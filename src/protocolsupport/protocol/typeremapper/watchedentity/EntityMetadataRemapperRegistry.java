@@ -655,7 +655,7 @@ public enum EntityMetadataRemapperRegistry {
 		this.type = type;
 		for (Entry entry : entries) {
 			for (ProtocolVersion version : entry.versions) {
-				Utils.getFromMapOrCreateDefault(this.entries, version, new ArrayList<DataWatcherObjectRemapper>()).add(entry.remapper);
+				this.entries.computeIfAbsent(version, k -> new ArrayList<>()).add(entry.remapper);
 			}
 		}
 	}
@@ -663,11 +663,11 @@ public enum EntityMetadataRemapperRegistry {
 	EntityMetadataRemapperRegistry(NetworkEntityType type, EntityMetadataRemapperRegistry superType, Entry... entries) {
 		this.type = type;
 		for (Map.Entry<ProtocolVersion, List<DataWatcherObjectRemapper>> entry : superType.entries.entrySet()) {
-			Utils.getFromMapOrCreateDefault(this.entries, entry.getKey(), new ArrayList<DataWatcherObjectRemapper>()).addAll(entry.getValue());
+			this.entries.computeIfAbsent(entry.getKey(), k -> new ArrayList<>()).addAll(entry.getValue());
 		}
 		for (Entry entry : entries) {
 			for (ProtocolVersion version : entry.versions) {
-				Utils.getFromMapOrCreateDefault(this.entries, version, new ArrayList<DataWatcherObjectRemapper>()).add(entry.remapper);
+				this.entries.computeIfAbsent(version, k -> new ArrayList<DataWatcherObjectRemapper>()).add(entry.remapper);
 			}
 		}
 	}

@@ -25,14 +25,13 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectStrin
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3i;
-import protocolsupport.utils.Utils;
 
 public class DataWatcherObjectIdRegistry {
 
 	private static final HashMap<Class<? extends DataWatcherObject<?>>, EnumMap<ProtocolVersion, Integer>> registry = new HashMap<>();
 
 	private static void register(Class<? extends DataWatcherObject<?>> clazz, int id, ProtocolVersion... versions) {
-		EnumMap<ProtocolVersion, Integer> mmap = Utils.getFromMapOrCreateDefault(registry, clazz, new EnumMap<>(ProtocolVersion.class));
+		EnumMap<ProtocolVersion, Integer> mmap = registry.computeIfAbsent(clazz, k -> new EnumMap<>(ProtocolVersion.class));
 		for (ProtocolVersion version : versions) {
 			mmap.put(version, id);
 		}
@@ -65,10 +64,10 @@ public class DataWatcherObjectIdRegistry {
 		register(DataWatcherObjectBlockState.class, 12, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 		register(DataWatcherObjectNBTTagCompound.class, 14, ProtocolVersionsHelper.AFTER_1_12_2);
 		register(DataWatcherObjectNBTTagCompound.class, 13, ProtocolVersionsHelper.RANGE__1_11__1_12_2);
+		register(DataWatcherObjectParticle.class, 15, ProtocolVersionsHelper.AFTER_1_12_2);
 		register(DataWatcherObjectShort.class, 1, ProtocolVersionsHelper.BEFORE_1_9);
 		register(DataWatcherObjectInt.class, 2, ProtocolVersionsHelper.BEFORE_1_9);
 		register(DataWatcherObjectVector3i.class, 6, ProtocolVersionsHelper.BEFORE_1_9);
-		register(DataWatcherObjectParticle.class, 15, ProtocolVersionsHelper.AFTER_1_12_2);
 	}
 
 	public static int getTypeId(@SuppressWarnings("rawtypes") Class<? extends DataWatcherObject> clazz, ProtocolVersion version) {

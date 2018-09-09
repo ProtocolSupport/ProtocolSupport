@@ -21,7 +21,6 @@ import protocolsupport.protocol.typeremapper.itemstack.LegacyItemType;
 import protocolsupport.protocol.typeremapper.itemstack.PreFlatteningItemIdData;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
@@ -49,7 +48,7 @@ public class LegacyChatJson {
 
 	private static void register(ComponentConverter r, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
-			Utils.getFromMapOrCreateDefault(registry, version, new ArrayList<>()).add(r);
+			registry.computeIfAbsent(version, k -> new ArrayList<>()).add(r);
 		}
 	}
 

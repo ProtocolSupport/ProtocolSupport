@@ -6,14 +6,13 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.EnumRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.GenericRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.IdRemappingTable;
-import protocolsupport.utils.Utils;
 
 public abstract class RemappingRegistry<T extends RemappingTable> {
 
 	protected final EnumMap<ProtocolVersion, T> remappings = new EnumMap<>(ProtocolVersion.class);
 
 	public T getTable(ProtocolVersion version) {
-		return Utils.getFromMapOrCreateDefault(remappings, version, createTable());
+		return remappings.computeIfAbsent(version, k -> createTable());
 	}
 
 	protected abstract T createTable();

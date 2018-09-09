@@ -13,7 +13,6 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
-import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
@@ -34,12 +33,13 @@ public class TileNBTRemapper {
 		newToOldType.put(TileEntityType.SIGN, "Sign");
 	}
 
+	//TODO make version a main key, so remapping table can be extracted by middle packets
 	protected static final EnumMap<TileEntityType, EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>>> registry = new EnumMap<>(TileEntityType.class);
 
 	protected static void register(TileEntityType type, BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper> transformer, ProtocolVersion... versions) {
-		EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>> map = Utils.getFromMapOrCreateDefault(registry, type, new EnumMap<>(ProtocolVersion.class));
+		EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>> map = registry.computeIfAbsent(type, k -> new EnumMap<>(ProtocolVersion.class));
 		for (ProtocolVersion version : versions) {
-			Utils.getFromMapOrCreateDefault(map, version, new ArrayList<>()).add(transformer);
+			map.computeIfAbsent(version, k -> new ArrayList<>()).add(transformer);
 		}
 	}
 

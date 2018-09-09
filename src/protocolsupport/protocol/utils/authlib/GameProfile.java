@@ -57,7 +57,7 @@ public class GameProfile extends Profile {
 	}
 
 	public void addProperty(ProfileProperty profileProperty) {
-		Utils.getFromMapOrCreateDefault(properties, profileProperty.getName(), new HashSet<>()).add(profileProperty);
+		properties.computeIfAbsent(profileProperty.getName(), k -> new HashSet<>()).add(profileProperty);
 	}
 
 	@Override

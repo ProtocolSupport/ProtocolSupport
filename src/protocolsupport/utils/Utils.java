@@ -10,7 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.function.Function;
@@ -51,27 +50,12 @@ public class Utils {
 		return obj.getClass().getName() + "(" + joiner.toString() + ")";
 	}
 
-	public static <K, V> V getFromMapOrCreateDefault(Map<K, V> map, K key, V defaultValue) {
-		return map.computeIfAbsent(key, k -> defaultValue);
-	}
-
 	public static <T> T getFromArrayOrNull(T[] array, int index) {
 		if ((index >= 0) && (index < array.length)) {
 			return array[index];
 		} else {
 			return null;
 		}
-	}
-
-	public static String exceptionMessage(Object... strings) {
-		StringBuilder msg = new StringBuilder();
-		msg.append(strings[0]).append(System.lineSeparator());
-		msg.append("Additional exception info:").append(System.lineSeparator());
-		for (int i = 1; i < strings.length; i++) {
-			msg.append("\t").append(strings[i]).append(System.lineSeparator());
-		}
-		msg.append("Stacktrace:");
-		return msg.toString();
 	}
 
 	public static String clampString(String string, int limit) {

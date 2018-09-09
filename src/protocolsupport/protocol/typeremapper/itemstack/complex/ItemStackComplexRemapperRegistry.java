@@ -22,7 +22,6 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHe
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PotionToLegacyIdComplexRemapper;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class ItemStackComplexRemapperRegistry {
@@ -45,8 +44,8 @@ public class ItemStackComplexRemapperRegistry {
 		if (!material.isItem()) {
 			throw new IllegalArgumentException(material + " is not an item");
 		}
-		EnumMap<ProtocolVersion, List<ItemStackComplexRemapper>> map = Utils.getFromMapOrCreateDefault(registry, ItemMaterialLookup.getRuntimeId(material), new EnumMap<>(ProtocolVersion.class));
-		Arrays.stream(versions).forEach(version -> Utils.getFromMapOrCreateDefault(map, version, new ArrayList<>()).add(transformer));
+		EnumMap<ProtocolVersion, List<ItemStackComplexRemapper>> map = registry.computeIfAbsent(ItemMaterialLookup.getRuntimeId(material), k -> new EnumMap<>(ProtocolVersion.class));
+		Arrays.stream(versions).forEach(version -> map.computeIfAbsent(version, k -> new ArrayList<>()).add(transformer));
 	}
 
 	static {
