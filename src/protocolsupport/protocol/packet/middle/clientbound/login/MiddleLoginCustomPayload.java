@@ -16,13 +16,13 @@ public abstract class MiddleLoginCustomPayload extends ClientBoundMiddlePacket {
 
 	protected int id;
 	protected String tag;
-	protected byte[] data;
+	protected ByteBuf data;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		id = VarNumberSerializer.readVarInt(serverdata);
 		tag = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
-		data = MiscSerializer.readAllBytes(serverdata);
+		data = MiscSerializer.readAllBytesSlice(serverdata);
 	}
 
 }

@@ -113,10 +113,10 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		decode(ctx);
 	}
 
-	private boolean firstread = true;
-	private EncapsulatedProtocolInfo encapsulatedinfo = null;
+	protected boolean firstread = true;
+	protected EncapsulatedProtocolInfo encapsulatedinfo = null;
 
-	private void decode(ChannelHandlerContext ctx) throws Exception {
+	protected void decode(ChannelHandlerContext ctx) throws Exception {
 		cancelTask();
 		if (firstread) {
 			int firstbyte = buffer.readUnsignedByte();
@@ -137,7 +137,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		}
 	}
 
-	private void decodeRaw(ChannelHandlerContext ctx) {
+	protected void decodeRaw(ChannelHandlerContext ctx) {
 		Channel channel = ctx.channel();
 		int firstbyte = buffer.readUnsignedByte();
 		switch (firstbyte) {
@@ -179,12 +179,12 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		}
 	}
 
-	private static ProtocolVersion attemptDecodeNewHandshake(ByteBuf bytebuf) {
+	protected static ProtocolVersion attemptDecodeNewHandshake(ByteBuf bytebuf) {
 		bytebuf.readerIndex(0);
 		return ProtocolUtils.readNewHandshake(bytebuf.readSlice(VarNumberSerializer.readVarInt(bytebuf)));
 	}
 
-	private void decodeEncapsulated(ChannelHandlerContext ctx) throws Exception {
+	protected void decodeEncapsulated(ChannelHandlerContext ctx) throws Exception {
 		Channel channel = ctx.channel();
 		ByteBuf firstpacketdata = buffer.readSlice(VarNumberSerializer.readVarInt(buffer));
 		if (encapsulatedinfo.hasCompression()) {
