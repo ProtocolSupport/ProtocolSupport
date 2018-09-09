@@ -11,11 +11,18 @@ import protocolsupport.protocol.typeremapper.utils.RemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.types.BlockDirection;
 
 public class ObjectDataRemaper {
 
 	public static final RemappingRegistry<ObjectDataRemappingTable> REGISTRY = new RemappingRegistry<ObjectDataRemappingTable>() {
 		{
+			Arrays.stream(ProtocolVersionsHelper.BEFORE_1_13)
+			.forEach(version -> registerRemapEntry(
+				NetworkEntityType.ITEM_FRAME,
+				blockdata -> BlockDirection.CONSTANT_LOOKUP.getByOrdinal(blockdata).get2DId(),
+				version
+			));
 			Arrays.stream(ProtocolVersionsHelper.RANGE__1_8__1_12_2)
 			.forEach(version -> registerRemapEntry(
 				NetworkEntityType.FALLING_OBJECT,

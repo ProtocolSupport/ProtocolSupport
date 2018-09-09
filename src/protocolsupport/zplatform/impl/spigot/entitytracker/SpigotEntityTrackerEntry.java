@@ -444,7 +444,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 		createSpawnPacketMethods.setKnownPath(EntityArmorStand.class, entity -> new PacketPlayOutSpawnEntity(entity, 78));
 		createSpawnPacketMethods.setKnownPath(EntityItemFrame.class, entity -> {
 			EntityItemFrame entityitemframe = (EntityItemFrame) entity;
-			return new PacketPlayOutSpawnEntity(entity, 71, entityitemframe.direction.get2DRotationValue(), entityitemframe.getBlockPosition());
+			return new PacketPlayOutSpawnEntity(entity, 71, entityitemframe.direction.a(), entityitemframe.getBlockPosition());
 		});
 		createSpawnPacketMethods.setKnownPath(EntityLeash.class, entity -> {
 			EntityLeash entityleash = (EntityLeash) entity;

@@ -954,20 +954,23 @@ public enum EntityMetadataRemapperRegistry {
 				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.SINGLE_POINT, 8), ProtocolVersionsHelper.RANGE__1_10__1_13_1),
 				new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.SINGLE_POINT, 7), ProtocolVersionsHelper.ALL_1_9)
 		},
-		Entry.createPerVersion(version -> new DataWatcherObjectRemapper() {
-				@Override
-				public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
-					DataWatcherObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent(particleObject -> {
-						Particle particle = ParticleRemapper.remap(version, particleObject.getValue());
-						remapped.put(9, new DataWatcherObjectVarInt(particle.getId()));
-						if (particle instanceof LegacyParticle) {
-							LegacyParticle lParticle = (LegacyParticle) particleObject.getValue();
-							remapped.put(10, new DataWatcherObjectVarInt(lParticle.getFirstParameter()));
-							remapped.put(11, new DataWatcherObjectVarInt(lParticle.getSecondParameter()));
-						}
-					});
-				}
-			}, ProtocolVersionsHelper.RANGE__1_9__1_12_2
+		Entry.createPerVersion(
+			version ->
+				new DataWatcherObjectRemapper() {
+					@Override
+					public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+						DataWatcherObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent(particleObject -> {
+							Particle particle = ParticleRemapper.remap(version, particleObject.getValue());
+							remapped.put(9, new DataWatcherObjectVarInt(particle.getId()));
+							if (particle instanceof LegacyParticle) {
+								LegacyParticle lParticle = (LegacyParticle) particle;
+								remapped.put(10, new DataWatcherObjectVarInt(lParticle.getFirstParameter()));
+								remapped.put(11, new DataWatcherObjectVarInt(lParticle.getSecondParameter()));
+							}
+						});
+					}
+				},
+			ProtocolVersionsHelper.RANGE__1_9__1_12_2
 		)
 	)),
 	SHULKER_BULLET(NetworkEntityType.SHULKER_BULLET, ENTITY),
