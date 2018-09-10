@@ -100,11 +100,6 @@ public class PEDataValues {
 		registerLivingType(NetworkEntityType.COD, 112);
 		registerLivingType(NetworkEntityType.DROWNED, 110);
 
-		// FIXME: Figure out correct value; for now use SQUID (17) to avoid crash
-		registerLivingType(NetworkEntityType.PHANTOM, 17);
-		registerLivingType(NetworkEntityType.DOLPHIN, 17);
-		registerLivingType(NetworkEntityType.TURTLE, 17);
-
 		entityType.put(NetworkEntityType.ARMOR_STAND_OBJECT, 61);
 		entityType.put(NetworkEntityType.TNT, 65);
 		entityType.put(NetworkEntityType.FALLING_OBJECT, 66);
@@ -114,6 +109,7 @@ public class PEDataValues {
 		entityType.put(NetworkEntityType.ENDEREYE, 70);
 		entityType.put(NetworkEntityType.ENDER_CRYSTAL, 71);
 		entityType.put(NetworkEntityType.FIREWORK, 72);
+		entityType.put(NetworkEntityType.THROWN_TRIDENT, 73);
 		entityType.put(NetworkEntityType.SHULKER_BULLET, 76);
 		entityType.put(NetworkEntityType.FISHING_FLOAT, 77);
 		entityType.put(NetworkEntityType.DRAGON_FIREBALL, 79);
