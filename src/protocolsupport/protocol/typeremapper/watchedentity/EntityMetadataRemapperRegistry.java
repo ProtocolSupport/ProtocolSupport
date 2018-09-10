@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
@@ -68,7 +69,6 @@ public enum EntityMetadataRemapperRegistry {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				NetworkEntityDataCache data = entity.getDataCache();
-				PEEntityData pocketdata = PEDataValues.getEntityData(entity.getType());
 				float entitySize = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType()) * data.getSizeModifier();
 				// = PE Lead =
 				//Leashing is set in Entity Leash.
@@ -104,9 +104,14 @@ public enum EntityMetadataRemapperRegistry {
 				remapped.put(PeMetaBase.AIR, new DataWatcherObjectShortLe(air.get()));
 				remapped.put(PeMetaBase.MAX_AIR, new DataWatcherObjectShortLe(300));
 				// = PE Bounding Box =
-				if(pocketdata.getBoundingBox() != null) {
-					remapped.put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getWidth() * entitySize));
-					remapped.put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));
+				PEEntityData pocketdata = PEDataValues.getEntityData(entity.getType());
+				if (pocketdata == null) {
+					ProtocolSupport.logWarning("PE BoundingBox missing for entity: " + entity.getType());
+				} else {
+					if (pocketdata.getBoundingBox() != null) {
+						remapped.put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getWidth() * entitySize));
+						remapped.put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));
+					}
 				}
 				// = PE Size =
 				remapped.put(PeMetaBase.SCALE, new DataWatcherObjectFloatLe(entitySize));
