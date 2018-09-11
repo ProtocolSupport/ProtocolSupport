@@ -605,6 +605,42 @@
 			"height": 0.8
 		}
 	},
+    "DOLPHIN": {
+		"BoundingBox": {
+			"width": 0.9,
+			"height": 0.6
+		}
+	},
+	"PUFFERFISH": {
+		"BoundingBox": {
+			"width": 0.8,
+			"height": 0.8
+		}
+	},
+	"SALMON": {
+		"BoundingBox": {
+			"width": 0.5,
+			"height": 0.5
+		}
+	},
+	"TROPICAL_FISH": {
+		"BoundingBox": {
+			"width": 0.4,
+			"height": 0.4
+		}
+	},
+	"COD": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 0.3
+		}
+	},
+	"DROWNED": {
+		"BoundingBox": {
+			"width": 0.6,
+			"height": 1.8
+		}
+	},
 	"PARROT": {
 		"BoundingBox": {
 			"width": 0.5,
