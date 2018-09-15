@@ -99,6 +99,7 @@ public class PEDataValues {
 		registerLivingType(NetworkEntityType.TROPICAL_FISH, 111);
 		registerLivingType(NetworkEntityType.COD, 112);
 		registerLivingType(NetworkEntityType.DROWNED, 110);
+		registerLivingType(NetworkEntityType.TURTLE, 74);
 
 		entityType.put(NetworkEntityType.ARMOR_STAND_OBJECT, 61);
 		entityType.put(NetworkEntityType.TNT, 65);

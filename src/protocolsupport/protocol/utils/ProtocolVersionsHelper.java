@@ -81,6 +81,8 @@ public class ProtocolVersionsHelper {
 
 	public static final ProtocolVersion[] BEFORE_1_9_AND_PE = concat(BEFORE_1_9, ProtocolVersion.MINECRAFT_PE);
 
+	public static final ProtocolVersion[] BEFORE_1_13_AND_PE = concat(BEFORE_1_13, ProtocolVersion.MINECRAFT_PE);
+
 	public static final ProtocolVersion[] concat(ProtocolVersion[] versions, ProtocolVersion... moreVersions) {
 		ArrayList<ProtocolVersion> all = new ArrayList<>();
 		all.addAll(Arrays.asList(versions));
