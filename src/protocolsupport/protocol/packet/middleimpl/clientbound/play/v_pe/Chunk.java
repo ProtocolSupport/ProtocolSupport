@@ -12,6 +12,7 @@ import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerPE;
+import protocolsupport.protocol.typeremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -53,18 +54,7 @@ public class Chunk extends MiddleChunk {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA);
 		VarNumberSerializer.writeSVarInt(serializer, chunkX);
 		VarNumberSerializer.writeSVarInt(serializer, chunkZ);
-		ArraySerializer.writeVarIntByteArray(serializer, chunkdata -> {
-			chunkdata.writeByte(1); //1 section
-		    chunkdata.writeByte(1); //New subchunk version!
-		    //VarNumberSerializer.writeVarInt(chunkdata, 0); //blockstorage count (first is blocks second is water, we only do first for now) TODO: new beta, write zero and be done?
-		    chunkdata.writeByte((1 << 1) | 1);  //Runtimeflag and palette id.
-		    chunkdata.writeZero(512);
-		    VarNumberSerializer.writeSVarInt(chunkdata, 1); //Palette size
-		    VarNumberSerializer.writeSVarInt(chunkdata, 0); //Air
-			chunkdata.writeZero(512); //heightmap.
-			chunkdata.writeZero(256); //Biomedata.
-			chunkdata.writeByte(0); //borders
-		});
+		serializer.writeBytes(EmptyChunk.getPEChunkData());
 		return serializer;
 	}
 

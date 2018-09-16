@@ -29,6 +29,7 @@ import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
+import protocolsupport.protocol.typeremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.typeremapper.itemstack.FlatteningItemId;
 import protocolsupport.protocol.typeremapper.itemstack.LegacyItemType;
 import protocolsupport.protocol.typeremapper.itemstack.PreFlatteningItemIdData;
@@ -151,6 +152,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(PESkinModel.class.getName());
 			Class.forName(PEPotion.class.getName());
 			Class.forName(PEBlocks.class.getName());
+			Class.forName(EmptyChunk.class.getName());
 			ServerPlatform.get().getInjector().onLoad();
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);

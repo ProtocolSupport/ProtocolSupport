@@ -10,8 +10,8 @@ import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BlockChangeSingle extends MiddleBlockChangeSingle {
 
@@ -28,16 +28,25 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(BlockChangeSingle.create(connection.getVersion(), position, id));
+		return BlockChangeSingle.create(connection.getVersion(), position, id, RecyclableArrayList.create());
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, Position position, int state) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.UPDATE_BLOCK);
-		PositionSerializer.writePEPosition(serializer, position);
-		VarNumberSerializer.writeVarInt(serializer, PEBlocks.getPocketRuntimeId(LegacyBlockData.REGISTRY.getTable(version).getRemap(state)));
-		VarNumberSerializer.writeVarInt(serializer, flags);
-		VarNumberSerializer.writeVarInt(serializer, 0); //Normal layer (liquid not implemented in java yet)
-		return serializer;
+	public static RecyclableArrayList<ClientBoundPacketData> create(ProtocolVersion version, Position position, int state, RecyclableArrayList<ClientBoundPacketData> packets) {
+		ClientBoundPacketData updateBlock = ClientBoundPacketData.create(PEPacketIDs.UPDATE_BLOCK);
+		PositionSerializer.writePEPosition(updateBlock, position);
+		VarNumberSerializer.writeVarInt(updateBlock, PEBlocks.getPocketRuntimeId(LegacyBlockData.REGISTRY.getTable(version).getRemap(state)));
+		VarNumberSerializer.writeVarInt(updateBlock, flags);
+		VarNumberSerializer.writeVarInt(updateBlock, 0); //Normal layer
+		packets.add(updateBlock);
+		if (PEBlocks.canPCBlockBeWaterLogged(state) || state == 0) {
+			ClientBoundPacketData updateWater = ClientBoundPacketData.create(PEPacketIDs.UPDATE_BLOCK);
+			PositionSerializer.writePEPosition(updateWater, position);
+			VarNumberSerializer.writeVarInt(updateWater, PEBlocks.isPCBlockWaterlogged(state) ? PEBlocks.getPEWaterId() : 0);
+			VarNumberSerializer.writeVarInt(updateWater, flags);
+			VarNumberSerializer.writeVarInt(updateWater, 1); //Liquid layer
+			packets.add(updateWater);
+		}
+		return packets;
 	}
 
 }

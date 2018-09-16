@@ -24,6 +24,11 @@ public class PEBlocks {
 
 	protected static byte[] peBlockDef;
 	protected static final int[] pcToPeRuntimeId = new int[MinecraftData.BLOCKDATA_COUNT];
+	protected static final int[] pcWaterlogged = new int[MinecraftData.BLOCKDATA_COUNT];
+	protected static int WATER_BLOCK;
+
+	private static final int CAN_BE_WATERLOGGED = 1;
+	private static final int IS_WATERLOGGED = 2;
 
 	static {
 		final ArrayList<Any<String, Short>> peBlocks = new ArrayList<>();
@@ -42,6 +47,12 @@ public class PEBlocks {
 			short peData = (short) JsonUtils.getInt(object, "pedata");
 			System.out.println("REMAPPED pcRuntimeId: " + runtimeId + "(" + JsonUtils.getString(object, "blockdata") + ") TO " + peName + "[DATA=" + peData + "] peRuntimeId: " + peBlocks.indexOf(new Any<String,Short>(peName, peData)) + ".");
 			pcToPeRuntimeId[runtimeId] = peBlocks.indexOf(new Any<String,Short>(peName, peData));
+			//TODO: Stop this absurd test and actually remap in this script, also storing the waterlogged runtimeids.
+			if (JsonUtils.getString(object, "blockdata").contains("waterlogged=false")) {
+				pcWaterlogged[runtimeId] = IS_WATERLOGGED;
+			}
+			//TODO do this while compiling the list also!
+			WATER_BLOCK = 54;
 		}
 		//Compile PE block definition for sending on login.
 		ByteBuf def = Unpooled.buffer();
@@ -59,6 +70,18 @@ public class PEBlocks {
 
 	public static byte[] getPocketRuntimeDefinition() {
 		return peBlockDef;
+	}
+
+	public static boolean isPCBlockWaterlogged(int runtimeId) {
+		return pcWaterlogged[runtimeId] == IS_WATERLOGGED;
+	}
+
+	public static boolean canPCBlockBeWaterLogged(int runtimeId) {
+		return pcWaterlogged[runtimeId] == IS_WATERLOGGED || pcWaterlogged[runtimeId] == CAN_BE_WATERLOGGED;
+	}
+
+	public static int getPEWaterId() {
+		return WATER_BLOCK;
 	}
 
 }

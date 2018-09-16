@@ -18,7 +18,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		for (Record record : records) {
 			int xz = record.coord >> 8;
-			packets.add(BlockChangeSingle.create(connection.getVersion(), new Position((chunkX << 4) + (xz >> 4), record.coord & 0xFF, (chunkZ << 4) + (xz & 0xF)), record.id));
+			BlockChangeSingle.create(connection.getVersion(), new Position((chunkX << 4) + (xz >> 4), record.coord & 0xFF, (chunkZ << 4) + (xz & 0xF)), record.id, packets);
 		}
 		return packets;
 	}
