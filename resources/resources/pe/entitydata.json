@@ -647,6 +647,12 @@
 			"height": 1.8
 		}
 	},
+	"PHANTOM": {
+		"BoundingBox": {
+			"width": 0.9,
+			"height": 0.5
+		}
+	},
 	"PARROT": {
 		"BoundingBox": {
 			"width": 0.5,

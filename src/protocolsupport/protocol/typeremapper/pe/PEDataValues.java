@@ -92,7 +92,6 @@ public class PEDataValues {
 		registerLivingType(NetworkEntityType.VINDICATOR, 57);
 		registerLivingType(NetworkEntityType.EVOKER, 104);
 		registerLivingType(NetworkEntityType.VEX, 105);
-
 		registerLivingType(NetworkEntityType.DOLPHIN, 31);
 		registerLivingType(NetworkEntityType.PUFFERFISH, 108);
 		registerLivingType(NetworkEntityType.SALMON, 109);
@@ -100,6 +99,7 @@ public class PEDataValues {
 		registerLivingType(NetworkEntityType.COD, 112);
 		registerLivingType(NetworkEntityType.DROWNED, 110);
 		registerLivingType(NetworkEntityType.TURTLE, 74);
+		registerLivingType(NetworkEntityType.PHANTOM, 58);
 
 		entityType.put(NetworkEntityType.ARMOR_STAND_OBJECT, 61);
 		entityType.put(NetworkEntityType.TNT, 65);
