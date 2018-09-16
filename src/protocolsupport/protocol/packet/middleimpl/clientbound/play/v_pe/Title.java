@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTitle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -13,6 +14,10 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Title extends MiddleTitle {
+
+	public Title(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	private static final int HIDE = 0;
 	private static final int RESET = 1;

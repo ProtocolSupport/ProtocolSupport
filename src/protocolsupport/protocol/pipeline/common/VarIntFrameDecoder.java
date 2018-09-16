@@ -36,7 +36,7 @@ public class VarIntFrameDecoder implements IPacketSplitter {
         if (input.readableBytes() < packetLength) {
             return;
         }
-        list.add(input.readBytes(packetLength));
+        list.add(input.readSlice(packetLength).retain());
         packetLength = -1;
 	}
 

@@ -10,7 +10,7 @@ public class NoOpFrameDecoder implements IPacketSplitter {
 
 	@Override
 	public void split(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) {
-		list.add(input.readBytes(input.readableBytes()));
+		list.add(input.readSlice(input.readableBytes()).retain());
 	}
 
 }

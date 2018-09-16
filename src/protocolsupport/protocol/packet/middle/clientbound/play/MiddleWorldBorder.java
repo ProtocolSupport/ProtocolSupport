@@ -1,12 +1,17 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookups;
 
 public abstract class MiddleWorldBorder extends ClientBoundMiddlePacket {
+
+	public MiddleWorldBorder(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected Action action;
 	protected double radius;

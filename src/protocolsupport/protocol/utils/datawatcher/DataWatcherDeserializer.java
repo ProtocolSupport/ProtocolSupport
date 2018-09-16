@@ -1,10 +1,12 @@
 package protocolsupport.protocol.utils.datawatcher;
 
-import java.lang.reflect.Constructor;
+import java.text.MessageFormat;
+import java.util.function.Supplier;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
@@ -14,8 +16,10 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectDirec
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTagCompound;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectParticle;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
@@ -28,31 +32,32 @@ public class DataWatcherDeserializer {
 	public static final int MAX_USED_META_INDEX = 76;
 
 	@SuppressWarnings("unchecked")
-	private static final Constructor<? extends ReadableDataWatcherObject<?>>[] registry = new Constructor[256];
+	private static final Supplier<? extends ReadableDataWatcherObject<?>>[] registry = new Supplier[256];
 	static {
 		try {
-			register(DataWatcherObjectByte.class);
-			register(DataWatcherObjectVarInt.class);
-			register(DataWatcherObjectFloat.class);
-			register(DataWatcherObjectString.class);
-			register(DataWatcherObjectChat.class);
-			register(DataWatcherObjectItemStack.class);
-			register(DataWatcherObjectBoolean.class);
-			register(DataWatcherObjectVector3f.class);
-			register(DataWatcherObjectPosition.class);
-			register(DataWatcherObjectOptionalPosition.class);
-			register(DataWatcherObjectDirection.class);
-			register(DataWatcherObjectOptionalUUID.class);
-			register(DataWatcherObjectBlockState.class);
-			register(DataWatcherObjectNBTTagCompound.class);
+			register(DataWatcherObjectByte::new);
+			register(DataWatcherObjectVarInt::new);
+			register(DataWatcherObjectFloat::new);
+			register(DataWatcherObjectString::new);
+			register(DataWatcherObjectChat::new);
+			register(DataWatcherObjectOptionalChat::new);
+			register(DataWatcherObjectItemStack::new);
+			register(DataWatcherObjectBoolean::new);
+			register(DataWatcherObjectVector3f::new);
+			register(DataWatcherObjectPosition::new);
+			register(DataWatcherObjectOptionalPosition::new);
+			register(DataWatcherObjectDirection::new);
+			register(DataWatcherObjectOptionalUUID::new);
+			register(DataWatcherObjectBlockState::new);
+			register(DataWatcherObjectNBTTagCompound::new);
+			register(DataWatcherObjectParticle::new);
 		} catch (Exception e) {
 			throw new RuntimeException("Exception in datawatcher init", e);
 		}
 	}
 
-	private static void register(Class<? extends ReadableDataWatcherObject<?>> clazz) throws NoSuchMethodException {
-		Constructor<? extends ReadableDataWatcherObject<?>> constr = clazz.getConstructor();
-		registry[DataWatcherObjectIdRegistry.getTypeId(clazz, ProtocolVersionsHelper.LATEST_PC)] = constr;
+	private static void register(Supplier<? extends ReadableDataWatcherObject<?>> supplier) throws NoSuchMethodException {
+		registry[DataWatcherObjectIdRegistry.getTypeId(supplier.get().getClass(), ProtocolVersionsHelper.LATEST_PC)] = supplier;
 	}
 
 	public static void decodeDataTo(ByteBuf from, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> to) {
@@ -63,11 +68,11 @@ public class DataWatcherDeserializer {
 			}
 			int type = from.readUnsignedByte();
 			try {
-				ReadableDataWatcherObject<?> object = registry[type].newInstance();
+				ReadableDataWatcherObject<?> object = registry[type].get();
 				object.readFromStream(from, version, locale);
 				to.put(key, object);
 			} catch (Exception e) {
-				throw new DecoderException("Unable to decode datawatcher object", e);
+				throw new DecoderException(MessageFormat.format("Unable to decode datawatcher object (type: {0}, index: {1})", type, key), e);
 			}
 		} while (true);
 	}
@@ -89,6 +94,28 @@ public class DataWatcherDeserializer {
 			to.writeByte(0);
 		}
 		to.writeByte(0xFF);
+	}
+
+	public static void encodePEData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> peMetadata) {
+		int entries = 0;
+		int writerPreIndex = to.writerIndex();
+		//Fake fixed-varint length.
+		to.writeZero(VarNumberSerializer.MAX_LENGTH);
+		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
+			DataWatcherObject<?> object = peMetadata.get(key);
+			if (object != null) {
+				VarNumberSerializer.writeVarInt(to, key);
+				VarNumberSerializer.writeVarInt(to, DataWatcherObjectIdRegistry.getTypeId(object, version));
+				object.writeToStream(to, version, locale);
+				entries++;
+			}
+		}
+		int writerPostIndex = to.writerIndex();
+		//Overwrite fake length.
+		to.writerIndex(writerPreIndex);
+		VarNumberSerializer.writeFixedSizeVarInt(to, entries);
+		//Return writer.
+		to.writerIndex(writerPostIndex);
 	}
 
 }

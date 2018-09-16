@@ -2,9 +2,9 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -12,51 +12,37 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
+import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.inventory.PESlotRemapper;
 import protocolsupport.protocol.typeremapper.pe.inventory.PETransactionRemapper;
-import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagType;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 //The PE GodPacket! See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-GodPacket)
 public class GodPacket extends ServerBoundMiddlePacket {
 
-	//Wrapped packet
+	public GodPacket(ConnectionImpl connection) {
+		super(connection);
+	}
+
 	protected static final int ACTION_NORMAL = 0;
 	protected static final int ACTION_MISMATCH = 1;
 	protected static final int ACTION_USE_ITEM = 2;
 	protected static final int ACTION_USE_ENTITY = 3;
 	protected static final int ACTION_RELEASE_ITEM = 4;
 
-	protected UseItem useItemMiddlePacket = new UseItem();
-	protected UseEntity useEntityMiddlePacket = new UseEntity();
-	protected ReleaseItem releaseItemMiddlePacket = new ReleaseItem();
-
-	@Override
-	public void setConnection(Connection connection) {
-		super.setConnection(connection);
-		useItemMiddlePacket.setConnection(connection);
-		useEntityMiddlePacket.setConnection(connection);
-		releaseItemMiddlePacket.setConnection(connection);
-	}
-
-	@Override
-	public void setSharedStorage(NetworkDataCache sharedstorage) {
-		super.setSharedStorage(sharedstorage);
-		useItemMiddlePacket.setSharedStorage(sharedstorage);
-		useEntityMiddlePacket.setSharedStorage(sharedstorage);
-		releaseItemMiddlePacket.setSharedStorage(sharedstorage);
-	}
+	protected UseItem useItemMiddlePacket = new UseItem(connection);
+	protected UseEntity useEntityMiddlePacket = new UseEntity(connection);
+	protected ReleaseItem releaseItemMiddlePacket = new ReleaseItem(connection);
 
 	protected int actionId;
 	protected InvTransaction[] transactions;
@@ -147,8 +133,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		private int inventoryId;
 		private int action;
 		private int slot;
-		private ItemStackWrapper oldItem;
-		private ItemStackWrapper newItem;
+		private NetworkItemStack oldItem;
+		private NetworkItemStack newItem;
 
 		private static InvTransaction readFromStream(ByteBuf from, String locale, ProtocolVersion version) {
 			InvTransaction transaction = new InvTransaction();
@@ -182,8 +168,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					+ " wId: " + transaction.inventoryId 
 					+ " action: " + transaction.action 
 					+ " slot: " + transaction.slot 
-					+ " oldItem: " + transaction.oldItem.toString()  + ((!transaction.oldItem.isNull()) ? transaction.oldItem.getTag() : "") 
-					+ " newItem: " + transaction.newItem.toString() + (!transaction.newItem.isNull() ? transaction.newItem.getTag() : ""));
+					+ " oldItem: " + transaction.oldItem.toString()  + ((!transaction.oldItem.isNull()) ? transaction.oldItem.getNBT() : "") 
+					+ " newItem: " + transaction.newItem.toString() + (!transaction.newItem.isNull() ? transaction.newItem.getNBT() : ""));
 			return transaction;
 		}
 
@@ -215,11 +201,11 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			return slot == CURSOR;
 		}
 
-		public ItemStackWrapper getOldItem() {
+		public NetworkItemStack getOldItem() {
 			return oldItem;
 		}
 
-		public ItemStackWrapper getNewItem() {
+		public NetworkItemStack getNewItem() {
 			return newItem;
 		}
 
@@ -233,13 +219,13 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	protected static void processAnvilName(InvTransaction transaction, RecyclableArrayList<ServerBoundPacketData> packets) {
 		//Anvil naming is only done and known based on the clicked item.
 		if (transaction.getSlot() == 2 && !transaction.getOldItem().isNull()) {
-			NBTTagCompoundWrapper tag = transaction.getOldItem().getTag();
+			NBTTagCompoundWrapper tag = transaction.getOldItem().getNBT();
 			if (tag.hasKeyOfType("display", NBTTagType.COMPOUND)) {
 				NBTTagCompoundWrapper display = tag.getCompound("display");
 				if (display.hasKeyOfType("Name", NBTTagType.STRING)) {
 					ByteBuf payload = Unpooled.buffer();
 					StringSerializer.writeString(payload, ProtocolVersionsHelper.LATEST_PC, display.getString("Name"));
-					packets.add(MiddleCustomPayload.create("MC|ItemName", MiscSerializer.readAllBytes(payload)));
+					packets.add(MiddleCustomPayload.create("minecraft:ItemName", MiscSerializer.readAllBytes(payload)));
 				}
 			}
 		}

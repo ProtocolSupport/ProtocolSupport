@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -8,6 +9,10 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleTeleportAccept extends ServerBoundMiddlePacket {
+
+	public MiddleTeleportAccept(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected int teleportConfirmId;
 

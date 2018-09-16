@@ -1,11 +1,16 @@
 package protocolsupport.protocol.typeremapper.pe.inventory.fakes;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+
+import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockTileUpdate;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
+import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -14,7 +19,7 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class PEFakeBeacon {
 
-	private static final int EMERALD_BLOCK = 133 << 4;
+	private static final int EMERALD_BLOCK = PEBlocks.getPocketRuntimeId(MaterialAPI.getBlockDataNetworkId(Bukkit.createBlockData(Material.EMERALD_BLOCK)));
 
 	private int level = 0;
 	private int primary = 0;
@@ -43,7 +48,7 @@ public class PEFakeBeacon {
 						Position block = position.clone();
 						block.mod(x, -i, z);
 						invCache.getFakeContainers().addLast(block);
-						packets.add(BlockChangeSingle.create(version, block, EMERALD_BLOCK));
+						BlockChangeSingle.create(version, block, EMERALD_BLOCK, packets);
 					}
 				}
 			}

@@ -3,10 +3,15 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import org.bukkit.Location;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleSetPosition extends ClientBoundMiddlePacket {
+
+	public MiddleSetPosition(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected double xOrig;
 	protected double yOrig;

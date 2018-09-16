@@ -9,13 +9,13 @@ import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class PESlotRemapper {
 
-	public static ClientBoundPacketData remapClientBoundSlot(NetworkDataCache cache, ProtocolVersion version, ItemStackWrapper item, int slot) {
+	public static ClientBoundPacketData remapClientBoundSlot(NetworkDataCache cache, ProtocolVersion version, NetworkItemStack item, int slot) {
 		String locale = cache.getAttributesCache().getLocale();
 		PEInventoryCache invCache = cache.getPEInventoryCache();
 		WindowCache winCache = cache.getWindowCache();
@@ -134,7 +134,7 @@ public class PESlotRemapper {
 		return null;
 	}
 
-	public static RecyclableArrayList<ClientBoundPacketData> remapClientBoundInventory(NetworkDataCache cache, ProtocolVersion version, ItemStackWrapper[] items) {
+	public static RecyclableArrayList<ClientBoundPacketData> remapClientBoundInventory(NetworkDataCache cache, ProtocolVersion version, NetworkItemStack[] items) {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		String locale = cache.getAttributesCache().getLocale();
 		PEInventoryCache invCache = cache.getPEInventoryCache();
@@ -142,11 +142,11 @@ public class PESlotRemapper {
 		switch(winCache.getOpenedWindow()) {
 			case PLAYER: {
 				if (items.length < 46) { break; }
-				ItemStackWrapper[] peInvGridResult = new ItemStackWrapper[1];
-				ItemStackWrapper[] peInvGrid = new ItemStackWrapper[5];
-				ItemStackWrapper[] peArmor = new ItemStackWrapper[4];
-				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
-				ItemStackWrapper[] peOffhand = new ItemStackWrapper[1];
+				NetworkItemStack[] peInvGridResult = new NetworkItemStack[1];
+				NetworkItemStack[] peInvGrid = new NetworkItemStack[5];
+				NetworkItemStack[] peArmor = new NetworkItemStack[4];
+				NetworkItemStack[] peInventory = new NetworkItemStack[36];
+				NetworkItemStack[] peOffhand = new NetworkItemStack[1];
 				System.arraycopy(items,  0, peInvGridResult, 0 , 1);
 				System.arraycopy(items,  1, peInvGrid, 		 0,  4);
 				System.arraycopy(items,  5, peArmor, 		 0,  4);
@@ -161,8 +161,8 @@ public class PESlotRemapper {
 				break;
 			}
 			case BREWING: {
-				ItemStackWrapper[] brewingSlots = new ItemStackWrapper[5];
-				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
+				NetworkItemStack[] brewingSlots = new NetworkItemStack[5];
+				NetworkItemStack[] peInventory = new NetworkItemStack[36];
 				System.arraycopy(items,  0, brewingSlots, 1,  3);
 				System.arraycopy(items,  3, brewingSlots, 0,  1);
 				System.arraycopy(items,  4, brewingSlots, 4,  1);
@@ -173,10 +173,10 @@ public class PESlotRemapper {
 				break;
 			}
 			case ANVIL: {
-				ItemStackWrapper[] peAnvIn = new ItemStackWrapper[1];
-				ItemStackWrapper[] peAnvMa = new ItemStackWrapper[1];
-				ItemStackWrapper[] peAnvOu = new ItemStackWrapper[1];
-				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
+				NetworkItemStack[] peAnvIn = new NetworkItemStack[1];
+				NetworkItemStack[] peAnvMa = new NetworkItemStack[1];
+				NetworkItemStack[] peAnvOu = new NetworkItemStack[1];
+				NetworkItemStack[] peInventory = new NetworkItemStack[36];
 				System.arraycopy(items,  0, peAnvIn, 	 0,  1);
 				System.arraycopy(items,  1, peAnvMa, 	 0,  1);
 				System.arraycopy(items,  2, peAnvOu,     0,  1);
@@ -189,7 +189,7 @@ public class PESlotRemapper {
 				break;
 			}
 			case ENCHANT: { //Faked with hopper thingy, server sends the two slots though.
-				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
+				NetworkItemStack[] peInventory = new NetworkItemStack[36];
 				invCache.getFakeEnchanting().setInputOutputStack(items[0]);
 				invCache.getFakeEnchanting().setLapisStack(items[1]);
 				System.arraycopy(items, 29, peInventory, 0,  9);
@@ -199,8 +199,8 @@ public class PESlotRemapper {
 				break;
 			}
 			case BEACON: {
-				ItemStackWrapper[] peBeaMa = new ItemStackWrapper[1];
-				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
+				NetworkItemStack[] peBeaMa = new NetworkItemStack[1];
+				NetworkItemStack[] peInventory = new NetworkItemStack[36];
 				System.arraycopy(items,  0, peBeaMa, 	 0,  1);
 				System.arraycopy(items, 28, peInventory, 0,  9);
 				System.arraycopy(items,  1, peInventory, 9, 27);
@@ -209,9 +209,9 @@ public class PESlotRemapper {
 				break;
 			}
 			case CRAFTING_TABLE: {
-				ItemStackWrapper[] craftingGridResult = new ItemStackWrapper[1];
-				ItemStackWrapper[] craftingSlots = new ItemStackWrapper[9];
-				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
+				NetworkItemStack[] craftingGridResult = new NetworkItemStack[1];
+				NetworkItemStack[] craftingSlots = new NetworkItemStack[9];
+				NetworkItemStack[] peInventory = new NetworkItemStack[36];
 				System.arraycopy(items,  0, craftingGridResult, 0 , 1);
 				System.arraycopy(items,  1, craftingSlots,	 	0,  9);
 				System.arraycopy(items, 37, peInventory, 		0,  9);
@@ -222,10 +222,10 @@ public class PESlotRemapper {
 				break;
 			}
 			case VILLAGER: {
-				ItemStackWrapper[] peTradeSA = new ItemStackWrapper[1];
-				ItemStackWrapper[] peTradeSB = new ItemStackWrapper[1];
-				ItemStackWrapper[] peTradeResult = new ItemStackWrapper[1];
-				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
+				NetworkItemStack[] peTradeSA = new NetworkItemStack[1];
+				NetworkItemStack[] peTradeSB = new NetworkItemStack[1];
+				NetworkItemStack[] peTradeResult = new NetworkItemStack[1];
+				NetworkItemStack[] peInventory = new NetworkItemStack[36];
 				System.arraycopy(items,  0, peTradeSA, 		0 , 1);
 				System.arraycopy(items,  1, peTradeSB, 		0,  1);
 				System.arraycopy(items,  2, peTradeResult, 	0,  1);
@@ -252,8 +252,8 @@ public class PESlotRemapper {
 					wSlots = wSlots / 9 * 9;
 					peWSlots = wSlots > 27 ? 54 : 27;
 				}
-				ItemStackWrapper[] windowSlots = new ItemStackWrapper[peWSlots];
-				ItemStackWrapper[] peInventory = new ItemStackWrapper[36];
+				NetworkItemStack[] windowSlots = new NetworkItemStack[peWSlots];
+				NetworkItemStack[] peInventory = new NetworkItemStack[36];
 				System.arraycopy(items,		 	  0, 	windowSlots, 0, wSlots);
 				System.arraycopy(items, wSlots + 27,	peInventory, 0,	 	 9);
 				System.arraycopy(items, 	 wSlots, 	peInventory, 9, 	27);

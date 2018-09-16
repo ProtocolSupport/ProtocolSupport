@@ -1,17 +1,22 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public abstract class MiddleEntityEquipment extends ClientBoundMiddlePacket {
 
+	public MiddleEntityEquipment(ConnectionImpl connection) {
+		super(connection);
+	}
+
 	protected int entityId;
 	protected int slot;
-	protected ItemStackWrapper itemstack;
+	protected NetworkItemStack itemstack;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {

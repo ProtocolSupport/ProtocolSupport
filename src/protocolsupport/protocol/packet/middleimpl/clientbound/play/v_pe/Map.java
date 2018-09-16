@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -12,6 +13,10 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Map extends MiddleMap {
+
+	public Map(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	//public static final int FLAG_ENTITY_UPDATE = 0x08;
 	protected static final int FLAG_DECORATION_UPDATE = 0x04;
@@ -35,12 +40,13 @@ public class Map extends MiddleMap {
 			serializer.writeByte(scale);
 		}
 
+		//TODO check if this is right.
 		if ((flags & FLAG_DECORATION_UPDATE) != 0) {
 			VarNumberSerializer.writeVarInt(serializer, 0); //Playerheads?
 			VarNumberSerializer.writeVarInt(serializer, icons.length);
 			for (Icon icon : icons) {
-				serializer.writeByte(icon.dirtype & 0x0F);
-				serializer.writeByte(icon.dirtype & 0xF0);
+				serializer.writeByte(icon.direction);
+				serializer.writeByte(icon.type);
 				serializer.writeByte(icon.x);
 				serializer.writeByte(icon.z);
 				StringSerializer.writeString(serializer, connection.getVersion(), ""); //Label

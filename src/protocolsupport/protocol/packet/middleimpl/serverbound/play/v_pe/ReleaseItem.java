@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -10,12 +11,16 @@ import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class ReleaseItem extends ServerBoundMiddlePacket {
 
+	public ReleaseItem(ConnectionImpl connection) {
+		super(connection);
+	}
+
 	protected int subTypeId = -1;
-	protected ItemStackWrapper itemstack;
+	protected NetworkItemStack itemstack;
 	protected int slot;
 
 	@Override

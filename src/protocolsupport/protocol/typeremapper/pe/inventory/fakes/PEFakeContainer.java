@@ -2,7 +2,11 @@ package protocolsupport.protocol.typeremapper.pe.inventory.fakes;
 
 import java.util.EnumMap;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+
 import protocolsupport.api.Connection;
+import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
@@ -13,6 +17,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockTil
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
+import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
@@ -23,24 +28,24 @@ import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 public class PEFakeContainer {
 
 	//Table with PE ids and access to tile id, to place the inventory blocks.
-	private static void regInvBlockType(WindowType type, int containerId, TileEntityType tileType) {
-		invBlockType.put(type, new Any<Integer, TileEntityType>(containerId << 4, tileType));
+	private static void regInvBlockType(WindowType type, Material container, TileEntityType tileType) {
+		invBlockType.put(type, new Any<Material, TileEntityType>(container, tileType));
 	}
-	private static EnumMap<WindowType, Any<Integer, TileEntityType>> invBlockType = new EnumMap<>(WindowType.class);
+	private static EnumMap<WindowType, Any<Material, TileEntityType>> invBlockType = new EnumMap<>(WindowType.class);
 	static {
-		regInvBlockType(WindowType.CHEST, 			54, TileEntityType.CHEST);
-		regInvBlockType(WindowType.CRAFTING_TABLE, 	58, TileEntityType.UNKNOWN);
-		regInvBlockType(WindowType.FURNACE, 		61, TileEntityType.FURNACE);
-		regInvBlockType(WindowType.DISPENSER, 		23, TileEntityType.DISPENSER);
-		regInvBlockType(WindowType.ENCHANT, 	   154, TileEntityType.HOPPER); //Fake with hopper
-		regInvBlockType(WindowType.BREWING, 	   117, TileEntityType.BREWING_STAND);
-		regInvBlockType(WindowType.BEACON, 		   138, TileEntityType.BEACON);
-		regInvBlockType(WindowType.ANVIL, 		   145, TileEntityType.UNKNOWN);
-		regInvBlockType(WindowType.HOPPER, 		   154, TileEntityType.HOPPER);
-		regInvBlockType(WindowType.DROPPER,		   158, TileEntityType.DROPPER);
-		regInvBlockType(WindowType.SHULKER, 		54, TileEntityType.CHEST); //Fake with chest
+		regInvBlockType(WindowType.CHEST, 			Material.CHEST,			 	TileEntityType.CHEST);
+		regInvBlockType(WindowType.CRAFTING_TABLE, 	Material.CRAFTING_TABLE, 	TileEntityType.UNKNOWN);
+		regInvBlockType(WindowType.FURNACE, 		Material.FURNACE, 			TileEntityType.FURNACE);
+		regInvBlockType(WindowType.DISPENSER, 		Material.DISPENSER, 		TileEntityType.DISPENSER);
+		regInvBlockType(WindowType.ENCHANT,			Material.ENCHANTING_TABLE, 	TileEntityType.HOPPER); //Fake with hopper
+		regInvBlockType(WindowType.BREWING,			Material.BREWING_STAND, 	TileEntityType.BREWING_STAND);
+		regInvBlockType(WindowType.BEACON,			Material.BEACON, 			TileEntityType.BEACON);
+		regInvBlockType(WindowType.ANVIL,			Material.ANVIL, 			TileEntityType.UNKNOWN);
+		regInvBlockType(WindowType.HOPPER,			Material.HOPPER, 			TileEntityType.HOPPER);
+		regInvBlockType(WindowType.DROPPER,			Material.DROPPER, 			TileEntityType.DROPPER);
+		regInvBlockType(WindowType.SHULKER,			Material.PURPLE_SHULKER_BOX,TileEntityType.CHEST); //Fake with chest
 	}
-	private static Any<Integer, TileEntityType> getContainerData(WindowType type) {
+	private static Any<Material, TileEntityType> getContainerData(WindowType type) {
 		return invBlockType.get(type);
 	}
 
@@ -49,7 +54,7 @@ public class PEFakeContainer {
 		ProtocolVersion version = connection.getVersion();
 		WindowCache winCache = cache.getWindowCache();
 		PEInventoryCache invCache = cache.getPEInventoryCache();
-		Any<Integer, TileEntityType> typeData = getContainerData(winCache.getOpenedWindow());
+		Any<Material, TileEntityType> typeData = getContainerData(winCache.getOpenedWindow());
 		Position position = new Position(0,0,0);
 		if (typeData != null) {
 			//Get position under client's feet.
@@ -62,7 +67,7 @@ public class PEFakeContainer {
 			}
 			invCache.getFakeContainers().addFirst(position);
 			//Create fake inventory block.
-			packets.add(BlockChangeSingle.create(version, position, typeData.getObj1()));
+			BlockChangeSingle.create(version, position, PEBlocks.getPocketRuntimeId(MaterialAPI.getBlockDataNetworkId(Bukkit.createBlockData(typeData.getObj1()))), packets);
 			//Set tile data for fake block.
 			NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 			tag.setString("CustomName", title.toLegacyText(cache.getAttributesCache().getLocale()));
@@ -74,7 +79,7 @@ public class PEFakeContainer {
 				Position auxPos = position.clone();
 				auxPos.modifyX(1); //Get adjacend block.
 				invCache.getFakeContainers().addLast(auxPos);
-				packets.add(BlockChangeSingle.create(version, auxPos, typeData.getObj1()));
+				BlockChangeSingle.create(version, auxPos, PEBlocks.getPocketRuntimeId(MaterialAPI.getBlockDataNetworkId(Bukkit.createBlockData(typeData.getObj1()))), packets);
 				tag.setInt("pairx", auxPos.getX());
 				tag.setInt("pairz", auxPos.getZ());
 				tag.setByte("pairlead", 1);

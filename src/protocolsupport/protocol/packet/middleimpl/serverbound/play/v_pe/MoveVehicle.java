@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleMoveVehicle;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerBoat;
@@ -9,13 +10,17 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData.Offset;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class MoveVehicle extends ServerBoundMiddlePacket {
+
+	public MoveVehicle(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected int vehicleId;
 	protected float x, y, z;
@@ -25,14 +30,15 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		vehicleId = (int) VarNumberSerializer.readVarLong(clientdata);
+		byte flag = clientdata.readByte();
+		onGround = (flag & 128) == 128;
+		teleported = (flag & 64) == 64;
 		x = clientdata.readFloatLE();
 		y = clientdata.readFloatLE();
 		z = clientdata.readFloatLE();
 		pitch = clientdata.readByte();
 		headYaw = clientdata.readByte();
 		yaw = clientdata.readByte();
-		onGround = clientdata.readBoolean();
-		teleported = clientdata.readBoolean();
 	}
 
 	@Override

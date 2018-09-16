@@ -7,7 +7,6 @@ import java.util.function.BiConsumer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
-import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -22,19 +21,15 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.utils.netty.Allocator;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupportbuildprocessor.annotations.NeedsNoArgConstructor;
 
-@SuppressWarnings("deprecation")
 public class InternalPluginMessageRequest implements PluginMessageListener {
 
 	private static final UUID uuid = UUID.randomUUID();
 
-	public static final String TAG = "PS|IR";
+	public static final String TAG = "ps:ir";
 
 	protected static final Map<String, Class<? extends PluginMessageData>> subchannelToClass = new HashMap<>();
 	protected static final Map<Class<? extends PluginMessageData>, BiConsumer<Connection, PluginMessageData>> handlers = new HashMap<>();
@@ -57,15 +52,10 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 			});
 		});
 		register(BlockUpdateRequest.class, (connection, request) -> {
-			Bukkit.getScheduler().runTask(ProtocolSupport.getInstance(), () -> {
-				Location place = request.getPosition().toBukkit(connection.getPlayer().getWorld());
-				if (place.getChunk().isLoaded()) {
-					Block block = place.getBlock();
-					connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockUpdatePacket(
-							request.getPosition(), MinecraftData.getBlockStateFromIdAndData(block.getTypeId(), block.getData()))
-					);
-				}
-			});
+			Block block = request.getPosition().toBukkit(connection.getPlayer().getWorld()).getBlock();
+			connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockUpdatePacket(
+					request.getPosition(), ServerPlatform.get().getMiscUtils().getBlockDataNetworkId(block.getBlockData()))
+			);
 		});
 		register(InventoryOpenRequest.class, (connection, request) -> {
 			Bukkit.getScheduler().runTaskLater(ProtocolSupport.getInstance(), () -> {
@@ -81,7 +71,6 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 		});
 	}
 
-	@NeedsNoArgConstructor
 	public static abstract class PluginMessageData {
 
 		protected abstract void read(ByteBuf from);
@@ -243,7 +232,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 	}
 
 	public static void receivePluginMessageRequest(Connection connection, PluginMessageData data) {
-		ByteBuf buf = Allocator.allocateBuffer();
+		ByteBuf buf = Unpooled.buffer();
 		try {
 			MiscSerializer.writeUUID(buf, ProtocolVersionsHelper.LATEST_PC, uuid);
 			StringSerializer.writeString(buf, ProtocolVersionsHelper.LATEST_PC, (data.getClass().getSimpleName()));

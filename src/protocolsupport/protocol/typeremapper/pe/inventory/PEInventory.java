@@ -5,21 +5,22 @@ import java.util.List;
 
 import org.bukkit.Material;
 
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.api.MaterialAPI;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class PEInventory {
 
 	private static List<Material> clickUpdateMaterials = new ArrayList<Material>(9);
 	static {
-		clickUpdateMaterials.add(Material.BOAT);
-		clickUpdateMaterials.add(Material.BOAT_ACACIA);
-		clickUpdateMaterials.add(Material.BOAT_BIRCH);
-		clickUpdateMaterials.add(Material.BOAT_DARK_OAK);
-		clickUpdateMaterials.add(Material.BOAT_JUNGLE);
-		clickUpdateMaterials.add(Material.BOAT_SPRUCE);
+		clickUpdateMaterials.add(Material.OAK_BOAT);
+		clickUpdateMaterials.add(Material.ACACIA_BOAT);
+		clickUpdateMaterials.add(Material.BIRCH_BOAT);
+		clickUpdateMaterials.add(Material.DARK_OAK_BOAT);
+		clickUpdateMaterials.add(Material.JUNGLE_BOAT);
+		clickUpdateMaterials.add(Material.SPRUCE_BOAT);
 	}
-	public static boolean shouldDoClickUpdate(ItemStackWrapper itemstack) {
-		return !itemstack.isNull() && clickUpdateMaterials.contains(itemstack.getType());
+	public static boolean shouldDoClickUpdate(NetworkItemStack itemstack) {
+		return !itemstack.isNull() && clickUpdateMaterials.contains(MaterialAPI.getItemByNetworkId(itemstack.getTypeId()));
 	}
 
 	//Slot thingy numbers.

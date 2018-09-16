@@ -37,7 +37,7 @@ public class PECreativeInventory {
 	}
 
 	public void generateCreativeInventoryItems() {
-		JsonArray array = new JsonParser().parse(Utils.getResource("pe/creativeitems.json")).getAsJsonArray();
+		JsonArray array = new JsonParser().parse(Utils.getResourceBuffered("pe/creativeitems.json")).getAsJsonArray();
 		AtomicInteger itemcount = new AtomicInteger();
 		ByteBuf itembuf = Unpooled.buffer();
 

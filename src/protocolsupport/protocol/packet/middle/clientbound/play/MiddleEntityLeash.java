@@ -1,10 +1,15 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 
 public abstract class MiddleEntityLeash extends ClientBoundMiddlePacket {
+
+	public MiddleEntityLeash(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected int entityId;
 	protected int vehicleId;

@@ -2,7 +2,6 @@ package protocolsupport.protocol.typeremapper.pe;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 
 public class PEPotion {
 
@@ -53,8 +52,8 @@ public class PEPotion {
 
 	private static void register(String name, int id) {
 		nameToPeId.put(name, id);
-		nameToPeId.put(MinecraftData.addNamespacePrefix(name), id);
-		peIdToName.put(id, MinecraftData.addNamespacePrefix(name));
+		nameToPeId.put("minecraft:" + name, id);
+		peIdToName.put(id, "minecraft:" + name);
 	}
 
 	public static boolean hasPERemap(String nbttag) {

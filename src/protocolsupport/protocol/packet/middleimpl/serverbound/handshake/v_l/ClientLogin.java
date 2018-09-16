@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_l;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -13,6 +14,10 @@ import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class ClientLogin extends ServerBoundMiddlePacket {
+
+	public ClientLogin(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected String username;
 	protected String hostname;

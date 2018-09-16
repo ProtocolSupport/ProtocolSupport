@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class MerchantData {
 
@@ -28,13 +28,13 @@ public class MerchantData {
 	}
 
 	public static class TradeOffer {
-		private final ItemStackWrapper itemstack1;
-		private final ItemStackWrapper itemstack2;
-		private final ItemStackWrapper result;
+		private final NetworkItemStack itemstack1;
+		private final NetworkItemStack itemstack2;
+		private final NetworkItemStack result;
 		private final int uses;
 		private final int maxuses;
 
-		public TradeOffer(ItemStackWrapper itemstack1, ItemStackWrapper itemstack2, ItemStackWrapper result, int uses, int maxuses) {
+		public TradeOffer(NetworkItemStack itemstack1, NetworkItemStack itemstack2, NetworkItemStack result, int uses, int maxuses) {
 			this.itemstack1 = itemstack1;
 			this.result = result;
 			this.uses = uses;
@@ -42,7 +42,7 @@ public class MerchantData {
 			this.itemstack2 = itemstack2;
 		}
 
-		public ItemStackWrapper getItemStack1() {
+		public NetworkItemStack getItemStack1() {
 			return itemstack1;
 		}
 
@@ -50,11 +50,11 @@ public class MerchantData {
 			return !itemstack2.isNull();
 		}
 
-		public ItemStackWrapper getItemStack2() {
+		public NetworkItemStack getItemStack2() {
 			return itemstack2;
 		}
 
-		public ItemStackWrapper getResult() {
+		public NetworkItemStack getResult() {
 			return result;
 		}
 

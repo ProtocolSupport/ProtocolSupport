@@ -3,13 +3,18 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.id.IdSkipper;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 
 public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
+
+	public MiddleSpawnObject(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected NetworkEntity entity;
 	protected double x;
@@ -42,7 +47,7 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 	@Override
 	public boolean postFromServerRead() {
 		cache.getWatchedEntityCache().addWatchedEntity(entity);
-		return !IdSkipper.ENTITY.getTable(connection.getVersion()).shouldSkip(entity.getType());
+		return !GenericIdSkipper.ENTITY.getTable(connection.getVersion()).shouldSkip(entity.getType());
 	}
 
 }

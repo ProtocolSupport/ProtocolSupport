@@ -4,10 +4,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.MainHand;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleClientSettings;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class ClientSettings extends MiddleClientSettings {
+
+	public ClientSettings(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {

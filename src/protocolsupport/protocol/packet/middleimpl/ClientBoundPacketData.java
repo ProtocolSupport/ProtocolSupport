@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.util.Recycler;
 import io.netty.util.Recycler.Handle;
-import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.WrappingBuffer;
 import protocolsupport.utils.recyclable.Recyclable;
 
@@ -24,7 +24,7 @@ public class ClientBoundPacketData extends WrappingBuffer implements Recyclable 
 
 	private final Handle<ClientBoundPacketData> handle;
 	private ClientBoundPacketData(Handle<ClientBoundPacketData> handle) {
-		super(Allocator.allocateUnpooledBuffer());
+		super(Unpooled.buffer());
 		this.handle = handle;
 	}
 
@@ -43,11 +43,6 @@ public class ClientBoundPacketData extends WrappingBuffer implements Recyclable 
 
 	@Override
 	public void setBuf(ByteBuf buf) {
-	}
-
-	@Override
-	protected void finalize() {
-		release();
 	}
 
 }

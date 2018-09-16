@@ -3,14 +3,19 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.typeremapper.id.IdSkipper;
+import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
+
+	public MiddleInventoryOpen(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected int windowId;
 	protected WindowType type;
@@ -52,7 +57,7 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 			}
 		}
 		cache.getWindowCache().setOpenedWindow(type, windowId, invSlots, horseId);
-		if (IdSkipper.INVENTORY.getTable(connection.getVersion()).shouldSkip(type)) {
+		if (GenericIdSkipper.INVENTORY.getTable(connection.getVersion()).shouldSkip(type)) {
 			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryClosePacket());
 			return false;
 		} else {

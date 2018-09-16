@@ -12,7 +12,7 @@ import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.ArrayDequeMultiMap;
 import protocolsupport.utils.ArrayDequeMultiMap.ChildDeque;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 //See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-Inventory-Managing)
 public class PETransactionRemapper {
@@ -54,7 +54,7 @@ public class PETransactionRemapper {
 		surpluses.clear();
 	}
 
-	public void customCursor(ItemStackWrapper item) {
+	public void customCursor(NetworkItemStack item) {
 		clear();
 		if(!item.isNull()) {
 			surpluses.put(new ItemKey(item), new SlotBudget(InvTransaction.CURSOR, item.getAmount(), item.getAmount()), true);
@@ -89,21 +89,21 @@ public class PETransactionRemapper {
 								}
 								bug("Paying back");
 								for (int i = 0; i < (surplus.getSlotAmount() - money); i++) {
-									Click.RIGHT.on(surplus.getSlot(), (i == 0) ? ItemStackWrapper.NULL : item.get(i), cache, packets);
+									Click.RIGHT.on(surplus.getSlot(), (i == 0) ? NetworkItemStack.NULL : item.get(i), cache, packets);
 								}
 							} 
 							if (!deficit.isCursor()) {
 								if (money == surplus.getSlotAmount()) {
 									if (!isSwapping(deficit)) { //not swapping.
 										bug("Putting all on deficit!");
-										Click.LEFT.on(deficit.getSlot(), (!deficit.hasStack()) ? ItemStackWrapper.NULL : item.get(deficit.getSlotAmount()), cache, packets);
+										Click.LEFT.on(deficit.getSlot(), (!deficit.hasStack()) ? NetworkItemStack.NULL : item.get(deficit.getSlotAmount()), cache, packets);
 									} else {
 										bug("swapping!");
 									}
 								} else {
 									bug("putting some on deficit!");
 									for (int i = 0; i < money; i++) {
-										Click.RIGHT.on(deficit.getSlot(), ((deficit.getSlotAmount() + i) == 0) ? ItemStackWrapper.NULL : item.get(deficit.getSlotAmount() + i), cache, packets);
+										Click.RIGHT.on(deficit.getSlot(), ((deficit.getSlotAmount() + i) == 0) ? NetworkItemStack.NULL : item.get(deficit.getSlotAmount() + i), cache, packets);
 									}
 								}
 							}
@@ -112,7 +112,7 @@ public class PETransactionRemapper {
 						deficit.receive(money);
 						if (!surplus.isCursor() && !deficit.isToUseInTable() && !deficit.isCursor() && surplus.hasStack() && (surplus.getSlot() != deficit.getSlot())) {
 							bug("Putting surplus back");
-							Click.LEFT.on(surplus.getSlot(), ItemStackWrapper.NULL, cache, packets);
+							Click.LEFT.on(surplus.getSlot(), NetworkItemStack.NULL, cache, packets);
 						}
 						return surplus.isEmpty();
 					});
@@ -125,7 +125,7 @@ public class PETransactionRemapper {
 							int money = surplus.getSlotAmount() - surplus.getAmount();
 							Click.LEFT.on(surplus.getSlot(), item.get(surplus.getSlotAmount()), cache, packets);
 							for (int i = 0; i < money; i++) {
-								Click.RIGHT.on(surplus.getSlot(), (i == 0) ? ItemStackWrapper.NULL : item.get(i), cache, packets);
+								Click.RIGHT.on(surplus.getSlot(), (i == 0) ? NetworkItemStack.NULL : item.get(i), cache, packets);
 							}
 							itemSurplus.removeLast();
 							surpluses.put(item, new SlotBudget(InvTransaction.CURSOR, surplus.getAmount(), surplus.getAmount()));
@@ -174,11 +174,11 @@ public class PETransactionRemapper {
 			this.button = button;
 		}
 		
-		public void on(int slot, ItemStackWrapper item, NetworkDataCache cache, RecyclableArrayList<ServerBoundPacketData> packets) {
+		public void on(int slot, NetworkItemStack item, NetworkDataCache cache, RecyclableArrayList<ServerBoundPacketData> packets) {
 			bug("CLICK " + toString() + " on: " + slot + " with: " + item.toString());
 			int actionNumber = cache.getPEInventoryCache().getActionNumber();
 			packets.add(MiddleInventoryClick.create(cache.getAttributesCache().getLocale(), cache.getWindowCache().getOpenedWindowId(), slot, button, actionNumber, mode, item));
-			if(!item.isNull() && item.getTag() != null && !item.getTag().isNull()) {
+			if(!item.isNull() && item.getNBT() != null && !item.getNBT().isNull()) {
 				packets.add(MiddleInventoryTransaction.create(cache.getWindowCache().getOpenedWindowId(), actionNumber, false));
 			}
 		}
@@ -250,25 +250,25 @@ public class PETransactionRemapper {
 
 	protected static class ItemKey {
 
-		private ItemStackWrapper keyItem = ItemStackWrapper.NULL;
+		private NetworkItemStack keyItem = NetworkItemStack.NULL;
 		private int hash = 0;
 
-		public ItemKey(ItemStackWrapper keyItem) {
+		public ItemKey(NetworkItemStack keyItem) {
 			if(!keyItem.isNull()) {
 				this.keyItem = keyItem;
 				hash = 41 * hash + keyItem.getTypeId();
-				hash = 41 * hash + keyItem.getData();
-				hash = 41 * hash + keyItem.getTag().hashCode();
+				hash = 41 * hash + keyItem.getLegacyData();
+				hash = 41 * hash + keyItem.getNBT().hashCode();
 			}
 		}
 
 		@Deprecated
-		public ItemStackWrapper getKeyItem() {
+		public NetworkItemStack getKeyItem() {
 			return keyItem;
 		}
 
-		public ItemStackWrapper get(int amount) {
-			ItemStackWrapper item = getKeyItem().cloneItemStack();
+		public NetworkItemStack get(int amount) {
+			NetworkItemStack item = getKeyItem().cloneItemStack();
 			item.setAmount(amount);
 			return item;
 		}
@@ -287,8 +287,8 @@ public class PETransactionRemapper {
 				}
 				return 
 						(wrapper.getKeyItem().getTypeId() == this.getKeyItem().getTypeId()) &&
-						(wrapper.getKeyItem().getData() == this.getKeyItem().getData()) &&
-						(wrapper.getKeyItem().getTag().equals(this.getKeyItem().getTag()));
+						(wrapper.getKeyItem().getLegacyData() == this.getKeyItem().getLegacyData()) &&
+						(wrapper.getKeyItem().getNBT().equals(this.getKeyItem().getNBT()));
 			}
 			return false;
 			

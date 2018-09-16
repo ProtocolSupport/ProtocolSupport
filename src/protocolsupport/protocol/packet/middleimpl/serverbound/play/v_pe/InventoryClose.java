@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClose;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -10,6 +11,10 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class InventoryClose extends ServerBoundMiddlePacket {
+
+	public InventoryClose(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected int windowId;
 

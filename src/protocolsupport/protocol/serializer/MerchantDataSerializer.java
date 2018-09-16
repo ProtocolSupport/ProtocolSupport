@@ -9,9 +9,9 @@ import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
+import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class MerchantDataSerializer {
 
@@ -19,9 +19,9 @@ public class MerchantDataSerializer {
 		MerchantData merchdata = new MerchantData(from.readInt());
 		int count = from.readUnsignedByte();
 		for (int i = 0; i < count; i++) {
-			ItemStackWrapper itemstack1 = ItemStackSerializer.readItemStack(from, version, locale, false);
-			ItemStackWrapper result = ItemStackSerializer.readItemStack(from, version, locale, false);
-			ItemStackWrapper itemstack2 = ItemStackWrapper.NULL;
+			NetworkItemStack itemstack1 = ItemStackSerializer.readItemStack(from, version, locale, false);
+			NetworkItemStack result = ItemStackSerializer.readItemStack(from, version, locale, false);
+			NetworkItemStack itemstack2 = NetworkItemStack.NULL;
 			if (from.readBoolean()) {
 				itemstack2 = ItemStackSerializer.readItemStack(from, version, locale, false);
 			}
@@ -91,14 +91,14 @@ public class MerchantDataSerializer {
 	}
 
 	//TODO: Find proper place for this.
-	private static NBTTagCompoundWrapper ItemStackToPENBT(ProtocolVersion version, String locale, ItemStackWrapper itemstack) {
+	private static NBTTagCompoundWrapper ItemStackToPENBT(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		NBTTagCompoundWrapper item = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
 		itemstack = ItemStackSerializer.remapItemToClient(version, locale, itemstack);
 		item.setByte("Count", itemstack.getAmount());
-		item.setShort("Damage", itemstack.getData());
+		item.setShort("Damage", itemstack.getLegacyData());
 		item.setShort("id", itemstack.getTypeId());
-		if ((itemstack.getTag() != null) && !itemstack.getTag().isNull()) {
-			item.setCompound("tag", itemstack.getTag().clone());
+		if ((itemstack.getNBT() != null) && !itemstack.getNBT().isNull()) {
+			item.setCompound("tag", itemstack.getNBT().clone());
 		}
 		return item;
 	}

@@ -14,6 +14,7 @@ import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.listeners.FeatureEmulation;
 import protocolsupport.listeners.InternalPluginMessageRequest;
+import protocolsupport.listeners.LocaleUseLoader;
 import protocolsupport.listeners.MultiplePassengersRestrict;
 import protocolsupport.listeners.ReloadCommandBlocker;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -21,33 +22,42 @@ import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.typeremapper.id.IdSkipper;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.typeremapper.basic.GenericIdRemapper;
+import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
+import protocolsupport.protocol.typeremapper.basic.SoundRemapper;
+import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
+import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
+import protocolsupport.protocol.typeremapper.chunk.EmptyChunk;
+import protocolsupport.protocol.typeremapper.itemstack.FlatteningItemId;
+import protocolsupport.protocol.typeremapper.itemstack.LegacyItemType;
+import protocolsupport.protocol.typeremapper.itemstack.PreFlatteningItemIdData;
+import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapperRegistry;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEffect;
-import protocolsupport.protocol.typeremapper.legacy.LegacyEntityType;
-import protocolsupport.protocol.typeremapper.legacy.LegacyPotion;
+import protocolsupport.protocol.typeremapper.legacy.LegacyEnchantmentId;
+import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
+import protocolsupport.protocol.typeremapper.legacy.LegacyPotionId;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
+import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
+import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPotion;
 import protocolsupport.protocol.typeremapper.pe.PESkinModel;
 import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory;
 import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeContainer;
-import protocolsupport.protocol.typeremapper.sound.SoundRemapper;
-import protocolsupport.protocol.typeremapper.tileentity.TileNBTRemapper;
-import protocolsupport.protocol.typeremapper.watchedentity.remapper.SpecificRemapper;
+import protocolsupport.protocol.typeremapper.watchedentity.EntityMetadataRemapperRegistry;
+import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.minecraftdata.BlockData;
-import protocolsupport.protocol.utils.minecraftdata.ItemData;
 import protocolsupport.protocol.utils.minecraftdata.KeybindData;
 import protocolsupport.protocol.utils.minecraftdata.PotionData;
 import protocolsupport.protocol.utils.minecraftdata.SoundData;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.pe.PECraftingManager;
@@ -91,7 +101,7 @@ public class ProtocolSupport extends JavaPlugin {
 		} else {
 			getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get().getIdentifier().getName()));
 		}
-		if (!ServerPlatform.get().getMiscUtils().getVersionName().equals("1.12.2")) {
+		if (!ServerPlatform.get().getMiscUtils().getVersionName().equals("1.13.1")) {
 			getLogger().severe("Unsupported server version " + ServerPlatform.get().getMiscUtils().getVersionName());
 			Bukkit.shutdown();
 			return;
@@ -102,13 +112,30 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(NetworkEntityType.class.getName());
 			Class.forName(DataWatcherObjectIndex.class.getName());
 			Class.forName(DataWatcherObjectIdRegistry.class.getName());
-			Class.forName(Allocator.class.getName());
 			Class.forName(BlockData.class.getName());
-			Class.forName(ItemData.class.getName());
 			Class.forName(PotionData.class.getName());
 			Class.forName(SoundData.class.getName());
 			Class.forName(KeybindData.class.getName());
 			Class.forName(I18NData.class.getName());
+			Class.forName(LegacyPotionId.class.getName());
+			Class.forName(LegacyEntityId.class.getName());
+			Class.forName(LegacyEnchantmentId.class.getName());
+			Class.forName(LegacyEffect.class.getName());
+			Class.forName(GenericIdSkipper.class.getName());
+			Class.forName(LegacyBlockData.class.getName());
+			Class.forName(FlatteningBlockId.class.getName());
+			Class.forName(PreFlatteningBlockIdData.class.getName());
+			Class.forName(TileNBTRemapper.class.getName());
+			Class.forName(ItemMaterialLookup.class.getName());
+			Class.forName(LegacyItemType.class.getName());
+			Class.forName(FlatteningItemId.class.getName());
+			Class.forName(PreFlatteningItemIdData.class.getName());
+			Class.forName(ItemStackComplexRemapperRegistry.class.getName());
+			Class.forName(MapColorRemapper.class.getName());
+			Class.forName(GenericIdRemapper.class.getName());
+			Class.forName(ParticleRemapper.class.getName());
+			Class.forName(EntityMetadataRemapperRegistry.class.getName());
+			Class.forName(SoundRemapper.class.getName());
 			Class.forName(Compressor.class.getName());
 			Class.forName(ServerBoundPacket.class.getName());
 			Class.forName(ClientBoundPacket.class.getName());
@@ -116,14 +143,10 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(AbstractLoginListener.class.getName());
 			Class.forName(AbstractStatusListener.class.getName());
 			Class.forName(SoundRemapper.class.getName());
-			Class.forName(IdSkipper.class.getName());
-			Class.forName(SpecificRemapper.class.getName());
-			Class.forName(IdRemapper.class.getName());
-			Class.forName(ItemStackRemapper.class.getName());
 			Class.forName(TileNBTRemapper.class.getName());
 			Class.forName(MapColorRemapper.class.getName());
-			Class.forName(LegacyPotion.class.getName());
-			Class.forName(LegacyEntityType.class.getName());
+			Class.forName(LegacyPotionId.class.getName());
+			Class.forName(LegacyEntityId.class.getName());
 			Class.forName(LegacyEffect.class.getName());
 			Class.forName(PEDataValues.class.getName());
 			Class.forName(PEProxyServerInfoHandler.class.getName());
@@ -134,6 +157,8 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(PEPotion.class.getName());
 			Class.forName(PEInventory.class.getName());
 			Class.forName(PEFakeContainer.class.getName());
+			Class.forName(PEBlocks.class.getName());
+			Class.forName(EmptyChunk.class.getName());
 			ServerPlatform.get().getInjector().onLoad();
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
@@ -162,6 +187,7 @@ public class ProtocolSupport extends JavaPlugin {
 			}
 			(peserver = new PEProxyServer()).start();
 		});
+		getServer().getPluginManager().registerEvents(new LocaleUseLoader(), this);
 	}
 
 	@Override
@@ -191,7 +217,7 @@ public class ProtocolSupport extends JavaPlugin {
 		public final String buildnumber;
 		public BuildInfo() throws IOException {
 			Properties properties = new Properties();
-			properties.load(Utils.getResource("buildinfo"));
+			properties.load(Utils.getResourceBuffered("buildinfo"));
 			buildtime = properties.getProperty("buildtime");
 			buildhost = properties.getProperty("buildhost");
 			buildnumber = properties.getProperty("buildnumber");

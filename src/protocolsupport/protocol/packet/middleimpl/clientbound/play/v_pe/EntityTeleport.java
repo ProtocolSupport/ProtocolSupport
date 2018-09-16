@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -8,13 +9,17 @@ import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData.Offset;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityTeleport extends MiddleEntityTeleport {
+
+	public EntityTeleport(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -57,14 +62,14 @@ public class EntityTeleport extends MiddleEntityTeleport {
 	public static ClientBoundPacketData create(ProtocolVersion version, NetworkEntity entity, double x, double y, double z, byte pitch, byte headYaw, byte yaw, boolean onGround, boolean teleported) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
+		int flag = onGround ? (teleported ? 192 : 128) : (teleported ? 64 : 0);
+		serializer.writeByte(flag);
 		serializer.writeFloatLE((float) x);
 		serializer.writeFloatLE((float) y);
 		serializer.writeFloatLE((float) z);
 		serializer.writeByte(pitch);
 		serializer.writeByte(headYaw);
 		serializer.writeByte(yaw);
-		serializer.writeBoolean(onGround);
-		serializer.writeBoolean(teleported);
 		return serializer;
 	}
 

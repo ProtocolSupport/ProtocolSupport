@@ -1,18 +1,23 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleMoveLook;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAccept;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.MovementCache;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class PositionLook extends ServerBoundMiddlePacket {
+
+	public PositionLook(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected double x;
 	protected double y;

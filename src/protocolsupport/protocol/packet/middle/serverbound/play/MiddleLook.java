@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -7,6 +8,10 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleLook extends ServerBoundMiddlePacket {
+
+	public MiddleLook(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected float yaw;
 	protected float pitch;

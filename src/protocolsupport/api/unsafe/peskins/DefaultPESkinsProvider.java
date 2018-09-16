@@ -16,7 +16,7 @@ public class DefaultPESkinsProvider extends PESkinsProvider {
 		@Override
 		public byte[] call() {
 			try {
-				return toData(ImageIO.read(Utils.getResourceAsStream("pe/steve_skin.png")));
+				return toData(ImageIO.read(Utils.getResource("pe/steve_skin.png")));
 			} catch (IOException e) {
 				return new byte[0];
 			}

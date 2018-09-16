@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
@@ -14,6 +15,10 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class PlayerAction extends ServerBoundMiddlePacket {
+
+	public PlayerAction(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected int action;
 	protected Position blockPosition = new Position(0, 0, 0);
