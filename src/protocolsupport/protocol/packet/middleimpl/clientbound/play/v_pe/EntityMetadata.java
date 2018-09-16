@@ -1,5 +1,8 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import org.bukkit.Material;
+
+import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
@@ -36,35 +39,37 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		if (entity == null) {
 			return packets;
 		}
-		switch (entity.getType()) {
-			case ITEM: {
-				DataWatcherObjectIndex.Item.ITEM.getValue(metadata.getOriginal()).ifPresent(itemWatcher -> {
-					NetworkEntityItemDataCache itemDataCache = (NetworkEntityItemDataCache) entity.getDataCache();
-					packets.addAll(itemDataCache.updateItem(version, entity.getId(), itemWatcher.getValue()));
-				});
-				break;
-			}
-			default: {
-				if (entity.getType().isOfType(NetworkEntityType.LIVING)) {
-					DataWatcherObjectIndex.EntityLiving.HEALTH.getValue(metadata.getOriginal()).ifPresent(healthWatcher -> {
-						packets.add(EntitySetAttributes.create(version, entity, new ObjectFloatTuple<>(AttributeInfo.HEALTH, healthWatcher.getValue())));
-					});
-				}
-				if (entity.getType().isOfType(NetworkEntityType.BATTLE_HORSE)) {
-					DataWatcherObjectIndex.BattleHorse.ARMOR.getValue(metadata.getOriginal()).ifPresent(armorWatcher -> {
-						//int type = armorWatcher.getValue();
-						packets.add(EntityEquipment.create(version, locale, entityId,
-							NetworkItemStack.NULL,
-							//TODO Fix for 1.13
-							/*type == 0 ?*/ NetworkItemStack.NULL /*: ServerPlatform.get().getWrapperFactory().createItemStack(416 + armorWatcher.getValue())*/,
-							NetworkItemStack.NULL,
-							NetworkItemStack.NULL
-						));
-					});
-				}
-				packets.add(create(entity, locale, metadata.getRemapped(), version));
-			}
+		//TODO add these as some kind of function based on NetworkEntityType, if this gets unmanagable.
+		//Special metadata -> other packet remapper.
+		if (entity.getType().isOfType(NetworkEntityType.ITEM)) {
+			DataWatcherObjectIndex.Item.ITEM.getValue(metadata.getOriginal()).ifPresent(itemWatcher -> {
+				NetworkEntityItemDataCache itemDataCache = (NetworkEntityItemDataCache) entity.getDataCache();
+				packets.addAll(itemDataCache.updateItem(version, entity.getId(), itemWatcher.getValue()));
+			});
 		}
+		if (entity.getType().isOfType(NetworkEntityType.LIVING)) {
+			DataWatcherObjectIndex.EntityLiving.HEALTH.getValue(metadata.getOriginal()).ifPresent(healthWatcher -> {
+				packets.add(EntitySetAttributes.create(version, entity, new ObjectFloatTuple<>(AttributeInfo.HEALTH, healthWatcher.getValue())));
+			});
+		}
+		if (entity.getType().isOfType(NetworkEntityType.BATTLE_HORSE)) {
+			DataWatcherObjectIndex.BattleHorse.ARMOR.getValue(metadata.getOriginal()).ifPresent(armorWatcher -> {
+				NetworkItemStack armour = new NetworkItemStack();
+				switch (armorWatcher.getValue()) {
+					case 0: { armour = NetworkItemStack.NULL; break; }
+					case 1: { armour.setTypeId(MaterialAPI.getItemNetworkId(Material.IRON_HORSE_ARMOR)); break; }
+					case 2: { armour.setTypeId(MaterialAPI.getItemNetworkId(Material.GOLDEN_HORSE_ARMOR)); break; }
+					case 3: { armour.setTypeId(MaterialAPI.getItemNetworkId(Material.DIAMOND_HORSE_ARMOR)); break; }
+				}
+				packets.add(EntityEquipment.create(version, locale, entityId,
+					NetworkItemStack.NULL,
+					armour,
+					NetworkItemStack.NULL,
+					NetworkItemStack.NULL
+				));
+			});
+		}
+		packets.add(create(entity, locale, metadata.getRemapped(), version));
 		return packets;
 	}
 
