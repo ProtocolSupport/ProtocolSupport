@@ -23,7 +23,6 @@ import org.bukkit.block.data.type.Door.Hinge;
 import org.bukkit.block.data.type.EnderChest;
 import org.bukkit.block.data.type.Fire;
 import org.bukkit.block.data.type.Gate;
-import org.bukkit.block.data.type.Jukebox;
 import org.bukkit.block.data.type.Observer;
 import org.bukkit.block.data.type.PistonHead;
 import org.bukkit.block.data.type.RedstoneWire;
@@ -141,7 +140,20 @@ public class LegacyBlockData {
 		public void applyDefaultRemaps() {
 			remappings.clear();
 
-			this.<Jukebox>registerRemapEntryForAllStates(Material.JUKEBOX, o -> o.getMaterial().createBlockData(), ProtocolVersion.MINECRAFT_PE);
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.JUKEBOX,
+					Material.WHITE_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.MAGENTA_SHULKER_BOX,
+					Material.LIGHT_BLUE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.LIME_SHULKER_BOX,
+					Material.PINK_SHULKER_BOX, Material.GRAY_SHULKER_BOX, Material.LIGHT_GRAY_SHULKER_BOX,
+					Material.CYAN_SHULKER_BOX, Material.CYAN_SHULKER_BOX, Material.PURPLE_SHULKER_BOX,
+					Material.BLUE_SHULKER_BOX, Material.BROWN_SHULKER_BOX, Material.GREEN_SHULKER_BOX,
+					Material.RED_SHULKER_BOX, Material.BLACK_SHULKER_BOX
+				),
+				o -> o.getMaterial().createBlockData(),
+				ProtocolVersion.MINECRAFT_PE
+			);
+			this.registerRemapEntryForAllStates(Material.SHULKER_BOX, Material.PURPLE_SHULKER_BOX.createBlockData(), ProtocolVersion.MINECRAFT_PE);
 
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -403,7 +415,7 @@ public class LegacyBlockData {
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
 			this.registerRemapEntryForAllStates(Material.DRIED_KELP_BLOCK, Material.GREEN_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
-			this.registerRemapEntryForAllStates(Material.SHULKER_BOX, Material.PINK_SHULKER_BOX.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
+			this.registerRemapEntryForAllStates(Material.SHULKER_BOX, Material.PINK_SHULKER_BOX.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(Material.SEAGRASS, Material.SEA_PICKLE, Material.TURTLE_EGG),
 				Material.GRASS.createBlockData(),
