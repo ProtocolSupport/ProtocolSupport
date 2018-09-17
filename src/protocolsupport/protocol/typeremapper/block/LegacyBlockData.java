@@ -23,6 +23,7 @@ import org.bukkit.block.data.type.Door.Hinge;
 import org.bukkit.block.data.type.EnderChest;
 import org.bukkit.block.data.type.Fire;
 import org.bukkit.block.data.type.Gate;
+import org.bukkit.block.data.type.Jukebox;
 import org.bukkit.block.data.type.Observer;
 import org.bukkit.block.data.type.PistonHead;
 import org.bukkit.block.data.type.RedstoneWire;
@@ -52,6 +53,7 @@ public class LegacyBlockData {
 			applyDefaultRemaps();
 		}
 
+		
 		protected Gate toPre13GateState(Gate from, Gate to) {
 			to.setInWall(false);
 			to.setFacing(from.getFacing());
@@ -138,6 +140,8 @@ public class LegacyBlockData {
 
 		public void applyDefaultRemaps() {
 			remappings.clear();
+
+			this.<Jukebox>registerRemapEntryForAllStates(Material.JUKEBOX, o -> o.getMaterial().createBlockData(), ProtocolVersion.MINECRAFT_PE);
 
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(
