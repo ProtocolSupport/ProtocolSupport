@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -24,6 +27,7 @@ public class PEBlocks {
 
 	protected static byte[] peBlockDef;
 	protected static final int[] pcToPeRuntimeId = new int[MinecraftData.BLOCKDATA_COUNT];
+	protected static final int[] peToPcRuntimeId = new int[MinecraftData.BLOCKDATA_COUNT];
 	protected static final int[] pcWaterlogged = new int[MinecraftData.BLOCKDATA_COUNT];
 	protected static int WATER_BLOCK;
 
@@ -46,7 +50,9 @@ public class PEBlocks {
 			String peName = JsonUtils.getString(object, "pename");
 			short peData = (short) JsonUtils.getInt(object, "pedata");
 			System.out.println("REMAPPED pcRuntimeId: " + runtimeId + "(" + JsonUtils.getString(object, "blockdata") + ") TO " + peName + "[DATA=" + peData + "] peRuntimeId: " + peBlocks.indexOf(new Any<String,Short>(peName, peData)) + ".");
-			pcToPeRuntimeId[runtimeId] = peBlocks.indexOf(new Any<String,Short>(peName, peData));
+			int peRuntimeId = peBlocks.indexOf(new Any<String,Short>(peName, peData));
+			pcToPeRuntimeId[runtimeId] = peRuntimeId;
+			peToPcRuntimeId[peRuntimeId] = runtimeId;
 			//TODO: Stop this absurd test and actually remap in this script, also storing the waterlogged runtimeids.
 			if (JsonUtils.getString(object, "blockdata").contains("waterlogged=false")) {
 				pcWaterlogged[runtimeId] = IS_WATERLOGGED;
@@ -68,8 +74,28 @@ public class PEBlocks {
 		return pcToPeRuntimeId[pcRuntimeId];
 	}
 
+	public static int getPcRuntimeId(int peRuntimeId) {
+		return peToPcRuntimeId[peRuntimeId];
+	}
+
 	public static byte[] getPocketRuntimeDefinition() {
 		return peBlockDef;
+	}
+
+	public static int toPocketBlock(Material material) {
+		return toPocketBlock(material.createBlockData());
+	}
+
+	public static int toPocketBlock(BlockData blockdata) {
+		return PEBlocks.getPocketRuntimeId(MaterialAPI.getBlockDataNetworkId(blockdata));
+	}
+
+	public BlockData fromPocketBlock(int pocketblock) {
+		return MaterialAPI.getBlockDataByNetworkId(PEBlocks.getPcRuntimeId(pocketblock));
+	}
+
+	public Material materialFromPocketBlock(int pocketblock) {
+		return fromPocketBlock(pocketblock).getMaterial();
 	}
 
 	public static boolean isPCBlockWaterlogged(int runtimeId) {
