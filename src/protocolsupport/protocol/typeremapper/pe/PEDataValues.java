@@ -330,11 +330,11 @@ public class PEDataValues {
 	}
 
 	public static int pcToPeItem(int combinedId) {
-		return pcItemToPe.get(combinedId);
+		return pcItemToPe.getOrDefault(combinedId, combinedId);
 	}
 
 	public static int peToPcItem(int combinedId) {
-		return peItemToPc.get(combinedId);
+		return peItemToPc.getOrDefault(combinedId, combinedId);
 	}
 
 	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> PARTICLE = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
