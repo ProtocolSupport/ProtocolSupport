@@ -28,12 +28,12 @@ public class ItemStackRemapper {
 	public static NetworkItemStack remapFromClient(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		if ((version == ProtocolVersion.MINECRAFT_PE) || version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			int legacyCombinedId = PreFlatteningItemIdData.formLegacyCombinedId(itemstack.getTypeId(), itemstack.getLegacyData());
-			itemstack.setTypeId(PreFlatteningItemIdData.getModernIdByLegacyCombinedId(legacyCombinedId));
 			if (version == ProtocolVersion.MINECRAFT_PE) {
 				int peCombinedId = PEDataValues.pcToPeItem(legacyCombinedId);
 				itemstack.setTypeId(PreFlatteningItemIdData.getIdFromLegacyCombinedId(peCombinedId));
 				itemstack.setLegacyData(PreFlatteningItemIdData.getDataFromLegacyCombinedId(peCombinedId));
 			}
+			itemstack.setTypeId(PreFlatteningItemIdData.getModernIdByLegacyCombinedId(legacyCombinedId));
 		} else {
 			itemstack.setTypeId(FlatteningItemId.REGISTRY_FROM_CLIENT.getTable(version).getRemap(itemstack.getTypeId()));
 		}
