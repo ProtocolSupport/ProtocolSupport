@@ -18,6 +18,7 @@ import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.Utils;
@@ -82,20 +83,20 @@ public class PEBlocks {
 		return peBlockDef;
 	}
 
-	public static int toPocketBlock(Material material) {
-		return toPocketBlock(material.createBlockData());
+	public static int toPocketBlock(ProtocolVersion version, Material material) {
+		return toPocketBlock(version, material.createBlockData());
 	}
 
-	public static int toPocketBlock(BlockData blockdata) {
-		return PEBlocks.getPocketRuntimeId(MaterialAPI.getBlockDataNetworkId(blockdata));
+	public static int toPocketBlock(ProtocolVersion version, BlockData blockdata) {
+		return PEBlocks.getPocketRuntimeId(LegacyBlockData.REGISTRY.getTable(version).getRemap(MaterialAPI.getBlockDataNetworkId(blockdata)));
 	}
 
-	public BlockData fromPocketBlock(int pocketblock) {
+	public BlockData fromPocketBlock(ProtocolVersion version, int pocketblock) {
 		return MaterialAPI.getBlockDataByNetworkId(PEBlocks.getPcRuntimeId(pocketblock));
 	}
 
-	public Material materialFromPocketBlock(int pocketblock) {
-		return fromPocketBlock(pocketblock).getMaterial();
+	public Material materialFromPocketBlock(ProtocolVersion version, int pocketblock) {
+		return fromPocketBlock(version, pocketblock).getMaterial();
 	}
 
 	public static boolean isPCBlockWaterlogged(int runtimeId) {
