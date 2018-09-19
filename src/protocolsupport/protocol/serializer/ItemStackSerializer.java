@@ -40,16 +40,22 @@ public class ItemStackSerializer {
 		} else {
 			type = from.readShort();
 		}
-		if ((type < 0) || ((type == 0) && (version == ProtocolVersion.MINECRAFT_PE))) {
-			//Non or empty item stacks can also be 0 in PE.
-			return NetworkItemStack.NULL;
+		// PE can have -1 for new blocks :F
+		if (version == ProtocolVersion.MINECRAFT_PE) {
+			if (type == 0) {
+				return NetworkItemStack.NULL;
+			}
+		} else {
+			if (type < 0) {
+				return NetworkItemStack.NULL;
+			}
 		}
 		NetworkItemStack itemstack = new NetworkItemStack();
 		itemstack.setTypeId(type);
 		if (version == ProtocolVersion.MINECRAFT_PE) {
 			int amountdata = VarNumberSerializer.readSVarInt(from);
 			itemstack.setAmount(amountdata & 0x7F);
-			itemstack.setLegacyData((amountdata >> 8) & 0xFFFF);
+			itemstack.setLegacyData((amountdata >> 8) & 0x7FFF);
 		} else {
 			itemstack.setAmount(from.readByte());
 		}
@@ -58,9 +64,14 @@ public class ItemStackSerializer {
 		}
 		if (version == ProtocolVersion.MINECRAFT_PE) {
 			itemstack.setNBT(readTag(from, false, version));
-			//TODO: Read the rest properly..
-			from.readByte(); //TODO: CanPlaceOn PE
-			from.readByte(); //TODO: CanDestroy PE
+			//TODO: CanPlaceOn PE
+			for (int i = 0; i < VarNumberSerializer.readSVarInt(from); i++) {
+				StringSerializer.readString(from, version);
+			}
+			//TODO: CanDestroy PE
+			for (int i = 0; i < VarNumberSerializer.readSVarInt(from); i++) {
+				StringSerializer.readString(from, version);
+			}
 		} else {
 			itemstack.setNBT(readTag(from, version));
 		}
@@ -85,10 +96,10 @@ public class ItemStackSerializer {
 		}
 		if (version == ProtocolVersion.MINECRAFT_PE) {
 			VarNumberSerializer.writeSVarInt(to, witemstack.getTypeId());
-			VarNumberSerializer.writeSVarInt(to, ((witemstack.getLegacyData() & 0xFFFF) << 8) | witemstack.getAmount());
+			VarNumberSerializer.writeSVarInt(to, ((witemstack.getLegacyData() & 0x7FFF) << 8) | witemstack.getAmount());
 			writeTag(to, false, version, witemstack.getNBT());
-			to.writeByte(0); //TODO: CanPlaceOn PE
-			to.writeByte(0); //TODO: CanDestroy PE
+			VarNumberSerializer.writeSVarInt(to, 0); //TODO: CanPlaceOn PE
+			VarNumberSerializer.writeSVarInt(to, 0); //TODO: CanDestroy PE
 		} else {
 			to.writeShort(witemstack.getTypeId());
 			to.writeByte(witemstack.getAmount());
