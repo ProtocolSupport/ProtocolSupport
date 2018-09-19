@@ -43,7 +43,7 @@ public class PEFakeContainer {
 		regInvBlockType(WindowType.ANVIL,			Material.ANVIL, 			TileEntityType.UNKNOWN);
 		regInvBlockType(WindowType.HOPPER,			Material.HOPPER, 			TileEntityType.HOPPER);
 		regInvBlockType(WindowType.DROPPER,			Material.DROPPER, 			TileEntityType.DROPPER);
-		regInvBlockType(WindowType.SHULKER,			Material.PURPLE_SHULKER_BOX,TileEntityType.CHEST); //Fake with chest
+		regInvBlockType(WindowType.SHULKER,			Material.CHEST,				TileEntityType.CHEST); //Fake with chest
 	}
 	private static Any<Material, TileEntityType> getContainerData(WindowType type) {
 		return invBlockType.get(type);
