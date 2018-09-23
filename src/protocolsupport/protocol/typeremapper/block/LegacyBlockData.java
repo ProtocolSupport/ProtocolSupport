@@ -6,6 +6,7 @@ import java.util.function.Function;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.AnaloguePowerable;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.BlockData;
@@ -237,7 +238,8 @@ public class LegacyBlockData {
 					Material.JUNGLE_STAIRS, Material.OAK_STAIRS, Material.SPRUCE_STAIRS,
 					Material.COBBLESTONE_STAIRS, Material.STONE_BRICK_STAIRS,
 					Material.SANDSTONE_STAIRS, Material.RED_SANDSTONE_STAIRS,
-					Material.QUARTZ_STAIRS, Material.NETHER_BRICK_STAIRS, Material.PURPUR_STAIRS
+					Material.QUARTZ_STAIRS, Material.NETHER_BRICK_STAIRS, Material.PURPUR_STAIRS,
+					Material.BRICK_STAIRS
 				),
 				o -> toPre13StairsState(o, (Stairs) o.getMaterial().createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13
@@ -365,9 +367,19 @@ public class LegacyBlockData {
 				Material.AIR.createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
+			this.registerRemapEntryForAllStates(Material.ATTACHED_MELON_STEM, o -> {
+				return Material.MELON_STEM.createBlockData(data -> {
+					((Ageable) data).setAge(((Ageable) data).getMaximumAge());
+				});
+			}, ProtocolVersionsHelper.BEFORE_1_13);
+			this.registerRemapEntryForAllStates(Material.ATTACHED_PUMPKIN_STEM, o -> {
+				return Material.PUMPKIN_STEM.createBlockData(data -> {
+					((Ageable) data).setAge(((Ageable) data).getMaximumAge());
+				});
+			}, ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(Material.BLUE_ICE, Material.LIGHT_BLUE_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(Material.BUBBLE_COLUMN, Material.WATER.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
-			this.registerRemapEntryForAllStates(Material.CARVED_PUMPKIN, Material.PUMPKIN.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
+			this.registerRemapEntryForAllStates(Material.PUMPKIN, Material.CARVED_PUMPKIN.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(Material.CONDUIT, Material.STONE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(
