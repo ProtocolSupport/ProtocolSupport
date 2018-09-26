@@ -635,10 +635,22 @@
 			"height": 0.3
 		}
 	},
+	"TURTLE": {
+		"BoundingBox":  {
+			"width": 0.6,
+			"height": 0.2
+		}
+	},
 	"DROWNED": {
 		"BoundingBox": {
 			"width": 0.6,
 			"height": 1.8
+		}
+	},
+	"PHANTOM": {
+		"BoundingBox": {
+			"width": 0.9,
+			"height": 0.5
 		}
 	},
 	"PARROT": {

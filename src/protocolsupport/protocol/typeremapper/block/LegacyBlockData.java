@@ -52,6 +52,7 @@ public class LegacyBlockData {
 			applyDefaultRemaps();
 		}
 
+		
 		protected Gate toPre13GateState(Gate from, Gate to) {
 			to.setInWall(false);
 			to.setFacing(from.getFacing());
@@ -141,6 +142,21 @@ public class LegacyBlockData {
 
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(
+					Material.JUKEBOX,
+					Material.WHITE_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.MAGENTA_SHULKER_BOX,
+					Material.LIGHT_BLUE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.LIME_SHULKER_BOX,
+					Material.PINK_SHULKER_BOX, Material.GRAY_SHULKER_BOX, Material.LIGHT_GRAY_SHULKER_BOX,
+					Material.CYAN_SHULKER_BOX, Material.CYAN_SHULKER_BOX, Material.PURPLE_SHULKER_BOX,
+					Material.BLUE_SHULKER_BOX, Material.BROWN_SHULKER_BOX, Material.GREEN_SHULKER_BOX,
+					Material.RED_SHULKER_BOX, Material.BLACK_SHULKER_BOX
+				),
+				o -> o.getMaterial().createBlockData(),
+				ProtocolVersion.MINECRAFT_PE
+			);
+			this.registerRemapEntryForAllStates(Material.SHULKER_BOX, Material.PURPLE_SHULKER_BOX.createBlockData(), ProtocolVersion.MINECRAFT_PE);
+
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(
 					Material.ACACIA_LEAVES, Material.DARK_OAK_LEAVES, Material.BIRCH_LEAVES,
 					Material.JUNGLE_LEAVES, Material.SPRUCE_LEAVES, Material.OAK_LEAVES,
 					Material.ACACIA_FENCE, Material.DARK_OAK_FENCE, Material.BIRCH_FENCE,
@@ -160,12 +176,12 @@ public class LegacyBlockData {
 					Material.NOTE_BLOCK
 				),
 				o -> o.getMaterial().createBlockData(),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<MultipleFacing>registerRemapEntryForAllStates(
 				Arrays.asList(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL),
 				o -> clearMutipleFacing((MultipleFacing) o.getMaterial().createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<MultipleFacing>registerRemapEntryForAllStates(
 				Material.VINE,
@@ -174,7 +190,7 @@ public class LegacyBlockData {
 					mfacing.setFace(BlockFace.UP, true);
 					return mfacing;
 				},
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Gate>registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -182,12 +198,12 @@ public class LegacyBlockData {
 					Material.JUNGLE_FENCE_GATE, Material.OAK_FENCE_GATE, Material.SPRUCE_FENCE_GATE
 				),
 				o -> toPre13GateState(o, (Gate) o.getMaterial().createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Switch>registerRemapEntryForAllStates(
 				Arrays.asList(Material.STONE_BUTTON, Material.LEVER),
 				o -> toPre13ButtonState(o, (Switch) o.getMaterial().createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Switch>registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -195,7 +211,7 @@ public class LegacyBlockData {
 					Material.JUNGLE_BUTTON, Material.OAK_BUTTON, Material.SPRUCE_BUTTON
 				),
 				o -> toPre13ButtonState(o, (Switch) Material.OAK_BUTTON.createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Door>registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -204,7 +220,7 @@ public class LegacyBlockData {
 					Material.IRON_DOOR
 				),
 				o -> toPre13DoorState(o, (Door) o.getMaterial().createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Slab>registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -213,7 +229,7 @@ public class LegacyBlockData {
 					Material.COBBLESTONE_SLAB, Material.SANDSTONE_SLAB, Material.RED_SANDSTONE_SLAB
 				),
 				o -> toPre13SlabState(o, (Slab) o.getMaterial().createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Slab>registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -221,7 +237,7 @@ public class LegacyBlockData {
 					Material.PETRIFIED_OAK_SLAB
 				),
 				o -> toPre13SlabState(o, (Slab) Material.COBBLESTONE_SLAB.createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -229,7 +245,7 @@ public class LegacyBlockData {
 					Material.JUNGLE_PRESSURE_PLATE, Material.OAK_PRESSURE_PLATE, Material.SPRUCE_PRESSURE_PLATE
 				),
 				Material.OAK_PRESSURE_PLATE.createBlockData(),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Stairs>registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -240,12 +256,12 @@ public class LegacyBlockData {
 					Material.QUARTZ_STAIRS, Material.NETHER_BRICK_STAIRS, Material.PURPUR_STAIRS
 				),
 				o -> toPre13StairsState(o, (Stairs) o.getMaterial().createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Stairs>registerRemapEntryForAllStates(
 				Arrays.asList(Material.PRISMARINE_BRICK_STAIRS, Material.PRISMARINE_STAIRS, Material.DARK_PRISMARINE_STAIRS),
 				o -> toPre13StairsState(o, (Stairs) Material.STONE_BRICK_STAIRS.createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<TrapDoor>registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -253,12 +269,12 @@ public class LegacyBlockData {
 					Material.JUNGLE_TRAPDOOR, Material.OAK_TRAPDOOR, Material.SPRUCE_TRAPDOOR
 				),
 				o -> toPre13TrapDoor(o, (TrapDoor) Material.OAK_TRAPDOOR.createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<TrapDoor>registerRemapEntryForAllStates(
 				Material.IRON_TRAPDOOR,
 				o -> toPre13TrapDoor(o, (TrapDoor) o.getMaterial().createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Bed>registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -273,7 +289,7 @@ public class LegacyBlockData {
 					bed.setPart(o.getPart());
 					return bed;
 				},
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Rotatable>registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -283,7 +299,7 @@ public class LegacyBlockData {
 					Material.PURPLE_BANNER, Material.RED_BANNER, Material.WHITE_BANNER, Material.YELLOW_BANNER
 				),
 				o -> cloneRotatable(o, (Rotatable) Material.WHITE_BANNER.createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Directional>registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -293,12 +309,12 @@ public class LegacyBlockData {
 					Material.PURPLE_WALL_BANNER, Material.RED_WALL_BANNER, Material.WHITE_WALL_BANNER, Material.YELLOW_WALL_BANNER
 				),
 				o -> cloneDirectional(o, (Directional) Material.WHITE_WALL_BANNER.createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Directional>registerRemapEntryForAllStates(
 				Arrays.asList(Material.LADDER, Material.ENDER_CHEST),
 				o -> cloneDirectional(o, (Directional) o.getMaterial().createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Chest>registerRemapEntryForAllStates(
 				Arrays.asList(Material.CHEST, Material.TRAPPED_CHEST),
@@ -308,7 +324,7 @@ public class LegacyBlockData {
 					enderChest.setFacing(o.getFacing());
 					return enderChest;
 				},
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<PistonHead>registerRemapEntryForAllStates(
 				Material.PISTON_HEAD,
@@ -318,7 +334,7 @@ public class LegacyBlockData {
 					pistonHead.setType(o.getType());
 					return pistonHead;
 				},
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Fire>registerRemapEntryForAllStates(
 				Material.FIRE,
@@ -327,7 +343,7 @@ public class LegacyBlockData {
 					fire.setAge(o.getAge());
 					return fire;
 				},
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Tripwire>registerRemapEntryForAllStates(
 				Material.TRIPWIRE,
@@ -338,7 +354,7 @@ public class LegacyBlockData {
 					tripwire.setPowered(o.isPowered());
 					return tripwire;
 				},
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<RedstoneWire>registerRemapEntryForAllStates(
 				Material.REDSTONE_WIRE,
@@ -347,7 +363,7 @@ public class LegacyBlockData {
 					wire.setPower(o.getPower());
 					return wire;
 				},
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Repeater>registerRemapEntryForAllStates(
 				Material.REPEATER,
@@ -358,12 +374,12 @@ public class LegacyBlockData {
 					repeater.setPowered(o.isPowered());
 					return repeater;
 				},
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(Material.CAVE_AIR, Material.VOID_AIR),
 				Material.AIR.createBlockData(),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.registerRemapEntryForAllStates(Material.BLUE_ICE, Material.LIGHT_BLUE_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(Material.BUBBLE_COLUMN, Material.WATER.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
@@ -383,7 +399,7 @@ public class LegacyBlockData {
 					Material.DEAD_TUBE_CORAL_FAN, Material.DEAD_TUBE_CORAL_WALL_FAN
 				),
 				Material.DANDELION.createBlockData(),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.registerRemapEntryForAllStates(Material.TUBE_CORAL_BLOCK, Material.BLUE_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(Material.BRAIN_CORAL_BLOCK, Material.PINK_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
@@ -480,7 +496,7 @@ public class LegacyBlockData {
 					Material.POTTED_WHITE_TULIP
 				),
 				Material.FLOWER_POT.createBlockData(),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 
 

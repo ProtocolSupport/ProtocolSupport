@@ -78,6 +78,20 @@ public class JsonUtils {
 		throw new JsonSyntaxException("Missing " + s + ", expected to find a Int");
 	}
 
+	public static boolean getAsBoolean(JsonElement jsonElement, String s) {
+		if (jsonElement.isJsonPrimitive() && jsonElement.getAsJsonPrimitive().isBoolean()) {
+			return jsonElement.getAsBoolean();
+		}
+		throw new JsonSyntaxException("Expected " + s + " to be a Boolean, was " + toString(jsonElement));
+	}
+
+	public static boolean getBoolean(JsonObject jsonObject, String s) {
+		if (jsonObject.has(s)) {
+			return getAsBoolean(jsonObject.get(s), s);
+		}
+		throw new JsonSyntaxException("Missing " + s + ", expected to find a Boolean");
+	}
+
 	public static JsonObject getJsonObject(JsonObject jsonObject, String name) {
 		if (jsonObject.has(name)) {
 			return getAsJsonObject(jsonObject.get(name), name);

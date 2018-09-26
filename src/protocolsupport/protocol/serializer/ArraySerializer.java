@@ -124,6 +124,13 @@ public class ArraySerializer {
 		}
 	}
 
+	public static void writeSVarIntSVarIntArray(ByteBuf to, int[] array) {
+		VarNumberSerializer.writeSVarInt(to, array.length);
+		for (int element : array) {
+			VarNumberSerializer.writeSVarInt(to, element);
+		}
+	}
+
 	public static void writeVarIntLongArray(ByteBuf to, long[] array) {
 		VarNumberSerializer.writeVarInt(to, array.length);
 		for (long element : array) {

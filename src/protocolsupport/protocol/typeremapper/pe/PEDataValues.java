@@ -92,13 +92,14 @@ public class PEDataValues {
 		registerLivingType(NetworkEntityType.VINDICATOR, 57);
 		registerLivingType(NetworkEntityType.EVOKER, 104);
 		registerLivingType(NetworkEntityType.VEX, 105);
-
 		registerLivingType(NetworkEntityType.DOLPHIN, 31);
 		registerLivingType(NetworkEntityType.PUFFERFISH, 108);
 		registerLivingType(NetworkEntityType.SALMON, 109);
 		registerLivingType(NetworkEntityType.TROPICAL_FISH, 111);
 		registerLivingType(NetworkEntityType.COD, 112);
 		registerLivingType(NetworkEntityType.DROWNED, 110);
+		registerLivingType(NetworkEntityType.TURTLE, 74);
+		registerLivingType(NetworkEntityType.PHANTOM, 58);
 
 		entityType.put(NetworkEntityType.ARMOR_STAND_OBJECT, 61);
 		entityType.put(NetworkEntityType.TNT, 65);
@@ -323,11 +324,11 @@ public class PEDataValues {
 	}
 
 	public static int pcToPeItem(int combinedId) {
-		return pcItemToPe.get(combinedId);
+		return pcItemToPe.getOrDefault(combinedId, combinedId);
 	}
 
 	public static int peToPcItem(int combinedId) {
-		return peItemToPc.get(combinedId);
+		return peItemToPc.getOrDefault(combinedId, combinedId);
 	}
 
 	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> PARTICLE = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
