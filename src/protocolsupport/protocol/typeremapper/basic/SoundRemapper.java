@@ -426,17 +426,17 @@ public class SoundRemapper {
 			registerRemapEntry("block.note_block.hat", "note.hat", ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry("block.note_block.pling", "note.pling", ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry("block.note_block.snare", "note.snare", ProtocolVersionsHelper.BEFORE_1_9);
-                        registerRemapEntry("block.note_block.basedrum", "block.note.basedrum", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-                        registerRemapEntry("block.note_block.bass", "block.note.bass", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-                        registerRemapEntry("block.note_block.bell", "block.note.bell", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-                        registerRemapEntry("block.note_block.chime", "block.note.chime", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-                        registerRemapEntry("block.note_block.flute", "block.note.flute", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-                        registerRemapEntry("block.note_block.guitar", "block.note.guitar", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-                        registerRemapEntry("block.note_block.harp", "block.note.harp", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-                        registerRemapEntry("block.note_block.hat", "block.note.hat", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-                        registerRemapEntry("block.note_block.pling", "block.note.pling", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-                        registerRemapEntry("block.note_block.snare", "block.note.snare", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-                        registerRemapEntry("block.note_block.xylophone", "block.note.xylophone", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+			registerRemapEntry("block.note_block.basedrum", "block.note.basedrum", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+			registerRemapEntry("block.note_block.bass", "block.note.bass", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+			registerRemapEntry("block.note_block.bell", "block.note.bell", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+			registerRemapEntry("block.note_block.chime", "block.note.chime", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+			registerRemapEntry("block.note_block.flute", "block.note.flute", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+			registerRemapEntry("block.note_block.guitar", "block.note.guitar", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+			registerRemapEntry("block.note_block.harp", "block.note.harp", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+			registerRemapEntry("block.note_block.hat", "block.note.hat", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+			registerRemapEntry("block.note_block.pling", "block.note.pling", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+			registerRemapEntry("block.note_block.snare", "block.note.snare", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+			registerRemapEntry("block.note_block.xylophone", "block.note.xylophone", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 		}
 		@Override
 		protected GenericRemappingTable<String> createTable() {
