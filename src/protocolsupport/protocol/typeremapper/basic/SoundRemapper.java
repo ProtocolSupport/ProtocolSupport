@@ -420,14 +420,12 @@ public class SoundRemapper {
 			registerRemapEntry("entity.player.hurt_on_fire", "game.player.hurt", ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry("entity.player.hurt_drown", "entity.player.hurt", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 			registerRemapEntry("entity.player.hurt_drown", "game.player.hurt", ProtocolVersionsHelper.BEFORE_1_9);
-                        
 			registerRemapEntry("block.note_block.basedrum", "note.bd", ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry("block.note_block.bass", "note.bassattack", ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry("block.note_block.harp", "note.harp", ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry("block.note_block.hat", "note.hat", ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry("block.note_block.pling", "note.pling", ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry("block.note_block.snare", "note.snare", ProtocolVersionsHelper.BEFORE_1_9);
-                        
                         registerRemapEntry("block.note_block.basedrum", "block.note.basedrum", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
                         registerRemapEntry("block.note_block.bass", "block.note.bass", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
                         registerRemapEntry("block.note_block.bell", "block.note.bell", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
