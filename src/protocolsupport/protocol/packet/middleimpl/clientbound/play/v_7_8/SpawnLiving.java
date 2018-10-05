@@ -6,7 +6,6 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.basic.GenericIdRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyDataWatcherSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -23,7 +22,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_LIVING_ID);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
-		serializer.writeByte(LegacyEntityId.getLegacyId(GenericIdRemapper.ENTITY.getTable(version).getRemap(entity.getType())));
+		serializer.writeByte(LegacyEntityId.getLegacyId(entityRemapper.getRemappedEntityType()));
 		serializer.writeInt((int) (x * 32));
 		serializer.writeInt((int) (y * 32));
 		serializer.writeInt((int) (z * 32));
@@ -33,7 +32,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		serializer.writeShort(motX);
 		serializer.writeShort(motY);
 		serializer.writeShort(motZ);
-		LegacyDataWatcherSerializer.encodeData(serializer, version, cache.getAttributesCache().getLocale(), metadata.getRemapped());
+		LegacyDataWatcherSerializer.encodeData(serializer, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
 		return RecyclableSingletonList.create(serializer);
 	}
 

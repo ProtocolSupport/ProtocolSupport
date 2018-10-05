@@ -21,7 +21,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_METADATA_ID);
 		VarNumberSerializer.writeVarInt(serializer, entityId);
-		DataWatcherDeserializer.encodeData(serializer, version, cache.getAttributesCache().getLocale(), metadata.getRemapped());
+		DataWatcherDeserializer.encodeData(serializer, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
 		return RecyclableSingletonList.create(serializer);
 	}
 

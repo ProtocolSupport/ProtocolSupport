@@ -8,10 +8,12 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
-import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherRemapper;
+import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 
 public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
+
+	protected final EntityRemapper entityRemapper = new EntityRemapper(connection.getVersion());
 
 	public MiddleSpawnLiving(ConnectionImpl connection) {
 		super(connection);
@@ -27,7 +29,6 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 	protected int motX;
 	protected int motY;
 	protected int motZ;
-	protected DataWatcherRemapper metadata = new DataWatcherRemapper();
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
@@ -44,7 +45,7 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 		motX = serverdata.readShort();
 		motY = serverdata.readShort();
 		motZ = serverdata.readShort();
-		metadata.init(serverdata, connection.getVersion(), cache.getAttributesCache().getLocale(), entity);
+		entityRemapper.readEntityWithMetadataAndRemap(cache.getAttributesCache().getLocale(), entity, serverdata);
 	}
 
 	@Override
