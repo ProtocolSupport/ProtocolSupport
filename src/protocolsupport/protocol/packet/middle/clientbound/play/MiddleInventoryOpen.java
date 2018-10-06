@@ -45,8 +45,4 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 			return true;
 		}
 	}
-
-	protected String getLegacyTitle() {
-		return Utils.clampString(title.toLegacyText(cache.getAttributesCache().getLocale()), 32);
-	}
 }
