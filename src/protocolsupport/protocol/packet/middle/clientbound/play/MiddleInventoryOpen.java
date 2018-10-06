@@ -47,18 +47,6 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 	}
 
 	protected String getLegacyTitle() {
-		switch (type) {
-			// Title users
-			case CHEST:
-			case FURNACE:
-			case DISPENSER:
-			case BREWING:
-			case VILLAGER:
-			case BEACON:
-			case HOPPER:
-				return Utils.clampString(title.toLegacyText(cache.getAttributesCache().getLocale()), 32);
-			default:
-				return "";
-		}
+		return Utils.clampString(title.toLegacyText(cache.getAttributesCache().getLocale()), 32);
 	}
 }
