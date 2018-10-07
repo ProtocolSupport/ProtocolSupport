@@ -7,12 +7,15 @@ import protocolsupport.zplatform.itemstack.NetworkItemStack;
 public class ItemStackRemapper {
 
 	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale,  NetworkItemStack itemstack) {
+		setComplexlyRemapped(itemstack, false);
 		itemstack = ItemStackComplexRemapperRegistry.remapToClient(version, locale, itemstack);
 		itemstack.setTypeId(LegacyItemType.REGISTRY.getTable(version).getRemap(itemstack.getTypeId()));
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			int legacyCombinedId = PreFlatteningItemIdData.getLegacyCombinedIdByModernId(itemstack.getTypeId());
 			itemstack.setTypeId(PreFlatteningItemIdData.getIdFromLegacyCombinedId(legacyCombinedId));
-			itemstack.setLegacyData(PreFlatteningItemIdData.getDataFromLegacyCombinedId(legacyCombinedId));
+			if (!isComplexlyRemapped(itemstack)) {
+				itemstack.setLegacyData(PreFlatteningItemIdData.getDataFromLegacyCombinedId(legacyCombinedId));
+			}
 		} else {
 			itemstack.setTypeId(FlatteningItemId.REGISTRY_TO_CLIENT.getTable(version).getRemap(itemstack.getTypeId()));
 		}
@@ -26,6 +29,14 @@ public class ItemStackRemapper {
 			itemstack.setTypeId(FlatteningItemId.REGISTRY_FROM_CLIENT.getTable(version).getRemap(itemstack.getTypeId()));
 		}
 		return ItemStackComplexRemapperRegistry.remapFromClient(version, locale, itemstack);
+	}
+
+	public static void setComplexlyRemapped(NetworkItemStack itemstack, boolean remapped) {
+		itemstack.setLegacyData(remapped ? 0 : -1);
+	}
+
+	public static boolean isComplexlyRemapped(NetworkItemStack itemstack) {
+		return itemstack.getLegacyData() == -1 ? false : true; 
 	}
 
 }
