@@ -15,6 +15,7 @@ import protocolsupport.utils.Utils;
 
 public class PreFlatteningItemIdData {
 
+	protected static final int combinedLegacyStoneId = formLegacyCombinedId(1, 0);
 	protected static final int[] toLegacyId = new int[MinecraftData.ITEM_COUNT];
 	protected static final Int2IntMap fromLegacyId = new Int2IntOpenHashMap();
 	protected static void register(String modernKey, int legacyMainId, int legacyData) {
@@ -24,9 +25,7 @@ public class PreFlatteningItemIdData {
 		fromLegacyId.put(combinedLegacyId, modernId);
 	}
 	static {
-		int combinedLegacyStoneId = formLegacyCombinedId(1, 0);
 		Arrays.fill(toLegacyId, combinedLegacyStoneId);
-		fromLegacyId.defaultReturnValue(1);
 		for (JsonElement element : Utils.iterateJsonArrayResource(MappingsData.getResourcePath("preflatteningitemiddata.json"))) {
 			JsonObject object = element.getAsJsonObject();
 			register(JsonUtils.getString(object, "itemkey"), JsonUtils.getInt(object, "legacyid"), JsonUtils.getInt(object, "legacydata"));
@@ -46,7 +45,7 @@ public class PreFlatteningItemIdData {
 	}
 
 	public static int getModernIdByLegacyIdData(int legacyId, int data) {
-		return fromLegacyId.get(formLegacyCombinedId(legacyId, data));
+		return fromLegacyId.getOrDefault(formLegacyCombinedId(legacyId, data), fromLegacyId.getOrDefault(formLegacyCombinedId(legacyId, 0), combinedLegacyStoneId));
 	}
 
 	protected static int formLegacyCombinedId(int legacyId, int data) {
