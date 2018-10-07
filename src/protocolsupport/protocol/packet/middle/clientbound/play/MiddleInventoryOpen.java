@@ -44,5 +44,4 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 			return true;
 		}
 	}
-
 }
