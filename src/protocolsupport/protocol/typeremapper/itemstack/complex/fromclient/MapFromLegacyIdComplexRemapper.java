@@ -10,7 +10,6 @@ public class MapFromLegacyIdComplexRemapper implements ItemStackComplexRemapper 
 
 	@Override
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		System.out.println("MAP: " + itemstack.getLegacyData());
 		NBTTagCompoundWrapper tag = itemstack.getNBT();
 		if (tag.isNull()) {
 			tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
