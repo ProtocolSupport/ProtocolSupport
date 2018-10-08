@@ -4,25 +4,27 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackNBTComplexRemapper;
 import protocolsupport.protocol.utils.GameProfileSerializer;
 import protocolsupport.protocol.utils.authlib.GameProfile;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class PlayerHeadToLegacyOwnerComplexRemapper extends ItemStackNBTComplexRemapper {
 
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTTagCompoundWrapper tag) {
+	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
 		remap(tag, "SkullOwner", "SkullOwner");
 		return tag;
 	}
 
-	public static void remap(NBTTagCompoundWrapper tag, String tagname, String newtagname) {
-		if (tag.hasKeyOfType(tagname, NBTTagType.COMPOUND)) {
-			GameProfile gameprofile = GameProfileSerializer.deserialize(tag.getCompound(tagname));
+	public static void remap(NBTCompound tag, String tagname, String newtagname) {
+		NBTCompound gameprofileTag = tag.getTagOfType(tagname, NBTType.COMPOUND);
+		if (gameprofileTag != null) {
+			GameProfile gameprofile = GameProfileSerializer.deserialize(gameprofileTag);
 			if (gameprofile.getName() != null) {
-				tag.setString(newtagname, gameprofile.getName());
+				tag.setTag(newtagname, new NBTString(gameprofile.getName()));
 			} else {
-				tag.remove(tagname);
+				tag.removeTag(tagname);
 			}
 		}
 	}

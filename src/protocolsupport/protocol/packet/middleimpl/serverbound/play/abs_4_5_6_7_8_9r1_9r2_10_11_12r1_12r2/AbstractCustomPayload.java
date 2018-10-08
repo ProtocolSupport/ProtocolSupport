@@ -22,15 +22,15 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.CustomPayloadChannelsCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.UsedHand;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTList;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 
@@ -75,17 +75,17 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 		if (!book.isNull()) {
 			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITTEN_BOOK));
 			if (connection.getVersion() == ProtocolVersion.MINECRAFT_1_8) {
-				NBTTagCompoundWrapper nbt = book.getNBT();
-				if (!nbt.isNull()) {
-					if (nbt.hasKeyOfType("pages", NBTTagType.LIST)) {
-						NBTTagListWrapper pages = nbt.getList("pages", NBTTagType.STRING);
-						NBTTagListWrapper newPages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
-						for (int i = 0; i < pages.size(); i++) {
-							newPages.addString(ChatAPI.fromJSON(pages.getString(i)).toLegacyText(locale));
+				NBTCompound rootTag = book.getNBT();
+				if (rootTag != null) {
+					NBTList<NBTString> pages = rootTag.getTagListOfType("pages", NBTType.STRING);
+					if (pages != null) {
+						NBTList<NBTString> newPages = new NBTList<>(NBTType.STRING);
+						for (NBTString page : pages.getTags()) {
+							newPages.addTag(new NBTString(ChatAPI.fromJSON(page.getValue()).toLegacyText(locale)));
 						}
-						nbt.setList("pages", newPages);
+						rootTag.setTag("pages", newPages);
+						book.setNBT(rootTag);
 					}
-					book.setNBT(nbt);
 				}
 			}
 			return RecyclableSingletonList.create(MiddleEditBook.create(locale, book, true, UsedHand.MAIN));

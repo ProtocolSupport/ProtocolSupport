@@ -1,11 +1,13 @@
-package protocolsupport.zplatform.itemstack;
+package protocolsupport.protocol.utils.types;
+
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 
 public class NetworkItemStack {
 
 	protected int runtimeId;
 	protected int amount;
 	protected int legacyData;
-	protected NBTTagCompoundWrapper nbt;
+	protected NBTCompound nbt;
 
 	public boolean isNull() {
 		return false;
@@ -27,11 +29,11 @@ public class NetworkItemStack {
 		this.amount = amount;
 	}
 
-	public NBTTagCompoundWrapper getNBT() {
+	public NBTCompound getNBT() {
 		return nbt;
 	}
 
-	public void setNBT(NBTTagCompoundWrapper nbt) {
+	public void setNBT(NBTCompound nbt) {
 		this.nbt = nbt;
 	}
 
@@ -74,7 +76,7 @@ public class NetworkItemStack {
 		}
 
 		@Override
-		public void setNBT(NBTTagCompoundWrapper tag) {
+		public void setNBT(NBTCompound tag) {
 			throw reject();
 		}
 
@@ -89,7 +91,7 @@ public class NetworkItemStack {
 		}
 
 		@Override
-		public NBTTagCompoundWrapper getNBT() {
+		public NBTCompound getNBT() {
 			throw reject();
 		}
 

@@ -5,7 +5,7 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public class MerchantDataSerializer {
 

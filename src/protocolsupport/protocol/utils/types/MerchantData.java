@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
-
 public class MerchantData {
 
 	private final int windowId;

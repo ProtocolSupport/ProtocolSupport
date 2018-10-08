@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.itemstack;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapperRegistry;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public class ItemStackRemapper {
 

@@ -2,18 +2,14 @@ package protocolsupport.api.chat.modifiers;
 
 import java.util.UUID;
 
-import org.bukkit.Achievement;
-import org.bukkit.Statistic;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
-import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 @SuppressWarnings("deprecation")
 public class HoverAction {
@@ -33,7 +29,7 @@ public class HoverAction {
 
 	public HoverAction(ItemStack itemstack) {
 		this.type = Type.SHOW_ITEM;
-		this.value = ServerPlatform.get().getMiscUtils().createNBTTagFromItemStack(itemstack).toString();
+		this.value = ServerPlatform.get().getMiscUtils().serializeItemStackToNBTJson(itemstack);
 	}
 
 	public HoverAction(Entity entity) {
@@ -42,23 +38,8 @@ public class HoverAction {
 
 	public HoverAction(EntityInfo entityinfo) {
 		this.type = Type.SHOW_ENTITY;
-		NBTTagCompoundWrapper compound = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-		compound.setString("type", entityinfo.getType().getName());
-		compound.setString("id", entityinfo.getUUID().toString());
-		compound.setString("name", entityinfo.getName());
-		this.value = compound.toString();
-	}
-
-	@Deprecated
-	public HoverAction(Achievement achievment) {
-		this.type = Type.SHOW_TEXT;
-		this.value = ChatAPI.toJSON(new TextComponent("Achievement hover component is no longer supported"));
-	}
-
-	@Deprecated
-	public HoverAction(Statistic stat) {
-		this.type = Type.SHOW_TEXT;
-		this.value = ChatAPI.toJSON(new TextComponent("Statistic hover component is no longer supported"));
+		//TODO: use nbt compound after implementing our own mojangson serializer
+		this.value = "{type:\"" + entityinfo.getType().getName() + "\", id:\"" + entityinfo.getUUID().toString() + "\", name:\"" +  entityinfo.getName() + "\"}";
 	}
 
 	public Type getType() {
@@ -76,18 +57,18 @@ public class HoverAction {
 
 	public ItemStack getItemStack() {
 		validateAction(type, Type.SHOW_ITEM);
-		return ServerPlatform.get().getMiscUtils().createItemStackFromNBTTag(ServerPlatform.get().getWrapperFactory().createNBTCompoundFromJson(value));
+		return ServerPlatform.get().getMiscUtils().deserializeItemStackFromNBTJson(value);
 	}
 
 	public EntityInfo getEntity() {
 		validateAction(type, Type.SHOW_ENTITY);
-		NBTTagCompoundWrapper compound = ServerPlatform.get().getWrapperFactory().createNBTCompoundFromJson(value);
-		return new EntityInfo(EntityType.fromName(compound.getString("type")), UUID.fromString(compound.getString("id")), compound.getString("name"));
+		//TODO: use nbt compound after implementing our own mojangson serializer
+		return ServerPlatform.get().getMiscUtils().parseEntityInfo(value);
 	}
 
 	static void validateAction(Type current, Type expected) {
 		if (current != expected) {
-			throw new IllegalStateException(current + " is not an "+expected);
+			throw new IllegalStateException(current + " is not an " + expected);
 		}
 	}
 

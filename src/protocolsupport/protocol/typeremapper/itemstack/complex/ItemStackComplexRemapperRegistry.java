@@ -22,7 +22,7 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHe
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PotionToLegacyIdComplexRemapper;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public class ItemStackComplexRemapperRegistry {
 

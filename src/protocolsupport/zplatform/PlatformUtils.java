@@ -16,18 +16,25 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
 import io.netty.channel.ChannelPipeline;
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.modifiers.HoverAction.EntityInfo;
+import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public interface PlatformUtils {
 
-	public ItemStack createItemStackFromNBTTag(NBTTagCompoundWrapper tag);
-
 	public ItemStack createItemStackFromNetwork(NetworkItemStack stack);
 
-	public NBTTagCompoundWrapper createNBTTagFromItemStack(ItemStack itemstack);
+	public ItemStack deserializeItemStackFromNBTJson(String json);
+
+	public String serializeItemStackToNBTJson(ItemStack itemstack);
+
+	public EntityInfo parseEntityInfo(String json);
+
+	public String fixHoverShowItem(ProtocolVersion version, String locale, String json);
 
 	public int getMobTypeNetworkId(EntityType type);
 
@@ -74,5 +81,7 @@ public interface PlatformUtils {
 	public void enableEncryption(ChannelPipeline pipeline, SecretKey key, boolean fullEncryption);
 
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender);
+
+	public AbstractHandshakeListener createHandshakeListener(NetworkManagerWrapper networkmanager);
 
 }

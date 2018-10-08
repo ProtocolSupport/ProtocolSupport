@@ -2,20 +2,20 @@ package protocolsupport.protocol.typeremapper.itemstack.complex.toclient;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackNBTComplexRemapper;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTList;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class EmptyBookPageAdderComplexRemapper extends ItemStackNBTComplexRemapper {
 
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTTagCompoundWrapper tag) {
-		if (!tag.hasKeyOfType("pages", NBTTagType.LIST)) {
-			NBTTagListWrapper pages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
-			pages.addString("");
-			tag.setList("pages", pages);
+	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
+		if (tag.getTagListOfType("pages", NBTType.LIST) == null) {
+			NBTList<NBTString> pages = new NBTList<>(NBTType.STRING);
+			pages.addTag(new NBTString(""));
+			tag.setTag("pages", pages);
 		}
 		return tag;
 	}
