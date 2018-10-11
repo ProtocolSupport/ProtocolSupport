@@ -35,12 +35,13 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 		z = serverdata.readDouble();
 		yaw = serverdata.readUnsignedByte();
 		pitch = serverdata.readUnsignedByte();
-		entityRemapper.readEntityWithMetadataAndRemap(cache.getAttributesCache().getLocale(), entity, serverdata);
+		entityRemapper.readEntityWithMetadata(cache.getAttributesCache().getLocale(), entity, serverdata);
 	}
 
 	@Override
 	public boolean postFromServerRead() {
 		cache.getWatchedEntityCache().addWatchedEntity(entity);
+		entityRemapper.remap(true);
 		return true;
 	}
 

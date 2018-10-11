@@ -48,13 +48,18 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 		motY = serverdata.readShort();
 		motZ = serverdata.readShort();
 		entity = NetworkEntity.createObject(uuid, entityId, typeId, objectdata);
-		entityRemapper.readEntityAndRemap(entity);
+		entityRemapper.readEntity(entity);
 	}
 
 	@Override
 	public boolean postFromServerRead() {
-		cache.getWatchedEntityCache().addWatchedEntity(entity);
-		return !GenericIdSkipper.ENTITY.getTable(connection.getVersion()).shouldSkip(entity.getType());
+		if (!GenericIdSkipper.ENTITY.getTable(connection.getVersion()).shouldSkip(entity.getType())) {
+			cache.getWatchedEntityCache().addWatchedEntity(entity);
+			entityRemapper.remap(false);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

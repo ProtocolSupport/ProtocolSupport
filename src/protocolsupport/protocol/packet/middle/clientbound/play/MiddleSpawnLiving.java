@@ -45,13 +45,18 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 		motX = serverdata.readShort();
 		motY = serverdata.readShort();
 		motZ = serverdata.readShort();
-		entityRemapper.readEntityWithMetadataAndRemap(cache.getAttributesCache().getLocale(), entity, serverdata);
+		entityRemapper.readEntityWithMetadata(cache.getAttributesCache().getLocale(), entity, serverdata);
 	}
 
 	@Override
 	public boolean postFromServerRead() {
-		cache.getWatchedEntityCache().addWatchedEntity(entity);
-		return !GenericIdSkipper.ENTITY.getTable(connection.getVersion()).shouldSkip(entity.getType());
+		if (!GenericIdSkipper.ENTITY.getTable(connection.getVersion()).shouldSkip(entity.getType())) {
+			cache.getWatchedEntityCache().addWatchedEntity(entity);
+			entityRemapper.remap(true);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

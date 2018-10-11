@@ -23,32 +23,39 @@ public class EntityRemapper {
 		this.table = EntityRemappersRegistry.REGISTRY.getTable(version);
 	}
 
+	protected NetworkEntity originalEntity;
 	protected final ArrayMap<DataWatcherObject<?>> originalMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
-	protected final ArrayMap<DataWatcherObject<?>> remappedMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
 
 	protected NetworkEntityType remappedEntityType;
+	protected final ArrayMap<DataWatcherObject<?>> remappedMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
 
-	public void readEntityAndRemap(NetworkEntity entity) {
+	public void readEntity(NetworkEntity entity) {
 		if (entity == null) {
 			throw new IllegalArgumentException("Entity can't be null");
 		}
-		remappedEntityType = table.getRemap(entity.getType()).getLeft();
+		originalEntity = entity;
 	}
 
-	public void readEntityWithMetadataAndRemap(String locale, NetworkEntity entity, ByteBuf serverdata) {
+	public void readEntityWithMetadata(String locale, NetworkEntity entity, ByteBuf serverdata) {
 		if (entity == null) {
 			throw new IllegalArgumentException("Entity can't be null");
 		}
+		originalEntity = entity;
 		originalMetadata.clear();
-		remappedMetadata.clear();
 		DataWatcherSerializer.readDataTo(serverdata, ProtocolVersionsHelper.LATEST_PC, locale, originalMetadata);
-		Pair<NetworkEntityType, List<DataWatcherObjectRemapper>> entityRemapper = table.getRemap(entity.getType());
+	}
+
+	public void remap(boolean metadata) {
+		Pair<NetworkEntityType, List<DataWatcherObjectRemapper>> entityRemapper = table.getRemap(originalEntity.getType());
 		if (entityRemapper == null) {
-			throw new IllegalStateException(MessageFormat.format("Missing entity remapper entry for entity type {0}", entity.getType()));
+			throw new IllegalStateException(MessageFormat.format("Missing entity remapper entry for entity type {0}", originalEntity.getType()));
 		}
 		remappedEntityType = entityRemapper.getLeft();
-		entityRemapper.getRight().forEach(remapper -> remapper.remap(entity, originalMetadata, remappedMetadata));
-		entity.getDataCache().setFirstMeta(false);
+		if (metadata) {
+			remappedMetadata.clear();
+			entityRemapper.getRight().forEach(remapper -> remapper.remap(originalEntity, originalMetadata, remappedMetadata));
+			originalEntity.getDataCache().setFirstMeta(false);
+		}
 	}
 
 	public NetworkEntityType getRemappedEntityType() {
