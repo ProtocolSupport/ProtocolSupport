@@ -1,4 +1,4 @@
-package protocolsupport.protocol.utils.datawatcher;
+package protocolsupport.protocol.serializer;
 
 import java.text.MessageFormat;
 import java.util.function.Supplier;
@@ -7,6 +7,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
+import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
@@ -25,7 +28,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarIn
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
-public class DataWatcherDeserializer {
+public class DataWatcherSerializer {
 
 	//while meta indexes can be now up to 255, we actually use up to 31
 	public static final int MAX_USED_META_INDEX = 31;
@@ -33,33 +36,29 @@ public class DataWatcherDeserializer {
 	@SuppressWarnings("unchecked")
 	private static final Supplier<? extends ReadableDataWatcherObject<?>>[] registry = new Supplier[256];
 	static {
-		try {
-			register(DataWatcherObjectByte::new);
-			register(DataWatcherObjectVarInt::new);
-			register(DataWatcherObjectFloat::new);
-			register(DataWatcherObjectString::new);
-			register(DataWatcherObjectChat::new);
-			register(DataWatcherObjectOptionalChat::new);
-			register(DataWatcherObjectItemStack::new);
-			register(DataWatcherObjectBoolean::new);
-			register(DataWatcherObjectVector3f::new);
-			register(DataWatcherObjectPosition::new);
-			register(DataWatcherObjectOptionalPosition::new);
-			register(DataWatcherObjectDirection::new);
-			register(DataWatcherObjectOptionalUUID::new);
-			register(DataWatcherObjectBlockState::new);
-			register(DataWatcherObjectNBTTagCompound::new);
-			register(DataWatcherObjectParticle::new);
-		} catch (Exception e) {
-			throw new RuntimeException("Exception in datawatcher init", e);
-		}
+		register(DataWatcherObjectByte::new);
+		register(DataWatcherObjectVarInt::new);
+		register(DataWatcherObjectFloat::new);
+		register(DataWatcherObjectString::new);
+		register(DataWatcherObjectChat::new);
+		register(DataWatcherObjectOptionalChat::new);
+		register(DataWatcherObjectItemStack::new);
+		register(DataWatcherObjectBoolean::new);
+		register(DataWatcherObjectVector3f::new);
+		register(DataWatcherObjectPosition::new);
+		register(DataWatcherObjectOptionalPosition::new);
+		register(DataWatcherObjectDirection::new);
+		register(DataWatcherObjectOptionalUUID::new);
+		register(DataWatcherObjectBlockState::new);
+		register(DataWatcherObjectNBTTagCompound::new);
+		register(DataWatcherObjectParticle::new);
 	}
 
-	private static void register(Supplier<? extends ReadableDataWatcherObject<?>> supplier) throws NoSuchMethodException {
+	private static void register(Supplier<? extends ReadableDataWatcherObject<?>> supplier) {
 		registry[DataWatcherObjectIdRegistry.getTypeId(supplier.get().getClass(), ProtocolVersionsHelper.LATEST_PC)] = supplier;
 	}
 
-	public static void decodeDataTo(ByteBuf from, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> to) {
+	public static void readDataTo(ByteBuf from, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> to) {
 		do {
 			int key = from.readUnsignedByte();
 			if (key == 0xFF) {
@@ -76,7 +75,7 @@ public class DataWatcherDeserializer {
 		} while (true);
 	}
 
-	public static void encodeData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> objects) {
+	public static void writeData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> objects) {
 		boolean hadObject = false;
 		for (int key = objects.getMinKey(); key < objects.getMaxKey(); key++) {
 			DataWatcherObject<?> object = objects.get(key);
@@ -93,6 +92,24 @@ public class DataWatcherDeserializer {
 			to.writeByte(0);
 		}
 		to.writeByte(0xFF);
+	}
+
+	public static void writeLegacyData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> objects) {
+		boolean hadObject = false;
+		for (int key = objects.getMinKey(); key < objects.getMaxKey(); key++) {
+			DataWatcherObject<?> object = objects.get(key);
+			if (object != null) {
+				hadObject = true;
+				int tk = ((DataWatcherObjectIdRegistry.getTypeId(object, version) << 5) | (key & 0x1F)) & 0xFF;
+				to.writeByte(tk);
+				object.writeToStream(to, version, locale);
+			}
+		}
+		if (!hadObject) {
+			to.writeByte(31);
+			to.writeByte(0);
+		}
+		to.writeByte(127);
 	}
 
 }

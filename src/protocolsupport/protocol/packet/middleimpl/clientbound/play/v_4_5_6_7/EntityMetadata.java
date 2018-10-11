@@ -5,7 +5,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.typeremapper.legacy.LegacyDataWatcherSerializer;
+import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -20,7 +20,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_METADATA_ID);
 		serializer.writeInt(entityId);
-		LegacyDataWatcherSerializer.encodeData(serializer, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
+		DataWatcherSerializer.writeLegacyData(serializer, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
 		return RecyclableSingletonList.create(serializer);
 	}
 
