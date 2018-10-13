@@ -7,9 +7,9 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotionId;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
 
 public class PotionFromLegacyIdComplexRemapper implements ItemStackComplexRemapper {
 
@@ -18,12 +18,12 @@ public class PotionFromLegacyIdComplexRemapper implements ItemStackComplexRemapp
 		int data = itemstack.getLegacyData();
 		String name = LegacyPotionId.fromLegacyId(data);
 		if (!StringUtils.isEmpty(name)) {
-			NBTTagCompoundWrapper tag = itemstack.getNBT();
-			if (tag.isNull()) {
-				tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+			NBTCompound tag = itemstack.getNBT();
+			if (tag == null) {
+				tag = new NBTCompound();
 				itemstack.setNBT(tag);
 			}
-			tag.setString("Potion", name);
+			tag.setTag("Potion", new NBTString(name));
 			itemstack.setTypeId(ItemMaterialLookup.getRuntimeId(LegacyPotionId.isThrowable(data) ? Material.SPLASH_POTION : Material.POTION));
 		}
 		return itemstack;

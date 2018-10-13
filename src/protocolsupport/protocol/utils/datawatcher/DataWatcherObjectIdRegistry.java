@@ -32,14 +32,13 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVecto
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3fLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3i;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3vi;
-import protocolsupport.utils.Utils;
 
 public class DataWatcherObjectIdRegistry {
 
 	private static final HashMap<Class<? extends DataWatcherObject<?>>, EnumMap<ProtocolVersion, Integer>> registry = new HashMap<>();
 
 	private static void register(Class<? extends DataWatcherObject<?>> clazz, int id, ProtocolVersion... versions) {
-		EnumMap<ProtocolVersion, Integer> mmap = Utils.getFromMapOrCreateDefault(registry, clazz, new EnumMap<>(ProtocolVersion.class));
+		EnumMap<ProtocolVersion, Integer> mmap = registry.computeIfAbsent(clazz, k -> new EnumMap<>(ProtocolVersion.class));
 		for (ProtocolVersion version : versions) {
 			mmap.put(version, id);
 		}
@@ -47,38 +46,36 @@ public class DataWatcherObjectIdRegistry {
 
 	static {
 		//PC
-		register(DataWatcherObjectBlockState.class, 12, ProtocolVersionsHelper.AFTER_1_8);
-		register(DataWatcherObjectBoolean.class, 6, ProtocolVersionsHelper.AFTER_1_8);
 		register(DataWatcherObjectByte.class, 0, ProtocolVersionsHelper.ALL_PC);
-		register(DataWatcherObjectVarInt.class, 1, ProtocolVersionsHelper.AFTER_1_8);
-		register(DataWatcherObjectFloat.class, 2, ProtocolVersionsHelper.AFTER_1_8);
+		register(DataWatcherObjectVarInt.class, 1, ProtocolVersionsHelper.UP_1_9);
+		register(DataWatcherObjectFloat.class, 2, ProtocolVersionsHelper.UP_1_9);
 		register(DataWatcherObjectFloat.class, 3, ProtocolVersionsHelper.BEFORE_1_9);
-		register(DataWatcherObjectString.class, 3, ProtocolVersionsHelper.AFTER_1_8);
+		register(DataWatcherObjectString.class, 3, ProtocolVersionsHelper.UP_1_9);
 		register(DataWatcherObjectString.class, 4, ProtocolVersionsHelper.BEFORE_1_9);
-		register(DataWatcherObjectChat.class, 4, ProtocolVersionsHelper.AFTER_1_8);
-		register(DataWatcherObjectOptionalChat.class, 5, ProtocolVersionsHelper.AFTER_1_12_2);
-		register(DataWatcherObjectItemStack.class, 6, ProtocolVersionsHelper.AFTER_1_12_2);
+		register(DataWatcherObjectChat.class, 4, ProtocolVersionsHelper.UP_1_9);
+		register(DataWatcherObjectOptionalChat.class, 5, ProtocolVersionsHelper.UP_1_13);
+		register(DataWatcherObjectItemStack.class, 6, ProtocolVersionsHelper.UP_1_13);
 		register(DataWatcherObjectItemStack.class, 5, ProtocolVersionsHelper.BEFORE_1_13);
-		register(DataWatcherObjectBoolean.class, 7, ProtocolVersionsHelper.AFTER_1_12_2);
+		register(DataWatcherObjectBoolean.class, 7, ProtocolVersionsHelper.UP_1_13);
 		register(DataWatcherObjectBoolean.class, 6, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-		register(DataWatcherObjectVector3f.class, 8, ProtocolVersionsHelper.AFTER_1_12_2);
+		register(DataWatcherObjectVector3f.class, 8, ProtocolVersionsHelper.UP_1_13);
 		register(DataWatcherObjectVector3f.class, 7, ProtocolVersionsHelper.BEFORE_1_13);
-		register(DataWatcherObjectPosition.class, 9, ProtocolVersionsHelper.AFTER_1_12_2);
+		register(DataWatcherObjectPosition.class, 9, ProtocolVersionsHelper.UP_1_13);
 		register(DataWatcherObjectPosition.class, 8, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-		register(DataWatcherObjectOptionalPosition.class, 10, ProtocolVersionsHelper.AFTER_1_12_2);
+		register(DataWatcherObjectOptionalPosition.class, 10, ProtocolVersionsHelper.UP_1_13);
 		register(DataWatcherObjectOptionalPosition.class, 9, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-		register(DataWatcherObjectDirection.class, 11, ProtocolVersionsHelper.AFTER_1_12_2);
+		register(DataWatcherObjectDirection.class, 11, ProtocolVersionsHelper.UP_1_13);
 		register(DataWatcherObjectDirection.class, 10, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-		register(DataWatcherObjectOptionalUUID.class, 12, ProtocolVersionsHelper.AFTER_1_12_2);
+		register(DataWatcherObjectOptionalUUID.class, 12, ProtocolVersionsHelper.UP_1_13);
 		register(DataWatcherObjectOptionalUUID.class, 11, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-		register(DataWatcherObjectBlockState.class, 13, ProtocolVersionsHelper.AFTER_1_12_2);
+		register(DataWatcherObjectBlockState.class, 13, ProtocolVersionsHelper.UP_1_13);
 		register(DataWatcherObjectBlockState.class, 12, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-		register(DataWatcherObjectNBTTagCompound.class, 14, ProtocolVersionsHelper.AFTER_1_12_2);
+		register(DataWatcherObjectNBTTagCompound.class, 14, ProtocolVersionsHelper.UP_1_13);
 		register(DataWatcherObjectNBTTagCompound.class, 13, ProtocolVersionsHelper.RANGE__1_11__1_12_2);
+		register(DataWatcherObjectParticle.class, 15, ProtocolVersionsHelper.UP_1_13);
 		register(DataWatcherObjectShort.class, 1, ProtocolVersionsHelper.BEFORE_1_9);
 		register(DataWatcherObjectInt.class, 2, ProtocolVersionsHelper.BEFORE_1_9);
 		register(DataWatcherObjectVector3i.class, 6, ProtocolVersionsHelper.BEFORE_1_9);
-		register(DataWatcherObjectParticle.class, 15, ProtocolVersionsHelper.AFTER_1_12_2);
 		register(DataWatcherObjectByte.class, 0, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectShortLe.class, 1, ProtocolVersion.MINECRAFT_PE);
 		register(DataWatcherObjectVarInt.class, 2, ProtocolVersion.MINECRAFT_PE);

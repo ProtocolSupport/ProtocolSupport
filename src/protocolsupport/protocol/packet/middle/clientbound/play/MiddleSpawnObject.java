@@ -8,9 +8,15 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
+import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry;
+import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry.ObjectDataRemappingTable;
+import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 
 public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
+
+	protected final EntityRemapper entityRemapper = new EntityRemapper(connection.getVersion());
+	protected final ObjectDataRemappingTable entityObjectDataRemappingTable = ObjectDataRemappersRegistry.REGISTRY.getTable(connection.getVersion());
 
 	public MiddleSpawnObject(ConnectionImpl connection) {
 		super(connection);
@@ -42,12 +48,18 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 		motY = serverdata.readShort();
 		motZ = serverdata.readShort();
 		entity = NetworkEntity.createObject(uuid, entityId, typeId, objectdata);
+		entityRemapper.readEntity(entity);
 	}
 
 	@Override
 	public boolean postFromServerRead() {
-		cache.getWatchedEntityCache().addWatchedEntity(entity);
-		return !GenericIdSkipper.ENTITY.getTable(connection.getVersion()).shouldSkip(entity.getType());
+		if (!GenericIdSkipper.ENTITY.getTable(connection.getVersion()).shouldSkip(entity.getType())) {
+			cache.getWatchedEntityCache().addWatchedEntity(entity);
+			entityRemapper.remap(false);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

@@ -15,11 +15,11 @@ public class MiddleUpdateStructureBlock extends ServerBoundMiddlePacket {
 	}
 
 	//TODO: structure (who cares about structure block anyway???)
-	protected byte[] data;
+	protected ByteBuf data;
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		data = MiscSerializer.readAllBytes(clientdata);
+		data = MiscSerializer.readAllBytesSlice(clientdata);
 	}
 
 	@Override

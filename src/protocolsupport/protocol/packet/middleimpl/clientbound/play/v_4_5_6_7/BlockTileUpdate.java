@@ -12,10 +12,10 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class BlockTileUpdate extends MiddleBlockTileUpdate {
 
@@ -30,7 +30,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		));
 	}
 
-	public static ClientBoundPacketData createPacketData(ProtocolVersion version, String locale, TileEntityType type, Position position, NBTTagCompoundWrapper tag) {
+	public static ClientBoundPacketData createPacketData(ProtocolVersion version, String locale, TileEntityType type, Position position, NBTCompound tag) {
 		if (type == TileEntityType.SIGN) {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID);
 			PositionSerializer.writeLegacyPositionS(serializer, position);

@@ -1,8 +1,7 @@
 package protocolsupport.protocol.utils;
 
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class CommonNBT {
 
@@ -10,14 +9,13 @@ public class CommonNBT {
 	public static final String DISPLAY_NAME = "Name";
 	public static final String DISPLAY_LORE = "Lore";
 
-	public static NBTTagCompoundWrapper getOrCreateDisplayTag(NBTTagCompoundWrapper rootTag) {
-		if (rootTag.hasKeyOfType(DISPLAY, NBTTagType.COMPOUND)) {
-			return rootTag.getCompound(DISPLAY);
-		} else {
-			NBTTagCompoundWrapper display = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-			rootTag.setCompound(DISPLAY, display);
-			return display;
+	public static NBTCompound getOrCreateDisplayTag(NBTCompound rootTag) {
+		NBTCompound display = rootTag.getTagOfType(DISPLAY, NBTType.COMPOUND);
+		if (display == null) {
+			display = new NBTCompound();
+			rootTag.setTag(DISPLAY, display);
 		}
+		return display;
 	}
 
 	public static final String BOOK_ENCHANTMENTS = "StoredEnchantments";

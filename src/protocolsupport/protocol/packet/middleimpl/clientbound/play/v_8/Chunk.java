@@ -13,9 +13,9 @@ import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBA;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerShort;
 import protocolsupport.protocol.typeremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.utils.types.TileEntityType;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class Chunk extends MiddleChunk {
 
@@ -43,7 +43,7 @@ public class Chunk extends MiddleChunk {
 			ArraySerializer.writeVarIntByteArray(chunkdata, transformer.toLegacyData());
 		}
 		packets.add(chunkdata);
-		for (NBTTagCompoundWrapper tile : tiles) {
+		for (NBTCompound tile : tiles) {
 			packets.add(BlockTileUpdate.createPacketData(
 				version,
 				TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)),

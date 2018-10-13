@@ -66,7 +66,7 @@ public class ParticleRemapper {
 
 	protected static final RemappingRegistry<ParticleRemappingTable> REGISTRY = new RemappingRegistry<ParticleRemappingTable>() {
 		{
-			Arrays.stream(ProtocolVersionsHelper.AFTER_1_12_2)
+			Arrays.stream(ProtocolVersionsHelper.UP_1_13)
 			.forEach(version -> {
 				registerRemap(ParticleBlock.class, from -> new ParticleBlock(from.getId(), version, from.getBlockData()), version);
 				registerRemap(ParticleItem.class, from -> new ParticleItem(from.getId(), version, I18NData.DEFAULT_LOCALE, from.getItemStack()), version);

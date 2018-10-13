@@ -2,18 +2,17 @@ package protocolsupport.protocol.typeremapper.itemstack.complex.toclient;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 
 public class MapItemLegacyIdToNbtSpecificRemapper implements ItemStackComplexRemapper {
 
 	@Override
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		NBTTagCompoundWrapper tag = itemstack.getNBT();
+		NBTCompound tag = itemstack.getNBT();
 		//TODO FIX
 //		if (tag.isNull()) {
-			tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+			tag = new NBTCompound();
 //		}
 //		if(itemstack.getData() != Integer.MAX_VALUE) {
 //			tag.setString("map_uuid", String.valueOf(itemstack.getData()));

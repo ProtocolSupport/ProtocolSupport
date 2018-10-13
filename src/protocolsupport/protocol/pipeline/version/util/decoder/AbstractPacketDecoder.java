@@ -35,7 +35,7 @@ public abstract class AbstractPacketDecoder extends MessageToMessageDecoder<Byte
 		packetTransformer.readFromClientData(buffer);
 		try (RecyclableCollection<ServerBoundPacketData> data = processPackets(ctx.channel(), packetTransformer.toNative())) {
 			for (ServerBoundPacketData packetdata : data) {
-				ByteBuf receivedata = ctx.channel().alloc().ioBuffer(packetdata.readableBytes() + VarNumberSerializer.MAX_LENGTH);
+				ByteBuf receivedata = ctx.channel().alloc().heapBuffer(packetdata.readableBytes() + VarNumberSerializer.MAX_LENGTH);
 				VarNumberSerializer.writeVarInt(receivedata, packetdata.getPacketId());
 				receivedata.writeBytes(packetdata);
 				to.add(receivedata);

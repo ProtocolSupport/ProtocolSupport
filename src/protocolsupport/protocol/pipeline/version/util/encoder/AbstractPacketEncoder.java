@@ -45,7 +45,7 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 			if (packetTransformer.postFromServerRead()) {
 				try (RecyclableCollection<ClientBoundPacketData> data = processPackets(ctx.channel(), packetTransformer.toData())) {
 					for (ClientBoundPacketData packetdata : data) {
-						ByteBuf senddata = ctx.alloc().ioBuffer(packetdata.readableBytes() + VarNumberSerializer.MAX_LENGTH);
+						ByteBuf senddata = ctx.alloc().heapBuffer(packetdata.readableBytes() + VarNumberSerializer.MAX_LENGTH);
 						writePacketId(senddata, getNewPacketId(currentProtocol, packetdata.getPacketId()));
 						senddata.writeBytes(packetdata);
 						output.add(senddata);
