@@ -66,4 +66,8 @@ public class EntityRemapper {
 		return remappedMetadata;
 	}
 
+	public ArrayMap<DataWatcherObject<?>> getOriginalMetadata() {
+		return originalMetadata;
+	}
+
 }

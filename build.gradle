@@ -87,6 +87,7 @@ dependencies {
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
 	compile group: 'it.unimi.dsi', name: 'fastutil', version: '8.2.2'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
+	compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '5.2'
 	testCompile fileTree(dir: librariesRuntimeDirectory, include: '*.jar')
 	testCompile fileTree(dir: librariesShadeDirectory, include: '*.jar')
 	testCompile 'org.junit.jupiter:junit-jupiter-api:5.2.0'

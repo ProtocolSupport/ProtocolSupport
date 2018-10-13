@@ -1,15 +1,21 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.living;
 
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperBooleanToByte;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNumberToByte;
+import protocolsupport.protocol.typeremapper.entity.metadata.value.PeSimpleFlagRemapper;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 
 public class CreeperEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
 	public CreeperEntityMetadataRemapper() {
+		addRemap(new PeSimpleFlagRemapper(DataWatcherObjectIndex.Creeper.IGNITED, PeMetaBase.FLAG_IGNITED), ProtocolVersion.MINECRAFT_PE);
+		addRemap(new PeSimpleFlagRemapper(DataWatcherObjectIndex.Creeper.POWERED, PeMetaBase.FLAG_CHARGED), ProtocolVersion.MINECRAFT_PE);
+
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Creeper.STATE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Creeper.STATE, 11), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Creeper.STATE, 16), ProtocolVersionsHelper.BEFORE_1_9);

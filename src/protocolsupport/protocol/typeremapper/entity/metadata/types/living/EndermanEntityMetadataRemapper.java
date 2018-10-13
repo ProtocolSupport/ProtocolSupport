@@ -10,6 +10,14 @@ public class EndermanEntityMetadataRemapper extends InsentientEntityMetadataRema
 
 	public EndermanEntityMetadataRemapper() {
 		//TODO: Remap this.
+//		addRemap(new DataWatcherObjectRemapper() {
+//		@Override
+//		public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+//			DataWatcherObjectIndex.Enderman.CARRIED_BLOCK.getValue(original).ifPresent(stateWatcher -> {
+//				remapped.put(PeMetaBase.ENDERMAN_BLOCK, new DataWatcherObjectShortLe((short) MinecraftData.getBlockIdFromState(stateWatcher.getValue())));
+//			});
+//		}
+//	}, ProtocolVersion.MINECRAFT_PE),
 //		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
 //		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 11), ProtocolVersionsHelper.ALL_1_9),
 //		new Entry(new IndexValueRemapper<Integer, DataWatcherObjectBlockState>(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 16) {

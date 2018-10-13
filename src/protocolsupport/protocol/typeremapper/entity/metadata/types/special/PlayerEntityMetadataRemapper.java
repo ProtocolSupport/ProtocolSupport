@@ -1,10 +1,12 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.special;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
 import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.LivingEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNumberToInt;
+import protocolsupport.protocol.typeremapper.entity.metadata.value.PeSimpleFlagAdder;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
@@ -15,6 +17,8 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 public class PlayerEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 
 	public PlayerEntityMetadataRemapper() {
+		addRemap(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG}, new boolean[] {true}), ProtocolVersion.MINECRAFT_PE);
+
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 11), ProtocolVersionsHelper.RANGE__1_10__1_13_1);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 10), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 17), ProtocolVersionsHelper.BEFORE_1_9);

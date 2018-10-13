@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes.AttributeInfo;
 import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.basic.GenericIdRemapper;
+import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData.Offset;
@@ -35,12 +35,12 @@ public class SpawnLiving extends MiddleSpawnLiving {
 			version, cache.getAttributesCache().getLocale(),
 			entity, x, y, z,
 			motX / 8.000F, motY / 8000.F, motZ / 8000.F, pitch, yaw, headPitch,
-			metadata.getRemapped()
+			entityRemapper.getRemappedMetadata()
 		));
 		if (entity.getType() == NetworkEntityType.PIG) {
 			packets.add(EntitySetAttributes.create(version, entity, new ObjectFloatTuple<>(AttributeInfo.HORSE_JUMP_STRENGTH, 0.432084373616155F)));
 		}
-		DataWatcherObjectIndex.EntityLiving.HEALTH.getValue(metadata.getOriginal()).ifPresent(healthWatcher -> {
+		DataWatcherObjectIndex.EntityLiving.HEALTH.getValue(entityRemapper.getOriginalMetadata()).ifPresent(healthWatcher -> {
 			packets.add(EntitySetAttributes.create(version, entity, new ObjectFloatTuple<>(AttributeInfo.HEALTH, healthWatcher.getValue())));
 		});
 		return packets;
@@ -69,7 +69,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_ENTITY);
 		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
-		NetworkEntityType entityType = GenericIdRemapper.ENTITY.getTable(version).getRemap(entity.getType());
+		NetworkEntityType entityType = EntityRemappersRegistry.REGISTRY.getTable(version).getRemap(entity.getType()).getLeft();
 		VarNumberSerializer.writeVarInt(serializer, PEDataValues.getEntityTypeId(entityType));
 		serializer.writeFloatLE((float) x);
 		serializer.writeFloatLE((float) y);

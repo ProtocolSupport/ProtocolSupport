@@ -1,11 +1,9 @@
-package protocolsupport.protocol.typeremapper.watchedentity.value;
+package protocolsupport.protocol.typeremapper.entity.metadata.value;
 
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarInt;
 
-//Since PE has so many values just shifted one to the left I remapped it this way.
-//TODO: do a proper remapper for shifted
 public final class IndexValueRemapperNumberToSVarInt extends IndexValueRemapper<DataWatcherObject<Number>> {
 
 	@SuppressWarnings("unchecked")

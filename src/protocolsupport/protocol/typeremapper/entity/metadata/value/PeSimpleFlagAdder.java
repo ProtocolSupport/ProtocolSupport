@@ -1,6 +1,6 @@
-package protocolsupport.protocol.typeremapper.watchedentity.value;
+package protocolsupport.protocol.typeremapper.entity.metadata.value;
 
-import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;

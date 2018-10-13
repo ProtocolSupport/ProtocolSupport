@@ -43,7 +43,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		serializer.writeFloatLE(yaw); //head yaw actually
 		serializer.writeFloatLE(yaw);
 		ItemStackSerializer.writeItemStack(serializer, version, cache.getAttributesCache().getLocale(), NetworkItemStack.NULL, true);
-		DataWatcherSerializer.encodePEData(serializer, version, cache.getAttributesCache().getLocale(), EntityMetadata.transform(entity, metadata.getRemapped(), version));
+		DataWatcherSerializer.writePEData(serializer, version, cache.getAttributesCache().getLocale(), EntityMetadata.transform(entity, entityRemapper.getRemappedMetadata(), version));
 		VarNumberSerializer.writeVarInt(serializer, 0); //?
 		VarNumberSerializer.writeVarInt(serializer, 0); //?
 		VarNumberSerializer.writeVarInt(serializer, 0); //?
