@@ -14,10 +14,10 @@ import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerPE;
 import protocolsupport.protocol.typeremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class Chunk extends MiddleChunk {
 
@@ -39,7 +39,7 @@ public class Chunk extends MiddleChunk {
 			ArraySerializer.writeVarIntByteArray(serializer, chunkdata -> {
 				transformer.writeLegacyData(chunkdata);
 				chunkdata.writeByte(0); //borders
-				for (NBTTagCompoundWrapper tile : tiles) {
+				for (NBTCompound tile : tiles) {
 					ItemStackSerializer.writeTag(chunkdata, true, version, TileNBTRemapper.remap(version, tile));
 				}
 			});

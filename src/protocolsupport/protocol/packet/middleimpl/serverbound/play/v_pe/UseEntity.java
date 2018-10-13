@@ -11,10 +11,10 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.UsedHand;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class UseEntity extends ServerBoundMiddlePacket {
 
@@ -53,7 +53,8 @@ public class UseEntity extends ServerBoundMiddlePacket {
 		switch (subTypeId) {
 			case INTERACT_INTERACT: {
 				NetworkEntity target = cache.getWatchedEntityCache().getWatchedEntity(targetId);
-				if ((target == null) || !target.getType().isOfType(NetworkEntityType.ARMOR_STAND)) {
+				//TODO both armor stands?
+				if ((target == null) || !target.getType().isOfType(NetworkEntityType.ARMOR_STAND_MOB)) {
 					packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT, null, UsedHand.MAIN));
 				}
 				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(cX, cY, cZ), UsedHand.MAIN));

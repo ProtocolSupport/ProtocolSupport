@@ -2,23 +2,23 @@ package protocolsupport.protocol.typeremapper.itemstack.complex.fromclient;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackNBTComplexRemapper;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTList;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class BookPagesFromPERemapper extends ItemStackNBTComplexRemapper {
 
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTTagCompoundWrapper tag) {
-		if (tag.hasKeyOfType("pages", NBTTagType.LIST)) {
-			NBTTagListWrapper pages = tag.getList("pages", NBTTagType.COMPOUND);
-			NBTTagListWrapper newpages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
+	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
+		NBTList<NBTCompound> pages = tag.getTagListOfType("pages", NBTType.COMPOUND);
+		if (pages != null) {
+			NBTList<NBTString> newpages = new NBTList<>(NBTType.STRING);
 			for (int i = 0; i < pages.size(); i++) {
-				newpages.addString(pages.getCompound(i).getString("text"));
+				newpages.addTag(new NBTString(pages.getTag(i).getTagOfType("text", NBTType.STRING).getValue()));
 			}
-			tag.setList("pages", newpages);
+			tag.setTag("pages", newpages);
 		}
 		return tag;
 	}

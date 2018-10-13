@@ -10,11 +10,13 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTNumber;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
 
 public class BlockTileUpdate extends ServerBoundMiddlePacket {
 
@@ -22,7 +24,7 @@ public class BlockTileUpdate extends ServerBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected NBTTagCompoundWrapper nbt;
+	protected NBTCompound nbt;
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
@@ -32,15 +34,18 @@ public class BlockTileUpdate extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		if (nbt.hasKeyOfType("id", NBTTagType.STRING)) {
-			switch (nbt.getString("id")) {
+		NBTString id = nbt.getTagOfType("id", NBTType.STRING);
+		if (id != null) {
+			switch (id.getValue()) {
 				case "Sign": {
 					cache.getPETileCache().updateSignTag(nbt);
 					break;
 				}
 				case "Beacon": {
-					if (nbt.hasKeyOfType("primary", NBTTagType.INT) && nbt.hasKeyOfType("secondary", NBTTagType.INT)) {
-						return RecyclableSingletonList.create(createSelectBeacon(nbt.getIntNumber("primary"), nbt.getIntNumber("secondary")));
+					NBTNumber primary = nbt.getNumberTag("primary");
+					NBTNumber secondary = nbt.getNumberTag("secondary");
+					if (primary != null && secondary != null) {
+						return RecyclableSingletonList.create(createSelectBeacon(primary.getAsInt(), secondary.getAsInt()));
 					}
 				}
 			}
@@ -52,7 +57,7 @@ public class BlockTileUpdate extends ServerBoundMiddlePacket {
 		ByteBuf payload = Unpooled.buffer();
 		payload.writeInt(primary);
 		payload.writeInt(secondary);
-		return MiddleCustomPayload.create("MC|Beacon", MiscSerializer.readAllBytes(payload));
+		return MiddleCustomPayload.create("Minecraft:Beacon", MiscSerializer.readAllBytes(payload));
 	}
 
 }

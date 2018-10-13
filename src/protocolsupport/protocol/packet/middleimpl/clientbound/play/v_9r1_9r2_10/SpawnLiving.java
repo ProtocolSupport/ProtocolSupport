@@ -23,13 +23,8 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_LIVING_ID);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
-<<<<<<< HEAD
 		MiscSerializer.writeUUID(serializer, connection.getVersion(), entity.getUUID());
-		serializer.writeByte(LegacyEntityId.getLegacyId(GenericIdRemapper.ENTITY.getTable(version).getRemap(entity.getType())));
-=======
-		MiscSerializer.writeUUID(serializer, entity.getUUID());
 		serializer.writeByte(LegacyEntityId.getLegacyId(entityRemapper.getRemappedEntityType()));
->>>>>>> branch 'master' of https://github.com/ProtocolSupport/ProtocolSupport.git
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);
 		serializer.writeDouble(z);

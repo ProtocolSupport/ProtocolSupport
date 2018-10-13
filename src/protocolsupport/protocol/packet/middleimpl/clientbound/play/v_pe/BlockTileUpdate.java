@@ -9,9 +9,9 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class BlockTileUpdate extends MiddleBlockTileUpdate {
 
@@ -24,7 +24,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		return RecyclableSingletonList.create(create(connection.getVersion(), position, tag));
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, Position position, NBTTagCompoundWrapper tag) {
+	public static ClientBoundPacketData create(ProtocolVersion version, Position position, NBTCompound tag) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.TILE_DATA_UPDATE);
 		PositionSerializer.writePEPosition(serializer, position);
 		ItemStackSerializer.writeTag(serializer, true, version, TileNBTRemapper.remap(version, tag));

@@ -3,10 +3,12 @@ package protocolsupport.protocol.typeremapper.itemstack.complex.toclient;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTByte;
+import protocolsupport.protocol.utils.types.nbt.NBTByteArray;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTIntArray;
 import protocolsupport.protocol.utils.types.nbt.NBTList;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
-import protocolsupport.zplatform.ServerPlatform;
 
 public class FireworkToPETagSpecificRemapper implements ItemStackComplexRemapper {
 
@@ -40,11 +42,26 @@ public class FireworkToPETagSpecificRemapper implements ItemStackComplexRemapper
 
 	private NBTCompound remapExplosion(NBTCompound pcExplosion) {
 		NBTCompound peExplosion = new NBTCompound();
-		if (pcExplosion.hasKeyOfType("Colors", 		NBTTagType.INT_ARRAY)) { peExplosion.setByteArray("FireworkColor", remapColors(pcExplosion.getIntArray("Colors"))); }
-		if (pcExplosion.hasKeyOfType("FadeColors", 	NBTTagType.INT_ARRAY)) { peExplosion.setByteArray("FireworkFade", remapColors(pcExplosion.getIntArray("FadeColors"))); }
-		if (pcExplosion.hasKeyOfType("Flicker", 	NBTTagType.BYTE)) 	   { peExplosion.setByte("FireworkFlicker", pcExplosion.getByteNumber("Flicker")); }
-		if (pcExplosion.hasKeyOfType("Trail", 		NBTTagType.BYTE))	   { peExplosion.setByte("FireworkTrail", pcExplosion.getByteNumber("Trail")); }
-		if (pcExplosion.hasKeyOfType("Type",	 	NBTTagType.BYTE))	   { peExplosion.setByte("FireworkType", pcExplosion.getByteNumber("Type")); }
+		NBTIntArray colors = pcExplosion.getTagOfType("Colors", NBTType.INT_ARRAY);
+		if (colors != null) {
+			peExplosion.setTag("FireworkColor", new NBTByteArray(remapColors(colors.getValue())));
+		}
+		NBTIntArray fadeColors = pcExplosion.getTagOfType("FadeColors", NBTType.INT_ARRAY);
+		if (fadeColors != null) {
+			peExplosion.setTag("FireworkFade", new NBTByteArray(remapColors(fadeColors.getValue())));
+		}
+		NBTByte flicker = pcExplosion.getTagOfType("Flicker", NBTType.BYTE);
+		if (flicker != null) {
+			peExplosion.setTag("FireworkFlicker", new NBTByte(flicker.getAsByte()));
+		}
+		NBTByte trail = pcExplosion.getTagOfType("Trail", NBTType.BYTE);
+		if (trail != null) {
+			peExplosion.setTag("FireworkTrail", new NBTByte(flicker.getAsByte()));
+		}
+		NBTByte type = pcExplosion.getTagOfType("Type", NBTType.BYTE);
+		if (type != null) {
+			peExplosion.setTag("FireworkType", new NBTByte(type.getAsByte()));
+		}
 		return peExplosion;
 	}
 

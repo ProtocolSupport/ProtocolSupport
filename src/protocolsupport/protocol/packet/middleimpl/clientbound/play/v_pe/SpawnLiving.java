@@ -5,13 +5,13 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes.AttributeInfo;
+import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData.Offset;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
@@ -84,7 +84,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		if (metadata == null) {
 			VarNumberSerializer.writeVarInt(serializer, 0);
 		} else {
-			DataWatcherDeserializer.encodePEData(serializer, version, locale, EntityMetadata.transform(entity, metadata, version));
+			DataWatcherSerializer.writePEData(serializer, version, locale, EntityMetadata.transform(entity, metadata, version));
 		}
 		VarNumberSerializer.writeVarInt(serializer, 0); //links, sent in separate packet
 		return serializer;

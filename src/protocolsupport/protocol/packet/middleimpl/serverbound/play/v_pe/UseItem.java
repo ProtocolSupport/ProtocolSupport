@@ -12,11 +12,11 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.types.BlockFace;
 import protocolsupport.protocol.utils.types.GameMode;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.UsedHand;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class UseItem extends ServerBoundMiddlePacket {
 
