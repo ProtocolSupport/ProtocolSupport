@@ -146,8 +146,8 @@ public class LegacyBlockData {
 					Material.JUNGLE_LEAVES, Material.SPRUCE_LEAVES, Material.OAK_LEAVES,
 					Material.ACACIA_FENCE, Material.DARK_OAK_FENCE, Material.BIRCH_FENCE,
 					Material.JUNGLE_FENCE, Material.SPRUCE_FENCE, Material.OAK_FENCE,
-					Material.IRON_BARS,
-					Material.CHORUS_PLANT, Material.MUSHROOM_STEM, Material.BROWN_MUSHROOM_BLOCK, Material.GLASS_PANE,
+					Material.NETHER_BRICK_FENCE, Material.IRON_BARS,
+					Material.CHORUS_PLANT, Material.MUSHROOM_STEM, Material.BROWN_MUSHROOM_BLOCK, Material.RED_MUSHROOM_BLOCK, Material.GLASS_PANE,
 					Material.BLACK_STAINED_GLASS_PANE, Material.BLUE_STAINED_GLASS_PANE, Material.BROWN_STAINED_GLASS_PANE, Material.CYAN_STAINED_GLASS_PANE,
 					Material.GRAY_STAINED_GLASS_PANE, Material.GREEN_STAINED_GLASS_PANE, Material.LIGHT_BLUE_STAINED_GLASS_PANE, Material.LIGHT_GRAY_STAINED_GLASS_PANE,
 					Material.LIME_STAINED_GLASS_PANE, Material.MAGENTA_STAINED_GLASS_PANE, Material.ORANGE_STAINED_GLASS_PANE, Material.PINK_STAINED_GLASS_PANE,
@@ -211,7 +211,9 @@ public class LegacyBlockData {
 				Arrays.asList(
 					Material.ACACIA_SLAB, Material.DARK_OAK_SLAB, Material.BIRCH_SLAB,
 					Material.JUNGLE_SLAB, Material.OAK_SLAB, Material.SPRUCE_SLAB,
-					Material.COBBLESTONE_SLAB, Material.SANDSTONE_SLAB, Material.RED_SANDSTONE_SLAB
+					Material.COBBLESTONE_SLAB, Material.SANDSTONE_SLAB, Material.RED_SANDSTONE_SLAB,
+					Material.STONE_SLAB, Material.BRICK_SLAB, Material.STONE_BRICK_SLAB,
+					Material.NETHER_BRICK_SLAB, Material.QUARTZ_SLAB, Material.PURPUR_SLAB
 				),
 				o -> toPre13SlabState(o, (Slab) o.getMaterial().createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13
