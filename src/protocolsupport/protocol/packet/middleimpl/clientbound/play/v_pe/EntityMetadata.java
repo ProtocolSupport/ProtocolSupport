@@ -79,6 +79,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 
 	public static ClientBoundPacketData createFaux(NetworkEntity entity, String locale, ProtocolVersion version) {
 		EntityRemapper faux = new EntityRemapper(version);
+		faux.readEntity(entity);
 		faux.remap(true);
 		return create(entity, locale, transform(entity, faux.getRemappedMetadata(), version), version);
 	}
@@ -132,8 +133,9 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int FLAG_INTERESTED = takeNextFlag();
 		public static final int FLAG_CHARGED = takeNextFlag();
 		public static final int FLAG_TAMED = takeNextFlag();
-		public static final int FLAG_LEASHED = takeNextFlag();
-		public static final int FLAG_SHEARED = takeNextFlag(); //30
+		public static final int FLAG_ORPHANED = takeNextFlag();
+		public static final int FLAG_LEASHED = takeNextFlag(); //30
+		public static final int FLAG_SHEARED = takeNextFlag();
 		public static final int FLAG_GLIDING = takeNextFlag();
 		public static final int FLAG_ELDER = takeNextFlag();
 		public static final int FLAG_MOVING = takeNextFlag();
@@ -142,8 +144,8 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int FLAG_STACKABLE = takeNextFlag();
 		public static final int FLAG_SHOW_BASE = takeNextFlag();
 		public static final int FLAG_REARING = takeNextFlag();
-		public static final int FLAG_VIBRATING = takeNextFlag();
-		public static final int FLAG_IDLING = takeNextFlag(); //40
+		public static final int FLAG_VIBRATING = takeNextFlag(); //40
+		public static final int FLAG_IDLING = takeNextFlag();
 		public static final int FLAG_EVOKER_SPELL = takeNextFlag();
 		public static final int FLAG_CHARGE_ATTACK = takeNextFlag();
 		public static final int FLAG_WASD_CONTROLLED = takeNextFlag();
@@ -152,14 +154,16 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int FLAG_COLLIDE = takeNextFlag();
 		public static final int FLAG_GRAVITY = takeNextFlag();
 		public static final int FLAG_FIRE_IMMUNE = takeNextFlag();
-		public static final int FLAG_DANCING = takeNextFlag();
-		public static final int FLAG_ENCHANTED = takeNextFlag(); //50
+		public static final int FLAG_DANCING = takeNextFlag(); //50
+		public static final int FLAG_ENCHANTED = takeNextFlag();
 		public static final int FLAG_SHOW_TRIDENT_ROPE = takeNextFlag();
 		public static final int FLAG_CONTAINER_PRIVATE = takeNextFlag();
 		public static final int FLAG_TRANSORMATION = takeNextFlag();
 		public static final int FLAG_SPIN_ATTACK = takeNextFlag();
 		public static final int FLAG_SWIMMING = takeNextFlag();
 		public static final int FLAG_BRIBED = takeNextFlag();
+		public static final int FLAG_PREGNANT = takeNextFlag();
+		public static final int FLAG_LAYING_EGG = takeNextFlag();
 
 		protected static int metaId = 0;
 		protected static int takeNextMeta() {

@@ -54,7 +54,7 @@ public class PEPacketIDs {
 	public static final int INVENTORY_SLOT = 50;
 	public static final int CONTAINER_DATA = 51;
 	public static final int CRAFTING_DATA = 52;
-	//public static final int CRAFTING_EVENT = 53;
+	//public static final int CRAFTING_EVENT = 53; //Simulated
 	//public static final int GUI_DATA_PICK_ITEM = 54;
 	public static final int ADVENTURE_SETTINGS = 55;
 	public static final int TILE_DATA_UPDATE = 56;
@@ -110,5 +110,7 @@ public class PEPacketIDs {
 	public static final int SET_LOCAL_PLAYER_INITIALISED = 113;
 	public static final int UPDATE_SOFT_ENUM = 114;
 	public static final int STACK_LATANCY = 115;
+	//public static final int UNKOWN = 116;
+	public static final int CUSTOM_EVENT = 117;
 
 }
