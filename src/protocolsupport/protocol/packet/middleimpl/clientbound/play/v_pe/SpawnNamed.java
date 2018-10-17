@@ -28,8 +28,6 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		MiscSerializer.writeUUID(serializer, connection.getVersion(), entity.getUUID());
 		PlayerListEntry entry = cache.getPlayerListCache().getEntry(entity.getUUID());
 		StringSerializer.writeString(serializer, version, entry != null ? entry.getCurrentName(cache.getAttributesCache().getLocale()) : "UNKNOWN");
-		StringSerializer.writeString(serializer, version, ""); //ThirdPartyName :F
-		VarNumberSerializer.writeVarInt(serializer, 0); //Platform
 		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		StringSerializer.writeString(serializer, version, ""); //Chat :F
