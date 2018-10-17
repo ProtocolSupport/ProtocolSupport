@@ -15,6 +15,8 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class MinecartFurnaceEntityMetadataRemapper extends MinecartEntityMetadataRemapper {
 
+	public static final MinecartFurnaceEntityMetadataRemapper INSTANCE = new MinecartFurnaceEntityMetadataRemapper();
+
 	public MinecartFurnaceEntityMetadataRemapper() {
 		addRemap(new DataWatcherObjectRemapper() {
 			@Override

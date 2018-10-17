@@ -66,7 +66,6 @@ public class PEDataValues {
 		registerLivingType(NetworkEntityType.ZOMBIE_PIGMAN, 36);
 		registerLivingType(NetworkEntityType.GHAST, 41);
 		registerLivingType(NetworkEntityType.SLIME, 37);
-		registerLivingType(NetworkEntityType.GIANT, 32); //Massive zombies. No remap though because we want the metadata.
 		registerLivingType(NetworkEntityType.ZOMBIE, 32);
 		registerLivingType(NetworkEntityType.SPIDER, 35);
 		registerLivingType(NetworkEntityType.SKELETON, 34);
@@ -131,8 +130,6 @@ public class PEDataValues {
 		entityType.put(NetworkEntityType.MINECART_TNT, 97);
 		entityType.put(NetworkEntityType.MINECART_CHEST, 98);
 		entityType.put(NetworkEntityType.MINECART_COMMAND, 100);
-		entityType.put(NetworkEntityType.MINECART_FURNACE, 84); //Hack, we remap a furnace using entitymetadata.
-		entityType.put(NetworkEntityType.MINECART_MOB_SPAWNER, 84); //Hack, we remap a mobspawner using entitymetadata.
 		//TODO: Lingering Potion? -> 101
 		entityType.put(NetworkEntityType.LAMA_SPIT, 102);
 		entityType.put(NetworkEntityType.EVOCATOR_FANGS, 103);

@@ -89,6 +89,18 @@ public class ProtocolVersionsHelper {
 
 	public static final ProtocolVersion[] RANGE__1_6__1_10 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_1, ProtocolVersion.MINECRAFT_1_10);
 
+	public static final ProtocolVersion[] UP_1_13_AND_PE = concat(UP_1_13, ProtocolVersion.MINECRAFT_PE);
+
+	public static final ProtocolVersion[] UP_1_12_AND_PE = concat(UP_1_12, ProtocolVersion.MINECRAFT_PE);
+
+	public static final ProtocolVersion[] UP_1_11_AND_PE = concat(UP_1_11, ProtocolVersion.MINECRAFT_PE);
+
+	public static final ProtocolVersion[] UP_1_9_AND_PE = concat(UP_1_9, ProtocolVersion.MINECRAFT_PE);
+
+	public static final ProtocolVersion[] UP_1_8_AND_PE = concat(UP_1_8, ProtocolVersion.MINECRAFT_PE);
+
+	public static final ProtocolVersion[] UP_1_6_AND_PE = concat(UP_1_6, ProtocolVersion.MINECRAFT_PE);
+
 	public static final ProtocolVersion[] BEFORE_1_9_AND_PE = concat(BEFORE_1_9, ProtocolVersion.MINECRAFT_PE);
 
 	public static final ProtocolVersion[] BEFORE_1_13_AND_PE = concat(BEFORE_1_13, ProtocolVersion.MINECRAFT_PE);

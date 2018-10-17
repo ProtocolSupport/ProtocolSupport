@@ -8,6 +8,8 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class MinecartSpawnerEntityMetadataRemapper extends MinecartEntityMetadataRemapper {
 
+	public static final MinecartSpawnerEntityMetadataRemapper INSTANCE = new MinecartSpawnerEntityMetadataRemapper();
+
 	public MinecartSpawnerEntityMetadataRemapper() {
 		addRemap(new DataWatcherObjectRemapper() {
 			@Override

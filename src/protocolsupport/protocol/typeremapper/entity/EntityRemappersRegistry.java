@@ -23,6 +23,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.living.EnderD
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.EndermanEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.EvokerEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.GhastEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.GiantEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.GuardianEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.IronGolemEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.PhantomEntityMetadataRemapper;
@@ -73,6 +74,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.object.arrow.
 import protocolsupport.protocol.typeremapper.entity.metadata.types.object.minecart.MinecartCommandEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.object.minecart.MinecartEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.object.minecart.MinecartFurnaceEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.object.minecart.MinecartSpawnerEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.special.ArmorStandEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.special.PlayerEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry;
@@ -128,276 +130,280 @@ public class EntityRemappersRegistry {
 		}
 		{
 			new Mapping(NetworkEntityType.PLAYER)
-			.addMapping(NetworkEntityType.PLAYER, new PlayerEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.PLAYER, new PlayerEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.EXP_ORB)
-			.addMapping(NetworkEntityType.EXP_ORB, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.EXP_ORB, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.PAINTING)
-			.addMapping(NetworkEntityType.EXP_ORB, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.EXP_ORB, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.THUNDERBOLT)
-			.addMapping(NetworkEntityType.THUNDERBOLT, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.THUNDERBOLT, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.COW)
-			.addMapping(NetworkEntityType.COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.MUSHROOM_COW)
-			.addMapping(NetworkEntityType.MUSHROOM_COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.MUSHROOM_COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.CHICKEN)
-			.addMapping(NetworkEntityType.CHICKEN, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.CHICKEN, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.SQUID)
-			.addMapping(NetworkEntityType.SQUID, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.SQUID, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.COMMON_HORSE)
-			.addMapping(NetworkEntityType.COMMON_HORSE, BattleHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_6)
+			.addMapping(NetworkEntityType.COMMON_HORSE, BattleHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_6_AND_PE)
 			.addMapping(NetworkEntityType.COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
 			.register();
 			new Mapping(NetworkEntityType.ZOMBIE_HORSE)
-			.addMapping(NetworkEntityType.ZOMBIE_HORSE, BattleHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.ZOMBIE_HORSE, BattleHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.COMMON_HORSE, new LegacyZombieHorseEntityMetadataRemapper(), ProtocolVersionsHelper.RANGE__1_6__1_10)
 			.addMapping(NetworkEntityType.COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
 			.register();
 			new Mapping(NetworkEntityType.SKELETON_HORSE)
-			.addMapping(NetworkEntityType.SKELETON_HORSE, BattleHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.SKELETON_HORSE, BattleHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.COMMON_HORSE, new LegacySkeletonHorseEntityMetadataRemapper(), ProtocolVersionsHelper.RANGE__1_6__1_10)
 			.addMapping(NetworkEntityType.COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
 			.register();
 			new Mapping(NetworkEntityType.DONKEY)
-			.addMapping(NetworkEntityType.DONKEY, CargoHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.DONKEY, CargoHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.COMMON_HORSE, new LegacyDonkeyEntityMetadataRemapper(), ProtocolVersionsHelper.RANGE__1_6__1_10)
 			.addMapping(NetworkEntityType.COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
 			.register();
 			new Mapping(NetworkEntityType.MULE)
-			.addMapping(NetworkEntityType.MULE, CargoHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.MULE, CargoHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.COMMON_HORSE, new LegacyMuleEntityMetadataRemapper(), ProtocolVersionsHelper.RANGE__1_6__1_10)
 			.addMapping(NetworkEntityType.COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
 			.register();
 			new Mapping(NetworkEntityType.LAMA)
-			.addMapping(NetworkEntityType.LAMA, CargoHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.LAMA, CargoHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.COMMON_HORSE, new LegacyLamaEntityMetadataRemapper(), ProtocolVersionsHelper.RANGE__1_6__1_10)
 			.addMapping(NetworkEntityType.COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
 			.register();
 			new Mapping(NetworkEntityType.BAT)
-			.addMapping(NetworkEntityType.BAT, new BatEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.BAT, new BatEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.OCELOT)
-			.addMapping(NetworkEntityType.OCELOT, new OcelotEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.OCELOT, new OcelotEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.WOLF)
-			.addMapping(NetworkEntityType.WOLF, new WolfEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.WOLF, new WolfEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.PIG)
-			.addMapping(NetworkEntityType.PIG, new PigEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.PIG, new PigEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.RABBIT)
-			.addMapping(NetworkEntityType.RABBIT, new RabbitEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_9)
+			.addMapping(NetworkEntityType.RABBIT, new RabbitEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_9_AND_PE)
 			.addMapping(NetworkEntityType.CHICKEN, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 			.register();
 			new Mapping(NetworkEntityType.SHEEP)
-			.addMapping(NetworkEntityType.SHEEP, new SheepEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.SHEEP, new SheepEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.POLAR_BEAR)
-			.addMapping(NetworkEntityType.POLAR_BEAR, new PolarBearEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.POLAR_BEAR, new PolarBearEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.SPIDER, new LivingEntityMetadataRemapper(), ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.VILLAGER)
-			.addMapping(NetworkEntityType.VILLAGER, new VillagerEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.VILLAGER, new VillagerEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.ENDERMAN)
-			.addMapping(NetworkEntityType.ENDERMAN, new EndermanEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ENDERMAN, new EndermanEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.GIANT)
-			.addMapping(NetworkEntityType.GIANT, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.GIANT, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.SILVERFISH)
-			.addMapping(NetworkEntityType.SILVERFISH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.SILVERFISH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.ENDERMITE)
-			.addMapping(NetworkEntityType.ENDERMITE, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_8)
+			.addMapping(NetworkEntityType.ENDERMITE, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_8_AND_PE)
 			.addMapping(NetworkEntityType.SILVERFISH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_8)
 			.register();
 			new Mapping(NetworkEntityType.ENDER_DRAGON)
-			.addMapping(NetworkEntityType.ENDER_DRAGON, new EnderDragonEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ENDER_DRAGON, new EnderDragonEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.SNOWMAN)
-			.addMapping(NetworkEntityType.SNOWMAN, new SnowmanEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.SNOWMAN, new SnowmanEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.ZOMBIE)
-			.addMapping(NetworkEntityType.ZOMBIE, ZombieEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ZOMBIE, ZombieEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			//TODO: type???
 			new Mapping(NetworkEntityType.ZOMBIE_VILLAGER)
-			.addMapping(NetworkEntityType.ZOMBIE_VILLAGER, new ZombieVillagerEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.ZOMBIE_VILLAGER, new ZombieVillagerEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.ZOMBIE, ZombieEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.ZOMBIE_PIGMAN)
-			.addMapping(NetworkEntityType.ZOMBIE_PIGMAN, ZombieEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ZOMBIE_PIGMAN, ZombieEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.HUSK)
-			.addMapping(NetworkEntityType.HUSK, ZombieEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.HUSK, ZombieEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.ZOMBIE, ZombieEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.DROWNED)
-			.addMapping(NetworkEntityType.DROWNED, ZombieEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_13)
+			.addMapping(NetworkEntityType.DROWNED, ZombieEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_13_AND_PE)
 			.addMapping(NetworkEntityType.ZOMBIE, ZombieEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_13)
 			.register();
 			new Mapping(NetworkEntityType.BLAZE)
-			.addMapping(NetworkEntityType.BLAZE, new BlazeEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.BLAZE, new BlazeEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.SPIDER)
-			.addMapping(NetworkEntityType.SPIDER, SpiderEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.SPIDER, SpiderEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.CAVE_SPIDER)
-			.addMapping(NetworkEntityType.CAVE_SPIDER, SpiderEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.CAVE_SPIDER, SpiderEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.CREEPER)
-			.addMapping(NetworkEntityType.CREEPER, new CreeperEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.CREEPER, new CreeperEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.GHAST)
-			.addMapping(NetworkEntityType.GHAST, new GhastEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.GHAST, new GhastEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.SLIME)
-			.addMapping(NetworkEntityType.SLIME, SlimeEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.SLIME, SlimeEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.MAGMA_CUBE)
-			.addMapping(NetworkEntityType.MAGMA_CUBE, SlimeEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.MAGMA_CUBE, SlimeEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.SKELETON)
-			.addMapping(NetworkEntityType.SKELETON, SkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.SKELETON, SkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.WITHER_SKELETON)
-			.addMapping(NetworkEntityType.WITHER_SKELETON, SkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.WITHER_SKELETON, SkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.SKELETON, new LegacyWitherSkeletonEntityMetadataRemapper(), ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.STRAY)
-			.addMapping(NetworkEntityType.STRAY, SkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.STRAY, SkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.SKELETON, new LegacyStrayEntityMetadataRemapper(), ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.WITCH)
-			.addMapping(NetworkEntityType.WITCH, new WitchEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.WITCH, new WitchEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.IRON_GOLEM)
-			.addMapping(NetworkEntityType.IRON_GOLEM, new IronGolemEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.IRON_GOLEM, new IronGolemEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.SHULKER)
-			.addMapping(NetworkEntityType.SHULKER, new ShulkerEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_9)
+			.addMapping(NetworkEntityType.SHULKER, new ShulkerEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_9_AND_PE)
 			.addMapping(NetworkEntityType.BLAZE, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 			.register();
 			new Mapping(NetworkEntityType.WITHER)
-			.addMapping(NetworkEntityType.WITHER, new WitherEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.WITHER, new WitherEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.GUARDIAN)
-			.addMapping(NetworkEntityType.GUARDIAN, GuardianEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_8)
+			.addMapping(NetworkEntityType.GUARDIAN, GuardianEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_8_AND_PE)
 			.addMapping(NetworkEntityType.SQUID, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_8)
 			.register();
 			new Mapping(NetworkEntityType.ELDER_GUARDIAN)
-			.addMapping(NetworkEntityType.ELDER_GUARDIAN, GuardianEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.ELDER_GUARDIAN, GuardianEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.GUARDIAN, GuardianEntityMetadataRemapper.INSTANCE, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_10, ProtocolVersion.MINECRAFT_1_8))
 			.addMapping(NetworkEntityType.SQUID, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_8)
 			.register();
 			new Mapping(NetworkEntityType.VINDICATOR)
-			.addMapping(NetworkEntityType.VINDICATOR, new VindicatorEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.VINDICATOR, new VindicatorEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.WITCH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.EVOKER)
-			.addMapping(NetworkEntityType.EVOKER, EvokerEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.EVOKER, EvokerEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.WITCH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.ILLUSIONER)
-			.addMapping(NetworkEntityType.ILLUSIONER, EvokerEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.ILLUSIONER, EvokerEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.WITCH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.VEX)
-			.addMapping(NetworkEntityType.VEX, new VexEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.VEX, new VexEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.BLAZE, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.PARROT)
-			.addMapping(NetworkEntityType.PARROT, new ParrotEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_12)
+			.addMapping(NetworkEntityType.PARROT, new ParrotEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_12_AND_PE)
 			.addMapping(NetworkEntityType.CHICKEN, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_12)
 			.register();
 			new Mapping(NetworkEntityType.PHANTOM)
-			.addMapping(NetworkEntityType.PHANTOM, new PhantomEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_13)
+			.addMapping(NetworkEntityType.PHANTOM, new PhantomEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_13_AND_PE)
 			.addMapping(NetworkEntityType.BLAZE, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_13)
 			.register();
 			new Mapping(NetworkEntityType.DOLPHIN)
-			.addMapping(NetworkEntityType.DOLPHIN, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_13)
+			.addMapping(NetworkEntityType.DOLPHIN, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_13_AND_PE)
 			.addMapping(NetworkEntityType.SQUID, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_13)
 			.register();
 			new Mapping(NetworkEntityType.TURTLE)
-			.addMapping(NetworkEntityType.TURTLE, new TurtleEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_13)
+			.addMapping(NetworkEntityType.TURTLE, new TurtleEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_13_AND_PE)
 			.addMapping(NetworkEntityType.SQUID, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_13)
 			.register();
 			new Mapping(NetworkEntityType.COD)
-			.addMapping(NetworkEntityType.COD, FishEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_13)
+			.addMapping(NetworkEntityType.COD, FishEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_13_AND_PE)
 			.addMapping(NetworkEntityType.BAT, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_13)
 			.register();
 			new Mapping(NetworkEntityType.SALMON)
-			.addMapping(NetworkEntityType.SALMON, FishEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_13)
+			.addMapping(NetworkEntityType.SALMON, FishEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_13_AND_PE)
 			.addMapping(NetworkEntityType.BAT, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_13)
 			.register();
 			new Mapping(NetworkEntityType.PUFFERFISH)
-			.addMapping(NetworkEntityType.PUFFERFISH, new PufferFishEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_13)
+			.addMapping(NetworkEntityType.PUFFERFISH, new PufferFishEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_13_AND_PE)
 			.addMapping(NetworkEntityType.BAT, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_13)
 			.register();
 			new Mapping(NetworkEntityType.TROPICAL_FISH)
-			.addMapping(NetworkEntityType.TROPICAL_FISH, new TropicalFishEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_13)
+			.addMapping(NetworkEntityType.TROPICAL_FISH, new TropicalFishEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_13_AND_PE)
 			.addMapping(NetworkEntityType.BAT, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_13)
 			.register();
 			new Mapping(NetworkEntityType.ARMOR_STAND_MOB)
-			.addMapping(NetworkEntityType.ARMOR_STAND_MOB, ArmorStandEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_8)
+			.addMapping(NetworkEntityType.ARMOR_STAND_MOB, ArmorStandEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_8_AND_PE)
 			.addMapping(NetworkEntityType.ARMOR_STAND_MOB, EntityMetadataRemapper.NOOP, ProtocolVersionsHelper.BEFORE_1_8)
 			.register();
+			new Mapping(NetworkEntityType.GIANT)
+			.addMapping(NetworkEntityType.ZOMBIE, GiantEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PE)
+			.addMapping(NetworkEntityType.GIANT, GiantEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.register();
 			new Mapping(NetworkEntityType.BOAT)
-			.addMapping(NetworkEntityType.BOAT, new BoatEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.BOAT, new BoatEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.TNT)
-			.addMapping(NetworkEntityType.TNT, new TNTEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.TNT, new TNTEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.SNOWBALL)
-			.addMapping(NetworkEntityType.SNOWBALL, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.SNOWBALL, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.EGG)
-			.addMapping(NetworkEntityType.EGG, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.EGG, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.FIREBALL)
-			.addMapping(NetworkEntityType.FIREBALL, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.FIREBALL, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.FIRECHARGE)
-			.addMapping(NetworkEntityType.FIRECHARGE, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.FIRECHARGE, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.ENDERPEARL)
-			.addMapping(NetworkEntityType.ENDERPEARL, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ENDERPEARL, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.WITHER_SKULL)
-			.addMapping(NetworkEntityType.WITHER_SKULL, new WitherSkullEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.WITHER_SKULL, new WitherSkullEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.FALLING_OBJECT)
-			.addMapping(NetworkEntityType.FALLING_OBJECT, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.FALLING_OBJECT, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.ENDEREYE)
-			.addMapping(NetworkEntityType.ENDEREYE, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ENDEREYE, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.POTION)
-			.addMapping(NetworkEntityType.POTION, new PotionEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.POTION, new PotionEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.EXP_BOTTLE)
-			.addMapping(NetworkEntityType.EXP_BOTTLE, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.EXP_BOTTLE, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.LEASH_KNOT)
-			.addMapping(NetworkEntityType.LEASH_KNOT, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_6)
+			.addMapping(NetworkEntityType.LEASH_KNOT, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_6_AND_PE)
 			.addMapping(NetworkEntityType.LEASH_KNOT, EntityMetadataRemapper.NOOP, ProtocolVersionsHelper.BEFORE_1_6)
 			.register();
 			new Mapping(NetworkEntityType.FISHING_FLOAT)
-			.addMapping(NetworkEntityType.FISHING_FLOAT, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.FISHING_FLOAT, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.ITEM)
-			.addMapping(NetworkEntityType.ITEM, new ItemEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ITEM, new ItemEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.ARROW)
-			.addMapping(NetworkEntityType.ARROW, ArrowEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ARROW, ArrowEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.SPECTRAL_ARROW)
 			.addMapping(NetworkEntityType.SPECTRAL_ARROW, ArrowEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_9)
@@ -408,62 +414,64 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.ARROW, ArrowEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9_AND_PE)
 			.register();
 			new Mapping(NetworkEntityType.THROWN_TRIDENT)
-			.addMapping(NetworkEntityType.THROWN_TRIDENT, new TridentEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_13)
+			.addMapping(NetworkEntityType.THROWN_TRIDENT, new TridentEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_13_AND_PE)
 			.addMapping(NetworkEntityType.ARROW, ArrowEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_13)
 			.register();
 			new Mapping(NetworkEntityType.FIREWORK)
-			.addMapping(NetworkEntityType.FIREWORK, new FireworkEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.FIREWORK, new FireworkEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.ITEM_FRAME)
-			.addMapping(NetworkEntityType.ITEM_FRAME, new ItemFrameEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ITEM_FRAME, new ItemFrameEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.ENDER_CRYSTAL)
-			.addMapping(NetworkEntityType.ENDER_CRYSTAL, new EnderCrystalEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ENDER_CRYSTAL, new EnderCrystalEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.AREA_EFFECT_CLOUD)
-			.addMapping(NetworkEntityType.AREA_EFFECT_CLOUD, new AreaEffectCloudEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_9)
+			.addMapping(NetworkEntityType.AREA_EFFECT_CLOUD, new AreaEffectCloudEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_9_AND_PE)
 			.addMapping(NetworkEntityType.AREA_EFFECT_CLOUD, EntityMetadataRemapper.NOOP, ProtocolVersionsHelper.BEFORE_1_9)
 			.register();
 			new Mapping(NetworkEntityType.SHULKER_BULLET)
-			.addMapping(NetworkEntityType.SHULKER_BULLET, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_9)
+			.addMapping(NetworkEntityType.SHULKER_BULLET, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_9_AND_PE)
 			.addMapping(NetworkEntityType.FIRECHARGE, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 			.register();
 			new Mapping(NetworkEntityType.LAMA_SPIT)
-			.addMapping(NetworkEntityType.LAMA_SPIT, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.LAMA_SPIT, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.SNOWBALL, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.DRAGON_FIREBALL)
-			.addMapping(NetworkEntityType.DRAGON_FIREBALL, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_9)
+			.addMapping(NetworkEntityType.DRAGON_FIREBALL, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_9_AND_PE)
 			.addMapping(NetworkEntityType.FIRECHARGE, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
 			.register();
 			new Mapping(NetworkEntityType.EVOCATOR_FANGS)
-			.addMapping(NetworkEntityType.EVOCATOR_FANGS, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.EVOCATOR_FANGS, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.FIRECHARGE, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.ARMOR_STAND_OBJECT)
-			.addMapping(NetworkEntityType.ARMOR_STAND_OBJECT, ArmorStandEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_8)
+			.addMapping(NetworkEntityType.ARMOR_STAND_OBJECT, ArmorStandEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_8_AND_PE)
 			.addMapping(NetworkEntityType.ARMOR_STAND_OBJECT, EntityMetadataRemapper.NOOP, ProtocolVersionsHelper.BEFORE_1_8)
 			.register();
 			new Mapping(NetworkEntityType.MINECART)
-			.addMapping(NetworkEntityType.MINECART, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.MINECART, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.MINECART_CHEST)
-			.addMapping(NetworkEntityType.MINECART_CHEST, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.MINECART_CHEST, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.MINECART_FURNACE)
-			.addMapping(NetworkEntityType.MINECART_FURNACE, new MinecartFurnaceEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.MINECART, MinecartFurnaceEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PE)
+			.addMapping(NetworkEntityType.MINECART_FURNACE, MinecartFurnaceEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
 			.register();
 			new Mapping(NetworkEntityType.MINECART_TNT)
-			.addMapping(NetworkEntityType.MINECART_TNT, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.MINECART_TNT, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.MINECART_MOB_SPAWNER)
-			.addMapping(NetworkEntityType.MINECART_MOB_SPAWNER, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.MINECART, MinecartSpawnerEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PE)
+			.addMapping(NetworkEntityType.MINECART_MOB_SPAWNER, MinecartSpawnerEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
 			.register();
 			new Mapping(NetworkEntityType.MINECART_HOPPER)
-			.addMapping(NetworkEntityType.MINECART_HOPPER, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.MINECART_HOPPER, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.MINECART_COMMAND)
-			.addMapping(NetworkEntityType.MINECART_COMMAND, new MinecartCommandEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.MINECART_COMMAND, new MinecartCommandEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 		}
 	};

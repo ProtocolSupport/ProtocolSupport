@@ -13,7 +13,9 @@ import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class GiantEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
-	
+
+	public static final GiantEntityMetadataRemapper INSTANCE = new GiantEntityMetadataRemapper();
+
 	public GiantEntityMetadataRemapper() {
 		addRemap(new DataWatcherObjectRemapper() {
 			@Override
