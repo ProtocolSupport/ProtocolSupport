@@ -7,10 +7,12 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.events.ConnectionHandshakeEvent;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ThrottleTracker;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.spoofedata.SpoofedData;
 import protocolsupport.protocol.utils.spoofedata.SpoofedDataParser;
 import protocolsupport.zplatform.ServerPlatform;
@@ -42,7 +44,8 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 				ConnectionImpl connection = ConnectionImpl.getFromChannel(networkManager.getChannel());
 				//version check
 				if (!connection.getVersion().isSupported()) {
-					disconnect(MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replace("'", "''"), ServerPlatform.get().getMiscUtils().getVersionName()));
+					disconnect(MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replace("'", "''"), 
+						connection.getVersion().getProtocolType() == ProtocolType.PE ? ProtocolVersionsHelper.LATEST_PE.getName() : ServerPlatform.get().getMiscUtils().getVersionName()));
 					break;
 				}
 				//ps handshake event
