@@ -15,14 +15,21 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEditBook;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleNameItem;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePickItem;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSetBeaconEffect;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock.Action;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock.Mirror;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock.Mode;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock.Rotation;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.CustomPayloadChannelsCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.UsedHand;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTList;
@@ -92,6 +99,30 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 		} else {
 			return RecyclableEmptyList.get();
 		}
+	}
+
+	protected RecyclableCollection<ServerBoundPacketData> transformStructureBlock() {
+		Position position = PositionSerializer.readLegacyPositionI(data);
+		Action action = Action.CONSTANT_LOOKUP.getByOrdinal(data.readByte());
+		Mode mode = Mode.valueOf(StringSerializer.readString(data, connection.getVersion()));
+		String name = StringSerializer.readString(data, connection.getVersion());
+		byte offsetX = (byte) data.readInt();
+		byte offsetY = (byte) data.readInt();
+		byte offsetZ = (byte) data.readInt();
+		byte sizeX = (byte) data.readInt();
+		byte sizeY = (byte) data.readInt();
+		byte sizeZ = (byte) data.readInt();
+		Mirror mirror = Mirror.valueOf(StringSerializer.readString(data, connection.getVersion()));
+		Rotation rotation = Rotation.valueOf(StringSerializer.readString(data, connection.getVersion()));
+		String metadata = StringSerializer.readString(data, connection.getVersion());
+		int ignoreEntities = data.readBoolean() ? 0x01 : 0;
+		int showAir = data.readBoolean() ? 0x02 : 0;
+		int showBoundingBox = data.readBoolean() ? 0x04 : 0;
+		float integrity = data.readFloat();
+		long seed = VarNumberSerializer.readVarLong(data);
+		byte flags = (byte) (ignoreEntities | showAir | showBoundingBox);
+		return RecyclableSingletonList.create(MiddleUpdateStructureBlock.create(position, action, mode, name, 
+				offsetX, offsetY, offsetZ, sizeX, sizeY, sizeZ, mirror, rotation, metadata, integrity, seed, flags));
 	}
 
 	protected RecyclableCollection<ServerBoundPacketData> transformSetBeaconEffect() {
