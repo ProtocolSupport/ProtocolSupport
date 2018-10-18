@@ -20,6 +20,7 @@ import protocolsupport.protocol.utils.types.nbt.NBTByte;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTFloat;
 import protocolsupport.protocol.utils.types.nbt.NBTInt;
+import protocolsupport.protocol.utils.types.nbt.NBTNumber;
 import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
 
@@ -174,9 +175,12 @@ public class TileNBTRemapper {
 		register(
 				TileEntityType.BED,
 				(version, input) -> {
-					byte color = input.getNumberTag("color").getAsByte();
-					input.removeTag("color");
-					input.setTag("color", new NBTByte(color));
+					NBTNumber colorTag = input.getNumberTag("color");
+					if (colorTag != null) {
+						byte color = input.getNumberTag("color").getAsByte();
+						input.removeTag("color");
+						input.setTag("color", new NBTByte(color));
+					}
 					return input;
 				},
 				ProtocolVersion.MINECRAFT_PE
