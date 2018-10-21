@@ -18,7 +18,7 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected Position position = new Position(0, 0, 0);
+	protected final Position position = new Position(0, 0, 0);
 	protected int face;
 	protected UsedHand hand;
 	protected float cX;

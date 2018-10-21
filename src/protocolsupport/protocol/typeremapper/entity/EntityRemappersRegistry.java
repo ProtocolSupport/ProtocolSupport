@@ -134,7 +134,7 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.EXP_ORB, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
 			.register();
 			new Mapping(NetworkEntityType.PAINTING)
-			.addMapping(NetworkEntityType.EXP_ORB, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.PAINTING, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
 			.register();
 			new Mapping(NetworkEntityType.THUNDERBOLT)
 			.addMapping(NetworkEntityType.THUNDERBOLT, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)

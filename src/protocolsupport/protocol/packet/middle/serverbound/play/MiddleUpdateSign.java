@@ -17,7 +17,7 @@ public abstract class MiddleUpdateSign extends ServerBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected Position position = new Position(0, 0, 0);
+	protected final Position position = new Position(0, 0, 0);
 	protected String[] lines = new String[4];
 
 	@Override
