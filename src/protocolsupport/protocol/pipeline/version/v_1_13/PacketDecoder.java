@@ -2,7 +2,6 @@ package protocolsupport.protocol.pipeline.version.v_1_13;
 
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_7_8_9r1_9r2_10_11_12r1_12r2_13.SetProtocol;
 import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_13.LoginCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13.LoginStart;
@@ -23,6 +22,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13.SetBeaco
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13.TabComplete;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13.UpdateCommandBlock;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13.UpdateCommandMinecart;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13.UpdateStructureBlock;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.Chat;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.CreativeSetSlot;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.Flying;
@@ -99,7 +99,7 @@ public class PacketDecoder extends AbstractModernPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x22, UpdateCommandBlock::new);
 		registry.register(NetworkState.PLAY, 0x23, UpdateCommandMinecart::new);
 		registry.register(NetworkState.PLAY, 0x24, CreativeSetSlot::new);
-		registry.register(NetworkState.PLAY, 0x25, MiddleUpdateStructureBlock::new);
+		registry.register(NetworkState.PLAY, 0x25, UpdateStructureBlock::new);
 		registry.register(NetworkState.PLAY, 0x26, UpdateSign::new);
 		registry.register(NetworkState.PLAY, 0x27, Animation::new);
 		registry.register(NetworkState.PLAY, 0x28, Spectate::new);

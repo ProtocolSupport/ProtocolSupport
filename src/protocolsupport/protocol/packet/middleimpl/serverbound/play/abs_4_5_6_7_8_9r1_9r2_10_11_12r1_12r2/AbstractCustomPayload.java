@@ -16,10 +16,6 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleNameItem;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePickItem;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSetBeaconEffect;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock.Action;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock.Mirror;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock.Mode;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock.Rotation;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -103,8 +99,8 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 
 	protected RecyclableCollection<ServerBoundPacketData> transformStructureBlock() {
 		Position position = PositionSerializer.readLegacyPositionI(data);
-		Action action = Action.CONSTANT_LOOKUP.getByOrdinal(data.readByte());
-		Mode mode = Mode.valueOf(StringSerializer.readString(data, connection.getVersion()));
+		MiddleUpdateStructureBlock.Action action = MiddleUpdateStructureBlock.Action.CONSTANT_LOOKUP.getByOrdinal(data.readByte() - 1);
+		MiddleUpdateStructureBlock.Mode mode = MiddleUpdateStructureBlock.Mode.valueOf(StringSerializer.readString(data, connection.getVersion()));
 		String name = StringSerializer.readString(data, connection.getVersion());
 		byte offsetX = (byte) data.readInt();
 		byte offsetY = (byte) data.readInt();
@@ -112,8 +108,8 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 		byte sizeX = (byte) data.readInt();
 		byte sizeY = (byte) data.readInt();
 		byte sizeZ = (byte) data.readInt();
-		Mirror mirror = Mirror.valueOf(StringSerializer.readString(data, connection.getVersion()));
-		Rotation rotation = Rotation.valueOf(StringSerializer.readString(data, connection.getVersion()));
+		MiddleUpdateStructureBlock.Mirror mirror = MiddleUpdateStructureBlock.Mirror.valueOf(StringSerializer.readString(data, connection.getVersion()));
+		MiddleUpdateStructureBlock.Rotation rotation = MiddleUpdateStructureBlock.Rotation.valueOf(StringSerializer.readString(data, connection.getVersion()));
 		String metadata = StringSerializer.readString(data, connection.getVersion());
 		int ignoreEntities = data.readBoolean() ? 0x01 : 0;
 		int showAir = data.readBoolean() ? 0x02 : 0;
