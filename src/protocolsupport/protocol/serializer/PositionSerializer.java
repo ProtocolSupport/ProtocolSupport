@@ -33,6 +33,16 @@ public class PositionSerializer {
 		to.setZ(from.readInt());
 	}
 
+	public static void readLegacyPositionITo(ByteBuf from, Position to) {
+		to.setX(from.readInt());
+		to.setY(from.readInt());
+		to.setZ(from.readInt());
+	}
+
+	public static Position readLegacyPositionI(ByteBuf from) {
+		return new Position(from.readInt(), from.readInt(), from.readInt());
+	}
+
 	public static void writePosition(ByteBuf to, Position position) {
 		to.writeLong(((position.getX() & 0x3FFFFFFL) << 38) | ((position.getY() & 0xFFFL) << 26) | (position.getZ() & 0x3FFFFFFL));
 	}
