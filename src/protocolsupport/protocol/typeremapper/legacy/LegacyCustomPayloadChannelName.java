@@ -10,9 +10,14 @@ public class LegacyCustomPayloadChannelName {
 	public static final String MODERN_UNREGISTER = "minecraft:unregister";
 	public static final String MODERN_TRADER_LIST = "minecraft:trader_list";
 	public static final String MODERN_BRAND = "minecraft:brand";
+	public static final String MODERN_BOOK_OPEN = "minecraft:book_open";
+	public static final String MODERN_BUNGEE = "bungeecord:main";
 
 	public static final String LEGACY_REGISTER = "REGISTER";
 	public static final String LEGACY_UNREGISTER = "UNREGISTER";
+	public static final String LEGACY_BRAND = "MC|Brand";
+	public static final String LEGACY_BOOK_OPEN = "MC|BOpen";
+	public static final String LEGACY_BUNGEE = "MC|BungeeCord";
 	public static final String LEGACY_COMMAND_BLOCK_NAME = "MC|AutoCmd";
 	public static final String LEGACY_COMMAND_RIGHT_NAME = "MC|AdvCmd";
 	public static final String LEGACY_COMMAND_TYPO_NAME = "MC|AdvCdm";
@@ -21,17 +26,19 @@ public class LegacyCustomPayloadChannelName {
 	public static final String LEGACY_SET_BEACON = "MC|Beacon";
 	public static final String LEGACY_NAME_ITEM = "MC|ItemName";
 	public static final String LEGACY_PICK_ITEM = "MC|PickItem";
+	public static final String LEGACY_STRUCTURE_BLOCK = "MC|Struct";
+	public static final String LEGACY_TRADE_LIST = "MC|TrList";
 
 	public static String toPre13(String modernName) {
 		switch (modernName) {
 			case MODERN_TRADER_LIST: {
-				return "MC|TrList";
+				return LEGACY_TRADE_LIST;
 			}
 			case MODERN_BRAND: {
-				return "MC|Brand";
+				return LEGACY_BRAND;
 			}
-			case "minecraft:book_open": {
-				return "MC|BOpen";
+			case MODERN_BOOK_OPEN: {
+				return LEGACY_BOOK_OPEN;
 			}
 			case MODERN_REGISTER: {
 				return LEGACY_REGISTER;
@@ -54,11 +61,11 @@ public class LegacyCustomPayloadChannelName {
 			case LEGACY_UNREGISTER: {
 				return MODERN_UNREGISTER;
 			}
-			case "MC|Brand": {
+			case LEGACY_BRAND: {
 				return MODERN_BRAND;
 			}
-			case "BungeeCord": {
-				return "bungeecord:main";
+			case LEGACY_BUNGEE: {
+				return MODERN_BUNGEE;
 			}
 			default: {
 				String[] split = legacyName.toLowerCase().split(NamespacedKeyUtils.SEPARATOR, 2);
