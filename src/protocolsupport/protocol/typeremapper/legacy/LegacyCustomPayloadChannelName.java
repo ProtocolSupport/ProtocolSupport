@@ -17,7 +17,7 @@ public class LegacyCustomPayloadChannelName {
 	public static final String LEGACY_UNREGISTER = "UNREGISTER";
 	public static final String LEGACY_BRAND = "MC|Brand";
 	public static final String LEGACY_BOOK_OPEN = "MC|BOpen";
-	public static final String LEGACY_BUNGEE = "MC|BungeeCord";
+	public static final String LEGACY_BUNGEE = "BungeeCord";
 	public static final String LEGACY_COMMAND_BLOCK_NAME = "MC|AutoCmd";
 	public static final String LEGACY_COMMAND_RIGHT_NAME = "MC|AdvCmd";
 	public static final String LEGACY_COMMAND_TYPO_NAME = "MC|AdvCdm";
