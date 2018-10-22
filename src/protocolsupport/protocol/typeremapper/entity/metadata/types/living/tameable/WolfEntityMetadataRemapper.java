@@ -16,10 +16,10 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarIn
 public class WolfEntityMetadataRemapper extends TameableEntityMetadataRemapper {
 
 	public WolfEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.HEALTH, 15), ProtocolVersionsHelper.RANGE__1_10__1_13_1);
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.HEALTH, 14), ProtocolVersionsHelper.ALL_1_9);
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.HEALTH, 18), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1));
-		addRemap(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Wolf.HEALTH, 18), ProtocolVersionsHelper.BEFORE_1_6);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.DAMAGE_TAKEN, 15), ProtocolVersionsHelper.RANGE__1_10__1_13_1);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.DAMAGE_TAKEN, 14), ProtocolVersionsHelper.ALL_1_9);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.DAMAGE_TAKEN, 18), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1));
+		addRemap(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Wolf.DAMAGE_TAKEN, 18), ProtocolVersionsHelper.BEFORE_1_6);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.BEGGING, 16), ProtocolVersion.MINECRAFT_1_10);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.BEGGING, 15), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Wolf.BEGGING, 19), ProtocolVersionsHelper.BEFORE_1_9);

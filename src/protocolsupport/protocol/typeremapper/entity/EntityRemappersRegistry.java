@@ -45,8 +45,8 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.living.fish.P
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.fish.TropicalFishEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.BattleHorseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.CargoHorseEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LegacyDonkeyEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LamaEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LegacyDonkeyEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LegacyMuleEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LegacySkeletonHorseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LegacyZombieHorseEntityMetadataRemapper;
