@@ -41,7 +41,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 		if (PEBlocks.canPCBlockBeWaterLogged(state) || state == 0) {
 			ClientBoundPacketData updateWater = ClientBoundPacketData.create(PEPacketIDs.UPDATE_BLOCK);
 			PositionSerializer.writePEPosition(updateWater, position);
-			VarNumberSerializer.writeVarInt(updateWater, PEBlocks.isPCBlockWaterlogged(state) ? PEBlocks.getPEWaterId() : 0);
+			VarNumberSerializer.writeVarInt(updateWater, PEBlocks.isPCBlockWaterlogged(state) ? PEBlocks.getPEWaterId(version) : 0);
 			VarNumberSerializer.writeVarInt(updateWater, flags);
 			VarNumberSerializer.writeVarInt(updateWater, 1); //Liquid layer
 			packets.add(updateWater);
