@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
@@ -23,18 +22,12 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ByteBuf data = cachedBuffers.get(connection.getVersion());
-		if (data == null) {
-			data = Unpooled.buffer();
-			ProtocolVersion version = connection.getVersion();
-			VarNumberSerializer.writeVarInt(data, recipes.length);
-			for (Recipe r : recipes) {
-				writeRecipe(r, data, version);
-			}
-			cachedBuffers.put(version, data);
-		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_DECLARE_RECIPES);
-		serializer.writeBytes(data.slice());
+		ProtocolVersion version = connection.getVersion();
+		VarNumberSerializer.writeVarInt(serializer, recipes.length);
+		for (Recipe r : recipes) {
+			writeRecipe(r, serializer, version);
+		}
 		return RecyclableSingletonList.create(serializer);
 	}
 

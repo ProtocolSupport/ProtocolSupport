@@ -14,7 +14,6 @@ public class NoopDeclareRecipes extends MiddleDeclareRecipes {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		cachedBuffers.put(connection.getVersion(), null);
 		return RecyclableEmptyList.get();
 	}
 

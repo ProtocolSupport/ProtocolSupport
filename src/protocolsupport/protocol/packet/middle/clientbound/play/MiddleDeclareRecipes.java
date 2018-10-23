@@ -1,16 +1,12 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.util.Collections;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
@@ -23,22 +19,16 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected static final Map<ProtocolVersion, ByteBuf> cachedBuffers = Collections.synchronizedMap(new EnumMap<>(ProtocolVersion.class));
-
 	protected Recipe[] recipes;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		if (cachedBuffers.containsKey(connection.getVersion())) {
-			MiscSerializer.readAllBytesSlice(serverdata);
-		} else {
-			int count = VarNumberSerializer.readVarInt(serverdata);
-			recipes = new Recipe[count];
-			for (int i = 0; i < count; i++) {
-				String id = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
-				RecipeType type = RecipeType.getByInternalName(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
-				recipes[i] = type.read(id, serverdata);
-			}
+		int count = VarNumberSerializer.readVarInt(serverdata);
+		recipes = new Recipe[count];
+		for (int i = 0; i < count; i++) {
+			String id = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+			RecipeType type = RecipeType.getByInternalName(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
+			recipes[i] = type.read(id, serverdata);
 		}
 	}
 
