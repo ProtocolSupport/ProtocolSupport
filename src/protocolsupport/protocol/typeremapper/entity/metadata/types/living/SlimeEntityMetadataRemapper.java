@@ -11,7 +11,7 @@ public class SlimeEntityMetadataRemapper extends InsentientEntityMetadataRemappe
 	public static final SlimeEntityMetadataRemapper INSTANCE = new SlimeEntityMetadataRemapper();
 
 	public SlimeEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Slime.SIZE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Slime.SIZE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Slime.SIZE, 11), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Slime.SIZE, 16), ProtocolVersionsHelper.BEFORE_1_9);
 	}

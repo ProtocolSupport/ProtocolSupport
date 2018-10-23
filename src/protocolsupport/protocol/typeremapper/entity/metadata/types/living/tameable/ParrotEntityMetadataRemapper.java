@@ -8,7 +8,7 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 public class ParrotEntityMetadataRemapper extends TameableEntityMetadataRemapper {
 
 	public ParrotEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Parrot.VARIANT, 15), ProtocolVersionsHelper.RANGE__1_12__1_13_1);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Parrot.VARIANT, 15), ProtocolVersionsHelper.RANGE__1_12__1_13_2);
 	}
 
 }

@@ -8,6 +8,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13.LoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_8_9r1_9r2_10_11_12r1_12r2_13.EncryptionRequest;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_8_9r1_9r2_10_11_12r1_12r2_13.SetCompression;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12r1_12r2_13.EntityEffectAdd;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12r1_12r2_13.WorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12r1_12r2_13.WorldSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_11_12r1_12r2_13.CollectEffect;
@@ -57,7 +58,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.CombatEvent;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.Entity;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.EntityDestroy;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.EntityEffectAdd;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.EntityEffectRemove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.EntityHeadRotation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.EntityLook;
