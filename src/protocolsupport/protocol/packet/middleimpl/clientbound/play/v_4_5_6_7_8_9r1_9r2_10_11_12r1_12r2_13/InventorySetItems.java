@@ -6,10 +6,10 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySetItems;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class InventorySetItems extends MiddleInventorySetItems {
 
@@ -22,8 +22,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 		ProtocolVersion version = connection.getVersion();
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && ((cache.getWindowCache().getOpenedWindow() == WindowType.PLAYER) || (windowId == 0))) {
 			itemstacks.remove(itemstacks.size() - 1);
-		}
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (cache.getWindowCache().getOpenedWindow() == WindowType.BREWING)) {
+		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (cache.getWindowCache().getOpenedWindow() == WindowType.BREWING)) {
 			itemstacks.remove(4);
 		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (cache.getWindowCache().getOpenedWindow() == WindowType.ENCHANT)) {
 			itemstacks.remove(1);

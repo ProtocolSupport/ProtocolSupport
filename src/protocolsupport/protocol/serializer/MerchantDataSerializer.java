@@ -7,11 +7,14 @@ import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.utils.types.nbt.NBTByte;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTInt;
+import protocolsupport.protocol.utils.types.nbt.NBTList;
+import protocolsupport.protocol.utils.types.nbt.NBTShort;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public class MerchantDataSerializer {
 
@@ -65,24 +68,23 @@ public class MerchantDataSerializer {
 		VarNumberSerializer.writeSVarLong(to, villagerId);
 		VarNumberSerializer.writeSVarLong(to, cache.getWatchedEntityCache().getSelfPlayerEntityId());
 		StringSerializer.writeString(to, version, title);
-		NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-		NBTTagListWrapper recipes = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
+		NBTCompound tag = new NBTCompound();
+		NBTList<NBTCompound> recipes = new NBTList<>(NBTType.COMPOUND);
 		if (merchdata != null) {
 			for (TradeOffer offer : merchdata.getOffers()) {
-				NBTTagCompoundWrapper recipe = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-				ServerPlatform.get().getMiscUtils();
-				recipe.setCompound("buyA", ItemStackToPENBT(version, locale, offer.getItemStack1()));
-				recipe.setCompound("sell", ItemStackToPENBT(version, locale, offer.getResult()));
+				NBTCompound recipe = new NBTCompound();
+				recipe.setTag("buyA", ItemStackToPENBT(version, locale, offer.getItemStack1()));
+				recipe.setTag("sell", ItemStackToPENBT(version, locale, offer.getResult()));
 				if (offer.hasItemStack2()) {
-					recipe.setCompound("buyB", ItemStackToPENBT(version, locale, offer.getItemStack2()));
+					recipe.setTag("buyB", ItemStackToPENBT(version, locale, offer.getItemStack2()));
 				}
-				recipe.setInt("uses", offer.isDisabled() ? offer.getMaxUses() : offer.getUses());
-				recipe.setInt("maxUses", offer.getMaxUses());
+				recipe.setTag("uses", new NBTInt(offer.isDisabled() ? offer.getMaxUses() : offer.getUses()));
+				recipe.setTag("maxUses", new NBTInt(offer.getMaxUses()));
 				//recipe.setByte("rewardExp", 0);
-				recipes.addCompound(recipe);
+				recipes.addTag(recipe);
 			}
 		}
-		tag.setList("Recipes", recipes);
+		tag.setTag("Recipes", recipes);
 		ItemStackSerializer.writeTag(to, true, version, tag);
 	}
 
@@ -91,14 +93,14 @@ public class MerchantDataSerializer {
 	}
 
 	//TODO: Find proper place for this.
-	private static NBTTagCompoundWrapper ItemStackToPENBT(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		NBTTagCompoundWrapper item = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+	private static NBTCompound ItemStackToPENBT(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
+		NBTCompound item = new NBTCompound();
 		itemstack = ItemStackSerializer.remapItemToClient(version, locale, itemstack);
-		item.setByte("Count", itemstack.getAmount());
-		item.setShort("Damage", itemstack.getLegacyData());
-		item.setShort("id", itemstack.getTypeId());
-		if ((itemstack.getNBT() != null) && !itemstack.getNBT().isNull()) {
-			item.setCompound("tag", itemstack.getNBT().clone());
+		item.setTag("Count", new NBTByte((byte) itemstack.getAmount()));
+		item.setTag("Damage", new NBTShort((short) itemstack.getLegacyData()));
+		item.setTag("id", new NBTShort((short) itemstack.getTypeId()));
+		if ((itemstack.getNBT() != null)) {
+			item.setTag("tag", itemstack.getNBT());
 		}
 		return item;
 	}

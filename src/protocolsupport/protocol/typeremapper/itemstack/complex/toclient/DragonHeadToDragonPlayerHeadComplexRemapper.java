@@ -9,17 +9,16 @@ import protocolsupport.protocol.utils.GameProfileSerializer;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.authlib.UUIDTypeAdapter;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 
 public class DragonHeadToDragonPlayerHeadComplexRemapper implements ItemStackComplexRemapper {
 
 	@Override
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		itemstack.setTypeId(ItemMaterialLookup.getRuntimeId(Material.PLAYER_HEAD));
-		NBTTagCompoundWrapper wrapper = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-		wrapper.setCompound("SkullOwner", createTag());
+		NBTCompound wrapper = new NBTCompound();
+		wrapper.setTag("SkullOwner", createTag());
 		itemstack.setNBT(wrapper);
 		return itemstack;
 	}
@@ -34,7 +33,7 @@ public class DragonHeadToDragonPlayerHeadComplexRemapper implements ItemStackCom
 		)
 	);
 
-	public static NBTTagCompoundWrapper createTag() {
+	public static NBTCompound createTag() {
 		return GameProfileSerializer.serialize(dragonHeadGameProfile);
 	}
 

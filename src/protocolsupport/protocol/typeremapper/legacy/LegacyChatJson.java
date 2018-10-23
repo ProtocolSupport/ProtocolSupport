@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.bukkit.Material;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.TranslationAPI;
 import protocolsupport.api.chat.components.BaseComponent;
@@ -17,13 +15,8 @@ import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.chat.components.TranslateComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
-import protocolsupport.protocol.typeremapper.itemstack.LegacyItemType;
-import protocolsupport.protocol.typeremapper.itemstack.PreFlatteningItemIdData;
-import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class LegacyChatJson {
 
@@ -49,7 +42,7 @@ public class LegacyChatJson {
 
 	private static void register(ComponentConverter r, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
-			Utils.getFromMapOrCreateDefault(registry, version, new ArrayList<>()).add(r);
+			registry.computeIfAbsent(version, k -> new ArrayList<>()).add(r);
 		}
 	}
 
@@ -108,17 +101,8 @@ public class LegacyChatJson {
 		register((version, locale, component) -> {
 			HoverAction hover = component.getHoverAction();
 			if ((hover != null) && (hover.getType() == HoverAction.Type.SHOW_ITEM)) {
-				NBTTagCompoundWrapper compound = ServerPlatform.get().getWrapperFactory().createNBTCompoundFromJson(hover.getValue());
-				Material material = ItemMaterialLookup.getByKey(compound.getString("id"));
-				if (material != null) {
-					int materialRuntimeId = LegacyItemType.REGISTRY.getTable(version).getRemap(ItemMaterialLookup.getRuntimeId(material));
-					if (version.isBefore(ProtocolVersion.MINECRAFT_1_8)) {
-						compound.setInt("id", PreFlatteningItemIdData.getIdFromLegacyCombinedId(PreFlatteningItemIdData.getLegacyCombinedIdByModernId(materialRuntimeId)));
-					} else {
-						compound.setString("id", ItemMaterialLookup.getByRuntimeId(materialRuntimeId).getKey().toString());
-					}
-				}
-				component.setHoverAction(new HoverAction(HoverAction.Type.SHOW_ITEM, compound.toString()));
+				//TODO: use nbt compound after implementing our own mojangson serializer
+				component.setHoverAction(new HoverAction(HoverAction.Type.SHOW_ITEM, ServerPlatform.get().getMiscUtils().fixHoverShowItem(version, locale, hover.getValue())));
 			}
 			return component;
 		}, ProtocolVersion.getAllSupported());

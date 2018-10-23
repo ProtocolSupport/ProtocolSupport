@@ -2,19 +2,25 @@ package protocolsupport.protocol.typeremapper.itemstack.complex.fromclient;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackNBTComplexRemapper;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTInt;
+import protocolsupport.protocol.utils.types.nbt.NBTNumber;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class LeatherArmorFromPERemapper extends ItemStackNBTComplexRemapper {
 
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTTagCompoundWrapper tag) {
-		if (tag.hasKeyOfType("customColor", NBTTagType.INT)) {
-			NBTTagCompoundWrapper display = tag.hasKeyOfType("display", NBTTagType.COMPOUND) ? tag.getCompound("display") : ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-			display.setInt("color", tag.getIntNumber("customColor"));
-			tag.remove("customColor");
+	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
+		NBTNumber customColor = tag.getNumberTag("customColor");
+		if (customColor != null) {
+			NBTCompound display = tag.getTagOfType("display", NBTType.COMPOUND);
+			if (display == null) {
+				display = new NBTCompound();
+			}
+			display.setTag("color", new NBTInt(customColor.getAsInt()));
+			tag.setTag("display", display);
+			tag.removeTag("customColor");
 		}
 		return tag;
 	}

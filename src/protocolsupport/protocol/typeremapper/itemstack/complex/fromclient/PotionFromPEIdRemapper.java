@@ -5,9 +5,9 @@ import org.apache.commons.lang3.StringUtils;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPotion;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
 
 public class PotionFromPEIdRemapper implements ItemStackComplexRemapper {
 
@@ -16,12 +16,12 @@ public class PotionFromPEIdRemapper implements ItemStackComplexRemapper {
 		int data = itemstack.getLegacyData();
 		String name = PEPotion.fromPEId(data);
 		if (!StringUtils.isEmpty(name)) {
-			NBTTagCompoundWrapper tag = itemstack.getNBT();
-			if (tag.isNull()) {
-				tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+			NBTCompound tag = itemstack.getNBT();
+			if (tag == null) {
+				tag = new NBTCompound();
 				itemstack.setNBT(tag);
 			}
-			tag.setString("Potion", name);
+			tag.setTag("Potion", new NBTString(name));
 			itemstack.setLegacyData(0);
 		}
 		return itemstack;

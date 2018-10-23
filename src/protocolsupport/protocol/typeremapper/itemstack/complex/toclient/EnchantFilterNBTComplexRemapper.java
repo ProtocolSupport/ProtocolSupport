@@ -5,32 +5,30 @@ import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackNBTComplexRemapper;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkippingTable;
 import protocolsupport.protocol.utils.CommonNBT;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTList;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class EnchantFilterNBTComplexRemapper extends ItemStackNBTComplexRemapper {
 
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTTagCompoundWrapper tag) {
-		if (tag.hasKeyOfType(CommonNBT.MODERN_ENCHANTMENTS, NBTTagType.LIST)) {
-			tag.setList(CommonNBT.MODERN_ENCHANTMENTS, filterEnchantList(version, tag.getList(CommonNBT.MODERN_ENCHANTMENTS, NBTTagType.COMPOUND)));
-		}
-		if (tag.hasKeyOfType(CommonNBT.BOOK_ENCHANTMENTS, NBTTagType.LIST)) {
-			tag.setList(CommonNBT.BOOK_ENCHANTMENTS, filterEnchantList(version, tag.getList(CommonNBT.BOOK_ENCHANTMENTS, NBTTagType.COMPOUND)));
-		}
+	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
+		tag.setTag(CommonNBT.MODERN_ENCHANTMENTS, filterEnchantList(version, tag.getTagListOfType(CommonNBT.MODERN_ENCHANTMENTS, NBTType.COMPOUND)));
+		tag.setTag(CommonNBT.BOOK_ENCHANTMENTS, filterEnchantList(version, tag.getTagListOfType(CommonNBT.BOOK_ENCHANTMENTS, NBTType.COMPOUND)));
 		return tag;
 	}
 
-	protected NBTTagListWrapper filterEnchantList(ProtocolVersion version, NBTTagListWrapper oldList) {
+	protected NBTList<NBTCompound> filterEnchantList(ProtocolVersion version, NBTList<NBTCompound> oldList) {
+		if (oldList == null) {
+			return null;
+		}
 		GenericSkippingTable<String> enchSkip = GenericIdSkipper.ENCHANT.getTable(version);
-		NBTTagListWrapper newList = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
-		for (int i = 0; i < oldList.size(); i++) {
-			NBTTagCompoundWrapper enchData = oldList.getCompound(i);
-			if (!enchSkip.shouldSkip(enchData.getString("id"))) {
-				newList.addCompound(enchData);
+		NBTList<NBTCompound> newList = new NBTList<>(NBTType.COMPOUND);
+		for (NBTCompound enchData : oldList.getTags()) {
+			if (!enchSkip.shouldSkip(NBTString.getValueOrDefault(enchData.getTagOfType("id", NBTType.STRING), ""))) {
+				newList.addTag(enchData);
 			}
 		}
 		return newList;

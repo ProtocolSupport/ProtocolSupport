@@ -6,34 +6,39 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackNBTComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEnchantmentId;
 import protocolsupport.protocol.utils.CommonNBT;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTList;
+import protocolsupport.protocol.utils.types.nbt.NBTNumber;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class EnchantFromLegacyIdComplexRemapper extends ItemStackNBTComplexRemapper {
 
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTTagCompoundWrapper tag) {
-		if (tag.hasKeyOfType(CommonNBT.LEGACY_ENCHANTMENTS, NBTTagType.LIST)) {
-			tag.setList(CommonNBT.MODERN_ENCHANTMENTS, remapEnchantList(tag.getList(CommonNBT.LEGACY_ENCHANTMENTS, NBTTagType.COMPOUND)));
-			tag.remove(CommonNBT.LEGACY_ENCHANTMENTS);
+	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
+		NBTList<NBTCompound> enchTag = tag.getTagListOfType(CommonNBT.LEGACY_ENCHANTMENTS, NBTType.COMPOUND);
+		if (enchTag != null) {
+			tag.removeTag(CommonNBT.LEGACY_ENCHANTMENTS);
+			tag.setTag(CommonNBT.MODERN_ENCHANTMENTS, remapEnchantList(enchTag));
 		}
-		if (tag.hasKeyOfType(CommonNBT.BOOK_ENCHANTMENTS, NBTTagType.LIST)) {
-			tag.setList(CommonNBT.BOOK_ENCHANTMENTS, remapEnchantList(tag.getList(CommonNBT.BOOK_ENCHANTMENTS, NBTTagType.COMPOUND)));
+		NBTList<NBTCompound> bookEnch = tag.getTagListOfType(CommonNBT.BOOK_ENCHANTMENTS, NBTType.COMPOUND);
+		if (bookEnch != null) {
+			tag.setTag(CommonNBT.BOOK_ENCHANTMENTS, remapEnchantList(bookEnch));
 		}
 		return tag;
 	}
 
-	protected NBTTagListWrapper remapEnchantList(NBTTagListWrapper oldList) {
-		NBTTagListWrapper newList = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
-		for (int i = 0; i < oldList.size(); i++) {
-			NBTTagCompoundWrapper enchData = oldList.getCompound(i);
-			Enchantment ench = LegacyEnchantmentId.getById(enchData.getIntNumber("id") & 0xFFFF);
-			if (ench != null) {
-				enchData.setString("id", ench.getKey().toString());
-				newList.addCompound(enchData);
+	protected NBTList<NBTCompound> remapEnchantList(NBTList<NBTCompound> oldList) {
+		NBTList<NBTCompound> newList = new NBTList<>(NBTType.COMPOUND);
+		for (NBTCompound enchData : oldList.getTags()) {
+			NBTNumber enchId = enchData.getNumberTag("id");
+			if (enchId != null) {
+				Enchantment ench = LegacyEnchantmentId.getById(enchId.getAsInt());
+				if (ench != null) {
+					enchData.setTag("id", new NBTString(ench.getKey().toString()));
+					newList.addTag(enchData);
+				}
 			}
 		}
 		return newList;

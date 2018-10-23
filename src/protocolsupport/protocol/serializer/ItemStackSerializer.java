@@ -2,8 +2,6 @@ package protocolsupport.protocol.serializer;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -24,12 +22,15 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.utils.CommonNBT;
-import protocolsupport.protocol.utils.NBTTagCompoundSerializer;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTEnd;
+import protocolsupport.protocol.utils.types.nbt.NBTList;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
+import protocolsupport.protocol.utils.types.nbt.serializer.DefaultNBTSerializer;
+import protocolsupport.protocol.utils.types.nbt.serializer.PENBTSerializer;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class ItemStackSerializer {
 
@@ -110,81 +111,90 @@ public class ItemStackSerializer {
 		}
 	}
 
-	public static NBTTagCompoundWrapper readTag(ByteBuf from, ProtocolVersion version) {
+	public static NBTCompound readTag(ByteBuf from, ProtocolVersion version) {
 		return readTag(from, false, version);
 	}
 
-	public static NBTTagCompoundWrapper readTag(ByteBuf from, boolean varint, ProtocolVersion version) {
+	public static NBTCompound readTag(ByteBuf from, boolean varint, ProtocolVersion version) {
 		try {
 			if (isUsingShortLengthNBT(version)) {
 				final short length = from.readShort();
 				if (length < 0) {
-					return NBTTagCompoundWrapper.NULL;
+					return null;
 				}
-				try (InputStream inputstream = new GZIPInputStream(new ByteBufInputStream(from.readSlice(length)))) {
-					return NBTTagCompoundSerializer.readTag(new DataInputStream(inputstream));
+				try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new ByteBufInputStream(from.readSlice(length))))) {
+					return DefaultNBTSerializer.INSTANCE.deserializeTag(stream);
 				}
 			} else if (isUsingDirectNBT(version)) {
-				return NBTTagCompoundSerializer.readTag(new ByteBufInputStream(from));
+				return DefaultNBTSerializer.INSTANCE.deserializeTag(new ByteBufInputStream(from));
 			} else if (isUsingPENBT(version)) {
 				if (!varint) { // VarInts NBTs doesn't have length
 					final short length = from.readShortLE();
 					if (length <= 0) {
-						return NBTTagCompoundWrapper.NULL;
+						return null;
 					}
+					return PENBTSerializer.LE_INSTANCE.deserializeTag(from);
 				}
-				return NBTTagCompoundSerializer.readPeTag(from, varint);
+				return PENBTSerializer.VI_INSTANCE.deserializeTag(from);
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Dont know how to read nbt of version {0}", version));
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new DecoderException(e);
 		}
 	}
 
-	public static void writeTag(ByteBuf to, ProtocolVersion version, NBTTagCompoundWrapper tag) {
+	public static void writeTag(ByteBuf to, ProtocolVersion version, NBTCompound tag) {
 		writeTag(to, false, version, tag);
 	}
 
-	public static void writeTag(ByteBuf to, boolean varint, ProtocolVersion version, NBTTagCompoundWrapper tag) {
-		try {
-			if (isUsingShortLengthNBT(version)) {
-				if (tag.isNull()) {
-					to.writeShort(-1);
-				} else {
-					int writerIndex = to.writerIndex();
-					//fake length
-					to.writeShort(0);
-					//actual nbt
-					try (DataOutputStream outputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(to)))) {
-						NBTTagCompoundSerializer.writeTag(outputstream, tag);
+	public static void writeTag(ByteBuf to, boolean varint, ProtocolVersion version, NBTCompound tag) {
+		if (isUsingShortLengthNBT(version)) {
+			if (tag == null) {
+				to.writeShort(-1);
+			} else {
+				MiscSerializer.writeLengthPrefixedBytes(
+					to,
+					(lTo, length) -> lTo.writeShort(length),
+					lTo -> {
+						try (DataOutputStream outputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(lTo)))) {
+							DefaultNBTSerializer.INSTANCE.serializeTag(outputstream, tag);
+						} catch (Exception e) {
+							throw new EncoderException(e);
+						}
 					}
-					//now replace fake length with real length
-					to.setShort(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
-				}
-			} else if (isUsingDirectNBT(version)) {
-				NBTTagCompoundSerializer.writeTag(new ByteBufOutputStream(to), tag);
-			} else if (isUsingPENBT(version)) {
-				if (tag.isNull()) {
-					to.writeShortLE(0);
+				);
+			}
+		} else if (isUsingDirectNBT(version)) {
+			try (ByteBufOutputStream outputstream = new ByteBufOutputStream(to)) {
+				if (tag != null) {
+					DefaultNBTSerializer.INSTANCE.serializeTag(outputstream, tag);
 				} else {
-					int writerIndex = to.writerIndex();
+					DefaultNBTSerializer.INSTANCE.serializeTag(outputstream, NBTEnd.INSTANCE);
+				}
+			} catch (Exception e) {
+				throw new EncoderException(e);
+			}
+		} else if (isUsingPENBT(version)) {
+			if (tag == null) {
+				to.writeShortLE(0);
+			} else {
+				try {
 					//fake length
 					if (!varint) { // VarInt NBTs doesn't have length
+						int writerIndex = to.writerIndex();
 						to.writeShortLE(0);
-					}
-					//actual nbt
-					NBTTagCompoundSerializer.writePeTag(to, varint, tag);
-					//now replace fake length with real length
-					if (!varint) {
+						PENBTSerializer.LE_INSTANCE.serializeTag(to, tag);
 						to.setShortLE(writerIndex, to.writerIndex() - writerIndex - Short.BYTES);
+					} else {
+						PENBTSerializer.VI_INSTANCE.serializeTag(to, tag);
 					}
+				} catch (Exception e) {
+					throw new EncoderException(e);
 				}
-			} else {
-				throw new IllegalArgumentException(MessageFormat.format("Dont know how to write nbt of version {0}", version));
 			}
-		} catch (Throwable ioexception) {
-			throw new EncoderException(ioexception);
+		} else {
+			throw new IllegalArgumentException(MessageFormat.format("Dont know how to write nbt of version {0}", version));
 		}
 	}
 
@@ -196,20 +206,25 @@ public class ItemStackSerializer {
 			List<String> additionalLore = event.getAdditionalLore();
 			BaseComponent forcedDisplayName = event.getForcedDisplayName();
 			if ((forcedDisplayName != null) || !additionalLore.isEmpty()) {
-				NBTTagCompoundWrapper nbt = itemstack.getNBT();
-				if (nbt.isNull()) {
-					nbt = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+				NBTCompound nbt = itemstack.getNBT();
+				if (nbt == null) {
+					nbt = new NBTCompound();
 				}
-				NBTTagCompoundWrapper displayNBT = CommonNBT.getOrCreateDisplayTag(nbt);
+				NBTCompound displayNBT = CommonNBT.getOrCreateDisplayTag(nbt);
 
 				if (forcedDisplayName != null) {
-					displayNBT.setString(CommonNBT.DISPLAY_NAME, ChatAPI.toJSON(forcedDisplayName));
+					displayNBT.setTag(CommonNBT.DISPLAY_NAME, new NBTString(ChatAPI.toJSON(forcedDisplayName)));
 				}
 
 				if (!additionalLore.isEmpty()) {
-					NBTTagListWrapper loreNBT = displayNBT.getList(CommonNBT.DISPLAY_LORE, NBTTagType.STRING);
-					additionalLore.forEach(loreNBT::addString);
-					displayNBT.setList(CommonNBT.DISPLAY_LORE, loreNBT);
+					NBTList<NBTString> loreNBT = displayNBT.getTagListOfType(CommonNBT.DISPLAY_LORE, NBTType.STRING);
+					if (loreNBT == null) {
+						loreNBT = new NBTList<>(NBTType.STRING);
+					}
+					for (String lore : additionalLore) {
+						loreNBT.addTag(new NBTString(lore));
+					}
+					displayNBT.setTag(CommonNBT.DISPLAY_LORE, loreNBT);
 				}
 
 				itemstack.setNBT(nbt);

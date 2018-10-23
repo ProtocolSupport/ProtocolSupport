@@ -4,30 +4,30 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.ChatAPI.JsonParseException;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackNBTComplexRemapper;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTList;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class BookPagesToPESpecificRemapper extends ItemStackNBTComplexRemapper {
 
 	@Override
-	public NBTTagCompoundWrapper remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTTagCompoundWrapper tag) {
-		if (tag.hasKeyOfType("pages", NBTTagType.LIST)) {
-			NBTTagListWrapper pages = tag.getList("pages", NBTTagType.STRING);
-			NBTTagListWrapper newpages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
+	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
+		NBTList<NBTString> pages = tag.getTagListOfType("pages", NBTType.STRING);
+		if (pages != null) {
+			NBTList<NBTCompound> newpages = new NBTList<>(NBTType.COMPOUND);
 			for (int i = 0; i < pages.size(); i++) {
-				NBTTagCompoundWrapper page = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+				NBTCompound page = new NBTCompound();
 				try {
-					String fromJSON = ChatAPI.fromJSON(pages.getString(i)).toLegacyText();
-					page.setString("text", fromJSON);
+					String fromJSON = ChatAPI.fromJSON(pages.getTag(i).getValue()).toLegacyText();
+					page.setTag("text", new NBTString(fromJSON));
 				} catch (JsonParseException e) {
-					page.setString("text", pages.getString(i));
+					page.setTag("text", new NBTString(pages.getTag(i).getValue()));
 				}
-				newpages.addCompound(page);
+				newpages.addTag(page);
 			}
-			tag.setList("pages", newpages);
+			tag.setTag("pages", newpages);
 		}
 		return tag;
 	}

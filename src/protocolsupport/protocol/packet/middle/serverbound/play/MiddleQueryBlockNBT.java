@@ -17,7 +17,7 @@ public abstract class MiddleQueryBlockNBT extends ServerBoundMiddlePacket {
 	}
 
 	protected int id;
-	protected Position position = new Position(0, 0, 0);
+	protected final Position position = new Position(0, 0, 0);
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {

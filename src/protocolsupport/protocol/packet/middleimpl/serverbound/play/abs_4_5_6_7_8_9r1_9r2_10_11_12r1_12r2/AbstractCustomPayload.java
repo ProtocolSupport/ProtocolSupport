@@ -15,22 +15,25 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEditBook;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleNameItem;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePickItem;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSetBeaconEffect;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.CustomPayloadChannelsCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.UsedHand;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTList;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 
@@ -75,23 +78,47 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 		if (!book.isNull()) {
 			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITTEN_BOOK));
 			if (connection.getVersion() == ProtocolVersion.MINECRAFT_1_8) {
-				NBTTagCompoundWrapper nbt = book.getNBT();
-				if (!nbt.isNull()) {
-					if (nbt.hasKeyOfType("pages", NBTTagType.LIST)) {
-						NBTTagListWrapper pages = nbt.getList("pages", NBTTagType.STRING);
-						NBTTagListWrapper newPages = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
-						for (int i = 0; i < pages.size(); i++) {
-							newPages.addString(ChatAPI.fromJSON(pages.getString(i)).toLegacyText(locale));
+				NBTCompound rootTag = book.getNBT();
+				if (rootTag != null) {
+					NBTList<NBTString> pages = rootTag.getTagListOfType("pages", NBTType.STRING);
+					if (pages != null) {
+						NBTList<NBTString> newPages = new NBTList<>(NBTType.STRING);
+						for (NBTString page : pages.getTags()) {
+							newPages.addTag(new NBTString(ChatAPI.fromJSON(page.getValue()).toLegacyText(locale)));
 						}
-						nbt.setList("pages", newPages);
+						rootTag.setTag("pages", newPages);
+						book.setNBT(rootTag);
 					}
-					book.setNBT(nbt);
 				}
 			}
 			return RecyclableSingletonList.create(MiddleEditBook.create(locale, book, true, UsedHand.MAIN));
 		} else {
 			return RecyclableEmptyList.get();
 		}
+	}
+
+	protected RecyclableCollection<ServerBoundPacketData> transformStructureBlock() {
+		Position position = PositionSerializer.readLegacyPositionI(data);
+		MiddleUpdateStructureBlock.Action action = MiddleUpdateStructureBlock.Action.CONSTANT_LOOKUP.getByOrdinal(data.readByte() - 1);
+		MiddleUpdateStructureBlock.Mode mode = MiddleUpdateStructureBlock.Mode.valueOf(StringSerializer.readString(data, connection.getVersion()));
+		String name = StringSerializer.readString(data, connection.getVersion());
+		byte offsetX = (byte) data.readInt();
+		byte offsetY = (byte) data.readInt();
+		byte offsetZ = (byte) data.readInt();
+		byte sizeX = (byte) data.readInt();
+		byte sizeY = (byte) data.readInt();
+		byte sizeZ = (byte) data.readInt();
+		MiddleUpdateStructureBlock.Mirror mirror = MiddleUpdateStructureBlock.Mirror.valueOf(StringSerializer.readString(data, connection.getVersion()));
+		MiddleUpdateStructureBlock.Rotation rotation = MiddleUpdateStructureBlock.Rotation.valueOf(StringSerializer.readString(data, connection.getVersion()));
+		String metadata = StringSerializer.readString(data, connection.getVersion());
+		int ignoreEntities = data.readBoolean() ? 0x01 : 0;
+		int showAir = data.readBoolean() ? 0x02 : 0;
+		int showBoundingBox = data.readBoolean() ? 0x04 : 0;
+		float integrity = data.readFloat();
+		long seed = VarNumberSerializer.readVarLong(data);
+		byte flags = (byte) (ignoreEntities | showAir | showBoundingBox);
+		return RecyclableSingletonList.create(MiddleUpdateStructureBlock.create(position, action, mode, name, 
+				offsetX, offsetY, offsetZ, sizeX, sizeY, sizeZ, mirror, rotation, metadata, integrity, seed, flags));
 	}
 
 	protected RecyclableCollection<ServerBoundPacketData> transformSetBeaconEffect() {

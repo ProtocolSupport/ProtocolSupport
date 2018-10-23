@@ -6,6 +6,7 @@ import java.util.function.Function;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.AnaloguePowerable;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.BlockData;
@@ -161,8 +162,8 @@ public class LegacyBlockData {
 					Material.JUNGLE_LEAVES, Material.SPRUCE_LEAVES, Material.OAK_LEAVES,
 					Material.ACACIA_FENCE, Material.DARK_OAK_FENCE, Material.BIRCH_FENCE,
 					Material.JUNGLE_FENCE, Material.SPRUCE_FENCE, Material.OAK_FENCE,
-					Material.IRON_BARS,
-					Material.CHORUS_PLANT, Material.MUSHROOM_STEM, Material.BROWN_MUSHROOM_BLOCK, Material.GLASS_PANE,
+					Material.NETHER_BRICK_FENCE, Material.IRON_BARS,
+					Material.CHORUS_PLANT, Material.MUSHROOM_STEM, Material.BROWN_MUSHROOM_BLOCK, Material.RED_MUSHROOM_BLOCK, Material.GLASS_PANE,
 					Material.BLACK_STAINED_GLASS_PANE, Material.BLUE_STAINED_GLASS_PANE, Material.BROWN_STAINED_GLASS_PANE, Material.CYAN_STAINED_GLASS_PANE,
 					Material.GRAY_STAINED_GLASS_PANE, Material.GREEN_STAINED_GLASS_PANE, Material.LIGHT_BLUE_STAINED_GLASS_PANE, Material.LIGHT_GRAY_STAINED_GLASS_PANE,
 					Material.LIME_STAINED_GLASS_PANE, Material.MAGENTA_STAINED_GLASS_PANE, Material.ORANGE_STAINED_GLASS_PANE, Material.PINK_STAINED_GLASS_PANE,
@@ -226,7 +227,9 @@ public class LegacyBlockData {
 				Arrays.asList(
 					Material.ACACIA_SLAB, Material.DARK_OAK_SLAB, Material.BIRCH_SLAB,
 					Material.JUNGLE_SLAB, Material.OAK_SLAB, Material.SPRUCE_SLAB,
-					Material.COBBLESTONE_SLAB, Material.SANDSTONE_SLAB, Material.RED_SANDSTONE_SLAB
+					Material.COBBLESTONE_SLAB, Material.SANDSTONE_SLAB, Material.RED_SANDSTONE_SLAB,
+					Material.STONE_SLAB, Material.BRICK_SLAB, Material.STONE_BRICK_SLAB,
+					Material.NETHER_BRICK_SLAB, Material.QUARTZ_SLAB, Material.PURPUR_SLAB
 				),
 				o -> toPre13SlabState(o, (Slab) o.getMaterial().createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
@@ -253,7 +256,8 @@ public class LegacyBlockData {
 					Material.JUNGLE_STAIRS, Material.OAK_STAIRS, Material.SPRUCE_STAIRS,
 					Material.COBBLESTONE_STAIRS, Material.STONE_BRICK_STAIRS,
 					Material.SANDSTONE_STAIRS, Material.RED_SANDSTONE_STAIRS,
-					Material.QUARTZ_STAIRS, Material.NETHER_BRICK_STAIRS, Material.PURPUR_STAIRS
+					Material.QUARTZ_STAIRS, Material.NETHER_BRICK_STAIRS, Material.PURPUR_STAIRS,
+					Material.BRICK_STAIRS
 				),
 				o -> toPre13StairsState(o, (Stairs) o.getMaterial().createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
@@ -381,9 +385,19 @@ public class LegacyBlockData {
 				Material.AIR.createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
+			this.registerRemapEntryForAllStates(Material.ATTACHED_MELON_STEM, o -> {
+				return Material.MELON_STEM.createBlockData(data -> {
+					((Ageable) data).setAge(((Ageable) data).getMaximumAge());
+				});
+			}, ProtocolVersionsHelper.BEFORE_1_13);
+			this.registerRemapEntryForAllStates(Material.ATTACHED_PUMPKIN_STEM, o -> {
+				return Material.PUMPKIN_STEM.createBlockData(data -> {
+					((Ageable) data).setAge(((Ageable) data).getMaximumAge());
+				});
+			}, ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(Material.BLUE_ICE, Material.LIGHT_BLUE_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(Material.BUBBLE_COLUMN, Material.WATER.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
-			this.registerRemapEntryForAllStates(Material.CARVED_PUMPKIN, Material.PUMPKIN.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
+			this.registerRemapEntryForAllStates(Material.PUMPKIN, Material.CARVED_PUMPKIN.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(Material.CONDUIT, Material.STONE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(

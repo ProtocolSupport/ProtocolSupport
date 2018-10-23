@@ -20,7 +20,7 @@ public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 
 	protected NetworkEntity entity;
 	protected int type;
-	protected Position position = new Position(0, 0, 0);
+	protected final Position position = new Position(0, 0, 0);
 	protected int direction;
 
 	@Override

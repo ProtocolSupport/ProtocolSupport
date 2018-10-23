@@ -4,7 +4,8 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.utils.types.UsedHand;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -14,16 +15,16 @@ public abstract class MiddleAnimation extends ServerBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected int usedHand;
+	protected UsedHand hand;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		return RecyclableSingletonList.create(create(usedHand));
+		return RecyclableSingletonList.create(create(hand));
 	}
 
-	public static ServerBoundPacketData create(int usedHand) {
+	public static ServerBoundPacketData create(UsedHand hand) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_ANIMATION);
-		VarNumberSerializer.writeVarInt(creator, usedHand);
+		MiscSerializer.writeVarIntEnum(creator, hand);
 		return creator;
 	}
 

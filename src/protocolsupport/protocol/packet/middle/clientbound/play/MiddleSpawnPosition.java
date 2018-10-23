@@ -12,7 +12,7 @@ public abstract class MiddleSpawnPosition extends ClientBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected Position position = new Position(0, 0, 0);
+	protected final Position position = new Position(0, 0, 0);
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {

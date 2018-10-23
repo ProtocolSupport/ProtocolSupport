@@ -16,16 +16,11 @@ public enum NetworkEntityType {
 
 	NONE(EType.NONE, -1),
 	ENTITY(EType.NONE, -1),
-	LIVING(EType.NONE, -1, NetworkEntityType.ENTITY),
-	INSENTIENT(EType.NONE, -1, NetworkEntityType.LIVING),
-	PLAYER(EType.NONE, -1, NetworkEntityType.LIVING),
-	AGEABLE(EType.NONE, -1, NetworkEntityType.INSENTIENT),
-	TAMEABLE(EType.NONE, -1, NetworkEntityType.AGEABLE),
-	ARMOR_STAND(EType.NONE, -1, NetworkEntityType.LIVING),
-	BASE_HORSE(EType.NONE, -1, NetworkEntityType.AGEABLE),
-	BATTLE_HORSE(EType.NONE, -1, BASE_HORSE),
-	CARGO_HORSE(EType.NONE, -1, BASE_HORSE),
-	BASE_SKELETON(EType.NONE, -1, INSENTIENT),
+	LIVING(EType.NONE, -1, ENTITY),
+	INSENTIENT(EType.NONE, -1, LIVING),
+	PLAYER(EType.NONE, -1, LIVING),
+	AGEABLE(EType.NONE, -1, INSENTIENT),
+	TAMEABLE(EType.NONE, -1, AGEABLE),
 	BASE_FISH(EType.NONE, -1, INSENTIENT),
 	// Specials (Spawned by separate packets)
 	EXP_ORB(EType.NONE, -1),
@@ -37,12 +32,12 @@ public enum NetworkEntityType {
 	MUSHROOM_COW(EType.MOB, EntityType.MUSHROOM_COW, NetworkEntityType.COW),
 	CHICKEN(EType.MOB, EntityType.CHICKEN, NetworkEntityType.AGEABLE),
 	SQUID(EType.MOB, EntityType.SQUID, NetworkEntityType.INSENTIENT),
-	COMMON_HORSE(EType.MOB, EntityType.HORSE, BATTLE_HORSE),
-	ZOMBIE_HORSE(EType.MOB, EntityType.ZOMBIE_HORSE, BATTLE_HORSE),
-	SKELETON_HORSE(EType.MOB, EntityType.SKELETON_HORSE, BATTLE_HORSE),
-	DONKEY(EType.MOB, EntityType.DONKEY, CARGO_HORSE),
-	MULE(EType.MOB, EntityType.MULE, CARGO_HORSE),
-	LAMA(EType.MOB, EntityType.LLAMA, CARGO_HORSE),
+	COMMON_HORSE(EType.MOB, EntityType.HORSE, AGEABLE),
+	ZOMBIE_HORSE(EType.MOB, EntityType.ZOMBIE_HORSE, AGEABLE),
+	SKELETON_HORSE(EType.MOB, EntityType.SKELETON_HORSE, AGEABLE),
+	DONKEY(EType.MOB, EntityType.DONKEY, AGEABLE),
+	MULE(EType.MOB, EntityType.MULE, AGEABLE),
+	LAMA(EType.MOB, EntityType.LLAMA, AGEABLE),
 	BAT(EType.MOB, EntityType.BAT, INSENTIENT),
 	OCELOT(EType.MOB, EntityType.OCELOT, TAMEABLE),
 	WOLF(EType.MOB, EntityType.WOLF, TAMEABLE),
@@ -61,6 +56,7 @@ public enum NetworkEntityType {
 	ZOMBIE_VILLAGER(EType.MOB, EntityType.ZOMBIE_VILLAGER, ZOMBIE),
 	HUSK(EType.MOB, EntityType.HUSK, ZOMBIE),
 	ZOMBIE_PIGMAN(EType.MOB, EntityType.PIG_ZOMBIE, ZOMBIE),
+	DROWNED(EType.MOB, EntityType.DROWNED, ZOMBIE),
 	BLAZE(EType.MOB, EntityType.BLAZE, INSENTIENT),
 	SPIDER(EType.MOB, EntityType.SPIDER, LIVING),
 	CAVE_SPIDER(EType.MOB, EntityType.CAVE_SPIDER, SPIDER),
@@ -68,9 +64,9 @@ public enum NetworkEntityType {
 	GHAST(EType.MOB, EntityType.GHAST, INSENTIENT),
 	SLIME(EType.MOB, EntityType.SLIME, INSENTIENT),
 	MAGMA_CUBE(EType.MOB, EntityType.MAGMA_CUBE, SLIME),
-	SKELETON(EType.MOB, EntityType.SKELETON, BASE_SKELETON),
-	WITHER_SKELETON(EType.MOB, EntityType.WITHER_SKELETON, BASE_SKELETON),
-	STRAY(EType.MOB, EntityType.STRAY, BASE_SKELETON),
+	SKELETON(EType.MOB, EntityType.SKELETON, INSENTIENT),
+	WITHER_SKELETON(EType.MOB, EntityType.WITHER_SKELETON, SKELETON),
+	STRAY(EType.MOB, EntityType.STRAY, SKELETON),
 	WITCH(EType.MOB, EntityType.WITCH, INSENTIENT),
 	IRON_GOLEM(EType.MOB, EntityType.IRON_GOLEM, INSENTIENT),
 	SHULKER(EType.MOB, EntityType.SHULKER, INSENTIENT),
@@ -82,15 +78,14 @@ public enum NetworkEntityType {
 	ILLUSIONER(EType.MOB, EntityType.ILLUSIONER, EVOKER),
 	VEX(EType.MOB, EntityType.VEX, INSENTIENT),
 	PARROT(EType.MOB, EntityType.PARROT, TAMEABLE),
-	ARMOR_STAND_MOB(EType.MOB, EntityType.ARMOR_STAND, ARMOR_STAND),
 	PHANTOM(EType.MOB, EntityType.PHANTOM, INSENTIENT),
 	DOLPHIN(EType.MOB, EntityType.DOLPHIN, INSENTIENT),
-	COD(EType.MOB, EntityType.COD, BASE_FISH),
-	PUFFERFISH(EType.MOB, EntityType.PUFFERFISH, BASE_FISH),
-	SALMON(EType.MOB, EntityType.SALMON, BASE_FISH),
-	TROPICAL_FISH(EType.MOB, EntityType.TROPICAL_FISH, BASE_FISH),
 	TURTLE(EType.MOB, EntityType.TURTLE, AGEABLE),
-	DROWNED(EType.MOB, EntityType.DROWNED, ZOMBIE),
+	COD(EType.MOB, EntityType.COD, BASE_FISH),
+	SALMON(EType.MOB, EntityType.SALMON, BASE_FISH),
+	PUFFERFISH(EType.MOB, EntityType.PUFFERFISH, BASE_FISH),
+	TROPICAL_FISH(EType.MOB, EntityType.TROPICAL_FISH, BASE_FISH),
+	ARMOR_STAND_MOB(EType.MOB, EntityType.ARMOR_STAND, LIVING),
 	// Objects
 	BOAT(EType.OBJECT, 1, EntityType.BOAT, ENTITY),
 	TNT(EType.OBJECT, 50, EntityType.PRIMED_TNT, ENTITY),
@@ -114,14 +109,14 @@ public enum NetworkEntityType {
 	FIREWORK(EType.OBJECT, 76, EntityType.FIREWORK, ENTITY),
 	ITEM_FRAME(EType.OBJECT, 71, EntityType.ITEM_FRAME, ENTITY),
 	ENDER_CRYSTAL(EType.OBJECT, 51, EntityType.ENDER_CRYSTAL, ENTITY),
-	ARMOR_STAND_OBJECT(EType.OBJECT, 78, EntityType.ARMOR_STAND, ARMOR_STAND),
 	AREA_EFFECT_CLOUD(EType.OBJECT, 3, EntityType.AREA_EFFECT_CLOUD, ENTITY),
 	SHULKER_BULLET(EType.OBJECT, 67, EntityType.SHULKER_BULLET, ENTITY),
 	LAMA_SPIT(EType.OBJECT, 68, EntityType.LLAMA_SPIT, ENTITY),
 	DRAGON_FIREBALL(EType.OBJECT, 93, EntityType.DRAGON_FIREBALL, ENTITY),
 	EVOCATOR_FANGS(EType.OBJECT, 79, EntityType.EVOKER_FANGS, ENTITY),
+	ARMOR_STAND_OBJECT(EType.OBJECT, 78, EntityType.ARMOR_STAND, LIVING),
+	// Hack, use unused object ids, minecart is the only object where different types are sent using objectdata.
 	MINECART(EType.OBJECT, 10,  EntityType.MINECART, ENTITY),
-	// Hack, using unsused ids; the only object where different types are send using objectData.
 	MINECART_CHEST(EType.OBJECT, 211, EntityType.MINECART_CHEST, MINECART),
 	MINECART_FURNACE(EType.OBJECT, 212, EntityType.MINECART_FURNACE, MINECART),
 	MINECART_TNT(EType.OBJECT, 213, EntityType.MINECART_TNT, MINECART),
@@ -133,6 +128,10 @@ public enum NetworkEntityType {
 	private final int typeId;
 	private final EntityType bukkitType;
 	private final NetworkEntityType superType;
+
+	public boolean isReal() {
+		return etype != EType.NONE;
+	}
 
 	public NetworkEntityType getSuperType() {
 		return superType;

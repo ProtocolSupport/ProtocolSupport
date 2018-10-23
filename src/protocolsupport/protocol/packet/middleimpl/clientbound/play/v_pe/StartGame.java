@@ -89,6 +89,7 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeBoolean(false); //hasLockedRes pack
 		startgame.writeBoolean(false); //hasLockedBeh pack
 		startgame.writeBoolean(false); //hasLocked world template.
+		startgame.writeBoolean(false); //Microsoft GamerTags only. Hell no!
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //level ID (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //world name (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //premium world template id (empty string)

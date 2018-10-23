@@ -4,10 +4,10 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class MonsterEggFromPEIdRemapper implements ItemStackComplexRemapper {
 
@@ -17,10 +17,16 @@ public class MonsterEggFromPEIdRemapper implements ItemStackComplexRemapper {
 		if (itemstack.getLegacyData() > 0) {
 			NetworkEntityType type = PEDataValues.getLivingTypeFromPeNetworkId(itemstack.getLegacyData());
 			if (type != null) {
-				NBTTagCompoundWrapper tag = ((itemstack.getNBT() != null) && !itemstack.getNBT().isNull()) ? itemstack.getNBT() : ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-				NBTTagCompoundWrapper entityTag = tag.hasKeyOfType("EntityTag", NBTTagType.COMPOUND) ? tag.getCompound("EntityTag") : ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-				entityTag.setString("id", "minecraft:" + type.getBukkitType().getName());
-				tag.setCompound("EntityTag", entityTag);
+				NBTCompound tag = itemstack.getNBT();
+				if (tag == null) {
+					tag = new NBTCompound();
+				}
+				NBTCompound entityTag = tag.getTagOfType("EntityTag", NBTType.COMPOUND);
+				if (entityTag == null) {
+					entityTag = new NBTCompound();
+				}
+				entityTag.setTag("id", new NBTString("minecraft:" + type.getBukkitType().getName()));
+				tag.setTag("EntityTag", entityTag);
 				itemstack.setNBT(tag);
 			}
 		}

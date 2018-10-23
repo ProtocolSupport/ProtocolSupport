@@ -25,7 +25,8 @@ public class PECompressor extends MessageToByteEncoder<ByteBuf> {
 		packbuffer.clear();
 		VarNumberSerializer.writeVarInt(packbuffer, buf.readableBytes());
 		packbuffer.writeBytes(buf);
-		out.writeBytes(compressor.compress(MiscSerializer.readAllBytes(packbuffer)));
+		byte[] bytes = MiscSerializer.readAllBytes(packbuffer);
+		out.writeBytes(compressor.compress(bytes, 0, bytes.length));
 	}
 
 }

@@ -12,11 +12,11 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 	}
 
 	//TODO: structure
-	protected byte[] data;
+	protected ByteBuf data;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		data = MiscSerializer.readAllBytes(serverdata);
+		data = MiscSerializer.readAllBytesSlice(serverdata);
 	}
 
 }

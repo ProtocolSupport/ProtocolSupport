@@ -22,4 +22,9 @@ public class SpigotWrappedPrepender extends MessageToByteEncoder<ByteBuf> {
 		realPrepender.prepend(ctx, input, output);
 	}
 
+	@Override
+	protected ByteBuf allocateBuffer(ChannelHandlerContext ctx, ByteBuf input, boolean preferDirect) throws Exception {
+		return realPrepender.allocBuffer(ctx, input, preferDirect);
+	}
+
 }

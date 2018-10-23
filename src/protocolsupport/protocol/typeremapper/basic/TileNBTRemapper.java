@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
-import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHeadToDragonPlayerHeadComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
@@ -17,10 +16,13 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
-import protocolsupport.utils.Utils;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
+import protocolsupport.protocol.utils.types.nbt.NBTByte;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTFloat;
+import protocolsupport.protocol.utils.types.nbt.NBTInt;
+import protocolsupport.protocol.utils.types.nbt.NBTNumber;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class TileNBTRemapper {
 
@@ -56,13 +58,13 @@ public class TileNBTRemapper {
 		peTypes.put(TileEntityType.BANNER, "Banner");
 	}
 
+	//TODO make version a main key, so remapping table can be extracted by middle packets
+	protected static final EnumMap<TileEntityType, EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTCompound, NBTCompound>>>> registry = new EnumMap<>(TileEntityType.class);
 
-	protected static final EnumMap<TileEntityType, EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>>> registry = new EnumMap<>(TileEntityType.class);
-
-	protected static void register(TileEntityType type, BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper> transformer, ProtocolVersion... versions) {
-		EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>> map = Utils.getFromMapOrCreateDefault(registry, type, new EnumMap<>(ProtocolVersion.class));
+	protected static void register(TileEntityType type, BiFunction<ProtocolVersion, NBTCompound, NBTCompound> transformer, ProtocolVersion... versions) {
+		EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTCompound, NBTCompound>>> map = registry.computeIfAbsent(type, k -> new EnumMap<>(ProtocolVersion.class));
 		for (ProtocolVersion version : versions) {
-			Utils.getFromMapOrCreateDefault(map, version, new ArrayList<>()).add(transformer);
+			map.computeIfAbsent(version, k -> new ArrayList<>()).add(transformer);
 		}
 	}
 
@@ -71,7 +73,7 @@ public class TileNBTRemapper {
 			register(
 				type,
 				(version, input) -> {
-					input.setString(tileEntityTypeKey, newToOldType.getOrDefault(type, type.getRegistryId()));
+					input.setTag(tileEntityTypeKey, new NBTString(newToOldType.getOrDefault(type, type.getRegistryId())));
 					return input;
 				},
 				ProtocolVersionsHelper.BEFORE_1_11
@@ -79,7 +81,7 @@ public class TileNBTRemapper {
 			register(
 				type,
 				(version, input) -> {
-					input.setString(tileEntityTypeKey, peTypes.getOrDefault(type, type.getRegistryId()));
+					input.setTag(tileEntityTypeKey, new NBTString(peTypes.getOrDefault(type, type.getRegistryId())));
 					return input;
 				},
 				ProtocolVersion.MINECRAFT_PE
@@ -88,10 +90,10 @@ public class TileNBTRemapper {
 		register(
 			TileEntityType.MOB_SPAWNER,
 			(version, input) -> {
-				if (!input.hasKeyOfType("SpawnData", NBTTagType.COMPOUND)) {
-					NBTTagCompoundWrapper spawndata = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-					spawndata.setString("id", NetworkEntityType.PIG.getKey());
-					input.setCompound("SpawnData", spawndata);
+				if (input.getTagOfType("SpawnData", NBTType.COMPOUND) == null) {
+					NBTCompound spawndata = new NBTCompound();
+					spawndata.setTag("id", new NBTString(NetworkEntityType.PIG.getKey()));
+					input.setTag("SpawnData", spawndata);
 				}
 				return input;
 			},
@@ -100,24 +102,23 @@ public class TileNBTRemapper {
 		register(
 			TileEntityType.MOB_SPAWNER,
 			(version, input) -> {
-				NBTTagCompoundWrapper spawndata = input.getCompound("SpawnData");
-				NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(spawndata.getString("id"));
-				if (type != NetworkEntityType.NONE) {
-					spawndata.setString("id", LegacyEntityId.getLegacyName(type));
+				NBTCompound spawndata = input.getTagOfType("SpawnData", NBTType.COMPOUND);
+				if (spawndata != null) {
+					NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(NBTString.getValueOrNull(spawndata.getTagOfType("id", NBTType.STRING)));
+					if (type != NetworkEntityType.NONE) {
+						spawndata.setTag("id", new NBTString(LegacyEntityId.getLegacyName(type)));
+					}
 				}
 				return input;
 			},
-			ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.MINECRAFT_1_10)
+			ProtocolVersionsHelper.BEFORE_1_11
 		);
 		register(
 			TileEntityType.MOB_SPAWNER,
 			(version, input) -> {
-				NBTTagCompoundWrapper spawndata = input.getCompound("SpawnData");
-				input.remove("SpawnPotentials");
-				input.remove("SpawnData");
-				NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(spawndata.getString("id"));
-				if (type != NetworkEntityType.NONE) {
-					input.setString("EntityId", LegacyEntityId.getLegacyName(type));
+				if (input.getTagOfType("SpawnData", NBTType.COMPOUND) != null) {
+					input.removeTag("SpawnPotentials");
+					input.removeTag("SpawnData");
 				}
 				return input;
 			},
@@ -126,10 +127,7 @@ public class TileNBTRemapper {
 		register(
 			TileEntityType.SKULL,
 			(version, input) -> {
-				if (input.getIntNumber("SkullType") == 5) {
-					input.setByte("SkullType", 3);
-					input.setCompound("Owner", DragonHeadToDragonPlayerHeadComplexRemapper.createTag());
-				}
+				//TODO
 				return input;
 			},
 			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_8)
@@ -145,31 +143,31 @@ public class TileNBTRemapper {
 		register(
 			TileEntityType.SIGN,
 			(version, input) -> {
-				input.setString("Text", String.join("\n",
+				input.setTag("Text", new NBTString(String.join("\n",
 					Arrays.stream(getSignLines(input))
 					.map(line -> ChatAPI.fromJSON(line).toLegacyText())
 					.collect(Collectors.toList())
-				));
+				)));
 				return input;
 			}, ProtocolVersion.MINECRAFT_PE
 		);
 		register(
 			TileEntityType.MOB_SPAWNER,
 			(version, input) -> {
-				input.remove("SpawnPotentials");
+				input.removeTag("SpawnPotentials");
 
 				int entityId = 0;
 
-				if (input.hasKeyOfType("SpawnData", NBTTagType.COMPOUND)) {
-					NBTTagCompoundWrapper compound = input.getCompound("SpawnData");
-					entityId = PEDataValues.getEntityTypeId(NetworkEntityType.getByRegistrySTypeId(compound.getString("id")));
-					compound.setInt("Type", entityId);
+				NBTCompound compound = input.getTagOfType("SpawnData", NBTType.COMPOUND);
+				if (compound != null) {
+					entityId = PEDataValues.getEntityTypeId(NetworkEntityType.getByRegistrySTypeId(compound.getTagOfType("id", NBTType.STRING).getValue()));
+					compound.setTag("Type", new NBTInt(entityId));
 				}
 
-				input.setInt("EntityId", entityId);
-				input.setFloat("DisplayEntityWidth", 1);
-				input.setFloat("DisplayEntityHeight", 1);
-				input.setFloat("DisplayEntityScale", 1);
+				input.setTag("EntityId", new NBTInt(entityId));
+				input.setTag("DisplayEntityWidth", new NBTFloat(1));
+				input.setTag("DisplayEntityHeight", new NBTFloat(1));
+				input.setTag("DisplayEntityScale", new NBTFloat(1));
 				return input;
 			},
 			ProtocolVersion.MINECRAFT_PE
@@ -177,37 +175,40 @@ public class TileNBTRemapper {
 		register(
 				TileEntityType.BED,
 				(version, input) -> {
-					int color = input.getIntNumber("color");
-					input.remove("color");
-					input.setByte("color", color);
+					NBTNumber colorTag = input.getNumberTag("color");
+					if (colorTag != null) {
+						byte color = input.getNumberTag("color").getAsByte();
+						input.removeTag("color");
+						input.setTag("color", new NBTByte(color));
+					}
 					return input;
 				},
 				ProtocolVersion.MINECRAFT_PE
 		);
 	}
 
-	public static String getTileType(NBTTagCompoundWrapper tag) {
-		return tag.getString(tileEntityTypeKey);
+	public static String getTileType(NBTCompound tag) {
+		return NBTString.getValueOrNull(tag.getTagOfType(tileEntityTypeKey, NBTType.STRING));
 	}
 
-	public static Position getPosition(NBTTagCompoundWrapper tag) {
-		return new Position(tag.getIntNumber("x"), tag.getIntNumber("y"), tag.getIntNumber("z"));
+	public static Position getPosition(NBTCompound tag) {
+		return new Position(tag.getNumberTag("x").getAsInt(), tag.getNumberTag("y").getAsInt(), tag.getNumberTag("z").getAsInt());
 	}
 
-	public static String[] getSignLines(NBTTagCompoundWrapper tag) {
+	public static String[] getSignLines(NBTCompound tag) {
 		String[] lines = new String[4];
 		for (int i = 0; i < lines.length; i++) {
-			lines[i] = tag.getString("Text" + (i + 1));
+			lines[i] = NBTString.getValueOrDefault(tag.getTagOfType("Text" + (i + 1), NBTType.STRING), "");
 		}
 		return lines;
 	}
 
-	public static NBTTagCompoundWrapper remap(ProtocolVersion version, NBTTagCompoundWrapper compound) {
-		EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>>> map = registry.get(TileEntityType.getByRegistryId(getTileType(compound)));
+	public static NBTCompound remap(ProtocolVersion version, NBTCompound compound) {
+		EnumMap<ProtocolVersion, List<BiFunction<ProtocolVersion, NBTCompound, NBTCompound>>> map = registry.get(TileEntityType.getByRegistryId(getTileType(compound)));
 		if (map != null) {
-			List<BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper>> transformers = map.get(version);
+			List<BiFunction<ProtocolVersion, NBTCompound, NBTCompound>> transformers = map.get(version);
 			if (transformers != null) {
-				for (BiFunction<ProtocolVersion, NBTTagCompoundWrapper, NBTTagCompoundWrapper> transformer : transformers) {
+				for (BiFunction<ProtocolVersion, NBTCompound, NBTCompound> transformer : transformers) {
 					compound = transformer.apply(version, compound);
 				}
 				return compound;

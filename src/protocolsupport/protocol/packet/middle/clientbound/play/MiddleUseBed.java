@@ -14,7 +14,7 @@ public abstract class MiddleUseBed extends ClientBoundMiddlePacket {
 	}
 
 	protected int entityId;
-	protected Position bed = new Position(0, 0, 0);
+	protected final Position bed = new Position(0, 0, 0);
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {

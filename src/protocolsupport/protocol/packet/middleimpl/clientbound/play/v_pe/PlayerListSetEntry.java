@@ -62,8 +62,6 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 					MiscSerializer.writeUUID(serializer, version, uuid.equals(connection.getPlayer().getUniqueId()) ? attrscache.getPEClientUUID() : uuid);
 					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
 					StringSerializer.writeString(serializer, version, currentEntry.getCurrentName(attrscache.getLocale()));
-					StringSerializer.writeString(serializer, version, ""); //Third party name
-					VarNumberSerializer.writeVarInt(serializer, 0); //PlatformId
 					Any<Boolean, String> skininfo = getSkinInfo(currentEntry.getProperties(true));
 					byte[] skindata = skininfo != null ? skinprovider.getSkinData(skininfo.getObj2()) : null;
 					if (skindata != null) {

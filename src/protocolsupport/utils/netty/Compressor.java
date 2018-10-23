@@ -3,6 +3,7 @@ package protocolsupport.utils.netty;
 import java.util.Arrays;
 import java.util.zip.Deflater;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
 import io.netty.util.Recycler.Handle;
 import protocolsupport.ProtocolSupport;
@@ -27,19 +28,32 @@ public class Compressor {
 		return recycler.get();
 	}
 
-	private final Deflater deflater = new Deflater(compressionLevel);
-	private final Handle<Compressor> handle;
+	protected final Deflater deflater = new Deflater(compressionLevel);
+	protected final Handle<Compressor> handle;
 	protected Compressor(Handle<Compressor> handle) {
 		this.handle = handle;
 	}
 
-	public byte[] compress(byte[] input) {
-		deflater.setInput(input);
+	protected final ReusableWriteHeapBuffer writeBuffer = new ReusableWriteHeapBuffer();
+
+	protected int getMaxCompressedSize(int uncompressedSize) {
+		return ((uncompressedSize * 11) / 10) + 50;
+	}
+
+	public byte[] compress(byte[] input, int offset, int length) {
+		deflater.setInput(input, offset, length);
 		deflater.finish();
-		byte[] compressedBuf = new byte[((input.length * 11) / 10) + 50];
+		byte[] compressedBuf = writeBuffer.getBuffer(getMaxCompressedSize(length));
 		int size = deflater.deflate(compressedBuf);
 		deflater.reset();
 		return Arrays.copyOf(compressedBuf, size);
+	}
+
+	public void compressTo(ByteBuf to, byte[] input, int offset, int length) throws Exception {
+		deflater.setInput(input, offset, length);
+		deflater.finish();
+		writeBuffer.writeTo(to, getMaxCompressedSize(length), deflater::deflate);
+		deflater.reset();
 	}
 
 	public void recycle() {
@@ -49,10 +63,12 @@ public class Compressor {
 	public static byte[] compressStatic(byte[] input) {
 		Compressor compressor = create();
 		try {
-			return compressor.compress(input);
+			return compressor.compress(input, 0, input.length);
 		} finally {
 			compressor.recycle();
 		}
 	}
+
+	//TODO: compressStaticTo
 
 }

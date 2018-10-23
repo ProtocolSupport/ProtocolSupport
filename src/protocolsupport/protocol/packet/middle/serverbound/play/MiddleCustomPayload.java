@@ -17,7 +17,7 @@ public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 	}
 
 	protected String tag;
-	protected byte[] data;
+	protected ByteBuf data;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {

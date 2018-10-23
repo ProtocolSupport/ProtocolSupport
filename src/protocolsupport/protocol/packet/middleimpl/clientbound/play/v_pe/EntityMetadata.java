@@ -8,21 +8,21 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes.AttributeInfo;
+import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherRemapper;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherDeserializer;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarLong;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityItemDataCache;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.ObjectFloatTuple;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class EntityMetadata extends MiddleEntityMetadata {
 
@@ -42,18 +42,18 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		//TODO add these as some kind of function based on NetworkEntityType, if this gets unmanagable.
 		//Special metadata -> other packet remapper.
 		if (entity.getType().isOfType(NetworkEntityType.ITEM)) {
-			DataWatcherObjectIndex.Item.ITEM.getValue(metadata.getOriginal()).ifPresent(itemWatcher -> {
+			DataWatcherObjectIndex.Item.ITEM.getValue(entityRemapper.getOriginalMetadata()).ifPresent(itemWatcher -> {
 				NetworkEntityItemDataCache itemDataCache = (NetworkEntityItemDataCache) entity.getDataCache();
 				packets.addAll(itemDataCache.updateItem(version, entity.getId(), itemWatcher.getValue()));
 			});
 		}
 		if (entity.getType().isOfType(NetworkEntityType.LIVING)) {
-			DataWatcherObjectIndex.EntityLiving.HEALTH.getValue(metadata.getOriginal()).ifPresent(healthWatcher -> {
+			DataWatcherObjectIndex.EntityLiving.HEALTH.getValue(entityRemapper.getOriginalMetadata()).ifPresent(healthWatcher -> {
 				packets.add(EntitySetAttributes.create(version, entity, new ObjectFloatTuple<>(AttributeInfo.HEALTH, healthWatcher.getValue())));
 			});
 		}
-		if (entity.getType().isOfType(NetworkEntityType.BATTLE_HORSE)) {
-			DataWatcherObjectIndex.BattleHorse.ARMOR.getValue(metadata.getOriginal()).ifPresent(armorWatcher -> {
+		if (entity.getType().isOfType(NetworkEntityType.COMMON_HORSE)) {
+			DataWatcherObjectIndex.BattleHorse.ARMOR.getValue(entityRemapper.getOriginalMetadata()).ifPresent(armorWatcher -> {
 				NetworkItemStack armour = new NetworkItemStack();
 				switch (armorWatcher.getValue()) {
 					case 0: { armour = NetworkItemStack.NULL; break; }
@@ -69,7 +69,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				));
 			});
 		}
-		packets.add(create(entity, locale, metadata.getRemapped(), version));
+		packets.add(create(entity, locale, entityRemapper.getRemappedMetadata(), version));
 		return packets;
 	}
 
@@ -78,9 +78,10 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	}
 
 	public static ClientBoundPacketData createFaux(NetworkEntity entity, String locale, ProtocolVersion version) {
-		DataWatcherRemapper faux = new DataWatcherRemapper();
-		faux.remap(version, entity);
-		return create(entity, locale, transform(entity, faux.getRemapped(), version), version);
+		EntityRemapper faux = new EntityRemapper(version);
+		faux.readEntity(entity);
+		faux.remap(true);
+		return create(entity, locale, transform(entity, faux.getRemappedMetadata(), version), version);
 	}
 
 	public static ArrayMap<DataWatcherObject<?>> transform(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> peMetadata, ProtocolVersion version) {
@@ -91,7 +92,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	public static ClientBoundPacketData create(NetworkEntity entity, String locale, ArrayMap<DataWatcherObject<?>> peMetadata, ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ENTITY_DATA);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
-		DataWatcherDeserializer.encodePEData(serializer, version, locale, transform(entity, peMetadata, version));
+		DataWatcherSerializer.writePEData(serializer, version, locale, transform(entity, peMetadata, version));
 		return serializer;
 	}
 
@@ -132,8 +133,9 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int FLAG_INTERESTED = takeNextFlag();
 		public static final int FLAG_CHARGED = takeNextFlag();
 		public static final int FLAG_TAMED = takeNextFlag();
-		public static final int FLAG_LEASHED = takeNextFlag();
-		public static final int FLAG_SHEARED = takeNextFlag(); //30
+		public static final int FLAG_ORPHANED = takeNextFlag();
+		public static final int FLAG_LEASHED = takeNextFlag(); //30
+		public static final int FLAG_SHEARED = takeNextFlag();
 		public static final int FLAG_GLIDING = takeNextFlag();
 		public static final int FLAG_ELDER = takeNextFlag();
 		public static final int FLAG_MOVING = takeNextFlag();
@@ -142,8 +144,8 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int FLAG_STACKABLE = takeNextFlag();
 		public static final int FLAG_SHOW_BASE = takeNextFlag();
 		public static final int FLAG_REARING = takeNextFlag();
-		public static final int FLAG_VIBRATING = takeNextFlag();
-		public static final int FLAG_IDLING = takeNextFlag(); //40
+		public static final int FLAG_VIBRATING = takeNextFlag(); //40
+		public static final int FLAG_IDLING = takeNextFlag();
 		public static final int FLAG_EVOKER_SPELL = takeNextFlag();
 		public static final int FLAG_CHARGE_ATTACK = takeNextFlag();
 		public static final int FLAG_WASD_CONTROLLED = takeNextFlag();
@@ -152,14 +154,16 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int FLAG_COLLIDE = takeNextFlag();
 		public static final int FLAG_GRAVITY = takeNextFlag();
 		public static final int FLAG_FIRE_IMMUNE = takeNextFlag();
-		public static final int FLAG_DANCING = takeNextFlag();
-		public static final int FLAG_ENCHANTED = takeNextFlag(); //50
+		public static final int FLAG_DANCING = takeNextFlag(); //50
+		public static final int FLAG_ENCHANTED = takeNextFlag();
 		public static final int FLAG_SHOW_TRIDENT_ROPE = takeNextFlag();
 		public static final int FLAG_CONTAINER_PRIVATE = takeNextFlag();
 		public static final int FLAG_TRANSORMATION = takeNextFlag();
 		public static final int FLAG_SPIN_ATTACK = takeNextFlag();
 		public static final int FLAG_SWIMMING = takeNextFlag();
 		public static final int FLAG_BRIBED = takeNextFlag();
+		public static final int FLAG_PREGNANT = takeNextFlag();
+		public static final int FLAG_LAYING_EGG = takeNextFlag();
 
 		protected static int metaId = 0;
 		protected static int takeNextMeta() {

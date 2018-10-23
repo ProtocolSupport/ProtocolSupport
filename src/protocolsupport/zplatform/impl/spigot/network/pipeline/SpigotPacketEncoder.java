@@ -17,6 +17,10 @@ import protocolsupport.utils.netty.WrappingBuffer;
 
 public class SpigotPacketEncoder extends MessageToByteEncoder<Packet<PacketListener>> {
 
+	public SpigotPacketEncoder() {
+		super(false);
+	}
+
 	private final WrappingBuffer wrapper = new WrappingBuffer();
 	private final PacketDataSerializer nativeSerializer = new PacketDataSerializer(wrapper);
 

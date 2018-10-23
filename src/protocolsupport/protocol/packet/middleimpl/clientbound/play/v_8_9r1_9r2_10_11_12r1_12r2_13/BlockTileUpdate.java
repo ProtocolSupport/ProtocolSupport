@@ -11,9 +11,9 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class BlockTileUpdate extends MiddleBlockTileUpdate {
 
@@ -26,7 +26,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		return RecyclableSingletonList.create(createPacketData(connection.getVersion(), TileEntityType.getByNetworkId(type), position, tag));
 	}
 
-	public static ClientBoundPacketData createPacketData(ProtocolVersion version, TileEntityType type, Position position, NBTTagCompoundWrapper tag) {
+	public static ClientBoundPacketData createPacketData(ProtocolVersion version, TileEntityType type, Position position, NBTCompound tag) {
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9_4) && (type == TileEntityType.SIGN)) {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID);
 			PositionSerializer.writePosition(serializer, position);

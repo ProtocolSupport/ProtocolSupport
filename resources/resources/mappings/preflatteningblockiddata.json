@@ -410,6 +410,66 @@
     "legacydata": 11
   },
   {
+    "blockdata": "minecraft:oak_wood[axis=x]",
+    "legacyid": 17,
+    "legacydata": 12
+  },
+  {
+    "blockdata": "minecraft:spruce_wood[axis=x]",
+    "legacyid": 17,
+    "legacydata": 13
+  },
+  {
+    "blockdata": "minecraft:birch_wood[axis=x]",
+    "legacyid": 17,
+    "legacydata": 14
+  },
+  {
+    "blockdata": "minecraft:jungle_wood[axis=x]",
+    "legacyid": 17,
+    "legacydata": 15
+  },
+  {
+    "blockdata": "minecraft:oak_wood[axis=y]",
+    "legacyid": 17,
+    "legacydata": 12
+  },
+  {
+    "blockdata": "minecraft:spruce_wood[axis=y]",
+    "legacyid": 17,
+    "legacydata": 13
+  },
+  {
+    "blockdata": "minecraft:birch_wood[axis=y]",
+    "legacyid": 17,
+    "legacydata": 14
+  },
+  {
+    "blockdata": "minecraft:jungle_wood[axis=y]",
+    "legacyid": 17,
+    "legacydata": 15
+  },
+  {
+    "blockdata": "minecraft:oak_wood[axis=z]",
+    "legacyid": 17,
+    "legacydata": 12
+  },
+  {
+    "blockdata": "minecraft:spruce_wood[axis=z]",
+    "legacyid": 17,
+    "legacydata": 13
+  },
+  {
+    "blockdata": "minecraft:birch_wood[axis=z]",
+    "legacyid": 17,
+    "legacydata": 14
+  },
+  {
+    "blockdata": "minecraft:jungle_wood[axis=z]",
+    "legacyid": 17,
+    "legacydata": 15
+  },
+  {
     "blockdata": "minecraft:oak_leaves[distance=7,persistent=false]",
     "legacyid": 18,
     "legacydata": 0
@@ -5106,6 +5166,36 @@
   },
   {
     "blockdata": "minecraft:dark_oak_log[axis=z]",
+    "legacyid": 162,
+    "legacydata": 9
+  },
+  {
+    "blockdata": "minecraft:acacia_wood[axis=y]",
+    "legacyid": 162,
+    "legacydata": 0
+  },
+  {
+    "blockdata": "minecraft:dark_oak_wood[axis=y]",
+    "legacyid": 162,
+    "legacydata": 1
+  },
+  {
+    "blockdata": "minecraft:acacia_wood[axis=x]",
+    "legacyid": 162,
+    "legacydata": 4
+  },
+  {
+    "blockdata": "minecraft:dark_oak_wood[axis=x]",
+    "legacyid": 162,
+    "legacydata": 5
+  },
+  {
+    "blockdata": "minecraft:acacia_wood[axis=z]",
+    "legacyid": 162,
+    "legacydata": 8
+  },
+  {
+    "blockdata": "minecraft:dark_oak_wood[axis=z]",
     "legacyid": 162,
     "legacydata": 9
   },

@@ -2,8 +2,8 @@ package protocolsupport.protocol.utils.networkentity;
 
 import org.bukkit.util.Vector;
 
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.utils.Utils;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class NetworkEntityDataCache {
 

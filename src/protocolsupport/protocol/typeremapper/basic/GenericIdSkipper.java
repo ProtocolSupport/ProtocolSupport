@@ -18,8 +18,10 @@ public class GenericIdSkipper {
 
 	public static final EnumSkippingRegistry<NetworkEntityType, EnumSkippingTable<NetworkEntityType>> ENTITY = new EnumSkippingRegistry<NetworkEntityType, EnumSkippingTable<NetworkEntityType>>() {
 		{
+			registerSkipEntry(NetworkEntityType.AREA_EFFECT_CLOUD, ProtocolVersionsHelper.BEFORE_1_9);
 			registerSkipEntry(NetworkEntityType.ARMOR_STAND_MOB, ProtocolVersionsHelper.BEFORE_1_8);
 			registerSkipEntry(NetworkEntityType.ARMOR_STAND_OBJECT, ProtocolVersionsHelper.BEFORE_1_8);
+			registerSkipEntry(NetworkEntityType.LEASH_KNOT, ProtocolVersionsHelper.BEFORE_1_6);
 		}
 
 		@Override

@@ -53,7 +53,7 @@ public class PEBlocks {
 			System.out.println("REMAPPED pcRuntimeId: " + runtimeId + "(" + JsonUtils.getString(object, "blockdata") + ") TO " + peName + "[DATA=" + peData + "] peRuntimeId: " + peBlocks.indexOf(new Any<String,Short>(peName, peData)) + ".");
 			int peRuntimeId = peBlocks.indexOf(new Any<String,Short>(peName, peData));
 			pcToPeRuntimeId[runtimeId] = peRuntimeId;
-			peToPcRuntimeId[peRuntimeId] = runtimeId;
+			peToPcRuntimeId[peRuntimeId+255] = runtimeId;
 			//TODO: Stop this absurd test and actually remap in this script, also storing the waterlogged runtimeids.
 			if (JsonUtils.getString(object, "blockdata").contains("waterlogged=false")) {
 				pcWaterlogged[runtimeId] = IS_WATERLOGGED;
@@ -76,7 +76,7 @@ public class PEBlocks {
 	}
 
 	public static int getPcRuntimeId(int peRuntimeId) {
-		return peToPcRuntimeId[peRuntimeId];
+		return peToPcRuntimeId[peRuntimeId+255];
 	}
 
 	public static byte[] getPocketRuntimeDefinition() {
