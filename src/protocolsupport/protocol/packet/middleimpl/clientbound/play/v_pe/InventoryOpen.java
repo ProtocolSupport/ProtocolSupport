@@ -22,9 +22,9 @@ import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeVillager;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class InventoryOpen extends MiddleInventoryOpen {
 	
@@ -72,7 +72,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		return (ClientBoundPacketData) serialize(ClientBoundPacketData.create(PEPacketIDs.CONTAINER_OPEN), version, windowId, type, pePosition, horseId);
 	}
 	
-	public static ClientBoundPacketData openEquipment(ProtocolVersion version, int windowId, WindowType type, long entityId, NBTTagCompoundWrapper nbt) {
+	public static ClientBoundPacketData openEquipment(ProtocolVersion version, int windowId, WindowType type, long entityId, NBTCompound nbt) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.EQUIPMENT);
 		serializer.writeByte(windowId);
 		serializer.writeByte(PEDataValues.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()));

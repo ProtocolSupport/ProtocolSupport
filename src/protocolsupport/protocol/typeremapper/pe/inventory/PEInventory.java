@@ -6,7 +6,7 @@ import java.util.List;
 import org.bukkit.Material;
 
 import protocolsupport.api.MaterialAPI;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public class PEInventory {
 

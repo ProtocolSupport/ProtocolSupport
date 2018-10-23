@@ -8,9 +8,9 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.pe.inventory.PESlotRemapper;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class InventorySetItems extends MiddleInventorySetItems {
 

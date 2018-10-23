@@ -12,7 +12,6 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.Utils;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -58,7 +57,7 @@ public class PECreativeInventory {
 			// ByteBuf, without any consequences. ;)
 			VarNumberSerializer.writeSVarInt(itembuf, id);
 			VarNumberSerializer.writeSVarInt(itembuf, ((damage & 0xFFFF) << 8) | amount);
-			ItemStackSerializer.writeTag(itembuf, false, ProtocolVersion.MINECRAFT_PE, NBTTagCompoundWrapper.NULL);
+			ItemStackSerializer.writeTag(itembuf, false, ProtocolVersion.MINECRAFT_PE, null);
 			itembuf.writeByte(0); //TODO: CanPlaceOn PE
 			itembuf.writeByte(0); //TODO: CanDestroy PE
 

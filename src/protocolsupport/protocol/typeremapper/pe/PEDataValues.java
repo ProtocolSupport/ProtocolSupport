@@ -22,9 +22,8 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.Utils;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class PEDataValues {
 
@@ -626,13 +625,15 @@ public class PEDataValues {
 
 		public static class PocketInventoryFilter {
 			private String Filter;
-			private transient NBTTagCompoundWrapper filterNBT;
+			private transient NBTCompound filterNBT;
 
 			protected void init() {
-				filterNBT = ServerPlatform.get().getWrapperFactory().createNBTCompoundFromJson(Filter.replaceAll("\'", "\""));
+				Filter.hashCode();
+				//TODO GET THIS???
+				//filterNBT = new createNBTCompoundFromJson(Filter.replaceAll("\'", "\""));
 			}
 
-			public NBTTagCompoundWrapper getFilter() {
+			public NBTCompound getFilter() {
 				return filterNBT;
 			}
 		}

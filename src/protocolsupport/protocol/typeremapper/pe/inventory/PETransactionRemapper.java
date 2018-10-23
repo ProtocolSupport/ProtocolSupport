@@ -8,11 +8,11 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacke
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InvTransaction;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.utils.types.GameMode;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.ArrayDequeMultiMap;
 import protocolsupport.utils.ArrayDequeMultiMap.ChildDeque;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 //See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-Inventory-Managing)
 public class PETransactionRemapper {
@@ -178,7 +178,7 @@ public class PETransactionRemapper {
 			bug("CLICK " + toString() + " on: " + slot + " with: " + item.toString());
 			int actionNumber = cache.getPEInventoryCache().getActionNumber();
 			packets.add(MiddleInventoryClick.create(cache.getAttributesCache().getLocale(), cache.getWindowCache().getOpenedWindowId(), slot, button, actionNumber, mode, item));
-			if(!item.isNull() && item.getNBT() != null && !item.getNBT().isNull()) {
+			if(!item.isNull() && item.getNBT() != null) {
 				packets.add(MiddleInventoryTransaction.create(cache.getWindowCache().getOpenedWindowId(), actionNumber, false));
 			}
 		}

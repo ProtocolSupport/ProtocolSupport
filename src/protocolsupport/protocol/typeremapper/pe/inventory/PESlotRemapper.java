@@ -10,8 +10,8 @@ import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class PESlotRemapper {
 

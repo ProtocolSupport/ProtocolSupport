@@ -11,12 +11,13 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Inventor
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InvTransaction;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTList;
+import protocolsupport.protocol.utils.types.nbt.NBTShort;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 public class PEFakeEnchanting {
 
@@ -59,26 +60,26 @@ public class PEFakeEnchanting {
 			if (optionEnch[i] < 0) { contents[i+2] = NetworkItemStack.NULL; break;}
 			NetworkItemStack option = inputOutputSlot.cloneItemStack();
 			if (option.isNull()) { break; }
-			NBTTagCompoundWrapper tag = (option.getNBT() == null || option.getNBT().isNull()) ?
-			ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound() : option.getNBT();
+			NBTCompound tag = (option.getNBT() == null) ?
+			new NBTCompound() : option.getNBT();
 			//Display
-			if (!tag.hasKeyOfType("display", NBTTagType.COMPOUND)) {
-				tag.setCompound("display", ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound());
+			NBTCompound display = tag.getTagOfType("display", NBTType.COMPOUND);
+			if (display == null) {
+				display = new NBTCompound();
 			}
-			NBTTagCompoundWrapper display = tag.getCompound("display");
-			display.setString("Name", "Click to enchant");
-			NBTTagListWrapper lore = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
-			lore.addString("Requires");
-			lore.addString(optionXP[i] + (optionXP[i] == 1 ? " Enchantment Level" : " Enchantment Levels"));
-			lore.addString((i + 1) + " Lapis Lazuli");
-			display.setList("Lore", lore);
-			tag.setCompound("display", display);
+			display.setTag("Name", new NBTString("Click to enchant"));
+			NBTList<NBTString> lore = new NBTList<>(NBTType.STRING);
+			lore.addTag(new NBTString("Requires"));
+			lore.addTag(new NBTString(optionXP[i] + (optionXP[i] == 1 ? " Enchantment Level" : " Enchantment Levels")));
+			lore.addTag(new NBTString((i + 1) + " Lapis Lazuli"));
+			display.setTag("Lore", lore);
+			tag.setTag("display", display);
 			//Enchantment
-			NBTTagListWrapper ench = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
-			if(ench.isEmpty()) { ench.addCompound(ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound()); }
-			ench.getCompound(0).setShort("id",  optionEnch[i]);
-			ench.getCompound(0).setShort("lvl", optionLvl [i]);
-			tag.setList("ench", ench);
+			NBTList<NBTCompound> ench = new NBTList<>(NBTType.COMPOUND);
+			if(ench.isEmpty()) { ench.addTag(new NBTCompound()); }
+			ench.getTag(0).setTag("id", new NBTShort((short) optionEnch[i]));
+			ench.getTag(0).setTag("lvl", new NBTShort((short) optionLvl [i]));
+			tag.setTag("ench", ench);
 			//Wrap up
 			option.setNBT(tag);
 			contents[i+2] = option;

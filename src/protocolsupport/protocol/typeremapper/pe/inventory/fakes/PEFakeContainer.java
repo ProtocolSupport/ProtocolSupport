@@ -19,9 +19,11 @@ import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.utils.types.nbt.NBTByte;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTInt;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class PEFakeContainer {
 
@@ -69,10 +71,10 @@ public class PEFakeContainer {
 			//Create fake inventory block.
 			BlockChangeSingle.create(version, position, PEBlocks.toPocketBlock(version, typeData.getObj1()), packets);
 			//Set tile data for fake block.
-			NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-			tag.setString("CustomName", title.toLegacyText(cache.getAttributesCache().getLocale()));
+			NBTCompound tag = new NBTCompound();
+			tag.setTag("CustomName", new NBTString(title.toLegacyText(cache.getAttributesCache().getLocale())));
 			if (typeData.getObj2() != TileEntityType.UNKNOWN) {
-				tag.setString("id", typeData.getObj2().getRegistryId());
+				tag.setTag("id", new NBTString(typeData.getObj2().getRegistryId()));
 			}
 			//Large inventories require doublechest that requires two blocks and nbt.
 			if (shouldDoDoubleChest(cache)) {
@@ -80,16 +82,16 @@ public class PEFakeContainer {
 				auxPos.modifyX(1); //Get adjacend block.
 				invCache.getFakeContainers().addLast(auxPos);
 				BlockChangeSingle.create(version, auxPos, PEBlocks.toPocketBlock(version, typeData.getObj1()), packets);
-				tag.setInt("pairx", auxPos.getX());
-				tag.setInt("pairz", auxPos.getZ());
-				tag.setByte("pairlead", 1);
+				tag.setTag("pairx", new NBTInt(auxPos.getX()));
+				tag.setTag("pairz", new NBTInt(auxPos.getZ()));
+				tag.setTag("pairlead", new NBTByte((byte) 1));
 				packets.add(BlockTileUpdate.create(version, position, tag));
-				NBTTagCompoundWrapper auxTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();;
-				auxTag.setString("CustomName", title.toLegacyText(cache.getAttributesCache().getLocale()));
-				auxTag.setString("id", typeData.getObj2().getRegistryId());
-				auxTag.setInt("pairx", position.getX());
-				auxTag.setInt("pairz", position.getZ());
-				auxTag.setByte("pairlead", 0);
+				NBTCompound auxTag = new NBTCompound();
+				auxTag.setTag("CustomName", new NBTString(title.toLegacyText(cache.getAttributesCache().getLocale())));
+				auxTag.setTag("id", new NBTString(typeData.getObj2().getRegistryId()));
+				auxTag.setTag("pairx", new NBTInt(position.getX()));
+				auxTag.setTag("pairz", new NBTInt(position.getZ()));
+				auxTag.setTag("pairlead", new NBTByte((byte) 0));
 				packets.add(BlockTileUpdate.create(version, auxPos, auxTag));
 			} else {
 				packets.add(BlockTileUpdate.create(version, position, tag));

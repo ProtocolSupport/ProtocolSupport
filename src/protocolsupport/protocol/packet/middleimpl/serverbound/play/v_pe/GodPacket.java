@@ -19,13 +19,14 @@ import protocolsupport.protocol.typeremapper.pe.inventory.PESlotRemapper;
 import protocolsupport.protocol.typeremapper.pe.inventory.PETransactionRemapper;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.GameMode;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
-import protocolsupport.zplatform.itemstack.NetworkItemStack;
 
 //The PE GodPacket! See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-GodPacket)
 public class GodPacket extends ServerBoundMiddlePacket {
@@ -219,12 +220,13 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	protected static void processAnvilName(InvTransaction transaction, RecyclableArrayList<ServerBoundPacketData> packets) {
 		//Anvil naming is only done and known based on the clicked item.
 		if (transaction.getSlot() == 2 && !transaction.getOldItem().isNull()) {
-			NBTTagCompoundWrapper tag = transaction.getOldItem().getNBT();
-			if (tag.hasKeyOfType("display", NBTTagType.COMPOUND)) {
-				NBTTagCompoundWrapper display = tag.getCompound("display");
-				if (display.hasKeyOfType("Name", NBTTagType.STRING)) {
+			NBTCompound tag = transaction.getOldItem().getNBT();
+			NBTCompound display = tag.getTagOfType("display", NBTType.COMPOUND);
+			if (display != null) {
+				NBTString name = display.getTagOfType("Name", NBTType.STRING);
+				if (name != null) {
 					ByteBuf payload = Unpooled.buffer();
-					StringSerializer.writeString(payload, ProtocolVersionsHelper.LATEST_PC, display.getString("Name"));
+					StringSerializer.writeString(payload, ProtocolVersionsHelper.LATEST_PC, name.getValue());
 					packets.add(MiddleCustomPayload.create("minecraft:ItemName", MiscSerializer.readAllBytes(payload)));
 				}
 			}

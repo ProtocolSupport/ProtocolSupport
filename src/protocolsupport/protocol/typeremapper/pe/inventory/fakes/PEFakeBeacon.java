@@ -11,9 +11,10 @@ import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTInt;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class PEFakeBeacon {
 
@@ -56,10 +57,10 @@ public class PEFakeBeacon {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		PEInventoryCache invCache = cache.getPEInventoryCache();
 		if (cache.getWindowCache().getOpenedWindow() == WindowType.BEACON && invCache.getFakeContainers().hasFirst()) {
-			NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-			tag.setString("id", "beacon");
-			tag.setInt("primary", primary);
-			tag.setInt("secondary", secondary);
+			NBTCompound tag = new NBTCompound();
+			tag.setTag("id", new NBTString("beacon"));
+			tag.setTag("primary", new NBTInt(primary));
+			tag.setTag("secondary", new NBTInt(secondary));
 			packets.add(BlockTileUpdate.create(version, invCache.getFakeContainers().getFirst(), tag));
 		}
 		return packets;
