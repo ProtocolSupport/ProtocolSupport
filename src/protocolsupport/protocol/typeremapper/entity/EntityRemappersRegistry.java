@@ -178,7 +178,7 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
 			.register();
 			new Mapping(NetworkEntityType.LAMA)
-			.addMapping(NetworkEntityType.LAMA, CargoHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11_AND_PE)
+			.addMapping(NetworkEntityType.LAMA, LamaEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.COMMON_HORSE, LamaEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_10)
 			.addMapping(NetworkEntityType.COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
 			.register();

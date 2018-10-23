@@ -38,7 +38,7 @@ public class EndermanEntityMetadataRemapper extends InsentientEntityMetadataRema
 //				return new DataWatcherObjectByte((byte) MinecraftData.getBlockDataFromState(object.getValue()));
 //			}
 //		}, ProtocolVersionsHelper.BEFORE_1_9),
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.SCREAMING, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.SCREAMING, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.SCREAMING, 12), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Enderman.SCREAMING, 18), ProtocolVersionsHelper.BEFORE_1_9);
 	}

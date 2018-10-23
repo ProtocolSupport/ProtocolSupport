@@ -8,7 +8,7 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 public class EnderDragonEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
 	public EnderDragonEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EnderDragon.PHASE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_1);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EnderDragon.PHASE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EnderDragon.PHASE, 11), ProtocolVersionsHelper.ALL_1_9);
 	}
 

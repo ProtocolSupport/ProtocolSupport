@@ -13,7 +13,7 @@ public class ParrotEntityMetadataRemapper extends TameableEntityMetadataRemapper
 	public ParrotEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Parrot.VARIANT, PeMetaBase.VARIANT), ProtocolVersion.MINECRAFT_PE);
 
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Parrot.VARIANT, 15), ProtocolVersionsHelper.RANGE__1_12__1_13_1);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Parrot.VARIANT, 15), ProtocolVersionsHelper.RANGE__1_12__1_13_2);
 	}
 
 }

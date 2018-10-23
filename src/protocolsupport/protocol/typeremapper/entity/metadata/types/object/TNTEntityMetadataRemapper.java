@@ -17,7 +17,7 @@ public class TNTEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 		), ProtocolVersion.MINECRAFT_PE);
 		addRemap(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Tnt.FUSE, PeMetaBase.FUSE_LENGTH), ProtocolVersion.MINECRAFT_PE);
 
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Tnt.FUSE, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_1);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Tnt.FUSE, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Tnt.FUSE, 5), ProtocolVersionsHelper.ALL_1_9);
 	}
 

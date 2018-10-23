@@ -10,7 +10,7 @@ public class EvokerEntityMetadataRemapper extends InsentientEntityMetadataRemapp
 	public static final EvokerEntityMetadataRemapper INSTANCE = new EvokerEntityMetadataRemapper();
 
 	public EvokerEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Evoker.SPELL, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_1);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Evoker.SPELL, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 	}
 
 }

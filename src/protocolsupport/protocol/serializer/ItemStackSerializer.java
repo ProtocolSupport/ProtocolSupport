@@ -38,6 +38,12 @@ public class ItemStackSerializer {
 		int type = 0;
 		if (version == ProtocolVersion.MINECRAFT_PE) {
 			type = VarNumberSerializer.readSVarInt(from);
+		} else if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
+			if (!from.readBoolean()) {
+				type = -1;
+			} else {
+				type = VarNumberSerializer.readVarInt(from);
+			}
 		} else {
 			type = from.readShort();
 		}
@@ -86,6 +92,8 @@ public class ItemStackSerializer {
 		if ((itemstack == null) || itemstack.isNull()) {
 			if (version == ProtocolVersion.MINECRAFT_PE) {
 				VarNumberSerializer.writeVarInt(to, 0);
+			} else if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
+				to.writeBoolean(false);
 			} else {
 				to.writeShort(-1);
 			}
@@ -102,7 +110,12 @@ public class ItemStackSerializer {
 			VarNumberSerializer.writeSVarInt(to, 0); //TODO: CanPlaceOn PE
 			VarNumberSerializer.writeSVarInt(to, 0); //TODO: CanDestroy PE
 		} else {
-			to.writeShort(witemstack.getTypeId());
+			if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
+				to.writeBoolean(true);
+				VarNumberSerializer.writeVarInt(to, witemstack.getTypeId());
+			} else {
+				to.writeShort(witemstack.getTypeId());
+			}
 			to.writeByte(witemstack.getAmount());
 			if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 				to.writeShort(witemstack.getLegacyData());

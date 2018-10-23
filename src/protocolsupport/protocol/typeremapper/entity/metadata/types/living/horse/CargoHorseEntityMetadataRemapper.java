@@ -27,7 +27,7 @@ public class CargoHorseEntityMetadataRemapper extends BaseHorseEntityMetadataRem
 			}
 		}, ProtocolVersion.MINECRAFT_PE);
 
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.CargoHorse.HAS_CHEST, 15), ProtocolVersionsHelper.RANGE__1_11__1_13_1);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.CargoHorse.HAS_CHEST, 15), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 	}
 
 }

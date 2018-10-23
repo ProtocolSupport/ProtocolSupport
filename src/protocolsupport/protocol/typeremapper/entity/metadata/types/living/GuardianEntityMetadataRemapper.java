@@ -17,7 +17,7 @@ public class GuardianEntityMetadataRemapper extends InsentientEntityMetadataRema
 	public static final GuardianEntityMetadataRemapper INSTANCE = new GuardianEntityMetadataRemapper();
 
 	public GuardianEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Guardian.SPIKES, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_1);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Guardian.SPIKES, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 		addRemap(new IndexValueRemapper<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Guardian.SPIKES, 12) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectBoolean object) {
@@ -36,7 +36,7 @@ public class GuardianEntityMetadataRemapper extends InsentientEntityMetadataRema
 				return new DataWatcherObjectInt(object.getValue() ? (byte) 2 : (byte) 0);
 			}
 		}, ProtocolVersion.MINECRAFT_1_8);
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Guardian.TARGET_ID, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Guardian.TARGET_ID, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Guardian.TARGET_ID, 12), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Guardian.TARGET_ID, 17), ProtocolVersion.MINECRAFT_1_8);
 	}

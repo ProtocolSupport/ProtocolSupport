@@ -21,7 +21,7 @@ public class VillagerEntityMetadataRemapper extends AgeableEntityMetadataRemappe
 			}
 		}, ProtocolVersion.MINECRAFT_PE);
 
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Villager.PROFESSION, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_1);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Villager.PROFESSION, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Villager.PROFESSION, 12), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Villager.PROFESSION, 16), ProtocolVersionsHelper.BEFORE_1_9);
 	}
