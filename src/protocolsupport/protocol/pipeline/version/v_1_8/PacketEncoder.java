@@ -59,6 +59,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SpawnName
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.UnloadChunk;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2.EntityEffectAdd;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10.CollectEffect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10.Title;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.BlockChangeMulti;
@@ -74,7 +75,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.CombatEvent;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.Entity;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.EntityDestroy;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.EntityEffectAdd;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.EntityEffectRemove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.EntityHeadRotation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.EntityLook;
