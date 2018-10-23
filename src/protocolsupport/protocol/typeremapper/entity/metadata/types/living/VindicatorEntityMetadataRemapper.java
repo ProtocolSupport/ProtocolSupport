@@ -8,7 +8,7 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 public class VindicatorEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
 	public VindicatorEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Vindicator.HAS_TARGET, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_1);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Vindicator.HAS_TARGET, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 	}
 
 }
