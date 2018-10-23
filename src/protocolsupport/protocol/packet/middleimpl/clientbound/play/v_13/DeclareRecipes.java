@@ -40,7 +40,7 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 
 	private void writeRecipe(Recipe recipe, ByteBuf serializer, ProtocolVersion version) {
 		StringSerializer.writeString(serializer, version, recipe.getId());
-		StringSerializer.writeString(serializer, version, recipe.getType().name());
+		StringSerializer.writeString(serializer, version, recipe.getType().getInternalName());
 
 		if (recipe instanceof ShapelessRecipe) {
 			ShapelessRecipe shapelessRecipe = (ShapelessRecipe) recipe;

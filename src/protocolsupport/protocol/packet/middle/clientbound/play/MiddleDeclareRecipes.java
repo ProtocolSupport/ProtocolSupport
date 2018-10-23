@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import io.netty.buffer.ByteBuf;
@@ -35,7 +36,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 			recipes = new Recipe[count];
 			for (int i = 0; i < count; i++) {
 				String id = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
-				RecipeType type = RecipeType.valueOf(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
+				RecipeType type = RecipeType.getByInternalName(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
 				recipes[i] = type.read(id, serverdata);
 			}
 		}
@@ -81,7 +82,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 		private NetworkItemStack result;
 
 		public ShapelessRecipe(String id, ByteBuf data) {
-			super(id, RecipeType.crafting_shapeless);
+			super(id, RecipeType.CRAFTING_SHAPELESS);
 
 			group = StringSerializer.readString(data, ProtocolVersionsHelper.LATEST_PC);
 			int ingredientCount = VarNumberSerializer.readVarInt(data);
@@ -113,7 +114,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 		private NetworkItemStack result;
 
 		public ShapedRecipe(String id, ByteBuf data) {
-			super(id, RecipeType.crafting_shaped);
+			super(id, RecipeType.CRAFTING_SHAPED);
 
 			width = VarNumberSerializer.readVarInt(data);
 			height = VarNumberSerializer.readVarInt(data);
@@ -155,7 +156,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 		private int time;
 
 		public SmeltingRecipe(String id, ByteBuf data) {
-			super(id, RecipeType.smelting);
+			super(id, RecipeType.SMELTING);
 
 			group = StringSerializer.readString(data, ProtocolVersionsHelper.LATEST_PC);
 			ingredient = new Ingredient(data);
@@ -186,41 +187,61 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 	}
 
 	public enum RecipeType {
-		crafting_shapeless {
+		CRAFTING_SHAPELESS {
 			@Override
 			public Recipe read(String id, ByteBuf data) {
 				return new ShapelessRecipe(id, data);
 			}
 		},
-		crafting_shaped {
+		CRAFTING_SHAPED {
 			@Override
 			public Recipe read(String id, ByteBuf data) {
 				return new ShapedRecipe(id, data);
 			}
 		},
-		crafting_special_armordye,
-		crafting_special_bookcloning,
-		crafting_special_mapcloning,
-		crafting_special_mapextending,
-		crafting_special_firework_rocket,
-		crafting_special_firework_star,
-		crafting_special_firework_star_fade,
-		crafting_special_repairitem,
-		crafting_special_tippedarrow,
-		crafting_special_bannerduplicate,
-		crafting_special_banneraddpattern,
-		crafting_special_shielddecoration,
-		crafting_special_shulkerboxcoloring,
-		smelting {
+		CRAFTING_SPECIAL_ARMORDYE,
+		CRAFTING_SPECIAL_BOOKCLONING,
+		CRAFTING_SPECIAL_MAPCLONING,
+		CRAFTING_SPECIAL_MAPEXTENDING,
+		CRAFTING_SPECIAL_FIREWORK_ROCKET,
+		CRAFTING_SPECIAL_FIREWORK_STAR,
+		CRAFTING_SPECIAL_FIREWORK_STAR_FADE,
+		CRAFTING_SPECIAL_REPAIRITEM,
+		CRAFTING_SPECIAL_TIPPEDARROW,
+		CRAFTING_SPECIAL_BANNERDUPLICATE,
+		CRAFTING_SPECIAL_BANNERADDPATTERN,
+		CRAFTING_SPECIAL_SHIELDDECORATION,
+		CRAFTING_SPECIAL_SHULKERBOXCOLORING,
+		SMELTING {
 			@Override
 			public Recipe read(String id, ByteBuf data) {
 				return new SmeltingRecipe(id, data);
 			}
 		};
 
+		private static Map<String, RecipeType> byInternalName = new HashMap<>();
+		private final String internalName = name().toLowerCase();
+
+		static {
+			for (RecipeType recipeType : values()) {
+				byInternalName.put(recipeType.getInternalName(), recipeType);
+			}
+		}
+
+		public static RecipeType getByInternalName(String name) {
+			RecipeType recipeType = byInternalName.get(name);
+			if (recipeType == null) {
+				throw new IllegalArgumentException(name + " is no valid recipe type");
+			}
+			return recipeType;
+		}
+
+		public String getInternalName() {
+			return internalName;
+		}
+
 		public Recipe read(String id, ByteBuf serverdata) {
 			return new Recipe(id, this);
-
 		}
 	}
 }
