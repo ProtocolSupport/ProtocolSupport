@@ -34,9 +34,18 @@ import protocolsupport.zplatform.ServerPlatform;
 public class ItemStackSerializer {
 
 	public static NetworkItemStack readItemStack(ByteBuf from, ProtocolVersion version, String locale, boolean isFromClient) {
-		int type = from.readShort();
-		if (type < 0) {
-			return NetworkItemStack.NULL;
+		int type;
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
+			boolean exist = from.readBoolean();
+			if (!exist) {
+				return NetworkItemStack.NULL;
+			}
+			type = VarNumberSerializer.readVarInt(from);
+		} else {
+			type = from.readShort();
+			if (type < 0) {
+				return NetworkItemStack.NULL;
+			}
 		}
 		NetworkItemStack itemstack = new NetworkItemStack();
 		itemstack.setTypeId(type);
@@ -53,7 +62,11 @@ public class ItemStackSerializer {
 
 	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, NetworkItemStack itemstack, boolean isToClient) {
 		if (itemstack.isNull()) {
-			to.writeShort(-1);
+			if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
+				to.writeBoolean(false);
+			} else {
+				to.writeShort(-1);
+			}
 			return;
 		}
 
@@ -92,8 +105,12 @@ public class ItemStackSerializer {
 
 			itemstack = ItemStackRemapper.remapToClient(version, locale, itemstack);
 		}
-
-		to.writeShort(itemstack.getTypeId());
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
+			to.writeBoolean(true);
+			VarNumberSerializer.writeVarInt(to, itemstack.getTypeId());
+		} else {
+			to.writeShort(itemstack.getTypeId());
+		}
 		to.writeByte(itemstack.getAmount());
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			to.writeShort(itemstack.getLegacyData());
