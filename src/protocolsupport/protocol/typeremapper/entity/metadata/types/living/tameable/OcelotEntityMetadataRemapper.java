@@ -9,7 +9,7 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 public class OcelotEntityMetadataRemapper extends TameableEntityMetadataRemapper {
 
 	public OcelotEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ocelot.VARIANT, 15), ProtocolVersionsHelper.RANGE__1_10__1_13_1);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ocelot.VARIANT, 15), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ocelot.VARIANT, 14), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Ocelot.VARIANT, 18), ProtocolVersionsHelper.BEFORE_1_9);
 	}

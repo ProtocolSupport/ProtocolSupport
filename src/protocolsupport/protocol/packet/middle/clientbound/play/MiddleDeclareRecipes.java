@@ -42,7 +42,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 	}
 
 	public static class Ingredient {
-		protected NetworkItemStack[] possibleStacks;
+		private NetworkItemStack[] possibleStacks;
 
 		public Ingredient(ByteBuf serverdata) {
 			int possibleStacksCount = VarNumberSerializer.readVarInt(serverdata);
@@ -52,33 +52,33 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 			}
 		}
 
-		public void write(ByteBuf serializer, ProtocolVersion version) {
-			VarNumberSerializer.writeVarInt(serializer, possibleStacks.length);
-			for (int i = 0; i < possibleStacks.length; i++) {
-				ItemStackSerializer.writeItemStack(serializer, version, I18NData.DEFAULT_LOCALE, possibleStacks[i], true);
-			}
+		public NetworkItemStack[] getPossibleStacks() {
+			return possibleStacks;
 		}
 	}
 
 	public static class Recipe {
-		protected String id;
-		protected RecipeType type;
+		private String id;
+		private RecipeType type;
 
 		public Recipe(String id, RecipeType type) {
 			this.id = id;
 			this.type = type;
 		}
 
-		public void write(ByteBuf buffOut, ProtocolVersion version) {
-			StringSerializer.writeString(buffOut, version, id);
-			StringSerializer.writeString(buffOut, version, type.name());
+		public String getId() {
+			return id;
+		}
+
+		public RecipeType getType() {
+			return type;
 		}
 	}
 
 	public static class ShapelessRecipe extends Recipe {
-		protected String group;
-		protected Ingredient[] ingredients;
-		protected NetworkItemStack result;
+		private String group;
+		private Ingredient[] ingredients;
+		private NetworkItemStack result;
 
 		public ShapelessRecipe(String id, ByteBuf data) {
 			super(id, RecipeType.crafting_shapeless);
@@ -92,23 +92,25 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 			result = ItemStackSerializer.readItemStack(data, ProtocolVersionsHelper.LATEST_PC, I18NData.DEFAULT_LOCALE, false);
 		}
 
-		public void write(ByteBuf serializer, ProtocolVersion version) {
-			super.write(serializer, version);
-			StringSerializer.writeString(serializer, version, group);
-			VarNumberSerializer.writeVarInt(serializer, ingredients.length);
-			for (int i = 0; i < ingredients.length; i++) {
-				ingredients[i].write(serializer, version);
-			}
-			ItemStackSerializer.writeItemStack(serializer, version, I18NData.DEFAULT_LOCALE, result, true);
+		public String getGroup() {
+			return group;
+		}
+
+		public Ingredient[] getIngredients() {
+			return ingredients;
+		}
+
+		public NetworkItemStack getResult() {
+			return result;
 		}
 	}
 
 	public static class ShapedRecipe extends Recipe {
-		protected String group;
-		protected int width;
-		protected int height;
-		protected Ingredient[] ingredients;
-		protected NetworkItemStack result;
+		private String group;
+		private int width;
+		private int height;
+		private Ingredient[] ingredients;
+		private NetworkItemStack result;
 
 		public ShapedRecipe(String id, ByteBuf data) {
 			super(id, RecipeType.crafting_shaped);
@@ -124,24 +126,33 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 			result = ItemStackSerializer.readItemStack(data, ProtocolVersionsHelper.LATEST_PC, I18NData.DEFAULT_LOCALE, false);
 		}
 
-		public void write(ByteBuf serializer, ProtocolVersion version) {
-			super.write(serializer, version);
-			VarNumberSerializer.writeVarInt(serializer, width);
-			VarNumberSerializer.writeVarInt(serializer, height);
-			StringSerializer.writeString(serializer, version, group);
-			for (int i = 0; i < ingredients.length; i++) {
-				ingredients[i].write(serializer, version);
-			}
-			ItemStackSerializer.writeItemStack(serializer, version, I18NData.DEFAULT_LOCALE, result, true);
+		public String getGroup() {
+			return group;
+		}
+
+		public int getWidth() {
+			return width;
+		}
+
+		public int getHeight() {
+			return height;
+		}
+
+		public Ingredient[] getIngredients() {
+			return ingredients;
+		}
+
+		public NetworkItemStack getResult() {
+			return result;
 		}
 	}
 
 	public static class SmeltingRecipe extends Recipe {
-		protected String group;
-		protected Ingredient ingredient;
-		protected NetworkItemStack result;
-		protected float exp;
-		protected int time;
+		private String group;
+		private Ingredient ingredient;
+		private NetworkItemStack result;
+		private float exp;
+		private int time;
 
 		public SmeltingRecipe(String id, ByteBuf data) {
 			super(id, RecipeType.smelting);
@@ -153,14 +164,24 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 			time = VarNumberSerializer.readVarInt(data);
 		}
 
-		public void write(ByteBuf serializer, ProtocolVersion version) {
-			super.write(serializer, version);
-			StringSerializer.writeString(serializer, version, group);
-			ingredient.write(serializer, version);
-			ItemStackSerializer.writeItemStack(serializer, version, I18NData.DEFAULT_LOCALE, result, true);
-			serializer.writeFloat(exp);
-			VarNumberSerializer.writeVarInt(serializer, time);
+		public String getGroup() {
+			return group;
+		}
 
+		public Ingredient getIngredient() {
+			return ingredient;
+		}
+
+		public NetworkItemStack getResult() {
+			return result;
+		}
+
+		public float getExp() {
+			return exp;
+		}
+
+		public int getTime() {
+			return time;
 		}
 	}
 
@@ -189,7 +210,8 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 		crafting_special_bannerduplicate,
 		crafting_special_banneraddpattern,
 		crafting_special_shielddecoration,
-		crafting_special_shulkerboxcoloring, smelting {
+		crafting_special_shulkerboxcoloring,
+		smelting {
 			@Override
 			public Recipe read(String id, ByteBuf data) {
 				return new SmeltingRecipe(id, data);
