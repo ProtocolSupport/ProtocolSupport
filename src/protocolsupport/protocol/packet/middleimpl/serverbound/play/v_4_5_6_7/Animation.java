@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleAnimation;
+import protocolsupport.protocol.utils.types.UsedHand;
 
 public class Animation extends MiddleAnimation {
 
@@ -14,6 +15,7 @@ public class Animation extends MiddleAnimation {
 	public void readFromClientData(ByteBuf clientdata) {
 		clientdata.readInt();
 		clientdata.readByte();
+		hand = UsedHand.MAIN;
 	}
 
 }

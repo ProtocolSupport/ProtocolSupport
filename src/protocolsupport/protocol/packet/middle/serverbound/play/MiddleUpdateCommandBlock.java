@@ -19,7 +19,7 @@ public abstract class MiddleUpdateCommandBlock extends ServerBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected Position position = new Position(0, 0, 0);
+	protected final Position position = new Position(0, 0, 0);
 	protected String command;
 	protected Mode mode;
 	protected int flags;

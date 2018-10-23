@@ -13,7 +13,7 @@ public abstract class MiddleWorldEvent extends ClientBoundMiddlePacket {
 	}
 
 	protected int effectId;
-	protected Position position = new Position(0, 0, 0);
+	protected final Position position = new Position(0, 0, 0);
 	protected int data;
 	protected boolean disableRelative;
 
