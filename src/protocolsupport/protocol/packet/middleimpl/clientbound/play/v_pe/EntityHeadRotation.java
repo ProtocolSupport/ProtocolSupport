@@ -19,6 +19,13 @@ public class EntityHeadRotation extends MiddleEntityHeadRotation {
 		if (entity != null) {
 			entity.getDataCache().setHeadRotation(headRot);
 		}
+		//TODO Figure out why this makes the entity disappear!
+//		System.out.println("SENDING HEADROT TO PE: " + headRot);
+//		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOVE_ENTITY_DELTA);
+//		VarNumberSerializer.writeVarLong(serializer, entityId);
+//		serializer.writeByte((byte) 0x20);
+//		serializer.writeByte(headYaw);
+//		return RecyclableSingletonList.create(serializer);
 		return RecyclableEmptyList.get();
 	}
 
