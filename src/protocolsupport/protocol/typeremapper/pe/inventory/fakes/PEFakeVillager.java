@@ -55,8 +55,6 @@ public class PEFakeVillager {
 	public void despawnVillager(Connection connection) {
 		ByteBuf serializer = Unpooled.buffer();
 		VarNumberSerializer.writeVarInt(serializer, PEPacketIDs.ENTITY_DESTROY);
-		serializer.writeByte(0);
-		serializer.writeByte(0);
 		serializer.writeBytes(EntityDestroy.create(villager.getId()));
 		spawned = false;
 		connection.sendRawPacket(MiscSerializer.readAllBytes(serializer));
