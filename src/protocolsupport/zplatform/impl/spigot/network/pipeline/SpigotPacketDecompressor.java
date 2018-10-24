@@ -2,17 +2,15 @@ package protocolsupport.zplatform.impl.spigot.network.pipeline;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.zip.DataFormatException;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.netty.Decompressor;
+import protocolsupport.utils.netty.ReusableReadHeapBuffer;
 
-public class SpigotPacketDecompressor extends net.minecraft.server.v1_12_R1.PacketDecompressor {
+public class SpigotPacketDecompressor extends net.minecraft.server.v1_13_R2.PacketDecompressor {
 
 	protected static final int maxPacketLength = 2 << 20;
 
@@ -28,19 +26,23 @@ public class SpigotPacketDecompressor extends net.minecraft.server.v1_12_R1.Pack
 		decompressor.recycle();
 	}
 
+	protected final ReusableReadHeapBuffer readBuffer = new ReusableReadHeapBuffer();
+
 	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf from, List<Object> list) throws DataFormatException {
+	protected void decode(ChannelHandlerContext ctx, ByteBuf from, List<Object> list) throws Exception {
 		if (!from.isReadable()) {
 			return;
 		}
 		int uncompressedlength = VarNumberSerializer.readVarInt(from);
 		if (uncompressedlength == 0) {
-			list.add(from.readBytes(from.readableBytes()));
+			list.add(from.retain());
 		} else {
 			if (uncompressedlength > maxPacketLength) {
 				throw new DecoderException(MessageFormat.format("Badly compressed packet - size of {0} is larger than protocol maximum of {1}", uncompressedlength, maxPacketLength));
 			}
-			list.add(Unpooled.wrappedBuffer(decompressor.decompress(MiscSerializer.readAllBytes(from), uncompressedlength)));
+			ByteBuf out = ctx.alloc().heapBuffer(uncompressedlength);
+			readBuffer.readFrom(from, (larray, loffset, llength) -> decompressor.decompressTo(out, larray, loffset, llength, uncompressedlength));
+			list.add(out);
 		}
 	}
 

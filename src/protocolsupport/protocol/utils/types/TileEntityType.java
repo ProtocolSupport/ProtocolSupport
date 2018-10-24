@@ -3,18 +3,19 @@ package protocolsupport.protocol.utils.types;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import org.bukkit.NamespacedKey;
+
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public enum TileEntityType {
 
-	UNKNOWN(0, "__FAKETYPE_NONE"),
+	UNKNOWN(0, "__faketype_unknown"),
 	MOB_SPAWNER(1, "mob_spawner"),
 	COMMAND_BLOCK(2, "command_block"),
 	BEACON(3, "beacon"),
 	SKULL(4, "skull"),
-	FLOWER_POT(5, "flower_pot"),
+	CONDUIT(5, "conduit"),
 	BANNER(6, "banner"),
 	STRUCTURE(7, "structure_block"),
 	END_GATEWAY(8, "end_gateway"),
@@ -42,7 +43,7 @@ public enum TileEntityType {
 	static {
 		Arrays.stream(values()).forEach(v -> {
 			by_r_id.put(v.registryId, v);
-			by_r_id.put(MinecraftData.addNamespacePrefix(v.registryId), v);
+			by_r_id.put(NamespacedKey.minecraft(v.registryId).toString(), v);
 		});
 	}
 

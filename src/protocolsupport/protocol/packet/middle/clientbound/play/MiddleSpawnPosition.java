@@ -1,13 +1,18 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.utils.types.Position;
 
 public abstract class MiddleSpawnPosition extends ClientBoundMiddlePacket {
 
-	protected Position position = new Position(0, 0, 0);
+	public MiddleSpawnPosition(ConnectionImpl connection) {
+		super(connection);
+	}
+
+	protected final Position position = new Position(0, 0, 0);
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {

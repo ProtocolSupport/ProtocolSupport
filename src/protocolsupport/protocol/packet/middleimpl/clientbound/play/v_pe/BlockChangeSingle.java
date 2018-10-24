@@ -1,17 +1,23 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.pe.PEDataValues;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
+import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BlockChangeSingle extends MiddleBlockChangeSingle {
+
+	public BlockChangeSingle(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected static final int flag_update_neighbors = 0b0001;
 	protected static final int flag_network = 0b0010;
@@ -22,17 +28,25 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(BlockChangeSingle.create(connection.getVersion(), position, id));
+		return BlockChangeSingle.create(connection.getVersion(), position, id, RecyclableArrayList.create());
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, Position position, int state) {
-		state = PEDataValues.BLOCK_ID.getRemap(state);
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.UPDATE_BLOCK);
-		PositionSerializer.writePEPosition(serializer, position);
-		VarNumberSerializer.writeVarInt(serializer, state);
-		VarNumberSerializer.writeVarInt(serializer, flags);
-		VarNumberSerializer.writeVarInt(serializer, 0); //Normal layer (liquid not implemented in java yet)
-		return serializer;
+	public static RecyclableArrayList<ClientBoundPacketData> create(ProtocolVersion version, Position position, int state, RecyclableArrayList<ClientBoundPacketData> packets) {
+		ClientBoundPacketData updateBlock = ClientBoundPacketData.create(PEPacketIDs.UPDATE_BLOCK);
+		PositionSerializer.writePEPosition(updateBlock, position);
+		VarNumberSerializer.writeVarInt(updateBlock, PEBlocks.getPocketRuntimeId(LegacyBlockData.REGISTRY.getTable(version).getRemap(state)));
+		VarNumberSerializer.writeVarInt(updateBlock, flags);
+		VarNumberSerializer.writeVarInt(updateBlock, 0); //Normal layer
+		packets.add(updateBlock);
+		if (PEBlocks.canPCBlockBeWaterLogged(state) || state == 0) {
+			ClientBoundPacketData updateWater = ClientBoundPacketData.create(PEPacketIDs.UPDATE_BLOCK);
+			PositionSerializer.writePEPosition(updateWater, position);
+			VarNumberSerializer.writeVarInt(updateWater, PEBlocks.isPCBlockWaterlogged(state) ? PEBlocks.getPEWaterId(version) : 0);
+			VarNumberSerializer.writeVarInt(updateWater, flags);
+			VarNumberSerializer.writeVarInt(updateWater, 1); //Liquid layer
+			packets.add(updateWater);
+		}
+		return packets;
 	}
 
 }

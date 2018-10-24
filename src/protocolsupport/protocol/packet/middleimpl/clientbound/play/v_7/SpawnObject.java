@@ -1,21 +1,24 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 
-import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SpawnObject extends MiddleSpawnObject {
 
+	public SpawnObject(ConnectionImpl connection) {
+		super(connection);
+	}
+
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
-		NetworkEntityType type = IdRemapper.ENTITY.getTable(version).getRemap(entity.getType());
+		NetworkEntityType type = entityRemapper.getRemappedEntityType();
+		objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
 		x *= 32;
 		y *= 32;
 		z *= 32;
@@ -45,13 +48,6 @@ public class SpawnObject extends MiddleSpawnObject {
 				}
 				break;
 			}
-			case FALLING_OBJECT: {
-				int id = IdRemapper.BLOCK.getTable(version).getRemap((objectdata & 4095) << 4) >> 4;
-				int data = (objectdata >> 12) & 0xF;
-				objectdata = (id | (data << 16));
-				y += 16;
-				break;
-			}
 			case TNT:
 			case MINECART:
 			case MINECART_CHEST:
@@ -59,12 +55,9 @@ public class SpawnObject extends MiddleSpawnObject {
 			case MINECART_TNT:
 			case MINECART_MOB_SPAWNER:
 			case MINECART_HOPPER:
-			case MINECART_COMMAND: {
+			case MINECART_COMMAND:
+			case FALLING_OBJECT: {
 				y += 16;
-				break;
-			}
-			case ARROW: {
-				objectdata--;
 				break;
 			}
 			default: {

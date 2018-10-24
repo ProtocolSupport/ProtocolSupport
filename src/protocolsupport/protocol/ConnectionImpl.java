@@ -19,8 +19,10 @@ import protocolsupport.api.Connection.PacketListener.PacketEvent;
 import protocolsupport.api.Connection.PacketListener.RawPacketEvent;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.NetworkState;
+import protocolsupport.protocol.packet.handler.IPacketListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
@@ -45,6 +47,26 @@ public class ConnectionImpl extends Connection {
 	@Override
 	public boolean isConnected() {
 		return networkmanager.isConnected();
+	}
+
+	@Override
+	public void close() {
+		networkmanager.close("Force connection close");
+	}
+
+	@Override
+	public void disconnect(String message) {
+		Player player = getPlayer();
+		if (player != null) {
+			player.kickPlayer(message);
+			return;
+		}
+		Object packetListener = networkmanager.getPacketListener();
+		if (packetListener instanceof IPacketListener) {
+			((IPacketListener) packetListener).disconnect(message);
+			return;
+		}
+		close();
 	}
 
 	@Override
@@ -292,6 +314,12 @@ public class ConnectionImpl extends Connection {
 				return rawpacketevent.getDirectData();
 			}
 		}
+	}
+
+	protected final NetworkDataCache cache = new NetworkDataCache();
+
+	public NetworkDataCache getCache() {
+		return cache;
 	}
 
 	@Override

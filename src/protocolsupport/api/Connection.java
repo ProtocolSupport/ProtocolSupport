@@ -8,8 +8,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.entity.Player;
 
-import com.google.common.base.Objects;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ReadOnlyByteBuf;
 import protocolsupport.api.utils.NetworkState;
@@ -34,6 +32,18 @@ public abstract class Connection {
 	 * @return true if connection is active
 	 */
 	public abstract boolean isConnected();
+
+	/**
+	 * Closes the connection
+	 */
+	public abstract void close();
+
+	/**
+	 * Disconnects client with sending disconnect message <br>
+	 * If sending disconnect message is impossible, just closes the connection
+	 * @param message disconnect message
+	 */
+	public abstract void disconnect(String message);
 
 	/**
 	 * Returns real remote address
@@ -130,59 +140,6 @@ public abstract class Connection {
 	public void removePacketListener(PacketListener listener) {
 		packetlisteners.remove(listener);
 	}
-
-	/**
-	 * Adds send packet listener
-	 * @param listener send packet listener
-	 */
-	@Deprecated
-	public void addPacketSendListener(PacketSendListener listener) {
-		addPacketListener(new DeprecatedPacketListener(listener) {
-			@Override
-			public void onPacketSending(PacketEvent event) {
-				boolean cansend = listener.onPacketSending(event.getPacket());
-				if (!cansend) {
-					event.setCancelled(true);
-				}
-			}
-		});
-	}
-
-	/**
-	 * Removes send packet listener
-	 * @param listener send packet listener
-	 */
-	@Deprecated
-	public void removePacketSendListener(PacketSendListener listener) {
-		removePacketListener(new DeprecatedPacketListener(listener));
-	}
-
-	/**
-	 * Adds receive packet listener
-	 * @param listener receive packet listener
-	 */
-	@Deprecated
-	public void addPacketReceiveListener(PacketReceiveListener listener) {
-		addPacketListener(new DeprecatedPacketListener(listener) {
-			@Override
-			public void onPacketReceiving(PacketEvent event) {
-				boolean cansend = listener.onPacketReceiving(event.getPacket());
-				if (!cansend) {
-					event.setCancelled(true);
-				}
-			}
-		});
-	}
-
-	/**
-	 * Removes receive packet listener
-	 * @param listener receive packet listener
-	 */
-	@Deprecated
-	public void removePacketReceiveListener(PacketReceiveListener listener) {
-		removePacketListener(new DeprecatedPacketListener(listener));
-	}
-
 
 	protected final ConcurrentHashMap<String, Object> metadata = new ConcurrentHashMap<>();
 
@@ -365,48 +322,6 @@ public abstract class Connection {
 
 		}
 
-	}
-
-	private static class DeprecatedPacketListener extends PacketListener {
-		private final Object deprecatedlistener;
-		public DeprecatedPacketListener(Object deprecatedlistener) {
-			this.deprecatedlistener = deprecatedlistener;
-		}
-		@Override
-		public int hashCode() {
-			return deprecatedlistener.hashCode();
-		}
-		@Override
-		public boolean equals(Object obj) {
-			if (obj instanceof DeprecatedPacketListener) {
-				return Objects.equal(deprecatedlistener, ((DeprecatedPacketListener) obj).deprecatedlistener);
-			}
-			return false;
-		}
-	}
-
-	@Deprecated
-	@FunctionalInterface
-	public static interface PacketSendListener {
-		/**
-		 * Override to handle packet sending <br>
-		 * Return true to allow packet sending, false to deny
-		 * @param packet packet
-		 * @return true to allow packet sending, false to deny
-		 */
-		public boolean onPacketSending(Object packet);
-	}
-
-	@Deprecated
-	@FunctionalInterface
-	public static interface PacketReceiveListener {
-		/**
-		 * Override to handle packet receivingb <br>
-		 * Return true to allow packet receiving, false to deny
-		 * @param packet packet
-		 * @return true to allow packet receiving, false to deny
-		 */
-		public boolean onPacketReceiving(Object packet);
 	}
 
 }

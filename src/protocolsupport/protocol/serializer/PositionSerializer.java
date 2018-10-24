@@ -5,6 +5,10 @@ import protocolsupport.protocol.utils.types.Position;
 
 public class PositionSerializer {
 
+	public static void skipPosition(ByteBuf from) {
+		from.skipBytes(Long.BYTES);
+	}
+
 	public static Position readPosition(ByteBuf from) {
 		long l = from.readLong();
 		return new Position((int) (l >> 38), (int) ((l >> 26) & 0xFFFL), (int) ((l << 38) >> 38));
@@ -39,6 +43,16 @@ public class PositionSerializer {
 		to.setX(from.readInt());
 		to.setY(from.readShort());
 		to.setZ(from.readInt());
+	}
+
+	public static void readLegacyPositionITo(ByteBuf from, Position to) {
+		to.setX(from.readInt());
+		to.setY(from.readInt());
+		to.setZ(from.readInt());
+	}
+
+	public static Position readLegacyPositionI(ByteBuf from) {
+		return new Position(from.readInt(), from.readInt(), from.readInt());
 	}
 
 	public static void writePosition(ByteBuf to, Position position) {

@@ -3,13 +3,20 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.watchedentity.DataWatcherDataRemapper;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 
 public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
+
+	protected final EntityRemapper entityRemapper = new EntityRemapper(connection.getVersion());
+
+	public MiddleSpawnNamed(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected NetworkEntity entity;
 	protected double x;
@@ -17,7 +24,6 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 	protected double z;
 	protected int yaw;
 	protected int pitch;
-	protected DataWatcherDataRemapper metadata = new DataWatcherDataRemapper();
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
@@ -29,12 +35,13 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 		z = serverdata.readDouble();
 		yaw = serverdata.readUnsignedByte();
 		pitch = serverdata.readUnsignedByte();
-		metadata.init(serverdata, connection.getVersion(), cache.getAttributesCache().getLocale(), entity);
+		entityRemapper.readEntityWithMetadata(cache.getAttributesCache().getLocale(), entity, serverdata);
 	}
 
 	@Override
 	public boolean postFromServerRead() {
 		cache.getWatchedEntityCache().addWatchedEntity(entity);
+		entityRemapper.remap(true);
 		return true;
 	}
 

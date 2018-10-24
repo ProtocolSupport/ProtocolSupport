@@ -10,17 +10,15 @@ import org.bukkit.Bukkit;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.unix.Errors.NativeIoException;
-import io.netty.handler.codec.MessageToMessageCodec;
 import io.netty.handler.timeout.ReadTimeoutException;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.events.ConnectionCloseEvent;
 import protocolsupport.api.events.ConnectionOpenEvent;
-import protocolsupport.api.events.PlayerDisconnectEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.utils.netty.MessageToMessageCodec;
 import protocolsupport.zplatform.ServerPlatform;
 
-@SuppressWarnings("deprecation")
 public class LogicHandler extends MessageToMessageCodec<Object, Object> {
 
 	protected static final HashSet<Class<? extends Throwable>> ignoreExceptions = new HashSet<>();
@@ -86,10 +84,6 @@ public class LogicHandler extends MessageToMessageCodec<Object, Object> {
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
-		String username = connection.getProfile().getName();
-		if (username != null) {
-			Bukkit.getPluginManager().callEvent(new PlayerDisconnectEvent(connection));
-		}
 		Bukkit.getPluginManager().callEvent(new ConnectionCloseEvent(connection));
 		ProtocolStorage.removeConnection(connection.getRawAddress());
 	}

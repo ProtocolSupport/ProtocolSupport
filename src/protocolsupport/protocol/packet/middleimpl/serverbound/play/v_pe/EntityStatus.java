@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -15,6 +16,10 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityStatus extends ServerBoundMiddlePacket {
+
+	public EntityStatus(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected long entityId;
 	protected byte status;

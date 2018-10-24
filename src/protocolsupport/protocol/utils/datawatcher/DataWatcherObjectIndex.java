@@ -11,8 +11,11 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectDirec
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTagCompound;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectParticle;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
@@ -38,7 +41,7 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 	public static class Entity {
 		public static final DataWatcherObjectIndex<DataWatcherObjectByte> FLAGS = takeNextIndex(DataWatcherObjectByte.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> AIR = takeNextIndex(DataWatcherObjectVarInt.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectString> NAMETAG = takeNextIndex(DataWatcherObjectString.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectOptionalChat> NAMETAG = takeNextIndex(DataWatcherObjectOptionalChat.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> NAMETAG_VISIBLE = takeNextIndex(DataWatcherObjectBoolean.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> SILENT = takeNextIndex(DataWatcherObjectBoolean.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> NO_GRAVITY = takeNextIndex(DataWatcherObjectBoolean.class);
@@ -234,6 +237,35 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> VARIANT = takeNextIndex(DataWatcherObjectVarInt.class);
 	}
 
+	public static class Phantom extends Insentient {
+		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> SIZE = takeNextIndex(DataWatcherObjectVarInt.class);
+	}
+
+	public static class BaseFish extends Insentient {
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> FROM_BUCKET = takeNextIndex(DataWatcherObjectBoolean.class);
+	}
+
+	public static class PufferFish extends BaseFish {
+		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> PUFF_STATE = takeNextIndex(DataWatcherObjectVarInt.class);
+	}
+
+	public static class TropicalFish extends BaseFish {
+		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> VARIANT = takeNextIndex(DataWatcherObjectVarInt.class);
+	}
+
+	public static class Turtle extends Ageable {
+		public static final DataWatcherObjectIndex<DataWatcherObjectPosition> HOME_POS = takeNextIndex(DataWatcherObjectPosition.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> HAS_EGG = takeNextIndex(DataWatcherObjectBoolean.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> LAYING_EGG = takeNextIndex(DataWatcherObjectBoolean.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectPosition> TRAVEL_POS = takeNextIndex(DataWatcherObjectPosition.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> GOING_HOME = takeNextIndex(DataWatcherObjectBoolean.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> TRAVELING = takeNextIndex(DataWatcherObjectBoolean.class);
+	}
+
+	public static class Drowned extends Zombie {
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> HAS_TARGET = takeNextIndex(DataWatcherObjectBoolean.class);
+	}
+
 	public static class Boat extends Entity {
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> TIME_SINCE_LAST_HIT = takeNextIndex(DataWatcherObjectVarInt.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> FORWARD_DIRECTION = takeNextIndex(DataWatcherObjectVarInt.class);
@@ -241,6 +273,7 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> VARIANT = takeNextIndex(DataWatcherObjectVarInt.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> LEFT_PADDLE = takeNextIndex(DataWatcherObjectBoolean.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> RIGHT_PADDLE = takeNextIndex(DataWatcherObjectBoolean.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> SPLASH_TIMER = takeNextIndex(DataWatcherObjectVarInt.class);
 	}
 
 	public static class Tnt extends Entity {
@@ -289,6 +322,10 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> COLOR = takeNextIndex(DataWatcherObjectVarInt.class);
 	}
 
+	public static class Trident extends Arrow {
+		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> LOYALTY = takeNextIndex(DataWatcherObjectVarInt.class);
+	}
+
 	public static class Firework extends Entity {
 		public static final DataWatcherObjectIndex<DataWatcherObjectItemStack> ITEM = takeNextIndex(DataWatcherObjectItemStack.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> USER = takeNextIndex(DataWatcherObjectVarInt.class);
@@ -308,9 +345,7 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectFloat> RADIUS = takeNextIndex(DataWatcherObjectFloat.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> COLOR = takeNextIndex(DataWatcherObjectVarInt.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> SINGLE_POINT = takeNextIndex(DataWatcherObjectBoolean.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> PARTICLE = takeNextIndex(DataWatcherObjectVarInt.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> PARTICLE_DATA1 = takeNextIndex(DataWatcherObjectVarInt.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> PARTICLE_DATA2 = takeNextIndex(DataWatcherObjectVarInt.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectParticle> PARTICLE = takeNextIndex(DataWatcherObjectParticle.class);
 	}
 
 	protected static final HashMap<Class<?>, Integer> lastTakenId = new HashMap<>();

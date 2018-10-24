@@ -1,8 +1,13 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 
 public abstract class MiddleEntityRelMoveLook extends MiddleEntity {
+
+	public MiddleEntityRelMoveLook(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected int relX;
 	protected int relY;

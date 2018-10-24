@@ -4,9 +4,9 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 
-public class DataWatcherObjectItemStack extends ReadableDataWatcherObject<ItemStackWrapper> {
+public class DataWatcherObjectItemStack extends ReadableDataWatcherObject<NetworkItemStack> {
 
 	@Override
 	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {

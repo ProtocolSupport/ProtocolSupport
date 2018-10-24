@@ -74,6 +74,8 @@ public interface PlatformPacketFactory {
 
 	public int getOutLoginSetCompressionPacketId();
 
+	public int getOutLoginCustomPayloadPacketId();
+
 	public int getOutStatusServerInfoPacketId();
 
 	public int getOutStatusPongPacketId();
@@ -236,7 +238,19 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayAdvancementsTabPacketId();
 
-	public int getOutPlayCraftingGridConfirmPacketId();
+	public int getOutPlayCraftRecipeConfirmPacketId();
+
+	public int getOutPlayDeclareCommandsPacketId();
+
+	public int getOutPlayDeclareRecipesPacketId();
+
+	public int getOutPlayDeclareTagsPacket();
+
+	public int getOutPlayQueryNBTResponsePacketId();
+
+	public int getOutPlayStopSoundPacketId();
+
+	public int getOutPlayLookAtPacketId();
 
 
 	public int getInHandshakeStartPacketId();
@@ -248,6 +262,8 @@ public interface PlatformPacketFactory {
 	public int getInLoginStartPacketId();
 
 	public int getInLoginEncryptionBeginPacketId();
+
+	public int getInLoginCustomPayloadPacketId();
 
 	public int getInPlayKeepAlivePacketId();
 
@@ -309,10 +325,30 @@ public interface PlatformPacketFactory {
 
 	public int getInPlayTeleportAcceptPacketId();
 
-	public int getInPlayCraftingBookPacketId();
+	public int getInPlayRecipeBookDataPacketId();
 
-	public int getInPlayPrepareCraftingGridPacketId();
+	public int getInPlayCraftRecipeRequestPacketId();
 
 	public int getInPlayAdvancementTabPacketId();
+
+	public int getInPlayQueryBlockNBTPacketId();
+
+	public int getInPlayQueryEntityNBTPacketId();
+
+	public int getInPlayEditBookPacketId();
+
+	public int getInPlayPickItemPacketId();
+
+	public int getInPlayNameItemPacketId();
+
+	public int getInPlaySelectTradePacketId();
+
+	public int getInPlaySetBeaconEffectPacketId();
+
+	public int getInPlayUpdateCommandBlockPacketId();
+
+	public int getInPlayUpdateCommandMinecartPacketId();
+
+	public int getInPlayUpdateStructureBlockPacketId();
 
 }

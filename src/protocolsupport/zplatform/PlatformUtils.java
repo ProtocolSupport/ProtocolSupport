@@ -8,21 +8,44 @@ import java.util.concurrent.FutureTask;
 import javax.crypto.SecretKey;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.modifiers.HoverAction.EntityInfo;
+import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public interface PlatformUtils {
 
-	public ItemStack createItemStackFromNBTTag(NBTTagCompoundWrapper tag);
+	public ItemStack createItemStackFromNetwork(NetworkItemStack stack);
 
-	public NBTTagCompoundWrapper createNBTTagFromItemStack(ItemStack itemstack);
+	public ItemStack deserializeItemStackFromNBTJson(String json);
+
+	public String serializeItemStackToNBTJson(ItemStack itemstack);
+
+	public EntityInfo parseEntityInfo(String json);
+
+	public String fixHoverShowItem(ProtocolVersion version, String locale, String json);
+
+	public int getMobTypeNetworkId(EntityType type);
+
+	public int getItemNetworkId(Material material);
+
+	public int getBlockDataNetworkId(BlockData blockdata);
+
+	public BlockData getBlockDataByNetworkId(int id);
+
+	public List<BlockData> getBlockDataList(Material material);
 
 	public List<Player> getNearbyPlayers(Location location, double rX, double rY, double rZ);
 
@@ -61,5 +84,7 @@ public interface PlatformUtils {
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender);
 
 	public EventLoopGroup getServerEventLoop();
+
+	public AbstractHandshakeListener createHandshakeListener(NetworkManagerWrapper networkmanager);
 
 }

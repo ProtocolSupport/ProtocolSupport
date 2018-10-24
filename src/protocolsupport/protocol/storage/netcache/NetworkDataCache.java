@@ -52,6 +52,11 @@ public class NetworkDataCache {
 	protected final PEPositionQueue positionQueue = new PEPositionQueue();
 	public PEPositionQueue getPositionQueue() {
 		return positionQueue;
+  }
+
+	protected final CustomPayloadChannelsCache cpccache = new CustomPayloadChannelsCache();
+	public CustomPayloadChannelsCache getChannelsCache() {
+		return cpccache;
 	}
 
 	@Override

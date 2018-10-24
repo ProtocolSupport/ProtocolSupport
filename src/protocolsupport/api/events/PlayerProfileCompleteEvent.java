@@ -11,12 +11,11 @@ import org.bukkit.event.HandlerList;
 
 import protocolsupport.api.Connection;
 import protocolsupport.api.utils.ProfileProperty;
-import protocolsupport.utils.Utils;
 
 /**
  * This event is fired after player profile complete (either after doing online-mode checks, or after generating offline-mode profile)
  */
-public class PlayerProfileCompleteEvent extends ConnectionEvent {
+public class PlayerProfileCompleteEvent extends PlayerAbstractLoginEvent {
 
 	public PlayerProfileCompleteEvent(Connection connection) {
 		super(connection);
@@ -105,7 +104,7 @@ public class PlayerProfileCompleteEvent extends ConnectionEvent {
 	 * @param property property
 	 */
 	public void addProperty(ProfileProperty property) {
-		Utils.getFromMapOrCreateDefault(properties, property.getName(), new HashSet<>()).add(property);
+		properties.computeIfAbsent(property.getName(), k -> new HashSet<>()).add(property);
 	}
 
 

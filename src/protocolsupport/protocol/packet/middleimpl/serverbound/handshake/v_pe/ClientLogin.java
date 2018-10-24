@@ -21,11 +21,11 @@ import com.nimbusds.jose.crypto.factories.DefaultJWSVerifierFactory;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.Any;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -39,6 +39,10 @@ import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class ClientLogin extends ServerBoundMiddlePacket {
+
+	public ClientLogin(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	public static final String XUID_METADATA_KEY = "___PS_PE_XUID";
 
@@ -65,7 +69,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		clientdata.readInt();
-		ByteBuf logindata = Unpooled.wrappedBuffer(ArraySerializer.readByteArray(clientdata, connection.getVersion()));
+		ByteBuf logindata = ArraySerializer.readVarIntByteArraySlice(clientdata);
 		try {
 			Any<Key, JsonObject> chaindata = extractChainData(Utils.GSON.fromJson(
 				new InputStreamReader(new ByteBufInputStream(logindata, logindata.readIntLE())),

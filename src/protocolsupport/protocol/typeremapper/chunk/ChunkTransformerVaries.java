@@ -1,49 +1,53 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.utils.netty.Allocator;
 
-public class ChunkTransformerVaries extends ChunkTransformer {
+public class ChunkTransformerVaries extends ChunkTransformerBB {
 
-	protected static final int bitsPerBlock__1_9__1_12 = 13;
+	protected final ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable;
+	public ChunkTransformerVaries(ArrayBasedIdRemappingTable blockTypeRemappingTable, ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable) {
+		super(blockTypeRemappingTable);
+		this.blockFlatteningIdRemappingTable = blockFlatteningIdRemappingTable;
+	}
+
+	protected static final int globalPaletteBitsPerBlock = 14;
 
 	@Override
-	public byte[] toLegacyData(ProtocolVersion version) {
-		ArrayBasedIdRemappingTable table = IdRemapper.BLOCK.getTable(version);
-		ByteBuf chunkdata = Allocator.allocateBuffer();
-		try {
-			for (int i = 0; i < sections.length; i++) {
-				ChunkSection section = sections[i];
-				if (section != null) {
-					chunkdata.writeByte(bitsPerBlock__1_9__1_12);
-					VarNumberSerializer.writeVarInt(chunkdata, 0);
-					BlockStorageReader storage = section.blockdata;
-					BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock__1_9__1_12, blocksInSection);
-					for (int block = 0; block < blocksInSection; block++) {
-						blockstorage.setBlockState(block, table.getRemap(storage.getBlockState(block)));
+	public void writeLegacyData(ByteBuf buffer) {
+		for (int i = 0; i < sections.length; i++) {
+			ChunkSection section = sections[i];
+			if (section != null) {
+				BlockStorageReader storage = section.blockdata;
+				int bitsPerBlock = storage.getBitsPerBlock();
+				if (bitsPerBlock > 8) {
+					buffer.writeByte(globalPaletteBitsPerBlock);
+					BlockStorageWriter blockstorage = new BlockStorageWriter(globalPaletteBitsPerBlock, blocksInSection);
+					for (int blockIndex = 0; blockIndex < blocksInSection; blockIndex++) {
+						blockstorage.setBlockState(blockIndex, blockFlatteningIdRemappingTable.getRemap(blockTypeRemappingTable.getRemap(storage.getBlockState(blockIndex))));
 					}
-					long[] ldata = blockstorage.getBlockData();
-					VarNumberSerializer.writeVarInt(chunkdata, ldata.length);
-					for (long l : ldata) {
-						chunkdata.writeLong(l);
+					ArraySerializer.writeVarIntLongArray(buffer, blockstorage.getBlockData());
+				} else {
+					buffer.writeByte(bitsPerBlock);
+					BlockPalette palette = new BlockPalette();
+					BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock, blocksInSection);
+					for (int blockIndex = 0; blockIndex < blocksInSection; blockIndex++) {
+						blockstorage.setBlockState(blockIndex, palette.getRuntimeId(blockFlatteningIdRemappingTable.getRemap(blockTypeRemappingTable.getRemap(storage.getBlockState(blockIndex)))));
 					}
-					chunkdata.writeBytes(section.blocklight);
-					if (hasSkyLight) {
-						chunkdata.writeBytes(section.skylight);
-					}
+					ArraySerializer.writeVarIntVarIntArray(buffer, palette.getBlockStates());
+					ArraySerializer.writeVarIntLongArray(buffer, blockstorage.getBlockData());
+				}
+				buffer.writeBytes(section.blocklight);
+				if (hasSkyLight) {
+					buffer.writeBytes(section.skylight);
 				}
 			}
-			if (hasBiomeData) {
-				chunkdata.writeBytes(biomeData);
+		}
+		if (hasBiomeData) {
+			for (int i = 0; i < biomeData.length; i++) {
+				buffer.writeInt(biomeData[i]);
 			}
-			return MiscSerializer.readAllBytes(chunkdata);
-		} finally {
-			chunkdata.release();
 		}
 	}
 

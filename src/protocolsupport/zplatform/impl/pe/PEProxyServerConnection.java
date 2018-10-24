@@ -147,7 +147,8 @@ public class PEProxyServerConnection extends SimpleChannelInboundHandler<ByteBuf
 							output.writeBytes(input);
 						} else {
 							VarNumberSerializer.writeVarInt(output, readable);
-							output.writeBytes(compressor.compress(MiscSerializer.readAllBytes(input)));
+							byte[] bytes = MiscSerializer.readAllBytes(input);
+							output.writeBytes(compressor.compress(bytes, 0, bytes.length));
 						}
 					}
 					@Override
@@ -162,7 +163,8 @@ public class PEProxyServerConnection extends SimpleChannelInboundHandler<ByteBuf
 							if (uncompressedlength > maxPacketLength) {
 								throw new DecoderException(MessageFormat.format("Badly compressed packet - size of {0} is larger than protocol maximum of {1}", uncompressedlength, maxPacketLength));
 							}
-							list.add(Unpooled.wrappedBuffer(decompressor.decompress(MiscSerializer.readAllBytes(input), uncompressedlength)));
+							byte[] inputBytes = MiscSerializer.readAllBytes(input);
+							list.add(Unpooled.wrappedBuffer(decompressor.decompress(inputBytes, 0, inputBytes.length, uncompressedlength)));
 						}
 					}
 				})

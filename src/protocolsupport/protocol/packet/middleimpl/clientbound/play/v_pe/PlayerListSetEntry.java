@@ -23,6 +23,7 @@ import protocolsupport.api.unsafe.peskins.PESkinsProvider;
 import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
 import protocolsupport.api.utils.Any;
 import protocolsupport.api.utils.ProfileProperty;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
@@ -41,6 +42,10 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 
+	public PlayerListSetEntry(ConnectionImpl connection) {
+		super(connection);
+	}
+
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		AttributesCache attrscache = cache.getAttributesCache();
@@ -57,8 +62,6 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 					MiscSerializer.writeUUID(serializer, version, uuid.equals(connection.getPlayer().getUniqueId()) ? attrscache.getPEClientUUID() : uuid);
 					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
 					StringSerializer.writeString(serializer, version, currentEntry.getCurrentName(attrscache.getLocale()));
-					StringSerializer.writeString(serializer, version, ""); //Third party name
-					VarNumberSerializer.writeVarInt(serializer, 0); //PlatformId
 					Any<Boolean, String> skininfo = getSkinInfo(currentEntry.getProperties(true));
 					byte[] skindata = skininfo != null ? skinprovider.getSkinData(skininfo.getObj2()) : null;
 					if (skindata != null) {
@@ -139,8 +142,8 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		if (isSkinUpdate) {
 			StringSerializer.writeString(serializer, version, "Steve");
 		}
-		ArraySerializer.writeByteArray(serializer, version, skindata);
-		ArraySerializer.writeByteArray(serializer, version, new byte[0]); //cape data
+		ArraySerializer.writeVarIntByteArray(serializer, skindata);
+		ArraySerializer.writeVarIntByteArray(serializer, new byte[0]); //cape data
 		StringSerializer.writeString(serializer, version, model.getGeometryId());
 		StringSerializer.writeString(serializer, version, model.getGeometryData());
 	}

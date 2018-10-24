@@ -26,4 +26,21 @@ public class Any<T1, T2> {
 		return obj2;
 	}
 
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 47 * hash + (hasObj1() ? obj1.hashCode() : 0);
+		hash = 47 * hash + (hasObj2() ? obj2.hashCode() : 0);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Any<?, ?> && obj.hashCode() == hashCode()) {
+			Any<?, ?> anyObj = (Any<?, ?>) obj;
+			return anyObj.getObj1().equals(obj1) && anyObj.getObj2().equals(getObj2());
+		}
+		return false;
+	}
+
 }

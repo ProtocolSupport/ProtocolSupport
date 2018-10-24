@@ -1,13 +1,11 @@
 package protocolsupport.api.events;
 
-import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.event.HandlerList;
 
 import protocolsupport.api.Connection;
-import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.IconUtils;
 import protocolsupport.zplatform.ServerPlatform;
@@ -17,11 +15,11 @@ import protocolsupport.zplatform.ServerPlatform;
  */
 public class ServerPingResponseEvent extends ConnectionEvent {
 
-	private ProtocolInfo info;
-	private String motd;
-	private String icon;
-	private int maxPlayers;
-	private List<String> players;
+	protected ProtocolInfo info;
+	protected String motd;
+	protected String icon;
+	protected int maxPlayers;
+	protected List<String> players;
 
 	public ServerPingResponseEvent(Connection connection, ProtocolInfo info, String icon, String motd, int maxPlayers, List<String> players) {
 		super(connection);
@@ -30,11 +28,6 @@ public class ServerPingResponseEvent extends ConnectionEvent {
 		setMotd(motd);
 		setMaxPlayers(maxPlayers);
 		setPlayers(players);
-	}
-
-	@Deprecated
-	public ServerPingResponseEvent(InetSocketAddress address, ProtocolInfo info, String icon, String motd, int maxPlayers, List<String> players) {
-		this(ProtocolSupportAPI.getConnection(address), info, icon, motd, maxPlayers, players);
 	}
 
 	/**

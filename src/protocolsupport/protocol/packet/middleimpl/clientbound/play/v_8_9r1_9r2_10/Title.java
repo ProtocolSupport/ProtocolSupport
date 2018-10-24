@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTitle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -14,6 +15,10 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Title extends MiddleTitle {
 
+	public Title(ConnectionImpl connection) {
+		super(connection);
+	}
+
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
@@ -23,7 +28,7 @@ public class Title extends MiddleTitle {
 		switch (action) {
 			case SET_TITLE:
 			case SET_SUBTITLE: {
-				StringSerializer.writeString(serializer, version, ChatAPI.toJSON(LegacyChatJson.convert(message, version, cache.getAttributesCache().getLocale())));
+				StringSerializer.writeString(serializer, version, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), message)));
 				break;
 			}
 			case SET_TIMES: {

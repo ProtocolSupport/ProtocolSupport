@@ -13,19 +13,23 @@ import com.google.gson.JsonParser;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.itemstack.PreFlatteningItemIdData;
+import protocolsupport.protocol.typeremapper.legacy.LegacyEnchantmentId;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.Utils;
 
 public class PEDataValues {
 
+	public static String getResourcePath(String name) {
+		return "pe/" + name;
+	}
+
 	public static BufferedReader getResource(String name) {
-		return Utils.getResource("pe/" + name);
+		return Utils.getResourceBuffered(getResourcePath(name));
 	}
 
 	private static JsonObject getFileObject(String name) {
@@ -62,7 +66,6 @@ public class PEDataValues {
 		registerLivingType(NetworkEntityType.ZOMBIE_PIGMAN, 36);
 		registerLivingType(NetworkEntityType.GHAST, 41);
 		registerLivingType(NetworkEntityType.SLIME, 37);
-		registerLivingType(NetworkEntityType.GIANT, 32); //Massive zombies. No remap though because we want the metadata.
 		registerLivingType(NetworkEntityType.ZOMBIE, 32);
 		registerLivingType(NetworkEntityType.SPIDER, 35);
 		registerLivingType(NetworkEntityType.SKELETON, 34);
@@ -88,6 +91,14 @@ public class PEDataValues {
 		registerLivingType(NetworkEntityType.VINDICATOR, 57);
 		registerLivingType(NetworkEntityType.EVOKER, 104);
 		registerLivingType(NetworkEntityType.VEX, 105);
+		registerLivingType(NetworkEntityType.DOLPHIN, 31);
+		registerLivingType(NetworkEntityType.PUFFERFISH, 108);
+		registerLivingType(NetworkEntityType.SALMON, 109);
+		registerLivingType(NetworkEntityType.TROPICAL_FISH, 111);
+		registerLivingType(NetworkEntityType.COD, 112);
+		registerLivingType(NetworkEntityType.DROWNED, 110);
+		registerLivingType(NetworkEntityType.TURTLE, 74);
+		registerLivingType(NetworkEntityType.PHANTOM, 58);
 
 		entityType.put(NetworkEntityType.ARMOR_STAND_OBJECT, 61);
 		entityType.put(NetworkEntityType.TNT, 65);
@@ -98,6 +109,7 @@ public class PEDataValues {
 		entityType.put(NetworkEntityType.ENDEREYE, 70);
 		entityType.put(NetworkEntityType.ENDER_CRYSTAL, 71);
 		entityType.put(NetworkEntityType.FIREWORK, 72);
+		entityType.put(NetworkEntityType.THROWN_TRIDENT, 73);
 		entityType.put(NetworkEntityType.SHULKER_BULLET, 76);
 		entityType.put(NetworkEntityType.FISHING_FLOAT, 77);
 		entityType.put(NetworkEntityType.DRAGON_FIREBALL, 79);
@@ -118,8 +130,6 @@ public class PEDataValues {
 		entityType.put(NetworkEntityType.MINECART_TNT, 97);
 		entityType.put(NetworkEntityType.MINECART_CHEST, 98);
 		entityType.put(NetworkEntityType.MINECART_COMMAND, 100);
-		entityType.put(NetworkEntityType.MINECART_FURNACE, 84); //Hack, we remap a furnace using entitymetadata.
-		entityType.put(NetworkEntityType.MINECART_MOB_SPAWNER, 84); //Hack, we remap a mobspawner using entitymetadata.
 		//TODO: Lingering Potion? -> 101
 		entityType.put(NetworkEntityType.LAMA_SPIT, 102);
 		entityType.put(NetworkEntityType.EVOCATOR_FANGS, 103);
@@ -133,19 +143,11 @@ public class PEDataValues {
 		return livingTypeFromNetwork.get(networkId);
 	}
 
-	public static final ArrayBasedIdRemappingTable BLOCK_ID = new ArrayBasedIdRemappingTable(MinecraftData.BLOCK_ID_MAX * MinecraftData.BLOCK_DATA_MAX);
-	static {
-		getFileObject("blockremaps.json").get("Remaps").getAsJsonArray().forEach(entry -> {
-			BLOCK_ID.setRemap(entry.getAsJsonObject().get("from").getAsInt(), entry.getAsJsonObject().get("to").getAsInt());
-		});
-	}
-
 	private static final Int2IntOpenHashMap pcEnchantToPe = new Int2IntOpenHashMap();
 	private static final Int2IntOpenHashMap peEnchantToPc = new Int2IntOpenHashMap();
-	@SuppressWarnings("deprecation")
 	private static void registerEnchantRemap(Enchantment enchantment, int peId) {
-		pcEnchantToPe.put(enchantment.getId(), peId);
-		peEnchantToPc.put(peId, enchantment.getId());
+		pcEnchantToPe.put(LegacyEnchantmentId.getId(enchantment), peId);
+		peEnchantToPc.put(peId, LegacyEnchantmentId.getId(enchantment));
 	}
 	static {
 		registerEnchantRemap(Enchantment.OXYGEN, 6);
@@ -179,19 +181,19 @@ public class PEDataValues {
 		return peEnchantToPc.get(peId);
 	}
 
-	public static final RemappingTable.ComplexIdRemappingTable ITEM_ID = new RemappingTable.ComplexIdRemappingTable();
-	public static final RemappingTable.ComplexIdRemappingTable PE_ITEM_ID = new RemappingTable.ComplexIdRemappingTable();
+	public static final Int2IntOpenHashMap pcItemToPe = new Int2IntOpenHashMap();
+	public static final Int2IntOpenHashMap peItemToPc = new Int2IntOpenHashMap();
 	private static void registerItemRemap(int from, int to) {
-		ITEM_ID.setSingleRemap(from, to, -1);
-		PE_ITEM_ID.setSingleRemap(to, from, -1);
+		pcItemToPe.put(PreFlatteningItemIdData.getModernIdByLegacyIdData(from, 0), PreFlatteningItemIdData.getModernIdByLegacyIdData(to, 0));
+		peItemToPc.put(PreFlatteningItemIdData.getModernIdByLegacyIdData(to, 0), PreFlatteningItemIdData.getModernIdByLegacyIdData(from, 0));
 	}
 	private static void registerItemRemap(int from, int to, int dataTo) {
-		ITEM_ID.setSingleRemap(from, to, dataTo);
-		PE_ITEM_ID.setSingleRemap(to, from, dataTo);
+		pcItemToPe.put(PreFlatteningItemIdData.getModernIdByLegacyIdData(from, 0), PreFlatteningItemIdData.getModernIdByLegacyIdData(to, dataTo));
+		peItemToPc.put(PreFlatteningItemIdData.getModernIdByLegacyIdData(to, dataTo), PreFlatteningItemIdData.getModernIdByLegacyIdData(from, 0));
 	}
 	private static void registerItemRemap(int from, int dataFrom, int to, int dataTo) {
-		ITEM_ID.setComplexRemap(from, dataFrom, to, dataTo);
-		PE_ITEM_ID.setComplexRemap(to, dataTo, from, dataFrom);
+		pcItemToPe.put(PreFlatteningItemIdData.getModernIdByLegacyIdData(from, dataFrom), PreFlatteningItemIdData.getModernIdByLegacyIdData(to, dataTo));
+		peItemToPc.put(PreFlatteningItemIdData.getModernIdByLegacyIdData(to, dataTo), PreFlatteningItemIdData.getModernIdByLegacyIdData(from, dataFrom));
 	}
 
 	static {
@@ -316,6 +318,14 @@ public class PEDataValues {
 		registerItemRemap(442, 268); // SHIELD -> WOODEN SWORD
 		registerItemRemap(439, 262); // SPECTRAL ARROW -> ARROW
 		registerItemRemap(343, 408); // POWERED MINECART -> MINECART WITH A HOPPER
+	}
+
+	public static int pcToPeItem(int combinedId) {
+		return pcItemToPe.getOrDefault(combinedId, combinedId);
+	}
+
+	public static int peToPcItem(int combinedId) {
+		return peItemToPc.getOrDefault(combinedId, combinedId);
 	}
 
 	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> PARTICLE = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {

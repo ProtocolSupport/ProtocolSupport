@@ -19,6 +19,7 @@ import protocolsupport.ProtocolSupport;
 import protocolsupport.protocol.pipeline.version.v_pe.PEPacketDecoder;
 import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.pingresponse.PingResponse;
@@ -41,7 +42,7 @@ public class PEProxyServerInfoHandler implements PingHandler {
 		r -> new Thread(r, "PEStatusProcessingThread")
 	);
 
-	public static final int PACKET_ID = 3;
+	public static final int PACKET_ID = PEPacketIDs.SERVER_TO_CLIENT_HANDSHAKE;
 
 	protected static AttributeKey<Boolean> sentInfoKey = AttributeKey.valueOf("___PSPEServerInfoSentInfo");
 
@@ -60,7 +61,7 @@ public class PEProxyServerInfoHandler implements PingHandler {
 			return String.join(";",
 				"MCPE",
 				ping.getMotd().toLegacyText(I18NData.DEFAULT_LOCALE).replace(";", ":"),
-				String.valueOf(ping.getProtocolData().getVersion()), "1.5.0",
+				String.valueOf(ping.getProtocolData().getVersion()), ProtocolVersionsHelper.LATEST_PE.getName().replaceFirst("PE-", ""),
 				String.valueOf(ping.getPlayers().getOnline()),
 				String.valueOf(ping.getPlayers().getMax()),
 				"1337", //TODO: find out how it is used, apprently that is some sort of id

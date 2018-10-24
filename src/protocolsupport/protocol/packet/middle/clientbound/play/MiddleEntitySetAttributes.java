@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -11,6 +12,10 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
 
 public abstract class MiddleEntitySetAttributes extends MiddleEntity {
+
+	public MiddleEntitySetAttributes(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	protected final LinkedHashMap<String, Attribute> attributes = new LinkedHashMap<>();
 

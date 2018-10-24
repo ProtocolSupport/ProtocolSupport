@@ -5,7 +5,7 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
-import protocolsupport.zplatform.itemstack.ItemStackWrapper;
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public class MerchantDataSerializer {
 
@@ -13,9 +13,9 @@ public class MerchantDataSerializer {
 		MerchantData merchdata = new MerchantData(from.readInt());
 		int count = from.readUnsignedByte();
 		for (int i = 0; i < count; i++) {
-			ItemStackWrapper itemstack1 = ItemStackSerializer.readItemStack(from, version, locale, false);
-			ItemStackWrapper result = ItemStackSerializer.readItemStack(from, version, locale, false);
-			ItemStackWrapper itemstack2 = ItemStackWrapper.NULL;
+			NetworkItemStack itemstack1 = ItemStackSerializer.readItemStack(from, version, locale, false);
+			NetworkItemStack result = ItemStackSerializer.readItemStack(from, version, locale, false);
+			NetworkItemStack itemstack2 = NetworkItemStack.NULL;
 			if (from.readBoolean()) {
 				itemstack2 = ItemStackSerializer.readItemStack(from, version, locale, false);
 			}

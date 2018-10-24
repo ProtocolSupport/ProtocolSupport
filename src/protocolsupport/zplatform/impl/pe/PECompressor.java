@@ -1,16 +1,16 @@
 package protocolsupport.zplatform.impl.pe;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.netty.Allocator;
 import protocolsupport.utils.netty.Compressor;
 
 public class PECompressor extends MessageToByteEncoder<ByteBuf> {
 
-	private final ByteBuf packbuffer = Allocator.allocateBuffer();
+	private final ByteBuf packbuffer = Unpooled.buffer();
 	private final Compressor compressor = Compressor.create();
 
 	@Override
@@ -25,7 +25,8 @@ public class PECompressor extends MessageToByteEncoder<ByteBuf> {
 		packbuffer.clear();
 		VarNumberSerializer.writeVarInt(packbuffer, buf.readableBytes());
 		packbuffer.writeBytes(buf);
-		out.writeBytes(compressor.compress(MiscSerializer.readAllBytes(packbuffer)));
+		byte[] bytes = MiscSerializer.readAllBytes(packbuffer);
+		out.writeBytes(compressor.compress(bytes, 0, bytes.length));
 	}
 
 }

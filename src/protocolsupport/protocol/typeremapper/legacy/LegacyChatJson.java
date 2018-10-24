@@ -16,19 +16,16 @@ import protocolsupport.api.chat.components.TranslateComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.minecraftdata.ItemData;
-import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
 
 public class LegacyChatJson {
 
-	public static BaseComponent convert(BaseComponent message, ProtocolVersion version, String locale) {
+	public static BaseComponent convert(ProtocolVersion version, String locale, BaseComponent message) {
 		List<BaseComponent> siblings = new ArrayList<>(message.getSiblings());
 		message.clearSiblings();
 		HoverAction hoveraction = message.getHoverAction();
 		if ((hoveraction != null) && (hoveraction.getType() == HoverAction.Type.SHOW_TEXT)) {
-			message.setHoverAction(new HoverAction(convert(hoveraction.getText(), version, locale)));
+			message.setHoverAction(new HoverAction(convert(version, locale, hoveraction.getText())));
 		}
 		message.addSiblings(convertComponents(siblings, version, locale));
 		if (message instanceof TranslateComponent) {
@@ -45,7 +42,7 @@ public class LegacyChatJson {
 
 	private static void register(ComponentConverter r, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
-			Utils.getFromMapOrCreateDefault(registry, version, new ArrayList<>()).add(r);
+			registry.computeIfAbsent(version, k -> new ArrayList<>()).add(r);
 		}
 	}
 
@@ -104,15 +101,11 @@ public class LegacyChatJson {
 		register((version, locale, component) -> {
 			HoverAction hover = component.getHoverAction();
 			if ((hover != null) && (hover.getType() == HoverAction.Type.SHOW_ITEM)) {
-				NBTTagCompoundWrapper compound = ServerPlatform.get().getWrapperFactory().createNBTCompoundFromJson(hover.getValue());
-				Integer id = ItemData.getIdByName(compound.getString("id"));
-				if (id != null) {
-					compound.setInt("id", id);
-				}
-				component.setHoverAction(new HoverAction(HoverAction.Type.SHOW_ITEM, compound.toString()));
+				//TODO: use nbt compound after implementing our own mojangson serializer
+				component.setHoverAction(new HoverAction(HoverAction.Type.SHOW_ITEM, ServerPlatform.get().getMiscUtils().fixHoverShowItem(version, locale, hover.getValue())));
 			}
 			return component;
-		}, ProtocolVersionsHelper.BEFORE_1_8);
+		}, ProtocolVersion.getAllSupported());
 	}
 
 	private static BaseComponent cloneComponentAuxData(BaseComponent from, BaseComponent to) {
@@ -127,7 +120,7 @@ public class LegacyChatJson {
 	private static List<BaseComponent> convertComponents(List<BaseComponent> oldlist, ProtocolVersion version, String locale) {
 		List<BaseComponent> newlist = new ArrayList<>();
 		for (BaseComponent old : oldlist) {
-			newlist.add(convert(old, version, locale));
+			newlist.add(convert(version, locale, old));
 		}
 		return newlist;
 	}

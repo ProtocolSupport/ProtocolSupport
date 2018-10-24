@@ -7,16 +7,18 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.events.ConnectionHandshakeEvent;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ThrottleTracker;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.spoofedata.SpoofedData;
 import protocolsupport.protocol.utils.spoofedata.SpoofedDataParser;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public abstract class AbstractHandshakeListener {
+public abstract class AbstractHandshakeListener implements IPacketListener {
 
 	protected final NetworkManagerWrapper networkManager;
 	protected AbstractHandshakeListener(NetworkManagerWrapper networkmanager) {
@@ -42,7 +44,8 @@ public abstract class AbstractHandshakeListener {
 				ConnectionImpl connection = ConnectionImpl.getFromChannel(networkManager.getChannel());
 				//version check
 				if (!connection.getVersion().isSupported()) {
-					disconnect(MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replace("'", "''"), ServerPlatform.get().getMiscUtils().getVersionName()));
+					disconnect(MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replace("'", "''"), 
+						connection.getVersion().getProtocolType() == ProtocolType.PE ? ProtocolVersionsHelper.LATEST_PE.getName() : ServerPlatform.get().getMiscUtils().getVersionName()));
 					break;
 				}
 				//ps handshake event
@@ -87,9 +90,13 @@ public abstract class AbstractHandshakeListener {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	protected void disconnect(String message) {
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), future -> networkManager.close(message));
+	@Override
+	public void disconnect(String message) {
+		try {
+			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), future -> networkManager.close(message));
+		} catch (Throwable exception) {
+			networkManager.close("Error whilst disconnecting player, force closing connection");
+		}
 	}
 
 	protected abstract AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager, String hostname);

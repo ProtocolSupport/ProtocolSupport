@@ -4,6 +4,8 @@ public class PEPacketIDs {
 
 	public static final int LOGIN = 1;
 	public static final int PLAY_STATUS = 2;
+	public static final int SERVER_TO_CLIENT_HANDSHAKE = 3;
+	public static final int CLIENT_TO_SERVER_HANDSHAKE = 4;
 	public static final int DISCONNECT = 5;
 	public static final int RESOURCE_PACK = 6;
 	public static final int RESOURCE_STACK = 7;
@@ -52,7 +54,7 @@ public class PEPacketIDs {
 	public static final int INVENTORY_SLOT = 50;
 	public static final int CONTAINER_DATA = 51;
 	public static final int CRAFTING_DATA = 52;
-	//public static final int CRAFTING_EVENT = 53;
+	//public static final int CRAFTING_EVENT = 53; //Simulated
 	//public static final int GUI_DATA_PICK_ITEM = 54;
 	public static final int ADVENTURE_SETTINGS = 55;
 	public static final int TILE_DATA_UPDATE = 56;
@@ -70,13 +72,13 @@ public class PEPacketIDs {
 	public static final int MAP_INFO_REQUEST = 68;
 	public static final int CLIENT_SETTINGS = 69;
 	public static final int CHUNK_RADIUS = 70;
-	//public static final int ITEM_FRAME_DROP = 71; //Simulated
-	//public static final int GAME_RULE_CHANGE = 72;
-	//public static final int BOSS_EVENT = 74;
-	//public static final int SHOW_CREDITS = 75;
-	//public static final int TAB_COMPLETE = 76;
+	public static final int ITEM_FRAME_DROP = 71;
+	public static final int GAME_RULE_CHANGE = 72;
+	public static final int BOSS_EVENT = 74;
+	public static final int SHOW_CREDITS = 75;
+	public static final int TAB_COMPLETE = 76;
 	public static final int COMMAND_REQUEST = 77;
-	//public static final int COMMAND_BLOCK_UPDATE = 78;
+	public static final int COMMAND_BLOCK_UPDATE = 78;
 	public static final int TRADE_UPDATE = 80;
 	public static final int EQUIPMENT = 81;
 	public static final int RESOURCE_INFO = 82;
@@ -84,10 +86,10 @@ public class PEPacketIDs {
 	public static final int RESOURCE_REQUEST = 84;
 	public static final int TRANSFER = 85;
 	public static final int PLAY_SOUND = 86;
-	//public static final int STOP_SOUND = 87;
+	public static final int STOP_SOUND = 87;
 	public static final int SET_TITLE = 88;
 	public static final int PLAYER_SKIN = 93;
-	//public static final int SUB_LOGIN = 94;
+	//public static final int SUB_LOGIN = 94; //TODO: Splitscreen support? :O
 	//public static final int LAST_HURT = 96;
 	public static final int EDIT_BOOK = 97;
 	//public static final int NPC_REQUEST = 98;
@@ -98,5 +100,17 @@ public class PEPacketIDs {
 	//public static final int SETTINGS_RESPONSE = 103;
 	//public static final int SHOW_PROFILE = 104;
 	//public static final int SET_DEFAULT_GAMEMODE = 105;
+	public static final int REMOVE_OBJECTIVE = 106;
+	public static final int DISPLAY_OBJECTIVE = 107;
+	public static final int SET_SCORE = 108;
+	//public static final int LAB_TABLE = 109;
+	public static final int UPDATE_BLOCK_SYNCED = 110;
+	public static final int MOVE_ENTITY_DELTA = 111;
+	public static final int SET_SCOREBOARD_IDENTITY = 112;
+	public static final int SET_LOCAL_PLAYER_INITIALISED = 113;
+	public static final int UPDATE_SOFT_ENUM = 114;
+	public static final int STACK_LATANCY = 115;
+	//public static final int UNKOWN = 116;
+	public static final int CUSTOM_EVENT = 117;
 
 }

@@ -1,13 +1,12 @@
 package protocolsupport.protocol.pipeline.version.util.encoder;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.Connection;
-import protocolsupport.protocol.storage.netcache.NetworkDataCache;
+import protocolsupport.protocol.ConnectionImpl;
 
 public abstract class AbstractLegacyPacketEncoder extends AbstractPacketEncoder {
 
-	public AbstractLegacyPacketEncoder(Connection connection, NetworkDataCache storage) {
-		super(connection, storage);
+	public AbstractLegacyPacketEncoder(ConnectionImpl connection) {
+		super(connection);
 	}
 
 	@Override

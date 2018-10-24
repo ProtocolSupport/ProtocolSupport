@@ -8,10 +8,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.utils.authlib.GameProfile;
-import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.itemstack.NBTTagCompoundWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagListWrapper;
-import protocolsupport.zplatform.itemstack.NBTTagType;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTList;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class GameProfileSerializer {
 
@@ -21,60 +21,55 @@ public class GameProfileSerializer {
 	private static final String PROPERTY_VALUE_KEY = "Value";
 	private static final String PROPERTY_SIGNATURE_KEY = "Signature";
 
-	public static NBTTagCompoundWrapper serialize(GameProfile gameProfile) {
-		NBTTagCompoundWrapper tag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+	public static NBTCompound serialize(GameProfile gameProfile) {
+		NBTCompound tag = new NBTCompound();
 		if (!StringUtils.isEmpty(gameProfile.getName())) {
-			tag.setString(NAME_KEY, gameProfile.getName());
+			tag.setTag(NAME_KEY, new NBTString(gameProfile.getName()));
 		}
 		if (gameProfile.getUUID() != null) {
-			tag.setString(UUID_KEY, gameProfile.getUUID().toString());
+			tag.setTag(UUID_KEY, new NBTString(gameProfile.getUUID().toString()));
 		}
 		if (!gameProfile.getProperties().isEmpty()) {
-			NBTTagCompoundWrapper propertiesTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
+			NBTCompound propertiesTag = new NBTCompound();
 			for (Entry<String, Set<ProfileProperty>> entry : gameProfile.getProperties().entrySet()) {
-				NBTTagListWrapper propertiesListTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTList();
+				NBTList<NBTCompound> propertiesListTag = new NBTList<>(NBTType.COMPOUND);
 				for (ProfileProperty property : entry.getValue()) {
-					NBTTagCompoundWrapper propertyTag = ServerPlatform.get().getWrapperFactory().createEmptyNBTCompound();
-					propertyTag.setString(PROPERTY_VALUE_KEY, property.getValue());
+					NBTCompound propertyTag = new NBTCompound();
+					propertyTag.setTag(PROPERTY_VALUE_KEY, new NBTString(property.getValue()));
 					if (property.hasSignature()) {
-						propertyTag.setString(PROPERTY_SIGNATURE_KEY, property.getSignature());
+						propertyTag.setTag(PROPERTY_SIGNATURE_KEY, new NBTString(property.getSignature()));
 					}
-					propertiesListTag.addCompound(propertyTag);
+					propertiesListTag.addTag(propertyTag);
 				}
-				propertiesTag.setList(entry.getKey(), propertiesListTag);
+				propertiesTag.setTag(entry.getKey(), propertiesListTag);
 			}
-			tag.setCompound(PROPERTIES_KEY, propertiesTag);
+			tag.setTag(PROPERTIES_KEY, propertiesTag);
 		}
 		return tag;
 	}
 
-	public static GameProfile deserialize(NBTTagCompoundWrapper tag) {
-		String name = null;
-		if (tag.hasKeyOfType(NAME_KEY, NBTTagType.STRING)) {
-			name = tag.getString(NAME_KEY);
-		}
+	public static GameProfile deserialize(NBTCompound tag) {
+		String name = NBTString.getValueOrNull(tag.getTagOfType(NAME_KEY, NBTType.STRING));
 		UUID uuid = null;
 		try {
-			if (tag.hasKeyOfType(UUID_KEY, NBTTagType.STRING)) {
-				uuid = UUID.fromString(tag.getString(UUID_KEY));
-			}
+			uuid = UUID.fromString(NBTString.getValueOrNull(tag.getTagOfType(UUID_KEY, NBTType.STRING)));
 		} catch (Throwable t) {
 		}
 		if (StringUtils.isEmpty(name) && (uuid == null)) {
 			return null;
 		}
 		GameProfile gameProfile = new GameProfile(uuid, name);
-		if (tag.hasKeyOfType(PROPERTIES_KEY, NBTTagType.COMPOUND)) {
-			NBTTagCompoundWrapper compound = tag.getCompound(PROPERTIES_KEY);
-			for (String propertyName : compound.getKeys()) {
-				NBTTagListWrapper list = compound.getList(propertyName, NBTTagType.COMPOUND);
-				for (int i = 0; i < list.size(); ++i) {
-					NBTTagCompoundWrapper value = list.getCompound(i);
-					String propertyValue = value.getString(PROPERTY_VALUE_KEY);
-					if (value.hasKeyOfType(PROPERTY_SIGNATURE_KEY, NBTTagType.STRING)) {
-						gameProfile.addProperty(new ProfileProperty(propertyName, propertyValue, value.getString(PROPERTY_SIGNATURE_KEY)));
-					} else {
-						gameProfile.addProperty(new ProfileProperty(propertyName, propertyValue));
+		NBTCompound propertiesTag = tag.getTagOfType(PROPERTIES_KEY, NBTType.COMPOUND);
+		if (propertiesTag != null) {
+			for (String propertyName : propertiesTag.getTagNames()) {
+				NBTList<NBTCompound> propertiesListTag = propertiesTag.getTagListOfType(propertyName, NBTType.COMPOUND);
+				if (propertiesListTag != null) {
+					for (NBTCompound propertyTag : propertiesListTag.getTags()) {
+						gameProfile.addProperty(new ProfileProperty(
+							propertyName,
+							NBTString.getValueOrNull(propertyTag.getTagOfType(PROPERTY_VALUE_KEY, NBTType.STRING)),
+							NBTString.getValueOrNull(propertyTag.getTagOfType(PROPERTY_SIGNATURE_KEY, NBTType.STRING))
+						));
 					}
 				}
 			}

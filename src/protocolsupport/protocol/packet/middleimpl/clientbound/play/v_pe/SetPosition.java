@@ -3,16 +3,21 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 import org.bukkit.util.NumberConversions;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPosition;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class SetPosition extends MiddleSetPosition {
+
+	public SetPosition(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -54,11 +59,15 @@ public class SetPosition extends MiddleSetPosition {
 		serializer.writeFloatLE((float) y);
 		serializer.writeFloatLE((float) z);
 		serializer.writeFloatLE(pitch);
-		serializer.writeFloatLE((float) yaw);
+		serializer.writeFloatLE(yaw);
 		serializer.writeFloatLE(headYaw);
 		serializer.writeByte(mode);
 		serializer.writeBoolean(false); //on ground
 		VarNumberSerializer.writeVarLong(serializer, entity.getDataCache().getVehicleId());
+		if (mode == ANIMATION_MODE_TELEPORT) {
+			serializer.writeIntLE(0); //teleportCause
+			serializer.writeIntLE(0); //teleportItem
+		}
 		return serializer;
 	}
 

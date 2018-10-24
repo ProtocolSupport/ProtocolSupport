@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.Any;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -15,6 +16,10 @@ import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
+
+	public PlayerListSetEntry(ConnectionImpl connection) {
+		super(connection);
+	}
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {

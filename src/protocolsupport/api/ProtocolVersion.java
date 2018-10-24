@@ -12,7 +12,10 @@ import protocolsupport.utils.Utils;
 
 public enum ProtocolVersion {
 
-	MINECRAFT_FUTURE(-1, new OrderId(ProtocolType.PC, 20)),
+	MINECRAFT_FUTURE(-1, new OrderId(ProtocolType.PC, 23)),
+	MINECRAFT_1_13_2(404, new OrderId(ProtocolType.PC, 22), "1.13.2"),
+	MINECRAFT_1_13_1(401, new OrderId(ProtocolType.PC, 21), "1.13.1"),
+	MINECRAFT_1_13(393, new OrderId(ProtocolType.PC, 20), "1.13"),
 	MINECRAFT_1_12_2(340, new OrderId(ProtocolType.PC, 19), "1.12.2"),
 	MINECRAFT_1_12_1(338, new OrderId(ProtocolType.PC, 18), "1.12.1"),
 	MINECRAFT_1_12(335, new OrderId(ProtocolType.PC, 17), "1.12"),
@@ -34,7 +37,7 @@ public enum ProtocolVersion {
 	MINECRAFT_1_4_7(51, new OrderId(ProtocolType.PC, 1), "1.4.7"),
 	MINECRAFT_LEGACY(-1, new OrderId(ProtocolType.PC, 0)),
 	MINECRAFT_PE_FUTURE(-1, new OrderId(ProtocolType.PE, 2)),
-	MINECRAFT_PE(274, new OrderId(ProtocolType.PE, 1), "pe"),
+	MINECRAFT_PE(291, new OrderId(ProtocolType.PE, 1), "PE-1.7.0"),
 	MINECRAFT_PE_LEGACY(-1, new OrderId(ProtocolType.PE, 0)),
 	UNKNOWN(-1, new OrderId(ProtocolType.UNKNOWN, 0));
 
@@ -275,7 +278,7 @@ public enum ProtocolVersion {
 	public static ProtocolVersion getLatest(ProtocolType type) {
 		switch (type) {
 			case PC: {
-				return MINECRAFT_1_12_2;
+				return MINECRAFT_1_13_2;
 			}
 			case PE: {
 				return MINECRAFT_PE;

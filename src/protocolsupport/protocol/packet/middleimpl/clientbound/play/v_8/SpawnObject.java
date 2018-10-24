@@ -1,36 +1,24 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
-import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.id.IdRemapper;
-import protocolsupport.protocol.utils.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SpawnObject extends MiddleSpawnObject {
 
+	public SpawnObject(ConnectionImpl connection) {
+		super(connection);
+	}
+
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
-		NetworkEntityType type = IdRemapper.ENTITY.getTable(version).getRemap(entity.getType());
-		switch (type) {
-			case FALLING_OBJECT: {
-				int id = IdRemapper.BLOCK.getTable(version).getRemap((objectdata & 4095) << 4) >> 4;
-				int data = (objectdata >> 12) & 0xF;
-				objectdata = (data << 12) | id;
-				break;
-			}
-			case ARROW: {
-				objectdata--;
-				break;
-			}
-			default: {
-				break;
-			}
-		}
+		NetworkEntityType type = entityRemapper.getRemappedEntityType();
+		objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		serializer.writeByte(type.getNetworkTypeId());

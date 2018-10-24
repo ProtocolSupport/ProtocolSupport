@@ -1,2286 +1,4744 @@
 [
   {
-    "id": 0,
-    "name": "air",
+    "material": "ACACIA_BUTTON",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 1,
-    "name": "stone",
+    "material": "ACACIA_DOOR",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 2,
-    "name": "grass",
+    "material": "ACACIA_FENCE",
     "sounds": {
-      "break": 43,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 3,
-    "name": "dirt",
+    "material": "ACACIA_FENCE_GATE",
     "sounds": {
-      "break": 48,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 4,
-    "name": "cobblestone",
+    "material": "ACACIA_LEAVES",
     "sounds": {
-      "break": 107,
+      "break": 63,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 5,
-    "name": "planks",
+    "material": "ACACIA_LOG",
     "sounds": {
-      "break": 122,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 6,
-    "name": "sapling",
+    "material": "ACACIA_PLANKS",
     "sounds": {
-      "break": 43,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 7,
-    "name": "bedrock",
+    "material": "ACACIA_PRESSURE_PLATE",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 8,
-    "name": "flowing_water",
+    "material": "ACACIA_SAPLING",
     "sounds": {
-      "break": 107,
+      "break": 63,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 9,
-    "name": "water",
+    "material": "ACACIA_SLAB",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 10,
-    "name": "flowing_lava",
+    "material": "ACACIA_STAIRS",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 11,
-    "name": "lava",
+    "material": "ACACIA_TRAPDOOR",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 12,
-    "name": "sand",
+    "material": "ACACIA_WOOD",
     "sounds": {
-      "break": 90,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 13,
-    "name": "gravel",
+    "material": "ACTIVATOR_RAIL",
     "sounds": {
-      "break": 48,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 14,
-    "name": "gold_ore",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 15,
-    "name": "iron_ore",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 16,
-    "name": "coal_ore",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 17,
-    "name": "log",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 18,
-    "name": "leaves",
-    "sounds": {
-      "break": 43,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 19,
-    "name": "sponge",
-    "sounds": {
-      "break": 43,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 20,
-    "name": "glass",
-    "sounds": {
-      "break": 38,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 21,
-    "name": "lapis_ore",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 22,
-    "name": "lapis_block",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 23,
-    "name": "dispenser",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 24,
-    "name": "sandstone",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 25,
-    "name": "noteblock",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 26,
-    "name": "bed",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 27,
-    "name": "golden_rail",
-    "sounds": {
-      "break": 66,
+      "break": 96,
       "volume": 1.0,
       "pitch": 1.5
     }
   },
   {
-    "id": 28,
-    "name": "detector_rail",
+    "material": "AIR",
     "sounds": {
-      "break": 66,
+      "break": 138,
       "volume": 1.0,
-      "pitch": 1.5
-    }
-  },
-  {
-    "id": 29,
-    "name": "sticky_piston",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 30,
-    "name": "web",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 31,
-    "name": "tallgrass",
-    "sounds": {
-      "break": 43,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 32,
-    "name": "deadbush",
-    "sounds": {
-      "break": 43,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 33,
-    "name": "piston",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 34,
-    "name": "piston_head",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 35,
-    "name": "wool",
-    "sounds": {
-      "break": 18,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 36,
-    "name": "piston_extension",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 37,
-    "name": "yellow_flower",
-    "sounds": {
-      "break": 43,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 38,
-    "name": "red_flower",
-    "sounds": {
-      "break": 43,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 39,
-    "name": "brown_mushroom",
-    "sounds": {
-      "break": 43,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 40,
-    "name": "red_mushroom",
-    "sounds": {
-      "break": 43,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 41,
-    "name": "gold_block",
-    "sounds": {
-      "break": 66,
-      "volume": 1.0,
-      "pitch": 1.5
-    }
-  },
-  {
-    "id": 42,
-    "name": "iron_block",
-    "sounds": {
-      "break": 66,
-      "volume": 1.0,
-      "pitch": 1.5
-    }
-  },
-  {
-    "id": 43,
-    "name": "double_stone_slab",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 44,
-    "name": "stone_slab",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 45,
-    "name": "brick_block",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 46,
-    "name": "tnt",
-    "sounds": {
-      "break": 43,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 47,
-    "name": "bookshelf",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 48,
-    "name": "mossy_cobblestone",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 49,
-    "name": "obsidian",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 50,
-    "name": "torch",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 51,
-    "name": "fire",
-    "sounds": {
-      "break": 18,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 52,
-    "name": "mob_spawner",
-    "sounds": {
-      "break": 66,
-      "volume": 1.0,
-      "pitch": 1.5
-    }
-  },
-  {
-    "id": 53,
-    "name": "oak_stairs",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 54,
-    "name": "chest",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 55,
-    "name": "redstone_wire",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 56,
-    "name": "diamond_ore",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 57,
-    "name": "diamond_block",
-    "sounds": {
-      "break": 66,
-      "volume": 1.0,
-      "pitch": 1.5
-    }
-  },
-  {
-    "id": 58,
-    "name": "crafting_table",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 59,
-    "name": "wheat",
-    "sounds": {
-      "break": 43,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 60,
-    "name": "farmland",
-    "sounds": {
-      "break": 48,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 61,
-    "name": "furnace",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 62,
-    "name": "lit_furnace",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 63,
-    "name": "standing_sign",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 64,
-    "name": "wooden_door",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 65,
-    "name": "ladder",
-    "sounds": {
-      "break": 57,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 66,
-    "name": "rail",
-    "sounds": {
-      "break": 66,
-      "volume": 1.0,
-      "pitch": 1.5
-    }
-  },
-  {
-    "id": 67,
-    "name": "stone_stairs",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 68,
-    "name": "wall_sign",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 69,
-    "name": "lever",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 70,
-    "name": "stone_pressure_plate",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 71,
-    "name": "iron_door",
-    "sounds": {
-      "break": 66,
-      "volume": 1.0,
-      "pitch": 1.5
-    }
-  },
-  {
-    "id": 72,
-    "name": "wooden_pressure_plate",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 73,
-    "name": "redstone_ore",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 74,
-    "name": "lit_redstone_ore",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 75,
-    "name": "unlit_redstone_torch",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 76,
-    "name": "redstone_torch",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 77,
-    "name": "stone_button",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 78,
-    "name": "snow_layer",
-    "sounds": {
-      "break": 102,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 79,
-    "name": "ice",
-    "sounds": {
-      "break": 38,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 80,
-    "name": "snow",
-    "sounds": {
-      "break": 102,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 81,
-    "name": "cactus",
-    "sounds": {
-      "break": 18,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 82,
-    "name": "clay",
-    "sounds": {
-      "break": 48,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 83,
-    "name": "reeds",
-    "sounds": {
-      "break": 43,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 84,
-    "name": "jukebox",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 85,
-    "name": "fence",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 86,
-    "name": "pumpkin",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 87,
-    "name": "netherrack",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 88,
-    "name": "soul_sand",
-    "sounds": {
-      "break": 90,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 89,
-    "name": "glowstone",
-    "sounds": {
-      "break": 38,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 90,
-    "name": "portal",
-    "sounds": {
-      "break": 38,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 91,
-    "name": "lit_pumpkin",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 92,
-    "name": "cake",
-    "sounds": {
-      "break": 18,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 93,
-    "name": "unpowered_repeater",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 94,
-    "name": "powered_repeater",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 95,
-    "name": "stained_glass",
-    "sounds": {
-      "break": 38,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 96,
-    "name": "trapdoor",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 97,
-    "name": "monster_egg",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 98,
-    "name": "stonebrick",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 99,
-    "name": "brown_mushroom_block",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 100,
-    "name": "red_mushroom_block",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 101,
-    "name": "iron_bars",
-    "sounds": {
-      "break": 66,
-      "volume": 1.0,
-      "pitch": 1.5
-    }
-  },
-  {
-    "id": 102,
-    "name": "glass_pane",
-    "sounds": {
-      "break": 38,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 103,
-    "name": "melon_block",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 104,
-    "name": "pumpkin_stem",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 105,
-    "name": "melon_stem",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 106,
-    "name": "vine",
-    "sounds": {
-      "break": 43,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 107,
-    "name": "fence_gate",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 108,
-    "name": "brick_stairs",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 109,
-    "name": "stone_brick_stairs",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 110,
-    "name": "mycelium",
-    "sounds": {
-      "break": 43,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 111,
-    "name": "waterlily",
-    "sounds": {
-      "break": 43,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 112,
-    "name": "nether_brick",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 113,
-    "name": "nether_brick_fence",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 114,
-    "name": "nether_brick_stairs",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 115,
-    "name": "nether_wart",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 116,
-    "name": "enchanting_table",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 117,
-    "name": "brewing_stand",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 118,
-    "name": "cauldron",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 119,
-    "name": "end_portal",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 120,
-    "name": "end_portal_frame",
-    "sounds": {
-      "break": 38,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 121,
-    "name": "end_stone",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 122,
-    "name": "dragon_egg",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 123,
-    "name": "redstone_lamp",
-    "sounds": {
-      "break": 38,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 124,
-    "name": "lit_redstone_lamp",
-    "sounds": {
-      "break": 38,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 125,
-    "name": "double_wooden_slab",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 126,
-    "name": "wooden_slab",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 127,
-    "name": "cocoa",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 128,
-    "name": "sandstone_stairs",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 129,
-    "name": "emerald_ore",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 130,
-    "name": "ender_chest",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 131,
-    "name": "tripwire_hook",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 132,
-    "name": "tripwire",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 133,
-    "name": "emerald_block",
-    "sounds": {
-      "break": 66,
-      "volume": 1.0,
-      "pitch": 1.5
-    }
-  },
-  {
-    "id": 134,
-    "name": "spruce_stairs",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 135,
-    "name": "birch_stairs",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 136,
-    "name": "jungle_stairs",
-    "sounds": {
-      "break": 122,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 137,
-    "name": "command_block",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 138,
-    "name": "beacon",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 139,
-    "name": "cobblestone_wall",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 140,
-    "name": "flower_pot",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 141,
-    "name": "carrots",
-    "sounds": {
-      "break": 43,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 142,
-    "name": "potatoes",
-    "sounds": {
-      "break": 43,
-      "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 143,
-    "name": "wooden_button",
+    "material": "ALLIUM",
     "sounds": {
-      "break": 122,
+      "break": 63,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 144,
-    "name": "skull",
+    "material": "ANDESITE",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 145,
-    "name": "anvil",
+    "material": "ANVIL",
     "sounds": {
-      "break": 6,
+      "break": 12,
       "volume": 0.3,
       "pitch": 1.0
     }
   },
   {
-    "id": 146,
-    "name": "trapped_chest",
+    "material": "ATTACHED_MELON_STEM",
     "sounds": {
-      "break": 122,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 147,
-    "name": "light_weighted_pressure_plate",
+    "material": "ATTACHED_PUMPKIN_STEM",
     "sounds": {
-      "break": 122,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 148,
-    "name": "heavy_weighted_pressure_plate",
+    "material": "AZURE_BLUET",
     "sounds": {
-      "break": 122,
+      "break": 63,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 149,
-    "name": "unpowered_comparator",
+    "material": "BARRIER",
     "sounds": {
-      "break": 122,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 150,
-    "name": "powered_comparator",
+    "material": "BEACON",
     "sounds": {
-      "break": 122,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 151,
-    "name": "daylight_detector",
+    "material": "BEDROCK",
     "sounds": {
-      "break": 122,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 152,
-    "name": "redstone_block",
+    "material": "BEETROOTS",
     "sounds": {
-      "break": 66,
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BIRCH_BUTTON",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BIRCH_DOOR",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BIRCH_FENCE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BIRCH_FENCE_GATE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BIRCH_LEAVES",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BIRCH_LOG",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BIRCH_PLANKS",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BIRCH_PRESSURE_PLATE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BIRCH_SAPLING",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BIRCH_SLAB",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BIRCH_STAIRS",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BIRCH_TRAPDOOR",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BIRCH_WOOD",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLACK_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLACK_BED",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLACK_CARPET",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLACK_CONCRETE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLACK_CONCRETE_POWDER",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLACK_GLAZED_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLACK_SHULKER_BOX",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLACK_STAINED_GLASS",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLACK_STAINED_GLASS_PANE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLACK_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLACK_WALL_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLACK_WOOL",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLUE_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLUE_BED",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLUE_CARPET",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLUE_CONCRETE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLUE_CONCRETE_POWDER",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLUE_GLAZED_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLUE_ICE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLUE_ORCHID",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLUE_SHULKER_BOX",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLUE_STAINED_GLASS",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLUE_STAINED_GLASS_PANE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLUE_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLUE_WALL_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BLUE_WOOL",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BONE_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BOOKSHELF",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BRAIN_CORAL",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BRAIN_CORAL_BLOCK",
+    "sounds": {
+      "break": 73,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BRAIN_CORAL_FAN",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BRAIN_CORAL_WALL_FAN",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BREWING_STAND",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BRICKS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BRICK_SLAB",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BRICK_STAIRS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BROWN_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BROWN_BED",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BROWN_CARPET",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BROWN_CONCRETE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BROWN_CONCRETE_POWDER",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BROWN_GLAZED_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BROWN_MUSHROOM",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BROWN_MUSHROOM_BLOCK",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BROWN_SHULKER_BOX",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BROWN_STAINED_GLASS",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BROWN_STAINED_GLASS_PANE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BROWN_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BROWN_WALL_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BROWN_WOOL",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BUBBLE_COLUMN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BUBBLE_CORAL",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BUBBLE_CORAL_BLOCK",
+    "sounds": {
+      "break": 73,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BUBBLE_CORAL_FAN",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "BUBBLE_CORAL_WALL_FAN",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CACTUS",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CAKE",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CARROTS",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CARVED_PUMPKIN",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CAULDRON",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CAVE_AIR",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CHAIN_COMMAND_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CHEST",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CHIPPED_ANVIL",
+    "sounds": {
+      "break": 12,
+      "volume": 0.3,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CHISELED_QUARTZ_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CHISELED_RED_SANDSTONE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CHISELED_SANDSTONE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CHISELED_STONE_BRICKS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CHORUS_FLOWER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CHORUS_PLANT",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CLAY",
+    "sounds": {
+      "break": 78,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "COAL_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "COAL_ORE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "COARSE_DIRT",
+    "sounds": {
+      "break": 78,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "COBBLESTONE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "COBBLESTONE_SLAB",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "COBBLESTONE_STAIRS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "COBBLESTONE_WALL",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "COBWEB",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "COCOA",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "COMMAND_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "COMPARATOR",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CONDUIT",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CRACKED_STONE_BRICKS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CRAFTING_TABLE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CREEPER_HEAD",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CREEPER_WALL_HEAD",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CUT_RED_SANDSTONE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CUT_SANDSTONE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CYAN_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CYAN_BED",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CYAN_CARPET",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CYAN_CONCRETE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CYAN_CONCRETE_POWDER",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CYAN_GLAZED_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CYAN_SHULKER_BOX",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CYAN_STAINED_GLASS",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CYAN_STAINED_GLASS_PANE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CYAN_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CYAN_WALL_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "CYAN_WOOL",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DAMAGED_ANVIL",
+    "sounds": {
+      "break": 12,
+      "volume": 0.3,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DANDELION",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DARK_OAK_BUTTON",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DARK_OAK_DOOR",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DARK_OAK_FENCE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DARK_OAK_FENCE_GATE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DARK_OAK_LEAVES",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DARK_OAK_LOG",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DARK_OAK_PLANKS",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DARK_OAK_PRESSURE_PLATE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DARK_OAK_SAPLING",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DARK_OAK_SLAB",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DARK_OAK_STAIRS",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DARK_OAK_TRAPDOOR",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DARK_OAK_WOOD",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DARK_PRISMARINE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DARK_PRISMARINE_SLAB",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DARK_PRISMARINE_STAIRS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DAYLIGHT_DETECTOR",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_BRAIN_CORAL_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_BRAIN_CORAL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_BRAIN_CORAL_WALL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_BUBBLE_CORAL_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_BUBBLE_CORAL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_BUBBLE_CORAL_WALL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_BUSH",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_FIRE_CORAL_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_FIRE_CORAL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_FIRE_CORAL_WALL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_HORN_CORAL_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_HORN_CORAL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_HORN_CORAL_WALL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_TUBE_CORAL_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_TUBE_CORAL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DEAD_TUBE_CORAL_WALL_FAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "DETECTOR_RAIL",
+    "sounds": {
+      "break": 96,
       "volume": 1.0,
       "pitch": 1.5
     }
   },
   {
-    "id": 153,
-    "name": "quartz_ore",
+    "material": "DIAMOND_BLOCK",
     "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 154,
-    "name": "hopper",
-    "sounds": {
-      "break": 66,
+      "break": 96,
       "volume": 1.0,
       "pitch": 1.5
     }
   },
   {
-    "id": 155,
-    "name": "quartz_block",
+    "material": "DIAMOND_ORE",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 156,
-    "name": "quartz_stairs",
+    "material": "DIORITE",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 157,
-    "name": "activator_rail",
+    "material": "DIRT",
     "sounds": {
-      "break": 66,
-      "volume": 1.0,
-      "pitch": 1.5
-    }
-  },
-  {
-    "id": 158,
-    "name": "dropper",
-    "sounds": {
-      "break": 107,
+      "break": 78,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 159,
-    "name": "stained_hardened_clay",
+    "material": "DISPENSER",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 160,
-    "name": "stained_glass_pane",
+    "material": "DRAGON_EGG",
     "sounds": {
-      "break": 38,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 161,
-    "name": "leaves2",
+    "material": "DRAGON_HEAD",
     "sounds": {
-      "break": 43,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 162,
-    "name": "log2",
+    "material": "DRAGON_WALL_HEAD",
     "sounds": {
-      "break": 122,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 163,
-    "name": "acacia_stairs",
+    "material": "DRIED_KELP_BLOCK",
     "sounds": {
-      "break": 122,
+      "break": 63,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 164,
-    "name": "dark_oak_stairs",
+    "material": "DROPPER",
     "sounds": {
-      "break": 122,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 165,
-    "name": "slime",
+    "material": "EMERALD_BLOCK",
     "sounds": {
-      "break": 97,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 166,
-    "name": "barrier",
-    "sounds": {
-      "break": 107,
-      "volume": 1.0,
-      "pitch": 1.0
-    }
-  },
-  {
-    "id": 167,
-    "name": "iron_trapdoor",
-    "sounds": {
-      "break": 66,
+      "break": 96,
       "volume": 1.0,
       "pitch": 1.5
     }
   },
   {
-    "id": 168,
-    "name": "prismarine",
+    "material": "EMERALD_ORE",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 169,
-    "name": "sea_lantern",
+    "material": "ENCHANTING_TABLE",
     "sounds": {
-      "break": 38,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 170,
-    "name": "hay_block",
+    "material": "ENDER_CHEST",
     "sounds": {
-      "break": 43,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 171,
-    "name": "carpet",
+    "material": "END_GATEWAY",
     "sounds": {
-      "break": 18,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 172,
-    "name": "hardened_clay",
+    "material": "END_PORTAL",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 173,
-    "name": "coal_block",
+    "material": "END_PORTAL_FRAME",
     "sounds": {
-      "break": 107,
+      "break": 58,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 174,
-    "name": "packed_ice",
+    "material": "END_ROD",
     "sounds": {
-      "break": 38,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 175,
-    "name": "double_plant",
+    "material": "END_STONE",
     "sounds": {
-      "break": 43,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 176,
-    "name": "standing_banner",
+    "material": "END_STONE_BRICKS",
     "sounds": {
-      "break": 122,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 177,
-    "name": "wall_banner",
+    "material": "FARMLAND",
     "sounds": {
-      "break": 122,
+      "break": 78,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 178,
-    "name": "daylight_detector_inverted",
+    "material": "FERN",
     "sounds": {
-      "break": 122,
+      "break": 63,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 179,
-    "name": "red_sandstone",
+    "material": "FIRE",
     "sounds": {
-      "break": 107,
+      "break": 33,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 180,
-    "name": "red_sandstone_stairs",
+    "material": "FIRE_CORAL",
     "sounds": {
-      "break": 107,
+      "break": 68,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 181,
-    "name": "double_stone_slab2",
+    "material": "FIRE_CORAL_BLOCK",
     "sounds": {
-      "break": 107,
+      "break": 73,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 182,
-    "name": "stone_slab2",
+    "material": "FIRE_CORAL_FAN",
     "sounds": {
-      "break": 107,
+      "break": 68,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 183,
-    "name": "spruce_fence_gate",
+    "material": "FIRE_CORAL_WALL_FAN",
     "sounds": {
-      "break": 122,
+      "break": 68,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 184,
-    "name": "birch_fence_gate",
+    "material": "FLOWER_POT",
     "sounds": {
-      "break": 122,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 185,
-    "name": "jungle_fence_gate",
+    "material": "FROSTED_ICE",
     "sounds": {
-      "break": 122,
+      "break": 58,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 186,
-    "name": "dark_oak_fence_gate",
+    "material": "FURNACE",
     "sounds": {
-      "break": 122,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 187,
-    "name": "acacia_fence_gate",
+    "material": "GLASS",
     "sounds": {
-      "break": 122,
+      "break": 58,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 188,
-    "name": "spruce_fence",
+    "material": "GLASS_PANE",
     "sounds": {
-      "break": 122,
+      "break": 58,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 189,
-    "name": "birch_fence",
+    "material": "GLOWSTONE",
     "sounds": {
-      "break": 122,
+      "break": 58,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 190,
-    "name": "jungle_fence",
+    "material": "GOLD_BLOCK",
     "sounds": {
-      "break": 122,
+      "break": 96,
       "volume": 1.0,
+      "pitch": 1.5
+    }
+  },
+  {
+    "material": "GOLD_ORE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRANITE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRASS",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRASS_BLOCK",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRASS_PATH",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRAVEL",
+    "sounds": {
+      "break": 78,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRAY_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRAY_BED",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRAY_CARPET",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRAY_CONCRETE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRAY_CONCRETE_POWDER",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRAY_GLAZED_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRAY_SHULKER_BOX",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRAY_STAINED_GLASS",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRAY_STAINED_GLASS_PANE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRAY_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRAY_WALL_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GRAY_WOOL",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GREEN_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GREEN_BED",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GREEN_CARPET",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GREEN_CONCRETE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GREEN_CONCRETE_POWDER",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GREEN_GLAZED_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GREEN_SHULKER_BOX",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GREEN_STAINED_GLASS",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GREEN_STAINED_GLASS_PANE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GREEN_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GREEN_WALL_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "GREEN_WOOL",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "HAY_BLOCK",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "HEAVY_WEIGHTED_PRESSURE_PLATE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "HOPPER",
+    "sounds": {
+      "break": 96,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
+  },
+  {
+    "material": "HORN_CORAL",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "HORN_CORAL_BLOCK",
+    "sounds": {
+      "break": 73,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "HORN_CORAL_FAN",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "HORN_CORAL_WALL_FAN",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "ICE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "INFESTED_CHISELED_STONE_BRICKS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "INFESTED_COBBLESTONE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "INFESTED_CRACKED_STONE_BRICKS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "INFESTED_MOSSY_STONE_BRICKS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "INFESTED_STONE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "INFESTED_STONE_BRICKS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "IRON_BARS",
+    "sounds": {
+      "break": 96,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
+  },
+  {
+    "material": "IRON_BLOCK",
+    "sounds": {
+      "break": 96,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
+  },
+  {
+    "material": "IRON_DOOR",
+    "sounds": {
+      "break": 96,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
+  },
+  {
+    "material": "IRON_ORE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "IRON_TRAPDOOR",
+    "sounds": {
+      "break": 96,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
+  },
+  {
+    "material": "JACK_O_LANTERN",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "JUKEBOX",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "JUNGLE_BUTTON",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "JUNGLE_DOOR",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "JUNGLE_FENCE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "JUNGLE_FENCE_GATE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "JUNGLE_LEAVES",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "JUNGLE_LOG",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "JUNGLE_PLANKS",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "JUNGLE_PRESSURE_PLATE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "JUNGLE_SAPLING",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "JUNGLE_SLAB",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "JUNGLE_STAIRS",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "JUNGLE_TRAPDOOR",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "JUNGLE_WOOD",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "KELP",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "KELP_PLANT",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LADDER",
+    "sounds": {
+      "break": 87,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LAPIS_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LAPIS_ORE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LARGE_FERN",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LAVA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LEVER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_BLUE_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_BLUE_BED",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_BLUE_CARPET",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_BLUE_CONCRETE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_BLUE_CONCRETE_POWDER",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_BLUE_GLAZED_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_BLUE_SHULKER_BOX",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_BLUE_STAINED_GLASS",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_BLUE_STAINED_GLASS_PANE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_BLUE_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_BLUE_WALL_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_BLUE_WOOL",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_GRAY_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_GRAY_BED",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_GRAY_CARPET",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_GRAY_CONCRETE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_GRAY_CONCRETE_POWDER",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_GRAY_GLAZED_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_GRAY_SHULKER_BOX",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_GRAY_STAINED_GLASS",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_GRAY_STAINED_GLASS_PANE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_GRAY_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_GRAY_WALL_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_GRAY_WOOL",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIGHT_WEIGHTED_PRESSURE_PLATE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LILAC",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LILY_PAD",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIME_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIME_BED",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIME_CARPET",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIME_CONCRETE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIME_CONCRETE_POWDER",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIME_GLAZED_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIME_SHULKER_BOX",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIME_STAINED_GLASS",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIME_STAINED_GLASS_PANE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIME_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIME_WALL_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "LIME_WOOL",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MAGENTA_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MAGENTA_BED",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MAGENTA_CARPET",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MAGENTA_CONCRETE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MAGENTA_CONCRETE_POWDER",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MAGENTA_GLAZED_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MAGENTA_SHULKER_BOX",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MAGENTA_STAINED_GLASS",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MAGENTA_STAINED_GLASS_PANE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MAGENTA_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MAGENTA_WALL_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MAGENTA_WOOL",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MAGMA_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MELON",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MELON_STEM",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MOSSY_COBBLESTONE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MOSSY_COBBLESTONE_WALL",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MOSSY_STONE_BRICKS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MOVING_PISTON",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MUSHROOM_STEM",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "MYCELIUM",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "NETHERRACK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "NETHER_BRICKS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "NETHER_BRICK_FENCE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "NETHER_BRICK_SLAB",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "NETHER_BRICK_STAIRS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "NETHER_PORTAL",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "NETHER_QUARTZ_ORE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "NETHER_WART",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "NETHER_WART_BLOCK",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "NOTE_BLOCK",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "OAK_BUTTON",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "OAK_DOOR",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "OAK_FENCE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "OAK_FENCE_GATE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "OAK_LEAVES",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "OAK_LOG",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "OAK_PLANKS",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "OAK_PRESSURE_PLATE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "OAK_SAPLING",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "OAK_SLAB",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "OAK_STAIRS",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "OAK_TRAPDOOR",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "OAK_WOOD",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "OBSERVER",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "OBSIDIAN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "ORANGE_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "ORANGE_BED",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "ORANGE_CARPET",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "ORANGE_CONCRETE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "ORANGE_CONCRETE_POWDER",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "ORANGE_GLAZED_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "ORANGE_SHULKER_BOX",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "ORANGE_STAINED_GLASS",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "ORANGE_STAINED_GLASS_PANE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "ORANGE_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "ORANGE_TULIP",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "ORANGE_WALL_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "ORANGE_WOOL",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "OXEYE_DAISY",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PACKED_ICE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PEONY",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PETRIFIED_OAK_SLAB",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PINK_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PINK_BED",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PINK_CARPET",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PINK_CONCRETE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PINK_CONCRETE_POWDER",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PINK_GLAZED_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PINK_SHULKER_BOX",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PINK_STAINED_GLASS",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PINK_STAINED_GLASS_PANE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PINK_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PINK_TULIP",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PINK_WALL_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PINK_WOOL",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PISTON",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PISTON_HEAD",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PLAYER_HEAD",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PLAYER_WALL_HEAD",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PODZOL",
+    "sounds": {
+      "break": 78,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POLISHED_ANDESITE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POLISHED_DIORITE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POLISHED_GRANITE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POPPY",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTATOES",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_ACACIA_SAPLING",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_ALLIUM",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_AZURE_BLUET",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_BIRCH_SAPLING",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_BLUE_ORCHID",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_BROWN_MUSHROOM",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_CACTUS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_DANDELION",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_DARK_OAK_SAPLING",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_DEAD_BUSH",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_FERN",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_JUNGLE_SAPLING",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_OAK_SAPLING",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_ORANGE_TULIP",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_OXEYE_DAISY",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_PINK_TULIP",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_POPPY",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_RED_MUSHROOM",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_RED_TULIP",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_SPRUCE_SAPLING",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POTTED_WHITE_TULIP",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "POWERED_RAIL",
+    "sounds": {
+      "break": 96,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
+  },
+  {
+    "material": "PRISMARINE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PRISMARINE_BRICKS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PRISMARINE_BRICK_SLAB",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PRISMARINE_BRICK_STAIRS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PRISMARINE_SLAB",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PRISMARINE_STAIRS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PUMPKIN",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PUMPKIN_STEM",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PURPLE_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PURPLE_BED",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PURPLE_CARPET",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PURPLE_CONCRETE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PURPLE_CONCRETE_POWDER",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PURPLE_GLAZED_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PURPLE_SHULKER_BOX",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PURPLE_STAINED_GLASS",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PURPLE_STAINED_GLASS_PANE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PURPLE_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PURPLE_WALL_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PURPLE_WOOL",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PURPUR_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PURPUR_PILLAR",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PURPUR_SLAB",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "PURPUR_STAIRS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "QUARTZ_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "QUARTZ_PILLAR",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "QUARTZ_SLAB",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "QUARTZ_STAIRS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RAIL",
+    "sounds": {
+      "break": 96,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
+  },
+  {
+    "material": "REDSTONE_BLOCK",
+    "sounds": {
+      "break": 96,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
+  },
+  {
+    "material": "REDSTONE_LAMP",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "REDSTONE_ORE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "REDSTONE_TORCH",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "REDSTONE_WALL_TORCH",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "REDSTONE_WIRE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_BED",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_CARPET",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_CONCRETE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_CONCRETE_POWDER",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_GLAZED_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_MUSHROOM",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_MUSHROOM_BLOCK",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_NETHER_BRICKS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_SAND",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_SANDSTONE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_SANDSTONE_SLAB",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_SANDSTONE_STAIRS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_SHULKER_BOX",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_STAINED_GLASS",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_STAINED_GLASS_PANE",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_TULIP",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_WALL_BANNER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "RED_WOOL",
+    "sounds": {
+      "break": 33,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "REPEATER",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "REPEATING_COMMAND_BLOCK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "ROSE_BUSH",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SAND",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SANDSTONE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SANDSTONE_SLAB",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SANDSTONE_STAIRS",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SEAGRASS",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SEA_LANTERN",
+    "sounds": {
+      "break": 58,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SEA_PICKLE",
+    "sounds": {
+      "break": 128,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SHULKER_BOX",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SIGN",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SKELETON_SKULL",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SKELETON_WALL_SKULL",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SLIME_BLOCK",
+    "sounds": {
+      "break": 128,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SMOOTH_QUARTZ",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SMOOTH_RED_SANDSTONE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SMOOTH_SANDSTONE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SMOOTH_STONE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SNOW",
+    "sounds": {
+      "break": 133,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SNOW_BLOCK",
+    "sounds": {
+      "break": 133,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SOUL_SAND",
+    "sounds": {
+      "break": 121,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SPAWNER",
+    "sounds": {
+      "break": 96,
+      "volume": 1.0,
+      "pitch": 1.5
+    }
+  },
+  {
+    "material": "SPONGE",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SPRUCE_BUTTON",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SPRUCE_DOOR",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SPRUCE_FENCE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SPRUCE_FENCE_GATE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SPRUCE_LEAVES",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SPRUCE_LOG",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SPRUCE_PLANKS",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SPRUCE_PRESSURE_PLATE",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SPRUCE_SAPLING",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SPRUCE_SLAB",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SPRUCE_STAIRS",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "SPRUCE_TRAPDOOR",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 191,
-    "name": "dark_oak_fence",
+    "material": "SPRUCE_WOOD",
     "sounds": {
-      "break": 122,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 192,
-    "name": "acacia_fence",
+    "material": "STICKY_PISTON",
     "sounds": {
-      "break": 122,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 193,
-    "name": "spruce_door",
+    "material": "STONE",
     "sounds": {
-      "break": 122,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 194,
-    "name": "birch_door",
+    "material": "STONE_BRICKS",
     "sounds": {
-      "break": 122,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 195,
-    "name": "jungle_door",
+    "material": "STONE_BRICK_SLAB",
     "sounds": {
-      "break": 122,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 196,
-    "name": "acacia_door",
+    "material": "STONE_BRICK_STAIRS",
     "sounds": {
-      "break": 122,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 197,
-    "name": "dark_oak_door",
+    "material": "STONE_BUTTON",
     "sounds": {
-      "break": 122,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 198,
-    "name": "end_rod",
+    "material": "STONE_PRESSURE_PLATE",
     "sounds": {
-      "break": 122,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 199,
-    "name": "chorus_plant",
+    "material": "STONE_SLAB",
     "sounds": {
-      "break": 122,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 200,
-    "name": "chorus_flower",
+    "material": "STRIPPED_ACACIA_LOG",
     "sounds": {
-      "break": 122,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 201,
-    "name": "purpur_block",
+    "material": "STRIPPED_ACACIA_WOOD",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 202,
-    "name": "purpur_pillar",
+    "material": "STRIPPED_BIRCH_LOG",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 203,
-    "name": "purpur_stairs",
+    "material": "STRIPPED_BIRCH_WOOD",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 204,
-    "name": "purpur_double_slab",
+    "material": "STRIPPED_DARK_OAK_LOG",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 205,
-    "name": "purpur_slab",
+    "material": "STRIPPED_DARK_OAK_WOOD",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 206,
-    "name": "end_bricks",
+    "material": "STRIPPED_JUNGLE_LOG",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 207,
-    "name": "beetroots",
+    "material": "STRIPPED_JUNGLE_WOOD",
     "sounds": {
-      "break": 43,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 208,
-    "name": "grass_path",
+    "material": "STRIPPED_OAK_LOG",
     "sounds": {
-      "break": 43,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 209,
-    "name": "end_gateway",
+    "material": "STRIPPED_OAK_WOOD",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 210,
-    "name": "repeating_command_block",
+    "material": "STRIPPED_SPRUCE_LOG",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 211,
-    "name": "chain_command_block",
+    "material": "STRIPPED_SPRUCE_WOOD",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 212,
-    "name": "frosted_ice",
+    "material": "STRUCTURE_BLOCK",
     "sounds": {
-      "break": 38,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 213,
-    "name": "magma",
+    "material": "STRUCTURE_VOID",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 214,
-    "name": "nether_wart_block",
+    "material": "SUGAR_CANE",
     "sounds": {
-      "break": 122,
+      "break": 63,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 215,
-    "name": "red_nether_brick",
+    "material": "SUNFLOWER",
     "sounds": {
-      "break": 107,
+      "break": 63,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 216,
-    "name": "bone_block",
+    "material": "TALL_GRASS",
     "sounds": {
-      "break": 107,
+      "break": 63,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 217,
-    "name": "structure_void",
+    "material": "TALL_SEAGRASS",
     "sounds": {
-      "break": 107,
+      "break": 68,
       "volume": 1.0,
       "pitch": 1.0
+    }
+  },
+  {
+    "material": "TERRACOTTA",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "TNT",
+    "sounds": {
+      "break": 63,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "TORCH",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "TRAPPED_CHEST",
+    "sounds": {
+      "break": 153,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "TRIPWIRE",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "TRIPWIRE_HOOK",
+    "sounds": {
+      "break": 138,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "TUBE_CORAL",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "TUBE_CORAL_BLOCK",
+    "sounds": {
+      "break": 73,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "TUBE_CORAL_FAN",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "TUBE_CORAL_WALL_FAN",
+    "sounds": {
+      "break": 68,
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  },
+  {
+    "material": "TURTLE_EGG",
+    "sounds": {
+      "break": 96,
+      "volume": 1.0,
+      "pitch": 1.5
     }
   },
   {
-    "id": 218,
-    "name": "observer",
+    "material": "VINE",
     "sounds": {
-      "break": 107,
+      "break": 63,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 219,
-    "name": "white_shulker_box",
+    "material": "VOID_AIR",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 220,
-    "name": "orange_shulker_box",
+    "material": "WALL_SIGN",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 221,
-    "name": "magenta_shulker_box",
+    "material": "WALL_TORCH",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 222,
-    "name": "light_blue_shulker_box",
+    "material": "WATER",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 223,
-    "name": "yellow_shulker_box",
+    "material": "WET_SPONGE",
     "sounds": {
-      "break": 107,
+      "break": 63,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 224,
-    "name": "lime_shulker_box",
+    "material": "WHEAT",
     "sounds": {
-      "break": 107,
+      "break": 63,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 225,
-    "name": "pink_shulker_box",
+    "material": "WHITE_BANNER",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 226,
-    "name": "gray_shulker_box",
+    "material": "WHITE_BED",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 227,
-    "name": "silver_shulker_box",
+    "material": "WHITE_CARPET",
     "sounds": {
-      "break": 107,
+      "break": 33,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 228,
-    "name": "cyan_shulker_box",
+    "material": "WHITE_CONCRETE",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 229,
-    "name": "purple_shulker_box",
+    "material": "WHITE_CONCRETE_POWDER",
     "sounds": {
-      "break": 107,
+      "break": 121,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 230,
-    "name": "blue_shulker_box",
+    "material": "WHITE_GLAZED_TERRACOTTA",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 231,
-    "name": "brown_shulker_box",
+    "material": "WHITE_SHULKER_BOX",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 232,
-    "name": "green_shulker_box",
+    "material": "WHITE_STAINED_GLASS",
     "sounds": {
-      "break": 107,
+      "break": 58,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 233,
-    "name": "red_shulker_box",
+    "material": "WHITE_STAINED_GLASS_PANE",
     "sounds": {
-      "break": 107,
+      "break": 58,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 234,
-    "name": "black_shulker_box",
+    "material": "WHITE_TERRACOTTA",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 235,
-    "name": "white_glazed_terracotta",
+    "material": "WHITE_TULIP",
     "sounds": {
-      "break": 107,
+      "break": 63,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 236,
-    "name": "orange_glazed_terracotta",
+    "material": "WHITE_WALL_BANNER",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 237,
-    "name": "magenta_glazed_terracotta",
+    "material": "WHITE_WOOL",
     "sounds": {
-      "break": 107,
+      "break": 33,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 238,
-    "name": "light_blue_glazed_terracotta",
+    "material": "WITHER_SKELETON_SKULL",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 239,
-    "name": "yellow_glazed_terracotta",
+    "material": "WITHER_SKELETON_WALL_SKULL",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 240,
-    "name": "lime_glazed_terracotta",
+    "material": "YELLOW_BANNER",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 241,
-    "name": "pink_glazed_terracotta",
+    "material": "YELLOW_BED",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 242,
-    "name": "gray_glazed_terracotta",
+    "material": "YELLOW_CARPET",
     "sounds": {
-      "break": 107,
+      "break": 33,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 243,
-    "name": "silver_glazed_terracotta",
+    "material": "YELLOW_CONCRETE",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 244,
-    "name": "cyan_glazed_terracotta",
+    "material": "YELLOW_CONCRETE_POWDER",
     "sounds": {
-      "break": 107,
+      "break": 121,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 245,
-    "name": "purple_glazed_terracotta",
+    "material": "YELLOW_GLAZED_TERRACOTTA",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 246,
-    "name": "blue_glazed_terracotta",
+    "material": "YELLOW_SHULKER_BOX",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 247,
-    "name": "brown_glazed_terracotta",
+    "material": "YELLOW_STAINED_GLASS",
     "sounds": {
-      "break": 107,
+      "break": 58,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 248,
-    "name": "green_glazed_terracotta",
+    "material": "YELLOW_STAINED_GLASS_PANE",
     "sounds": {
-      "break": 107,
+      "break": 58,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 249,
-    "name": "red_glazed_terracotta",
+    "material": "YELLOW_TERRACOTTA",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 250,
-    "name": "black_glazed_terracotta",
+    "material": "YELLOW_WALL_BANNER",
     "sounds": {
-      "break": 107,
+      "break": 153,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 251,
-    "name": "concrete",
+    "material": "YELLOW_WOOL",
     "sounds": {
-      "break": 107,
+      "break": 33,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 252,
-    "name": "concrete_powder",
+    "material": "ZOMBIE_HEAD",
     "sounds": {
-      "break": 90,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }
   },
   {
-    "id": 255,
-    "name": "structure_block",
+    "material": "ZOMBIE_WALL_HEAD",
     "sounds": {
-      "break": 107,
+      "break": 138,
       "volume": 1.0,
       "pitch": 1.0
     }

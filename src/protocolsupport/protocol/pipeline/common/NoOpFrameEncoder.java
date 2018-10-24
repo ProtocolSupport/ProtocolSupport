@@ -8,9 +8,12 @@ public class NoOpFrameEncoder implements IPacketPrepender {
 
 	@Override
 	public void prepend(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output) {
-		int readableBytes = input.readableBytes();
-		output.ensureWritable(readableBytes);
-		output.writeBytes(input, input.readerIndex(), readableBytes);
+		output.writeBytes(input);
+	}
+
+	@Override
+	public ByteBuf allocBuffer(ChannelHandlerContext ctx, ByteBuf in, boolean preferDirect) {
+		return ctx.alloc().heapBuffer(in.readableBytes());
 	}
 
 }
