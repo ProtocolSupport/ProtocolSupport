@@ -21,7 +21,7 @@ public class EntityEffectAdd extends MiddleEntityEffectAdd {
 		serializer.writeByte(1); // Add effect
 		VarNumberSerializer.writeSVarInt(serializer, effectId);
 		VarNumberSerializer.writeSVarInt(serializer, amplifier);
-		serializer.writeBoolean(!hideParticles);
+		serializer.writeBoolean((flags & 0x02) != 0);
 		VarNumberSerializer.writeSVarInt(serializer, duration);
 		return RecyclableSingletonList.create(serializer);
 	}
