@@ -46,7 +46,7 @@ public class CustomPayload extends AbstractCustomPayload {
 				return transformNameItem();
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_PICK_ITEM: {
-				return transformNameItem();
+				return transformPickItem();
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_STRUCTURE_BLOCK: {
 				return transformStructureBlock();

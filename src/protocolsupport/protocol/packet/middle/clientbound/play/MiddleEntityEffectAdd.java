@@ -14,7 +14,7 @@ public abstract class MiddleEntityEffectAdd extends MiddleEntity {
 	protected int effectId;
 	protected int amplifier;
 	protected int duration;
-	protected boolean hideParticles;
+	protected int flags;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
@@ -22,7 +22,7 @@ public abstract class MiddleEntityEffectAdd extends MiddleEntity {
 		effectId = serverdata.readByte();
 		amplifier = serverdata.readByte();
 		duration = VarNumberSerializer.readVarInt(serverdata);
-		hideParticles = serverdata.readBoolean();
+		flags = serverdata.readByte();
 	}
 
 	@Override

@@ -33,7 +33,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 	}
 
 	public static class Ingredient {
-		private NetworkItemStack[] possibleStacks;
+		protected final NetworkItemStack[] possibleStacks;
 
 		public Ingredient(ByteBuf serverdata) {
 			int possibleStacksCount = VarNumberSerializer.readVarInt(serverdata);
@@ -49,8 +49,8 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 	}
 
 	public static class Recipe {
-		private String id;
-		private RecipeType type;
+		protected final String id;
+		protected final RecipeType type;
 
 		public Recipe(String id, RecipeType type) {
 			this.id = id;
@@ -67,9 +67,9 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 	}
 
 	public static class ShapelessRecipe extends Recipe {
-		private String group;
-		private Ingredient[] ingredients;
-		private NetworkItemStack result;
+		protected final String group;
+		protected final Ingredient[] ingredients;
+		protected final NetworkItemStack result;
 
 		public ShapelessRecipe(String id, ByteBuf data) {
 			super(id, RecipeType.CRAFTING_SHAPELESS);
@@ -97,11 +97,11 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 	}
 
 	public static class ShapedRecipe extends Recipe {
-		private String group;
-		private int width;
-		private int height;
-		private Ingredient[] ingredients;
-		private NetworkItemStack result;
+		protected final String group;
+		protected final int width;
+		protected final int height;
+		protected final Ingredient[] ingredients;
+		protected final NetworkItemStack result;
 
 		public ShapedRecipe(String id, ByteBuf data) {
 			super(id, RecipeType.CRAFTING_SHAPED);
@@ -139,11 +139,11 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 	}
 
 	public static class SmeltingRecipe extends Recipe {
-		private String group;
-		private Ingredient ingredient;
-		private NetworkItemStack result;
-		private float exp;
-		private int time;
+		protected final String group;
+		protected final Ingredient ingredient;
+		protected final NetworkItemStack result;
+		protected final float exp;
+		protected final int time;
 
 		public SmeltingRecipe(String id, ByteBuf data) {
 			super(id, RecipeType.SMELTING);
@@ -209,7 +209,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 			}
 		};
 
-		private static Map<String, RecipeType> byInternalName = new HashMap<>();
+		private static final Map<String, RecipeType> byInternalName = new HashMap<>();
 		private final String internalName = name().toLowerCase();
 
 		static {
@@ -233,5 +233,6 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 		public Recipe read(String id, ByteBuf serverdata) {
 			return new Recipe(id, this);
 		}
+
 	}
 }

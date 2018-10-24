@@ -28,11 +28,11 @@ public class PotionToLegacyIdComplexRemapper implements ItemStackComplexRemapper
 			return itemstack;
 		}
 		String potion = NBTString.getValueOrNull(tag.getTagOfType("Potion", NBTType.STRING));
+		NBTList<NBTCompound> customPotionEffects = tag.getTagListOfType("CustomPotionEffects", NBTType.COMPOUND);
+		if (customPotionEffects != null && customPotionEffects.size() >= 1) {
+			potion = PotionData.getNameById(customPotionEffects.getTag(0).getNumberTag("Id").getAsInt());
+		}
 		if (potion != null) {
-			NBTList<NBTCompound> customPotionEffects = tag.getTagListOfType("CustomPotionEffects", NBTType.COMPOUND);
-			if (customPotionEffects.size() >= 1) {
-				potion = PotionData.getNameById(customPotionEffects.getTag(0).getNumberTag("Id").getAsInt());
-			}
 			itemstack.setLegacyData(LegacyPotionId.toLegacyId(potion, isThrowablePotion));
 			String basicTypeName = LegacyPotionId.getBasicTypeName(potion);
 			if (basicTypeName != null) {

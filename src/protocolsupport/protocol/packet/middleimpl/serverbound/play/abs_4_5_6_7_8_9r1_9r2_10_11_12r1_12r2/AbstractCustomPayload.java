@@ -117,8 +117,11 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 		float integrity = data.readFloat();
 		long seed = VarNumberSerializer.readVarLong(data);
 		byte flags = (byte) (ignoreEntities | showAir | showBoundingBox);
-		return RecyclableSingletonList.create(MiddleUpdateStructureBlock.create(position, action, mode, name, 
-				offsetX, offsetY, offsetZ, sizeX, sizeY, sizeZ, mirror, rotation, metadata, integrity, seed, flags));
+		return RecyclableSingletonList.create(MiddleUpdateStructureBlock.create(
+			position, action, mode, name,
+			offsetX, offsetY, offsetZ, sizeX, sizeY, sizeZ,
+			mirror, rotation, metadata, integrity, seed, flags
+		));
 	}
 
 	protected RecyclableCollection<ServerBoundPacketData> transformSetBeaconEffect() {
