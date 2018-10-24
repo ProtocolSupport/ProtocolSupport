@@ -32,6 +32,7 @@ public class EntityMetadataRemapper {
 		Arrays.stream(versions).forEach(version -> getRemaps(version).add(objectremapperProvider.apply(version)));
 	}
 
+	@Override
 	public EntityMetadataRemapper clone() {
 		EntityMetadataRemapper clone = new EntityMetadataRemapper();
 		entries.forEach((version, lEntries) -> clone.getRemaps(version).addAll(lEntries));
