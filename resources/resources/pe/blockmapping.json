@@ -601,7 +601,7 @@
   },
   "minecraft:grass":{
   	"pename":"minecraft:tallgrass"
-  	"pedata":0
+    "pedata":0
   },
   "minecraft:fern":{
     "pename":"minecraft:tallgrass",
