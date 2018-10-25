@@ -20,7 +20,7 @@ public abstract class MiddleUpdateStructureBlock extends ServerBoundMiddlePacket
 		super(connection);
 	}
 
-	protected Position position = new Position(0, 0, 0);
+	protected final Position position = new Position(0, 0, 0);
 	protected Action action;
 	protected Mode mode;
 	protected String name;
@@ -42,9 +42,10 @@ public abstract class MiddleUpdateStructureBlock extends ServerBoundMiddlePacket
 		return RecyclableSingletonList.create(create(position, action, mode, name, offsetX, offsetY, offsetZ, sizeX, sizeY, sizeZ, mirror, rotation, metadata, integrity, seed, flags));
 	}
 
-	public static ServerBoundPacketData create(Position position, Action action, Mode mode, String name, 
-			byte offsetX, byte offsetY, byte offsetZ, byte sizeX, byte sizeY, byte sizeZ, 
-			Mirror mirror, Rotation rotation, String metadata, float integrity, long seed, byte flags) {
+	public static ServerBoundPacketData create(Position position, Action action, Mode mode, String name,
+			byte offsetX, byte offsetY, byte offsetZ, byte sizeX, byte sizeY, byte sizeZ,
+			Mirror mirror, Rotation rotation, String metadata, float integrity, long seed, byte flags
+	) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_UPDATE_STRUCTURE_BLOCK);
 		PositionSerializer.writePosition(creator, position);
 		MiscSerializer.writeVarIntEnum(creator, action);

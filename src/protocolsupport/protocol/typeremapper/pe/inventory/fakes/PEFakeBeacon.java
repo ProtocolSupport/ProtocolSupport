@@ -45,7 +45,8 @@ public class PEFakeBeacon {
 						Position block = position.clone();
 						block.mod(x, -i, z);
 						invCache.getFakeContainers().addLast(block);
-						BlockChangeSingle.create(version, block, PEBlocks.toPocketBlock(version, Material.EMERALD_BLOCK), packets);
+						BlockChangeSingle.create(version, block,
+								PEBlocks.toPocketBlock(version, Material.EMERALD_BLOCK), packets);
 					}
 				}
 			}
