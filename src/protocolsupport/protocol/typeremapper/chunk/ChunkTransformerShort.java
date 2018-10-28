@@ -1,12 +1,13 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
 public class ChunkTransformerShort extends ChunkTransformerBA {
 
-	public ChunkTransformerShort(ArrayBasedIdRemappingTable blockRemappingTable) {
-		super(blockRemappingTable);
+	public ChunkTransformerShort(ArrayBasedIdRemappingTable blockRemappingTable, NetworkDataCache cache) {
+		super(blockRemappingTable, cache);
 	}
 
 	@Override
@@ -21,7 +22,7 @@ public class ChunkTransformerShort extends ChunkTransformerBA {
 				BlockStorageReader storage = section.blockdata;
 				for (int block = 0; block < blocksInSection; block++) {
 					int dataindex = blockIdIndex + (block << 1);
-					int blockstate = storage.getBlockState(block);
+					int blockstate = getBlockState(i, storage, block);
 					blockstate = PreFlatteningBlockIdData.getCombinedId(blockTypeRemappingTable.getRemap(blockstate));
 					data[dataindex] = (byte) blockstate;
 					data[dataindex + 1] = (byte) (blockstate >> 8);

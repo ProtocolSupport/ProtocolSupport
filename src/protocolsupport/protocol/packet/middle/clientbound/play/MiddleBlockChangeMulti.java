@@ -5,6 +5,8 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.Utils;
 
 public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
@@ -21,14 +23,34 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 	public void readFromServerData(ByteBuf serverdata) {
 		chunkX = serverdata.readInt();
 		chunkZ = serverdata.readInt();
-		records = ArraySerializer.readVarIntTArray(serverdata, Record.class, from -> new Record(from.readUnsignedShort(), VarNumberSerializer.readVarInt(from)));
+		records = ArraySerializer.readVarIntTArray(
+			serverdata, 
+			Record.class, 
+			from -> {
+				short horizCoord = from.readUnsignedByte();
+				short yCoord = from.readUnsignedByte();
+				int id = VarNumberSerializer.readVarInt(from);
+				if (TileNBTRemapper.shouldCacheBlockState(id)) {
+					connection.getCache().getTileBlockDataCache().setTileBlockstate(
+						new Position((
+							(horizCoord >> 4) & 0xF) + (chunkX * 16), 
+							yCoord,
+							(horizCoord & 0xF) + (chunkZ * 16)
+						), id
+					);
+				}
+				return new Record(horizCoord, yCoord, id);
+			}
+		);
 	}
 
 	public static class Record {
-		public final int coord;
+		public final short horizCoord;
+		public final short yCoord;
 		public final int id;
-		public Record(int coord, int id) {
-			this.coord = coord;
+		public Record(short horizCoord, short yCoord, int id) {
+			this.horizCoord = horizCoord;
+			this.yCoord = yCoord;
 			this.id = id;
 		}
 		@Override

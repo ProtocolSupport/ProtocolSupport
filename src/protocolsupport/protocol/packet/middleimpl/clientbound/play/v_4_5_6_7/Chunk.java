@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
@@ -22,11 +21,10 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	protected final ChunkTransformerBA transformer = new ChunkTransformerByte(LegacyBlockData.REGISTRY.getTable(connection.getVersion()));
+	protected final ChunkTransformerBA transformer = new ChunkTransformerByte(LegacyBlockData.REGISTRY.getTable(connection.getVersion()), cache);
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
 		chunkdata.writeInt(chunkX);
@@ -40,7 +38,7 @@ public class Chunk extends MiddleChunk {
 			chunkdata.writeInt(compressed.length);
 			chunkdata.writeBytes(compressed);
 		} else {
-			transformer.loadData(data, bitmask, hasSkyLight, full);
+			transformer.loadData(chunkX, chunkZ, data, bitmask, hasSkyLight, full);
 			byte[] compressed = Compressor.compressStatic(transformer.toLegacyData());
 			chunkdata.writeShort(bitmask);
 			chunkdata.writeShort(0);
@@ -50,8 +48,7 @@ public class Chunk extends MiddleChunk {
 		packets.add(chunkdata);
 		for (NBTCompound tile : tiles) {
 			packets.add(BlockTileUpdate.createPacketData(
-				version,
-				cache.getAttributesCache().getLocale(),
+				connection,
 				TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)),
 				TileNBTRemapper.getPosition(tile),
 				tile

@@ -21,11 +21,11 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	protected final ChunkTransformerBB transformer = new ChunkTransformerVariesLegacy(LegacyBlockData.REGISTRY.getTable(connection.getVersion()));
+	protected final ChunkTransformerBB transformer = new ChunkTransformerVariesLegacy(LegacyBlockData.REGISTRY.getTable(connection.getVersion()), cache);
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		transformer.loadData(data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full);
+		transformer.loadData(chunkX, chunkZ, data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full);
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
 		serializer.writeInt(chunkX);
@@ -33,7 +33,7 @@ public class Chunk extends MiddleChunk {
 		serializer.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(serializer, bitmask);
 		ArraySerializer.writeVarIntByteArray(serializer, transformer::writeLegacyData);
-		ArraySerializer.writeVarIntTArray(serializer, tiles, (to, tile) -> ItemStackSerializer.writeTag(to, version, TileNBTRemapper.remap(version, tile)));
+		ArraySerializer.writeVarIntTArray(serializer, tiles, (to, tile) -> ItemStackSerializer.writeTag(to, version, TileNBTRemapper.remap(connection, tile)));
 		return RecyclableSingletonList.create(serializer);
 	}
 

@@ -2,13 +2,14 @@ package protocolsupport.protocol.typeremapper.chunk;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
 public class ChunkTransformerVaries extends ChunkTransformerBB {
 
 	protected final ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable;
-	public ChunkTransformerVaries(ArrayBasedIdRemappingTable blockTypeRemappingTable, ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable) {
-		super(blockTypeRemappingTable);
+	public ChunkTransformerVaries(ArrayBasedIdRemappingTable blockTypeRemappingTable, ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable, NetworkDataCache cache) {
+		super(blockTypeRemappingTable, cache);
 		this.blockFlatteningIdRemappingTable = blockFlatteningIdRemappingTable;
 	}
 
@@ -25,7 +26,7 @@ public class ChunkTransformerVaries extends ChunkTransformerBB {
 					buffer.writeByte(globalPaletteBitsPerBlock);
 					BlockStorageWriter blockstorage = new BlockStorageWriter(globalPaletteBitsPerBlock, blocksInSection);
 					for (int blockIndex = 0; blockIndex < blocksInSection; blockIndex++) {
-						blockstorage.setBlockState(blockIndex, blockFlatteningIdRemappingTable.getRemap(blockTypeRemappingTable.getRemap(storage.getBlockState(blockIndex))));
+						blockstorage.setBlockState(blockIndex, blockFlatteningIdRemappingTable.getRemap(blockTypeRemappingTable.getRemap(getBlockState(i, storage, blockIndex))));
 					}
 					ArraySerializer.writeVarIntLongArray(buffer, blockstorage.getBlockData());
 				} else {
@@ -33,7 +34,7 @@ public class ChunkTransformerVaries extends ChunkTransformerBB {
 					BlockPalette palette = new BlockPalette();
 					BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock, blocksInSection);
 					for (int blockIndex = 0; blockIndex < blocksInSection; blockIndex++) {
-						blockstorage.setBlockState(blockIndex, palette.getRuntimeId(blockFlatteningIdRemappingTable.getRemap(blockTypeRemappingTable.getRemap(storage.getBlockState(blockIndex)))));
+						blockstorage.setBlockState(blockIndex, palette.getRuntimeId(blockFlatteningIdRemappingTable.getRemap(blockTypeRemappingTable.getRemap(getBlockState(i, storage, blockIndex)))));
 					}
 					ArraySerializer.writeVarIntVarIntArray(buffer, palette.getBlockStates());
 					ArraySerializer.writeVarIntLongArray(buffer, blockstorage.getBlockData());

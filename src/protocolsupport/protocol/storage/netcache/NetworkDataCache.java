@@ -39,6 +39,11 @@ public class NetworkDataCache {
 		return cpccache;
 	}
 
+	protected final TileBlockDataCache tbdcache = new TileBlockDataCache();
+	public TileBlockDataCache getTileBlockDataCache() {
+		return tbdcache;
+	}
+
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);

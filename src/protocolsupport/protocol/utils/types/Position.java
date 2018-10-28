@@ -55,4 +55,22 @@ public class Position {
 		return Utils.toStringAllFields(this);
 	}
 
+	@Override
+	public int hashCode() {
+		int code = 7;
+		code = 47 * code + x;
+		code = 47 * code + y;
+		code = 47 * code + z;
+		return code;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Position) {
+			Position pos = (Position) o;
+			return x == pos.getX() && y == pos.getY() && z == pos.getZ();
+		}
+		return false;
+	}
+
 }
