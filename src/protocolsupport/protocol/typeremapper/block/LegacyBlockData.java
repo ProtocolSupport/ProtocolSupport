@@ -49,7 +49,7 @@ public class LegacyBlockData {
 
 	public static class BlockIdRemappingRegistry extends IdRemappingRegistry<ArrayBasedIdRemappingTable> {
 
-		{
+		public BlockIdRemappingRegistry() {
 			applyDefaultRemaps();
 		}
 
@@ -138,7 +138,7 @@ public class LegacyBlockData {
 		}
 
 		public void applyDefaultRemaps() {
-			remappings.clear();
+			clear();
 
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(

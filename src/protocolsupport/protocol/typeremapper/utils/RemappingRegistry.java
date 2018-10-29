@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.utils;
 
+import java.text.MessageFormat;
 import java.util.EnumMap;
 
 import protocolsupport.api.ProtocolVersion;
@@ -11,8 +12,20 @@ public abstract class RemappingRegistry<T extends RemappingTable> {
 
 	protected final EnumMap<ProtocolVersion, T> remappings = new EnumMap<>(ProtocolVersion.class);
 
+	public RemappingRegistry() {
+		clear();
+	}
+
+	public void clear() {
+		for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
+			remappings.put(version, createTable());
+		}
+	}
+
 	public T getTable(ProtocolVersion version) {
-		return remappings.computeIfAbsent(version, k -> createTable());
+		return remappings.computeIfAbsent(version, k -> {
+			throw new IllegalArgumentException(MessageFormat.format("Missing remapping table for version {0}", k));
+		});
 	}
 
 	protected abstract T createTable();
