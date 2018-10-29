@@ -10,7 +10,7 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.IdRemappingTab
 
 public abstract class RemappingRegistry<T extends RemappingTable> {
 
-	protected final EnumMap<ProtocolVersion, T> remappings = new EnumMap<>(ProtocolVersion.class);
+	protected final EnumMap<ProtocolVersion, T> registry = new EnumMap<>(ProtocolVersion.class);
 
 	public RemappingRegistry() {
 		clear();
@@ -18,12 +18,12 @@ public abstract class RemappingRegistry<T extends RemappingTable> {
 
 	public void clear() {
 		for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
-			remappings.put(version, createTable());
+			registry.put(version, createTable());
 		}
 	}
 
 	public T getTable(ProtocolVersion version) {
-		return remappings.computeIfAbsent(version, k -> {
+		return registry.computeIfAbsent(version, k -> {
 			throw new IllegalArgumentException(MessageFormat.format("Missing remapping table for version {0}", k));
 		});
 	}
