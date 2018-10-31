@@ -1,17 +1,15 @@
 package protocolsupport.protocol.storage.netcache;
 
-import org.bukkit.block.data.BlockData;
 
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import protocolsupport.api.MaterialAPI;
 import protocolsupport.protocol.utils.types.Position;
 
 public class TileBlockDataCache {
 
 	protected final Object2IntOpenHashMap<Position> tiledata = new Object2IntOpenHashMap<>();
 
-	public BlockData getTileBlockData(Position position) {
-		return MaterialAPI.getBlockDataByNetworkId(tiledata.getInt(position));
+	public int getTileBlockData(Position position) {
+		return (tiledata.getInt(position));
 	}
 
 	public void setTileBlockstate(Position position, int blockstate) {

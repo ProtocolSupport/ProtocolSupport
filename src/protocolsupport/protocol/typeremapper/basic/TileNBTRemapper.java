@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Function;
+
 
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Rotatable;
 
-import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
@@ -41,13 +44,40 @@ public class TileNBTRemapper {
 		newToOldType.put(TileEntityType.SIGN, "Sign");
 	}
 
-	//TODO make version a main key, so remapping table can be extracted by middle packets
-	protected static final EnumMap<TileEntityType, EnumMap<ProtocolVersion, List<BiFunction<ConnectionImpl, NBTCompound, NBTCompound>>>> registry = new EnumMap<>(TileEntityType.class);
+	protected static final EnumMap<ProtocolVersion, EnumMap<TileEntityType, List<Function<NBTCompound, NBTCompound>>>> tile2tile = new EnumMap<>(ProtocolVersion.class);
+	protected static final EnumMap<ProtocolVersion, Map<Integer, List<BiFunction<BlockData, NBTCompound, NBTCompound>>>> tilestate2tile = new EnumMap<>(ProtocolVersion.class);
+	protected static final EnumMap<ProtocolVersion, Map<Integer, Function<BlockData, NBTCompound>>> state2tile = new EnumMap<>(ProtocolVersion.class);
 
-	protected static void register(TileEntityType type, BiFunction<ConnectionImpl, NBTCompound, NBTCompound> transformer, ProtocolVersion... versions) {
-		EnumMap<ProtocolVersion, List<BiFunction<ConnectionImpl, NBTCompound, NBTCompound>>> map = registry.computeIfAbsent(type, k -> new EnumMap<>(ProtocolVersion.class));
+	protected static void register(TileEntityType type, Function<NBTCompound, NBTCompound> transformer, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
-			map.computeIfAbsent(version, k -> new ArrayList<>()).add(transformer);
+			EnumMap<TileEntityType, List<Function<NBTCompound, NBTCompound>>> map = tile2tile.computeIfAbsent(version, k -> new EnumMap<>(TileEntityType.class));
+			map.computeIfAbsent(type, k -> new ArrayList<>()).add(transformer);
+		}
+	}
+
+	protected static void registerLegacy(List<Material> types, BiFunction<BlockData, NBTCompound, NBTCompound> transformer, ProtocolVersion... versions) {
+		for (ProtocolVersion version : versions) {
+			Map<Integer, List<BiFunction<BlockData, NBTCompound, NBTCompound>>> map = tilestate2tile.computeIfAbsent(version, k -> new Int2ObjectOpenHashMap<>());
+			types.forEach(type -> {
+				MaterialAPI.getBlockDataList(type).stream()
+				.map(MaterialAPI::getBlockDataNetworkId)
+				.forEach(i -> {
+					map.computeIfAbsent(i, k -> new ArrayList<>()).add(transformer);
+				});
+			});
+		}
+	}
+
+	protected static void registerLegacy(List<Material> types, Function<BlockData, NBTCompound> transformer, ProtocolVersion... versions) {
+		for (ProtocolVersion version : versions) {
+			Map<Integer, Function<BlockData, NBTCompound>> map = state2tile.computeIfAbsent(version, k -> new Int2ObjectOpenHashMap<>());
+			types.forEach(type -> {
+				MaterialAPI.getBlockDataList(type).stream()
+				.map(MaterialAPI::getBlockDataNetworkId)
+				.forEach(i -> {
+					map.put(i, transformer);
+				});
+			});
 		}
 	}
 
@@ -55,7 +85,7 @@ public class TileNBTRemapper {
 		for (TileEntityType type : TileEntityType.values()) {
 			register(
 				type,
-				(connection, input) -> {
+				(input) -> {
 					input.setTag(tileEntityTypeKey, new NBTString(newToOldType.getOrDefault(type, type.getRegistryId())));
 					return input;
 				},
@@ -64,7 +94,7 @@ public class TileNBTRemapper {
 		}
 		register(
 			TileEntityType.MOB_SPAWNER,
-			(connection, input) -> {
+			(input) -> {
 				if (input.getTagOfType("SpawnData", NBTType.COMPOUND) == null) {
 					NBTCompound spawndata = new NBTCompound();
 					spawndata.setTag("id", new NBTString(NetworkEntityType.PIG.getKey()));
@@ -76,7 +106,7 @@ public class TileNBTRemapper {
 		);
 		register(
 			TileEntityType.MOB_SPAWNER,
-			(connection, input) -> {
+			(input) -> {
 				NBTCompound spawndata = input.getTagOfType("SpawnData", NBTType.COMPOUND);
 				if (spawndata != null) {
 					NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(NBTString.getValueOrNull(spawndata.getTagOfType("id", NBTType.STRING)));
@@ -90,7 +120,7 @@ public class TileNBTRemapper {
 		);
 		register(
 			TileEntityType.MOB_SPAWNER,
-			(connection, input) -> {
+			(input) -> {
 				if (input.getTagOfType("SpawnData", NBTType.COMPOUND) != null) {
 					input.removeTag("SpawnPotentials");
 					input.removeTag("SpawnData");
@@ -99,13 +129,24 @@ public class TileNBTRemapper {
 			},
 			ProtocolVersionsHelper.BEFORE_1_9
 		);
-		register(
-			TileEntityType.SKULL,
-			(connection, input) -> {
-				BlockData skulldata = getTileDataFromCache(input, connection);
-				if (skulldata instanceof Rotatable) {
+		registerLegacy(
+			Arrays.asList(
+					Material.SKELETON_SKULL, 
+					Material.WITHER_SKELETON_SKULL, 
+					Material.CREEPER_HEAD, 
+					Material.DRAGON_HEAD, 
+					Material.PLAYER_HEAD, 
+					Material.ZOMBIE_HEAD,
+					Material.SKELETON_WALL_SKULL, 
+					Material.WITHER_SKELETON_WALL_SKULL, 
+					Material.CREEPER_WALL_HEAD, 
+					Material.DRAGON_WALL_HEAD, 
+					Material.PLAYER_WALL_HEAD, 
+					Material.ZOMBIE_WALL_HEAD
+			), (blockdata, input) -> {
+				if (blockdata instanceof Rotatable) {
 					System.out.println("ON GROUND WooooHOHOOOO");
-				} else if (skulldata instanceof Directional) {
+				} else if (blockdata instanceof Directional) {
 					System.out.println("ON WALL WooooHOHOOOO");
 				}
 				return input;
@@ -114,11 +155,33 @@ public class TileNBTRemapper {
 		);
 		register(
 			TileEntityType.SKULL,
-			(connection, input) -> {
+			(input) -> {
 				PlayerHeadToLegacyOwnerComplexRemapper.remap(input, "Owner", "ExtraType");
 				return input;
 			},
 			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5)
+		);
+		registerLegacy(
+			Arrays.asList(
+				Material.BLACK_BED, 
+				Material.BLUE_BED, 
+				Material.BROWN_BED, 
+				Material.CYAN_BED, 
+				Material.GRAY_BED, 
+				Material.GREEN_BED, 
+				Material.LIGHT_BLUE_BED, 
+				Material.LIGHT_GRAY_BED,
+				Material.LIME_BED, 
+				Material.MAGENTA_BED, 
+				Material.ORANGE_BED, 
+				Material.PINK_BED, 
+				Material.PURPLE_BED, 
+				Material.RED_BED, 
+				Material.WHITE_BED, 
+				Material.YELLOW_BED
+			), (blockdata) -> {
+				return new NBTCompound();
+			}, ProtocolVersionsHelper.RANGE__1_11_1__1_12_2
 		);
 	}
 
@@ -138,34 +201,50 @@ public class TileNBTRemapper {
 		return lines;
 	}
 
-	private static BlockData getTileDataFromCache(NBTCompound input, ConnectionImpl connection) {
-		return connection.getCache().getTileBlockDataCache().getTileBlockData(getPosition(input));
+	private ConnectionImpl connection;
+
+	public TileNBTRemapper(ConnectionImpl connection) {
+		this.connection = connection;
 	}
 
-	public static NBTCompound remap(ConnectionImpl connection, NBTCompound compound) {
-		EnumMap<ProtocolVersion, List<BiFunction<ConnectionImpl, NBTCompound, NBTCompound>>> map = registry.get(TileEntityType.getByRegistryId(getTileType(compound)));
+	public NBTCompound remap(NBTCompound compound) {
+		EnumMap<TileEntityType, List<Function<NBTCompound, NBTCompound>>> map = tile2tile.get(connection.getVersion());
 		if (map != null) {
-			List<BiFunction<ConnectionImpl, NBTCompound, NBTCompound>> transformers = map.get(connection.getVersion());
+			List<Function<NBTCompound, NBTCompound>> transformers = map.get(TileEntityType.getByRegistryId(getTileType(compound)));
 			if (transformers != null) {
-				for (BiFunction<ConnectionImpl, NBTCompound, NBTCompound> transformer : transformers) {
-					compound = transformer.apply(connection, compound);
+				for (Function<NBTCompound, NBTCompound> transformer : transformers) {
+					compound = transformer.apply(compound);
 				}
-				return compound;
+			}
+		}
+		int tileblock = connection.getCache().getTileBlockDataCache().getTileBlockData(getPosition(compound));
+		if (tileblock != -1) {
+			//If the block is cached then there is also a transformer responsible for that caching.
+			for (BiFunction<BlockData, NBTCompound, NBTCompound> transformer : tilestate2tile.get(connection.getVersion()).get(tileblock)) {
+				compound = transformer.apply(MaterialAPI.getBlockDataByNetworkId(tileblock), compound);
 			}
 		}
 		return compound;
 	}
 
-	private static final IntArrayList blockdataCacheTileStates = new IntArrayList();
-	static {
-		Arrays.asList(Material.SKELETON_SKULL, Material.WITHER_SKELETON_SKULL, Material.CREEPER_HEAD, Material.DRAGON_HEAD, Material.PLAYER_HEAD, Material.ZOMBIE_HEAD,
-				Material.SKELETON_WALL_SKULL, Material.WITHER_SKELETON_WALL_SKULL, Material.CREEPER_WALL_HEAD, Material.DRAGON_WALL_HEAD, Material.PLAYER_WALL_HEAD, Material.ZOMBIE_WALL_HEAD,
-				Material.BLACK_BED, Material.BLUE_BED, Material.BROWN_BED, Material.CYAN_BED, Material.GRAY_BED, Material.GREEN_BED, Material.LIGHT_BLUE_BED, Material.LIGHT_GRAY_BED,
-				Material.LIME_BED, Material.MAGENTA_BED, Material.ORANGE_BED, Material.PINK_BED, Material.PURPLE_BED, Material.RED_BED, Material.WHITE_BED, Material.YELLOW_BED)
-		.forEach(mat -> MaterialAPI.getBlockDataList(mat).forEach(data -> blockdataCacheTileStates.add(MaterialAPI.getBlockDataNetworkId(data))));
+	public NBTCompound getLegacyTileFromBlock(int blockstate) {
+		Map<Integer, Function<BlockData, NBTCompound>> map = state2tile.get(connection.getVersion());
+		if (map != null) {
+			Function<BlockData, NBTCompound> constructor = map.get(blockstate);
+			if (constructor != null) {
+				BlockData blockdata = MaterialAPI.getBlockDataByNetworkId(blockstate);
+				return constructor.apply(blockdata);
+			}
+		}
+		return null;
 	}
-	public static boolean shouldCacheBlockState(int blockstate) {
-		return blockdataCacheTileStates.contains(blockstate);
+
+	public boolean isToBeCachedTile(int blockstate) {
+		return tilestate2tile.get(connection.getVersion()).keySet().contains(blockstate);
+	}
+
+	public boolean usedToBeTile(ProtocolVersion version, int blockstate) {
+		return state2tile.get(connection.getVersion()).keySet().contains(blockstate);
 	}
 
 }

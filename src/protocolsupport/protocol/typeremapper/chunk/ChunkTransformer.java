@@ -1,6 +1,10 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
@@ -8,6 +12,7 @@ import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 
 public abstract class ChunkTransformer {
 
@@ -18,17 +23,19 @@ public abstract class ChunkTransformer {
 	protected boolean hasBiomeData;
 	protected final ChunkSection[] sections = new ChunkSection[16];
 	protected final int[] biomeData = new int[256];
-	protected NetworkDataCache cache;
+	protected ConnectionImpl connection;
+	protected List<NBTCompound> legacyTiles;
 
 	protected final ArrayBasedIdRemappingTable blockTypeRemappingTable;
-	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable, NetworkDataCache cache) {
+	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable, ConnectionImpl connection) {
 		this.blockTypeRemappingTable = blockRemappingTable;
-		this.cache = cache;
+		this.connection = connection;
 	}
 
 	public void loadData(int chunkX, int chunkZ, ByteBuf chunkdata, int bitmap, boolean hasSkyLight, boolean hasBiomeData) {
 		this.chunkX = chunkX;
 		this.chunkZ = chunkZ;
+		this.legacyTiles = new ArrayList<>();
 		this.columnsCount = Integer.bitCount(bitmap);
 		this.hasSkyLight = hasSkyLight;
 		this.hasBiomeData = hasBiomeData;
@@ -50,6 +57,9 @@ public abstract class ChunkTransformer {
 		int blockstate = blockstorage.getBlockState(blockindex);
 		if (TileNBTRemapper.shouldCacheBlockState(blockstate)) {
 			cache.getTileBlockDataCache().setTileBlockstate(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);
+		}
+		if (TileNBTRemapper.usedToBeTile(connection.getVersion(), blockstate)) {
+			NBTCompound extraTile = TileNBTRemapper.getLegacyTileFromBlock(connection, )
 		}
 		return blockstate;
 	}
