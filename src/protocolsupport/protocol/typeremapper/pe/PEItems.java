@@ -17,7 +17,7 @@ public class PEItems {
 	protected static final int combinedPEStoneId = formLegacyCombinedId(1, 0);
 
 	protected static int formLegacyCombinedId(int id, int data) {
-		return (id << 4) | data;
+		return (id << 16) | data;
 	}
 
 	protected static final int[] toPEId = new int[MinecraftData.ITEM_COUNT];
@@ -25,6 +25,10 @@ public class PEItems {
 	protected static void register(String modernKey, int legacyMainId, int legacyData) {
 		int modernId = ItemMaterialLookup.getRuntimeId(ItemMaterialLookup.getByKey(modernKey));
 		int combinedLegacyId = formLegacyCombinedId(legacyMainId, legacyData);
+
+		if(modernId == -1)
+			throw new IllegalArgumentException("modernId missing for modernKey " + modernKey);
+
 		toPEId[modernId] = combinedLegacyId;
 		fromPEId.put(combinedLegacyId, modernId);
 	}
