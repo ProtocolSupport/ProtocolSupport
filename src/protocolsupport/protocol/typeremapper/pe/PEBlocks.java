@@ -1,7 +1,9 @@
 package protocolsupport.protocol.typeremapper.pe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
@@ -42,12 +44,17 @@ public class PEBlocks {
 			JsonObject object = element.getAsJsonObject();
 			peBlocks.add(new PEBlock(JsonUtils.getString(object, "name"), (short) JsonUtils.getInt(object, "data")));
 		}
+		//Some pre-defined are always inherently waterlogged:
+		List<Material> inherentlyWaterlogged = Arrays.asList(Material.BUBBLE_COLUMN, Material.KELP, Material.KELP_PLANT, Material.SEAGRASS, Material.TALL_SEAGRASS);
 		//Iterate over all possible blockstates for remap.
 		for (int i = 0; i < MinecraftData.BLOCKDATA_COUNT; i++) {
 			BlockData data = ServerPlatform.get().getMiscUtils().getBlockDataByNetworkId(i);
 			//Store waterloggedness.
 			if (data instanceof Waterlogged) {
 				pcWaterlogged[i] = ((Waterlogged) data).isWaterlogged() ? IS_WATERLOGGED : CAN_BE_WATERLOGGED;
+			}
+			if (inherentlyWaterlogged.contains(data.getMaterial())) {
+				pcWaterlogged[i] = IS_WATERLOGGED;
 			}
 			//Remap to PE
 			if(peMappings.has(data.getAsString())) {
