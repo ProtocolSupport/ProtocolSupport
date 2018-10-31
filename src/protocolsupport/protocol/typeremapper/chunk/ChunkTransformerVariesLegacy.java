@@ -3,14 +3,14 @@ package protocolsupport.protocol.typeremapper.chunk;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.NetworkDataCache;
+import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
 public class ChunkTransformerVariesLegacy extends ChunkTransformerBB {
 
-	public ChunkTransformerVariesLegacy(ArrayBasedIdRemappingTable blockRemappingTable, NetworkDataCache cache) {
-		super(blockRemappingTable, cache);
+	public ChunkTransformerVariesLegacy(ArrayBasedIdRemappingTable blockRemappingTable, TileNBTRemapper tileremapper) {
+		super(blockRemappingTable, tileremapper);
 	}
 
 	protected static final int globalPaletteBitsPerBlock = 13;

@@ -1,5 +1,7 @@
 package protocolsupport.protocol.storage.netcache;
 
+import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.utils.Utils;
 
 public class NetworkDataCache {
@@ -39,9 +41,9 @@ public class NetworkDataCache {
 		return cpccache;
 	}
 
-	protected final TileBlockDataCache tbdcache = new TileBlockDataCache();
-	public TileBlockDataCache getTileBlockDataCache() {
-		return tbdcache;
+	protected TileNBTRemapper tileremapper;
+	public TileNBTRemapper getTileRemapper(ConnectionImpl connection) {
+		return tileremapper != null ? tileremapper : new TileNBTRemapper(connection);
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	protected final ChunkTransformerBA transformer = new ChunkTransformerShort(LegacyBlockData.REGISTRY.getTable(connection.getVersion()), cache);
+	protected final ChunkTransformerBA transformer = new ChunkTransformerShort(LegacyBlockData.REGISTRY.getTable(connection.getVersion()), cache.getTileRemapper(connection));
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -36,19 +36,19 @@ public class Chunk extends MiddleChunk {
 			chunkdata.writeShort(1);
 			ArraySerializer.writeVarIntByteArray(chunkdata, EmptyChunk.get18ChunkData(hasSkyLight));
 		} else {
-			transformer.loadData(chunkX, chunkZ, data, bitmask, hasSkyLight, full);
+			transformer.loadData(chunkX, chunkZ, data, bitmask, hasSkyLight, full, tiles);
 			chunkdata.writeShort(bitmask);
 			ArraySerializer.writeVarIntByteArray(chunkdata, transformer.toLegacyData());
+			for (NBTCompound tile : transformer.getTiles()) {
+				packets.add(BlockTileUpdate.createPacketData(
+					connection,
+					TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)),
+					TileNBTRemapper.getPosition(tile),
+					tile
+				));
+			}
 		}
 		packets.add(chunkdata);
-		for (NBTCompound tile : tiles) {
-			packets.add(BlockTileUpdate.createPacketData(
-				connection,
-				TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)),
-				TileNBTRemapper.getPosition(tile),
-				tile
-			));
-		}
 		return packets;
 	}
 

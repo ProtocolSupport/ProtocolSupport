@@ -1,13 +1,12 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
@@ -23,19 +22,18 @@ public abstract class ChunkTransformer {
 	protected boolean hasBiomeData;
 	protected final ChunkSection[] sections = new ChunkSection[16];
 	protected final int[] biomeData = new int[256];
-	protected ConnectionImpl connection;
-	protected List<NBTCompound> legacyTiles;
+	protected List<NBTCompound> tiles;
 
 	protected final ArrayBasedIdRemappingTable blockTypeRemappingTable;
-	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable, ConnectionImpl connection) {
+	protected final TileNBTRemapper tileremapper;
+	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable, TileNBTRemapper tileremapper) {
 		this.blockTypeRemappingTable = blockRemappingTable;
-		this.connection = connection;
+		this.tileremapper = tileremapper;
 	}
 
-	public void loadData(int chunkX, int chunkZ, ByteBuf chunkdata, int bitmap, boolean hasSkyLight, boolean hasBiomeData) {
+	public void loadData(int chunkX, int chunkZ, ByteBuf chunkdata, int bitmap, boolean hasSkyLight, boolean hasBiomeData, NBTCompound[] tiles) {
 		this.chunkX = chunkX;
 		this.chunkZ = chunkZ;
-		this.legacyTiles = new ArrayList<>();
 		this.columnsCount = Integer.bitCount(bitmap);
 		this.hasSkyLight = hasSkyLight;
 		this.hasBiomeData = hasBiomeData;
@@ -51,15 +49,23 @@ public abstract class ChunkTransformer {
 				biomeData[i] = chunkdata.readInt();
 			}
 		}
+		this.tiles = Arrays.stream(tiles).map(tileremapper::remap).collect(Collectors.toList());
+	}
+
+	public List<NBTCompound> getTiles() {
+		return tiles;
 	}
 
 	protected int getBlockState(int section, BlockStorageReader blockstorage, int blockindex) {
 		int blockstate = blockstorage.getBlockState(blockindex);
-		if (TileNBTRemapper.shouldCacheBlockState(blockstate)) {
-			cache.getTileBlockDataCache().setTileBlockstate(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);
+		if (tileremapper.tileThatNeedsBlockstate(blockstate)) {
+			tileremapper.setTileBlockstate(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);
 		}
-		if (TileNBTRemapper.usedToBeTile(connection.getVersion(), blockstate)) {
-			NBTCompound extraTile = TileNBTRemapper.getLegacyTileFromBlock(connection, )
+		if (tileremapper.usedToBeTile(blockstate)) {
+			NBTCompound tile = tileremapper.getLegacyTileFromBlock(blockstate);
+			if (tile != null) {
+				tiles.add(tile);
+			}
 		}
 		return blockstate;
 	}

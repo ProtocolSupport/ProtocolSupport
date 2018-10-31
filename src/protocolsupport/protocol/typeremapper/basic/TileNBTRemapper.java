@@ -15,6 +15,7 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Rotatable;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
@@ -185,6 +186,8 @@ public class TileNBTRemapper {
 		);
 	}
 
+
+
 	public static String getTileType(NBTCompound tag) {
 		return NBTString.getValueOrNull(tag.getTagOfType(tileEntityTypeKey, NBTType.STRING));
 	}
@@ -200,6 +203,8 @@ public class TileNBTRemapper {
 		}
 		return lines;
 	}
+
+
 
 	private ConnectionImpl connection;
 
@@ -217,7 +222,7 @@ public class TileNBTRemapper {
 				}
 			}
 		}
-		int tileblock = connection.getCache().getTileBlockDataCache().getTileBlockData(getPosition(compound));
+		int tileblock = getTileBlockData(getPosition(compound));
 		if (tileblock != -1) {
 			//If the block is cached then there is also a transformer responsible for that caching.
 			for (BiFunction<BlockData, NBTCompound, NBTCompound> transformer : tilestate2tile.get(connection.getVersion()).get(tileblock)) {
@@ -239,11 +244,29 @@ public class TileNBTRemapper {
 		return null;
 	}
 
-	public boolean isToBeCachedTile(int blockstate) {
+	protected final Object2IntOpenHashMap<Position> tiledata = new Object2IntOpenHashMap<>();
+
+	public int getTileBlockData(Position position) {
+		return (tiledata.getInt(position));
+	}
+
+	public void setTileBlockstate(Position position, int blockstate) {
+		if (blockstate == 0) {
+			tiledata.removeInt(position);
+		} else {
+			tiledata.put(position, blockstate);
+		}
+	}
+
+	public void clearCache(int chunkX, int chunkZ) {
+		tiledata.keySet().removeIf(pos -> (pos.getX() >> 4) == chunkX && (pos.getZ() >> 4) == chunkZ);
+	}
+
+	public boolean tileThatNeedsBlockstate(int blockstate) {
 		return tilestate2tile.get(connection.getVersion()).keySet().contains(blockstate);
 	}
 
-	public boolean usedToBeTile(ProtocolVersion version, int blockstate) {
+	public boolean usedToBeTile(int blockstate) {
 		return state2tile.get(connection.getVersion()).keySet().contains(blockstate);
 	}
 

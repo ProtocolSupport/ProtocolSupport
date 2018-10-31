@@ -23,10 +23,12 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		super(connection);
 	}
 
+	protected final TileNBTRemapper tileremapper = cache.getTileRemapper(connection);
+
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		return RecyclableSingletonList.create(createPacketData(
-			connection, TileEntityType.getByNetworkId(type), position, tag
+			connection, TileEntityType.getByNetworkId(type), position, tileremapper.remap(tag)
 		));
 	}
 
@@ -43,7 +45,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_UPDATE_TILE_ID);
 			PositionSerializer.writeLegacyPositionS(serializer, position);
 			serializer.writeByte(type.getNetworkId());
-			ItemStackSerializer.writeTag(serializer, version, TileNBTRemapper.remap(connection, tag));
+			ItemStackSerializer.writeTag(serializer, version, tag);
 			return serializer;
 		}
 	}

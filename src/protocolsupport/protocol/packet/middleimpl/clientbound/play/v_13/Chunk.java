@@ -8,11 +8,11 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerVaries;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -25,12 +25,12 @@ public class Chunk extends MiddleChunk {
 	protected final ChunkTransformerBB transformer = new ChunkTransformerVaries(
 		LegacyBlockData.REGISTRY.getTable(connection.getVersion()),
 		FlatteningBlockId.REGISTRY.getTable(connection.getVersion()),
-		cache
+		cache.getTileRemapper(connection)
 	);
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		transformer.loadData(chunkX, chunkZ, data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full);
+		transformer.loadData(chunkX, chunkZ, data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full, tiles);
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
 		serializer.writeInt(chunkX);
@@ -38,8 +38,8 @@ public class Chunk extends MiddleChunk {
 		serializer.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(serializer, bitmask);
 		ArraySerializer.writeVarIntByteArray(serializer, transformer::writeLegacyData);
-		ArraySerializer.writeVarIntTArray(serializer, tiles, (to, tile) -> 
-			ItemStackSerializer.writeTag(to, version, TileNBTRemapper.remap(connection, tile)));
+		ArraySerializer.writeVarIntTArray(serializer, transformer.getTiles().toArray(new NBTCompound[0]), (to, tile) -> 
+			ItemStackSerializer.writeTag(to, version, tile));
 		return RecyclableSingletonList.create(serializer);
 	}
 

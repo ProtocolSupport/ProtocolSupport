@@ -5,7 +5,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.Utils;
 
@@ -30,18 +29,17 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 				short horizCoord = from.readUnsignedByte();
 				short yCoord = from.readUnsignedByte();
 				int id = VarNumberSerializer.readVarInt(from);
-				if (TileNBTRemapper.shouldCacheBlockState(id)) {
-					connection.getCache().getTileBlockDataCache().setTileBlockstate(
-						new Position((
-							(horizCoord >> 4) & 0xF) + (chunkX * 16), 
-							yCoord,
-							(horizCoord & 0xF) + (chunkZ * 16)
-						), id
-					);
-				}
 				return new Record(horizCoord, yCoord, id);
 			}
 		);
+	}
+
+	public Position fromLocalPosition(Record record) {
+		return new Position((
+				(record.horizCoord >> 4) & 0xF) + (chunkX * 16), 
+				record.yCoord,
+				(record.horizCoord & 0xF) + (chunkZ * 16)
+			);
 	}
 
 	public static class Record {

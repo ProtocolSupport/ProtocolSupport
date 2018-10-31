@@ -22,11 +22,11 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	protected final ChunkTransformerBB transformer = new ChunkTransformerVariesLegacy(LegacyBlockData.REGISTRY.getTable(connection.getVersion()), cache);
+	protected final ChunkTransformerBB transformer = new ChunkTransformerVariesLegacy(LegacyBlockData.REGISTRY.getTable(connection.getVersion()), cache.getTileRemapper(connection));
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		transformer.loadData(chunkX, chunkZ, data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full);
+		transformer.loadData(chunkX, chunkZ, data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full, tiles);
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
 		chunkdata.writeInt(chunkX);
@@ -35,7 +35,7 @@ public class Chunk extends MiddleChunk {
 		VarNumberSerializer.writeVarInt(chunkdata, bitmask);
 		ArraySerializer.writeVarIntByteArray(chunkdata, transformer::writeLegacyData);
 		packets.add(chunkdata);
-		for (NBTCompound tile : tiles) {
+		for (NBTCompound tile : transformer.getTiles()) {
 			packets.add(BlockTileUpdate.createPacketData(
 				connection,
 				TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)),
