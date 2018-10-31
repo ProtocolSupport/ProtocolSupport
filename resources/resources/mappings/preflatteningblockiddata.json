@@ -4325,6 +4325,11 @@
     "legacydata": 13
   },
   {
+    "blockdata": "minecraft:skeleton_skull[rotation=0]",
+    "legacyid": 144,
+    "legacydata": 0
+  },
+  {
     "blockdata": "minecraft:anvil[facing=south]",
     "legacyid": 145,
     "legacydata": 0

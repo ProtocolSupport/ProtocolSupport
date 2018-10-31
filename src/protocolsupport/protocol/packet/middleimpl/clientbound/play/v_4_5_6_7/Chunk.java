@@ -44,7 +44,7 @@ public class Chunk extends MiddleChunk {
 			chunkdata.writeShort(0);
 			chunkdata.writeInt(compressed.length);
 			chunkdata.writeBytes(compressed);
-			for (NBTCompound tile : transformer.getTiles()) {
+			for (NBTCompound tile : transformer.remapAndGetTiles()) {
 				packets.add(BlockTileUpdate.createPacketData(
 					connection,
 					TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)),

@@ -11,7 +11,6 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerVariesLegacy;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -33,7 +32,7 @@ public class Chunk extends MiddleChunk {
 		serializer.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(serializer, bitmask);
 		ArraySerializer.writeVarIntByteArray(serializer, transformer::writeLegacyData);
-		ArraySerializer.writeVarIntTArray(serializer, transformer.getTiles().toArray(new NBTCompound[0]), (to, tile) -> ItemStackSerializer.writeTag(to, version, tile));
+		ArraySerializer.writeVarIntTArray(serializer, transformer.remapAndGetTiles(), (to, tile) -> ItemStackSerializer.writeTag(to, version, tile));
 		return RecyclableSingletonList.create(serializer);
 	}
 

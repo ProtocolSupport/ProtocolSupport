@@ -152,15 +152,28 @@ public class LegacyBlockData {
 					Material.GRAY_STAINED_GLASS_PANE, Material.GREEN_STAINED_GLASS_PANE, Material.LIGHT_BLUE_STAINED_GLASS_PANE, Material.LIGHT_GRAY_STAINED_GLASS_PANE,
 					Material.LIME_STAINED_GLASS_PANE, Material.MAGENTA_STAINED_GLASS_PANE, Material.ORANGE_STAINED_GLASS_PANE, Material.PINK_STAINED_GLASS_PANE,
 					Material.PURPLE_STAINED_GLASS_PANE, Material.RED_STAINED_GLASS_PANE, Material.WHITE_STAINED_GLASS_PANE, Material.YELLOW_STAINED_GLASS_PANE,
-					Material.CREEPER_HEAD, Material.CREEPER_WALL_HEAD,
-					Material.ZOMBIE_HEAD, Material.ZOMBIE_WALL_HEAD,
-					Material.SKELETON_SKULL, Material.SKELETON_WALL_SKULL,
-					Material.WITHER_SKELETON_SKULL, Material.WITHER_SKELETON_WALL_SKULL,
-					Material.PLAYER_HEAD, Material.PLAYER_WALL_HEAD,
 					Material.GRASS_BLOCK, Material.MYCELIUM, Material.PODZOL,
 					Material.NOTE_BLOCK
 				),
 				o -> o.getMaterial().createBlockData(),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.SKELETON_SKULL, 
+					Material.WITHER_SKELETON_SKULL, 
+					Material.CREEPER_HEAD, 
+					Material.DRAGON_HEAD, 
+					Material.PLAYER_HEAD, 
+					Material.ZOMBIE_HEAD,
+					Material.SKELETON_WALL_SKULL, 
+					Material.WITHER_SKELETON_WALL_SKULL, 
+					Material.CREEPER_WALL_HEAD, 
+					Material.DRAGON_WALL_HEAD, 
+					Material.PLAYER_WALL_HEAD, 
+					Material.ZOMBIE_WALL_HEAD
+				), 
+				Material.SKELETON_SKULL.createBlockData(), 
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
 			this.<MultipleFacing>registerRemapEntryForAllStates(

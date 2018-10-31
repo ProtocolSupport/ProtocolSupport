@@ -35,7 +35,7 @@ public class Chunk extends MiddleChunk {
 		VarNumberSerializer.writeVarInt(chunkdata, bitmask);
 		ArraySerializer.writeVarIntByteArray(chunkdata, transformer::writeLegacyData);
 		packets.add(chunkdata);
-		for (NBTCompound tile : transformer.getTiles()) {
+		for (NBTCompound tile : transformer.remapAndGetTiles()) {
 			packets.add(BlockTileUpdate.createPacketData(
 				connection,
 				TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)),

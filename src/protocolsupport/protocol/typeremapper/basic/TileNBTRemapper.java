@@ -11,7 +11,6 @@ import java.util.function.Function;
 
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Rotatable;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -20,12 +19,16 @@ import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHeadToDragonPlayerHeadComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTInt;
+import protocolsupport.protocol.utils.types.nbt.NBTByte;
+import protocolsupport.protocol.utils.types.nbt.NBTNumber;
 import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
 
@@ -47,18 +50,24 @@ public class TileNBTRemapper {
 
 	protected static final EnumMap<ProtocolVersion, EnumMap<TileEntityType, List<Function<NBTCompound, NBTCompound>>>> tile2tile = new EnumMap<>(ProtocolVersion.class);
 	protected static final EnumMap<ProtocolVersion, Map<Integer, List<BiFunction<BlockData, NBTCompound, NBTCompound>>>> tilestate2tile = new EnumMap<>(ProtocolVersion.class);
-	protected static final EnumMap<ProtocolVersion, Map<Integer, Function<BlockData, NBTCompound>>> state2tile = new EnumMap<>(ProtocolVersion.class);
+	protected static final EnumMap<ProtocolVersion, Map<Integer, BiFunction<BlockData, NBTCompound, NBTCompound>>> state2tile = new EnumMap<>(ProtocolVersion.class);
+	static {
+		for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
+			tile2tile.put(version, new EnumMap<>(TileEntityType.class));
+			tilestate2tile.put(version, new Int2ObjectOpenHashMap<>());
+			state2tile.put(version, new Int2ObjectOpenHashMap<>());
+		}
+	}
 
 	protected static void register(TileEntityType type, Function<NBTCompound, NBTCompound> transformer, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
-			EnumMap<TileEntityType, List<Function<NBTCompound, NBTCompound>>> map = tile2tile.computeIfAbsent(version, k -> new EnumMap<>(TileEntityType.class));
-			map.computeIfAbsent(type, k -> new ArrayList<>()).add(transformer);
+			tile2tile.get(version).computeIfAbsent(type, k -> new ArrayList<>()).add(transformer);
 		}
 	}
 
 	protected static void registerLegacy(List<Material> types, BiFunction<BlockData, NBTCompound, NBTCompound> transformer, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
-			Map<Integer, List<BiFunction<BlockData, NBTCompound, NBTCompound>>> map = tilestate2tile.computeIfAbsent(version, k -> new Int2ObjectOpenHashMap<>());
+			Map<Integer, List<BiFunction<BlockData, NBTCompound, NBTCompound>>> map = tilestate2tile.get(version);
 			types.forEach(type -> {
 				MaterialAPI.getBlockDataList(type).stream()
 				.map(MaterialAPI::getBlockDataNetworkId)
@@ -69,9 +78,9 @@ public class TileNBTRemapper {
 		}
 	}
 
-	protected static void registerLegacy(List<Material> types, Function<BlockData, NBTCompound> transformer, ProtocolVersion... versions) {
+	protected static void registerLegacyState(List<Material> types, BiFunction<BlockData, NBTCompound, NBTCompound> transformer, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
-			Map<Integer, Function<BlockData, NBTCompound>> map = state2tile.computeIfAbsent(version, k -> new Int2ObjectOpenHashMap<>());
+			Map<Integer, BiFunction<BlockData, NBTCompound, NBTCompound>> map = state2tile.get(version);
 			types.forEach(type -> {
 				MaterialAPI.getBlockDataList(type).stream()
 				.map(MaterialAPI::getBlockDataNetworkId)
@@ -130,66 +139,139 @@ public class TileNBTRemapper {
 			},
 			ProtocolVersionsHelper.BEFORE_1_9
 		);
+		List<Material> skulls = Arrays.asList(
+				Material.SKELETON_SKULL, 
+				Material.WITHER_SKELETON_SKULL, 
+				Material.CREEPER_HEAD, 
+				Material.DRAGON_HEAD, 
+				Material.PLAYER_HEAD, 
+				Material.ZOMBIE_HEAD,
+				Material.SKELETON_WALL_SKULL, 
+				Material.WITHER_SKELETON_WALL_SKULL, 
+				Material.CREEPER_WALL_HEAD, 
+				Material.DRAGON_WALL_HEAD, 
+				Material.PLAYER_WALL_HEAD, 
+				Material.ZOMBIE_WALL_HEAD
+		);
 		registerLegacy(
-			Arrays.asList(
-					Material.SKELETON_SKULL, 
-					Material.WITHER_SKELETON_SKULL, 
-					Material.CREEPER_HEAD, 
-					Material.DRAGON_HEAD, 
-					Material.PLAYER_HEAD, 
-					Material.ZOMBIE_HEAD,
-					Material.SKELETON_WALL_SKULL, 
-					Material.WITHER_SKELETON_WALL_SKULL, 
-					Material.CREEPER_WALL_HEAD, 
-					Material.DRAGON_WALL_HEAD, 
-					Material.PLAYER_WALL_HEAD, 
-					Material.ZOMBIE_WALL_HEAD
-			), (blockdata, input) -> {
+			skulls, (blockdata, input) -> {
+				byte skulltype = 0;
+				switch(blockdata.getMaterial()) {
+					case SKELETON_SKULL: case SKELETON_WALL_SKULL: skulltype = 0; break;
+					case WITHER_SKELETON_SKULL: case WITHER_SKELETON_WALL_SKULL: skulltype = 1; break;
+					case ZOMBIE_HEAD: case ZOMBIE_WALL_HEAD: skulltype = 2; break;
+					case PLAYER_HEAD: case PLAYER_WALL_HEAD: skulltype = 3; break;
+					case CREEPER_HEAD: case CREEPER_WALL_HEAD: skulltype = 4; break;
+					case DRAGON_HEAD: case DRAGON_WALL_HEAD: skulltype = 5; break;
+					default: break;
+				}
+				input.setTag("SkullType", new NBTByte(skulltype));
 				if (blockdata instanceof Rotatable) {
-					System.out.println("ON GROUND WooooHOHOOOO");
-				} else if (blockdata instanceof Directional) {
-					System.out.println("ON WALL WooooHOHOOOO");
+					Rotatable rotatable = (Rotatable) blockdata;
+					byte rotation = 0;
+					switch (rotatable.getRotation()) {
+						case SOUTH: rotation = 0; break;
+						case SOUTH_SOUTH_WEST: rotation = 1; break;
+						case SOUTH_WEST: rotation = 2; break;
+						case WEST_SOUTH_WEST: rotation = 3; break;
+						case WEST: rotation = 4; break;
+						case WEST_NORTH_WEST: rotation = 5; break;
+						case NORTH_WEST: rotation = 6; break;
+						case NORTH_NORTH_WEST: rotation = 7; break;
+						case NORTH: rotation = 8; break;
+						case NORTH_NORTH_EAST: rotation = 9; break;
+						case NORTH_EAST: rotation = 10; break;
+						case EAST_NORTH_EAST: rotation = 11; break;
+						case EAST: rotation = 12; break;
+						case EAST_SOUTH_EAST: rotation = 13; break;
+						case SOUTH_EAST: rotation = 14; break;
+						case SOUTH_SOUTH_EAST: rotation = 15; break;
+						default: break;
+					}
+					input.setTag("Rot", new NBTByte(rotation));
+				}
+				return input;
+			},
+			ProtocolVersionsHelper.BEFORE_1_13
+		);
+		registerLegacy(
+			skulls, (blockdata, input) -> {
+				NBTNumber skulltype = input.getNumberTag("SkullType");
+				if (skulltype != null && skulltype.getAsInt() == 5) {
+					input.setTag("SkullType", new NBTByte((byte) 3));
+					input.setTag("Owner", DragonHeadToDragonPlayerHeadComplexRemapper.createTag());
 				}
 				return input;
 			},
 			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_8)
 		);
-		register(
-			TileEntityType.SKULL,
-			(input) -> {
+		registerLegacy(
+			skulls,	(blockdata, input) -> {
 				PlayerHeadToLegacyOwnerComplexRemapper.remap(input, "Owner", "ExtraType");
 				return input;
 			},
 			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5)
 		);
-		registerLegacy(
+		registerLegacyState(
 			Arrays.asList(
-				Material.BLACK_BED, 
-				Material.BLUE_BED, 
-				Material.BROWN_BED, 
-				Material.CYAN_BED, 
-				Material.GRAY_BED, 
-				Material.GREEN_BED, 
-				Material.LIGHT_BLUE_BED, 
+				Material.BLACK_BED,
+				Material.RED_BED,
+				Material.GREEN_BED,
+				Material.BROWN_BED,
+				Material.BLUE_BED,
+				Material.PURPLE_BED,
+				Material.CYAN_BED,
 				Material.LIGHT_GRAY_BED,
-				Material.LIME_BED, 
-				Material.MAGENTA_BED, 
-				Material.ORANGE_BED, 
-				Material.PINK_BED, 
-				Material.PURPLE_BED, 
-				Material.RED_BED, 
-				Material.WHITE_BED, 
-				Material.YELLOW_BED
-			), (blockdata) -> {
-				return new NBTCompound();
-			}, ProtocolVersionsHelper.RANGE__1_11_1__1_12_2
+				Material.GRAY_BED,
+				Material.PINK_BED,
+				Material.LIME_BED,
+				Material.YELLOW_BED,
+				Material.LIGHT_BLUE_BED,
+				Material.MAGENTA_BED,
+				Material.ORANGE_BED,
+				Material.WHITE_BED
+			), (blockdata, input) -> {
+				int color = -1;
+				switch (blockdata.getMaterial()) {
+					case WHITE_BED: color = 0; break;
+					case ORANGE_BED: color = 1; break;
+					case MAGENTA_BED: color = 2; break;
+					case LIGHT_BLUE_BED: color = 3; break;
+					case YELLOW_BED: color = 4; break;
+					case LIME_BED: color = 5; break;
+					case PINK_BED: color = 6; break;
+					case GRAY_BED: color = 7; break;
+					case LIGHT_GRAY_BED: color = 8; break;
+					case CYAN_BED: color = 9; break;
+					case PURPLE_BED: color = 10; break;
+					case BLUE_BED: color = 11; break;
+					case BROWN_BED: color = 12; break;
+					case GREEN_BED: color = 13; break;
+					case RED_BED: color = 14; break;
+					case BLACK_BED: color = 15; break;
+					default: break;
+				}
+				setTileType(input, TileEntityType.BED);
+				input.setTag("color", new NBTInt(color));
+				return input;
+			}, ProtocolVersionsHelper.ALL_1_12
 		);
 	}
 
 
 
+	public static void setTileType(NBTCompound tag, TileEntityType type) {
+		tag.setTag(tileEntityTypeKey, new NBTString(type.getRegistryId()));
+	}
+
 	public static String getTileType(NBTCompound tag) {
 		return NBTString.getValueOrNull(tag.getTagOfType(tileEntityTypeKey, NBTType.STRING));
+	}
+
+	public static void setPosition(NBTCompound tag, Position position) {
+		tag.setTag("x", new NBTInt(position.getX()));
+		tag.setTag("y", new NBTInt(position.getY()));
+		tag.setTag("z", new NBTInt(position.getZ()));
 	}
 
 	public static Position getPosition(NBTCompound tag) {
@@ -225,20 +307,25 @@ public class TileNBTRemapper {
 		int tileblock = getTileBlockData(getPosition(compound));
 		if (tileblock != -1) {
 			//If the block is cached then there is also a transformer responsible for that caching.
-			for (BiFunction<BlockData, NBTCompound, NBTCompound> transformer : tilestate2tile.get(connection.getVersion()).get(tileblock)) {
-				compound = transformer.apply(MaterialAPI.getBlockDataByNetworkId(tileblock), compound);
+			List<BiFunction<BlockData, NBTCompound, NBTCompound>> transformers = tilestate2tile.get(connection.getVersion()).get(tileblock);
+			if (transformers != null) {
+				for (BiFunction<BlockData, NBTCompound, NBTCompound> transformer : transformers) {
+					compound = transformer.apply(MaterialAPI.getBlockDataByNetworkId(tileblock), compound);
+				}
 			}
 		}
 		return compound;
 	}
 
-	public NBTCompound getLegacyTileFromBlock(int blockstate) {
-		Map<Integer, Function<BlockData, NBTCompound>> map = state2tile.get(connection.getVersion());
+	public NBTCompound getLegacyTileFromBlock(Position position, int blockstate) {
+		Map<Integer, BiFunction<BlockData, NBTCompound, NBTCompound>> map = state2tile.get(connection.getVersion());
 		if (map != null) {
-			Function<BlockData, NBTCompound> constructor = map.get(blockstate);
+			BiFunction<BlockData, NBTCompound, NBTCompound> constructor = map.get(blockstate);
 			if (constructor != null) {
 				BlockData blockdata = MaterialAPI.getBlockDataByNetworkId(blockstate);
-				return constructor.apply(blockdata);
+				NBTCompound newTile = new NBTCompound();
+				setPosition(newTile, position);
+				return constructor.apply(blockdata, newTile);
 			}
 		}
 		return null;

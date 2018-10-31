@@ -1,8 +1,8 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -49,11 +49,11 @@ public abstract class ChunkTransformer {
 				biomeData[i] = chunkdata.readInt();
 			}
 		}
-		this.tiles = Arrays.stream(tiles).map(tileremapper::remap).collect(Collectors.toList());
+		this.tiles = new ArrayList<>(Arrays.asList(tiles));
 	}
 
-	public List<NBTCompound> getTiles() {
-		return tiles;
+	public NBTCompound[] remapAndGetTiles() {
+		return tiles.stream().map(tileremapper::remap).toArray(NBTCompound[]::new);
 	}
 
 	protected int getBlockState(int section, BlockStorageReader blockstorage, int blockindex) {
@@ -62,7 +62,7 @@ public abstract class ChunkTransformer {
 			tileremapper.setTileBlockstate(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);
 		}
 		if (tileremapper.usedToBeTile(blockstate)) {
-			NBTCompound tile = tileremapper.getLegacyTileFromBlock(blockstate);
+			NBTCompound tile = tileremapper.getLegacyTileFromBlock(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);
 			if (tile != null) {
 				tiles.add(tile);
 			}

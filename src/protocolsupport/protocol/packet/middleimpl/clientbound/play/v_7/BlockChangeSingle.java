@@ -37,7 +37,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 			tileremapper.setTileBlockstate(position, id);
 		}
 		if (tileremapper.usedToBeTile(id)) {
-			NBTCompound tile = tileremapper.getLegacyTileFromBlock(id);
+			NBTCompound tile = tileremapper.getLegacyTileFromBlock(position, id);
 			packets.add(BlockTileUpdate.createPacketData(connection, TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)), position, tile));
 		}
 		packets.add(serializer);

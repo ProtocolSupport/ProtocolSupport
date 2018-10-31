@@ -39,7 +39,7 @@ public class Chunk extends MiddleChunk {
 			transformer.loadData(chunkX, chunkZ, data, bitmask, hasSkyLight, full, tiles);
 			chunkdata.writeShort(bitmask);
 			ArraySerializer.writeVarIntByteArray(chunkdata, transformer.toLegacyData());
-			for (NBTCompound tile : transformer.getTiles()) {
+			for (NBTCompound tile : transformer.remapAndGetTiles()) {
 				packets.add(BlockTileUpdate.createPacketData(
 					connection,
 					TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)),
