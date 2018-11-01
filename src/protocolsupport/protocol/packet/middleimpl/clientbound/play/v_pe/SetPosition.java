@@ -14,7 +14,7 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class SetPosition extends MiddleSetPosition {
 
-		public SetPosition(ConnectionImpl connection) {
+	public SetPosition(ConnectionImpl connection) {
 		super(connection);
 	}
 	
