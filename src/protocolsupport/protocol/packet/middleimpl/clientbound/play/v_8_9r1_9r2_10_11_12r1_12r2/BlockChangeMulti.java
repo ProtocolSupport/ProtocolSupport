@@ -6,11 +6,13 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChange
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
 import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -29,25 +31,25 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID);
-		serializer.writeInt(chunkX);
-		serializer.writeInt(chunkZ);
+		PositionSerializer.writeChunkCoord(serializer, chunk);
 		ArraySerializer.writeVarIntTArray(serializer, records, (to, record) -> {
-			to.writeByte(record.horizCoord);
-			to.writeByte(record.yCoord);
+			PositionSerializer.writeLocalCoord(serializer, record.localCoord);
 			VarNumberSerializer.writeVarInt(to, PreFlatteningBlockIdData.getCombinedId(blockRemappingTable.getRemap(record.id)));
 			if (tileremapper.tileThatNeedsBlockstate(record.id)) {
-				tileremapper.setTileBlockstate(fromLocalPosition(record), record.id);
+				tileremapper.setTileBlockstate(chunk, record.localCoord, record.id);
 			}
 			if (tileremapper.usedToBeTile(record.id)) {
-				NBTCompound tile = tileremapper.getLegacyTileFromBlock(fromLocalPosition(record), record.id);
-				packets.add(BlockTileUpdate.createPacketData(connection,
-					TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)), 
-					TileNBTRemapper.getPosition(tile),
-					tile)
-				);
+				NBTCompound tile = tileremapper.getLegacyTileFromBlock(Position.fromLocal(chunk, record.localCoord), record.id);
+				if (tile != null) {
+					packets.add(BlockTileUpdate.createPacketData(connection,
+							TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)), 
+							TileNBTRemapper.getPosition(tile),
+							tile)
+						);
+				}
 			}
 		});
-		packets.add(serializer);
+		packets.add(0, serializer);
 		return packets;
 	}
 

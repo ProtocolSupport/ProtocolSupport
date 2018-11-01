@@ -50,6 +50,14 @@ public class Position {
 		z += cnt;
 	}
 
+	public static Position fromLocal(ChunkCoord chunkCoord, LocalCoord localCoord) {
+		return new Position(
+			chunkCoord.getX() * 16 + localCoord.getX(), 
+			localCoord.getY(), 
+			chunkCoord.getZ() * 16 + localCoord.getZ()
+		);
+	}
+
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);

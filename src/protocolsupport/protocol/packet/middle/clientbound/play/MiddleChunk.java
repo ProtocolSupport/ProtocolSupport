@@ -5,8 +5,10 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.types.ChunkCoord;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 
 public abstract class MiddleChunk extends ClientBoundMiddlePacket {
@@ -15,8 +17,7 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected int chunkX;
-	protected int chunkZ;
+	protected ChunkCoord chunk;
 	protected boolean full;
 	protected int bitmask;
 	protected ByteBuf data;
@@ -24,8 +25,7 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		chunkX = serverdata.readInt();
-		chunkZ = serverdata.readInt();
+		chunk = PositionSerializer.readChunkCoord(serverdata);
 		full = serverdata.readBoolean();
 		bitmask = VarNumberSerializer.readVarInt(serverdata);
 		data = ArraySerializer.readVarIntByteArraySlice(serverdata);

@@ -4,8 +4,10 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.ChunkCoord;
+import protocolsupport.protocol.utils.types.LocalCoord;
 import protocolsupport.utils.Utils;
 
 public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
@@ -14,41 +16,26 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected int chunkX;
-	protected int chunkZ;
+	protected ChunkCoord chunk;
 	protected Record[] records;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		chunkX = serverdata.readInt();
-		chunkZ = serverdata.readInt();
+		chunk = PositionSerializer.readChunkCoord(serverdata);
 		records = ArraySerializer.readVarIntTArray(
 			serverdata, 
 			Record.class, 
 			from -> {
-				short horizCoord = from.readUnsignedByte();
-				short yCoord = from.readUnsignedByte();
-				int id = VarNumberSerializer.readVarInt(from);
-				return new Record(horizCoord, yCoord, id);
+				return new Record(PositionSerializer.readLocalCoord(serverdata), VarNumberSerializer.readVarInt(from));
 			}
 		);
 	}
 
-	public Position fromLocalPosition(Record record) {
-		return new Position((
-				(record.horizCoord >> 4) & 0xF) + (chunkX * 16), 
-				record.yCoord,
-				(record.horizCoord & 0xF) + (chunkZ * 16)
-			);
-	}
-
 	public static class Record {
-		public final short horizCoord;
-		public final short yCoord;
+		public final LocalCoord localCoord;
 		public final int id;
-		public Record(short horizCoord, short yCoord, int id) {
-			this.horizCoord = horizCoord;
-			this.yCoord = yCoord;
+		public Record(LocalCoord localCoord, int id) {
+			this.localCoord = localCoord;
 			this.id = id;
 		}
 		@Override

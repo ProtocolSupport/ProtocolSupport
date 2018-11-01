@@ -10,13 +10,13 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.types.ChunkCoord;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 
 public abstract class ChunkTransformer {
 
-	protected int chunkX;
-	protected int chunkZ;
+	protected ChunkCoord chunk;
 	protected int columnsCount;
 	protected boolean hasSkyLight;
 	protected boolean hasBiomeData;
@@ -31,9 +31,8 @@ public abstract class ChunkTransformer {
 		this.tileremapper = tileremapper;
 	}
 
-	public void loadData(int chunkX, int chunkZ, ByteBuf chunkdata, int bitmap, boolean hasSkyLight, boolean hasBiomeData, NBTCompound[] tiles) {
-		this.chunkX = chunkX;
-		this.chunkZ = chunkZ;
+	public void loadData(ChunkCoord chunk, ByteBuf chunkdata, int bitmap, boolean hasSkyLight, boolean hasBiomeData, NBTCompound[] tiles) {
+		this.chunk = chunk;
 		this.columnsCount = Integer.bitCount(bitmap);
 		this.hasSkyLight = hasSkyLight;
 		this.hasBiomeData = hasBiomeData;
@@ -71,9 +70,9 @@ public abstract class ChunkTransformer {
 	}
 
 	protected Position getGlobalPositionFromSectionIndex(int section, int blockindex) {
-		return new Position((chunkX * 16) + (blockindex & 0xF), 
+		return new Position((chunk.getX() * 16) + (blockindex & 0xF), 
 				(section * 16) + ((blockindex >> 8) & 0xF),
-				(chunkZ * 16) + ((blockindex >> 4) & 0xF));
+				(chunk.getZ() * 16) + ((blockindex >> 4) & 0xF));
 	}
 
 	protected static final int blocksInSection = 16 * 16 * 16;

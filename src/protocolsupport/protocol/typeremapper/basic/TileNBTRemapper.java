@@ -3,6 +3,7 @@ package protocolsupport.protocol.typeremapper.basic;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -23,6 +24,8 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHe
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.types.ChunkCoord;
+import protocolsupport.protocol.utils.types.LocalCoord;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
@@ -331,22 +334,37 @@ public class TileNBTRemapper {
 		return null;
 	}
 
-	protected final Object2IntOpenHashMap<Position> tiledata = new Object2IntOpenHashMap<>();
+	protected final Map<ChunkCoord, Object2IntOpenHashMap<LocalCoord>> tiledata = new HashMap<>();
 
 	public int getTileBlockData(Position position) {
-		return (tiledata.getInt(position));
+		return getTileBlockData(ChunkCoord.fromGlobal(position), LocalCoord.fromGlobal(position));
 	}
 
 	public void setTileBlockstate(Position position, int blockstate) {
+		setTileBlockstate(ChunkCoord.fromGlobal(position), LocalCoord.fromGlobal(position), blockstate);
+	}
+
+	public int getTileBlockData(ChunkCoord chunkCoord, LocalCoord localCoord) {
+		Object2IntOpenHashMap<LocalCoord> map = tiledata.get(chunkCoord);
+		if (map != null) {
+			return map.getInt(localCoord);
+		}
+		return -1;
+	}
+
+	public void setTileBlockstate(ChunkCoord chunkCoord, LocalCoord localCoord, int blockstate) {
 		if (blockstate == 0) {
-			tiledata.removeInt(position);
+			tiledata.computeIfPresent(chunkCoord, (key, map) -> {
+				map.removeInt(localCoord);
+				return map;
+			});
 		} else {
-			tiledata.put(position, blockstate);
+			tiledata.computeIfAbsent(chunkCoord, k -> new Object2IntOpenHashMap<>()).put(localCoord, blockstate);
 		}
 	}
 
-	public void clearCache(int chunkX, int chunkZ) {
-		tiledata.keySet().removeIf(pos -> (pos.getX() >> 4) == chunkX && (pos.getZ() >> 4) == chunkZ);
+	public void clearCache(ChunkCoord chunk) {
+		tiledata.remove(chunk);
 	}
 
 	public boolean tileThatNeedsBlockstate(int blockstate) {
