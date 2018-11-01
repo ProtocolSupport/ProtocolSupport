@@ -49,20 +49,9 @@ public class NetworkDataCache {
 		return petilecache;
 	}
 
-	private final PEInventoryCache inventorycache = new PEInventoryCache();
-	public PEInventoryCache getPEInventoryCache() {
-		return inventorycache;
-	}
-	
 	protected final PEPositionQueue positionQueue = new PEPositionQueue();
 	public PEPositionQueue getPositionQueue() {
 		return positionQueue;
-	}
-
-
-	protected final CustomPayloadChannelsCache cpccache = new CustomPayloadChannelsCache();
-	public CustomPayloadChannelsCache getChannelsCache() {
-		return cpccache;
 	}
 
 	@Override
