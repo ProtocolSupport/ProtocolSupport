@@ -1,7 +1,7 @@
 package protocolsupport.protocol.storage.netcache;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;;
 import protocolsupport.api.Connection;
 
 import java.util.LinkedList;
