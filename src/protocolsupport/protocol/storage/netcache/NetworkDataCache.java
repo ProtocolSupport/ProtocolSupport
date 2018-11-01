@@ -53,6 +53,12 @@ public class NetworkDataCache {
 	public PEInventoryCache getPEInventoryCache() {
 		return inventorycache;
 	}
+	
+	protected final PEPositionQueue positionQueue = new PEPositionQueue();
+	public PEPositionQueue getPositionQueue() {
+		return positionQueue;
+	}
+
 
 	protected final CustomPayloadChannelsCache cpccache = new CustomPayloadChannelsCache();
 	public CustomPayloadChannelsCache getChannelsCache() {
