@@ -28,10 +28,20 @@ public class NetworkDataCache {
 	public KeepAliveCache getKeepAliveCache() {
 		return keepalivecache;
 	}
+	
+	protected final CustomPayloadChannelsCache cpccache = new CustomPayloadChannelsCache();
+	public CustomPayloadChannelsCache getChannelsCache() {
+		return cpccache;
+	}
 
 	protected final AttributesCache attrscache = new AttributesCache();
 	public AttributesCache getAttributesCache() {
 		return attrscache;
+	}
+	
+	private final PEInventoryCache inventorycache = new PEInventoryCache();
+	public PEInventoryCache getPEInventoryCache() {
+		return inventorycache;
 	}
 
 	protected final PEChunkMapCache pechunkmapcache = new PEChunkMapCache();
