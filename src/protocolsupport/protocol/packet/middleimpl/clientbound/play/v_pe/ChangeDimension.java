@@ -24,6 +24,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 	@Override
 	public boolean postFromServerRead() {
 		cache.getPEChunkMapCache().clear();
+		cache.getPositionQueue().clear();
 		return super.postFromServerRead();
 	}
 

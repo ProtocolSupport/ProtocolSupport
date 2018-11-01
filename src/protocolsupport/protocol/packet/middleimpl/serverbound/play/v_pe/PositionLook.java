@@ -54,9 +54,13 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		//movecache.updatePEPositionLeniency(y);
 		movecache.setPEClientPosition(x, y, z);
 		//PE doesn't send a movement confirm after position set, so we just confirm teleport straight away
-		int teleportId = movecache.teleportConfirm();
-		if (teleportId != -1) {
-			packets.add(MiddleTeleportAccept.create(teleportId));
+		movecache.teleportConfirm();
+		while (true) {
+			int id = cache.getPositionQueue().getAwaitQueue().remove();
+			if (id == -1) {
+				break;
+			}
+			packets.add(MiddleTeleportAccept.create(id));
 			packets.add(MiddleMoveLook.create(movecache.getX(), movecache.getY(), movecache.getZ(), headYaw, pitch, onGround));
 		}
 		//yaw fix for boats due to relative vs absolute
@@ -70,6 +74,7 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		if (cache.getPETileCache().shouldSignSign()) {
 			cache.getPETileCache().signSign(packets);
 		}
+		cache.getPositionQueue().onPositionLook(connection);
 		return packets;
 	}
 
