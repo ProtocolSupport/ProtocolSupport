@@ -165,7 +165,6 @@ public class TileNBTRemapper {
 					default: break;
 				}
 				input.setTag("SkullType", new NBTByte(skulltype));
-				System.out.println("SKULL of type: " + skulltype + " -: " + blockdata.getClass().getName());
 				if (blockdata instanceof Rotatable) {
 					System.out.println("GOIND FOR ORIENTATION REMAP!");
 					Rotatable rotatable = (Rotatable) blockdata;
