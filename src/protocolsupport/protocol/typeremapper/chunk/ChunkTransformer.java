@@ -7,6 +7,7 @@ import java.util.List;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.TileDataCache;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
@@ -25,10 +26,12 @@ public abstract class ChunkTransformer {
 	protected List<NBTCompound> tiles;
 
 	protected final ArrayBasedIdRemappingTable blockTypeRemappingTable;
+	protected final TileDataCache tilecache;
 	protected final TileNBTRemapper tileremapper;
-	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable, TileNBTRemapper tileremapper) {
+	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable, TileDataCache tilecache) {
 		this.blockTypeRemappingTable = blockRemappingTable;
-		this.tileremapper = tileremapper;
+		this.tilecache = tilecache;
+		this.tileremapper = tilecache.getTileRemapper();
 	}
 
 	public void loadData(ChunkCoord chunk, ByteBuf chunkdata, int bitmap, boolean hasSkyLight, boolean hasBiomeData, NBTCompound[] tiles) {
@@ -58,7 +61,7 @@ public abstract class ChunkTransformer {
 	protected int getBlockState(int section, BlockStorageReader blockstorage, int blockindex) {
 		int blockstate = blockstorage.getBlockState(blockindex);
 		if (tileremapper.tileThatNeedsBlockstate(blockstate)) {
-			tileremapper.setTileBlockstate(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);
+			tilecache.setCachedTileBlockstate(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);
 		}
 		if (tileremapper.usedToBeTile(blockstate)) {
 			NBTCompound tile = tileremapper.getLegacyTileFromBlock(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);

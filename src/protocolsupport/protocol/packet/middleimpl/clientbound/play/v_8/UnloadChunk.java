@@ -6,7 +6,6 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleUnloadChunk
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -16,11 +15,9 @@ public class UnloadChunk extends MiddleUnloadChunk {
 		super(connection);
 	}
 
-	protected TileNBTRemapper tileremapper = cache.getTileRemapper(connection);
-
 	@Override
 	public boolean postFromServerRead() {
-		tileremapper.clearCache(chunk);
+		cache.getTileCache().clearCache(chunk);
 		return super.postFromServerRead();
 	}
 

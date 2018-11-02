@@ -1,10 +1,13 @@
 package protocolsupport.protocol.storage.netcache;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.utils.Utils;
 
 public class NetworkDataCache {
+
+	public NetworkDataCache(ConnectionImpl connection) {
+		tilecache = new TileDataCache(connection);
+	}
 
 	protected final MovementCache movecache = new MovementCache();
 	public MovementCache getMovementCache() {
@@ -41,9 +44,9 @@ public class NetworkDataCache {
 		return cpccache;
 	}
 
-	protected TileNBTRemapper tileremapper;
-	public TileNBTRemapper getTileRemapper(ConnectionImpl connection) {
-		return tileremapper != null ? tileremapper : new TileNBTRemapper(connection);
+	protected final TileDataCache tilecache;
+	public TileDataCache getTileCache() {
+		return tilecache;
 	}
 
 	@Override

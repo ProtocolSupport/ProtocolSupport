@@ -24,7 +24,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 
 	protected final ArrayBasedIdRemappingTable blockTypeRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
 	protected final ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable = FlatteningBlockId.REGISTRY.getTable(connection.getVersion());
-	protected final TileNBTRemapper tileremapper = cache.getTileRemapper(connection);
+	protected final TileNBTRemapper tileremapper = cache.getTileCache().getTileRemapper();
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -33,7 +33,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 		PositionSerializer.writePosition(serializer, position);
 		VarNumberSerializer.writeVarInt(serializer, blockFlatteningIdRemappingTable.getRemap(blockTypeRemappingTable.getRemap(id)));
 		if (tileremapper.tileThatNeedsBlockstate(id)) {
-			tileremapper.setTileBlockstate(position, id);
+			cache.getTileCache().setCachedTileBlockstate(position, id);
 		}
 		if (tileremapper.usedToBeTile(id)) {
 			NBTCompound tile = tileremapper.getLegacyTileFromBlock(position, id);

@@ -21,7 +21,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		super(connection);
 	}
 
-	protected final TileNBTRemapper tileremapper = cache.getTileRemapper(connection);
+	protected final TileNBTRemapper tileremapper = cache.getTileCache().getTileRemapper();
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {

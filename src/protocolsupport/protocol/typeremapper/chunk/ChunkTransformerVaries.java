@@ -2,14 +2,14 @@ package protocolsupport.protocol.typeremapper.chunk;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.storage.netcache.TileDataCache;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
 public class ChunkTransformerVaries extends ChunkTransformerBB {
 
 	protected final ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable;
-	public ChunkTransformerVaries(ArrayBasedIdRemappingTable blockTypeRemappingTable, ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable, TileNBTRemapper tileremapper) {
-		super(blockTypeRemappingTable, tileremapper);
+	public ChunkTransformerVaries(ArrayBasedIdRemappingTable blockTypeRemappingTable, ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable, TileDataCache tilecache) {
+		super(blockTypeRemappingTable, tilecache);
 		this.blockFlatteningIdRemappingTable = blockFlatteningIdRemappingTable;
 	}
 

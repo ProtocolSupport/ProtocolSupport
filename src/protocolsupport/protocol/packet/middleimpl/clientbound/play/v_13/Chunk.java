@@ -25,7 +25,7 @@ public class Chunk extends MiddleChunk {
 	protected final ChunkTransformerBB transformer = new ChunkTransformerVaries(
 		LegacyBlockData.REGISTRY.getTable(connection.getVersion()),
 		FlatteningBlockId.REGISTRY.getTable(connection.getVersion()),
-		cache.getTileRemapper(connection)
+		cache.getTileCache()
 	);
 
 	@Override

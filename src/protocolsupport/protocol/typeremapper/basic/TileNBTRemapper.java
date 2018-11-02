@@ -3,7 +3,6 @@ package protocolsupport.protocol.typeremapper.basic;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -15,7 +14,6 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Rotatable;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
@@ -24,8 +22,6 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHe
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
-import protocolsupport.protocol.utils.types.ChunkCoord;
-import protocolsupport.protocol.utils.types.LocalCoord;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
@@ -169,7 +165,9 @@ public class TileNBTRemapper {
 					default: break;
 				}
 				input.setTag("SkullType", new NBTByte(skulltype));
+				System.out.println("SKULL of type: " + skulltype + " -: " + blockdata.getClass().getName());
 				if (blockdata instanceof Rotatable) {
+					System.out.println("GOIND FOR ORIENTATION REMAP!");
 					Rotatable rotatable = (Rotatable) blockdata;
 					byte rotation = 0;
 					switch (rotatable.getRotation()) {
@@ -307,9 +305,8 @@ public class TileNBTRemapper {
 				}
 			}
 		}
-		int tileblock = getTileBlockData(getPosition(compound));
+		int tileblock = connection.getCache().getTileCache().getCachedTileBlockstate(getPosition(compound));
 		if (tileblock != -1) {
-			//If the block is cached then there is also a transformer responsible for that caching.
 			List<BiFunction<BlockData, NBTCompound, NBTCompound>> transformers = tilestate2tile.get(connection.getVersion()).get(tileblock);
 			if (transformers != null) {
 				for (BiFunction<BlockData, NBTCompound, NBTCompound> transformer : transformers) {
@@ -332,39 +329,6 @@ public class TileNBTRemapper {
 			}
 		}
 		return null;
-	}
-
-	protected final Map<ChunkCoord, Object2IntOpenHashMap<LocalCoord>> tiledata = new HashMap<>();
-
-	public int getTileBlockData(Position position) {
-		return getTileBlockData(ChunkCoord.fromGlobal(position), LocalCoord.fromGlobal(position));
-	}
-
-	public void setTileBlockstate(Position position, int blockstate) {
-		setTileBlockstate(ChunkCoord.fromGlobal(position), LocalCoord.fromGlobal(position), blockstate);
-	}
-
-	public int getTileBlockData(ChunkCoord chunkCoord, LocalCoord localCoord) {
-		Object2IntOpenHashMap<LocalCoord> map = tiledata.get(chunkCoord);
-		if (map != null) {
-			return map.getInt(localCoord);
-		}
-		return -1;
-	}
-
-	public void setTileBlockstate(ChunkCoord chunkCoord, LocalCoord localCoord, int blockstate) {
-		if (blockstate == 0) {
-			tiledata.computeIfPresent(chunkCoord, (key, map) -> {
-				map.removeInt(localCoord);
-				return map;
-			});
-		} else {
-			tiledata.computeIfAbsent(chunkCoord, k -> new Object2IntOpenHashMap<>()).put(localCoord, blockstate);
-		}
-	}
-
-	public void clearCache(ChunkCoord chunk) {
-		tiledata.remove(chunk);
 	}
 
 	public boolean tileThatNeedsBlockstate(int blockstate) {
