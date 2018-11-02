@@ -79,7 +79,7 @@ public class PEFakeContainer {
 			//Large inventories require doublechest that requires two blocks and nbt.
 			if (shouldDoDoubleChest(cache)) {
 				Position auxPos = position.clone();
-				auxPos.modifyX(1); //Get adjacend block.
+				auxPos.modifyX(1); //Get adjacent block.
 				invCache.getFakeContainers().addLast(auxPos);
 				BlockChangeSingle.create(version, auxPos, PEBlocks.toPocketBlock(version, typeData.getObj1()), packets);
 				tag.setTag("pairx", new NBTInt(auxPos.getX()));

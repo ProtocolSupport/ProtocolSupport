@@ -61,6 +61,24 @@ public class ArrayDequeMultiMap<K, V> {
 		put(key, value, false);
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		boolean isFirst = true;
+
+		for(Entry<?, ?> entry : map) {
+			if(!isFirst) builder.append(", ");
+
+			builder.append(entry.getKey());
+			builder.append(" -> ");
+			builder.append(entry.getValue());
+
+			isFirst = false;
+		}
+
+		return builder.toString();
+	}
+
 	/**
 	 * Puts entries in the ArrayDequeMultiMap.
 	 * Important values will be put on top, others on the bottom.
@@ -209,11 +227,11 @@ public class ArrayDequeMultiMap<K, V> {
 		return entry;
 	}
 
-	private void cycle(Iterator<Entry<K, ChildDeque<V>>> itorator, BiFunction<K, ChildDeque<V>, Boolean> func) {
-		while (itorator.hasNext()) {
-			Entry<K, ChildDeque<V>> e = itorator.next();
+	private void cycle(Iterator<Entry<K, ChildDeque<V>>> iterator, BiFunction<K, ChildDeque<V>, Boolean> func) {
+		while (iterator.hasNext()) {
+			Entry<K, ChildDeque<V>> e = iterator.next();
 			if (func.apply(e.getKey(), e.getValue())) {
-				itorator.remove();
+				iterator.remove();
 			}
 		}
 	}
@@ -264,15 +282,30 @@ public class ArrayDequeMultiMap<K, V> {
 			cycle(descendingIterator(), func);
 		}
 
-		private void cycle(Iterator<T> itorator, Function<T, Boolean> func) {
-			while(itorator.hasNext()) {
-				T e = itorator.next();
+		private void cycle(Iterator<T> iterator, Function<T, Boolean> func) {
+			while(iterator.hasNext()) {
+				T e = iterator.next();
 				if (func.apply(e)) {
-					itorator.remove();
+					iterator.remove();
 				}
 			}
 		}
 
+		@Override
+		public String toString() {
+			StringBuilder builder = new StringBuilder();
+			boolean isFirst = true;
+
+			for(Object entry : this) {
+				if(!isFirst) builder.append(", ");
+
+				builder.append(entry);
+
+				isFirst = false;
+			}
+
+			return builder.toString();
+		}
 	}
 
 }

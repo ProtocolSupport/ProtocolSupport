@@ -27,3 +27,5 @@ dllibsc/
 
 # IntelliJ
 .idea/
+out/
+*.iml

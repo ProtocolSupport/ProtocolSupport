@@ -1,0 +1,294 @@
+{
+	"ocean": {
+		"pc": 0,
+		"pe": 0
+	},
+	"plains": {
+		"pc": 1,
+		"pe": 1
+	},
+	"desert": {
+		"pc": 2,
+		"pe": 2
+	},
+	"mountains": {
+		"pc": 3,
+		"pe": 3
+	},
+	"forest": {
+		"pc": 4,
+		"pe": 4
+	},
+	"taiga": {
+		"pc": 5,
+		"pe": 5
+	},
+	"swamp": {
+		"pc": 6,
+		"pe": 6
+	},
+	"river": {
+		"pc": 7,
+		"pe": 7
+	},
+	"nether": {
+		"pc": 8,
+		"pe": 8
+	},
+	"the_end": {
+		"pc": 9,
+		"pe": 9
+	},
+	"frozen_ocean": {
+		"pc": 10,
+		"pe": 46
+	},
+	"frozen_river": {
+		"pc": 11,
+		"pe": 11
+	},
+	"snowy_tundra": {
+		"pc": 12,
+		"pe": 12
+	},
+	"snowy_mountains": {
+		"pc": 13,
+		"pe": 13
+	},
+	"mushroom_fields": {
+		"pc": 14,
+		"pe": 14
+	},
+	"mushroom_field_shore": {
+		"pc": 15,
+		"pe": 15
+	},
+	"beach": {
+		"pc": 16,
+		"pe": 16
+	},
+	"desert_hills": {
+		"pc": 17,
+		"pe": 17
+	},
+	"wooded_hills": {
+		"pc": 18,
+		"pe": 18
+	},
+	"taiga_hills": {
+		"pc": 19,
+		"pe": 19
+	},
+	"mountain_edge": {
+		"pc": 20,
+		"pe": 20
+	},
+	"jungle": {
+		"pc": 21,
+		"pe": 21
+	},
+	"jungle_hills": {
+		"pc": 22,
+		"pe": 22
+	},
+	"jungle_edge": {
+		"pc": 23,
+		"pe": 23
+	},
+	"deep_ocean": {
+		"pc": 24,
+		"pe": 24
+	},
+	"stone_shore": {
+		"pc": 25,
+		"pe": 25
+	},
+	"snowy_beach": {
+		"pc": 26,
+		"pe": 26
+	},
+	"birch_forest": {
+		"pc": 27,
+		"pe": 27
+	},
+	"birch_forest_hills": {
+		"pc": 28,
+		"pe": 28
+	},
+	"dark_forest": {
+		"pc": 29,
+		"pe": 29
+	},
+	"snowy_taiga": {
+		"pc": 30,
+		"pe": 30
+	},
+	"snowy_taiga_hills": {
+		"pc": 31,
+		"pe": 31
+	},
+	"giant_tree_taiga": {
+		"pc": 32,
+		"pe": 32
+	},
+	"giant_tree_taiga_hills": {
+		"pc": 33,
+		"pe": 33
+	},
+	"wooded_mountains": {
+		"pc": 34,
+		"pe": 34
+	},
+	"savanna": {
+		"pc": 35,
+		"pe": 35
+	},
+	"savanna_plateau": {
+		"pc": 36,
+		"pe": 36
+	},
+	"badlands": {
+		"pc": 37,
+		"pe": 37
+	},
+	"wooded_badlands_plateau": {
+		"pc": 38,
+		"pe": 38
+	},
+	"badlands_plateau": {
+		"pc": 39,
+		"pe": 39
+	},
+	"small_end_islands": {
+		"pc": 40,
+		"pe": -1
+	},
+	"end_midlands": {
+		"pc": 41,
+		"pe": -1
+	},
+	"end_highlands": {
+		"pc": 42,
+		"pe": -1
+	},
+	"end_barrens": {
+		"pc": 43,
+		"pe": -1
+	},
+	"warm_ocean": {
+		"pc": 44,
+		"pe": 40
+	},
+	"lukewarm_ocean": {
+		"pc": 45,
+		"pe": 42
+	},
+	"cold_ocean": {
+		"pc": 46,
+		"pe": 44
+	},
+	"deep_warm_ocean": {
+		"pc": 47,
+		"pe": 41
+	},
+	"deep_lukewarm_ocean": {
+		"pc": 48,
+		"pe": 43
+	},
+	"deep_cold_ocean": {
+		"pc": 49,
+		"pe": 45
+	},
+	"deep_frozen_ocean": {
+		"pc": 50,
+		"pe": 47
+	},
+	"the_void": {
+		"pc": 127,
+		"pe": -1
+	},
+	"sunflower_plains": {
+		"pc": 129,
+		"pe": 129
+	},
+	"desert_lakes": {
+		"pc": 130,
+		"pe": 130
+	},
+	"gravelly_mountains": {
+		"pc": 131,
+		"pe": 131
+	},
+	"flower_forest": {
+		"pc": 132,
+		"pe": 132
+	},
+	"taiga_mountains": {
+		"pc": 133,
+		"pe": 133
+	},
+	"swamp_hills": {
+		"pc": 134,
+		"pe": 134
+	},
+	"ice_spikes": {
+		"pc": 140,
+		"pe": 140
+	},
+	"modified_jungle": {
+		"pc": 149,
+		"pe": 149
+	},
+	"modified_jungle_edge": {
+		"pc": 151,
+		"pe": 151
+	},
+	"tall_birch_forest": {
+		"pc": 155,
+		"pe": 155
+	},
+	"tall_birch_hills": {
+		"pc": 156,
+		"pe": 156
+	},
+	"dark_forest_hills": {
+		"pc": 157,
+		"pe": 157
+	},
+	"snowy_taiga_mountains": {
+		"pc": 158,
+		"pe": 158
+	},
+	"giant_spruce_taiga": {
+		"pc": 160,
+		"pe": 160
+	},
+	"giant_spruce_taiga_hills": {
+		"pc": 161,
+		"pe": 161
+	},
+	"modified_gravelly_mountains": {
+		"pc": 162,
+		"pe": 162
+	},
+	"shattered_savanna": {
+		"pc": 163,
+		"pe": 163
+	},
+	"shattered_savanna_plateau": {
+		"pc": 164,
+		"pe": 164
+	},
+	"eroded_badlands": {
+		"pc": 165,
+		"pe": 165
+	},
+	"modified_wooded_badlands_plateau": {
+		"pc": 166,
+		"pe": 166
+	},
+	"modified_badlands_plateau": {
+		"pc": 167,
+		"pe": 167
+	}
+}

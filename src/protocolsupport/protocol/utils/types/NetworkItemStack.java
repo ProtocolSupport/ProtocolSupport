@@ -53,6 +53,10 @@ public class NetworkItemStack {
 		return stack;
 	}
 
+	@Override
+	public String toString() {
+		return "NetworkItemStack(" + getTypeId() + ":" + getLegacyData() + "," + getAmount() + ")";
+	}
 
 	public static final NetworkItemStack NULL = new NetworkItemStack() {
 
@@ -98,6 +102,11 @@ public class NetworkItemStack {
 		@Override
 		public int getAmount() {
 			throw reject();
+		}
+
+		@Override
+		public String toString() {
+			return "NetworkItemStack.NULL";
 		}
 
 	};

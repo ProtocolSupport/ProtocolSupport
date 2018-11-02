@@ -10,9 +10,12 @@ import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.ArrayDequeMultiMap;
 import protocolsupport.utils.ArrayDequeMultiMap.ChildDeque;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
+
+import java.util.Collection;
 
 //See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-Inventory-Managing)
 public class PETransactionRemapper {
@@ -57,6 +60,7 @@ public class PETransactionRemapper {
 	public void customCursor(NetworkItemStack item) {
 		clear();
 		if(!item.isNull()) {
+			bug("customCursor surpluses.put " + item);
 			surpluses.put(new ItemKey(item), new SlotBudget(InvTransaction.CURSOR, item.getAmount(), item.getAmount()), true);
 		}
 		
@@ -70,8 +74,12 @@ public class PETransactionRemapper {
 	
 	//See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-Inventory-Managing#the-real-stuff)
 	public void processTransactions(NetworkDataCache cache, RecyclableArrayList<ServerBoundPacketData> packets) {
+		//bug("processTransactions deficits " + deficits);
+		//bug("processTransactions surpluses " + surpluses);
 		deficits.cycleUp((item, itemDeficit) -> {
+			//bug("processTransactions, deficit item: " + item);
 			ChildDeque<SlotBudget> itemSurplus = surpluses.get(item);
+			//bug("processTransactions, itemSurplus: " + itemSurplus);
 			if (itemSurplus != null) {
 				itemDeficit.cycleUp(deficit -> {
 					itemSurplus.cycleDown(surplus -> {
@@ -132,7 +140,7 @@ public class PETransactionRemapper {
 						}
 					}
 					if (deficit.isEmpty() && deficit.isCursor() && deficit.hasStack()) {
-						bug("Something left in cursor!");
+						bug("Something left in cursor! " + item);
 						surpluses.put(item, new SlotBudget(InvTransaction.CURSOR, deficit.getSlotAmount(), deficit.getSlotAmount()));
 					}
 					return deficit.isEmpty();
@@ -255,10 +263,13 @@ public class PETransactionRemapper {
 
 		public ItemKey(NetworkItemStack keyItem) {
 			if(!keyItem.isNull()) {
+				NBTCompound nbt = keyItem.getNBT();
+
 				this.keyItem = keyItem;
+
 				hash = 41 * hash + keyItem.getTypeId();
 				hash = 41 * hash + keyItem.getLegacyData();
-				hash = 41 * hash + keyItem.getNBT().hashCode();
+				hash = 41 * hash + (nbt == null ? 0 : nbt.hashCode());
 			}
 		}
 
@@ -285,10 +296,12 @@ public class PETransactionRemapper {
 				if(wrapper.getKeyItem().isNull() || this.getKeyItem().isNull()) {
 					return false;
 				}
+				NBTCompound nbtA = wrapper.getKeyItem().getNBT();
+				NBTCompound nbtB = this.getKeyItem().getNBT();
 				return 
 						(wrapper.getKeyItem().getTypeId() == this.getKeyItem().getTypeId()) &&
 						(wrapper.getKeyItem().getLegacyData() == this.getKeyItem().getLegacyData()) &&
-						(wrapper.getKeyItem().getNBT().equals(this.getKeyItem().getNBT()));
+						(nbtA == nbtB || (nbtA != null ? nbtA.equals(nbtB) : false));
 			}
 			return false;
 			

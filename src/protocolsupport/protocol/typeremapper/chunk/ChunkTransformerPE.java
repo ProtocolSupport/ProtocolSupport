@@ -3,6 +3,7 @@ package protocolsupport.protocol.typeremapper.chunk;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEBiomeValues;
 import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
@@ -54,7 +55,7 @@ public class ChunkTransformerPE extends ChunkTransformerBB {
 		}
 		chunkdata.writeZero(512); //heightmap (will be recalculated by client anyway)
 		for (int i = 0; i < biomeData.length; i++) {
-			chunkdata.writeByte(biomeData[i]);
+			chunkdata.writeByte(PEBiomeValues.pcToPe(biomeData[i]));
 		}
 	}
 

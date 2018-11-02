@@ -22,7 +22,7 @@ public class PotionToPEIdSpecificRemapper implements ItemStackComplexRemapper {
 		if (potionTag != null && !potionTag.getValue().isEmpty()) {
 			String potion = potionTag.getValue();
 			NBTList<NBTCompound> tagList = tag.getTagListOfType("CustomPotionEffects", NBTType.COMPOUND);
-			if (tagList.size() >= 1) {
+			if (tagList != null && tagList.size() >= 1) {
 				potion = PotionData.getNameById(tagList.getTag(0).getNumberTag("Id").getAsInt());
 			}
 			if (PEPotion.hasPERemap(potion)) {

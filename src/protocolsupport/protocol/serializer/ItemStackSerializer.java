@@ -101,7 +101,7 @@ public class ItemStackSerializer {
 		}
 		NetworkItemStack witemstack = itemstack;
 		if (isToClient) {
-			witemstack = remapItemToClient(version, locale, witemstack);
+			witemstack = remapItemToClient(version, locale, witemstack.cloneItemStack());
 		}
 		if (version == ProtocolVersion.MINECRAFT_PE) {
 			VarNumberSerializer.writeSVarInt(to, witemstack.getTypeId());
