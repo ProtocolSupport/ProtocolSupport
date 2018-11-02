@@ -264,9 +264,7 @@ public class PETransactionRemapper {
 		public ItemKey(NetworkItemStack keyItem) {
 			if(!keyItem.isNull()) {
 				NBTCompound nbt = keyItem.getNBT();
-
 				this.keyItem = keyItem;
-
 				hash = 41 * hash + keyItem.getTypeId();
 				hash = 41 * hash + keyItem.getLegacyData();
 				hash = 41 * hash + (nbt == null ? 0 : nbt.hashCode());
