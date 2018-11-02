@@ -387,6 +387,54 @@
     "pename":"minecraft:dispenser",
     "pedata":0
   },
+  "minecraft:observer[facing=north,powered=true]":{
+    "pename":"minecraft:observer",
+    "pedata":10
+  },
+  "minecraft:observer[facing=north,powered=false]":{
+    "pename":"minecraft:observer",
+    "pedata":2
+  },
+  "minecraft:observer[facing=east,powered=true]":{
+    "pename":"minecraft:observer",
+    "pedata":13
+  },
+  "minecraft:observer[facing=east,powered=false]":{
+    "pename":"minecraft:observer",
+    "pedata":5
+  },
+  "minecraft:observer[facing=south,powered=true]":{
+    "pename":"minecraft:observer",
+    "pedata":11
+  },
+  "minecraft:observer[facing=south,powered=false]":{
+    "pename":"minecraft:observer",
+    "pedata":3
+  },
+  "minecraft:observer[facing=west,powered=true]":{
+    "pename":"minecraft:observer",
+    "pedata":12
+  },
+  "minecraft:observer[facing=west,powered=false]":{
+    "pename":"minecraft:observer",
+    "pedata":4
+  },
+  "minecraft:observer[facing=up,powered=true]":{
+    "pename":"minecraft:observer",
+    "pedata":9
+  },
+  "minecraft:observer[facing=up,powered=false]":{
+    "pename":"minecraft:observer",
+    "pedata":1
+  },
+  "minecraft:observer[facing=down,powered=true]":{
+    "pename":"minecraft:observer",
+    "pedata":8
+  },
+  "minecraft:observer[facing=down,powered=false]":{
+    "pename":"minecraft:observer",
+    "pedata":0
+  },
   "minecraft:sandstone":{
     "pename":"minecraft:sandstone",
     "pedata":0
@@ -499,6 +547,54 @@
     "pename":"minecraft:golden_rail",
     "pedata":5
   },
+  "minecraft:activator_rail[powered=true,shape=north_south]":{
+    "pename":"minecraft:activator_rail",
+    "pedata":8
+  },
+  "minecraft:activator_rail[powered=true,shape=east_west]":{
+    "pename":"minecraft:activator_rail",
+    "pedata":9
+  },
+  "minecraft:activator_rail[powered=true,shape=ascending_east]":{
+    "pename":"minecraft:activator_rail",
+    "pedata":10
+  },
+  "minecraft:activator_rail[powered=true,shape=ascending_west]":{
+    "pename":"minecraft:activator_rail",
+    "pedata":11
+  },
+  "minecraft:activator_rail[powered=true,shape=ascending_north]":{
+    "pename":"minecraft:activator_rail",
+    "pedata":12
+  },
+  "minecraft:activator_rail[powered=true,shape=ascending_south]":{
+    "pename":"minecraft:activator_rail",
+    "pedata":13
+  },
+  "minecraft:activator_rail[powered=false,shape=north_south]":{
+    "pename":"minecraft:activator_rail",
+    "pedata":0
+  },
+  "minecraft:activator_rail[powered=false,shape=east_west]":{
+    "pename":"minecraft:activator_rail",
+    "pedata":1
+  },
+  "minecraft:activator_rail[powered=false,shape=ascending_east]":{
+    "pename":"minecraft:activator_rail",
+    "pedata":2
+  },
+  "minecraft:activator_rail[powered=false,shape=ascending_west]":{
+    "pename":"minecraft:activator_rail",
+    "pedata":3
+  },
+  "minecraft:activator_rail[powered=false,shape=ascending_north]":{
+    "pename":"minecraft:activator_rail",
+    "pedata":4
+  },
+  "minecraft:activator_rail[powered=false,shape=ascending_south]":{
+    "pename":"minecraft:activator_rail",
+    "pedata":5
+  },
   "minecraft:detector_rail[powered=true,shape=north_south]":{
     "pename":"minecraft:detector_rail",
     "pedata":8
@@ -599,12 +695,16 @@
     "pename":"minecraft:web",
     "pedata":0
   },
+  "minecraft:grass":{
+    "pename":"minecraft:tallgrass",
+    "pedata":0
+  },
   "minecraft:fern":{
     "pename":"minecraft:tallgrass",
-    "pedata":2
+    "pedata":1
   },
   "minecraft:dead_bush":{
-    "pename":"minecraft:tallgrass",
+    "pename":"minecraft:deadbush",
     "pedata":0
   },
   "minecraft:piston[extended=true,facing=north]":{
@@ -1183,6 +1283,22 @@
     "pename":"minecraft:furnace",
     "pedata":5
   },
+  "minecraft:furnace[facing=north,lit=true]":{
+    "pename":"minecraft:lit_furnace",
+    "pedata":2
+  },
+  "minecraft:furnace[facing=south,lit=true]":{
+    "pename":"minecraft:lit_furnace",
+    "pedata":3
+  },
+  "minecraft:furnace[facing=west,lit=true]":{
+    "pename":"minecraft:lit_furnace",
+    "pedata":4
+  },
+  "minecraft:furnace[facing=east,lit=true]":{
+    "pename":"minecraft:lit_furnace",
+    "pedata":5
+  },
   "minecraft:sign[rotation=0,waterlogged=false]":{
     "pename":"minecraft:standing_sign",
     "pedata":0
@@ -1520,11 +1636,51 @@
     "pedata":0
   },
   "minecraft:oak_pressure_plate[powered=true]":{
-    "pename":"minecraft:wooden_pressure_plate",
+    "pename":"minecraft:oak_pressure_plate",
     "pedata":1
   },
   "minecraft:oak_pressure_plate[powered=false]":{
-    "pename":"minecraft:wooden_pressure_plate",
+    "pename":"minecraft:oak_pressure_plate",
+    "pedata":0
+  },
+  "minecraft:spruce_pressure_plate[powered=true]":{
+    "pename":"minecraft:spruce_pressure_plate",
+    "pedata":1
+  },
+  "minecraft:spruce_pressure_plate[powered=false]":{
+    "pename":"minecraft:spruce_pressure_plate",
+    "pedata":0
+  },
+  "minecraft:birch_pressure_plate[powered=true]":{
+    "pename":"minecraft:birch_pressure_plate",
+    "pedata":1
+  },
+  "minecraft:birch_pressure_plate[powered=false]":{
+    "pename":"minecraft:birch_pressure_plate",
+    "pedata":0
+  },
+  "minecraft:jungle_pressure_plate[powered=true]":{
+    "pename":"minecraft:jungle_pressure_plate",
+    "pedata":1
+  },
+  "minecraft:jungle_pressure_plate[powered=false]":{
+    "pename":"minecraft:jungle_pressure_plate",
+    "pedata":0
+  },
+  "minecraft:acacia_pressure_plate[powered=true]":{
+    "pename":"minecraft:acacia_pressure_plate",
+    "pedata":1
+  },
+  "minecraft:acacia_pressure_plate[powered=false]":{
+    "pename":"minecraft:acacia_pressure_plate",
+    "pedata":0
+  },
+  "minecraft:dark_oak_pressure_plate[powered=true]":{
+    "pename":"minecraft:dark_oak_pressure_plate",
+    "pedata":1
+  },
+  "minecraft:dark_oak_pressure_plate[powered=false]":{
+    "pename":"minecraft:dark_oak_pressure_plate",
     "pedata":0
   },
   "minecraft:redstone_ore[lit=false]":{
@@ -1622,6 +1778,38 @@
   "minecraft:snow_block":{
     "pename":"minecraft:snow",
     "pedata":0
+  },
+  "minecraft:snow[layers=1]":{
+    "pename":"minecraft:snow_layer",
+    "pedata":0
+  },
+  "minecraft:snow[layers=2]":{
+    "pename":"minecraft:snow_layer",
+    "pedata":1
+  },
+  "minecraft:snow[layers=3]":{
+    "pename":"minecraft:snow_layer",
+    "pedata":2
+  },
+  "minecraft:snow[layers=4]":{
+    "pename":"minecraft:snow_layer",
+    "pedata":3
+  },
+  "minecraft:snow[layers=5]":{
+    "pename":"minecraft:snow_layer",
+    "pedata":4
+  },
+  "minecraft:snow[layers=6]":{
+    "pename":"minecraft:snow_layer",
+    "pedata":5
+  },
+  "minecraft:snow[layers=7]":{
+    "pename":"minecraft:snow_layer",
+    "pedata":6
+  },
+  "minecraft:snow[layers=8]":{
+    "pename":"minecraft:snow_layer",
+    "pedata":7
   },
   "minecraft:cactus[age=0]":{
     "pename":"minecraft:cactus",
@@ -1802,6 +1990,26 @@
   "minecraft:jack_o_lantern[facing=east]":{
     "pename":"minecraft:lit_pumpkin",
     "pedata":3
+  },
+  "minecraft:pumpkin":{
+    "pename":"minecraft:pumpkin",
+    "pedata":0
+  },
+  "minecraft:carved_pumpkin[facing=north]":{
+    "pename":"minecraft:carved_pumpkin  ",
+    "pedata":2
+  },
+  "minecraft:carved_pumpkin[facing=east]":{
+    "pename":"minecraft:carved_pumpkin",
+    "pedata":3
+  },
+  "minecraft:carved_pumpkin[facing=south]":{
+    "pename":"minecraft:carved_pumpkin",
+    "pedata":0
+  },
+  "minecraft:carved_pumpkin[facing=west]":{
+    "pename":"minecraft:carved_pumpkin",
+    "pedata":1
   },
   "minecraft:cake[bites=0]":{
     "pename":"minecraft:cake",
@@ -2085,6 +2293,326 @@
   },
   "minecraft:oak_trapdoor[facing=east,half=bottom,open=false,powered=false,waterlogged=false]":{
     "pename":"minecraft:trapdoor",
+    "pedata":0
+  },
+  "minecraft:spruce_trapdoor[facing=north,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:spruce_trapdoor",
+    "pedata":15
+  },
+  "minecraft:spruce_trapdoor[facing=north,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:spruce_trapdoor",
+    "pedata":7
+  },
+  "minecraft:spruce_trapdoor[facing=north,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:spruce_trapdoor",
+    "pedata":11
+  },
+  "minecraft:spruce_trapdoor[facing=north,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:spruce_trapdoor",
+    "pedata":3
+  },
+  "minecraft:spruce_trapdoor[facing=south,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:spruce_trapdoor",
+    "pedata":14
+  },
+  "minecraft:spruce_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:spruce_trapdoor",
+    "pedata":6
+  },
+  "minecraft:spruce_trapdoor[facing=south,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:spruce_trapdoor",
+    "pedata":10
+  },
+  "minecraft:spruce_trapdoor[facing=south,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:spruce_trapdoor",
+    "pedata":2
+  },
+  "minecraft:spruce_trapdoor[facing=west,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:spruce_trapdoor",
+    "pedata":13
+  },
+  "minecraft:spruce_trapdoor[facing=west,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:spruce_trapdoor",
+    "pedata":5
+  },
+  "minecraft:spruce_trapdoor[facing=west,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:spruce_trapdoor",
+    "pedata":9
+  },
+  "minecraft:spruce_trapdoor[facing=west,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:spruce_trapdoor",
+    "pedata":1
+  },
+  "minecraft:spruce_trapdoor[facing=east,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:spruce_trapdoor",
+    "pedata":12
+  },
+  "minecraft:spruce_trapdoor[facing=east,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:spruce_trapdoor",
+    "pedata":4
+  },
+  "minecraft:spruce_trapdoor[facing=east,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:spruce_trapdoor",
+    "pedata":8
+  },
+  "minecraft:spruce_trapdoor[facing=east,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:spruce_trapdoor",
+    "pedata":0
+  },
+  "minecraft:birch_trapdoor[facing=north,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:birch_trapdoor",
+    "pedata":15
+  },
+  "minecraft:birch_trapdoor[facing=north,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:birch_trapdoor",
+    "pedata":7
+  },
+  "minecraft:birch_trapdoor[facing=north,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:birch_trapdoor",
+    "pedata":11
+  },
+  "minecraft:birch_trapdoor[facing=north,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:birch_trapdoor",
+    "pedata":3
+  },
+  "minecraft:birch_trapdoor[facing=south,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:birch_trapdoor",
+    "pedata":14
+  },
+  "minecraft:birch_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:birch_trapdoor",
+    "pedata":6
+  },
+  "minecraft:birch_trapdoor[facing=south,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:birch_trapdoor",
+    "pedata":10
+  },
+  "minecraft:birch_trapdoor[facing=south,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:birch_trapdoor",
+    "pedata":2
+  },
+  "minecraft:birch_trapdoor[facing=west,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:birch_trapdoor",
+    "pedata":13
+  },
+  "minecraft:birch_trapdoor[facing=west,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:birch_trapdoor",
+    "pedata":5
+  },
+  "minecraft:birch_trapdoor[facing=west,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:birch_trapdoor",
+    "pedata":9
+  },
+  "minecraft:birch_trapdoor[facing=west,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:birch_trapdoor",
+    "pedata":1
+  },
+  "minecraft:birch_trapdoor[facing=east,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:birch_trapdoor",
+    "pedata":12
+  },
+  "minecraft:birch_trapdoor[facing=east,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:birch_trapdoor",
+    "pedata":4
+  },
+  "minecraft:birch_trapdoor[facing=east,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:birch_trapdoor",
+    "pedata":8
+  },
+  "minecraft:birch_trapdoor[facing=east,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:birch_trapdoor",
+    "pedata":0
+  },
+  "minecraft:jungle_trapdoor[facing=north,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:jungle_trapdoor",
+    "pedata":15
+  },
+  "minecraft:jungle_trapdoor[facing=north,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:jungle_trapdoor",
+    "pedata":7
+  },
+  "minecraft:jungle_trapdoor[facing=north,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:jungle_trapdoor",
+    "pedata":11
+  },
+  "minecraft:jungle_trapdoor[facing=north,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:jungle_trapdoor",
+    "pedata":3
+  },
+  "minecraft:jungle_trapdoor[facing=south,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:jungle_trapdoor",
+    "pedata":14
+  },
+  "minecraft:jungle_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:jungle_trapdoor",
+    "pedata":6
+  },
+  "minecraft:jungle_trapdoor[facing=south,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:jungle_trapdoor",
+    "pedata":10
+  },
+  "minecraft:jungle_trapdoor[facing=south,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:jungle_trapdoor",
+    "pedata":2
+  },
+  "minecraft:jungle_trapdoor[facing=west,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:jungle_trapdoor",
+    "pedata":13
+  },
+  "minecraft:jungle_trapdoor[facing=west,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:jungle_trapdoor",
+    "pedata":5
+  },
+  "minecraft:jungle_trapdoor[facing=west,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:jungle_trapdoor",
+    "pedata":9
+  },
+  "minecraft:jungle_trapdoor[facing=west,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:jungle_trapdoor",
+    "pedata":1
+  },
+  "minecraft:jungle_trapdoor[facing=east,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:jungle_trapdoor",
+    "pedata":12
+  },
+  "minecraft:jungle_trapdoor[facing=east,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:jungle_trapdoor",
+    "pedata":4
+  },
+  "minecraft:jungle_trapdoor[facing=east,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:jungle_trapdoor",
+    "pedata":8
+  },
+  "minecraft:jungle_trapdoor[facing=east,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:jungle_trapdoor",
+    "pedata":0
+  },
+  "minecraft:acacia_trapdoor[facing=north,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:acacia_trapdoor",
+    "pedata":15
+  },
+  "minecraft:acacia_trapdoor[facing=north,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:acacia_trapdoor",
+    "pedata":7
+  },
+  "minecraft:acacia_trapdoor[facing=north,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:acacia_trapdoor",
+    "pedata":11
+  },
+  "minecraft:acacia_trapdoor[facing=north,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:acacia_trapdoor",
+    "pedata":3
+  },
+  "minecraft:acacia_trapdoor[facing=south,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:acacia_trapdoor",
+    "pedata":14
+  },
+  "minecraft:acacia_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:acacia_trapdoor",
+    "pedata":6
+  },
+  "minecraft:acacia_trapdoor[facing=south,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:acacia_trapdoor",
+    "pedata":10
+  },
+  "minecraft:acacia_trapdoor[facing=south,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:acacia_trapdoor",
+    "pedata":2
+  },
+  "minecraft:acacia_trapdoor[facing=west,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:acacia_trapdoor",
+    "pedata":13
+  },
+  "minecraft:acacia_trapdoor[facing=west,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:acacia_trapdoor",
+    "pedata":5
+  },
+  "minecraft:acacia_trapdoor[facing=west,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:acacia_trapdoor",
+    "pedata":9
+  },
+  "minecraft:acacia_trapdoor[facing=west,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:acacia_trapdoor",
+    "pedata":1
+  },
+  "minecraft:acacia_trapdoor[facing=east,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:acacia_trapdoor",
+    "pedata":12
+  },
+  "minecraft:acacia_trapdoor[facing=east,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:acacia_trapdoor",
+    "pedata":4
+  },
+  "minecraft:acacia_trapdoor[facing=east,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:acacia_trapdoor",
+    "pedata":8
+  },
+  "minecraft:acacia_trapdoor[facing=east,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:acacia_trapdoor",
+    "pedata":0
+  },
+  "minecraft:dark_oak_trapdoor[facing=north,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:dark_oak_trapdoor",
+    "pedata":15
+  },
+  "minecraft:dark_oak_trapdoor[facing=north,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:dark_oak_trapdoor",
+    "pedata":7
+  },
+  "minecraft:dark_oak_trapdoor[facing=north,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:dark_oak_trapdoor",
+    "pedata":11
+  },
+  "minecraft:dark_oak_trapdoor[facing=north,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:dark_oak_trapdoor",
+    "pedata":3
+  },
+  "minecraft:dark_oak_trapdoor[facing=south,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:dark_oak_trapdoor",
+    "pedata":14
+  },
+  "minecraft:dark_oak_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:dark_oak_trapdoor",
+    "pedata":6
+  },
+  "minecraft:dark_oak_trapdoor[facing=south,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:dark_oak_trapdoor",
+    "pedata":10
+  },
+  "minecraft:dark_oak_trapdoor[facing=south,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:dark_oak_trapdoor",
+    "pedata":2
+  },
+  "minecraft:dark_oak_trapdoor[facing=west,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:dark_oak_trapdoor",
+    "pedata":13
+  },
+  "minecraft:dark_oak_trapdoor[facing=west,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:dark_oak_trapdoor",
+    "pedata":5
+  },
+  "minecraft:dark_oak_trapdoor[facing=west,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:dark_oak_trapdoor",
+    "pedata":9
+  },
+  "minecraft:dark_oak_trapdoor[facing=west,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:dark_oak_trapdoor",
+    "pedata":1
+  },
+  "minecraft:dark_oak_trapdoor[facing=east,half=top,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:dark_oak_trapdoor",
+    "pedata":12
+  },
+  "minecraft:dark_oak_trapdoor[facing=east,half=top,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:dark_oak_trapdoor",
+    "pedata":4
+  },
+  "minecraft:dark_oak_trapdoor[facing=east,half=bottom,open=true,powered=false,waterlogged=false]":{
+    "pename":"minecraft:dark_oak_trapdoor",
+    "pedata":8
+  },
+  "minecraft:dark_oak_trapdoor[facing=east,half=bottom,open=false,powered=false,waterlogged=false]":{
+    "pename":"minecraft:dark_oak_trapdoor",
     "pedata":0
   },
   "minecraft:infested_stone":{
@@ -4084,75 +4612,75 @@
     "pedata":0
   },
   "minecraft:oak_slab[type=top,waterlogged=false]":{
-    "pename":"minecraft:activator_rail",
+    "pename":"minecraft:wooden_slab",
     "pedata":8
   },
   "minecraft:oak_slab[type=bottom,waterlogged=false]":{
-    "pename":"minecraft:activator_rail",
+    "pename":"minecraft:wooden_slab",
     "pedata":0
   },
   "minecraft:oak_slab[type=double,waterlogged=false]":{
-    "pename":"minecraft:dropper",
+    "pename":"minecraft:double_wooden_slab",
     "pedata":0
   },
   "minecraft:spruce_slab[type=top,waterlogged=false]":{
-    "pename":"minecraft:activator_rail",
+    "pename":"minecraft:wooden_slab",
     "pedata":9
   },
   "minecraft:spruce_slab[type=bottom,waterlogged=false]":{
-    "pename":"minecraft:activator_rail",
+    "pename":"minecraft:wooden_slab",
     "pedata":1
   },
   "minecraft:spruce_slab[type=double,waterlogged=false]":{
-    "pename":"minecraft:dropper",
+    "pename":"minecraft:double_wooden_slab",
     "pedata":1
   },
   "minecraft:birch_slab[type=top,waterlogged=false]":{
-    "pename":"minecraft:activator_rail",
+    "pename":"minecraft:wooden_slab",
     "pedata":10
   },
   "minecraft:birch_slab[type=bottom,waterlogged=false]":{
-    "pename":"minecraft:activator_rail",
+    "pename":"minecraft:wooden_slab",
     "pedata":2
   },
   "minecraft:birch_slab[type=double,waterlogged=false]":{
-    "pename":"minecraft:dropper",
+    "pename":"minecraft:double_wooden_slab",
     "pedata":2
   },
   "minecraft:jungle_slab[type=top,waterlogged=false]":{
-    "pename":"minecraft:activator_rail",
+    "pename":"minecraft:wooden_slab",
     "pedata":11
   },
   "minecraft:jungle_slab[type=bottom,waterlogged=false]":{
-    "pename":"minecraft:activator_rail",
+    "pename":"minecraft:wooden_slab",
     "pedata":3
   },
   "minecraft:jungle_slab[type=double,waterlogged=false]":{
-    "pename":"minecraft:dropper",
+    "pename":"minecraft:double_wooden_slab",
     "pedata":3
   },
   "minecraft:acacia_slab[type=top,waterlogged=false]":{
-    "pename":"minecraft:activator_rail",
+    "pename":"minecraft:wooden_slab",
     "pedata":12
   },
   "minecraft:acacia_slab[type=bottom,waterlogged=false]":{
-    "pename":"minecraft:activator_rail",
+    "pename":"minecraft:wooden_slab",
     "pedata":4
   },
   "minecraft:acacia_slab[type=double,waterlogged=false]":{
-    "pename":"minecraft:dropper",
+    "pename":"minecraft:double_wooden_slab",
     "pedata":4
   },
   "minecraft:dark_oak_slab[type=top,waterlogged=false]":{
-    "pename":"minecraft:activator_rail",
+    "pename":"minecraft:wooden_slab",
     "pedata":13
   },
   "minecraft:dark_oak_slab[type=bottom,waterlogged=false]":{
-    "pename":"minecraft:activator_rail",
+    "pename":"minecraft:wooden_slab",
     "pedata":5
   },
   "minecraft:dark_oak_slab[type=double,waterlogged=false]":{
-    "pename":"minecraft:dropper",
+    "pename":"minecraft:double_wooden_slab",
     "pedata":5
   },
   "minecraft:stone_slab[type=top,waterlogged=false]":{
@@ -4260,16 +4788,52 @@
     "pedata":0
   },
   "minecraft:purpur_slab[type=top,waterlogged=false]":{
-    "pename":"minecraft:undyed_shulker_box",
-    "pedata":8
+    "pename":"minecraft:stone_slab2",
+    "pedata":9
   },
   "minecraft:purpur_slab[type=bottom,waterlogged=false]":{
-    "pename":"minecraft:undyed_shulker_box",
-    "pedata":0
+    "pename":"minecraft:stone_slab2",
+    "pedata":1
   },
   "minecraft:purpur_slab[type=double,waterlogged=false]":{
-    "pename":"minecraft:colored_torch_bp",
-    "pedata":0
+    "pename":"minecraft:double_stone_slab2",
+    "pedata":1
+  },
+  "minecraft:prismarine_slab[type=top,waterlogged=false]":{
+    "pename":"minecraft:stone_slab2",
+    "pedata":10
+  },
+  "minecraft:prismarine_slab[type=bottom,waterlogged=false]":{
+    "pename":"minecraft:stone_slab2",
+    "pedata":2
+  },
+  "minecraft:prismarine_slab[type=double,waterlogged=false]":{
+    "pename":"minecraft:double_stone_slab2",
+    "pedata":2
+  },
+  "minecraft:prismarine_brick_slab[type=top,waterlogged=false]":{
+    "pename":"minecraft:stone_slab2",
+    "pedata":11
+  },
+  "minecraft:prismarine_brick_slab[type=bottom,waterlogged=false]":{
+    "pename":"minecraft:stone_slab2",
+    "pedata":3
+  },
+  "minecraft:prismarine_brick_slab[type=double,waterlogged=false]":{
+    "pename":"minecraft:double_stone_slab2",
+    "pedata":3
+  },
+  "minecraft:dark_prismarine_slab[type=top,waterlogged=false]":{
+    "pename":"minecraft:stone_slab2",
+    "pedata":12
+  },
+  "minecraft:dark_prismarine_slab[type=bottom,waterlogged=false]":{
+    "pename":"minecraft:stone_slab2",
+    "pedata":4
+  },
+  "minecraft:dark_prismarine_slab[type=double,waterlogged=false]":{
+    "pename":"minecraft:double_stone_slab2",
+    "pedata":4
   },
   "minecraft:smooth_stone":{
     "pename":"minecraft:double_stone_slab",
@@ -4608,24 +5172,24 @@
     "pedata":3
   },
   "minecraft:spruce_fence[east=false,north=false,south=false,waterlogged=false,west=false]":{
-    "pename":"minecraft:repeating_command_block",
-    "pedata":0
+    "pename":"minecraft:fence",
+    "pedata":1
   },
   "minecraft:birch_fence[east=false,north=false,south=false,waterlogged=false,west=false]":{
-    "pename":"minecraft:chain_command_block",
-    "pedata":0
+    "pename":"minecraft:fence",
+    "pedata":2
   },
   "minecraft:jungle_fence[east=false,north=false,south=false,waterlogged=false,west=false]":{
-    "pename":"minecraft:hard_glass_pane",
-    "pedata":0
+    "pename":"minecraft:fence",
+    "pedata":3
   },
   "minecraft:acacia_fence[east=false,north=false,south=false,waterlogged=false,west=false]":{
-    "pename":"minecraft:chemical_heat",
-    "pedata":0
+    "pename":"minecraft:fence",
+    "pedata":4
   },
   "minecraft:dark_oak_fence[east=false,north=false,south=false,waterlogged=false,west=false]":{
-    "pename":"minecraft:hard_stained_glass_pane",
-    "pedata":0
+    "pename":"minecraft:fence",
+    "pedata":5
   },
   "minecraft:spruce_door[facing=north,half=lower,hinge=right,open=true,powered=false]":{
     "pename":"minecraft:spruce_door",
@@ -4896,16 +5460,16 @@
     "pedata":0
   },
   "minecraft:purpur_pillar[axis=x]":{
-    "pename":"minecraft:colored_torch_rg",
-    "pedata":4
+    "pename":"minecraft:purpur_block",
+    "pedata":6
   },
   "minecraft:purpur_pillar[axis=y]":{
-    "pename":"minecraft:colored_torch_rg",
-    "pedata":0
+    "pename":"minecraft:purpur_block",
+    "pedata":2
   },
   "minecraft:purpur_pillar[axis=z]":{
-    "pename":"minecraft:colored_torch_rg",
-    "pedata":8
+    "pename":"minecraft:purpur_block",
+    "pedata":10
   },
   "minecraft:purpur_stairs[facing=north,half=top,shape=straight,waterlogged=false]":{
     "pename":"minecraft:purpur_stairs",
@@ -4944,19 +5508,19 @@
     "pedata":0
   },
   "minecraft:beetroots[age=0]":{
-    "pename":"minecraft:frosted_ice",
+    "pename":"minecraft:beetroot",
     "pedata":0
   },
   "minecraft:beetroots[age=1]":{
-    "pename":"minecraft:frosted_ice",
+    "pename":"minecraft:beetroot",
     "pedata":1
   },
   "minecraft:beetroots[age=2]":{
-    "pename":"minecraft:frosted_ice",
+    "pename":"minecraft:beetroot",
     "pedata":2
   },
   "minecraft:beetroots[age=3]":{
-    "pename":"minecraft:frosted_ice",
+    "pename":"minecraft:beetroot",
     "pedata":3
   },
   "minecraft:end_gateway":{
@@ -4987,576 +5551,1460 @@
     "pename":"minecraft:bone_block",
     "pedata":8
   },
-  "minecraft:white_shulker_box[facing=north]":{
-    "pename":"minecraft:purple_glazed_terracotta",
-    "pedata":2
-  },
-  "minecraft:white_shulker_box[facing=east]":{
-    "pename":"minecraft:purple_glazed_terracotta",
-    "pedata":5
-  },
-  "minecraft:white_shulker_box[facing=south]":{
-    "pename":"minecraft:purple_glazed_terracotta",
-    "pedata":3
-  },
-  "minecraft:white_shulker_box[facing=west]":{
-    "pename":"minecraft:purple_glazed_terracotta",
-    "pedata":4
-  },
   "minecraft:white_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
     "pedata":0
-  },
-  "minecraft:white_shulker_box[facing=down]":{
-    "pename":"minecraft:purple_glazed_terracotta",
-    "pedata":0
-  },
-  "minecraft:orange_shulker_box[facing=north]":{
-    "pename":"minecraft:white_glazed_terracotta",
-    "pedata":2
-  },
-  "minecraft:orange_shulker_box[facing=east]":{
-    "pename":"minecraft:white_glazed_terracotta",
-    "pedata":5
-  },
-  "minecraft:orange_shulker_box[facing=south]":{
-    "pename":"minecraft:white_glazed_terracotta",
-    "pedata":3
-  },
-  "minecraft:orange_shulker_box[facing=west]":{
-    "pename":"minecraft:white_glazed_terracotta",
-    "pedata":4
   },
   "minecraft:orange_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
     "pedata":1
   },
-  "minecraft:orange_shulker_box[facing=down]":{
-    "pename":"minecraft:white_glazed_terracotta",
-    "pedata":0
-  },
-  "minecraft:magenta_shulker_box[facing=north]":{
-    "pename":"minecraft:orange_glazed_terracotta",
-    "pedata":2
-  },
-  "minecraft:magenta_shulker_box[facing=east]":{
-    "pename":"minecraft:orange_glazed_terracotta",
-    "pedata":5
-  },
-  "minecraft:magenta_shulker_box[facing=south]":{
-    "pename":"minecraft:orange_glazed_terracotta",
-    "pedata":3
-  },
-  "minecraft:magenta_shulker_box[facing=west]":{
-    "pename":"minecraft:orange_glazed_terracotta",
-    "pedata":4
-  },
   "minecraft:magenta_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
     "pedata":2
-  },
-  "minecraft:magenta_shulker_box[facing=down]":{
-    "pename":"minecraft:orange_glazed_terracotta",
-    "pedata":0
-  },
-  "minecraft:light_blue_shulker_box[facing=north]":{
-    "pename":"minecraft:magenta_glazed_terracotta",
-    "pedata":2
-  },
-  "minecraft:light_blue_shulker_box[facing=east]":{
-    "pename":"minecraft:magenta_glazed_terracotta",
-    "pedata":5
-  },
-  "minecraft:light_blue_shulker_box[facing=south]":{
-    "pename":"minecraft:magenta_glazed_terracotta",
-    "pedata":3
-  },
-  "minecraft:light_blue_shulker_box[facing=west]":{
-    "pename":"minecraft:magenta_glazed_terracotta",
-    "pedata":4
   },
   "minecraft:light_blue_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
     "pedata":3
   },
-  "minecraft:light_blue_shulker_box[facing=down]":{
-    "pename":"minecraft:magenta_glazed_terracotta",
-    "pedata":0
-  },
-  "minecraft:yellow_shulker_box[facing=north]":{
-    "pename":"minecraft:light_blue_glazed_terracotta",
-    "pedata":2
-  },
-  "minecraft:yellow_shulker_box[facing=east]":{
-    "pename":"minecraft:light_blue_glazed_terracotta",
-    "pedata":5
-  },
-  "minecraft:yellow_shulker_box[facing=south]":{
-    "pename":"minecraft:light_blue_glazed_terracotta",
-    "pedata":3
-  },
-  "minecraft:yellow_shulker_box[facing=west]":{
-    "pename":"minecraft:light_blue_glazed_terracotta",
-    "pedata":4
-  },
   "minecraft:yellow_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
-    "pedata":4
-  },
-  "minecraft:yellow_shulker_box[facing=down]":{
-    "pename":"minecraft:light_blue_glazed_terracotta",
-    "pedata":0
-  },
-  "minecraft:lime_shulker_box[facing=north]":{
-    "pename":"minecraft:yellow_glazed_terracotta",
-    "pedata":2
-  },
-  "minecraft:lime_shulker_box[facing=east]":{
-    "pename":"minecraft:yellow_glazed_terracotta",
-    "pedata":5
-  },
-  "minecraft:lime_shulker_box[facing=south]":{
-    "pename":"minecraft:yellow_glazed_terracotta",
-    "pedata":3
-  },
-  "minecraft:lime_shulker_box[facing=west]":{
-    "pename":"minecraft:yellow_glazed_terracotta",
     "pedata":4
   },
   "minecraft:lime_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
     "pedata":5
   },
-  "minecraft:lime_shulker_box[facing=down]":{
-    "pename":"minecraft:yellow_glazed_terracotta",
-    "pedata":0
-  },
-  "minecraft:pink_shulker_box[facing=north]":{
-    "pename":"minecraft:lime_glazed_terracotta",
-    "pedata":2
-  },
-  "minecraft:pink_shulker_box[facing=east]":{
-    "pename":"minecraft:lime_glazed_terracotta",
-    "pedata":5
-  },
-  "minecraft:pink_shulker_box[facing=south]":{
-    "pename":"minecraft:lime_glazed_terracotta",
-    "pedata":3
-  },
-  "minecraft:pink_shulker_box[facing=west]":{
-    "pename":"minecraft:lime_glazed_terracotta",
-    "pedata":4
-  },
   "minecraft:pink_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
     "pedata":6
-  },
-  "minecraft:pink_shulker_box[facing=down]":{
-    "pename":"minecraft:lime_glazed_terracotta",
-    "pedata":0
-  },
-  "minecraft:gray_shulker_box[facing=north]":{
-    "pename":"minecraft:pink_glazed_terracotta",
-    "pedata":2
-  },
-  "minecraft:gray_shulker_box[facing=east]":{
-    "pename":"minecraft:pink_glazed_terracotta",
-    "pedata":5
-  },
-  "minecraft:gray_shulker_box[facing=south]":{
-    "pename":"minecraft:pink_glazed_terracotta",
-    "pedata":3
-  },
-  "minecraft:gray_shulker_box[facing=west]":{
-    "pename":"minecraft:pink_glazed_terracotta",
-    "pedata":4
   },
   "minecraft:gray_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
     "pedata":7
   },
-  "minecraft:gray_shulker_box[facing=down]":{
-    "pename":"minecraft:pink_glazed_terracotta",
-    "pedata":0
-  },
-  "minecraft:light_gray_shulker_box[facing=north]":{
-    "pename":"minecraft:gray_glazed_terracotta",
-    "pedata":2
-  },
-  "minecraft:light_gray_shulker_box[facing=east]":{
-    "pename":"minecraft:gray_glazed_terracotta",
-    "pedata":5
-  },
-  "minecraft:light_gray_shulker_box[facing=south]":{
-    "pename":"minecraft:gray_glazed_terracotta",
-    "pedata":3
-  },
-  "minecraft:light_gray_shulker_box[facing=west]":{
-    "pename":"minecraft:gray_glazed_terracotta",
-    "pedata":4
-  },
   "minecraft:light_gray_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
     "pedata":8
-  },
-  "minecraft:light_gray_shulker_box[facing=down]":{
-    "pename":"minecraft:gray_glazed_terracotta",
-    "pedata":0
-  },
-  "minecraft:cyan_shulker_box[facing=north]":{
-    "pename":"minecraft:silver_glazed_terracotta",
-    "pedata":2
-  },
-  "minecraft:cyan_shulker_box[facing=east]":{
-    "pename":"minecraft:silver_glazed_terracotta",
-    "pedata":5
-  },
-  "minecraft:cyan_shulker_box[facing=south]":{
-    "pename":"minecraft:silver_glazed_terracotta",
-    "pedata":3
-  },
-  "minecraft:cyan_shulker_box[facing=west]":{
-    "pename":"minecraft:silver_glazed_terracotta",
-    "pedata":4
   },
   "minecraft:cyan_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
     "pedata":9
   },
-  "minecraft:cyan_shulker_box[facing=down]":{
-    "pename":"minecraft:silver_glazed_terracotta",
-    "pedata":0
-  },
-  "minecraft:purple_shulker_box[facing=north]":{
-    "pename":"minecraft:cyan_glazed_terracotta",
-    "pedata":2
-  },
-  "minecraft:purple_shulker_box[facing=east]":{
-    "pename":"minecraft:cyan_glazed_terracotta",
-    "pedata":5
-  },
-  "minecraft:purple_shulker_box[facing=south]":{
-    "pename":"minecraft:cyan_glazed_terracotta",
-    "pedata":3
-  },
-  "minecraft:purple_shulker_box[facing=west]":{
-    "pename":"minecraft:cyan_glazed_terracotta",
-    "pedata":4
-  },
   "minecraft:purple_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
     "pedata":10
-  },
-  "minecraft:purple_shulker_box[facing=down]":{
-    "pename":"minecraft:cyan_glazed_terracotta",
-    "pedata":0
-  },
-  "minecraft:blue_shulker_box[facing=up]":{
-    "pename":"minecraft:shulker_box",
-    "pedata":11
-  },
-  "minecraft:brown_shulker_box[facing=north]":{
-    "pename":"minecraft:blue_glazed_terracotta",
-    "pedata":2
-  },
-  "minecraft:brown_shulker_box[facing=east]":{
-    "pename":"minecraft:blue_glazed_terracotta",
-    "pedata":5
-  },
-  "minecraft:brown_shulker_box[facing=south]":{
-    "pename":"minecraft:blue_glazed_terracotta",
-    "pedata":3
-  },
-  "minecraft:brown_shulker_box[facing=west]":{
-    "pename":"minecraft:blue_glazed_terracotta",
-    "pedata":4
   },
   "minecraft:brown_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
     "pedata":12
   },
-  "minecraft:brown_shulker_box[facing=down]":{
-    "pename":"minecraft:blue_glazed_terracotta",
-    "pedata":0
-  },
-  "minecraft:green_shulker_box[facing=north]":{
-    "pename":"minecraft:brown_glazed_terracotta",
-    "pedata":2
-  },
-  "minecraft:green_shulker_box[facing=east]":{
-    "pename":"minecraft:brown_glazed_terracotta",
-    "pedata":5
-  },
-  "minecraft:green_shulker_box[facing=south]":{
-    "pename":"minecraft:brown_glazed_terracotta",
-    "pedata":3
-  },
-  "minecraft:green_shulker_box[facing=west]":{
-    "pename":"minecraft:brown_glazed_terracotta",
-    "pedata":4
-  },
   "minecraft:green_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
     "pedata":13
-  },
-  "minecraft:green_shulker_box[facing=down]":{
-    "pename":"minecraft:brown_glazed_terracotta",
-    "pedata":0
-  },
-  "minecraft:red_shulker_box[facing=north]":{
-    "pename":"minecraft:green_glazed_terracotta",
-    "pedata":2
-  },
-  "minecraft:red_shulker_box[facing=east]":{
-    "pename":"minecraft:green_glazed_terracotta",
-    "pedata":5
-  },
-  "minecraft:red_shulker_box[facing=south]":{
-    "pename":"minecraft:green_glazed_terracotta",
-    "pedata":3
-  },
-  "minecraft:red_shulker_box[facing=west]":{
-    "pename":"minecraft:green_glazed_terracotta",
-    "pedata":4
   },
   "minecraft:red_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
     "pedata":14
   },
-  "minecraft:red_shulker_box[facing=down]":{
-    "pename":"minecraft:green_glazed_terracotta",
-    "pedata":0
-  },
-  "minecraft:black_shulker_box[facing=north]":{
-    "pename":"minecraft:red_glazed_terracotta",
-    "pedata":2
-  },
-  "minecraft:black_shulker_box[facing=east]":{
-    "pename":"minecraft:red_glazed_terracotta",
-    "pedata":5
-  },
-  "minecraft:black_shulker_box[facing=south]":{
-    "pename":"minecraft:red_glazed_terracotta",
-    "pedata":3
-  },
-  "minecraft:black_shulker_box[facing=west]":{
-    "pename":"minecraft:red_glazed_terracotta",
-    "pedata":4
-  },
   "minecraft:black_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
     "pedata":15
   },
-  "minecraft:black_shulker_box[facing=down]":{
-    "pename":"minecraft:red_glazed_terracotta",
+  "minecraft:white_glazed_terracotta[facing=north]":{
+    "pename":"minecraft:white_glazed_terracotta",
+    "pedata":2
+  },
+  "minecraft:white_glazed_terracotta[facing=south]":{
+    "pename":"minecraft:white_glazed_terracotta",
     "pedata":0
   },
+  "minecraft:white_glazed_terracotta[facing=west]":{
+    "pename":"minecraft:white_glazed_terracotta",
+    "pedata":1
+  },
+  "minecraft:white_glazed_terracotta[facing=east]":{
+    "pename":"minecraft:white_glazed_terracotta",
+    "pedata":3
+  },
+  "minecraft:orange_glazed_terracotta[facing=north]":{
+    "pename":"minecraft:orange_glazed_terracotta",
+    "pedata":2
+  },
+  "minecraft:orange_glazed_terracotta[facing=south]":{
+    "pename":"minecraft:orange_glazed_terracotta",
+    "pedata":0
+  },
+  "minecraft:orange_glazed_terracotta[facing=west]":{
+    "pename":"minecraft:orange_glazed_terracotta",
+    "pedata":1
+  },
+  "minecraft:orange_glazed_terracotta[facing=east]":{
+    "pename":"minecraft:orange_glazed_terracotta",
+    "pedata":3
+  },
+  "minecraft:magenta_glazed_terracotta[facing=north]":{
+    "pename":"minecraft:magenta_glazed_terracotta",
+    "pedata":2
+  },
+  "minecraft:magenta_glazed_terracotta[facing=south]":{
+    "pename":"minecraft:magenta_glazed_terracotta",
+    "pedata":0
+  },
+  "minecraft:magenta_glazed_terracotta[facing=west]":{
+    "pename":"minecraft:magenta_glazed_terracotta",
+    "pedata":1
+  },
+  "minecraft:magenta_glazed_terracotta[facing=east]":{
+    "pename":"minecraft:magenta_glazed_terracotta",
+    "pedata":3
+  },
+  "minecraft:light_blue_glazed_terracotta[facing=north]":{
+    "pename":"minecraft:light_blue_glazed_terracotta",
+    "pedata":2
+  },
+  "minecraft:light_blue_glazed_terracotta[facing=south]":{
+    "pename":"minecraft:light_blue_glazed_terracotta",
+    "pedata":0
+  },
+  "minecraft:light_blue_glazed_terracotta[facing=west]":{
+    "pename":"minecraft:light_blue_glazed_terracotta",
+    "pedata":1
+  },
+  "minecraft:light_blue_glazed_terracotta[facing=east]":{
+    "pename":"minecraft:light_blue_glazed_terracotta",
+    "pedata":3
+  },
+  "minecraft:yellow_glazed_terracotta[facing=north]":{
+    "pename":"minecraft:yellow_glazed_terracotta",
+    "pedata":2
+  },
+  "minecraft:yellow_glazed_terracotta[facing=south]":{
+    "pename":"minecraft:yellow_glazed_terracotta",
+    "pedata":0
+  },
+  "minecraft:yellow_glazed_terracotta[facing=west]":{
+    "pename":"minecraft:yellow_glazed_terracotta",
+    "pedata":1
+  },
+  "minecraft:yellow_glazed_terracotta[facing=east]":{
+    "pename":"minecraft:yellow_glazed_terracotta",
+    "pedata":3
+  },
+  "minecraft:lime_glazed_terracotta[facing=north]":{
+    "pename":"minecraft:lime_glazed_terracotta",
+    "pedata":2
+  },
+  "minecraft:lime_glazed_terracotta[facing=south]":{
+    "pename":"minecraft:lime_glazed_terracotta",
+    "pedata":0
+  },
+  "minecraft:lime_glazed_terracotta[facing=west]":{
+    "pename":"minecraft:lime_glazed_terracotta",
+    "pedata":1
+  },
+  "minecraft:lime_glazed_terracotta[facing=east]":{
+    "pename":"minecraft:lime_glazed_terracotta",
+    "pedata":3
+  },
+  "minecraft:pink_glazed_terracotta[facing=north]":{
+    "pename":"minecraft:pink_glazed_terracotta",
+    "pedata":2
+  },
+  "minecraft:pink_glazed_terracotta[facing=south]":{
+    "pename":"minecraft:pink_glazed_terracotta",
+    "pedata":0
+  },
+  "minecraft:pink_glazed_terracotta[facing=west]":{
+    "pename":"minecraft:pink_glazed_terracotta",
+    "pedata":1
+  },
+  "minecraft:pink_glazed_terracotta[facing=east]":{
+    "pename":"minecraft:pink_glazed_terracotta",
+    "pedata":3
+  },
+  "minecraft:gray_glazed_terracotta[facing=north]":{
+    "pename":"minecraft:gray_glazed_terracotta",
+    "pedata":2
+  },
+  "minecraft:gray_glazed_terracotta[facing=south]":{
+    "pename":"minecraft:gray_glazed_terracotta",
+    "pedata":0
+  },
+  "minecraft:gray_glazed_terracotta[facing=west]":{
+    "pename":"minecraft:gray_glazed_terracotta",
+    "pedata":1
+  },
+  "minecraft:gray_glazed_terracotta[facing=east]":{
+    "pename":"minecraft:gray_glazed_terracotta",
+    "pedata":3
+  },
   "minecraft:light_gray_glazed_terracotta[facing=north]":{
-    "pename":"minecraft:podzol",
+    "pename":"minecraft:light_gray_glazed_terracotta",
     "pedata":2
   },
   "minecraft:light_gray_glazed_terracotta[facing=south]":{
-    "pename":"minecraft:podzol",
+    "pename":"minecraft:light_gray_glazed_terracotta",
     "pedata":0
   },
   "minecraft:light_gray_glazed_terracotta[facing=west]":{
-    "pename":"minecraft:podzol",
+    "pename":"minecraft:light_gray_glazed_terracotta",
     "pedata":1
   },
   "minecraft:light_gray_glazed_terracotta[facing=east]":{
-    "pename":"minecraft:podzol",
+    "pename":"minecraft:light_gray_glazed_terracotta",
+    "pedata":3
+  },
+  "minecraft:cyan_glazed_terracotta[facing=north]":{
+    "pename":"minecraft:cyan_glazed_terracotta",
+    "pedata":2
+  },
+  "minecraft:cyan_glazed_terracotta[facing=south]":{
+    "pename":"minecraft:cyan_glazed_terracotta",
+    "pedata":0
+  },
+  "minecraft:cyan_glazed_terracotta[facing=west]":{
+    "pename":"minecraft:cyan_glazed_terracotta",
+    "pedata":1
+  },
+  "minecraft:cyan_glazed_terracotta[facing=east]":{
+    "pename":"minecraft:cyan_glazed_terracotta",
+    "pedata":3
+  },
+  "minecraft:purple_glazed_terracotta[facing=north]":{
+    "pename":"minecraft:purple_glazed_terracotta",
+    "pedata":2
+  },
+  "minecraft:purple_glazed_terracotta[facing=south]":{
+    "pename":"minecraft:purple_glazed_terracotta",
+    "pedata":0
+  },
+  "minecraft:purple_glazed_terracotta[facing=west]":{
+    "pename":"minecraft:purple_glazed_terracotta",
+    "pedata":1
+  },
+  "minecraft:purple_glazed_terracotta[facing=east]":{
+    "pename":"minecraft:purple_glazed_terracotta",
+    "pedata":3
+  },
+  "minecraft:blue_glazed_terracotta[facing=north]":{
+    "pename":"minecraft:blue_glazed_terracotta",
+    "pedata":2
+  },
+  "minecraft:blue_glazed_terracotta[facing=south]":{
+    "pename":"minecraft:blue_glazed_terracotta",
+    "pedata":0
+  },
+  "minecraft:blue_glazed_terracotta[facing=west]":{
+    "pename":"minecraft:blue_glazed_terracotta",
+    "pedata":1
+  },
+  "minecraft:blue_glazed_terracotta[facing=east]":{
+    "pename":"minecraft:blue_glazed_terracotta",
+    "pedata":3
+  },
+  "minecraft:brown_glazed_terracotta[facing=north]":{
+    "pename":"minecraft:brown_glazed_terracotta",
+    "pedata":2
+  },
+  "minecraft:brown_glazed_terracotta[facing=south]":{
+    "pename":"minecraft:brown_glazed_terracotta",
+    "pedata":0
+  },
+  "minecraft:brown_glazed_terracotta[facing=west]":{
+    "pename":"minecraft:brown_glazed_terracotta",
+    "pedata":1
+  },
+  "minecraft:brown_glazed_terracotta[facing=east]":{
+    "pename":"minecraft:brown_glazed_terracotta",
+    "pedata":3
+  },
+  "minecraft:green_glazed_terracotta[facing=north]":{
+    "pename":"minecraft:green_glazed_terracotta",
+    "pedata":2
+  },
+  "minecraft:green_glazed_terracotta[facing=south]":{
+    "pename":"minecraft:green_glazed_terracotta",
+    "pedata":0
+  },
+  "minecraft:green_glazed_terracotta[facing=west]":{
+    "pename":"minecraft:green_glazed_terracotta",
+    "pedata":1
+  },
+  "minecraft:green_glazed_terracotta[facing=east]":{
+    "pename":"minecraft:green_glazed_terracotta",
+    "pedata":3
+  },
+  "minecraft:red_glazed_terracotta[facing=north]":{
+    "pename":"minecraft:red_glazed_terracotta",
+    "pedata":2
+  },
+  "minecraft:red_glazed_terracotta[facing=south]":{
+    "pename":"minecraft:red_glazed_terracotta",
+    "pedata":0
+  },
+  "minecraft:red_glazed_terracotta[facing=west]":{
+    "pename":"minecraft:red_glazed_terracotta",
+    "pedata":1
+  },
+  "minecraft:red_glazed_terracotta[facing=east]":{
+    "pename":"minecraft:red_glazed_terracotta",
+    "pedata":3
+  },
+  "minecraft:black_glazed_terracotta[facing=north]":{
+    "pename":"minecraft:black_glazed_terracotta",
+    "pedata":2
+  },
+  "minecraft:black_glazed_terracotta[facing=south]":{
+    "pename":"minecraft:black_glazed_terracotta",
+    "pedata":0
+  },
+  "minecraft:black_glazed_terracotta[facing=west]":{
+    "pename":"minecraft:black_glazed_terracotta",
+    "pedata":1
+  },
+  "minecraft:black_glazed_terracotta[facing=east]":{
+    "pename":"minecraft:black_glazed_terracotta",
     "pedata":3
   },
   "minecraft:white_concrete":{
-    "pename":"minecraft:observer",
+    "pename":"minecraft:concrete",
     "pedata":0
   },
   "minecraft:orange_concrete":{
-    "pename":"minecraft:observer",
+    "pename":"minecraft:concrete",
     "pedata":1
   },
   "minecraft:magenta_concrete":{
-    "pename":"minecraft:observer",
+    "pename":"minecraft:concrete",
     "pedata":2
   },
   "minecraft:light_blue_concrete":{
-    "pename":"minecraft:observer",
+    "pename":"minecraft:concrete",
     "pedata":3
   },
   "minecraft:yellow_concrete":{
-    "pename":"minecraft:observer",
+    "pename":"minecraft:concrete",
     "pedata":4
   },
   "minecraft:lime_concrete":{
-    "pename":"minecraft:observer",
+    "pename":"minecraft:concrete",
     "pedata":5
   },
   "minecraft:pink_concrete":{
-    "pename":"minecraft:observer",
+    "pename":"minecraft:concrete",
     "pedata":6
   },
   "minecraft:gray_concrete":{
-    "pename":"minecraft:observer",
+    "pename":"minecraft:concrete",
     "pedata":7
   },
   "minecraft:light_gray_concrete":{
-    "pename":"minecraft:observer",
+    "pename":"minecraft:concrete",
     "pedata":8
   },
   "minecraft:cyan_concrete":{
-    "pename":"minecraft:observer",
+    "pename":"minecraft:concrete",
     "pedata":9
   },
   "minecraft:purple_concrete":{
-    "pename":"minecraft:observer",
+    "pename":"minecraft:concrete",
     "pedata":10
   },
   "minecraft:blue_concrete":{
-    "pename":"minecraft:observer",
+    "pename":"minecraft:concrete",
     "pedata":11
   },
   "minecraft:brown_concrete":{
-    "pename":"minecraft:observer",
+    "pename":"minecraft:concrete",
     "pedata":12
   },
   "minecraft:green_concrete":{
-    "pename":"minecraft:observer",
+    "pename":"minecraft:concrete",
     "pedata":13
   },
   "minecraft:red_concrete":{
-    "pename":"minecraft:observer",
+    "pename":"minecraft:concrete",
     "pedata":14
   },
   "minecraft:black_concrete":{
-    "pename":"minecraft:observer",
+    "pename":"minecraft:concrete",
     "pedata":15
   },
   "minecraft:white_concrete_powder":{
-    "pename":"minecraft:structure_block",
+    "pename":"minecraft:concretepowder",
     "pedata":0
   },
   "minecraft:orange_concrete_powder":{
-    "pename":"minecraft:structure_block",
+    "pename":"minecraft:concretepowder",
     "pedata":1
   },
   "minecraft:magenta_concrete_powder":{
-    "pename":"minecraft:structure_block",
+    "pename":"minecraft:concretepowder",
     "pedata":2
   },
   "minecraft:light_blue_concrete_powder":{
-    "pename":"minecraft:structure_block",
+    "pename":"minecraft:concretepowder",
     "pedata":3
   },
   "minecraft:yellow_concrete_powder":{
-    "pename":"minecraft:structure_block",
+    "pename":"minecraft:concretepowder",
     "pedata":4
   },
   "minecraft:lime_concrete_powder":{
-    "pename":"minecraft:structure_block",
+    "pename":"minecraft:concretepowder",
     "pedata":5
   },
   "minecraft:pink_concrete_powder":{
-    "pename":"minecraft:structure_block",
+    "pename":"minecraft:concretepowder",
     "pedata":6
   },
   "minecraft:gray_concrete_powder":{
-    "pename":"minecraft:structure_block",
+    "pename":"minecraft:concretepowder",
     "pedata":7
   },
   "minecraft:light_gray_concrete_powder":{
-    "pename":"minecraft:structure_block",
+    "pename":"minecraft:concretepowder",
     "pedata":8
   },
   "minecraft:cyan_concrete_powder":{
-    "pename":"minecraft:structure_block",
+    "pename":"minecraft:concretepowder",
     "pedata":9
   },
   "minecraft:purple_concrete_powder":{
-    "pename":"minecraft:structure_block",
+    "pename":"minecraft:concretepowder",
     "pedata":10
   },
   "minecraft:blue_concrete_powder":{
-    "pename":"minecraft:structure_block",
+    "pename":"minecraft:concretepowder",
     "pedata":11
   },
   "minecraft:brown_concrete_powder":{
-    "pename":"minecraft:structure_block",
+    "pename":"minecraft:concretepowder",
     "pedata":12
   },
   "minecraft:green_concrete_powder":{
-    "pename":"minecraft:structure_block",
+    "pename":"minecraft:concretepowder",
     "pedata":13
   },
   "minecraft:red_concrete_powder":{
-    "pename":"minecraft:structure_block",
+    "pename":"minecraft:concretepowder",
     "pedata":14
   },
   "minecraft:black_concrete_powder":{
-    "pename":"minecraft:structure_block",
+    "pename":"minecraft:concretepowder",
     "pedata":15
   },
   "minecraft:water[level=0]":{
-  	"pename":"minecraft:water",
-  	"pedata": 0
+    "pename":"minecraft:water",
+    "pedata": 0
   },
   "minecraft:water[level=1]":{
-  	"pename":"minecraft:water",
-  	"pedata": 1
+    "pename":"minecraft:water",
+    "pedata": 1
   },
   "minecraft:water[level=2]":{
-  	"pename":"minecraft:water",
-  	"pedata": 2
+    "pename":"minecraft:water",
+    "pedata": 2
   },
   "minecraft:water[level=3]":{
-  	"pename":"minecraft:water",
-  	"pedata": 3
+    "pename":"minecraft:water",
+    "pedata": 3
   },
   "minecraft:water[level=4]":{
-  	"pename":"minecraft:water",
-  	"pedata": 4
+    "pename":"minecraft:water",
+    "pedata": 4
   },
   "minecraft:water[level=5]":{
-  	"pename":"minecraft:water",
-  	"pedata": 5
+    "pename":"minecraft:water",
+    "pedata": 5
   },
   "minecraft:water[level=6]":{
-  	"pename":"minecraft:water",
-  	"pedata": 6
+    "pename":"minecraft:water",
+    "pedata": 6
   },
   "minecraft:water[level=7]":{
-  	"pename":"minecraft:water",
-  	"pedata": 7
+    "pename":"minecraft:water",
+    "pedata": 7
   },
   "minecraft:water[level=8]":{
-  	"pename":"minecraft:water",
-  	"pedata": 8
+    "pename":"minecraft:water",
+    "pedata": 8
   },
   "minecraft:water[level=9]":{
-  	"pename":"minecraft:water",
-  	"pedata": 9
+    "pename":"minecraft:water",
+    "pedata": 9
   },
   "minecraft:water[level=10]":{
-  	"pename":"minecraft:water",
-  	"pedata": 10
+    "pename":"minecraft:water",
+    "pedata": 10
   },
   "minecraft:water[level=11]":{
-  	"pename":"minecraft:water",
-  	"pedata": 11
+    "pename":"minecraft:water",
+    "pedata": 11
   },
   "minecraft:water[level=12]":{
-  	"pename":"minecraft:water",
-  	"pedata": 12
+    "pename":"minecraft:water",
+    "pedata": 12
   },
   "minecraft:water[level=13]":{
-  	"pename":"minecraft:water",
-  	"pedata": 13
+    "pename":"minecraft:water",
+    "pedata": 13
   },
   "minecraft:water[level=14]":{
-  	"pename":"minecraft:water",
-  	"pedata": 14
+    "pename":"minecraft:water",
+    "pedata": 14
   },
   "minecraft:water[level=15]":{
-  	"pename":"minecraft:water",
-  	"pedata": 15
+    "pename":"minecraft:water",
+    "pedata": 15
+  },
+  "minecraft:lava[level=0]":{
+    "pename":"minecraft:lava",
+    "pedata": 0
+  },
+  "minecraft:lava[level=1]":{
+    "pename":"minecraft:lava",
+    "pedata": 1
+  },
+  "minecraft:lava[level=2]":{
+    "pename":"minecraft:lava",
+    "pedata": 2
+  },
+  "minecraft:lava[level=3]":{
+    "pename":"minecraft:lava",
+    "pedata": 3
+  },
+  "minecraft:lava[level=4]":{
+    "pename":"minecraft:lava",
+    "pedata": 4
+  },
+  "minecraft:lava[level=5]":{
+    "pename":"minecraft:lava",
+    "pedata": 5
+  },
+  "minecraft:lava[level=6]":{
+    "pename":"minecraft:lava",
+    "pedata": 6
+  },
+  "minecraft:lava[level=7]":{
+    "pename":"minecraft:lava",
+    "pedata": 7
+  },
+  "minecraft:lava[level=8]":{
+    "pename":"minecraft:lava",
+    "pedata": 8
+  },
+  "minecraft:lava[level=9]":{
+    "pename":"minecraft:lava",
+    "pedata": 9
+  },
+  "minecraft:lava[level=10]":{
+    "pename":"minecraft:lava",
+    "pedata": 10
+  },
+  "minecraft:lava[level=11]":{
+    "pename":"minecraft:lava",
+    "pedata": 11
+  },
+  "minecraft:lava[level=12]":{
+    "pename":"minecraft:lava",
+    "pedata": 12
+  },
+  "minecraft:lava[level=13]":{
+    "pename":"minecraft:lava",
+    "pedata": 13
+  },
+  "minecraft:lava[level=14]":{
+    "pename":"minecraft:lava",
+    "pedata": 14
+  },
+  "minecraft:lava[level=15]":{
+    "pename":"minecraft:lava",
+    "pedata": 15
+  },
+  "minecraft:stripped_oak_log[axis=x]":{
+    "pename":"minecraft:stripped_oak_log",
+    "pedata": 1
+  },
+  "minecraft:stripped_oak_log[axis=y]":{
+    "pename":"minecraft:stripped_oak_log",
+    "pedata": 0
+  },
+  "minecraft:stripped_oak_log[axis=z]":{
+    "pename":"minecraft:stripped_oak_log",
+    "pedata": 2
+  },
+  "minecraft:stripped_oak_wood[axis=x]":{
+    "pename":"minecraft:stripped_oak_log",
+    "pedata": 3
+  },
+  "minecraft:stripped_spruce_log[axis=x]":{
+    "pename":"minecraft:stripped_spruce_log",
+    "pedata": 1
+  },
+  "minecraft:stripped_spruce_log[axis=y]":{
+    "pename":"minecraft:stripped_spruce_log",
+    "pedata": 0
+  },
+  "minecraft:stripped_spruce_log[axis=z]":{
+    "pename":"minecraft:stripped_spruce_log",
+    "pedata": 2
+  },
+  "minecraft:stripped_spruce_wood[axis=x]":{
+    "pename":"minecraft:stripped_spruce_log",
+    "pedata": 3
+  },
+  "minecraft:stripped_birch_log[axis=x]":{
+    "pename":"minecraft:stripped_oak_log",
+    "pedata": 1
+  },
+  "minecraft:stripped_birch_log[axis=y]":{
+    "pename":"minecraft:stripped_birch_log",
+    "pedata": 0
+  },
+  "minecraft:stripped_birch_log[axis=z]":{
+    "pename":"minecraft:stripped_birch_log",
+    "pedata": 2
+  },
+  "minecraft:stripped_birch_wood[axis=x]":{
+    "pename":"minecraft:stripped_birch_log",
+    "pedata": 3
+  },
+  "minecraft:stripped_jungle_log[axis=x]":{
+    "pename":"minecraft:stripped_jungle_log",
+    "pedata": 1
+  },
+  "minecraft:stripped_jungle_log[axis=y]":{
+    "pename":"minecraft:stripped_jungle_log",
+    "pedata": 0
+  },
+  "minecraft:stripped_jungle_log[axis=z]":{
+    "pename":"minecraft:stripped_jungle_log",
+    "pedata": 2
+  },
+  "minecraft:stripped_jungle_wood[axis=x]":{
+    "pename":"minecraft:stripped_jungle_log",
+    "pedata": 3
+  },
+  "minecraft:stripped_acacia_log[axis=x]":{
+    "pename":"minecraft:stripped_acacia_log",
+    "pedata": 1
+  },
+  "minecraft:stripped_acacia_log[axis=y]":{
+    "pename":"minecraft:stripped_acacia_log",
+    "pedata": 0
+  },
+  "minecraft:stripped_acacia_log[axis=z]":{
+    "pename":"minecraft:stripped_acacia_log",
+    "pedata": 2
+  },
+  "minecraft:stripped_acacia_wood[axis=x]":{
+    "pename":"minecraft:stripped_acacia_log",
+    "pedata": 3
+  },
+  "minecraft:stripped_dark_oak_log[axis=x]":{
+    "pename":"minecraft:stripped_dark_oak_log",
+    "pedata": 1
+  },
+  "minecraft:stripped_dark_oak_log[axis=y]":{
+    "pename":"minecraft:stripped_dark_oak_log",
+    "pedata": 0
+  },
+  "minecraft:stripped_dark_oak_log[axis=z]":{
+    "pename":"minecraft:stripped_dark_oak_log",
+    "pedata": 2
+  },
+  "minecraft:stripped_dark_oak_wood[axis=x]":{
+    "pename":"minecraft:stripped_dark_oak_log",
+    "pedata": 3
+  },
+  "minecraft:seagrass":{
+  "pename":"minecraft:seagrass",
+  "pedata": 0
+  },
+  "minecraft:tall_seagrass[half=upper]":{
+  "pename":"minecraft:seagrass",
+  "pedata": 1
+  },
+  "minecraft:tall_seagrass[half=lower]":{
+  "pename":"minecraft:seagrass",
+  "pedata": 2
+  },
+  "minecraft:player_head[rotation=0]":{
+  "pename":"minecraft:skull",
+  "pedata": 1
+  },
+  "minecraft:player_wall_head[facing=north]":{
+  "pename":"minecraft:skull",
+  "pedata": 2
+  },
+  "minecraft:player_wall_head[facing=south]":{
+  "pename":"minecraft:skull",
+  "pedata": 3
+  },
+  "minecraft:player_wall_head[facing=east]":{
+  "pename":"minecraft:skull",
+  "pedata": 4
+  },
+  "minecraft:player_wall_head[facing=west]":{
+  "pename":"minecraft:skull",
+  "pedata": 5
+  },
+  "minecraft:dropper[facing=north,triggered=true]":{
+  "pename":"minecraft:dropper",
+  "pedata": 10
+  },
+  "minecraft:dropper[facing=north,triggered=false]":{
+  "pename":"minecraft:dropper",
+  "pedata": 2
+  },
+  "minecraft:dropper[facing=east,triggered=true]":{
+  "pename":"minecraft:dropper",
+  "pedata": 13
+  },
+  "minecraft:dropper[facing=east,triggered=false]":{
+  "pename":"minecraft:dropper",
+  "pedata": 5
+  },
+  "minecraft:dropper[facing=south,triggered=true]":{
+  "pename":"minecraft:dropper",
+  "pedata": 11
+  },
+  "minecraft:dropper[facing=south,triggered=false]":{
+  "pename":"minecraft:dropper",
+  "pedata": 3
+  },
+  "minecraft:dropper[facing=west,triggered=true]":{
+  "pename":"minecraft:dropper",
+  "pedata": 12
+  },
+  "minecraft:dropper[facing=west,triggered=false]":{
+  "pename":"minecraft:dropper",
+  "pedata": 4
+  },
+  "minecraft:dropper[facing=up,triggered=true]":{
+  "pename":"minecraft:dropper",
+  "pedata": 9
+  },
+  "minecraft:dropper[facing=up,triggered=false]":{
+  "pename":"minecraft:dropper",
+  "pedata": 1
+  },
+  "minecraft:dropper[facing=down,triggered=true]":{
+  "pename":"minecraft:dropper",
+  "pedata": 8
+  },
+  "minecraft:dropper[facing=down,triggered=false]":{
+  "pename":"minecraft:dropper",
+  "pedata": 0
+  },
+  "minecraft:barrier":{
+  "pename":"minecraft:barrier",
+  "pedata": 0
+  },
+  "minecraft:minecraft:prismarine_stairs[facing=north,half=top,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_stairs",
+    "pedata":7
+  },
+  "minecraft:minecraft:prismarine_stairs[facing=north,half=bottom,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_stairs",
+    "pedata":3
+  },
+  "minecraft:minecraft:prismarine_stairs[facing=south,half=top,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_stairs",
+    "pedata":6
+  },
+  "minecraft:minecraft:prismarine_stairs[facing=south,half=bottom,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_stairs",
+    "pedata":2
+  },
+  "minecraft:minecraft:prismarine_stairs[facing=west,half=top,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_stairs",
+    "pedata":5
+  },
+  "minecraft:minecraft:prismarine_stairs[facing=west,half=bottom,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_stairs",
+    "pedata":1
+  },
+  "minecraft:minecraft:prismarine_stairs[facing=east,half=top,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_stairs",
+    "pedata":4
+  },
+  "minecraft:minecraft:prismarine_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_stairs",
+    "pedata":0
+  },
+  "minecraft:minecraft:prismarine_brick_stairs[facing=north,half=top,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_brick_stairs",
+    "pedata":7
+  },
+  "minecraft:minecraft:prismarine_brick_stairs[facing=north,half=bottom,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_brick_stairs",
+    "pedata":3
+  },
+  "minecraft:minecraft:prismarine_brick_stairs[facing=south,half=top,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_brick_stairs",
+    "pedata":6
+  },
+  "minecraft:minecraft:prismarine_brick_stairs[facing=south,half=bottom,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_brick_stairs",
+    "pedata":2
+  },
+  "minecraft:minecraft:prismarine_brick_stairs[facing=west,half=top,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_brick_stairs",
+    "pedata":5
+  },
+  "minecraft:minecraft:prismarine_brick_stairs[facing=west,half=bottom,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_brick_stairs",
+    "pedata":1
+  },
+  "minecraft:minecraft:prismarine_brick_stairs[facing=east,half=top,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_brick_stairs",
+    "pedata":4
+  },
+  "minecraft:minecraft:prismarine_brick_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_brick_stairs",
+    "pedata":0
+  },
+  "minecraft:minecraft:dark_prismarine_stairs[facing=north,half=top,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:dark_prismarine_stairs",
+    "pedata":7
+  },
+  "minecraft:minecraft:dark_prismarine_stairs[facing=north,half=bottom,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:dark_prismarine_stairs",
+    "pedata":3
+  },
+  "minecraft:minecraft:dark_prismarine_stairs[facing=south,half=top,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:dark_prismarine_stairs",
+    "pedata":6
+  },
+  "minecraft:minecraft:dark_prismarine_stairs[facing=south,half=bottom,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:dark_prismarine_stairs",
+    "pedata":2
+  },
+  "minecraft:minecraft:dark_prismarine_stairs[facing=west,half=top,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:dark_prismarine_stairs",
+    "pedata":5
+  },
+  "minecraft:minecraft:dark_prismarine_stairs[facing=west,half=bottom,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:dark_prismarine_stairs",
+    "pedata":1
+  },
+  "minecraft:minecraft:dark_prismarine_stairs[facing=east,half=top,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:dark_prismarine_stairs",
+    "pedata":4
+  },
+  "minecraft:minecraft:dark_prismarine_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:dark_prismarine_stairs",
+    "pedata":0
+  },
+  "minecraft:end_rod[facing=north]":{
+    "pename":"minecraft:end_rod",
+    "pedata":2
+  },
+  "minecraft:end_rod[facing=east]":{
+    "pename":"minecraft:end_rod",
+    "pedata":5
+  },
+  "minecraft:end_rod[facing=south]":{
+    "pename":"minecraft:end_rod",
+    "pedata":3
+  },
+  "minecraft:end_rod[facing=west]":{
+    "pename":"minecraft:end_rod",
+    "pedata":4
+  },
+  "minecraft:end_rod[facing=up]":{
+    "pename":"minecraft:end_rod",
+    "pedata":1
+  },
+  "minecraft:end_rod[facing=down]":{
+    "pename":"minecraft:end_rod",
+    "pedata":0
+  },
+  "minecraft:chorus_plant[down=false,east=false,north=false,south=false,up=false,west=false]":{
+  "pename":"minecraft:chorus_plant",
+  "pedata":0
+  },
+  "minecraft:grass_path":{
+  "pename":"minecraft:grass_path",
+  "pedata":0
+  },
+  "minecraft:repeating_command_block[conditional=true,facing=north]":{
+  "pename":"minecraft:repeating_command_block",
+  "pedata":10
+  },
+  "minecraft:repeating_command_block[conditional=true,facing=east]":{
+  "pename":"minecraft:repeating_command_block",
+  "pedata":13
+  },
+  "minecraft:repeating_command_block[conditional=true,facing=south]":{
+  "pename":"minecraft:repeating_command_block",
+  "pedata":11
+  },
+  "minecraft:repeating_command_block[conditional=true,facing=west]":{
+  "pename":"minecraft:repeating_command_block",
+  "pedata":12
+  },
+  "minecraft:repeating_command_block[conditional=true,facing=up]":{
+  "pename":"minecraft:repeating_command_block",
+  "pedata":9
+  },
+  "minecraft:repeating_command_block[conditional=true,facing=down]":{
+  "pename":"minecraft:repeating_command_block",
+  "pedata":8
+  },
+  "minecraft:repeating_command_block[conditional=false,facing=north]":{
+  "pename":"minecraft:repeating_command_block",
+  "pedata":2
+  },
+  "minecraft:repeating_command_block[conditional=false,facing=east]":{
+  "pename":"minecraft:repeating_command_block",
+  "pedata":5
+  },
+  "minecraft:repeating_command_block[conditional=false,facing=south]":{
+  "pename":"minecraft:repeating_command_block",
+  "pedata":3
+  },
+  "minecraft:repeating_command_block[conditional=false,facing=west]":{
+  "pename":"minecraft:repeating_command_block",
+  "pedata":4
+  },
+  "minecraft:repeating_command_block[conditional=false,facing=up]":{
+  "pename":"minecraft:repeating_command_block",
+  "pedata":1
+  },
+  "minecraft:repeating_command_block[conditional=false,facing=down]":{
+  "pename":"minecraft:repeating_command_block",
+  "pedata":0
+  },
+  "minecraft:chain_command_block[conditional=true,facing=north]":{
+  "pename":"minecraft:chain_command_block",
+  "pedata":10
+  },
+  "minecraft:chain_command_block[conditional=true,facing=east]":{
+  "pename":"minecraft:chain_command_block",
+  "pedata":13
+  },
+  "minecraft:chain_command_block[conditional=true,facing=south]":{
+  "pename":"minecraft:chain_command_block",
+  "pedata":11
+  },
+  "minecraft:chain_command_block[conditional=true,facing=west]":{
+  "pename":"minecraft:chain_command_block",
+  "pedata":12
+  },
+  "minecraft:chain_command_block[conditional=true,facing=up]":{
+  "pename":"minecraft:chain_command_block",
+  "pedata":9
+  },
+  "minecraft:chain_command_block[conditional=true,facing=down]":{
+  "pename":"minecraft:chain_command_block",
+  "pedata":8
+  },
+  "minecraft:chain_command_block[conditional=false,facing=north]":{
+  "pename":"minecraft:chain_command_block",
+  "pedata":2
+  },
+  "minecraft:chain_command_block[conditional=false,facing=east]":{
+  "pename":"minecraft:chain_command_block",
+  "pedata":5
+  },
+  "minecraft:chain_command_block[conditional=false,facing=south]":{
+  "pename":"minecraft:chain_command_block",
+  "pedata":3
+  },
+  "minecraft:chain_command_block[conditional=false,facing=west]":{
+  "pename":"minecraft:chain_command_block",
+  "pedata":4
+  },
+  "minecraft:chain_command_block[conditional=false,facing=up]":{
+  "pename":"minecraft:chain_command_block",
+  "pedata":1
+  },
+  "minecraft:chain_command_block[conditional=false,facing=down]":{
+  "pename":"minecraft:chain_command_block",
+  "pedata":0
+  },
+  "minecraft:frosted_ice[age=0]]":{
+  "pename":"minecraft:frosted_ice",
+  "pedata":0
+  },
+  "minecraft:frosted_ice[age=1]]":{
+  "pename":"minecraft:frosted_ice",
+  "pedata":1
+  },
+  "minecraft:frosted_ice[age=2]]":{
+  "pename":"minecraft:frosted_ice",
+  "pedata":2
+  },
+  "minecraft:frosted_ice[age=3]]":{
+  "pename":"minecraft:frosted_ice",
+  "pedata":3
+  },
+  "minecraft:structure_block[mode=save]":{
+  "pename":"minecraft:structure_block",
+  "pedata":2
+  },
+  "minecraft:structure_block[mode=load]":{
+  "pename":"minecraft:structure_block",
+  "pedata":3
+  },
+  "minecraft:structure_block[mode=corner]":{
+  "pename":"minecraft:structure_block",
+  "pedata":4
+  },
+  "minecraft:structure_block[mode=data]":{
+  "pename":"minecraft:structure_block",
+  "pedata":1
+  },
+  "minecraft:conduit":{
+  "pename":"minecraft:conduit",
+  "pedata":0
+  },
+  "minecraft:blue_ice":{
+  "pename":"minecraft:blue_ice",
+  "pedata":0
+  },
+  "minecraft:sea_pickle[pickles=1,waterlogged=true]":{
+  "pename":"minecraft:sea_pickle",
+  "pedata":0
+  },
+  "minecraft:sea_pickle[pickles=2,waterlogged=true]":{
+  "pename":"minecraft:sea_pickle",
+  "pedata":1
+  },
+  "minecraft:sea_pickle[pickles=3,waterlogged=true]":{
+  "pename":"minecraft:sea_pickle",
+  "pedata":2
+  },
+  "minecraft:sea_pickle[pickles=4,waterlogged=true]":{
+  "pename":"minecraft:sea_pickle",
+  "pedata":3
+  },
+  "minecraft:sea_pickle[pickles=1,waterlogged=false]":{
+  "pename":"minecraft:sea_pickle",
+  "pedata":4
+  },
+  "minecraft:sea_pickle[pickles=2,waterlogged=false]":{
+  "pename":"minecraft:sea_pickle",
+  "pedata":5
+  },
+  "minecraft:sea_pickle[pickles=3,waterlogged=false]":{
+  "pename":"minecraft:sea_pickle",
+  "pedata":6
+  },
+  "minecraft:sea_pickle[pickles=4,waterlogged=false]":{
+  "pename":"minecraft:sea_pickle",
+  "pedata":7
+  },
+  "minecraft:kelp[age=0]":{
+  "pename":"minecraft:kelp",
+  "pedata":0
+  },
+  "minecraft:kelp[age=1]":{
+  "pename":"minecraft:kelp",
+  "pedata":1
+  },
+  "minecraft:kelp[age=2]":{
+  "pename":"minecraft:kelp",
+  "pedata":1
+  },
+  "minecraft:kelp[age=3]":{
+  "pename":"minecraft:kelp",
+  "pedata":2
+  },
+  "minecraft:kelp[age=4]":{
+  "pename":"minecraft:kelp",
+  "pedata":2
+  },
+  "minecraft:kelp[age=5]":{
+  "pename":"minecraft:kelp",
+  "pedata":3
+  },
+  "minecraft:kelp[age=6]":{
+  "pename":"minecraft:kelp",
+  "pedata":4
+  },
+  "minecraft:kelp[age=7]":{
+  "pename":"minecraft:kelp",
+  "pedata":4
+  },
+  "minecraft:kelp[age=8]":{
+  "pename":"minecraft:kelp",
+  "pedata":5
+  },
+  "minecraft:kelp[age=9]":{
+  "pename":"minecraft:kelp",
+  "pedata":5
+  },
+  "minecraft:kelp[age=10]":{
+  "pename":"minecraft:kelp",
+  "pedata":6
+  },
+  "minecraft:kelp[age=11]":{
+  "pename":"minecraft:kelp",
+  "pedata":7
+  },
+  "minecraft:kelp[age=12]":{
+  "pename":"minecraft:kelp",
+  "pedata":7
+  },
+  "minecraft:kelp[age=13]":{
+  "pename":"minecraft:kelp",
+  "pedata":8
+  },
+  "minecraft:kelp[age=14]":{
+  "pename":"minecraft:kelp",
+  "pedata":8
+  },
+  "minecraft:kelp[age=15]":{
+  "pename":"minecraft:kelp",
+  "pedata":9
+  },
+  "minecraft:kelp[age=16]":{
+  "pename":"minecraft:kelp",
+  "pedata":10
+  },
+  "minecraft:kelp[age=17]":{
+  "pename":"minecraft:kelp",
+  "pedata":10
+  },
+  "minecraft:kelp[age=18]":{
+  "pename":"minecraft:kelp",
+  "pedata":11
+  },
+  "minecraft:kelp[age=18]":{
+  "pename":"minecraft:kelp",
+  "pedata":11
+  },
+  "minecraft:kelp[age=19]":{
+  "pename":"minecraft:kelp",
+  "pedata":12
+  },
+  "minecraft:kelp[age=20]":{
+  "pename":"minecraft:kelp",
+  "pedata":13
+  },
+  "minecraft:kelp[age=21]":{
+  "pename":"minecraft:kelp",
+  "pedata":13
+  },
+  "minecraft:kelp[age=22]":{
+  "pename":"minecraft:kelp",
+  "pedata":14
+  },
+  "minecraft:kelp[age=23]":{
+  "pename":"minecraft:kelp",
+  "pedata":14
+  },
+  "minecraft:kelp[age=24]":{
+  "pename":"minecraft:kelp",
+  "pedata":15
+  },
+  "minecraft:kelp[age=25]":{
+  "pename":"minecraft:kelp",
+  "pedata":15
+  },
+  "minecraft:minecraft:turtle_egg[eggs=1,hatch=0]":{
+  "pename":"minecraft:turtle_egg",
+  "pedata":0
+  },
+  "minecraft:minecraft:turtle_egg[eggs=2,hatch=0]":{
+  "pename":"minecraft:turtle_egg",
+  "pedata":1
+  },
+  "minecraft:minecraft:turtle_egg[eggs=3,hatch=0]":{
+  "pename":"minecraft:turtle_egg",
+  "pedata":2
+  },
+  "minecraft:minecraft:turtle_egg[eggs=4,hatch=0]":{
+  "pename":"minecraft:turtle_egg",
+  "pedata":3
+  },
+  "minecraft:minecraft:turtle_egg[eggs=1,hatch=1]":{
+  "pename":"minecraft:turtle_egg",
+  "pedata":4
+  },
+  "minecraft:minecraft:turtle_egg[eggs=2,hatch=1]":{
+  "pename":"minecraft:turtle_egg",
+  "pedata":5
+  },
+  "minecraft:minecraft:turtle_egg[eggs=3,hatch=1]":{
+  "pename":"minecraft:turtle_egg",
+  "pedata":6
+  },
+  "minecraft:minecraft:turtle_egg[eggs=4,hatch=1]":{
+  "pename":"minecraft:turtle_egg",
+  "pedata":7
+  },
+  "minecraft:minecraft:turtle_egg[eggs=1,hatch=2]":{
+  "pename":"minecraft:turtle_egg",
+  "pedata":12
+  },
+  "minecraft:minecraft:turtle_egg[eggs=2,hatch=2]":{
+  "pename":"minecraft:turtle_egg",
+  "pedata":13
+  },
+  "minecraft:minecraft:turtle_egg[eggs=3,hatch=2]":{
+  "pename":"minecraft:turtle_egg",
+  "pedata":14
+  },
+  "minecraft:minecraft:turtle_egg[eggs=4,hatch=2]":{
+  "pename":"minecraft:turtle_egg",
+  "pedata":15
+  },
+  "minecraft:bubble_column[drag=true]":{
+  "pename":"minecraft:bubble_column",
+  "pedata":1
+  },
+  "minecraft:bubble_column[drag=false]":{
+  "pename":"minecraft:bubble_column",
+  "pedata":0
+  },
+  "minecraft:dried_kelp_block":{
+  "pename":"minecraft:dried_kelp_block",
+  "pedata":0
+  },
+  "minecraft:dead_tube_coral_block":{
+  "pename":"minecraft:coral_block",
+  "pedata":5
+  },
+  "minecraft:dead_brain_coral_block":{
+  "pename":"minecraft:coral_block",
+  "pedata":6
+  },
+  "minecraft:dead_bubble_coral_block":{
+  "pename":"minecraft:coral_block",
+  "pedata":7
+  },
+  "minecraft:dead_fire_coral_block":{
+  "pename":"minecraft:coral_block",
+  "pedata":8
+  },
+  "minecraft:dead_horn_coral_block":{
+  "pename":"minecraft:coral_block",
+  "pedata":9
+  },
+  "minecraft:tube_coral_block":{
+  "pename":"minecraft:coral_block",
+  "pedata":0
+  },
+  "minecraft:brain_coral_block":{
+  "pename":"minecraft:coral_block",
+  "pedata":1
+  },
+  "minecraft:bubble_coral_block":{
+  "pename":"minecraft:coral_block",
+  "pedata":2
+  },
+  "minecraft:fire_coral_block":{
+  "pename":"minecraft:coral_block",
+  "pedata":3
+  },
+  "minecraft:horn_coral_block":{
+  "pename":"minecraft:coral_block",
+  "pedata":4
+  },
+  "minecraft:dead_tube_coral_fan[waterlogged=false]":{
+  "pename":"minecraft:dead_coral_fan",
+  "pedata":0
+  },
+  "minecraft:dead_brain_coral_fan[waterlogged=false]":{
+  "pename":"minecraft:dead_coral_fan",
+  "pedata":1
+  },
+  "minecraft:dead_bubble_coral_fan[waterlogged=false]":{
+  "pename":"minecraft:dead_coral_fan",
+  "pedata":2
+  },
+  "minecraft:dead_fire_coral_fan[waterlogged=false]":{
+  "pename":"minecraft:dead_coral_fan",
+  "pedata":3
+  },
+  "minecraft:dead_horn_coral_fan[waterlogged=false]":{
+  "pename":"minecraft:dead_coral_fan",
+  "pedata":4
+  },
+  "minecraft:tube_coral_fan[waterlogged=false]":{
+  "pename":"minecraft:coral_fan",
+  "pedata":0
+  },
+  "minecraft:brain_coral_fan[waterlogged=false]":{
+  "pename":"minecraft:coral_fan",
+  "pedata":1
+  },
+  "minecraft:bubble_coral_fan[waterlogged=false]":{
+  "pename":"minecraft:coral_fan",
+  "pedata":2
+  },
+  "minecraft:fire_coral_fan[waterlogged=false]":{
+  "pename":"minecraft:coral_fan",
+  "pedata":3
+  },
+  "minecraft:horn_coral_fan[waterlogged=false]":{
+  "pename":"minecraft:coral_fan",
+  "pedata":4
+  },
+  "minecraft:dead_tube_coral_wall_fan[facing=north,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang",
+  "pedata":10
+  },
+  "minecraft:dead_tube_coral_wall_fan[facing=south,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang",
+  "pedata":14
+  },
+  "minecraft:dead_tube_coral_wall_fan[facing=west,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang",
+  "pedata":2
+  },
+  "minecraft:dead_tube_coral_wall_fan[facing=east,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang",
+  "pedata":6
+  },
+  "minecraft:dead_brain_coral_wall_fan[facing=north,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang",
+  "pedata":11
+  },
+  "minecraft:dead_brain_coral_wall_fan[facing=south,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang",
+  "pedata":15
+  },
+  "minecraft:dead_brain_coral_wall_fan[facing=west,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang",
+  "pedata":3
+  },
+  "minecraft:dead_brain_coral_wall_fan[facing=east,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang",
+  "pedata":7
+  },
+  "minecraft:dead_bubble_coral_wall_fan[facing=north,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang2",
+  "pedata":10
+  },
+  "minecraft:dead_bubble_coral_wall_fan[facing=south,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang2",
+  "pedata":14
+  },
+  "minecraft:dead_bubble_coral_wall_fan[facing=west,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang2",
+  "pedata":2
+  },
+  "minecraft:dead_bubble_coral_wall_fan[facing=east,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang2",
+  "pedata":6
+  },
+  "minecraft:dead_fire_coral_wall_fan[facing=north,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang2",
+  "pedata":11
+  },
+  "minecraft:dead_fire_coral_wall_fan[facing=south,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang2",
+  "pedata":15
+  },
+  "minecraft:dead_fire_coral_wall_fan[facing=west,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang2",
+  "pedata":3
+  },
+  "minecraft:dead_fire_coral_wall_fan[facing=east,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang2",
+  "pedata":7
+  },
+  "minecraft:dead_horn_coral_wall_fan[facing=north,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang3",
+  "pedata":10
+  },
+  "minecraft:dead_horn_coral_wall_fan[facing=south,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang3",
+  "pedata":14
+  },
+  "minecraft:dead_horn_coral_wall_fan[facing=west,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang3",
+  "pedata":2
+  },
+  "minecraft:dead_horn_coral_wall_fan[facing=east,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang3",
+  "pedata":6
+  },
+  "minecraft:tube_coral_wall_fan[facing=north,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang",
+  "pedata":8
+  },
+  "minecraft:tube_coral_wall_fan[facing=south,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang",
+  "pedata":12
+  },
+  "minecraft:tube_coral_wall_fan[facing=west,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang",
+  "pedata":0
+  },
+  "minecraft:tube_coral_wall_fan[facing=east,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang",
+  "pedata":4
+  },
+  "minecraft:brain_coral_wall_fan[facing=north,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang",
+  "pedata":9
+  },
+  "minecraft:brain_coral_wall_fan[facing=south,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang",
+  "pedata":13
+  },
+  "minecraft:brain_coral_wall_fan[facing=west,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang",
+  "pedata":1
+  },
+  "minecraft:brain_coral_wall_fan[facing=east,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang",
+  "pedata":5
+  },
+  "minecraft:bubble_coral_wall_fan[facing=north,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang2",
+  "pedata":8
+  },
+  "minecraft:bubble_coral_wall_fan[facing=south,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang2",
+  "pedata":12
+  },
+  "minecraft:bubble_coral_wall_fan[facing=west,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang2",
+  "pedata":0
+  },
+  "minecraft:bubble_coral_wall_fan[facing=east,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang2",
+  "pedata":4
+  },
+  "minecraft:fire_coral_wall_fan[facing=north,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang2",
+  "pedata":9
+  },
+  "minecraft:fire_coral_wall_fan[facing=south,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang2",
+  "pedata":13
+  },
+  "minecraft:fire_coral_wall_fan[facing=west,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang2",
+  "pedata":1
+  },
+  "minecraft:fire_coral_wall_fan[facing=east,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang2",
+  "pedata":5
+  },
+  "minecraft:horn_coral_wall_fan[facing=north,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang3",
+  "pedata":8
+  },
+  "minecraft:horn_coral_wall_fan[facing=south,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang3",
+  "pedata":12
+  },
+  "minecraft:horn_coral_wall_fan[facing=west,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang3",
+  "pedata":0
+  },
+  "minecraft:horn_coral_wall_fan[facing=east,waterlogged=false]":{
+  "pename":"minecraft:coral_fan_hang3",
+  "pedata":4
   }
 }
