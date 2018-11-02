@@ -15,8 +15,6 @@ import protocolsupport.utils.ArrayDequeMultiMap;
 import protocolsupport.utils.ArrayDequeMultiMap.ChildDeque;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 
-import java.util.Collection;
-
 //See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-Inventory-Managing)
 public class PETransactionRemapper {
 	

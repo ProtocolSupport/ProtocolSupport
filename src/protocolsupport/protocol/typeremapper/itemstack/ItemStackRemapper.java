@@ -16,9 +16,6 @@ public class ItemStackRemapper {
 			int peCombinedId = PEItems.getPECombinedIdByModernId(itemstack.getTypeId());
 			itemstack.setTypeId(PEItems.getIdFromPECombinedId(peCombinedId));
 			itemstack.setLegacyData(PEItems.getDataFromPECombinedId(peCombinedId));
-			/*if (!isComplexlyRemapped(itemstack)) {
-				itemstack.setLegacyData(PEItems.getDataFromPECombinedId(peCombinedId));
-			} */
 		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			int legacyCombinedId = PreFlatteningItemIdData.getLegacyCombinedIdByModernId(itemstack.getTypeId());
 			itemstack.setTypeId(PreFlatteningItemIdData.getIdFromLegacyCombinedId(legacyCombinedId));
@@ -35,7 +32,6 @@ public class ItemStackRemapper {
 		if (version == ProtocolVersion.MINECRAFT_PE) {
 			int modernId = PEItems.getModernIdByPEIdData(itemstack.getTypeId(), itemstack.getLegacyData());
 			itemstack.setTypeId(modernId);
-			itemstack.setLegacyData(0);
 		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			int legacyCombinedId = PreFlatteningItemIdData.formLegacyCombinedId(itemstack.getTypeId(), itemstack.getLegacyData());
 			itemstack.setTypeId(PreFlatteningItemIdData.getModernIdByLegacyCombinedId(legacyCombinedId));
