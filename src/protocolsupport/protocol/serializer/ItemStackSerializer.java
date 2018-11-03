@@ -83,7 +83,7 @@ public class ItemStackSerializer {
 			itemstack.setNBT(readTag(from, version));
 		}
 		if (isFromClient) {
-			itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack);
+			itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack.cloneItemStack());
 		}
 		return itemstack;
 	}

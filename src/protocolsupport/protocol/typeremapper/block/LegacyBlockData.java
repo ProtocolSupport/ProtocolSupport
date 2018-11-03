@@ -364,7 +364,7 @@ public class LegacyBlockData {
 					enderChest.setFacing(o.getFacing());
 					return enderChest;
 				},
-				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+				ProtocolVersionsHelper.BEFORE_1_13
 			);
 			this.<PistonHead>registerRemapEntryForAllStates(
 				Material.PISTON_HEAD,

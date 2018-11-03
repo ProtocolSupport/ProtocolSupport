@@ -5,6 +5,7 @@ import java.util.EnumMap;
 import org.bukkit.Material;
 
 import protocolsupport.api.Connection;
+import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
@@ -69,7 +70,8 @@ public class PEFakeContainer {
 			}
 			invCache.getFakeContainers().addFirst(position);
 			//Create fake inventory block.
-			BlockChangeSingle.create(version, position, PEBlocks.toPocketBlock(version, typeData.getObj1()), packets);
+			final int networkChestId = MaterialAPI.getBlockDataNetworkId(typeData.getObj1().createBlockData());
+			BlockChangeSingle.create(version, position, networkChestId, packets);
 			//Set tile data for fake block.
 			NBTCompound tag = new NBTCompound();
 			tag.setTag("CustomName", new NBTString(title.toLegacyText(cache.getAttributesCache().getLocale())));
@@ -81,7 +83,7 @@ public class PEFakeContainer {
 				Position auxPos = position.clone();
 				auxPos.modifyX(1); //Get adjacent block.
 				invCache.getFakeContainers().addLast(auxPos);
-				BlockChangeSingle.create(version, auxPos, PEBlocks.toPocketBlock(version, typeData.getObj1()), packets);
+				BlockChangeSingle.create(version, auxPos, networkChestId, packets);
 				tag.setTag("pairx", new NBTInt(auxPos.getX()));
 				tag.setTag("pairz", new NBTInt(auxPos.getZ()));
 				tag.setTag("pairlead", new NBTByte((byte) 1));

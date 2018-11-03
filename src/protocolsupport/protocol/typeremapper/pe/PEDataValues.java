@@ -232,7 +232,6 @@ public class PEDataValues {
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> BIOME = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
-			registerRemapEntry(Biome.FROZEN_OCEAN, 46, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(Biome.SMALL_END_ISLANDS, Biome.OCEAN, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(Biome.END_MIDLANDS, Biome.OCEAN, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(Biome.END_HIGHLANDS, Biome.OCEAN, ProtocolVersion.MINECRAFT_PE);
@@ -244,6 +243,7 @@ public class PEDataValues {
 			registerRemapEntry(Biome.DEEP_WARM_OCEAN, 41, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(Biome.DEEP_LUKEWARM_OCEAN, 43, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(Biome.DEEP_COLD_OCEAN, 45, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Biome.FROZEN_OCEAN, 46, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(Biome.DEEP_FROZEN_OCEAN, 47, ProtocolVersion.MINECRAFT_PE);
 		}
 		@Override
