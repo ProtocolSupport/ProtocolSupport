@@ -13,6 +13,7 @@ import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerPE;
 import protocolsupport.protocol.typeremapper.chunk.EmptyChunk;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -25,7 +26,7 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	private final ChunkTransformerBB transformer = new ChunkTransformerPE(LegacyBlockData.REGISTRY.getTable(connection.getVersion()));
+	private final ChunkTransformerBB transformer = new ChunkTransformerPE(LegacyBlockData.REGISTRY.getTable(connection.getVersion()), PEDataValues.BIOME.getTable(connection.getVersion()));
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {

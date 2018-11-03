@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
+
+import org.bukkit.block.Biome;
+import org.bukkit.block.data.type.RedstoneWire.Connection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.util.Vector;
 
@@ -225,6 +228,25 @@ public class PEDataValues {
 		@Override
 		protected HashMapBasedIdRemappingTable createTable() {
 			return new HashMapBasedIdRemappingTable();
+		}
+	};
+
+	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> BIOME = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
+		{
+			registerRemapEntry(Biome.FROZEN_OCEAN, 46, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Biome.SMALL_END_ISLANDS, Biome.THE_END, ProtocolVersion.MINECRAFT_PE);
+		}
+		@Override
+		protected ArrayBasedIdRemappingTable createTable() {
+			return new ArrayBasedIdRemappingTable(167); //Largest biome id.
+		}
+
+		private void registerRemapEntry(Biome type, int to, ProtocolVersion version) {
+			registerRemapEntry(type.ordinal(), to, version);
+		}
+
+		private void registerRemapEntry(Biome type, Biome to, ProtocolVersion version) {
+			registerRemapEntry(type.ordinal(), to.ordinal(), version);
 		}
 	};
 

@@ -8,10 +8,12 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 
 public class ChunkTransformerPE extends ChunkTransformerBB {
 
-	public ChunkTransformerPE(ArrayBasedIdRemappingTable blockRemappingTable) {
+	public ChunkTransformerPE(ArrayBasedIdRemappingTable blockRemappingTable, ArrayBasedIdRemappingTable biomeRemappingTable) {
 		super(blockRemappingTable);
+		this.biomeRemappingTable = biomeRemappingTable;
 	}
 
+	protected final ArrayBasedIdRemappingTable biomeRemappingTable;
 	protected static final int flag_runtime = 1;
 
 	@Override
@@ -54,7 +56,7 @@ public class ChunkTransformerPE extends ChunkTransformerBB {
 		}
 		chunkdata.writeZero(512); //heightmap (will be recalculated by client anyway)
 		for (int i = 0; i < biomeData.length; i++) {
-			chunkdata.writeByte(biomeData[i]);
+			chunkdata.writeByte(biomeRemappingTable.getRemap(biomeData[i]));
 		}
 	}
 
