@@ -415,10 +415,11 @@ public class LegacyBlockData {
 			this.registerRemapEntryForAllStates(Material.DRIED_KELP_BLOCK, Material.GREEN_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(Material.SHULKER_BOX, Material.PINK_SHULKER_BOX.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(
-				Arrays.asList(Material.SEAGRASS, Material.SEA_PICKLE, Material.TURTLE_EGG),
-				Material.GRASS.createBlockData(),
+				Arrays.asList(Material.SEA_PICKLE, Material.TURTLE_EGG),
+				Material.CAKE.createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
+			this.registerRemapEntryForAllStates(Material.SEAGRASS, Material.GRASS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(Material.TALL_SEAGRASS, Material.KELP, Material.KELP_PLANT),
 				Material.TALL_GRASS.createBlockData(),
