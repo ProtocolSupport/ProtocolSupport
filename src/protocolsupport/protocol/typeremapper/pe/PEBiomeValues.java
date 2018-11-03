@@ -12,7 +12,7 @@ public class PEBiomeValues {
 	static {
 		JsonObject mappingObj = Utils.getResourceJson(PEDataValues.getResourcePath("biomeids.json"));
 
-		for(String key : mappingObj.keySet()) {
+		for (String key : mappingObj.keySet()) {
 			JsonObject obj = mappingObj.getAsJsonObject(key);
 
 			final int pcId = obj.get("pc").getAsInt();

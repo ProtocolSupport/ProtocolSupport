@@ -26,8 +26,9 @@ public class PEItems {
 		int modernId = ItemMaterialLookup.getRuntimeId(ItemMaterialLookup.getByKey(modernKey));
 		int combinedLegacyId = formLegacyCombinedId(legacyMainId, legacyData);
 
-		if(modernId == -1)
+		if (modernId == -1) {
 			throw new IllegalArgumentException("modernId missing for modernKey " + modernKey);
+		}
 
 		toPEId[modernId] = combinedLegacyId;
 		fromPEId.put(combinedLegacyId, modernId);
@@ -50,7 +51,7 @@ public class PEItems {
 	public static int getPECombinedIdByModernId(int modernId) {
 		final int result = toPEId[modernId];
 
-		if(result == 0) {
+		if (result == 0) {
 			System.out.println("Using default for modernId " + modernId);
 			return combinedPEStoneId;
 		}
@@ -62,9 +63,9 @@ public class PEItems {
 		final int literalId = formLegacyCombinedId(PEId, PEData);
 		final int closestId = formLegacyCombinedId(PEId, 0);
 
-		if(fromPEId.containsKey(literalId)) {
+		if (fromPEId.containsKey(literalId)) {
 			return fromPEId.get(literalId);
-		} else if(fromPEId.containsKey(closestId)) {
+		} else if (fromPEId.containsKey(closestId)) {
 			System.out.println("Using closest guess for PE ID " + PEId);
 			return fromPEId.get(closestId);
 		} else {

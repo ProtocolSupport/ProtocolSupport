@@ -66,7 +66,7 @@ public class ArrayDequeMultiMap<K, V> {
 		StringBuilder builder = new StringBuilder();
 		boolean isFirst = true;
 
-		for(Entry<?, ?> entry : map) {
+		for (Entry<?, ?> entry : map) {
 			if(!isFirst) builder.append(", ");
 
 			builder.append(entry.getKey());
@@ -296,7 +296,7 @@ public class ArrayDequeMultiMap<K, V> {
 			StringBuilder builder = new StringBuilder();
 			boolean isFirst = true;
 
-			for(Object entry : this) {
+			for (Object entry : this) {
 				if(!isFirst) builder.append(", ");
 
 				builder.append(entry);
