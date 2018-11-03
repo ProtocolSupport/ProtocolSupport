@@ -9,6 +9,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerVariesLegacy;
@@ -21,7 +22,7 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	protected final ChunkTransformerBB transformer = new ChunkTransformerVariesLegacy(LegacyBlockData.REGISTRY.getTable(connection.getVersion()), cache.getTileCache());
+	protected final ChunkTransformerBB transformer = new ChunkTransformerVariesLegacy(LegacyBlockData.REGISTRY.getTable(connection.getVersion()), TileNBTRemapper.getRemapper(connection.getVersion()), cache.getTileCache());
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {

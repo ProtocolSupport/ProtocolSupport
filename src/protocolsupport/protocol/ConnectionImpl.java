@@ -316,7 +316,7 @@ public class ConnectionImpl extends Connection {
 		}
 	}
 
-	protected final NetworkDataCache cache = new NetworkDataCache(this);
+	protected final NetworkDataCache cache = new NetworkDataCache();
 
 	public NetworkDataCache getCache() {
 		return cache;

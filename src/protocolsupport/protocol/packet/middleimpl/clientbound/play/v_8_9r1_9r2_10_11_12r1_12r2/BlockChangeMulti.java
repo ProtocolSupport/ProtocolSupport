@@ -26,7 +26,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 	}
 
 	protected final ArrayBasedIdRemappingTable blockRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
-	protected final TileNBTRemapper tileremapper = cache.getTileCache().getTileRemapper();
+	protected final TileNBTRemapper tileremapper = TileNBTRemapper.getRemapper(connection.getVersion());
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {

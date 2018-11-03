@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.common.cache.Cache;
+
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -30,10 +32,10 @@ public abstract class ChunkTransformer {
 	protected final ArrayBasedIdRemappingTable blockTypeRemappingTable;
 	protected final TileDataCache tilecache;
 	protected final TileNBTRemapper tileremapper;
-	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable, TileDataCache tilecache) {
+	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable, TileNBTRemapper tileremapper, TileDataCache tilecache) {
 		this.blockTypeRemappingTable = blockRemappingTable;
+		this.tileremapper = tileremapper;
 		this.tilecache = tilecache;
-		this.tileremapper = tilecache.getTileRemapper();
 	}
 
 	public void loadData(ChunkCoord chunk, ByteBuf chunkdata, int bitmap, boolean hasSkyLight, boolean hasBiomeData, NBTCompound[] tiles) {
@@ -58,7 +60,9 @@ public abstract class ChunkTransformer {
 	}
 
 	public NBTCompound[] remapAndGetTiles() {
-		return tiles.stream().map(tileremapper::remap).toArray(NBTCompound[]::new);
+		return tiles.stream()
+			.map(tile -> tileremapper.remap(tile, tilecache.getTileBlockDatas.getAtPosition(TileNBTRemapper.getPosition(tile))))
+			.toArray(NBTCompound[]::new);
 	}
 
 	protected int getBlockState(int section, BlockStorageReader blockstorage, int blockindex) {

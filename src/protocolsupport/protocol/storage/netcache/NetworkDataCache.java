@@ -1,13 +1,8 @@
 package protocolsupport.protocol.storage.netcache;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.utils.Utils;
 
 public class NetworkDataCache {
-
-	public NetworkDataCache(ConnectionImpl connection) {
-		tilecache = new TileDataCache(connection);
-	}
 
 	protected final MovementCache movecache = new MovementCache();
 	public MovementCache getMovementCache() {
@@ -44,7 +39,7 @@ public class NetworkDataCache {
 		return cpccache;
 	}
 
-	protected final TileDataCache tilecache;
+	protected final TileDataCache tilecache = new TileDataCache();
 	public TileDataCache getTileCache() {
 		return tilecache;
 	}

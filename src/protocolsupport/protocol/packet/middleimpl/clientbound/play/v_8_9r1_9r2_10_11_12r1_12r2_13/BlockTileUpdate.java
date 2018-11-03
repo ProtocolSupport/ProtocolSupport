@@ -21,11 +21,18 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		super(connection);
 	}
 
-	protected final TileNBTRemapper tileremapper = cache.getTileCache().getTileRemapper();
+	protected final TileNBTRemapper tileremapper = TileNBTRemapper.getRemapper(connection.getVersion());
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(createPacketData(connection, TileEntityType.getByNetworkId(type), position, tileremapper.remap(tag)));
+		return RecyclableSingletonList.create(
+			createPacketData(
+				connection,
+				TileEntityType.getByNetworkId(type),
+				position,
+				tileremapper.remap(tag, cache.getTileCache().getTileBlockDatas.getAtPosition(position))
+			)
+		);
 	}
 
 	public static ClientBoundPacketData createPacketData(ConnectionImpl connection, TileEntityType type, Position position, NBTCompound tag) {

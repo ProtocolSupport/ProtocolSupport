@@ -24,7 +24,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 
 	protected final ArrayBasedIdRemappingTable blockTypeRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
 	protected final ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable = FlatteningBlockId.REGISTRY.getTable(connection.getVersion());
-	protected final TileNBTRemapper tileremapper = cache.getTileCache().getTileRemapper();
+	protected final TileNBTRemapper tileremapper = TileNBTRemapper.getRemapper(connection.getVersion());
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
