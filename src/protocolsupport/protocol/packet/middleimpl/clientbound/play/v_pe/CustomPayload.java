@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
@@ -31,15 +30,10 @@ public class CustomPayload extends MiddleCustomPayload {
 			);
 		}
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		packets.add(create(version, tag, data));
-		return packets;
-	}
-
-	public static ClientBoundPacketData create(ProtocolVersion version, String tag, ByteBuf data) {
-		System.out.println("CustomPayload " + tag);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CUSTOM_EVENT);
 		StringSerializer.writeString(serializer, version, tag);
 		serializer.writeBytes(data);
-		return serializer;
+		packets.add(serializer);
+		return packets;
 	}
 }
