@@ -32,15 +32,14 @@ public class ItemStackRemapper {
 		if (version == ProtocolVersion.MINECRAFT_PE) {
 			int modernId = PEItems.getModernIdByPEIdData(itemstack.getTypeId(), itemstack.getLegacyData());
 			itemstack.setTypeId(modernId);
+			itemstack.setLegacyData(0);
 		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			int legacyCombinedId = PreFlatteningItemIdData.formLegacyCombinedId(itemstack.getTypeId(), itemstack.getLegacyData());
 			itemstack.setTypeId(PreFlatteningItemIdData.getModernIdByLegacyCombinedId(legacyCombinedId));
 		} else {
 			itemstack.setTypeId(FlatteningItemId.REGISTRY_FROM_CLIENT.getTable(version).getRemap(itemstack.getTypeId()));
 		}
-		itemstack = ItemStackComplexRemapperRegistry.remapFromClient(version, locale, itemstack);
-
-		return itemstack;
+		return ItemStackComplexRemapperRegistry.remapFromClient(version, locale, itemstack);
 	}
 
 	public static void setComplexlyRemapped(NetworkItemStack itemstack, boolean remapped) {
