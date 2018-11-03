@@ -8,7 +8,6 @@ import java.util.Map;
 import com.google.gson.annotations.SerializedName;
 
 import org.bukkit.block.Biome;
-import org.bukkit.block.data.type.RedstoneWire.Connection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.util.Vector;
 
@@ -233,8 +232,19 @@ public class PEDataValues {
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> BIOME = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
-			registerRemapEntry(Biome.FROZEN_OCEAN, 46, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(Biome.SMALL_END_ISLANDS, Biome.THE_END, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Biome.END_MIDLANDS, Biome.THE_END, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Biome.END_HIGHLANDS, Biome.THE_END, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Biome.END_BARRENS, Biome.THE_END, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Biome.THE_VOID, Biome.THE_END, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Biome.WARM_OCEAN, 40, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Biome.LUKEWARM_OCEAN, 42, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Biome.COLD_OCEAN, 44, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Biome.DEEP_WARM_OCEAN, 41, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Biome.DEEP_LUKEWARM_OCEAN, 43, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Biome.DEEP_COLD_OCEAN, 45, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Biome.FROZEN_OCEAN, 46, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Biome.DEEP_FROZEN_OCEAN, 47, ProtocolVersion.MINECRAFT_PE);
 		}
 		@Override
 		protected ArrayBasedIdRemappingTable createTable() {

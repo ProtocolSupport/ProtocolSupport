@@ -169,8 +169,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					+ " wId: " + transaction.inventoryId 
 					+ " action: " + transaction.action 
 					+ " slot: " + transaction.slot 
-					+ " oldItem: " + transaction.oldItem.toString()  + ((!transaction.oldItem.isNull()) ? transaction.oldItem.getNBT() : "") 
-					+ " newItem: " + transaction.newItem.toString() + (!transaction.newItem.isNull() ? transaction.newItem.getNBT() : ""));
+					+ " oldItem: " + transaction.oldItem.toString() + ((!transaction.oldItem.isNull() && transaction.oldItem.getNBT() != null) ? transaction.oldItem.getNBT() : "")
+					+ " newItem: " + transaction.newItem.toString() + ((!transaction.newItem.isNull() && transaction.newItem.getNBT() != null) ? transaction.newItem.getNBT() : ""));
 			return transaction;
 		}
 

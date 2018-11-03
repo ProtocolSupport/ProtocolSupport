@@ -17,7 +17,7 @@ public class PEItems {
 	protected static final int combinedPEStoneId = formLegacyCombinedId(1, 0);
 
 	protected static int formLegacyCombinedId(int id, int data) {
-		return (id << 4) | data;
+		return (id << 16) | data;
 	}
 
 	protected static final int[] toPEId = new int[MinecraftData.ITEM_COUNT];
@@ -25,11 +25,15 @@ public class PEItems {
 	protected static void register(String modernKey, int legacyMainId, int legacyData) {
 		int modernId = ItemMaterialLookup.getRuntimeId(ItemMaterialLookup.getByKey(modernKey));
 		int combinedLegacyId = formLegacyCombinedId(legacyMainId, legacyData);
+
+		if (modernId == -1) {
+			throw new IllegalArgumentException("modernId missing for modernKey " + modernKey);
+		}
+
 		toPEId[modernId] = combinedLegacyId;
 		fromPEId.put(combinedLegacyId, modernId);
 	}
 	static {
-		Arrays.fill(toPEId, combinedPEStoneId);
 		for (JsonElement element : Utils.iterateJsonArrayResource(PEDataValues.getResourcePath("itemmapping.json"))) {
 			JsonObject object = element.getAsJsonObject();
 			register(JsonUtils.getString(object, "itemkey"), JsonUtils.getInt(object, "peid"), JsonUtils.getInt(object, "pedata"));
@@ -45,15 +49,29 @@ public class PEItems {
 	}
 
 	public static int getPECombinedIdByModernId(int modernId) {
-		return toPEId[modernId];
-	}
+		final int result = toPEId[modernId];
 
-	public static int getModernIdByPECombinedId(int PECombinedId) {
-		return fromPEId.getOrDefault(PECombinedId, combinedPEStoneId);
+		if (result == 0) {
+			System.out.println("Using default for modernId " + modernId);
+			return combinedPEStoneId;
+		}
+
+		return result;
 	}
 
 	public static int getModernIdByPEIdData(int PEId, int PEData) {
-		return fromPEId.getOrDefault(formLegacyCombinedId(PEId, PEData), fromPEId.getOrDefault(formLegacyCombinedId(PEId, 0), combinedPEStoneId));
+		final int literalId = formLegacyCombinedId(PEId, PEData);
+		final int closestId = formLegacyCombinedId(PEId, 0);
+
+		if (fromPEId.containsKey(literalId)) {
+			return fromPEId.get(literalId);
+		} else if (fromPEId.containsKey(closestId)) {
+			System.out.println("Using closest guess for PE ID " + PEId);
+			return fromPEId.get(closestId);
+		} else {
+			System.out.println("Using default item for PE ID " + PEId + ":" + PEData);
+			return combinedPEStoneId;
+		}
 	}
 
 }
