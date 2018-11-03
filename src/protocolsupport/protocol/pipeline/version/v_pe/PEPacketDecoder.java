@@ -13,24 +13,7 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.Ping;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Animation;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.BlockTileUpdate;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.BookEdit;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Chat;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.ClientSettings;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.CommandRequest;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.EntityStatus;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.HeldSlot;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Interact;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.InventoryClose;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.MapInfoRequest;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.MoveVehicle;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAbilities;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.RiderJump;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.SteerVehicle;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.*;
 import protocolsupport.protocol.pipeline.version.util.decoder.AbstractPacketDecoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.packet.PEDimensionSwitchMovementConfirmationPacketQueue;
@@ -66,6 +49,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.EDIT_BOOK, BookEdit::new);
 		registry.register(NetworkState.PLAY, PEPacketIDs.ADVENTURE_SETTINGS, PlayerAbilities::new);
 		registry.register(NetworkState.PLAY, PEPacketIDs.CONTAINER_CLOSE, InventoryClose::new);
+		registry.register(NetworkState.PLAY, PEPacketIDs.CUSTOM_EVENT, CustomEvent::new);
 	}
 
 	protected final PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq;
