@@ -13,6 +13,7 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.ChunkCoord;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.PositionMap.LocalMap;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 
 public abstract class ChunkTransformer {
@@ -24,6 +25,7 @@ public abstract class ChunkTransformer {
 	protected final ChunkSection[] sections = new ChunkSection[16];
 	protected final int[] biomeData = new int[256];
 	protected List<NBTCompound> tiles;
+	protected LocalMap<Integer> localTileDataMap;
 
 	protected final ArrayBasedIdRemappingTable blockTypeRemappingTable;
 	protected final TileDataCache tilecache;
@@ -52,6 +54,7 @@ public abstract class ChunkTransformer {
 			}
 		}
 		this.tiles = new ArrayList<>(Arrays.asList(tiles));
+		this.localTileDataMap = tilecache.getTileBlockDatas.get(chunk);
 	}
 
 	public NBTCompound[] remapAndGetTiles() {
@@ -61,7 +64,11 @@ public abstract class ChunkTransformer {
 	protected int getBlockState(int section, BlockStorageReader blockstorage, int blockindex) {
 		int blockstate = blockstorage.getBlockState(blockindex);
 		if (tileremapper.tileThatNeedsBlockstate(blockstate)) {
-			tilecache.setCachedTileBlockstate(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);
+			if (blockstate != 0) {
+				localTileDataMap.put(getLocalPositionFromSectionIndex(section, blockindex), blockstate);
+			} else {
+				localTileDataMap.remove(getLocalPositionFromSectionIndex(section, blockindex));
+			}
 		}
 		if (tileremapper.usedToBeTile(blockstate)) {
 			NBTCompound tile = tileremapper.getLegacyTileFromBlock(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);
@@ -70,6 +77,10 @@ public abstract class ChunkTransformer {
 			}
 		}
 		return blockstate;
+	}
+
+	protected int getLocalPositionFromSectionIndex(int section, int blockindex) {
+		return ((blockindex & 0xF) << 12) | (((blockindex >> 4) & 0xF) << 8) | ((section * 16) + ((blockindex >> 8) & 0xF)); 
 	}
 
 	protected Position getGlobalPositionFromSectionIndex(int section, int blockindex) {

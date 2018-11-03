@@ -13,6 +13,7 @@ import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.PositionMap.LocalMap;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -30,6 +31,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		LocalMap<Integer> tilestates = cache.getTileCache().getTileBlockDatas.get(chunk);
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID);
 		PositionSerializer.writeChunkCoord(serializer, chunk);
@@ -37,7 +39,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 			PositionSerializer.writeLocalCoord(serializer, record.localCoord);
 			VarNumberSerializer.writeVarInt(to, blockFlatteningIdRemappingTable.getRemap(blockTypeRemappingTable.getRemap(record.id)));
 			if (tileremapper.tileThatNeedsBlockstate(record.id)) {
-				cache.getTileCache().setCachedTileBlockstate(chunk, record.localCoord, record.id);
+				tilestates.put(record.localCoord, record.id);
 			}
 			if (tileremapper.usedToBeTile(record.id)) {
 				NBTCompound tile = tileremapper.getLegacyTileFromBlock(Position.fromLocal(chunk, record.localCoord), record.id);

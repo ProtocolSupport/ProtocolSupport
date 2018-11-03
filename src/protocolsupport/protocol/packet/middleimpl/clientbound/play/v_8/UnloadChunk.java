@@ -17,7 +17,7 @@ public class UnloadChunk extends MiddleUnloadChunk {
 
 	@Override
 	public boolean postFromServerRead() {
-		cache.getTileCache().clearCache(chunk);
+		cache.getTileCache().removeChunk(chunk);
 		return super.postFromServerRead();
 	}
 

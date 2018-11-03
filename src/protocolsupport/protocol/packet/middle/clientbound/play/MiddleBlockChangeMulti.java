@@ -7,7 +7,6 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.types.ChunkCoord;
-import protocolsupport.protocol.utils.types.LocalCoord;
 import protocolsupport.utils.Utils;
 
 public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
@@ -32,9 +31,9 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 	}
 
 	public static class Record {
-		public final LocalCoord localCoord;
+		public final int localCoord;
 		public final int id;
-		public Record(LocalCoord localCoord, int id) {
+		public Record(int localCoord, int id) {
 			this.localCoord = localCoord;
 			this.id = id;
 		}

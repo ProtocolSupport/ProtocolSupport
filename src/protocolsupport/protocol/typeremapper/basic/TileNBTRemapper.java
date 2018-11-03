@@ -304,7 +304,7 @@ public class TileNBTRemapper {
 				}
 			}
 		}
-		int tileblock = connection.getCache().getTileCache().getCachedTileBlockstate(getPosition(compound));
+		int tileblock = connection.getCache().getTileCache().getTileBlockDatas.getAtPosition(getPosition(compound));
 		if (tileblock != -1) {
 			List<BiFunction<BlockData, NBTCompound, NBTCompound>> transformers = tilestate2tile.get(connection.getVersion()).get(tileblock);
 			if (transformers != null) {

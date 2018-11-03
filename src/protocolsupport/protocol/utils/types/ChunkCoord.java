@@ -18,10 +18,6 @@ public class ChunkCoord {
 		return z;
 	}
 
-	public static ChunkCoord fromGlobal(Position position) {
-		return new ChunkCoord(position.getX() >> 4, position.getZ() >> 4);
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof ChunkCoord)) {

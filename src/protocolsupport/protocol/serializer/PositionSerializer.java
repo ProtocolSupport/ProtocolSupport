@@ -2,7 +2,6 @@ package protocolsupport.protocol.serializer;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.utils.types.ChunkCoord;
-import protocolsupport.protocol.utils.types.LocalCoord;
 import protocolsupport.protocol.utils.types.Position;
 
 public class PositionSerializer {
@@ -78,15 +77,12 @@ public class PositionSerializer {
 		to.writeInt(chunk.getZ());
 	}
 
-	public static LocalCoord readLocalCoord(ByteBuf from) {
-		short horizCoord = from.readUnsignedByte();
-		short yCoord = from.readUnsignedByte();
-		return new LocalCoord((byte) (horizCoord >> 4 & 0xF), yCoord, (byte) (horizCoord & 0xF));
+	public static int readLocalCoord(ByteBuf from) {
+		return from.readUnsignedShort();
 	}
 
-	public static void writeLocalCoord(ByteBuf to, LocalCoord coord) {
-		to.writeByte(coord.getX() << 4 | coord.getZ());
-		to.writeByte(coord.getY());
+	public static void writeLocalCoord(ByteBuf to, int coord) {
+		to.writeShort(coord);
 	}
 
 }
