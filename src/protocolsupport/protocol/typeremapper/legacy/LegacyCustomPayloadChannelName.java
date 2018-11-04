@@ -11,7 +11,7 @@ public class LegacyCustomPayloadChannelName {
 	public static final String MODERN_TRADER_LIST = "minecraft:trader_list";
 	public static final String MODERN_BRAND = "minecraft:brand";
 	public static final String MODERN_BOOK_OPEN = "minecraft:book_open";
-	public static final String MODERN_BUNGEE = "BungeeCord";
+	public static final String MODERN_BUNGEE = "bungeecord:main";
 
 	public static final String LEGACY_REGISTER = "REGISTER";
 	public static final String LEGACY_UNREGISTER = "UNREGISTER";
@@ -64,8 +64,11 @@ public class LegacyCustomPayloadChannelName {
 			case LEGACY_BRAND: {
 				return MODERN_BRAND;
 			}
+			case LEGACY_BUNGEE: {
+				return MODERN_BUNGEE;
+			}
 			default: {
-				String[] split = legacyName.toLowerCase().replace('|', ':').split(NamespacedKeyUtils.SEPARATOR, 2);
+				String[] split = legacyName.toLowerCase().split(NamespacedKeyUtils.SEPARATOR, 2);
 				if (split.length == 1) {
 					return NamespacedKeyUtils.combine("l", invalid_pattern.matcher(split[0]).replaceAll(""));
 				} else {
