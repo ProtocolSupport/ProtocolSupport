@@ -33,7 +33,11 @@ public class Chunk extends MiddleChunk {
 		serializer.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(serializer, bitmask);
 		ArraySerializer.writeVarIntByteArray(serializer, transformer::writeLegacyData);
-		ArraySerializer.writeVarIntTArray(serializer, transformer.remapAndGetTiles(), (to, tile) -> ItemStackSerializer.writeTag(to, version, tile));
+		ArraySerializer.writeVarIntTArray(
+			serializer,
+			transformer.remapAndGetTiles(),
+			(to, tile) -> ItemStackSerializer.writeTag(to, version, tile.getNBT())
+		);
 		return RecyclableSingletonList.create(serializer);
 	}
 

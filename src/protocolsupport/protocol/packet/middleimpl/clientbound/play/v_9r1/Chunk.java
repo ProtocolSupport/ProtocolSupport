@@ -12,8 +12,7 @@ import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerVariesLegacy;
-import protocolsupport.protocol.utils.types.TileEntityType;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.TileEntity;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -35,13 +34,8 @@ public class Chunk extends MiddleChunk {
 		VarNumberSerializer.writeVarInt(chunkdata, bitmask);
 		ArraySerializer.writeVarIntByteArray(chunkdata, transformer::writeLegacyData);
 		packets.add(chunkdata);
-		for (NBTCompound tile : transformer.remapAndGetTiles()) {
-			packets.add(BlockTileUpdate.createPacketData(
-				connection,
-				TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)),
-				TileNBTRemapper.getPosition(tile),
-				tile
-			));
+		for (TileEntity tile : transformer.remapAndGetTiles()) {
+			packets.add(BlockTileUpdate.create(connection, tile));
 		}
 		return packets;
 	}

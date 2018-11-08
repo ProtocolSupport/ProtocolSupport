@@ -10,8 +10,7 @@ import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBA;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerByte;
 import protocolsupport.protocol.typeremapper.chunk.EmptyChunk;
-import protocolsupport.protocol.utils.types.TileEntityType;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.TileEntity;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -44,13 +43,8 @@ public class Chunk extends MiddleChunk {
 			chunkdata.writeShort(0);
 			chunkdata.writeInt(compressed.length);
 			chunkdata.writeBytes(compressed);
-			for (NBTCompound tile : transformer.remapAndGetTiles()) {
-				packets.add(BlockTileUpdate.createPacketData(
-					connection,
-					TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)),
-					TileNBTRemapper.getPosition(tile),
-					tile
-				));
+			for (TileEntity tile : transformer.remapAndGetTiles()) {
+				packets.add(BlockTileUpdate.create(connection, tile));
 			}
 		}
 		packets.add(chunkdata);

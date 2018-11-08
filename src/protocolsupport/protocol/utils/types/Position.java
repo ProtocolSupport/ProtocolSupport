@@ -51,7 +51,7 @@ public class Position {
 	}
 
 	public int getLocalCoord() {
-		return ((x % 16) << 12) | ((z % 16) << 8) | y;
+		return ((x & 0xF) << 12) | ((z & 0xF) << 8) | y;
 	}
 
 	public ChunkCoord getChunkCoord() {
@@ -60,9 +60,9 @@ public class Position {
 
 	public static Position fromLocal(ChunkCoord chunkCoord, int localCoord) {
 		return new Position(
-			(chunkCoord.getX() * 16) + ((localCoord >> 12) & 0xF),
+			(chunkCoord.getX() << 4) + ((localCoord >> 12) & 0xF),
 			(localCoord & 0xFF),
-			(chunkCoord.getZ() * 16) + ((localCoord >>  8) & 0xF)
+			(chunkCoord.getZ() << 4) + ((localCoord >>  8) & 0xF)
 		);
 	}
 

@@ -14,7 +14,7 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.ChunkCoord;
 import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.TileEntity;
 
 public abstract class ChunkTransformer {
 
@@ -24,8 +24,8 @@ public abstract class ChunkTransformer {
 	protected boolean hasBiomeData;
 	protected final ChunkSection[] sections = new ChunkSection[16];
 	protected final int[] biomeData = new int[256];
-	protected List<NBTCompound> tiles;
-	protected Int2IntMap tileBlockdata;
+	protected List<TileEntity> tilesNBTData;
+	protected Int2IntMap tilesBlockData;
 
 	protected final ArrayBasedIdRemappingTable blockTypeRemappingTable;
 	protected final TileDataCache tilecache;
@@ -36,7 +36,7 @@ public abstract class ChunkTransformer {
 		this.tilecache = tilecache;
 	}
 
-	public void loadData(ChunkCoord chunk, ByteBuf chunkdata, int bitmap, boolean hasSkyLight, boolean hasBiomeData, NBTCompound[] tiles) {
+	public void loadData(ChunkCoord chunk, ByteBuf chunkdata, int bitmap, boolean hasSkyLight, boolean hasBiomeData, TileEntity[] tiles) {
 		this.chunk = chunk;
 		this.columnsCount = Integer.bitCount(bitmap);
 		this.hasSkyLight = hasSkyLight;
@@ -53,29 +53,28 @@ public abstract class ChunkTransformer {
 				biomeData[i] = chunkdata.readInt();
 			}
 		}
-		this.tiles = new ArrayList<>(Arrays.asList(tiles));
-		this.tileBlockdata = tilecache.getChunk(chunk);
+		this.tilesNBTData = new ArrayList<>(Arrays.asList(tiles));
+		this.tilesBlockData = tilecache.getOrCreateChunk(chunk);
 	}
 
-	public NBTCompound[] remapAndGetTiles() {
-		return tiles.stream()
-			.map(tile -> tileremapper.remap(tile, tilecache.getBlockData(TileNBTRemapper.getPosition(tile))))
-			.toArray(NBTCompound[]::new);
+	public TileEntity[] remapAndGetTiles() {
+		return
+			tilesNBTData.stream()
+			.map(tile -> tileremapper.remap(tile, tilesBlockData.get(tile.getPosition().getLocalCoord())))
+			.toArray(TileEntity[]::new);
 	}
 
 	protected int getBlockState(int section, BlockStorageReader blockstorage, int blockindex) {
 		int blockstate = blockstorage.getBlockState(blockindex);
-		if (tileremapper.tileThatNeedsBlockstate(blockstate)) {
-			if (blockstate != 0) {
-				tileBlockdata.put(getLocalPositionFromSectionIndex(section, blockindex), blockstate);
-			} else {
-				tileBlockdata.remove(getLocalPositionFromSectionIndex(section, blockindex));
-			}
+		if (tileremapper.tileThatNeedsBlockData(blockstate)) {
+			tilesBlockData.put(getLocalPositionFromSectionIndex(section, blockindex), blockstate);
+		} else {
+			tilesBlockData.remove(getLocalPositionFromSectionIndex(section, blockindex));
 		}
 		if (tileremapper.usedToBeTile(blockstate)) {
-			NBTCompound tile = tileremapper.getLegacyTileFromBlock(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);
+			TileEntity tile = tileremapper.getLegacyTileFromBlock(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);
 			if (tile != null) {
-				tiles.add(tile);
+				tilesNBTData.add(tile);
 			}
 		}
 		return blockstate;

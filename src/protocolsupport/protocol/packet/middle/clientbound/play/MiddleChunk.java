@@ -9,6 +9,7 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.ChunkCoord;
+import protocolsupport.protocol.utils.types.TileEntity;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 
 public abstract class MiddleChunk extends ClientBoundMiddlePacket {
@@ -21,7 +22,7 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 	protected boolean full;
 	protected int bitmask;
 	protected ByteBuf data;
-	protected NBTCompound[] tiles;
+	protected TileEntity[] tiles;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
@@ -30,8 +31,11 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 		bitmask = VarNumberSerializer.readVarInt(serverdata);
 		data = ArraySerializer.readVarIntByteArraySlice(serverdata);
 		tiles = ArraySerializer.readVarIntTArray(
-			serverdata, NBTCompound.class,
-			from -> ItemStackSerializer.readTag(from, ProtocolVersionsHelper.LATEST_PC)
+			serverdata, TileEntity.class,
+			from -> {
+				NBTCompound tag = ItemStackSerializer.readTag(from, ProtocolVersionsHelper.LATEST_PC);
+				return new TileEntity(tag);
+			}
 		);
 	}
 

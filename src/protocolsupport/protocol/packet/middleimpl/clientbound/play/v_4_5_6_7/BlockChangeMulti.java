@@ -12,8 +12,6 @@ import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.TileEntityType;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -37,16 +35,13 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		for (Record record : records) {
 			PositionSerializer.writeLocalCoord(serializer, record.localCoord);
 			serializer.writeShort(PreFlatteningBlockIdData.getCombinedId(blockRemappingTable.getRemap(record.id)));
-			if (tileremapper.tileThatNeedsBlockstate(record.id)) {
+			if (tileremapper.tileThatNeedsBlockData(record.id)) {
 				tilestates.put(record.localCoord, record.id);
 			}
 			if (tileremapper.usedToBeTile(record.id)) {
-				NBTCompound tile = tileremapper.getLegacyTileFromBlock(Position.fromLocal(chunk, record.localCoord), record.id);
-				packets.add(BlockTileUpdate.createPacketData(connection,
-					TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)),
-					TileNBTRemapper.getPosition(tile),
-					tile)
-				);
+				packets.add(BlockTileUpdate.create(
+					connection, tileremapper.getLegacyTileFromBlock(Position.fromLocal(chunk, record.localCoord), record.id)
+				));
 			}
 		}
 		packets.add(0, serializer);

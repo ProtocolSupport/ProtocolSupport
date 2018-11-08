@@ -15,6 +15,14 @@ public class TileDataCache {
 		return tileblockdatas.get(chunkCoord);
 	}
 
+	public Int2IntMap getOrCreateChunk(ChunkCoord chunkCoord) {
+		return tileblockdatas.computeIfAbsent(chunkCoord, k -> {
+			Int2IntMap map = new Int2IntOpenHashMap();
+			map.defaultReturnValue(-1);
+			return map;
+		});
+	}
+
 	public void removeChunk(ChunkCoord chunkCoord) {
 		tileblockdatas.remove(chunkCoord);
 	}
@@ -24,7 +32,7 @@ public class TileDataCache {
 	}
 
 	public int getBlockData(ChunkCoord chunkCoord, int localCoord) {
-		Int2IntMap localMap = tileblockdatas.get(chunkCoord);
+		Int2IntMap localMap = getChunk(chunkCoord);
 		if (localMap != null) {
 			return localMap.get(localCoord);
 		}
@@ -36,7 +44,7 @@ public class TileDataCache {
 	}
 
 	public void setBlockData(ChunkCoord chunkCoord, int localCoord, int blockdata) {
-		tileblockdatas.computeIfAbsent(chunkCoord, k -> new Int2IntOpenHashMap()).put(localCoord, blockdata);
+		getOrCreateChunk(chunkCoord).put(localCoord, blockdata);
 	}
 
 	public void removeBlockData(Position position) {
@@ -44,7 +52,7 @@ public class TileDataCache {
 	}
 
 	public void removeBlockData(ChunkCoord chunkCoord, int localCoord) {
-		Int2IntMap map = tileblockdatas.get(chunkCoord);
+		Int2IntMap map = getChunk(chunkCoord);
 		if (map != null) {
 			map.remove(localCoord);
 		}

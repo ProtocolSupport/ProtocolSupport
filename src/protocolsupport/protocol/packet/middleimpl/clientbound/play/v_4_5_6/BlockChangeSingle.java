@@ -10,8 +10,6 @@ import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.protocol.utils.types.TileEntityType;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -32,12 +30,11 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 		int lId = PreFlatteningBlockIdData.getCombinedId(blockRemappingTable.getRemap(id));
 		serializer.writeShort(PreFlatteningBlockIdData.getIdFromCombinedId(lId));
 		serializer.writeByte(PreFlatteningBlockIdData.getDataFromCombinedId(lId));
-		if (tileremapper.tileThatNeedsBlockstate(id)) {
+		if (tileremapper.tileThatNeedsBlockData(id)) {
 			cache.getTileCache().setBlockData(position, id);
 		}
 		if (tileremapper.usedToBeTile(id)) {
-			NBTCompound tile = tileremapper.getLegacyTileFromBlock(position, id);
-			packets.add(BlockTileUpdate.createPacketData(connection, TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)), position, tile));
+			packets.add(BlockTileUpdate.create(connection, tileremapper.getLegacyTileFromBlock(position, id)));
 		}
 		packets.add(0, serializer);
 		return packets;
