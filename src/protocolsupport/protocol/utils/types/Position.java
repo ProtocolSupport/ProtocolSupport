@@ -60,9 +60,9 @@ public class Position {
 
 	public static Position fromLocal(ChunkCoord chunkCoord, int localCoord) {
 		return new Position(
-			chunkCoord.getX() * 16 + ((localCoord >> 12) & 0xF), 
-			(localCoord & 0xFF), 
-			chunkCoord.getZ() * 16 + ((localCoord >>  8) & 0xF)
+			(chunkCoord.getX() * 16) + ((localCoord >> 12) & 0xF),
+			(localCoord & 0xFF),
+			(chunkCoord.getZ() * 16) + ((localCoord >>  8) & 0xF)
 		);
 	}
 
@@ -74,9 +74,9 @@ public class Position {
 	@Override
 	public int hashCode() {
 		int code = 7;
-		code = 47 * code + x;
-		code = 47 * code + y;
-		code = 47 * code + z;
+		code = (47 * code) + x;
+		code = (47 * code) + y;
+		code = (47 * code) + z;
 		return code;
 	}
 
@@ -84,7 +84,7 @@ public class Position {
 	public boolean equals(Object o) {
 		if (o instanceof Position) {
 			Position pos = (Position) o;
-			return x == pos.getX() && y == pos.getY() && z == pos.getZ();
+			return (x == pos.getX()) && (y == pos.getY()) && (z == pos.getZ());
 		}
 		return false;
 	}

@@ -160,26 +160,26 @@ public class LegacyBlockData {
 			);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(
-					Material.SKELETON_SKULL, 
-					Material.WITHER_SKELETON_SKULL, 
-					Material.CREEPER_HEAD, 
-					Material.DRAGON_HEAD, 
-					Material.PLAYER_HEAD, 
+					Material.SKELETON_SKULL,
+					Material.WITHER_SKELETON_SKULL,
+					Material.CREEPER_HEAD,
+					Material.DRAGON_HEAD,
+					Material.PLAYER_HEAD,
 					Material.ZOMBIE_HEAD
-				), 
-				Material.SKELETON_SKULL.createBlockData(), 
+				),
+				Material.SKELETON_SKULL.createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
 			this.<Directional>registerRemapEntryForAllStates(
 				Arrays.asList(
-					Material.SKELETON_WALL_SKULL, 
-					Material.WITHER_SKELETON_WALL_SKULL, 
-					Material.CREEPER_WALL_HEAD, 
-					Material.DRAGON_WALL_HEAD, 
-					Material.PLAYER_WALL_HEAD, 
+					Material.SKELETON_WALL_SKULL,
+					Material.WITHER_SKELETON_WALL_SKULL,
+					Material.CREEPER_WALL_HEAD,
+					Material.DRAGON_WALL_HEAD,
+					Material.PLAYER_WALL_HEAD,
 					Material.ZOMBIE_WALL_HEAD
-				), 
-				o -> cloneDirectional(o, (Directional) Material.SKELETON_WALL_SKULL.createBlockData()), 
+				),
+				o -> cloneDirectional(o, (Directional) Material.SKELETON_WALL_SKULL.createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
 			this.<MultipleFacing>registerRemapEntryForAllStates(

@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Rotatable;
@@ -17,16 +16,16 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHeadToDragonPlayerHeadComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntityType;
+import protocolsupport.protocol.utils.types.nbt.NBTByte;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTInt;
-import protocolsupport.protocol.utils.types.nbt.NBTByte;
 import protocolsupport.protocol.utils.types.nbt.NBTNumber;
 import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
@@ -136,17 +135,17 @@ public class TileNBTRemapper {
 			ProtocolVersionsHelper.BEFORE_1_9
 		);
 		List<Material> skulls = Arrays.asList(
-				Material.SKELETON_SKULL, 
-				Material.WITHER_SKELETON_SKULL, 
-				Material.CREEPER_HEAD, 
-				Material.DRAGON_HEAD, 
-				Material.PLAYER_HEAD, 
+				Material.SKELETON_SKULL,
+				Material.WITHER_SKELETON_SKULL,
+				Material.CREEPER_HEAD,
+				Material.DRAGON_HEAD,
+				Material.PLAYER_HEAD,
 				Material.ZOMBIE_HEAD,
-				Material.SKELETON_WALL_SKULL, 
-				Material.WITHER_SKELETON_WALL_SKULL, 
-				Material.CREEPER_WALL_HEAD, 
-				Material.DRAGON_WALL_HEAD, 
-				Material.PLAYER_WALL_HEAD, 
+				Material.SKELETON_WALL_SKULL,
+				Material.WITHER_SKELETON_WALL_SKULL,
+				Material.CREEPER_WALL_HEAD,
+				Material.DRAGON_WALL_HEAD,
+				Material.PLAYER_WALL_HEAD,
 				Material.ZOMBIE_WALL_HEAD
 		);
 		registerLegacy(
@@ -194,7 +193,7 @@ public class TileNBTRemapper {
 		registerLegacy(
 			skulls, (blockdata, input) -> {
 				NBTNumber skulltype = input.getNumberTag("SkullType");
-				if (skulltype != null && skulltype.getAsInt() == 5) {
+				if ((skulltype != null) && (skulltype.getAsInt() == 5)) {
 					input.setTag("SkullType", new NBTByte((byte) 3));
 					input.setTag("Owner", DragonHeadToDragonPlayerHeadComplexRemapper.createTag());
 				}

@@ -82,7 +82,7 @@ public abstract class ChunkTransformer {
 	}
 
 	protected int getLocalPositionFromSectionIndex(int section, int blockindex) {
-		return ((blockindex & 0xF) << 12) | (((blockindex >> 4) & 0xF) << 8) | ((section * 16) + ((blockindex >> 8) & 0xF)); 
+		return ((blockindex & 0xF) << 12) | (((blockindex >> 4) & 0xF) << 8) | ((section * 16) + ((blockindex >> 8) & 0xF));
 	}
 
 	protected Position getGlobalPositionFromSectionIndex(int section, int blockindex) {

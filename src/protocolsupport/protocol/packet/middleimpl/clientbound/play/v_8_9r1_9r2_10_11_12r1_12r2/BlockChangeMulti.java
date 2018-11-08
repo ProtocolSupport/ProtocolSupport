@@ -44,7 +44,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 				NBTCompound tile = tileremapper.getLegacyTileFromBlock(Position.fromLocal(chunk, record.localCoord), record.id);
 				if (tile != null) {
 					packets.add(BlockTileUpdate.createPacketData(connection,
-							TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)), 
+							TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)),
 							TileNBTRemapper.getPosition(tile),
 							tile)
 						);
