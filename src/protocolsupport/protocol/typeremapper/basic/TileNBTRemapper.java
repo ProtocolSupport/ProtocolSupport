@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Rotatable;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
@@ -58,13 +59,13 @@ public class TileNBTRemapper {
 
 	protected static void register(TileEntityType type, Function<NBTCompound, NBTCompound> transformer, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
-			tileRemappers.get(version).tile2tile.computeIfAbsent(type, k -> new ArrayList<>()).add(transformer);
+			tileRemappers.get(version).tileToTile.computeIfAbsent(type, k -> new ArrayList<>()).add(transformer);
 		}
 	}
 
 	protected static void registerLegacy(List<Material> types, BiFunction<BlockData, NBTCompound, NBTCompound> transformer, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
-			Map<Integer, List<BiFunction<BlockData, NBTCompound, NBTCompound>>> map = tileRemappers.get(version).tilestate2tile;
+			Map<Integer, List<BiFunction<BlockData, NBTCompound, NBTCompound>>> map = tileRemappers.get(version).tileWithBlockStateToTile;
 			types.forEach(type -> {
 				MaterialAPI.getBlockDataList(type).stream()
 				.map(MaterialAPI::getBlockDataNetworkId)
@@ -77,14 +78,12 @@ public class TileNBTRemapper {
 
 	protected static void registerLegacyState(List<Material> types, BiFunction<BlockData, NBTCompound, NBTCompound> transformer, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
-			Map<Integer, BiFunction<BlockData, NBTCompound, NBTCompound>> map = tileRemappers.get(version).state2tile;
-			types.forEach(type -> {
+			Map<Integer, BiFunction<BlockData, NBTCompound, NBTCompound>> map = tileRemappers.get(version).blockstateToTile;
+			types.forEach(type ->
 				MaterialAPI.getBlockDataList(type).stream()
 				.map(MaterialAPI::getBlockDataNetworkId)
-				.forEach(i -> {
-					map.put(i, transformer);
-				});
-			});
+				.forEach(i -> map.put(i, transformer))
+			);
 		}
 	}
 
@@ -92,7 +91,7 @@ public class TileNBTRemapper {
 		for (TileEntityType type : TileEntityType.values()) {
 			register(
 				type,
-				(input) -> {
+				input -> {
 					input.setTag(tileEntityTypeKey, new NBTString(newToOldType.getOrDefault(type, type.getRegistryId())));
 					return input;
 				},
@@ -101,7 +100,7 @@ public class TileNBTRemapper {
 		}
 		register(
 			TileEntityType.MOB_SPAWNER,
-			(input) -> {
+			input -> {
 				if (input.getTagOfType("SpawnData", NBTType.COMPOUND) == null) {
 					NBTCompound spawndata = new NBTCompound();
 					spawndata.setTag("id", new NBTString(NetworkEntityType.PIG.getKey()));
@@ -113,7 +112,7 @@ public class TileNBTRemapper {
 		);
 		register(
 			TileEntityType.MOB_SPAWNER,
-			(input) -> {
+			input -> {
 				NBTCompound spawndata = input.getTagOfType("SpawnData", NBTType.COMPOUND);
 				if (spawndata != null) {
 					NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(NBTString.getValueOrNull(spawndata.getTagOfType("id", NBTType.STRING)));
@@ -127,7 +126,7 @@ public class TileNBTRemapper {
 		);
 		register(
 			TileEntityType.MOB_SPAWNER,
-			(input) -> {
+			input -> {
 				if (input.getTagOfType("SpawnData", NBTType.COMPOUND) != null) {
 					input.removeTag("SpawnPotentials");
 					input.removeTag("SpawnData");
@@ -285,19 +284,19 @@ public class TileNBTRemapper {
 	}
 
 
-	private final Map<TileEntityType, List<Function<NBTCompound, NBTCompound>>> tile2tile = new EnumMap<>(TileEntityType.class);
-	private final Map<Integer, List<BiFunction<BlockData, NBTCompound, NBTCompound>>> tilestate2tile = new Int2ObjectOpenHashMap<>();
-	private final Map<Integer, BiFunction<BlockData, NBTCompound, NBTCompound>> state2tile = new Int2ObjectOpenHashMap<>();
-	
+	protected final Map<TileEntityType, List<Function<NBTCompound, NBTCompound>>> tileToTile = new EnumMap<>(TileEntityType.class);
+	protected final Int2ObjectMap<List<BiFunction<BlockData, NBTCompound, NBTCompound>>> tileWithBlockStateToTile = new Int2ObjectOpenHashMap<>();
+	protected final Int2ObjectMap<BiFunction<BlockData, NBTCompound, NBTCompound>> blockstateToTile = new Int2ObjectOpenHashMap<>();
+
 	public NBTCompound remap(NBTCompound compound, int blockstate) {
-		List<Function<NBTCompound, NBTCompound>> transformers = tile2tile.get(TileEntityType.getByRegistryId(getTileType(compound)));
+		List<Function<NBTCompound, NBTCompound>> transformers = tileToTile.get(TileEntityType.getByRegistryId(getTileType(compound)));
 		if (transformers != null) {
 			for (Function<NBTCompound, NBTCompound> transformer : transformers) {
 				compound = transformer.apply(compound);
 			}
 		}
 		if (blockstate != -1) {
-			List<BiFunction<BlockData, NBTCompound, NBTCompound>> legacyTransformers = tilestate2tile.get(blockstate);
+			List<BiFunction<BlockData, NBTCompound, NBTCompound>> legacyTransformers = tileWithBlockStateToTile.get(blockstate);
 			if (transformers != null) {
 				for (BiFunction<BlockData, NBTCompound, NBTCompound> legacyTransformer : legacyTransformers) {
 					compound = legacyTransformer.apply(MaterialAPI.getBlockDataByNetworkId(blockstate), compound);
@@ -308,7 +307,7 @@ public class TileNBTRemapper {
 	}
 
 	public NBTCompound getLegacyTileFromBlock(Position position, int blockstate) {
-		BiFunction<BlockData, NBTCompound, NBTCompound> constructor = state2tile.get(blockstate);
+		BiFunction<BlockData, NBTCompound, NBTCompound> constructor = blockstateToTile.get(blockstate);
 		if (constructor != null) {
 			BlockData blockdata = MaterialAPI.getBlockDataByNetworkId(blockstate);
 			NBTCompound newTile = new NBTCompound();
@@ -319,11 +318,11 @@ public class TileNBTRemapper {
 	}
 
 	public boolean tileThatNeedsBlockstate(int blockstate) {
-		return tilestate2tile.keySet().contains(blockstate);
+		return tileWithBlockStateToTile.containsKey(blockstate);
 	}
 
 	public boolean usedToBeTile(int blockstate) {
-		return state2tile.keySet().contains(blockstate);
+		return blockstateToTile.containsKey(blockstate);
 	}
 
 }

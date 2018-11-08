@@ -30,7 +30,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 				connection,
 				TileEntityType.getByNetworkId(type),
 				position,
-				tileremapper.remap(tag, cache.getTileCache().getTileBlockDatas.getAtPosition(position))
+				tileremapper.remap(tag, cache.getTileCache().getBlockData(position))
 			)
 		);
 	}

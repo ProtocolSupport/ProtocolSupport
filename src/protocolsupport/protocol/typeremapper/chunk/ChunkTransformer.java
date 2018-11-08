@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.TileDataCache;
@@ -13,7 +14,6 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.ChunkCoord;
 import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.PositionMap.LocalMap;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 
 public abstract class ChunkTransformer {
@@ -25,7 +25,7 @@ public abstract class ChunkTransformer {
 	protected final ChunkSection[] sections = new ChunkSection[16];
 	protected final int[] biomeData = new int[256];
 	protected List<NBTCompound> tiles;
-	protected LocalMap<Integer> localTileDataMap;
+	protected Int2IntMap tileBlockdata;
 
 	protected final ArrayBasedIdRemappingTable blockTypeRemappingTable;
 	protected final TileDataCache tilecache;
@@ -54,12 +54,12 @@ public abstract class ChunkTransformer {
 			}
 		}
 		this.tiles = new ArrayList<>(Arrays.asList(tiles));
-		this.localTileDataMap = tilecache.getTileBlockDatas.get(chunk);
+		this.tileBlockdata = tilecache.getChunk(chunk);
 	}
 
 	public NBTCompound[] remapAndGetTiles() {
 		return tiles.stream()
-			.map(tile -> tileremapper.remap(tile, tilecache.getTileBlockDatas.getAtPosition(TileNBTRemapper.getPosition(tile))))
+			.map(tile -> tileremapper.remap(tile, tilecache.getBlockData(TileNBTRemapper.getPosition(tile))))
 			.toArray(NBTCompound[]::new);
 	}
 
@@ -67,9 +67,9 @@ public abstract class ChunkTransformer {
 		int blockstate = blockstorage.getBlockState(blockindex);
 		if (tileremapper.tileThatNeedsBlockstate(blockstate)) {
 			if (blockstate != 0) {
-				localTileDataMap.put(getLocalPositionFromSectionIndex(section, blockindex), blockstate);
+				tileBlockdata.put(getLocalPositionFromSectionIndex(section, blockindex), blockstate);
 			} else {
-				localTileDataMap.remove(getLocalPositionFromSectionIndex(section, blockindex));
+				tileBlockdata.remove(getLocalPositionFromSectionIndex(section, blockindex));
 			}
 		}
 		if (tileremapper.usedToBeTile(blockstate)) {
@@ -86,9 +86,11 @@ public abstract class ChunkTransformer {
 	}
 
 	protected Position getGlobalPositionFromSectionIndex(int section, int blockindex) {
-		return new Position((chunk.getX() * 16) + (blockindex & 0xF), 
-				(section * 16) + ((blockindex >> 8) & 0xF),
-				(chunk.getZ() * 16) + ((blockindex >> 4) & 0xF));
+		return new Position(
+			(chunk.getX() << 4) + (blockindex & 0xF),
+			(section * 16) + ((blockindex >> 8) & 0xF),
+			(chunk.getZ() << 4) + ((blockindex >> 4) & 0xF)
+		);
 	}
 
 	protected static final int blocksInSection = 16 * 16 * 16;

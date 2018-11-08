@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13;
 
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeMulti;
@@ -13,7 +14,6 @@ import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.PositionMap.LocalMap;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -31,7 +31,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		LocalMap<Integer> tilestates = cache.getTileCache().getTileBlockDatas.get(chunk);
+		Int2IntMap tilestates = cache.getTileCache().getChunk(chunk);
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID);
 		PositionSerializer.writeChunkCoord(serializer, chunk);

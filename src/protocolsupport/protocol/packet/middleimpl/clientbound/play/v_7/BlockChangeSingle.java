@@ -34,7 +34,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 		VarNumberSerializer.writeVarInt(serializer, PreFlatteningBlockIdData.getIdFromCombinedId(lId));
 		serializer.writeByte(PreFlatteningBlockIdData.getDataFromCombinedId(lId));
 		if (tileremapper.tileThatNeedsBlockstate(id)) {
-			cache.getTileCache().getTileBlockDatas.putAtPosition(position, id);
+			cache.getTileCache().setBlockData(position, id);
 		}
 		if (tileremapper.usedToBeTile(id)) {
 			NBTCompound tile = tileremapper.getLegacyTileFromBlock(position, id);
