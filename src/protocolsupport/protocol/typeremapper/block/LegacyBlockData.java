@@ -434,10 +434,11 @@ public class LegacyBlockData {
 			this.registerRemapEntryForAllStates(Material.DRIED_KELP_BLOCK, Material.GREEN_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(Material.SHULKER_BOX, Material.PINK_SHULKER_BOX.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(
-				Arrays.asList(Material.SEAGRASS, Material.SEA_PICKLE, Material.TURTLE_EGG),
-				Material.GRASS.createBlockData(),
+				Arrays.asList(Material.SEA_PICKLE, Material.TURTLE_EGG),
+				Material.CAKE.createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
+			this.registerRemapEntryForAllStates(Material.SEAGRASS, Material.GRASS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(Material.TALL_SEAGRASS, Material.KELP, Material.KELP_PLANT),
 				Material.TALL_GRASS.createBlockData(),
@@ -570,7 +571,11 @@ public class LegacyBlockData {
 			this.registerRemapEntryForAllStates(Material.NETHER_WART_BLOCK, Material.RED_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
 			this.registerRemapEntryForAllStates(Material.RED_NETHER_BRICKS, Material.NETHER_BRICKS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
 			this.registerRemapEntryForAllStates(Material.MAGMA_BLOCK, Material.NETHERRACK.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
-			this.registerRemapEntryForAllStates(Material.BONE_BLOCK, Material.BRICKS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
+			this.registerRemapEntryForAllStates(Material.BONE_BLOCK, (o) -> {
+				Slab slab = (Slab) Material.STONE_SLAB.createBlockData();
+				slab.setType(Slab.Type.DOUBLE);
+				return slab;
+			}, ProtocolVersionsHelper.BEFORE_1_10);
 
 
 			this.registerRemapEntryForAllStates(Material.END_GATEWAY, Material.END_PORTAL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_9);
