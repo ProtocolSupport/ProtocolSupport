@@ -44,8 +44,20 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 				ConnectionImpl connection = ConnectionImpl.getFromChannel(networkManager.getChannel());
 				//version check
 				if (!connection.getVersion().isSupported()) {
-					disconnect(MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replace("'", "''"), 
-						connection.getVersion().getProtocolType() == ProtocolType.PE ? ProtocolVersionsHelper.LATEST_PE.getName() : ServerPlatform.get().getMiscUtils().getVersionName()));
+					String message;
+					if (connection.getVersion().getProtocolType() == ProtocolType.PE) {
+						if (connection.getVersion().isBefore(ProtocolVersionsHelper.LATEST_PE)) {
+							message = MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedClientMessage().replace("'", "''"),
+								ProtocolVersionsHelper.LATEST_PE.getName());
+						} else {
+							message = MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replace("'", "''"),
+								ProtocolVersionsHelper.LATEST_PE.getName());
+						}
+					} else {
+						message = MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedClientMessage().replace("'", "''"),
+							ServerPlatform.get().getMiscUtils().getVersionName());
+					}
+					disconnect(message);
 					break;
 				}
 				//ps handshake event
