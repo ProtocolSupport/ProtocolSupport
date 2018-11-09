@@ -43,8 +43,7 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 				allowed.add(sendpacket);
 				if (sendpacket.getPacketId() == PEPacketIDs.CUSTOM_EVENT) {
 					ByteBuf peak = sendpacket.duplicate();
-					String tag = StringSerializer.readString(peak, ProtocolVersion.MINECRAFT_PE);
-					if (tag.equals("ps:clientlock")) {
+					if (StringSerializer.readString(peak, ProtocolVersion.MINECRAFT_PE).equals("ps:clientlock")) {
 						state = State.LOCKED;
 					}
 				}
@@ -62,9 +61,8 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 			for (ServerBoundPacketData packet : packets) {
 				if (!isPacketSendingAllowed() && packet.getPacketType() == ServerBoundPacket.PLAY_CUSTOM_PAYLOAD) {
 					ByteBuf peak = packet.duplicate();
-					String tag = StringSerializer.readString(peak, ProtocolVersionsHelper.LATEST_PC);
 					// this may also be mimicked by bungee during server changes
-					if (tag.equals("ps:clientunlock")) {
+					if (StringSerializer.readString(peak, ProtocolVersionsHelper.LATEST_PC).equals("ps:clientunlock")) {
 						//TODO: do we need to do something to trigger the queue flush a bit faster?
 						state = State.UNLOCKED;
 					}

@@ -59,7 +59,7 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeFloatLE(0); //player pitch
 		startgame.writeFloatLE(0); //player yaw
 		VarNumberSerializer.writeSVarInt(startgame, 0); //seed
-		VarNumberSerializer.writeSVarInt(startgame, ChangeDimension.getPeDimensionId(dimension)); //world dimension, initially wrong so we can fix it later
+		VarNumberSerializer.writeSVarInt(startgame, ChangeDimension.getPeDimensionId(dimension)); //world dimension
 		VarNumberSerializer.writeSVarInt(startgame, 1); //world type (1 - infinite)
 		VarNumberSerializer.writeSVarInt(startgame, GameMode.SURVIVAL.getId()); //world gamemode
 		VarNumberSerializer.writeSVarInt(startgame, difficulty.getId()); //world difficulty

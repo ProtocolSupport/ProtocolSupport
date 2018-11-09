@@ -19,7 +19,6 @@ public class LocalPlayerInitialised extends ServerBoundMiddlePacket {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		entityId = VarNumberSerializer.readVarLong(clientdata);
-		System.out.println("LocalPlayerInitialised parsed");
 	}
 
 	@Override
