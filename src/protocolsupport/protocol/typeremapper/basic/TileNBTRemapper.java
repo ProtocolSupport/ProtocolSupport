@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.ObjIntConsumer;
 
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
@@ -64,9 +64,9 @@ public class TileNBTRemapper {
 		}
 	}
 
-	protected static void registerLegacy(List<Material> types, BiConsumer<BlockData, TileEntity> transformer, ProtocolVersion... versions) {
+	protected static void registerLegacy(List<Material> types, ObjIntConsumer<TileEntity> transformer, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
-			Int2ObjectMap<List<BiConsumer<BlockData, TileEntity>>> map = tileRemappers.get(version).tileWithBlockdataToTile;
+			Int2ObjectMap<List<ObjIntConsumer<TileEntity>>> map = tileRemappers.get(version).tileWithBlockdataToTile;
 			types.forEach(type ->
 				MaterialAPI.getBlockDataList(type).stream()
 				.mapToInt(MaterialAPI::getBlockDataNetworkId)
@@ -144,48 +144,64 @@ public class TileNBTRemapper {
 				Material.ZOMBIE_WALL_HEAD
 		);
 		registerLegacy(
-			skulls, (blockdata, tile) -> {
-				NBTCompound nbt = tile.getNBT();
-				byte skulltype = 0;
-				switch(blockdata.getMaterial()) {
-					case SKELETON_SKULL: case SKELETON_WALL_SKULL: skulltype = 0; break;
-					case WITHER_SKELETON_SKULL: case WITHER_SKELETON_WALL_SKULL: skulltype = 1; break;
-					case ZOMBIE_HEAD: case ZOMBIE_WALL_HEAD: skulltype = 2; break;
-					case PLAYER_HEAD: case PLAYER_WALL_HEAD: skulltype = 3; break;
-					case CREEPER_HEAD: case CREEPER_WALL_HEAD: skulltype = 4; break;
-					case DRAGON_HEAD: case DRAGON_WALL_HEAD: skulltype = 5; break;
-					default: break;
-				}
-				nbt.setTag("SkullType", new NBTByte(skulltype));
-				if (blockdata instanceof Rotatable) {
-					Rotatable rotatable = (Rotatable) blockdata;
-					byte rotation = 0;
-					switch (rotatable.getRotation()) {
-						case SOUTH: rotation = 0; break;
-						case SOUTH_SOUTH_WEST: rotation = 1; break;
-						case SOUTH_WEST: rotation = 2; break;
-						case WEST_SOUTH_WEST: rotation = 3; break;
-						case WEST: rotation = 4; break;
-						case WEST_NORTH_WEST: rotation = 5; break;
-						case NORTH_WEST: rotation = 6; break;
-						case NORTH_NORTH_WEST: rotation = 7; break;
-						case NORTH: rotation = 8; break;
-						case NORTH_NORTH_EAST: rotation = 9; break;
-						case NORTH_EAST: rotation = 10; break;
-						case EAST_NORTH_EAST: rotation = 11; break;
-						case EAST: rotation = 12; break;
-						case EAST_SOUTH_EAST: rotation = 13; break;
-						case SOUTH_EAST: rotation = 14; break;
-						case SOUTH_SOUTH_EAST: rotation = 15; break;
-						default: break;
+			skulls, new ObjIntConsumer<TileEntity>() {
+				final Int2ObjectMap<Consumer<NBTCompound>> skullRemappers = new Int2ObjectOpenHashMap<>();
+				{
+					for (Material skull : skulls) {
+						byte skulltype = 0;
+						switch (skull) {
+							case SKELETON_SKULL: case SKELETON_WALL_SKULL: skulltype = 0; break;
+							case WITHER_SKELETON_SKULL: case WITHER_SKELETON_WALL_SKULL: skulltype = 1; break;
+							case ZOMBIE_HEAD: case ZOMBIE_WALL_HEAD: skulltype = 2; break;
+							case PLAYER_HEAD: case PLAYER_WALL_HEAD: skulltype = 3; break;
+							case CREEPER_HEAD: case CREEPER_WALL_HEAD: skulltype = 4; break;
+							case DRAGON_HEAD: case DRAGON_WALL_HEAD: skulltype = 5; break;
+							default: break;
+						}
+						for (BlockData skullstate : MaterialAPI.getBlockDataList(skull)) {
+							byte rotation = 0;
+							if (skullstate instanceof Rotatable) {
+								Rotatable rotatable = (Rotatable) skullstate;
+								switch (rotatable.getRotation()) {
+									case SOUTH: rotation = 0; break;
+									case SOUTH_SOUTH_WEST: rotation = 1; break;
+									case SOUTH_WEST: rotation = 2; break;
+									case WEST_SOUTH_WEST: rotation = 3; break;
+									case WEST: rotation = 4; break;
+									case WEST_NORTH_WEST: rotation = 5; break;
+									case NORTH_WEST: rotation = 6; break;
+									case NORTH_NORTH_WEST: rotation = 7; break;
+									case NORTH: rotation = 8; break;
+									case NORTH_NORTH_EAST: rotation = 9; break;
+									case NORTH_EAST: rotation = 10; break;
+									case EAST_NORTH_EAST: rotation = 11; break;
+									case EAST: rotation = 12; break;
+									case EAST_SOUTH_EAST: rotation = 13; break;
+									case SOUTH_EAST: rotation = 14; break;
+									case SOUTH_SOUTH_EAST: rotation = 15; break;
+									default: break;
+								}
+							}
+							byte skulltypeF = skulltype;
+							byte rotationF = rotation;
+							skullRemappers.put(MaterialAPI.getBlockDataNetworkId(skullstate), nbt -> {
+								nbt.setTag("SkullType", new NBTByte(skulltypeF));
+								nbt.setTag("Rot", new NBTByte(rotationF));
+							});
+						}
 					}
-					nbt.setTag("Rot", new NBTByte(rotation));
+				}
+				public void accept(TileEntity tile, int blockdata) {
+					Consumer<NBTCompound> skullRemapper = skullRemappers.get(blockdata);
+					if (skullRemapper != null) {
+						skullRemapper.accept(tile.getNBT());
+					}
 				}
 			},
 			ProtocolVersionsHelper.BEFORE_1_13
 		);
 		registerLegacy(
-			skulls, (blockdata, tile) -> {
+			skulls, (tile, blockdata) -> {
 				NBTCompound nbt = tile.getNBT();
 				NBTNumber skulltype = nbt.getNumberTag("SkullType");
 				if ((skulltype != null) && (skulltype.getAsInt() == 5)) {
@@ -196,7 +212,7 @@ public class TileNBTRemapper {
 			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_8)
 		);
 		registerLegacy(
-			skulls,	(blockdata, tile) -> PlayerHeadToLegacyOwnerComplexRemapper.remap(tile.getNBT(), "Owner", "ExtraType"),
+			skulls,	(tile, blockdata) -> PlayerHeadToLegacyOwnerComplexRemapper.remap(tile.getNBT(), "Owner", "ExtraType"),
 			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5)
 		);
 		registerLegacyState(
@@ -255,7 +271,7 @@ public class TileNBTRemapper {
 
 
 	protected final Map<TileEntityType, List<Consumer<TileEntity>>> tileToTile = new EnumMap<>(TileEntityType.class);
-	protected final Int2ObjectMap<List<BiConsumer<BlockData, TileEntity>>> tileWithBlockdataToTile = new Int2ObjectOpenHashMap<>();
+	protected final Int2ObjectMap<List<ObjIntConsumer<TileEntity>>> tileWithBlockdataToTile = new Int2ObjectOpenHashMap<>();
 	protected final Int2ObjectMap<BiFunction<Position, BlockData, TileEntity>> blockdataToTile = new Int2ObjectOpenHashMap<>();
 
 	public TileEntity remap(TileEntity tileentity, int blockdata) {
@@ -266,10 +282,10 @@ public class TileNBTRemapper {
 			}
 		}
 		if (blockdata != -1) {
-			List<BiConsumer<BlockData, TileEntity>> legacyTransformers = tileWithBlockdataToTile.get(blockdata);
+			List<ObjIntConsumer<TileEntity>> legacyTransformers = tileWithBlockdataToTile.get(blockdata);
 			if (legacyTransformers != null) {
-				for (BiConsumer<BlockData, TileEntity> legacyTransformer : legacyTransformers) {
-					legacyTransformer.accept(MaterialAPI.getBlockDataByNetworkId(blockdata), tileentity);
+				for (ObjIntConsumer<TileEntity> legacyTransformer : legacyTransformers) {
+					legacyTransformer.accept(tileentity, blockdata);
 				}
 			}
 		}
