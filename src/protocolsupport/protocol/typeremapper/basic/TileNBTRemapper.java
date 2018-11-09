@@ -13,6 +13,8 @@ import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Rotatable;
 
+import gnu.trove.set.TIntSet;
+import gnu.trove.set.hash.TIntHashSet;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.MaterialAPI;
@@ -52,6 +54,7 @@ public class TileNBTRemapper {
 			tileRemappers.put(version, new TileNBTRemapper());
 		}
 	}
+
 	public static TileNBTRemapper getRemapper(ProtocolVersion version) {
 		return tileRemappers.get(version);
 	}
@@ -60,18 +63,28 @@ public class TileNBTRemapper {
 		for (ProtocolVersion version : versions) {
 			tileRemappers.get(version).tileToTile
 			.computeIfAbsent(type, k -> new ArrayList<>())
+			.add((tile, blockdata) -> transformer.accept(tile));
+		}
+	}
+
+	protected static void register(TileEntityType type, TileWithBlockDataRemapper transformer, ProtocolVersion... versions) {
+		for (ProtocolVersion version : versions) {
+			TileNBTRemapper remapper = tileRemappers.get(version);
+			remapper.tileNeedsBlockData.addAll(transformer.remappers.keySet());
+			remapper.tileToTile
+			.computeIfAbsent(type, k -> new ArrayList<>())
 			.add(transformer);
 		}
 	}
 
-	protected static void registerLegacy(List<Material> types, ObjIntConsumer<TileEntity> transformer, ProtocolVersion... versions) {
-		for (ProtocolVersion version : versions) {
-			Int2ObjectMap<List<ObjIntConsumer<TileEntity>>> map = tileRemappers.get(version).tileWithBlockdataToTile;
-			types.forEach(type ->
-				MaterialAPI.getBlockDataList(type).stream()
-				.mapToInt(MaterialAPI::getBlockDataNetworkId)
-				.forEach(i -> map.computeIfAbsent(i, k -> new ArrayList<>()).add(transformer))
-			);
+	protected static class TileWithBlockDataRemapper implements ObjIntConsumer<TileEntity> {
+		protected final Int2ObjectMap<Consumer<NBTCompound>> remappers = new Int2ObjectOpenHashMap<>();
+		@Override
+		public void accept(TileEntity tile, int blockdata) {
+			Consumer<NBTCompound> remapper = remappers.get(blockdata);
+			if (remapper != null) {
+				remapper.accept(tile.getNBT());
+			}
 		}
 	}
 
@@ -129,25 +142,17 @@ public class TileNBTRemapper {
 			},
 			ProtocolVersionsHelper.BEFORE_1_9
 		);
-		List<Material> skulls = Arrays.asList(
-				Material.SKELETON_SKULL,
-				Material.WITHER_SKELETON_SKULL,
-				Material.CREEPER_HEAD,
-				Material.DRAGON_HEAD,
-				Material.PLAYER_HEAD,
-				Material.ZOMBIE_HEAD,
-				Material.SKELETON_WALL_SKULL,
-				Material.WITHER_SKELETON_WALL_SKULL,
-				Material.CREEPER_WALL_HEAD,
-				Material.DRAGON_WALL_HEAD,
-				Material.PLAYER_WALL_HEAD,
-				Material.ZOMBIE_WALL_HEAD
-		);
-		registerLegacy(
-			skulls, new ObjIntConsumer<TileEntity>() {
-				final Int2ObjectMap<Consumer<NBTCompound>> skullRemappers = new Int2ObjectOpenHashMap<>();
+		register(
+			TileEntityType.SKULL, new TileWithBlockDataRemapper() {
 				{
-					for (Material skull : skulls) {
+					for (Material skull : Arrays.asList(
+						Material.SKELETON_SKULL, Material.SKELETON_WALL_SKULL,
+						Material.WITHER_SKELETON_SKULL, Material.WITHER_SKELETON_WALL_SKULL,
+						Material.CREEPER_HEAD, Material.CREEPER_WALL_HEAD,
+						Material.DRAGON_HEAD, Material.DRAGON_WALL_HEAD,
+						Material.PLAYER_HEAD, Material.PLAYER_WALL_HEAD,
+						Material.ZOMBIE_HEAD, Material.ZOMBIE_WALL_HEAD
+					)) {
 						byte skulltype = 0;
 						switch (skull) {
 							case SKELETON_SKULL: case SKELETON_WALL_SKULL: skulltype = 0; break;
@@ -184,24 +189,19 @@ public class TileNBTRemapper {
 							}
 							byte skulltypeF = skulltype;
 							byte rotationF = rotation;
-							skullRemappers.put(MaterialAPI.getBlockDataNetworkId(skullstate), nbt -> {
+							remappers.put(MaterialAPI.getBlockDataNetworkId(skullstate), nbt -> {
 								nbt.setTag("SkullType", new NBTByte(skulltypeF));
 								nbt.setTag("Rot", new NBTByte(rotationF));
 							});
 						}
 					}
 				}
-				public void accept(TileEntity tile, int blockdata) {
-					Consumer<NBTCompound> skullRemapper = skullRemappers.get(blockdata);
-					if (skullRemapper != null) {
-						skullRemapper.accept(tile.getNBT());
-					}
-				}
 			},
 			ProtocolVersionsHelper.BEFORE_1_13
 		);
-		registerLegacy(
-			skulls, (tile, blockdata) -> {
+		register(
+			TileEntityType.SKULL,
+			tile -> {
 				NBTCompound nbt = tile.getNBT();
 				NBTNumber skulltype = nbt.getNumberTag("SkullType");
 				if ((skulltype != null) && (skulltype.getAsInt() == 5)) {
@@ -211,10 +211,12 @@ public class TileNBTRemapper {
 			},
 			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_8)
 		);
-		registerLegacy(
-			skulls,	(tile, blockdata) -> PlayerHeadToLegacyOwnerComplexRemapper.remap(tile.getNBT(), "Owner", "ExtraType"),
+		register(
+			TileEntityType.SKULL,
+			tile -> PlayerHeadToLegacyOwnerComplexRemapper.remap(tile.getNBT(), "Owner", "ExtraType"),
 			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5)
 		);
+
 		registerLegacyState(
 			Arrays.asList(
 				Material.BLACK_BED,
@@ -270,23 +272,16 @@ public class TileNBTRemapper {
 	}
 
 
-	protected final Map<TileEntityType, List<Consumer<TileEntity>>> tileToTile = new EnumMap<>(TileEntityType.class);
-	protected final Int2ObjectMap<List<ObjIntConsumer<TileEntity>>> tileWithBlockdataToTile = new Int2ObjectOpenHashMap<>();
+	protected final Map<TileEntityType, List<ObjIntConsumer<TileEntity>>> tileToTile = new EnumMap<>(TileEntityType.class);
+	protected final TIntSet tileNeedsBlockData = new TIntHashSet();
+
 	protected final Int2ObjectMap<BiFunction<Position, BlockData, TileEntity>> blockdataToTile = new Int2ObjectOpenHashMap<>();
 
 	public TileEntity remap(TileEntity tileentity, int blockdata) {
-		List<Consumer<TileEntity>> transformers = tileToTile.get(tileentity.getType());
+		List<ObjIntConsumer<TileEntity>> transformers = tileToTile.get(tileentity.getType());
 		if (transformers != null) {
-			for (Consumer<TileEntity> transformer : transformers) {
-				transformer.accept(tileentity);
-			}
-		}
-		if (blockdata != -1) {
-			List<ObjIntConsumer<TileEntity>> legacyTransformers = tileWithBlockdataToTile.get(blockdata);
-			if (legacyTransformers != null) {
-				for (ObjIntConsumer<TileEntity> legacyTransformer : legacyTransformers) {
-					legacyTransformer.accept(tileentity, blockdata);
-				}
+			for (ObjIntConsumer<TileEntity> transformer : transformers) {
+				transformer.accept(tileentity, blockdata);
 			}
 		}
 		return tileentity;
@@ -300,12 +295,12 @@ public class TileNBTRemapper {
 		return null;
 	}
 
-	public boolean tileThatNeedsBlockData(int blockstate) {
-		return tileWithBlockdataToTile.containsKey(blockstate);
+	public boolean tileThatNeedsBlockData(int blockdata) {
+		return tileNeedsBlockData.contains(blockdata);
 	}
 
-	public boolean usedToBeTile(int blockstate) {
-		return blockdataToTile.containsKey(blockstate);
+	public boolean usedToBeTile(int blockdata) {
+		return blockdataToTile.containsKey(blockdata);
 	}
 
 }
