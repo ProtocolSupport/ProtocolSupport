@@ -33,6 +33,8 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 		serializer.writeByte(PreFlatteningBlockIdData.getDataFromCombinedId(lId));
 		if (tileremapper.tileThatNeedsBlockData(id)) {
 			cache.getTileCache().setBlockData(position, id);
+		} else {
+			cache.getTileCache().removeBlockData(position);
 		}
 		if (tileremapper.usedToBeTile(id)) {
 			packets.add(BlockTileUpdate.create(connection, tileremapper.getLegacyTileFromBlock(position, id)));

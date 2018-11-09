@@ -37,6 +37,8 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 			serializer.writeShort(PreFlatteningBlockIdData.getCombinedId(blockRemappingTable.getRemap(record.id)));
 			if (tileremapper.tileThatNeedsBlockData(record.id)) {
 				tilestates.put(record.localCoord, record.id);
+			} else {
+				tilestates.remove(record.localCoord);
 			}
 			if (tileremapper.usedToBeTile(record.id)) {
 				packets.add(BlockTileUpdate.create(
