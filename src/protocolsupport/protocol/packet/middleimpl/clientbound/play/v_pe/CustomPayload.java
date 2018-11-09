@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
@@ -21,8 +22,6 @@ public class CustomPayload extends MiddleCustomPayload {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
-
 		if (tag.equals(LegacyCustomPayloadChannelName.MODERN_TRADER_LIST)) {
 			return RecyclableSingletonList.create(cache.getPEInventoryCache().getFakeVillager().updateTrade(
 					cache, connection.getVersion(),
@@ -30,10 +29,14 @@ public class CustomPayload extends MiddleCustomPayload {
 			);
 		}
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+		create(connection.getVersion(), tag, data, packets);
+		return packets;
+	}
+
+	public static void create(ProtocolVersion version, String tag, ByteBuf data, RecyclableCollection<ClientBoundPacketData> packets) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CUSTOM_EVENT);
 		StringSerializer.writeString(serializer, version, tag);
 		serializer.writeBytes(data);
 		packets.add(serializer);
-		return packets;
 	}
 }

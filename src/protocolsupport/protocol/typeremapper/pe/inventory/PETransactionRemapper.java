@@ -64,7 +64,7 @@ public class PETransactionRemapper {
 		
 	}
 	
-	private static boolean godlyDebug = true;
+	private static boolean godlyDebug = false;
 	//TODO: Remove debug (can delete all lines starting with "bug(") if all is well.
 	public static void bug(String bugger) {
 		if(godlyDebug) { System.out.println(bugger); }

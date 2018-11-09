@@ -3350,6 +3350,56 @@
     "pedata": 5
   },
   {
+	"itemkey": "tube_coral",
+	"peid": 492,
+	"pedata": 0
+  },
+  {
+	"itemkey": "tube_coral_block",
+	"peid": 387,
+	"pedata": 0
+  },
+  {
+    "itemkey": "brain_coral",
+    "peid": 492,
+    "pedata": 1
+  },
+  {
+    "itemkey": "brain_coral_block",
+    "peid": 387,
+    "pedata": 1
+  },
+  {
+    "itemkey": "bubble_coral",
+    "peid": 492,
+    "pedata": 2
+  },
+  {
+    "itemkey": "bubble_coral_block",
+    "peid": 387,
+    "pedata": 2
+  },
+  {
+    "itemkey": "fire_coral",
+    "peid": 492,
+    "pedata": 3
+  },
+  {
+    "itemkey": "fire_coral_block",
+    "peid": 387,
+    "pedata": 3
+  },
+  {
+    "itemkey": "horn_coral",
+    "peid": 492,
+    "pedata": 4
+  },
+  {
+    "itemkey": "horn_coral_block",
+    "peid": 387,
+    "pedata": 4
+  },
+  {
     "itemkey": "totem_of_undying",
     "peid": 450,
     "pedata": 0

@@ -7,6 +7,7 @@ import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleNameItem;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -164,7 +165,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			transaction.slot = VarNumberSerializer.readVarInt(from);
 			transaction.oldItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			transaction.newItem = ItemStackSerializer.readItemStack(from, version, locale, true);
-			System.out.println("Inv transaction read:"
+			PETransactionRemapper.bug("Inv transaction read:"
 					+ " sId: " + transaction.sourceId 
 					+ " wId: " + transaction.inventoryId 
 					+ " action: " + transaction.action 
@@ -225,9 +226,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			if (display != null) {
 				NBTString name = display.getTagOfType("Name", NBTType.STRING);
 				if (name != null) {
-					ByteBuf payload = Unpooled.buffer();
-					StringSerializer.writeString(payload, ProtocolVersionsHelper.LATEST_PC, name.getValue());
-					packets.add(MiddleCustomPayload.create("minecraft:ItemName", MiscSerializer.readAllBytes(payload)));
+					packets.add(MiddleNameItem.create(name.getValue()));
 				}
 			}
 		}

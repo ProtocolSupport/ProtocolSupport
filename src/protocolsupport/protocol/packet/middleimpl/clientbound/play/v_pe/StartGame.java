@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import io.netty.buffer.Unpooled;
 import org.bukkit.Bukkit;
 
 import protocolsupport.api.ProtocolVersion;
@@ -58,7 +59,7 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeFloatLE(0); //player pitch
 		startgame.writeFloatLE(0); //player yaw
 		VarNumberSerializer.writeSVarInt(startgame, 0); //seed
-		VarNumberSerializer.writeSVarInt(startgame, ChangeDimension.getPeDimensionId(dimension)); //world dimension
+		VarNumberSerializer.writeSVarInt(startgame, ChangeDimension.getPeDimensionId(dimension)); //world dimension, initially wrong so we can fix it later
 		VarNumberSerializer.writeSVarInt(startgame, 1); //world type (1 - infinite)
 		VarNumberSerializer.writeSVarInt(startgame, GameMode.SURVIVAL.getId()); //world gamemode
 		VarNumberSerializer.writeSVarInt(startgame, difficulty.getId()); //world difficulty
@@ -123,11 +124,7 @@ public class StartGame extends MiddleStartGame {
 		//Set PE gamemode.
 		AttributesCache attrscache = cache.getAttributesCache();
 		attrscache.setPEGameMode(gamemode);
-		//fake chunks with position, because pe doesn't like spawning in no chunk world
-		ChangeDimension.addFakeChunksAndPos(version, player, attrscache.getPEFakeSetPositionY(), packets);
-		//add two dimension switches to make sure that player ends up in right dimension even if bungee dimension switch on server switch broke stuff
-		ChangeDimension.create(version, dimension != Environment.OVERWORLD ? Environment.OVERWORLD: Environment.THE_END, player, attrscache.getPEFakeSetPositionY(), packets);
-		ChangeDimension.create(version, dimension, player, attrscache.getPEFakeSetPositionY(), packets);
+		CustomPayload.create(version, "ps:clientlock", Unpooled.EMPTY_BUFFER, packets); // lock client bound packet queue until LocalPlayerInitialised or bungee confirm
 		return packets;
 	}
 

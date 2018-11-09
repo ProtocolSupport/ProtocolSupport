@@ -14,6 +14,7 @@ import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloatLe;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarLong;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityItemDataCache;
@@ -46,6 +47,18 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				NetworkEntityItemDataCache itemDataCache = (NetworkEntityItemDataCache) entity.getDataCache();
 				packets.addAll(itemDataCache.updateItem(version, entity.getId(), itemWatcher.getValue()));
 			});
+		}
+		//TODO: this can probably go in the remapper, but i couldnt get it to work there....
+		if (!entity.getType().isOfType(NetworkEntityType.PLAYER)) {
+			//text doesnt display when invisible, so lets restore the java behavior and make it invisible another way
+			boolean hasName = entity.getDataCache().getPeBaseFlag(PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG);
+			boolean isInvisible = entity.getDataCache().getPeBaseFlag(PeMetaBase.FLAG_INVISIBLE);
+			if (isInvisible && hasName) {
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_INVISIBLE, false);
+				entityRemapper.getRemappedMetadata().put(PeMetaBase.SCALE, new DataWatcherObjectFloatLe(0));
+				entityRemapper.getRemappedMetadata().put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(0));
+				entityRemapper.getRemappedMetadata().put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(0));
+			}
 		}
 		if (entity.getType().isOfType(NetworkEntityType.LIVING)) {
 			DataWatcherObjectIndex.EntityLiving.HEALTH.getValue(entityRemapper.getOriginalMetadata()).ifPresent(healthWatcher -> {
