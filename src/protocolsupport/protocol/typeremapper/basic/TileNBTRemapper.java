@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.ObjIntConsumer;
 
 import org.bukkit.Material;
@@ -88,15 +88,30 @@ public class TileNBTRemapper {
 		}
 	}
 
-	protected static void registerLegacyState(List<Material> types, BiFunction<Position, BlockData, TileEntity> transformer, ProtocolVersion... versions) {
+	protected static void registerLegacyState(Material material, Function<Position, TileEntity> transformer, ProtocolVersion... versions) {
+		MaterialAPI.getBlockDataList(material).forEach(blockdata -> registerLegacyState(blockdata, transformer, versions));
+	}
+
+	protected static void registerLegacyState(BlockData blockdata, Function<Position, TileEntity> transformer, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
-			Int2ObjectMap<BiFunction<Position, BlockData, TileEntity>> map = tileRemappers.get(version).blockdataToTile;
-			types.forEach(type ->
-				MaterialAPI.getBlockDataList(type).stream()
-				.mapToInt(MaterialAPI::getBlockDataNetworkId)
-				.forEach(i -> map.put(i, transformer))
-			);
+			tileRemappers.get(version).blockdataToTile.put(MaterialAPI.getBlockDataNetworkId(blockdata), transformer);
 		}
+	}
+
+	protected static class BedTileSupplier implements Function<Position, TileEntity> {
+
+		protected final int color;
+		public BedTileSupplier(int color) {
+			this.color = color;
+		}
+
+		@Override
+		public TileEntity apply(Position position) {
+			NBTCompound tag = new NBTCompound();
+			tag.setTag("color", new NBTInt(color));
+			return new TileEntity(TileEntityType.BED, position, tag);
+		}
+
 	}
 
 	static {
@@ -217,50 +232,22 @@ public class TileNBTRemapper {
 			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5)
 		);
 
-		registerLegacyState(
-			Arrays.asList(
-				Material.BLACK_BED,
-				Material.RED_BED,
-				Material.GREEN_BED,
-				Material.BROWN_BED,
-				Material.BLUE_BED,
-				Material.PURPLE_BED,
-				Material.CYAN_BED,
-				Material.LIGHT_GRAY_BED,
-				Material.GRAY_BED,
-				Material.PINK_BED,
-				Material.LIME_BED,
-				Material.YELLOW_BED,
-				Material.LIGHT_BLUE_BED,
-				Material.MAGENTA_BED,
-				Material.ORANGE_BED,
-				Material.WHITE_BED
-			), (position, blockdata) -> {
-				int color = -1;
-				switch (blockdata.getMaterial()) {
-					case WHITE_BED: color = 0; break;
-					case ORANGE_BED: color = 1; break;
-					case MAGENTA_BED: color = 2; break;
-					case LIGHT_BLUE_BED: color = 3; break;
-					case YELLOW_BED: color = 4; break;
-					case LIME_BED: color = 5; break;
-					case PINK_BED: color = 6; break;
-					case GRAY_BED: color = 7; break;
-					case LIGHT_GRAY_BED: color = 8; break;
-					case CYAN_BED: color = 9; break;
-					case PURPLE_BED: color = 10; break;
-					case BLUE_BED: color = 11; break;
-					case BROWN_BED: color = 12; break;
-					case GREEN_BED: color = 13; break;
-					case RED_BED: color = 14; break;
-					case BLACK_BED: color = 15; break;
-					default: break;
-				}
-				NBTCompound tag = new NBTCompound();
-				tag.setTag("color", new NBTInt(color));
-				return new TileEntity(TileEntityType.BED, position, tag);
-			}, ProtocolVersionsHelper.ALL_1_12
-		);
+		registerLegacyState(Material.WHITE_BED, new BedTileSupplier(0), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.ORANGE_BED, new BedTileSupplier(1), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.MAGENTA_BED, new BedTileSupplier(2), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.LIGHT_BLUE_BED, new BedTileSupplier(3), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.YELLOW_BED, new BedTileSupplier(4), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.LIME_BED, new BedTileSupplier(5), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.PINK_BED, new BedTileSupplier(6), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.GRAY_BED, new BedTileSupplier(7), ProtocolVersionsHelper.ALL_1_9);
+		registerLegacyState(Material.LIGHT_GRAY_BED, new BedTileSupplier(8), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.CYAN_BED, new BedTileSupplier(9), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.PURPLE_BED, new BedTileSupplier(10), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.BLUE_BED, new BedTileSupplier(11), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.BROWN_BED, new BedTileSupplier(12), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.GREEN_BED, new BedTileSupplier(13), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.RED_BED, new BedTileSupplier(14), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.BLACK_BED, new BedTileSupplier(15), ProtocolVersionsHelper.ALL_1_12);
 	}
 
 	public static String[] getSignLines(NBTCompound tag) {
@@ -275,7 +262,7 @@ public class TileNBTRemapper {
 	protected final Map<TileEntityType, List<ObjIntConsumer<TileEntity>>> tileToTile = new EnumMap<>(TileEntityType.class);
 	protected final IntSet tileNeedsBlockData = new IntOpenHashSet();
 
-	protected final Int2ObjectMap<BiFunction<Position, BlockData, TileEntity>> blockdataToTile = new Int2ObjectOpenHashMap<>();
+	protected final Int2ObjectMap<Function<Position, TileEntity>> blockdataToTile = new Int2ObjectOpenHashMap<>();
 
 	public TileEntity remap(TileEntity tileentity, int blockdata) {
 		List<ObjIntConsumer<TileEntity>> transformers = tileToTile.get(tileentity.getType());
@@ -287,10 +274,10 @@ public class TileNBTRemapper {
 		return tileentity;
 	}
 
-	public TileEntity getLegacyTileFromBlock(Position position, int blockdataId) {
-		BiFunction<Position, BlockData, TileEntity> constructor = blockdataToTile.get(blockdataId);
+	public TileEntity getLegacyTileFromBlock(Position position, int blockdata) {
+		Function<Position, TileEntity> constructor = blockdataToTile.get(blockdata);
 		if (constructor != null) {
-			return constructor.apply(position, MaterialAPI.getBlockDataByNetworkId(blockdataId));
+			return constructor.apply(position);
 		}
 		return null;
 	}
