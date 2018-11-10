@@ -1,17 +1,16 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBA;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerByte;
 import protocolsupport.protocol.typeremapper.chunk.EmptyChunk;
-import protocolsupport.protocol.utils.types.TileEntityType;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.TileEntity;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -22,15 +21,13 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	protected final ChunkTransformerBA transformer = new ChunkTransformerByte(LegacyBlockData.REGISTRY.getTable(connection.getVersion()));
+	protected final ChunkTransformerBA transformer = new ChunkTransformerByte(LegacyBlockData.REGISTRY.getTable(connection.getVersion()), TileNBTRemapper.getRemapper(connection.getVersion()), cache.getTileCache());
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
-		chunkdata.writeInt(chunkX);
-		chunkdata.writeInt(chunkZ);
+		PositionSerializer.writeChunkCoord(chunkdata, chunk);
 		chunkdata.writeBoolean(full);
 		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 		if ((bitmask == 0) && full) {
@@ -40,23 +37,17 @@ public class Chunk extends MiddleChunk {
 			chunkdata.writeInt(compressed.length);
 			chunkdata.writeBytes(compressed);
 		} else {
-			transformer.loadData(data, bitmask, hasSkyLight, full);
+			transformer.loadData(chunk, data, bitmask, hasSkyLight, full, tiles);
 			byte[] compressed = Compressor.compressStatic(transformer.toLegacyData());
 			chunkdata.writeShort(bitmask);
 			chunkdata.writeShort(0);
 			chunkdata.writeInt(compressed.length);
 			chunkdata.writeBytes(compressed);
+			for (TileEntity tile : transformer.remapAndGetTiles()) {
+				packets.add(BlockTileUpdate.create(connection, tile));
+			}
 		}
 		packets.add(chunkdata);
-		for (NBTCompound tile : tiles) {
-			packets.add(BlockTileUpdate.createPacketData(
-				version,
-				cache.getAttributesCache().getLocale(),
-				TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)),
-				TileNBTRemapper.getPosition(tile),
-				tile
-			));
-		}
 		return packets;
 	}
 
