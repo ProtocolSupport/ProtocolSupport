@@ -38,11 +38,11 @@ public class Chunk extends MiddleChunk {
 			transformer.loadData(chunk, data, bitmask, hasSkyLight, full, tiles);
 			chunkdata.writeShort(bitmask);
 			ArraySerializer.writeVarIntByteArray(chunkdata, transformer.toLegacyData());
-			for (TileEntity tile : transformer.remapAndGetTiles()) {
-				packets.add(BlockTileUpdate.create(connection, tile));
-			}
 		}
 		packets.add(chunkdata);
+		for (TileEntity tile : transformer.remapAndGetTiles()) {
+			packets.add(BlockTileUpdate.create(connection, tile));
+		}
 		return packets;
 	}
 

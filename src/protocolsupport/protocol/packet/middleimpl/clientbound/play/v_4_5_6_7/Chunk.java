@@ -43,11 +43,11 @@ public class Chunk extends MiddleChunk {
 			chunkdata.writeShort(0);
 			chunkdata.writeInt(compressed.length);
 			chunkdata.writeBytes(compressed);
-			for (TileEntity tile : transformer.remapAndGetTiles()) {
-				packets.add(BlockTileUpdate.create(connection, tile));
-			}
 		}
 		packets.add(chunkdata);
+		for (TileEntity tile : transformer.remapAndGetTiles()) {
+			packets.add(BlockTileUpdate.create(connection, tile));
+		}
 		return packets;
 	}
 
