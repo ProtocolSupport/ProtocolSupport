@@ -1,7 +1,6 @@
 package protocolsupport.protocol.typeremapper.basic;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -158,57 +157,95 @@ public class TileNBTRemapper {
 			ProtocolVersionsHelper.BEFORE_1_9
 		);
 		register(
+			TileEntityType.BANNER, new TileWithBlockDataRemapper() {
+				{
+					register(Material.WHITE_BANNER, 15);
+					register(Material.ORANGE_BANNER, 14);
+					register(Material.MAGENTA_BANNER, 13);
+					register(Material.LIGHT_BLUE_BANNER, 12);
+					register(Material.YELLOW_BANNER, 11);
+					register(Material.LIME_BANNER, 10);
+					register(Material.PINK_BANNER, 9);
+					register(Material.GRAY_BANNER, 8);
+					register(Material.LIGHT_GRAY_BANNER, 7);
+					register(Material.CYAN_BANNER, 6);
+					register(Material.PURPLE_BANNER, 5);
+					register(Material.BLUE_BANNER, 4);
+					register(Material.BROWN_BANNER, 3);
+					register(Material.GREEN_BANNER, 2);
+					register(Material.RED_BANNER, 1);
+					register(Material.BLACK_BANNER, 0);
+					register(Material.WHITE_WALL_BANNER, 15);
+					register(Material.ORANGE_WALL_BANNER, 14);
+					register(Material.MAGENTA_WALL_BANNER, 13);
+					register(Material.LIGHT_BLUE_WALL_BANNER, 12);
+					register(Material.YELLOW_WALL_BANNER, 11);
+					register(Material.LIME_WALL_BANNER, 10);
+					register(Material.PINK_WALL_BANNER, 9);
+					register(Material.GRAY_WALL_BANNER, 8);
+					register(Material.LIGHT_GRAY_WALL_BANNER, 7);
+					register(Material.CYAN_WALL_BANNER, 6);
+					register(Material.PURPLE_WALL_BANNER, 5);
+					register(Material.BLUE_WALL_BANNER, 4);
+					register(Material.BROWN_WALL_BANNER, 3);
+					register(Material.GREEN_WALL_BANNER, 2);
+					register(Material.RED_WALL_BANNER, 1);
+					register(Material.BLACK_WALL_BANNER, 0);
+				}
+				void register(Material banner, int color) {
+					for (BlockData blockdata : MaterialAPI.getBlockDataList(banner)) {
+						remappers.put(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> nbt.setTag("Base", new NBTInt(color)));
+					}
+				}
+			},
+			ProtocolVersionsHelper.BEFORE_1_13
+		);
+		register(
 			TileEntityType.SKULL, new TileWithBlockDataRemapper() {
 				{
-					for (Material skull : Arrays.asList(
-						Material.SKELETON_SKULL, Material.SKELETON_WALL_SKULL,
-						Material.WITHER_SKELETON_SKULL, Material.WITHER_SKELETON_WALL_SKULL,
-						Material.CREEPER_HEAD, Material.CREEPER_WALL_HEAD,
-						Material.DRAGON_HEAD, Material.DRAGON_WALL_HEAD,
-						Material.PLAYER_HEAD, Material.PLAYER_WALL_HEAD,
-						Material.ZOMBIE_HEAD, Material.ZOMBIE_WALL_HEAD
-					)) {
-						byte skulltype = 0;
-						switch (skull) {
-							case SKELETON_SKULL: case SKELETON_WALL_SKULL: skulltype = 0; break;
-							case WITHER_SKELETON_SKULL: case WITHER_SKELETON_WALL_SKULL: skulltype = 1; break;
-							case ZOMBIE_HEAD: case ZOMBIE_WALL_HEAD: skulltype = 2; break;
-							case PLAYER_HEAD: case PLAYER_WALL_HEAD: skulltype = 3; break;
-							case CREEPER_HEAD: case CREEPER_WALL_HEAD: skulltype = 4; break;
-							case DRAGON_HEAD: case DRAGON_WALL_HEAD: skulltype = 5; break;
-							default: break;
-						}
-						for (BlockData skullstate : MaterialAPI.getBlockDataList(skull)) {
-							byte rotation = 0;
-							if (skullstate instanceof Rotatable) {
-								Rotatable rotatable = (Rotatable) skullstate;
-								switch (rotatable.getRotation()) {
-									case SOUTH: rotation = 0; break;
-									case SOUTH_SOUTH_WEST: rotation = 1; break;
-									case SOUTH_WEST: rotation = 2; break;
-									case WEST_SOUTH_WEST: rotation = 3; break;
-									case WEST: rotation = 4; break;
-									case WEST_NORTH_WEST: rotation = 5; break;
-									case NORTH_WEST: rotation = 6; break;
-									case NORTH_NORTH_WEST: rotation = 7; break;
-									case NORTH: rotation = 8; break;
-									case NORTH_NORTH_EAST: rotation = 9; break;
-									case NORTH_EAST: rotation = 10; break;
-									case EAST_NORTH_EAST: rotation = 11; break;
-									case EAST: rotation = 12; break;
-									case EAST_SOUTH_EAST: rotation = 13; break;
-									case SOUTH_EAST: rotation = 14; break;
-									case SOUTH_SOUTH_EAST: rotation = 15; break;
-									default: break;
-								}
+					register(Material.SKELETON_SKULL, 0);
+					register(Material.WITHER_SKELETON_SKULL, 1);
+					register(Material.ZOMBIE_HEAD, 2);
+					register(Material.PLAYER_HEAD, 3);
+					register(Material.CREEPER_HEAD, 4);
+					register(Material.DRAGON_HEAD, 5);
+					register(Material.SKELETON_WALL_SKULL, 0);
+					register(Material.WITHER_SKELETON_WALL_SKULL, 1);
+					register(Material.ZOMBIE_WALL_HEAD, 2);
+					register(Material.PLAYER_WALL_HEAD, 3);
+					register(Material.CREEPER_WALL_HEAD, 4);
+					register(Material.DRAGON_WALL_HEAD, 5);
+				}
+				void register(Material skull, int skulltype) {
+					for (BlockData blockdata : MaterialAPI.getBlockDataList(skull)) {
+						byte rotation = 0;
+						if (blockdata instanceof Rotatable) {
+							Rotatable rotatable = (Rotatable) blockdata;
+							switch (rotatable.getRotation()) {
+								case SOUTH: rotation = 0; break;
+								case SOUTH_SOUTH_WEST: rotation = 1; break;
+								case SOUTH_WEST: rotation = 2; break;
+								case WEST_SOUTH_WEST: rotation = 3; break;
+								case WEST: rotation = 4; break;
+								case WEST_NORTH_WEST: rotation = 5; break;
+								case NORTH_WEST: rotation = 6; break;
+								case NORTH_NORTH_WEST: rotation = 7; break;
+								case NORTH: rotation = 8; break;
+								case NORTH_NORTH_EAST: rotation = 9; break;
+								case NORTH_EAST: rotation = 10; break;
+								case EAST_NORTH_EAST: rotation = 11; break;
+								case EAST: rotation = 12; break;
+								case EAST_SOUTH_EAST: rotation = 13; break;
+								case SOUTH_EAST: rotation = 14; break;
+								case SOUTH_SOUTH_EAST: rotation = 15; break;
+								default: break;
 							}
-							byte skulltypeF = skulltype;
-							byte rotationF = rotation;
-							remappers.put(MaterialAPI.getBlockDataNetworkId(skullstate), nbt -> {
-								nbt.setTag("SkullType", new NBTByte(skulltypeF));
-								nbt.setTag("Rot", new NBTByte(rotationF));
-							});
 						}
+						byte rotationF = rotation;
+						remappers.put(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> {
+							nbt.setTag("SkullType", new NBTByte((byte) skulltype));
+							nbt.setTag("Rot", new NBTByte(rotationF));
+						});
 					}
 				}
 			},
@@ -239,7 +276,7 @@ public class TileNBTRemapper {
 		registerLegacyState(Material.YELLOW_BED, new BedTileSupplier(4), ProtocolVersionsHelper.ALL_1_12);
 		registerLegacyState(Material.LIME_BED, new BedTileSupplier(5), ProtocolVersionsHelper.ALL_1_12);
 		registerLegacyState(Material.PINK_BED, new BedTileSupplier(6), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.GRAY_BED, new BedTileSupplier(7), ProtocolVersionsHelper.ALL_1_9);
+		registerLegacyState(Material.GRAY_BED, new BedTileSupplier(7), ProtocolVersionsHelper.ALL_1_12);
 		registerLegacyState(Material.LIGHT_GRAY_BED, new BedTileSupplier(8), ProtocolVersionsHelper.ALL_1_12);
 		registerLegacyState(Material.CYAN_BED, new BedTileSupplier(9), ProtocolVersionsHelper.ALL_1_12);
 		registerLegacyState(Material.PURPLE_BED, new BedTileSupplier(10), ProtocolVersionsHelper.ALL_1_12);
