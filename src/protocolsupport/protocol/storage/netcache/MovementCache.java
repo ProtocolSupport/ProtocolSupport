@@ -61,15 +61,6 @@ public class MovementCache {
 	private double pePositionLeniency = 0.5;
 	private boolean peLeftPaddleTurning = false;
 	private boolean peRightPaddleTurning = false;
-	private int viewDistance = 0;
-
-	public int getViewDistance() {
-		return viewDistance;
-	}
-
-	public void setViewDistance(int viewDistance) {
-		this.viewDistance = viewDistance;
-	}
 
 	public void setPEClientPosition(double x, double y, double z) {
 		this.peClientX = x;

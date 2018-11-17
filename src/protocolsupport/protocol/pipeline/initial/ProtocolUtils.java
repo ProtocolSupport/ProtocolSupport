@@ -34,8 +34,7 @@ public class ProtocolUtils {
 	protected static ProtocolVersion readNewHandshake(ByteBuf data) {
 		int packetId = VarNumberSerializer.readVarInt(data);
 		if (packetId == 0x00) {
-			int protocolId = VarNumberSerializer.readVarInt(data);
-			return ProtocolVersionsHelper.getNewProtocolVersion(protocolId);
+			return ProtocolVersionsHelper.getNewProtocolVersion(VarNumberSerializer.readVarInt(data));
 		} else {
 			throw new DecoderException(packetId + " is not a valid packet id");
 		}
