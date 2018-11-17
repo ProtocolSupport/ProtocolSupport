@@ -156,15 +156,18 @@ public class TileNBTRemapper {
 			(version, input) -> {
 				input.removeTag("SpawnPotentials");
 
-				int entityId = 0;
+				//int entityId = 0;
+				String entityType = "";
 
 				NBTCompound compound = input.getTagOfType("SpawnData", NBTType.COMPOUND);
 				if (compound != null) {
-					entityId = PEDataValues.getEntityTypeId(NetworkEntityType.getByRegistrySTypeId(compound.getTagOfType("id", NBTType.STRING).getValue()));
-					compound.setTag("Type", new NBTInt(entityId));
+					NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(compound.getTagOfType("id", NBTType.STRING).getValue());
+					//entityId = PEDataValues.getEntityTypeId(type);
+					//compound.setTag("Type", new NBTInt(entityId));
+					compound.setTag("Type", new NBTString(PEDataValues.getEntityKey(type)));
 				}
 
-				input.setTag("EntityId", new NBTInt(entityId));
+				//input.setTag("EntityId", new NBTInt(entityId));
 				input.setTag("DisplayEntityWidth", new NBTFloat(1));
 				input.setTag("DisplayEntityHeight", new NBTFloat(1));
 				input.setTag("DisplayEntityScale", new NBTFloat(1));

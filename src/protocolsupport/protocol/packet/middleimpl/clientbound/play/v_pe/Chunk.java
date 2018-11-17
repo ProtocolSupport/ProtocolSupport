@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import org.bukkit.Bukkit;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.ConnectionImpl;
@@ -8,6 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.MovementCache;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
@@ -16,6 +18,7 @@ import protocolsupport.protocol.typeremapper.chunk.EmptyChunk;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -31,6 +34,8 @@ public class Chunk extends MiddleChunk {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		if (full || (bitmask == 0xFFFF)) { //Only send full or 'full' chunks to PE.
+			MovementCache movecache = cache.getMovementCache();
+			RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 			ProtocolVersion version = connection.getVersion();
 			cache.getPEChunkMapCache().markSent(chunkX, chunkZ);
 			transformer.loadData(data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full);
@@ -44,7 +49,14 @@ public class Chunk extends MiddleChunk {
 					ItemStackSerializer.writeTag(chunkdata, true, version, TileNBTRemapper.remap(version, tile));
 				}
 			});
-			return RecyclableSingletonList.create(serializer);
+			packets.add(serializer);
+			ClientBoundPacketData networkChunkUpdate = ClientBoundPacketData.create(PEPacketIDs.NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET);
+			VarNumberSerializer.writeSVarInt(networkChunkUpdate, (int)movecache.getPEClientX());
+			VarNumberSerializer.writeVarInt(networkChunkUpdate, (int)movecache.getPEClientY());
+			VarNumberSerializer.writeSVarInt(networkChunkUpdate, (int)movecache.getPEClientZ());
+			VarNumberSerializer.writeVarInt(networkChunkUpdate, Bukkit.getViewDistance() << 4); //TODO: client view distance yo
+			packets.add(networkChunkUpdate);
+			return packets;
 		} else { //Request a full chunk.
 			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.ChunkUpdateRequest(chunkX, chunkZ));
 			return RecyclableEmptyList.get();

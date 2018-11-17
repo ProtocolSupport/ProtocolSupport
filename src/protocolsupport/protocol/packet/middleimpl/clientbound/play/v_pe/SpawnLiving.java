@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnLiving
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes.AttributeInfo;
 import protocolsupport.protocol.serializer.DataWatcherSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
@@ -70,7 +71,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		NetworkEntityType entityType = EntityRemappersRegistry.REGISTRY.getTable(version).getRemap(entity.getType()).getLeft();
-		VarNumberSerializer.writeVarInt(serializer, PEDataValues.getEntityTypeId(entityType));
+		StringSerializer.writeString(serializer, version, PEDataValues.getEntityKey(entityType));
 		serializer.writeFloatLE((float) x);
 		serializer.writeFloatLE((float) y);
 		serializer.writeFloatLE((float) z);

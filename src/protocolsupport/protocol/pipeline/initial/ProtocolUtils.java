@@ -34,7 +34,8 @@ public class ProtocolUtils {
 	protected static ProtocolVersion readNewHandshake(ByteBuf data) {
 		int packetId = VarNumberSerializer.readVarInt(data);
 		if (packetId == 0x00) {
-			return ProtocolVersionsHelper.getNewProtocolVersion(VarNumberSerializer.readVarInt(data));
+			int protocolId = VarNumberSerializer.readVarInt(data);
+			return ProtocolVersionsHelper.getNewProtocolVersion(protocolId);
 		} else {
 			throw new DecoderException(packetId + " is not a valid packet id");
 		}
@@ -48,6 +49,7 @@ public class ProtocolUtils {
 		} else if (incomingversion < cversion) {
 			return ProtocolVersion.MINECRAFT_PE_LEGACY;
 		} else {
+			System.out.println("Unknown future PE version " + incomingversion);
 			return ProtocolVersion.MINECRAFT_PE_FUTURE;
 		}
 	}

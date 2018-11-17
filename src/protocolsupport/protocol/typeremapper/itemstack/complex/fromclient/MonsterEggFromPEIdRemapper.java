@@ -14,7 +14,7 @@ public class MonsterEggFromPEIdRemapper implements ItemStackComplexRemapper {
 	@SuppressWarnings("deprecation")
 	@Override
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		if (itemstack.getLegacyData() > 0) {
+		/*if (itemstack.getLegacyData() > 0) {
 			NetworkEntityType type = PEDataValues.getLivingTypeFromPeNetworkId(itemstack.getLegacyData());
 			if (type != null) {
 				NBTCompound tag = itemstack.getNBT();
@@ -30,7 +30,8 @@ public class MonsterEggFromPEIdRemapper implements ItemStackComplexRemapper {
 				itemstack.setNBT(tag);
 			}
 		}
-		return itemstack;
+		return itemstack;*/
+		return null;
 	}
 
 }

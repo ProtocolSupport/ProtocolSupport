@@ -46,6 +46,7 @@ public class StartGame extends MiddleStartGame {
 		resourcestack.writeBoolean(false); // required
 		VarNumberSerializer.writeVarInt(resourcestack, 0); //beh packs count
 		VarNumberSerializer.writeVarInt(resourcestack, 0); //res packs count
+		resourcestack.writeBoolean(false); //is experimental
 		packets.add(resourcestack);
 		//Send actual start game information.
 		ClientBoundPacketData startgame = ClientBoundPacketData.create(PEPacketIDs.START_GAME);
@@ -90,6 +91,8 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeBoolean(false); //hasLockedBeh pack
 		startgame.writeBoolean(false); //hasLocked world template.
 		startgame.writeBoolean(false); //Microsoft GamerTags only. Hell no!
+		startgame.writeBoolean(false); //is from world template
+		startgame.writeBoolean(false); //is world template option locked
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //level ID (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //world name (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //premium world template id (empty string)
