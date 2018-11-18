@@ -10,6 +10,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSu
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.types.ChunkCoord;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -53,7 +54,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 	public static void addFakeChunksAndPos(ProtocolVersion version, NetworkEntity player, double posY, RecyclableCollection<ClientBoundPacketData> packets) {
 		for (int x = -2; x <= 2; x++) {
 			for (int z = -2; z <= 2; z++) {
-				packets.add(Chunk.createEmptyChunk(version, x, z));
+				packets.add(Chunk.createEmptyChunk(version, new ChunkCoord(x, z)));
 			}
 		}
 		packets.add(SetPosition.create(player, 0, posY, 0, 0, 0, SetPosition.ANIMATION_MODE_TELEPORT));

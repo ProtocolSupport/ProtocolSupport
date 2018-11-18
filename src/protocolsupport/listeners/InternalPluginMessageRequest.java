@@ -21,6 +21,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.types.ChunkCoord;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.zplatform.ServerPlatform;
@@ -43,11 +44,9 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 	static {
 		register(ChunkUpdateRequest.class, (connection, request) -> {
 			Bukkit.getScheduler().runTask(ProtocolSupport.getInstance(), () -> {
-				Chunk chunk = connection.getPlayer().getWorld().getChunkAt(request.getChunkX(), request.getChunkZ());
+				Chunk chunk = connection.getPlayer().getWorld().getChunkAt(request.getChunk().getX(), request.getChunk().getZ());
 				if (chunk.isLoaded()) {
-					connection.sendPacket(ServerPlatform.get().getPacketFactory().createUpdateChunkPacket(
-							connection.getPlayer().getWorld().getChunkAt(request.getChunkX(), request.getChunkZ()))
-					);
+					connection.sendPacket(ServerPlatform.get().getPacketFactory().createUpdateChunkPacket(chunk));
 				}
 			});
 		});
@@ -81,36 +80,29 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 
 	public static class ChunkUpdateRequest extends PluginMessageData {
 
-		protected int chunkX;
-		protected int chunkZ;
+		protected ChunkCoord chunk;
 
 		public ChunkUpdateRequest() {
-			this(0, 0);
+			this(null);
 		}
 
-		public ChunkUpdateRequest(int chunkX, int chunkZ) {
-			this.chunkX = chunkX;
-			this.chunkZ = chunkZ;
+		public ChunkUpdateRequest(ChunkCoord chunk) {
+			this.chunk = chunk;
 		}
 
 		@Override
 		protected void read(ByteBuf from) {
-			this.chunkX = from.readInt();
-			this.chunkZ = from.readInt();
+			chunk = new ChunkCoord(from.readInt(), from.readInt());
 		}
 
 		@Override
 		protected void write(ByteBuf to) {
-			to.writeInt(this.chunkX);
-			to.writeInt(this.chunkZ);
+			to.writeInt(chunk.getX());
+			to.writeInt(chunk.getZ());
 		}
 
-		public int getChunkX() {
-			return chunkX;
-		}
-
-		public int getChunkZ() {
-			return chunkZ;
+		public ChunkCoord getChunk() {
+			return chunk;
 		}
 
 	}

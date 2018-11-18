@@ -3,13 +3,15 @@ package protocolsupport.protocol.typeremapper.chunk;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.TileDataCache;
+import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
 public class ChunkTransformerPE extends ChunkTransformerBB {
 
-	public ChunkTransformerPE(ArrayBasedIdRemappingTable blockRemappingTable, ArrayBasedIdRemappingTable biomeRemappingTable) {
-		super(blockRemappingTable);
+	public ChunkTransformerPE(ArrayBasedIdRemappingTable blockRemappingTable, TileNBTRemapper tileremapper, TileDataCache tilecache, ArrayBasedIdRemappingTable biomeRemappingTable) {
+		super(blockRemappingTable, tileremapper, tilecache);
 		this.biomeRemappingTable = biomeRemappingTable;
 	}
 
