@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
+import protocolsupport.listeners.internal.InventoryOpenRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -60,7 +61,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 			}
 			Position open = PEFakeContainer.prepareContainer(title, connection, cache, packets);
 			//The fake blocks take some time, we schedule the opening be requesting a delay from the server.
-			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.InventoryOpenRequest(
+			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InventoryOpenRequest(
 					windowId, type, open, -1, 2
 			));
 		}

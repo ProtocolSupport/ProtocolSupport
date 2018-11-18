@@ -10,6 +10,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
 import protocolsupport.listeners.InternalPluginMessageRequest;
+import protocolsupport.listeners.internal.BlockUpdateRequest;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockTileUpdate;
@@ -110,7 +111,7 @@ public class PEFakeContainer {
 	//Request reset for all fake container blocks.
 	public static void destroyContainers(Connection connection, NetworkDataCache cache) {
 		cache.getPEInventoryCache().getFakeContainers().cycleDown(position -> {
-			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.BlockUpdateRequest(position));
+			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new BlockUpdateRequest(position));
 			return true;
 		});
 		if (cache.getPEInventoryCache().getFakeVillager().isSpawned()) {
