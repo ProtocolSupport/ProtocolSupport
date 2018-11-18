@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import io.netty.buffer.Unpooled;
 import org.bukkit.Bukkit;
 
 import protocolsupport.api.ProtocolVersion;
@@ -16,12 +17,11 @@ import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-//import protocolsupport.zplatform.impl.pe.PECraftingManager;
+import protocolsupport.zplatform.impl.pe.PECraftingManager;
 import protocolsupport.zplatform.impl.pe.PECreativeInventory;
 
 public class StartGame extends MiddleStartGame {
@@ -110,9 +110,10 @@ public class StartGame extends MiddleStartGame {
 		VarNumberSerializer.writeSVarInt(chunkradius, (int) Math.ceil((Bukkit.getViewDistance() + 1) * Math.sqrt(2)));
 		packets.add(chunkradius);
 		//Send crafting recipes
-//		ClientBoundPacketData craftPacket = ClientBoundPacketData.create(PEPacketIDs.CRAFTING_DATA); 
-//		craftPacket.writeBytes(PECraftingManager.getInstance().getAllRecipes());
-//		packets.add(craftPacket);
+		//TODO: bungeecord should also request this from servers again
+		ClientBoundPacketData craftPacket = ClientBoundPacketData.create(PEPacketIDs.CRAFTING_DATA);
+		craftPacket.writeBytes(PECraftingManager.getInstance().getAllRecipes());
+		packets.add(craftPacket);
 		//Send all creative items (from PE json)
 		PECreativeInventory peInv = PECreativeInventory.getInstance(); 
 		ClientBoundPacketData creativeInventoryPacket = ClientBoundPacketData.create(PEPacketIDs.INVENTORY_CONTENT);
@@ -123,11 +124,7 @@ public class StartGame extends MiddleStartGame {
 		//Set PE gamemode.
 		AttributesCache attrscache = cache.getAttributesCache();
 		attrscache.setPEGameMode(gamemode);
-		//fake chunks with position, because pe doesn't like spawning in no chunk world
-		ChangeDimension.addFakeChunksAndPos(version, player, attrscache.getPEFakeSetPositionY(), packets);
-		//add two dimension switches to make sure that player ends up in right dimension even if bungee dimension switch on server switch broke stuff
-		ChangeDimension.create(version, dimension != Environment.OVERWORLD ? Environment.OVERWORLD: Environment.THE_END, player, attrscache.getPEFakeSetPositionY(), packets);
-		ChangeDimension.create(version, dimension, player, attrscache.getPEFakeSetPositionY(), packets);
+		CustomPayload.create(version, "ps:clientlock", Unpooled.EMPTY_BUFFER, packets); // lock client bound packet queue until LocalPlayerInitialised or bungee confirm
 		return packets;
 	}
 

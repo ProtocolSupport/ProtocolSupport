@@ -50,11 +50,13 @@ public class BaseEntityMetadataRemapper extends EntityMetadataRemapper {
 				// = PE Nametag =
 				Optional<DataWatcherObjectOptionalChat> nameTagWatcher = DataWatcherObjectIndex.Entity.NAMETAG.getValue(original);
 				//Doing this for players makes nametags behave weird or only when close.
-				boolean doNameTag = ((nameTagWatcher.isPresent()) && (entity.getType() != NetworkEntityType.PLAYER));
+				boolean doNameTag = ((nameTagWatcher.isPresent()));/* && (entity.getType() != NetworkEntityType.PLAYER));*/ // works as intended
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, doNameTag);
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, doNameTag); // does nothing?
 				if (doNameTag) {
 					BaseComponent nameTag = nameTagWatcher.get().getValue();
 					remapped.put(PeMetaBase.NAMETAG, new DataWatcherObjectString(nameTag != null ? nameTag.toLegacyText() : ""));
+					remapped.put(PeMetaBase.ALWAYS_SHOW_NAMETAG, new DataWatcherObjectByte((byte)1)); // 1 for always display, 0 for display when look
 				}
 				// = PE Riding =
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_COLLIDE, !data.isRiding());

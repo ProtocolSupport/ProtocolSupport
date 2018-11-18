@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import java.text.MessageFormat;
 
+import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChangeDimension;
@@ -47,8 +48,9 @@ public class ChangeDimension extends MiddleChangeDimension {
 		changedim.writeFloatLE(0); //z
 		changedim.writeBoolean(true); //respawn
 		packets.add(changedim);
-		packets.add(LoginSuccess.createPlayStatus(LoginSuccess.PLAYER_SPAWN));
 		addFakeChunksAndPos(version, player, posY, packets);
+		packets.add(LoginSuccess.createPlayStatus(LoginSuccess.PLAYER_SPAWN));
+		CustomPayload.create(version, "ps:clientlock", Unpooled.EMPTY_BUFFER, packets); // lock client bound packet queue until client position packet
 	}
 
 	public static void addFakeChunksAndPos(ProtocolVersion version, NetworkEntity player, double posY, RecyclableCollection<ClientBoundPacketData> packets) {

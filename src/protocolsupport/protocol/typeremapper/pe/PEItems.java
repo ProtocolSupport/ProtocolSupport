@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import org.bukkit.Material;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.JsonUtils;
@@ -50,7 +51,8 @@ public class PEItems {
 		final int result = toPEId[modernId];
 
 		if (result == 0) {
-			System.out.println("Using default for modernId " + modernId);
+			Material mat = ItemMaterialLookup.getByRuntimeId(modernId);
+			System.out.println("Using default PE ID for material " + mat + ", key: " + mat.getKey());
 			return combinedPEStoneId;
 		}
 

@@ -5,6 +5,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -17,6 +18,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEItems;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 
@@ -44,6 +46,7 @@ public class PECraftingManager {
 		ByteBuf recipesbuf = Unpooled.buffer();
 		AtomicInteger recipescount = new AtomicInteger();
 
+		//TODO: remove WOOD recipes
 		Bukkit.recipeIterator().forEachRemaining(recipe -> {
 			if (recipe instanceof ShapedRecipe) {
 				recipescount.incrementAndGet();
@@ -54,7 +57,7 @@ public class PECraftingManager {
 				NetworkItemStack[] required = new NetworkItemStack[width * height];
 				for (int z = 0; z < height; z++) {
 					for (int x = 0; x < width; x++) {
-						required[(z*width) + x] = fromBukkitStack(map.get(pattern[z].charAt(x)));
+						required[(z * width) + x] = fromBukkitStack(map.get(pattern[z].charAt(x)));
 					}
 				}
 				addRecipeShaped(recipesbuf, fromBukkitStack(shapedRecipe.getResult()), width, height, required);
@@ -83,6 +86,10 @@ public class PECraftingManager {
 	}
 
 	private static NetworkItemStack fromBukkitStack(ItemStack stack) {
+		if (stack == null) {
+			return null;
+		}
+
 		NetworkItemStack ret = new NetworkItemStack();
 		ret.setTypeId(MaterialAPI.getItemNetworkId(stack.getType()));
 		ret.setAmount(stack.getAmount());
@@ -114,23 +121,16 @@ public class PECraftingManager {
 	}
 
 	public void addRecipeFurnace(ByteBuf to, NetworkItemStack output, NetworkItemStack input) {
-		//TODO REMAP?
-//		IntTuple iddata = PEDataValus.ID_DATA_REMAPPING_REGISTRY.getTable(defaultPE).getRemap(input.getTypeId(), input.getData());
-//		if (iddata != null) {
-//			input.setTypeId(iddata.getI1());
-//			if (iddata.getI2() != -1) {
-//				input.setLegacyData(iddata.getI2());
-//			}
-//		}
+		int peCombinedId = PEItems.getPECombinedIdByModernId(input.getTypeId());
 
-		if (input.getLegacyData() == 0) {
+		if (PEItems.getDataFromPECombinedId(peCombinedId) == 0) {
 			VarNumberSerializer.writeSVarInt(to, 2); //recipe type
-			VarNumberSerializer.writeSVarInt(to, input.getTypeId());
+			VarNumberSerializer.writeSVarInt(to, PEItems.getIdFromPECombinedId(peCombinedId));
 			ItemStackSerializer.writeItemStack(to, defaultPE, I18NData.DEFAULT_LOCALE, output, true);
 		} else { //meta recipe
-			VarNumberSerializer.writeSVarInt(to, 3); //recipe type
-			VarNumberSerializer.writeSVarInt(to, input.getTypeId());
-			VarNumberSerializer.writeSVarInt(to, input.getLegacyData());
+			VarNumberSerializer.writeSVarInt(to, 3); //recipe type, with data
+			VarNumberSerializer.writeSVarInt(to, PEItems.getIdFromPECombinedId(peCombinedId));
+			VarNumberSerializer.writeSVarInt(to, PEItems.getDataFromPECombinedId(peCombinedId));
 			ItemStackSerializer.writeItemStack(to, defaultPE, I18NData.DEFAULT_LOCALE, output, true);
 		}
 	}

@@ -3,20 +3,21 @@ package protocolsupport.protocol.typeremapper.packet;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.utils.Utils;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class PEDimensionSwitchMovementConfirmationPacketQueue {
 
-	public static final int UNLOCK_DELAY = Utils.getJavaPropertyValue("pe.dimswitchdelay", 5, Integer::parseInt);
-
 	protected final ArrayList<ClientBoundPacketData> queue = new ArrayList<>(2000);
-	protected State state = State.SCANNING_FOR_LOGIN_STATUS;
+	protected State state = State.UNLOCKED;
 
 	@SuppressWarnings("unchecked")
 	public RecyclableCollection<ClientBoundPacketData> processClientBoundPackets(RecyclableCollection<ClientBoundPacketData> packets) {
@@ -40,16 +41,10 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 				queue.add(sendpacket);
 			} else {
 				allowed.add(sendpacket);
-				switch (sendpacket.getPacketId()) {
-					case PEPacketIDs.PLAY_STATUS: {
-						state = state == State.SCANNING_FOR_LOGIN_STATUS ? State.SCANNING_FOR_PLAY_STATUS : State.SCANNING_FOR_SET_POSITION;
-						break;
-					}
-					case PEPacketIDs.PLAYER_MOVE: {
-						if (state == State.SCANNING_FOR_SET_POSITION) {
-							state = State.WAITING_CLIENT_MOVE_CONFIRM;
-						}
-						break;
+				if (sendpacket.getPacketId() == PEPacketIDs.CUSTOM_EVENT) {
+					ByteBuf peak = sendpacket.duplicate();
+					if (StringSerializer.readString(peak, ProtocolVersion.MINECRAFT_PE).equals("ps:clientlock")) {
+						state = State.LOCKED;
 					}
 				}
 			}
@@ -57,32 +52,23 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 	}
 
 	private boolean isPacketSendingAllowed() {
-		switch (state) {
-			case SCANNING_FOR_LOGIN_STATUS:
-			case SCANNING_FOR_PLAY_STATUS:
-			case SCANNING_FOR_SET_POSITION: {
-				return true;
-			}
-			default: {
-				return false;
-			}
-		}
-	}
-
-	public void unlock() {
-		state = State.SCANNING_FOR_PLAY_STATUS;
+		return state == State.UNLOCKED;
 	}
 
 	public RecyclableCollection<ServerBoundPacketData> processServerBoundPackets(RecyclableCollection<ServerBoundPacketData> packets) {
 		try {
 			RecyclableArrayList<ServerBoundPacketData> allowed = RecyclableArrayList.create();
 			for (ServerBoundPacketData packet : packets) {
-				if ((state == State.WAITING_CLIENT_MOVE_CONFIRM) && (packet.getPacketType() == ServerBoundPacket.PLAY_POSITION_LOOK)) {
-					state = State.WAITING_UNLOCK;
-				}
-				if ((state == State.WAITING_UNLOCK) || (state == State.UNLOCK_SCHEDULED)) {
-					packet.recycle();
-					continue;
+				if (!isPacketSendingAllowed() && packet.getPacketType() == ServerBoundPacket.PLAY_CUSTOM_PAYLOAD) {
+					ByteBuf peak = packet.duplicate();
+					// this may also be mimicked by bungee during server changes
+					if (StringSerializer.readString(peak, ProtocolVersionsHelper.LATEST_PC).equals("ps:clientunlock")) {
+						//TODO: do we need to do something to trigger the queue flush a bit faster?
+						state = State.UNLOCKED;
+					}
+				} else if (!isPacketSendingAllowed() && packet.getPacketType() == ServerBoundPacket.PLAY_POSITION_LOOK) {
+					// client is alive in its world
+					state = State.UNLOCKED;
 				}
 				allowed.add(packet);
 			}
@@ -92,16 +78,8 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 		}
 	}
 
-	public boolean shouldScheduleUnlock() {
-		if ((state != State.WAITING_UNLOCK) || (state == State.UNLOCK_SCHEDULED)) {
-			return false;
-		}
-		state = State.UNLOCK_SCHEDULED;
-		return true;
-	}
-
-	protected static enum State {
-		SCANNING_FOR_LOGIN_STATUS, SCANNING_FOR_PLAY_STATUS, SCANNING_FOR_SET_POSITION, WAITING_CLIENT_MOVE_CONFIRM, WAITING_UNLOCK, UNLOCK_SCHEDULED
+	protected enum State {
+		UNLOCKED, LOCKED
 	}
 
 }

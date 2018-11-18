@@ -1,13 +1,17 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MerchantDataSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class CustomPayload extends MiddleCustomPayload {
@@ -24,7 +28,15 @@ public class CustomPayload extends MiddleCustomPayload {
 					MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale()))
 			);
 		}
-		return RecyclableEmptyList.get();
+		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+		create(connection.getVersion(), tag, data, packets);
+		return packets;
 	}
 
+	public static void create(ProtocolVersion version, String tag, ByteBuf data, RecyclableCollection<ClientBoundPacketData> packets) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CUSTOM_EVENT);
+		StringSerializer.writeString(serializer, version, tag);
+		serializer.writeBytes(data);
+		packets.add(serializer);
+	}
 }
