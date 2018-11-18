@@ -1,24 +1,20 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
+import protocolsupport.listeners.internal.InventoryUpdateRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleNameItem;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.inventory.PESlotRemapper;
 import protocolsupport.protocol.typeremapper.pe.inventory.PETransactionRemapper;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.WindowType;
@@ -118,7 +114,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		}
 		if (invCache.shouldSendUpdate() && cache.getAttributesCache().getPEGameMode() != GameMode.CREATIVE) {
 			//Trigger inventory update, ALWAYS since PE sometimes 'guesses' or doesn't trust the server, we generally want an inventory update scheduled.
-			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.InventoryUpdateRequest(7));
+			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InventoryUpdateRequest(7));
 			invCache.lockInventoryUpdate();
 		}
 		return packets;

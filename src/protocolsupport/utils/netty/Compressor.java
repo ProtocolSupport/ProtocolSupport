@@ -57,6 +57,7 @@ public class Compressor {
 	}
 
 	public void recycle() {
+		deflater.reset();
 		handle.recycle(this);
 	}
 

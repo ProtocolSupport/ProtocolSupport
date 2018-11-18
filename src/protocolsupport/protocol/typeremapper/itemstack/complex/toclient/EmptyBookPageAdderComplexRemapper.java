@@ -12,7 +12,7 @@ public class EmptyBookPageAdderComplexRemapper extends ItemStackNBTComplexRemapp
 
 	@Override
 	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
-		if (tag.getTagListOfType("pages", NBTType.LIST) == null) {
+		if (tag.getTagListOfType("pages", NBTType.STRING) == null) {
 			NBTList<NBTString> pages = new NBTList<>(NBTType.STRING);
 			pages.addTag(new NBTString(""));
 			tag.setTag("pages", pages);

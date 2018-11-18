@@ -47,7 +47,7 @@ public class ItemStackRemapper {
 	}
 
 	public static boolean isComplexlyRemapped(NetworkItemStack itemstack) {
-		return itemstack.getLegacyData() == -1 ? false : true;
+		return itemstack.getLegacyData() != -1;
 	}
 
 }

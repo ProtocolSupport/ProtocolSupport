@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import com.destroystokyo.paper.event.player.PlayerHandshakeEvent;
+
 public class SpoofedDataParser {
 
 	private static final List<Function<String, SpoofedData>> parsers = new ArrayList<>();
@@ -30,7 +32,7 @@ public class SpoofedDataParser {
 
 	private static boolean isPaperHandshakeEvent() {
 		try {
-			Class.forName("com.destroystokyo.paper.event.player.PlayerHandshakeEvent");
+			Class.forName(PlayerHandshakeEvent.class.getName());
 			return true;
 		} catch (ClassNotFoundException e) {
 			return false;

@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import io.netty.buffer.Unpooled;
 import org.bukkit.Bukkit;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleStartGame;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -124,7 +124,8 @@ public class StartGame extends MiddleStartGame {
 		//Set PE gamemode.
 		AttributesCache attrscache = cache.getAttributesCache();
 		attrscache.setPEGameMode(gamemode);
-		CustomPayload.create(version, "ps:clientlock", Unpooled.EMPTY_BUFFER, packets); // lock client bound packet queue until LocalPlayerInitialised or bungee confirm
+		//Lock client bound packet queue until LocalPlayerInitialised or bungee confirm.
+		packets.add(CustomPayload.create(version, InternalPluginMessageRequest.PELockChannel));
 		return packets;
 	}
 

@@ -10,14 +10,15 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
 import protocolsupport.listeners.InternalPluginMessageRequest;
+import protocolsupport.listeners.internal.BlockUpdateRequest;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockTileUpdate;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
-import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.TileEntity;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.protocol.utils.types.nbt.NBTByte;
@@ -40,7 +41,7 @@ public class PEFakeContainer {
 		regInvBlockType(WindowType.CRAFTING_TABLE, 	Material.CRAFTING_TABLE, 	TileEntityType.UNKNOWN);
 		regInvBlockType(WindowType.FURNACE, 		Material.FURNACE, 			TileEntityType.FURNACE);
 		regInvBlockType(WindowType.DISPENSER, 		Material.DISPENSER, 		TileEntityType.DISPENSER);
-		regInvBlockType(WindowType.ENCHANT,			Material.ENCHANTING_TABLE, 	TileEntityType.HOPPER); //Fake with hopper
+		regInvBlockType(WindowType.ENCHANT,			Material.HOPPER,		 	TileEntityType.HOPPER); //Fake with hopper
 		regInvBlockType(WindowType.BREWING,			Material.BREWING_STAND, 	TileEntityType.BREWING_STAND);
 		regInvBlockType(WindowType.BEACON,			Material.BEACON, 			TileEntityType.BEACON);
 		regInvBlockType(WindowType.ANVIL,			Material.ANVIL, 			TileEntityType.UNKNOWN);
@@ -70,33 +71,33 @@ public class PEFakeContainer {
 			}
 			invCache.getFakeContainers().addFirst(position);
 			//Create fake inventory block.
-			final int networkChestId = MaterialAPI.getBlockDataNetworkId(typeData.getObj1().createBlockData());
-			BlockChangeSingle.create(version, position, networkChestId, packets);
+			final int networkTileId = MaterialAPI.getBlockDataNetworkId(typeData.getObj1().createBlockData());
+			BlockChangeSingle.create(version, position, networkTileId, packets);
 			//Set tile data for fake block.
-			NBTCompound tag = new NBTCompound();
-			tag.setTag("CustomName", new NBTString(title.toLegacyText(cache.getAttributesCache().getLocale())));
 			if (typeData.getObj2() != TileEntityType.UNKNOWN) {
-				tag.setTag("id", new NBTString(typeData.getObj2().getRegistryId()));
-			}
-			//Large inventories require doublechest that requires two blocks and nbt.
-			if (shouldDoDoubleChest(cache)) {
-				Position auxPos = position.clone();
-				auxPos.modifyX(1); //Get adjacent block.
-				invCache.getFakeContainers().addLast(auxPos);
-				BlockChangeSingle.create(version, auxPos, networkChestId, packets);
-				tag.setTag("pairx", new NBTInt(auxPos.getX()));
-				tag.setTag("pairz", new NBTInt(auxPos.getZ()));
-				tag.setTag("pairlead", new NBTByte((byte) 1));
-				packets.add(BlockTileUpdate.create(version, position, tag));
-				NBTCompound auxTag = new NBTCompound();
-				auxTag.setTag("CustomName", new NBTString(title.toLegacyText(cache.getAttributesCache().getLocale())));
-				auxTag.setTag("id", new NBTString(typeData.getObj2().getRegistryId()));
-				auxTag.setTag("pairx", new NBTInt(position.getX()));
-				auxTag.setTag("pairz", new NBTInt(position.getZ()));
-				auxTag.setTag("pairlead", new NBTByte((byte) 0));
-				packets.add(BlockTileUpdate.create(version, auxPos, auxTag));
-			} else {
-				packets.add(BlockTileUpdate.create(version, position, tag));
+				NBTCompound tag = new NBTCompound();
+				TileEntity tile = new TileEntity(typeData.getObj2(), position, tag);
+				tag.setTag("CustomName", new NBTString(title.toLegacyText(cache.getAttributesCache().getLocale())));
+				//Large inventories require doublechest that requires two blocks and nbt.
+				if (shouldDoDoubleChest(cache)) {
+					Position auxPos = position.clone();
+					auxPos.modifyX(1); //Get adjacent block.
+					invCache.getFakeContainers().addLast(auxPos);
+					BlockChangeSingle.create(version, auxPos, networkTileId, packets);
+					tag.setTag("pairx", new NBTInt(auxPos.getX()));
+					tag.setTag("pairz", new NBTInt(auxPos.getZ()));
+					tag.setTag("pairlead", new NBTByte((byte) 1));
+					packets.add(BlockTileUpdate.create(version, tile));
+					NBTCompound auxTag = new NBTCompound();
+					TileEntity auxTile = new TileEntity(typeData.getObj2(), auxPos, auxTag);
+					auxTag.setTag("CustomName", new NBTString(title.toLegacyText(cache.getAttributesCache().getLocale())));
+					auxTag.setTag("pairx", new NBTInt(position.getX()));
+					auxTag.setTag("pairz", new NBTInt(position.getZ()));
+					auxTag.setTag("pairlead", new NBTByte((byte) 0));
+					packets.add(BlockTileUpdate.create(version, auxTile));
+				} else {
+					packets.add(BlockTileUpdate.create(version, tile));
+				}
 			}
 		}
 		return position;
@@ -110,7 +111,7 @@ public class PEFakeContainer {
 	//Request reset for all fake container blocks.
 	public static void destroyContainers(Connection connection, NetworkDataCache cache) {
 		cache.getPEInventoryCache().getFakeContainers().cycleDown(position -> {
-			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.BlockUpdateRequest(position));
+			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new BlockUpdateRequest(position));
 			return true;
 		});
 		if (cache.getPEInventoryCache().getFakeVillager().isSpawned()) {

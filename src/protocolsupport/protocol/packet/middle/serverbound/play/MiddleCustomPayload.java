@@ -24,6 +24,12 @@ public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 		return RecyclableSingletonList.create(create(tag, data));
 	}
 
+	public static ServerBoundPacketData create(String tag) {
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CUSTOM_PAYLOAD);
+		StringSerializer.writeString(serializer, ProtocolVersionsHelper.LATEST_PC, tag);
+		return serializer;
+	}
+
 	public static ServerBoundPacketData create(String tag, byte[] data) {
 		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeString(serializer, ProtocolVersionsHelper.LATEST_PC, tag);

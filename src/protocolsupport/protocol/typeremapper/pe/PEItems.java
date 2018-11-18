@@ -1,7 +1,5 @@
 package protocolsupport.protocol.typeremapper.pe;
 
-import java.util.Arrays;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 

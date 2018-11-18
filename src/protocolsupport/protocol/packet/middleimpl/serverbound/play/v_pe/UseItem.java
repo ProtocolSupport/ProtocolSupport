@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.listeners.InternalPluginMessageRequest;
+import protocolsupport.listeners.internal.BlockUpdateRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
@@ -85,7 +86,7 @@ public class UseItem extends ServerBoundMiddlePacket {
 			(Math.abs(cache.getMovementCache().getPEClientY() - position.getY()) > 4) ||
 			(Math.abs(cache.getMovementCache().getPEClientZ() - position.getZ()) > 4)
 		) {
-			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.BlockUpdateRequest(position));
+			packets.add(InternalPluginMessageRequest.newPluginMessageRequest(new BlockUpdateRequest(position)));
 		}
 		return packets;
 	}

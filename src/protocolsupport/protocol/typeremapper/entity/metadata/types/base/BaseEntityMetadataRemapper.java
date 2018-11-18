@@ -30,7 +30,6 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectStrin
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3fLe;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityDataCache;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class BaseEntityMetadataRemapper extends EntityMetadataRemapper {

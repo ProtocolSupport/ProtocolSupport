@@ -10,7 +10,6 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -28,15 +27,20 @@ public class CustomPayload extends MiddleCustomPayload {
 					MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale()))
 			);
 		}
-		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		create(connection.getVersion(), tag, data, packets);
-		return packets;
+		return RecyclableSingletonList.create(create(connection.getVersion(), tag, data));
 	}
 
-	public static void create(ProtocolVersion version, String tag, ByteBuf data, RecyclableCollection<ClientBoundPacketData> packets) {
+	public static ClientBoundPacketData create(ProtocolVersion version, String tag) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CUSTOM_EVENT);
+		StringSerializer.writeString(serializer, version, tag);
+		return serializer;
+	}
+
+	public static ClientBoundPacketData create(ProtocolVersion version, String tag, ByteBuf data) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CUSTOM_EVENT);
 		StringSerializer.writeString(serializer, version, tag);
 		serializer.writeBytes(data);
-		packets.add(serializer);
+		return serializer;
 	}
+
 }

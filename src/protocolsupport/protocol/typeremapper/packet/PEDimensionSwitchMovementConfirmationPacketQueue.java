@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -43,7 +44,7 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 				allowed.add(sendpacket);
 				if (sendpacket.getPacketId() == PEPacketIDs.CUSTOM_EVENT) {
 					ByteBuf peak = sendpacket.duplicate();
-					if (StringSerializer.readString(peak, ProtocolVersion.MINECRAFT_PE).equals("ps:clientlock")) {
+					if (StringSerializer.readString(peak, ProtocolVersion.MINECRAFT_PE).equals(InternalPluginMessageRequest.PELockChannel)) {
 						state = State.LOCKED;
 					}
 				}
@@ -61,13 +62,13 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 			for (ServerBoundPacketData packet : packets) {
 				if (!isPacketSendingAllowed() && packet.getPacketType() == ServerBoundPacket.PLAY_CUSTOM_PAYLOAD) {
 					ByteBuf peak = packet.duplicate();
-					// this may also be mimicked by bungee during server changes
-					if (StringSerializer.readString(peak, ProtocolVersionsHelper.LATEST_PC).equals("ps:clientunlock")) {
+					//This may also be mimicked by bungee during server changes.
+					if (StringSerializer.readString(peak, ProtocolVersionsHelper.LATEST_PC).equals(InternalPluginMessageRequest.PEUnlockChannel)) {
 						//TODO: do we need to do something to trigger the queue flush a bit faster?
 						state = State.UNLOCKED;
 					}
 				} else if (!isPacketSendingAllowed() && packet.getPacketType() == ServerBoundPacket.PLAY_POSITION_LOOK) {
-					// client is alive in its world
+					//Client is alive in its world.
 					state = State.UNLOCKED;
 				}
 				allowed.add(packet);

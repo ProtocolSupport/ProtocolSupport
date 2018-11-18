@@ -8,8 +8,7 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.TileEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -19,15 +18,19 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		super(connection);
 	}
 
+	protected final TileNBTRemapper tileremapper = TileNBTRemapper.getRemapper(connection.getVersion());
+
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(create(connection.getVersion(), position, tag));
+		return RecyclableSingletonList.create(create(
+			connection.getVersion(), tileremapper.remap(tile, cache.getTileCache().getBlockData(position))
+		));
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, Position position, NBTCompound tag) {
+	public static ClientBoundPacketData create(ProtocolVersion version, TileEntity tile) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.TILE_DATA_UPDATE);
-		PositionSerializer.writePEPosition(serializer, position);
-		ItemStackSerializer.writeTag(serializer, true, version, TileNBTRemapper.remap(version, tag));
+		PositionSerializer.writePEPosition(serializer, tile.getPosition());
+		ItemStackSerializer.writeTag(serializer, true, version, tile.getNBT());
 		return serializer;
 	}
 
