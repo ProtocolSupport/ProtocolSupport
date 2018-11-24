@@ -10,7 +10,6 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEItems;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.typeremapper.pe.inventory.PETransactionRemapper;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -18,8 +17,6 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class CraftingData extends MiddleDeclareRecipes {
 	protected int recipesWritten;
@@ -29,44 +26,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 	}
 
 	void expandRecipe(Ingredient[] ingredients, Consumer<List<NetworkItemStack>> consumer) {
-		//TODO: brute force way of comparing ingredient sets
-		Set<Set<PETransactionRemapper.ItemKey>> ingredientSets = new HashSet<>();
-		for (Ingredient ingredient : ingredients) {
-			if (ingredient.getPossibleStacks().length <= 1) { // these come in empty sometime
-				continue;
-			}
-			Stream<PETransactionRemapper.ItemKey> stream = Arrays.stream(ingredient.getPossibleStacks())
-				.map(t -> new PETransactionRemapper.ItemKey(t));
-			ingredientSets.add(stream.collect(Collectors.toSet()));
-		}
-		if (ingredientSets.size() > 1) { //multiple sets, make all permutations
-			expandRecipePermutate(new LinkedList<>(Arrays.asList(ingredients)), new LinkedList<>(), consumer);
-		} else if (ingredientSets.size() == 1) { //only one set, so do only single-type permutations
-			for (PETransactionRemapper.ItemKey ingredientKey : ingredientSets.iterator().next()) {
-				NetworkItemStack ingredient = ingredientKey.getKeyItem();
-				List<NetworkItemStack> outIngredients = new ArrayList<>();
-				for (Ingredient ing : ingredients) {
-					if (ing.getPossibleStacks().length == 0) {
-						outIngredients.add(null); //air
-					} else if (ing.getPossibleStacks().length > 1) {
-						outIngredients.add(ingredient); //from set
-					} else {
-						outIngredients.add(ing.getPossibleStacks()[0]);
-					}
-				}
-				consumer.accept(outIngredients);
-			}
-		} else { //no sets, straight up recipe
-			List<NetworkItemStack> outIngredients = new ArrayList<>();
-			for (Ingredient ing : ingredients) {
-				if (ing.getPossibleStacks().length == 0) {
-					outIngredients.add(null); //air
-				} else {
-					outIngredients.add(ing.getPossibleStacks()[0]);
-				}
-			}
-			consumer.accept(outIngredients);
-		}
+		expandRecipePermutate(new LinkedList<>(Arrays.asList(ingredients)), new LinkedList<>(), consumer);
 	}
 
 	void expandRecipePermutate(LinkedList<Ingredient> ingredients, List<NetworkItemStack> items, Consumer<List<NetworkItemStack>> consumer) {
@@ -75,6 +35,25 @@ public class CraftingData extends MiddleDeclareRecipes {
 		NetworkItemStack[] possibleStacks = first.getPossibleStacks();
 		if (possibleStacks.length == 0) {
 			possibleStacks = new NetworkItemStack[]{null}; //air
+		}
+		if (possibleStacks.length > 2) {
+			NetworkItemStack firstType = ItemStackSerializer.remapItemToClient(connection.getVersion(), I18NData.DEFAULT_LOCALE, possibleStacks[0].cloneItemStack());
+			boolean allSameType = true;
+			for(NetworkItemStack ing : possibleStacks) {
+				NetworkItemStack thisType = ItemStackSerializer.remapItemToClient(connection.getVersion(), I18NData.DEFAULT_LOCALE, ing.cloneItemStack());
+				if(thisType.getTypeId() != firstType.getTypeId() || thisType.getAmount() != 1) {
+					allSameType = false;
+					break;
+				}
+			}
+
+			if (allSameType) {
+				NetworkItemStack wildStack = new NetworkItemStack();
+				wildStack.setTypeId(firstType.getTypeId());
+				wildStack.setLegacyData(-1); //wildcard stack
+				wildStack.setAmount(1);
+				possibleStacks = new NetworkItemStack[]{wildStack};
+			}
 		}
 		for (NetworkItemStack item : possibleStacks) {
 			LinkedList<NetworkItemStack> newItems = new LinkedList<>(items);
@@ -124,7 +103,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 		VarNumberSerializer.writeSVarInt(to, width);
 		VarNumberSerializer.writeSVarInt(to, height);
 		for (NetworkItemStack stack : required) {
-			ItemStackSerializer.writeItemStack(to, connection.getVersion(), I18NData.DEFAULT_LOCALE, stack, true);
+			ItemStackSerializer.writeItemStack(to, connection.getVersion(), I18NData.DEFAULT_LOCALE, stack, stack == null || stack.getLegacyData() != -1);
 		}
 		VarNumberSerializer.writeVarInt(to, 1); // result item count (PC only supports one itemstack output, so hardcoded to 1)
 		ItemStackSerializer.writeItemStack(to, connection.getVersion(), I18NData.DEFAULT_LOCALE, output, true);
@@ -136,7 +115,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 		VarNumberSerializer.writeSVarInt(to, 0); //recipe type
 		VarNumberSerializer.writeVarInt(to, required.size());
 		for (NetworkItemStack stack : required) {
-			ItemStackSerializer.writeItemStack(to, connection.getVersion(), I18NData.DEFAULT_LOCALE, stack, true);
+			ItemStackSerializer.writeItemStack(to, connection.getVersion(), I18NData.DEFAULT_LOCALE, stack, stack == null || stack.getLegacyData() != -1);
 		}
 		VarNumberSerializer.writeVarInt(to, 1); // result item count (PC only supports one itemstack output, so hardcoded to 1)
 		ItemStackSerializer.writeItemStack(to, connection.getVersion(), I18NData.DEFAULT_LOCALE, output, true);
@@ -149,12 +128,12 @@ public class CraftingData extends MiddleDeclareRecipes {
 		if (PEItems.getDataFromPECombinedId(peCombinedId) == 0) {
 			VarNumberSerializer.writeSVarInt(to, 2); //recipe type
 			VarNumberSerializer.writeSVarInt(to, PEItems.getIdFromPECombinedId(peCombinedId));
-			ItemStackSerializer.writeItemStack(to, connection.getVersion(), I18NData.DEFAULT_LOCALE, output, true);
+			ItemStackSerializer.writeItemStack(to, connection.getVersion(), I18NData.DEFAULT_LOCALE, output, output == null || output.getLegacyData() != -1);
 		} else { //meta recipe
 			VarNumberSerializer.writeSVarInt(to, 3); //recipe type, with data
 			VarNumberSerializer.writeSVarInt(to, PEItems.getIdFromPECombinedId(peCombinedId));
 			VarNumberSerializer.writeSVarInt(to, PEItems.getDataFromPECombinedId(peCombinedId));
-			ItemStackSerializer.writeItemStack(to, connection.getVersion(), I18NData.DEFAULT_LOCALE, output, true);
+			ItemStackSerializer.writeItemStack(to, connection.getVersion(), I18NData.DEFAULT_LOCALE, output, output == null || output.getLegacyData() != -1);
 		}
 		recipesWritten++;
 	}
