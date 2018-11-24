@@ -47,7 +47,7 @@ librariesShadeDirectory.mkdirs()
 task updateRuntimeLibraries(type: UpdateLibrariesTask) {
 	directory = librariesRuntimeDirectory
 	libraries = [
-		[name: 'spigot-1.13.2.jar', url: 'https://yivesmirror.com/files/paper/Paper-1.13.2-b388.jar']
+		[name: 'spigot-1.13.2.jar', url: 'https://mcmirror.io/files/Paper/Paper-1.13.2-b388.jar']
 	]
 }
 
