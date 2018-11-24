@@ -21,7 +21,6 @@ public class DisplayNameToLegacyTextComplexRemapper extends ItemStackNBTComplexR
 				try {
 					converted = ChatAPI.fromJSON(displayNameTag.getValue()).toLegacyText(locale);
 				} catch(ChatAPI.JsonParseException e) {
-					System.err.println(e.getMessage());
 					converted = displayNameTag.getValue();
 				}
 				displayTag.setTag(CommonNBT.DISPLAY_NAME, new NBTString(converted));

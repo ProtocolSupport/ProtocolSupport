@@ -3332,12 +3332,12 @@
   {
     "itemkey": "spectral_arrow",
     "peid": 262,
-    "pedata": 0
+    "pedata": 2
   },
   {
     "itemkey": "tipped_arrow",
     "peid": 440,
-    "pedata": 0
+    "pedata": 1
   },
   {
     "itemkey": "lingering_potion",
