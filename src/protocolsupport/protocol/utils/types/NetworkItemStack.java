@@ -48,6 +48,7 @@ public class NetworkItemStack {
 	public NetworkItemStack cloneItemStack() {
 		NetworkItemStack stack = new NetworkItemStack();
 		stack.setTypeId(getTypeId());
+		stack.setLegacyData(getLegacyData());
 		stack.setAmount(getAmount());
 		stack.setNBT(getNBT());
 		return stack;

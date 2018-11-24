@@ -50,7 +50,7 @@ public class PEItems {
 	public static int getPECombinedIdByModernId(int modernId) {
 		final int result = toPEId[modernId];
 
-		if (result == 0) {
+		if (result == 0 && modernId != 0) {
 			Material mat = ItemMaterialLookup.getByRuntimeId(modernId);
 			System.out.println("Using default PE ID for material " + mat + ", key: " + mat.getKey());
 			return combinedPEStoneId;

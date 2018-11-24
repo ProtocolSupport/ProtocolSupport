@@ -254,7 +254,7 @@ public class PETransactionRemapper {
 
 	}
 
-	protected static class ItemKey {
+	public static class ItemKey {
 
 		private NetworkItemStack keyItem = NetworkItemStack.NULL;
 		private int hash = 0;
