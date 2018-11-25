@@ -1,0 +1,240 @@
+{
+  "COMMON_HORSE": {
+    "InventoryFilter": {
+      "Filter": "{
+        'slots': [
+          {
+            'acceptedItems': [
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 0s,
+                  'id': 329s
+                }
+              }
+            ],
+            'item': {
+              'Count': 1b,
+              'Damage': 0s,
+              'id': 329s
+            },
+            'slotNumber': 0
+          },
+          {
+            'acceptedItems': [
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 0s,
+                  'id': 416s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 0s,
+                  'id': 417s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 0s,
+                  'id': 418s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 0s,
+                  'id': 419s
+                }
+              }
+            ],
+            'item': {
+              'Count': 1b,
+              'Damage': 0s,
+              'id': 416s
+            },
+            'slotNumber': 1
+          }
+        ]
+      }"
+    }
+  },
+  "DONKEY": {
+    "InventoryFilter": {
+      "Filter": "{
+        'slots': [
+          {
+            'acceptedItems': [
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 0s,
+                  'id': 329s
+                }
+              }
+            ],
+            'item': {
+              'Count': 1b,
+              'Damage': 0s,
+              'id': 329s
+            },
+            'slotNumber': 0
+          }
+        ]
+      }"
+    }
+  },
+  "LAMA": {
+    "InventoryFilter": {
+      "Filter": "{
+        'slots': [
+          {
+            'acceptedItems': [
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 0s,
+                  'id': 171s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 1s,
+                  'id': 171s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 2s,
+                  'id': 171s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 3s,
+                  'id': 171s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 4s,
+                  'id': 171s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 5s,
+                  'id': 171s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 6s,
+                  'id': 171s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 7s,
+                  'id': 171s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 8s,
+                  'id': 171s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 9s,
+                  'id': 171s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 10s,
+                  'id': 171s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 11s,
+                  'id': 171s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 12s,
+                  'id': 171s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 13s,
+                  'id': 171s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 14s,
+                  'id': 171s
+                }
+              },
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 15s,
+                  'id': 171s
+                }
+              }
+            ],
+            'slotNumber': 0
+          }
+        ]
+      }"
+    }
+  },
+  "MULE": {
+    "InventoryFilter": {
+      "Filter": "{
+        'slots': [
+          {
+            'acceptedItems': [
+              {
+                'slotItem': {
+                  'Count': 1b,
+                  'Damage': 0s,
+                  'id': 329s
+                }
+              }
+            ],
+            'item': {
+              'Count': 1b,
+              'Damage': 0s,
+              'id': 329s
+            },
+            'slotNumber': 0
+          }
+        ]
+      }"
+    }
+  }
+}
