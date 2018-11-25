@@ -143,7 +143,7 @@ public class PEDataValues {
 	public static int getEntityTypeId(NetworkEntityType type) {
 		try {
 			return entityType.get(type);
-		} catch(NullPointerException e) {
+		} catch (NullPointerException e) {
 			System.err.println("Missing entity mapping type for " + type);
 			return entityType.get(NetworkEntityType.ARMOR_STAND_MOB);
 		}

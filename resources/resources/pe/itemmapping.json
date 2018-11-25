@@ -160,26 +160,6 @@
     "pedata": 0
   },
   {
-    "itemkey": "oak_wood",
-    "peid": 17,
-    "pedata": 0
-  },
-  {
-    "itemkey": "spruce_wood",
-    "peid": 17,
-    "pedata": 1
-  },
-  {
-    "itemkey": "birch_wood",
-    "peid": 17,
-    "pedata": 2
-  },
-  {
-    "itemkey": "jungle_wood",
-    "peid": 17,
-    "pedata": 3
-  },
-  {
     "itemkey": "oak_log",
     "peid": 17,
     "pedata": 0
@@ -1252,16 +1232,6 @@
   {
     "itemkey": "dark_oak_leaves",
     "peid": 161,
-    "pedata": 1
-  },
-  {
-    "itemkey": "acacia_wood",
-    "peid": 162,
-    "pedata": 0
-  },
-  {
-    "itemkey": "dark_oak_wood",
-    "peid": 162,
     "pedata": 1
   },
   {
