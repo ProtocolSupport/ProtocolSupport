@@ -28,10 +28,10 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class PEBlocks {
 
-	protected static byte[] peBlockDef;
-	protected static final int[] pcToPeRuntimeId = new int[MinecraftData.BLOCKDATA_COUNT];
-	protected static final int[] pcWaterlogged = new int[MinecraftData.BLOCKDATA_COUNT];
-	protected static final EnumMap<ProtocolVersion, Integer> waterRuntime = new EnumMap<>(ProtocolVersion.class);;
+	private static final byte[] peBlockDef;
+	private static final int[] pcToPeRuntimeId = new int[MinecraftData.BLOCKDATA_COUNT];
+	private static final int[] pcWaterlogged = new int[MinecraftData.BLOCKDATA_COUNT];
+	private static final EnumMap<ProtocolVersion, Integer> waterRuntime = new EnumMap<>(ProtocolVersion.class);;
 
 	private static final int CAN_BE_WATERLOGGED = 1;
 	private static final int IS_WATERLOGGED = 2;
