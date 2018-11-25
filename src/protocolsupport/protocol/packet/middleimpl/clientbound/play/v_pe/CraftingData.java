@@ -29,21 +29,21 @@ public class CraftingData extends MiddleDeclareRecipes {
 	}
 
 	void expandRecipe(Ingredient[] ingredients, Consumer<List<NetworkItemStack>> consumer) {
-		expandRecipePermutate(new LinkedList<>(Arrays.asList(ingredients)), new LinkedList<>(), consumer);
+		expandRecipe(new LinkedList<>(Arrays.asList(ingredients)), new LinkedList<>(), consumer);
 	}
 
-	void expandRecipePermutate(LinkedList<Ingredient> ingredients, List<NetworkItemStack> items, Consumer<List<NetworkItemStack>> consumer) {
+	void expandRecipe(LinkedList<Ingredient> ingredients, List<NetworkItemStack> items, Consumer<List<NetworkItemStack>> consumer) {
 		LinkedList<Ingredient> tail = new LinkedList<>(ingredients);
 		Ingredient first = tail.removeFirst();
 		NetworkItemStack[] possibleStacks = first.getPossibleStacks();
-		if (possibleStacks.length == 0) { //air/empty
+		if (possibleStacks.length == 0) { //empty
 			possibleStacks = new NetworkItemStack[]{null};
 		}
 		if (possibleStacks.length > 2) { //'large' ingredient set
 			NetworkItemStack firstType = ItemStackSerializer.remapItemToClient(connection.getVersion(), I18NData.DEFAULT_LOCALE, possibleStacks[0].cloneItemStack());
 			boolean allSameType = true;
 			//see if all ingredients are variants of the same type
-			for(NetworkItemStack ing : possibleStacks) {
+			for (NetworkItemStack ing : possibleStacks) {
 				NetworkItemStack thisType = ItemStackSerializer.remapItemToClient(connection.getVersion(), I18NData.DEFAULT_LOCALE, ing.cloneItemStack());
 				if(thisType.getTypeId() != firstType.getTypeId() || thisType.getAmount() != 1) {
 					allSameType = false;
@@ -65,7 +65,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 				consumer.accept(newItems); //final step
 			} else {
 				//recursively call with each new level of permutation
-				expandRecipePermutate(tail, newItems, consumer);
+				expandRecipe(tail, newItems, consumer);
 			}
 		}
 	}
@@ -75,7 +75,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 		recipesWritten = 0;
 		ByteBuf buffer = Unpooled.buffer();
 		for (Recipe recipe : recipes) {
-			if(recipe instanceof ShapelessRecipe) {
+			if (recipe instanceof ShapelessRecipe) {
 				ShapelessRecipe shapeless = (ShapelessRecipe)recipe;
 
 				expandRecipe(shapeless.getIngredients(), ingredients -> {
