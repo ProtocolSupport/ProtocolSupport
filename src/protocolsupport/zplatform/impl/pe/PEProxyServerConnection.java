@@ -126,7 +126,7 @@ public class PEProxyServerConnection extends SimpleChannelInboundHandler<ByteBuf
 					}
 				})
 				.addLast("compression", new ByteToMessageCodec<ByteBuf>() {
-					private final int maxPacketLength = 2 << 21;
+					private static final int MAX_PACKET_LENGTH = 2 << 21;
 					private final int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
 					private final Compressor compressor = Compressor.create();
 					private final Decompressor decompressor = Decompressor.create();
@@ -160,8 +160,8 @@ public class PEProxyServerConnection extends SimpleChannelInboundHandler<ByteBuf
 						if (uncompressedlength == 0) {
 							list.add(input.readBytes(input.readableBytes()));
 						} else {
-							if (uncompressedlength > maxPacketLength) {
-								throw new DecoderException(MessageFormat.format("Badly compressed packet - size of {0} is larger than protocol maximum of {1}", uncompressedlength, maxPacketLength));
+							if (uncompressedlength > MAX_PACKET_LENGTH) {
+								throw new DecoderException(MessageFormat.format("Badly compressed packet - size of {0} is larger than protocol maximum of {1}", uncompressedlength, MAX_PACKET_LENGTH));
 							}
 							byte[] inputBytes = MiscSerializer.readAllBytes(input);
 							list.add(Unpooled.wrappedBuffer(decompressor.decompress(inputBytes, 0, inputBytes.length, uncompressedlength)));

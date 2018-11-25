@@ -106,7 +106,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		return id;
 	}
 
-	public class Noop extends ServerBoundMiddlePacket {
+	public static class Noop extends ServerBoundMiddlePacket {
 
 		public Noop(ConnectionImpl connection) {
 			super(connection);

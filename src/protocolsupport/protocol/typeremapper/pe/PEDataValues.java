@@ -507,10 +507,10 @@ public class PEDataValues {
 
 		public static class PocketInventoryFilter {
 			private String Filter;
-			private transient NBTCompound filterNBT;
+			private transient NBTCompound filterNBT = null;
 
 			protected void init() {
-				Filter.hashCode();
+				System.out.println("Skipping inventory filter because NBT code still needs to be formatted: " + Filter);
 				//TODO GET THIS???
 				//filterNBT = new createNBTCompoundFromJson(Filter.replaceAll("\'", "\""));
 			}
