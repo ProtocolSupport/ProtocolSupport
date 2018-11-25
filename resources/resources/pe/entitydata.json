@@ -496,7 +496,7 @@
   },
   "PARROT": {
     "BoundingBox": {
-      "height": 0.9,
+      "height": 1,
       "width": 0.5
     }
   },
@@ -688,8 +688,8 @@
   },
   "TURTLE": {
     "BoundingBox": {
-      "height": 0.2,
-      "width": 0.6
+      "height": 0.4,
+      "width": 1.2
     }
   },
   "VEX": {
@@ -724,7 +724,7 @@
   },
   "WITHER_SKELETON": {
     "BoundingBox": {
-      "height": 2,
+      "height": 2.01,
       "width": 0.72
     }
   },
