@@ -83,7 +83,7 @@ public class InventoryData extends MiddleInventoryData {
 			case BREWING: {
 				switch(type) {
 					case 0: { //Brew time (0 - 400) (400 is empty)
-						return RecyclableSingletonList.create(create(windowId, 0, Math.round(value / 2) * 2));
+						return RecyclableSingletonList.create(create(windowId, 0, Math.round(value / 2f) * 2));
 					}
 					case 1: { //Fuel remaining (0 - 20) (20 is full)
 						RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
