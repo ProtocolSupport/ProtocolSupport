@@ -3307,12 +3307,12 @@
   {
     "itemkey": "spectral_arrow",
     "peid": 262,
-    "pedata": 0
+    "pedata": 2
   },
   {
     "itemkey": "tipped_arrow",
     "peid": 440,
-    "pedata": 0
+    "pedata": 1
   },
   {
     "itemkey": "lingering_potion",
@@ -3355,14 +3355,14 @@
     "pedata": 5
   },
   {
-	"itemkey": "tube_coral",
-	"peid": 492,
-	"pedata": 0
+  "itemkey": "tube_coral",
+  "peid": 492,
+  "pedata": 0
   },
   {
-	"itemkey": "tube_coral_block",
-	"peid": 387,
-	"pedata": 0
+  "itemkey": "tube_coral_block",
+  "peid": 387,
+  "pedata": 0
   },
   {
     "itemkey": "brain_coral",
@@ -3417,11 +3417,6 @@
   {
     "itemkey": "iron_nugget",
     "peid": 452,
-    "pedata": 0
-  },
-  {
-    "itemkey": "knowledge_book",
-    "peid": 340,
     "pedata": 0
   },
   {
@@ -3510,9 +3505,9 @@
     "pedata": 0
   },
   {
-	"itemkey": "kelp",
-	"peid": 335,
-	"pedata": 0
+  "itemkey": "kelp",
+  "peid": 335,
+  "pedata": 0
   },
   {
     "itemkey": "dried_kelp",

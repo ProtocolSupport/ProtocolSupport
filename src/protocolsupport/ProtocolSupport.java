@@ -60,7 +60,6 @@ import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.impl.pe.PECraftingManager;
 import protocolsupport.zplatform.impl.pe.PECreativeInventory;
 import protocolsupport.zplatform.impl.pe.PEProxyServer;
 import protocolsupport.zplatform.impl.pe.PEProxyServerInfoHandler;
@@ -176,7 +175,6 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getMessenger().registerIncomingPluginChannel(this, InternalPluginMessageRequest.TAG, new InternalPluginMessageRequest());
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
 			Thread pocketPacketCache = new Thread(() -> {
-				PECraftingManager.getInstance().registerRecipes();
 				PECreativeInventory.getInstance().generateCreativeInventoryItems();
 			});
 			pocketPacketCache.setDaemon(true);
