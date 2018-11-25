@@ -10,7 +10,7 @@ import java.util.function.Function;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
 
-public class EntityMetadataRemapper {
+public class EntityMetadataRemapper implements Cloneable {
 
 	public static final EntityMetadataRemapper NOOP = new EntityMetadataRemapper();
 

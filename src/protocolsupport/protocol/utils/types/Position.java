@@ -5,7 +5,7 @@ import org.bukkit.World;
 
 import protocolsupport.utils.Utils;
 
-public class Position {
+public class Position implements Cloneable {
 
 	protected int x;
 	protected int y;

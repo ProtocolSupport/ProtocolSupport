@@ -10,7 +10,7 @@ public class BlockStorageWriterPE {
 
 	public BlockStorageWriterPE(int bitsPerBlock, int blocks) {
 		this.bitsPerBlock = bitsPerBlock;
-		this.blocksPerWord = Math.floor(bitsPerWord / bitsPerBlock);
+		this.blocksPerWord = Math.floor(bitsPerWord / (double) bitsPerBlock);
 		this.blockdata = new int[(int) Math.ceil(blocks / this.blocksPerWord)];
 		this.singleValMask = (1 << bitsPerBlock) - 1;
 	}

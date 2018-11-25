@@ -52,13 +52,13 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 
 		public final String parentId;
 		public final AdvancementDisplay display;
-		public final String[] criterias;
+		public final String[] criteria;
 		public final String[][] requirements;
-		public Advancement(String parentId, AdvancementDisplay display, String[] criterias, String[][] requirments) {
+		public Advancement(String parentId, AdvancementDisplay display, String[] criteria, String[][] requirements) {
 			this.parentId = parentId;
 			this.display = display;
-			this.criterias = criterias;
-			this.requirements = requirments;
+			this.criteria = criteria;
+			this.requirements = requirements;
 		}
 	}
 
