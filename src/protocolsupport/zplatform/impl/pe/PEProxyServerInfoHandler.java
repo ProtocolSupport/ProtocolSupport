@@ -44,7 +44,7 @@ public class PEProxyServerInfoHandler implements PingHandler {
 
 	public static final int PACKET_ID = PEPacketIDs.SERVER_TO_CLIENT_HANDSHAKE;
 
-	protected static final AttributeKey<Boolean> SENT_INFO_KEY = AttributeKey.valueOf("___PSPEServerInfoSentInfo");
+	private static final AttributeKey<Boolean> SENT_INFO_KEY = AttributeKey.valueOf("___PSPEServerInfoSentInfo");
 
 	@Override
 	public String getServerInfo(Channel channel) {
