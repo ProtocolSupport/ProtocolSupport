@@ -28,7 +28,7 @@ public class PlayerListCache {
 		return playerlist.remove(uuid);
 	}
 
-	public static class PlayerListEntry implements Cloneable {
+	public static class PlayerListEntry {
 		protected final String name;
 		protected String displayNameJson;
 		protected int ping;
