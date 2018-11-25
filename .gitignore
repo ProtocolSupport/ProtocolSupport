@@ -5,6 +5,10 @@ libs/
 target/
 gen/
 dllibs/
+dllibss/
+dllibsc/
+/libraries_runtime/
+/libraries_shade/
 
 .externalToolBuilders/
  # Eclipse Files #
@@ -23,9 +27,6 @@ dllibs/
 
 # IntelliJ
 .idea/
+out/
 *.iml
-/dllibsc/
-/dllibss/
-/libraries_runtime/
-/libraries_shade/
-/logs/
+.idea/

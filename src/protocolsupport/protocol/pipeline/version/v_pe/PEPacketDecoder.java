@@ -1,7 +1,6 @@
 package protocolsupport.protocol.pipeline.version.v_pe;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -15,12 +14,16 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.Cli
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.Ping;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Animation;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.BlockTileUpdate;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.BookEdit;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Chat;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.ClientSettings;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.CommandRequest;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.EntityStatus;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.HeldSlot;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Interact;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.InventoryClose;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.MapInfoRequest;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.MoveVehicle;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAbilities;
@@ -28,13 +31,13 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAc
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.RiderJump;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.SteerVehicle;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.LocalPlayerInitialised;
 import protocolsupport.protocol.pipeline.version.util.decoder.AbstractPacketDecoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.packet.PEDimensionSwitchMovementConfirmationPacketQueue;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.pe.PEProxyServerInfoHandler;
 
 public class PEPacketDecoder extends AbstractPacketDecoder {
@@ -55,11 +58,16 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.INTERACT, Interact::new);
 		registry.register(NetworkState.PLAY, PEPacketIDs.COMMAND_REQUEST, CommandRequest::new);
 		registry.register(NetworkState.PLAY, PEPacketIDs.TILE_DATA_UPDATE, BlockTileUpdate::new);
+		registry.register(NetworkState.PLAY, PEPacketIDs.MOB_EQUIPMENT, HeldSlot::new);
 		registry.register(NetworkState.PLAY, PEPacketIDs.ENTITY_EVENT, EntityStatus::new);
 		registry.register(NetworkState.PLAY, PEPacketIDs.MAP_INFO_REQUEST, MapInfoRequest::new);
 		registry.register(NetworkState.PLAY, PEPacketIDs.RIDER_JUMP, RiderJump::new);
 		registry.register(NetworkState.PLAY, PEPacketIDs.GOD_PACKET, GodPacket::new);
+		registry.register(NetworkState.PLAY, PEPacketIDs.EDIT_BOOK, BookEdit::new);
 		registry.register(NetworkState.PLAY, PEPacketIDs.ADVENTURE_SETTINGS, PlayerAbilities::new);
+		registry.register(NetworkState.PLAY, PEPacketIDs.CONTAINER_CLOSE, InventoryClose::new);
+		registry.register(NetworkState.PLAY, PEPacketIDs.CUSTOM_EVENT, CustomPayload::new);
+		registry.register(NetworkState.PLAY, PEPacketIDs.SET_LOCAL_PLAYER_INITIALISED, LocalPlayerInitialised::new);
 	}
 
 	protected final PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq;
@@ -77,12 +85,6 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 			decodeAndTransform(ctx, input, list);
 			if (input.isReadable()) {
 				throw new DecoderException("Did not read all data from packet, bytes left: " + input.readableBytes());
-			}
-			if (dimswitchq.shouldScheduleUnlock()) {
-				ctx.channel().eventLoop().schedule(() -> {
-					dimswitchq.unlock();
-					connection.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("PS|PushQueue"));
-				}, PEDimensionSwitchMovementConfirmationPacketQueue.UNLOCK_DELAY, TimeUnit.SECONDS);
 			}
 		} catch (Exception e) {
 			throwFailedTransformException(e, input);
@@ -104,7 +106,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		return id;
 	}
 
-	public class Noop extends ServerBoundMiddlePacket {
+	public static class Noop extends ServerBoundMiddlePacket {
 
 		public Noop(ConnectionImpl connection) {
 			super(connection);

@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.listeners.InternalPluginMessageRequest;
+import protocolsupport.listeners.internal.BlockUpdateRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
@@ -10,6 +11,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory;
 import protocolsupport.protocol.utils.types.BlockFace;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
@@ -57,17 +59,19 @@ public class UseItem extends ServerBoundMiddlePacket {
 		switch (subTypeId) {
 			case USE_CLICK_AIR: {
 				face = -1;
-				BlockFace.getById(face).modPosition(position); //Modify position to update the correct block.
 				packets.add(MiddleBlockPlace.create(position, face, UsedHand.MAIN, cX, cY, cZ));
 				break;
 			}
 			case USE_CLICK_BLOCK: {
-				BlockFace.getById(face).modPosition(position); //Modify position to update the correct block.
 				packets.add(MiddleBlockPlace.create(position, face, UsedHand.MAIN, cX, cY, cZ));
+				if (PEInventory.shouldDoClickUpdate(itemstack)) {
+					packets.add(MiddleBlockPlace.create(Position.ZERO, -1, UsedHand.MAIN, cX, cY, cZ));
+				}
+				//Modify position to request server update for the correct block.
+				BlockFace.getById(face).modPosition(position);
 				break;
 			}
 			case USE_DIG_BLOCK: {
-				face = -1;
 				//instabreak
 				if (cache.getAttributesCache().getPEGameMode() == GameMode.CREATIVE) {
 					packets.add(MiddleBlockDig.create(MiddleBlockDig.Action.START_DIG, position, 0));
@@ -76,13 +80,13 @@ public class UseItem extends ServerBoundMiddlePacket {
 				break;
 			}
 		}
-		//Whenever the player places a block far away we want the server to update it, because PE might not be allowed to do it.
+		//Whenever the player places or breaks a block far away we want the server to update it, because PE might not be allowed to do it.
 		if (
 			(Math.abs(cache.getMovementCache().getPEClientX() - position.getX()) > 4) ||
 			(Math.abs(cache.getMovementCache().getPEClientY() - position.getY()) > 4) ||
 			(Math.abs(cache.getMovementCache().getPEClientZ() - position.getZ()) > 4)
 		) {
-			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.BlockUpdateRequest(position));
+			packets.add(InternalPluginMessageRequest.newPluginMessageRequest(new BlockUpdateRequest(position)));
 		}
 		return packets;
 	}

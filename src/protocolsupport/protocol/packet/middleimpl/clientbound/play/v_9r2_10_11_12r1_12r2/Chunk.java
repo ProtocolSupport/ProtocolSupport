@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
@@ -21,19 +22,22 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	protected final ChunkTransformerBB transformer = new ChunkTransformerVariesLegacy(LegacyBlockData.REGISTRY.getTable(connection.getVersion()));
+	protected final ChunkTransformerBB transformer = new ChunkTransformerVariesLegacy(LegacyBlockData.REGISTRY.getTable(connection.getVersion()), TileNBTRemapper.getRemapper(connection.getVersion()), cache.getTileCache());
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		transformer.loadData(data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full);
+		transformer.loadData(chunk, data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full, tiles);
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
-		serializer.writeInt(chunkX);
-		serializer.writeInt(chunkZ);
+		PositionSerializer.writeChunkCoord(serializer, chunk);
 		serializer.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(serializer, bitmask);
 		ArraySerializer.writeVarIntByteArray(serializer, transformer::writeLegacyData);
-		ArraySerializer.writeVarIntTArray(serializer, tiles, (to, tile) -> ItemStackSerializer.writeTag(to, version, TileNBTRemapper.remap(version, tile)));
+		ArraySerializer.writeVarIntTArray(
+			serializer,
+			transformer.remapAndGetTiles(),
+			(to, tile) -> ItemStackSerializer.writeTag(to, version, tile.getNBT())
+		);
 		return RecyclableSingletonList.create(serializer);
 	}
 

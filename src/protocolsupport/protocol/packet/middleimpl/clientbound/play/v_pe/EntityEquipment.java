@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityDataCache;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
@@ -56,7 +57,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 		} else {
 			dataCache.setOffHand(itemstack);
 		}
-		return RecyclableSingletonList.create(createUpdateHand(version, locale, entityId, itemstack, 0, slot == 1));
+		return RecyclableSingletonList.create(createUpdateHand(version, locale, entityId, itemstack, cache.getWatchedEntityCache().isSelf(entityId) ? cache.getPEInventoryCache().getSelectedSlot() : 0, slot == 1));
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, String locale, long entityId, NetworkItemStack helmet, NetworkItemStack chestplate, NetworkItemStack leggings, NetworkItemStack boots) {
@@ -75,7 +76,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 		ItemStackSerializer.writeItemStack(serializer, version, locale, itemstack, true);
 		serializer.writeByte(slot);
 		serializer.writeByte(slot);
-		serializer.writeByte(isMainHand ? 119 : 0);
+		serializer.writeByte(isMainHand ? PESource.POCKET_OFFHAND : PESource.POCKET_INVENTORY);
 		return serializer;
 	}
 

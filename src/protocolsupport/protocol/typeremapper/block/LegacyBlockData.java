@@ -49,7 +49,7 @@ public class LegacyBlockData {
 
 	public static class BlockIdRemappingRegistry extends IdRemappingRegistry<ArrayBasedIdRemappingTable> {
 
-		{
+		public BlockIdRemappingRegistry() {
 			applyDefaultRemaps();
 		}
 
@@ -139,7 +139,7 @@ public class LegacyBlockData {
 		}
 
 		public void applyDefaultRemaps() {
-			remappings.clear();
+			clear();
 
 			this.registerRemapEntryForAllStates(Material.SHULKER_BOX, Material.PURPLE_SHULKER_BOX.createBlockData(), ProtocolVersion.MINECRAFT_PE);
 			this.registerRemapEntryForAllStates(
@@ -204,15 +204,34 @@ public class LegacyBlockData {
 					Material.GRAY_STAINED_GLASS_PANE, Material.GREEN_STAINED_GLASS_PANE, Material.LIGHT_BLUE_STAINED_GLASS_PANE, Material.LIGHT_GRAY_STAINED_GLASS_PANE,
 					Material.LIME_STAINED_GLASS_PANE, Material.MAGENTA_STAINED_GLASS_PANE, Material.ORANGE_STAINED_GLASS_PANE, Material.PINK_STAINED_GLASS_PANE,
 					Material.PURPLE_STAINED_GLASS_PANE, Material.RED_STAINED_GLASS_PANE, Material.WHITE_STAINED_GLASS_PANE, Material.YELLOW_STAINED_GLASS_PANE,
-					Material.CREEPER_HEAD, Material.CREEPER_WALL_HEAD,
-					Material.ZOMBIE_HEAD, Material.ZOMBIE_WALL_HEAD,
-					Material.SKELETON_SKULL, Material.SKELETON_WALL_SKULL,
-					Material.WITHER_SKELETON_SKULL, Material.WITHER_SKELETON_WALL_SKULL,
-					Material.PLAYER_HEAD, Material.PLAYER_WALL_HEAD,
 					Material.GRASS_BLOCK, Material.MYCELIUM, Material.PODZOL,
 					Material.NOTE_BLOCK
 				),
 				o -> o.getMaterial().createBlockData(),
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+			);
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.SKELETON_SKULL,
+					Material.WITHER_SKELETON_SKULL,
+					Material.CREEPER_HEAD,
+					Material.DRAGON_HEAD,
+					Material.PLAYER_HEAD,
+					Material.ZOMBIE_HEAD
+				),
+				Material.SKELETON_SKULL.createBlockData(),
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+			);
+			this.<Directional>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.SKELETON_WALL_SKULL,
+					Material.WITHER_SKELETON_WALL_SKULL,
+					Material.CREEPER_WALL_HEAD,
+					Material.DRAGON_WALL_HEAD,
+					Material.PLAYER_WALL_HEAD,
+					Material.ZOMBIE_WALL_HEAD
+				),
+				o -> cloneDirectional(o, (Directional) Material.SKELETON_WALL_SKULL.createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<MultipleFacing>registerRemapEntryForAllStates(
@@ -364,7 +383,7 @@ public class LegacyBlockData {
 					enderChest.setFacing(o.getFacing());
 					return enderChest;
 				},
-				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+				ProtocolVersionsHelper.BEFORE_1_13
 			);
 			this.<PistonHead>registerRemapEntryForAllStates(
 				Material.PISTON_HEAD,
@@ -467,10 +486,11 @@ public class LegacyBlockData {
 			this.registerRemapEntryForAllStates(Material.DRIED_KELP_BLOCK, Material.GREEN_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(Material.SHULKER_BOX, Material.PINK_SHULKER_BOX.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(
-				Arrays.asList(Material.SEAGRASS, Material.SEA_PICKLE, Material.TURTLE_EGG),
-				Material.GRASS.createBlockData(),
+				Arrays.asList(Material.SEA_PICKLE, Material.TURTLE_EGG),
+				Material.CAKE.createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
+			this.registerRemapEntryForAllStates(Material.SEAGRASS, Material.GRASS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(Material.TALL_SEAGRASS, Material.KELP, Material.KELP_PLANT),
 				Material.TALL_GRASS.createBlockData(),
@@ -603,7 +623,11 @@ public class LegacyBlockData {
 			this.registerRemapEntryForAllStates(Material.NETHER_WART_BLOCK, Material.RED_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
 			this.registerRemapEntryForAllStates(Material.RED_NETHER_BRICKS, Material.NETHER_BRICKS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
 			this.registerRemapEntryForAllStates(Material.MAGMA_BLOCK, Material.NETHERRACK.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
-			this.registerRemapEntryForAllStates(Material.BONE_BLOCK, Material.BRICKS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
+			this.registerRemapEntryForAllStates(Material.BONE_BLOCK, (o) -> {
+				Slab slab = (Slab) Material.STONE_SLAB.createBlockData();
+				slab.setType(Slab.Type.DOUBLE);
+				return slab;
+			}, ProtocolVersionsHelper.BEFORE_1_10);
 
 
 			this.registerRemapEntryForAllStates(Material.END_GATEWAY, Material.END_PORTAL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_9);

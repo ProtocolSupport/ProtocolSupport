@@ -1,10 +1,17 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.MerchantDataSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class CustomPayload extends MiddleCustomPayload {
 
@@ -14,7 +21,26 @@ public class CustomPayload extends MiddleCustomPayload {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableEmptyList.get();
+		if (tag.equals(LegacyCustomPayloadChannelName.MODERN_TRADER_LIST)) {
+			return RecyclableSingletonList.create(cache.getPEInventoryCache().getFakeVillager().updateTrade(
+					cache, connection.getVersion(),
+					MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale()))
+			);
+		}
+		return RecyclableSingletonList.create(create(connection.getVersion(), tag, data));
+	}
+
+	public static ClientBoundPacketData create(ProtocolVersion version, String tag) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CUSTOM_EVENT);
+		StringSerializer.writeString(serializer, version, tag);
+		return serializer;
+	}
+
+	public static ClientBoundPacketData create(ProtocolVersion version, String tag, ByteBuf data) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CUSTOM_EVENT);
+		StringSerializer.writeString(serializer, version, tag);
+		serializer.writeBytes(data);
+		return serializer;
 	}
 
 }

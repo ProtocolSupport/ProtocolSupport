@@ -82,7 +82,7 @@ public class ItemStackComplexRemapperRegistry {
 			}
 			registerToClient(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);
 			registerToClient(material, enchanttolegacyid, ProtocolVersionsHelper.BEFORE_1_13);
-			registerToClient(material, dnametolegacytext, ProtocolVersionsHelper.BEFORE_1_13);
+			registerToClient(material, dnametolegacytext, ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
 			registerToClient(material, peenchantremapper, ProtocolVersion.MINECRAFT_PE);
 		});
 		registerToClient(Material.MAP, new MapItemLegacyIdToNbtSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);

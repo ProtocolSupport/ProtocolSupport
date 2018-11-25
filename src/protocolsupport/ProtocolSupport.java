@@ -45,6 +45,8 @@ import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPotion;
 import protocolsupport.protocol.typeremapper.pe.PESkinModel;
+import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory;
+import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeContainer;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
@@ -58,6 +60,8 @@ import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.impl.pe.PECraftingManager;
+import protocolsupport.zplatform.impl.pe.PECreativeInventory;
 import protocolsupport.zplatform.impl.pe.PEProxyServer;
 import protocolsupport.zplatform.impl.pe.PEProxyServerInfoHandler;
 
@@ -151,6 +155,8 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(PEDataValues.class.getName());
 			Class.forName(PESkinModel.class.getName());
 			Class.forName(PEPotion.class.getName());
+			Class.forName(PEInventory.class.getName());
+			Class.forName(PEFakeContainer.class.getName());
 			Class.forName(PEBlocks.class.getName());
 			Class.forName(EmptyChunk.class.getName());
 			ServerPlatform.get().getInjector().onLoad();
@@ -169,6 +175,16 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
 		getServer().getMessenger().registerIncomingPluginChannel(this, InternalPluginMessageRequest.TAG, new InternalPluginMessageRequest());
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
+			Thread pocketPacketCache = new Thread(() -> {
+				PECraftingManager.getInstance().registerRecipes();
+				PECreativeInventory.getInstance().generateCreativeInventoryItems();
+			});
+			pocketPacketCache.setDaemon(true);
+			pocketPacketCache.start();
+			try {
+				pocketPacketCache.join();
+			} catch (InterruptedException e) {
+			}
 			(peserver = new PEProxyServer()).start();
 		});
 		getServer().getPluginManager().registerEvents(new LocaleUseLoader(), this);
@@ -181,6 +197,10 @@ public class ProtocolSupport extends JavaPlugin {
 		if (peserver != null) {
 			peserver.stop();
 		}
+	}
+
+	public static void logTrace(String message) {
+		ProtocolSupport.getInstance().getLogger().fine(message);
 	}
 
 	public static void logInfo(String message) {
