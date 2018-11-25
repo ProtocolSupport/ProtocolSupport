@@ -4,7 +4,9 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.types.ChunkCoord;
 import protocolsupport.utils.Utils;
 
 public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
@@ -13,22 +15,26 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected int chunkX;
-	protected int chunkZ;
+	protected ChunkCoord chunk;
 	protected Record[] records;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		chunkX = serverdata.readInt();
-		chunkZ = serverdata.readInt();
-		records = ArraySerializer.readVarIntTArray(serverdata, Record.class, from -> new Record(from.readUnsignedShort(), VarNumberSerializer.readVarInt(from)));
+		chunk = PositionSerializer.readChunkCoord(serverdata);
+		records = ArraySerializer.readVarIntTArray(
+			serverdata,
+			Record.class,
+			from -> {
+				return new Record(PositionSerializer.readLocalCoord(serverdata), VarNumberSerializer.readVarInt(from));
+			}
+		);
 	}
 
 	public static class Record {
-		public final int coord;
+		public final int localCoord;
 		public final int id;
-		public Record(int coord, int id) {
-			this.coord = coord;
+		public Record(int localCoord, int id) {
+			this.localCoord = localCoord;
 			this.id = id;
 		}
 		@Override
