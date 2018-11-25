@@ -51,7 +51,7 @@ public class Advancements extends MiddleAdvancements {
 		} else {
 			to.writeBoolean(false);
 		}
-		ArraySerializer.writeVarIntStringArray(to, version, advancement.criterias);
+		ArraySerializer.writeVarIntStringArray(to, version, advancement.criteria);
 		ArraySerializer.writeVarIntTArray(to, advancement.requirements, (buf, element) -> ArraySerializer.writeVarIntStringArray(to, version, element));
 	}
 
