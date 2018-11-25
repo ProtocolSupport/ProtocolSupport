@@ -15,7 +15,10 @@ import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class CraftingData extends MiddleDeclareRecipes {
@@ -33,12 +36,13 @@ public class CraftingData extends MiddleDeclareRecipes {
 		LinkedList<Ingredient> tail = new LinkedList<>(ingredients);
 		Ingredient first = tail.removeFirst();
 		NetworkItemStack[] possibleStacks = first.getPossibleStacks();
-		if (possibleStacks.length == 0) {
-			possibleStacks = new NetworkItemStack[]{null}; //air
+		if (possibleStacks.length == 0) { //air/empty
+			possibleStacks = new NetworkItemStack[]{null};
 		}
-		if (possibleStacks.length > 2) {
+		if (possibleStacks.length > 2) { //'large' ingredient set
 			NetworkItemStack firstType = ItemStackSerializer.remapItemToClient(connection.getVersion(), I18NData.DEFAULT_LOCALE, possibleStacks[0].cloneItemStack());
 			boolean allSameType = true;
+			//see if all ingredients are variants of the same type
 			for(NetworkItemStack ing : possibleStacks) {
 				NetworkItemStack thisType = ItemStackSerializer.remapItemToClient(connection.getVersion(), I18NData.DEFAULT_LOCALE, ing.cloneItemStack());
 				if(thisType.getTypeId() != firstType.getTypeId() || thisType.getAmount() != 1) {
@@ -46,7 +50,6 @@ public class CraftingData extends MiddleDeclareRecipes {
 					break;
 				}
 			}
-
 			if (allSameType) {
 				NetworkItemStack wildStack = new NetworkItemStack();
 				wildStack.setTypeId(firstType.getTypeId());
@@ -59,8 +62,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 			LinkedList<NetworkItemStack> newItems = new LinkedList<>(items);
 			newItems.add(item);
 			if (tail.isEmpty()) {
-				//final step
-				consumer.accept(newItems);
+				consumer.accept(newItems); //final step
 			} else {
 				//recursively call with each new level of permutation
 				expandRecipePermutate(tail, newItems, consumer);
@@ -95,6 +97,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 		ClientBoundPacketData craftPacket = ClientBoundPacketData.create(PEPacketIDs.CRAFTING_DATA);
 		VarNumberSerializer.writeVarInt(craftPacket, recipesWritten);
 		craftPacket.writeBytes(buffer);
+		buffer.release();
 		return RecyclableSingletonList.create(craftPacket);
 	}
 
