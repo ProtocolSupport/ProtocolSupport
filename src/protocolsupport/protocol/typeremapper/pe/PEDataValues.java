@@ -402,14 +402,22 @@ public class PEDataValues {
 	}
 
 	private final static Map<NetworkEntityType, PEEntityData> entityData = new EnumMap<NetworkEntityType, PEEntityData>(NetworkEntityType.class);
+	private final static Map<NetworkEntityType, PEEntityInventoryData> entityInventoryData = new EnumMap<NetworkEntityType, PEEntityInventoryData>(NetworkEntityType.class);
 	static {
 		getFileObject("entitydata.json").entrySet().forEach(entry -> {
-			entityData.put(NetworkEntityType.valueOf(entry.getKey()), Utils.GSON.fromJson(entry.getValue(), PEEntityData.class).init());
+			entityData.put(NetworkEntityType.valueOf(entry.getKey()), Utils.GSON.fromJson(entry.getValue(), PEEntityData.class));
+		});
+		getFileObject("entitydata_inventory.json").entrySet().forEach(entry -> {
+			entityInventoryData.put(NetworkEntityType.valueOf(entry.getKey()), Utils.GSON.fromJson(entry.getValue(), PEEntityInventoryData.class).init());
 		});
 	}
 
 	public static PEEntityData getEntityData(NetworkEntityType type) {
 		return entityData.get(type);
+	}
+
+	public static PEEntityInventoryData getEntityInventoryData(NetworkEntityType type) {
+		return entityInventoryData.get(type);
 	}
 
 	public static class PEEntityData {
@@ -422,9 +430,6 @@ public class PEDataValues {
 		@SerializedName("RiderInfo")
 		private RiderInfo riderInfo;
 
-		@SerializedName("InventoryFilter")
-		private PocketInventoryFilter inventoryFilter;
-
 		public BoundingBox getBoundingBox() {
 			return boundingBox;
 		}
@@ -435,17 +440,6 @@ public class PEDataValues {
 
 		public RiderInfo getRiderInfo() {
 			return riderInfo;
-		}
-
-		public PocketInventoryFilter getInventoryFilter() {
-			return inventoryFilter;
-		}
-
-		public PEEntityData init() {
-			if(inventoryFilter != null) {
-				inventoryFilter.init();
-			}
-			return this;
 		}
 
 		public static class BoundingBox {
@@ -502,7 +496,22 @@ public class PEDataValues {
 			public Float getRotationLock() {
 				return rotationlock;
 			}
+		}
+	}
 
+	public static class PEEntityInventoryData {
+		@SerializedName("InventoryFilter")
+		private PocketInventoryFilter inventoryFilter;
+
+		public PocketInventoryFilter getInventoryFilter() {
+			return inventoryFilter;
+		}
+
+		public PEEntityInventoryData init() {
+			if(inventoryFilter != null) {
+				inventoryFilter.init();
+			}
+			return this;
 		}
 
 		public static class PocketInventoryFilter {
@@ -519,7 +528,5 @@ public class PEDataValues {
 				return filterNBT;
 			}
 		}
-
 	}
-
 }
