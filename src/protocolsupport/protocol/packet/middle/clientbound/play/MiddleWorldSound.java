@@ -13,7 +13,6 @@ public abstract class MiddleWorldSound extends ClientBoundMiddlePacket {
 
 	protected int id;
 	protected int category;
-	protected String parrotedEntityType;
 	protected int x;
 	protected int y;
 	protected int z;

@@ -58,6 +58,7 @@ public class LegacyItemType {
 
 
 			registerRemapEntry(Material.KNOWLEDGE_BOOK, Material.BOOK, ProtocolVersionsHelper.BEFORE_1_12);
+			registerRemapEntry(Material.IRON_NUGGET, Material.GOLD_NUGGET, ProtocolVersionsHelper.BEFORE_1_11_1);
 			registerRemapEntry(Material.SHULKER_SHELL, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_11);
 			registerRemapEntry(Material.TOTEM_OF_UNDYING, Material.COBBLESTONE, ProtocolVersionsHelper.BEFORE_1_11);
 
