@@ -1,6 +1,7 @@
 package protocolsupport.protocol.utils;
 
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class CommonNBT {
@@ -23,5 +24,13 @@ public class CommonNBT {
 	public static final String MODERN_ENCHANTMENTS = "Enchantments";
 
 	public static final String LEGACY_ENCHANTMENTS = "ench";
+
+	public static String[] getSignLines(NBTCompound tag) {
+		String[] lines = new String[4];
+		for (int i = 0; i < lines.length; i++) {
+			lines[i] = NBTString.getValueOrDefault(tag.getTagOfType("Text" + (i + 1), NBTType.STRING), "");
+		}
+		return lines;
+	}
 
 }

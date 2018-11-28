@@ -22,7 +22,7 @@ import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.typeremapper.basic.GenericIdRemapper;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.basic.SoundRemapper;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.basic.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
@@ -109,7 +109,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(LegacyBlockData.class.getName());
 			Class.forName(FlatteningBlockId.class.getName());
 			Class.forName(PreFlatteningBlockIdData.class.getName());
-			Class.forName(TileNBTRemapper.class.getName());
+			Class.forName(TileEntityRemapper.class.getName());
 			Class.forName(ItemMaterialLookup.class.getName());
 			Class.forName(LegacyItemType.class.getName());
 			Class.forName(FlatteningItemId.class.getName());

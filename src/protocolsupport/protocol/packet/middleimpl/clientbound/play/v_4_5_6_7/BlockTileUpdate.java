@@ -9,7 +9,8 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.basic.TileEntityRemapper;
+import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.types.TileEntity;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.utils.Utils;
@@ -22,7 +23,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		super(connection);
 	}
 
-	protected final TileNBTRemapper tileremapper = TileNBTRemapper.getRemapper(connection.getVersion());
+	protected final TileEntityRemapper tileremapper = TileEntityRemapper.getRemapper(connection.getVersion());
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -37,7 +38,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		if (type == TileEntityType.SIGN) {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID);
 			PositionSerializer.writeLegacyPositionS(serializer, tile.getPosition());
-			for (String line : TileNBTRemapper.getSignLines(tile.getNBT())) {
+			for (String line : CommonNBT.getSignLines(tile.getNBT())) {
 				StringSerializer.writeString(serializer, version, Utils.clampString(ChatAPI.fromJSON(line).toLegacyText(connection.getCache().getAttributesCache().getLocale()), 15));
 			}
 			return serializer;
