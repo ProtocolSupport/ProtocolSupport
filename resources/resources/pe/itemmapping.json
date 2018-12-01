@@ -2560,6 +2560,11 @@
     "pedata": 0
   },
   {
+    "itemkey": "white_bed",
+    "peid": 355,
+    "pedata": 0
+  },
+  {
     "itemkey": "red_bed",
     "peid": 355,
     "pedata": 14
