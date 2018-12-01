@@ -3075,6 +3075,31 @@
     "pedata": 4
   },
   {
+    "itemkey": "dead_tube_coral_block",
+    "peid": -132,
+    "pedata": 8
+  },
+  {
+    "itemkey": "dead_brain_coral_block",
+    "peid": -132,
+    "pedata": 9
+  },
+  {
+    "itemkey": "dead_bubble_coral_block",
+    "peid": -132,
+    "pedata": 10
+  },
+  {
+    "itemkey": "dead_fire_coral_block",
+    "peid": -132,
+    "pedata": 11
+  },
+  {
+    "itemkey": "dead_horn_coral_block",
+    "peid": -132,
+    "pedata": 12
+  },
+  {
     "itemkey": "emerald",
     "peid": 388,
     "pedata": 0
@@ -3552,6 +3577,56 @@
   {
     "itemkey": "horn_coral",
     "peid": -131,
+    "pedata": 4
+  },
+  {
+    "itemkey": "tube_coral_fan",
+    "peid": -133,
+    "pedata": 0
+  },
+  {
+    "itemkey": "brain_coral_fan",
+    "peid": -133,
+    "pedata": 1
+  },
+  {
+    "itemkey": "bubble_coral_fan",
+    "peid": -133,
+    "pedata": 2
+  },
+  {
+    "itemkey": "fire_coral_fan",
+    "peid": -133,
+    "pedata": 3
+  },
+  {
+    "itemkey": "horn_coral_fan",
+    "peid": -133,
+    "pedata": 4
+  },
+  {
+    "itemkey": "dead_tube_coral_fan",
+    "peid": -134,
+    "pedata": 0
+  },
+  {
+    "itemkey": "dead_brain_coral_fan",
+    "peid": -134,
+    "pedata": 1
+  },
+  {
+    "itemkey": "dead_bubble_coral_fan",
+    "peid": -134,
+    "pedata": 2
+  },
+  {
+    "itemkey": "dead_fire_coral_fan",
+    "peid": -134,
+    "pedata": 3
+  },
+  {
+    "itemkey": "dead_horn_coral_fan",
+    "peid": -134,
     "pedata": 4
   },
   {
