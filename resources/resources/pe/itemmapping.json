@@ -222,7 +222,7 @@
   {
     "itemkey": "dispenser",
     "peid": 23,
-    "pedata": 0
+    "pedata": 3
   },
   {
     "itemkey": "sandstone",
@@ -257,7 +257,7 @@
   {
     "itemkey": "sticky_piston",
     "peid": 29,
-    "pedata": 0
+    "pedata": 1
   },
   {
     "itemkey": "cobweb",
@@ -282,7 +282,7 @@
   {
     "itemkey": "piston",
     "peid": 33,
-    "pedata": 0
+    "pedata": 1
   },
   {
     "itemkey": "white_wool",
@@ -587,7 +587,7 @@
   {
     "itemkey": "stone_button",
     "peid": 77,
-    "pedata": 0
+    "pedata": 5
   },
   {
     "itemkey": "snow",
@@ -837,7 +837,7 @@
   {
     "itemkey": "dropper",
     "peid": 125,
-    "pedata": 0
+    "pedata": 3
   },
   {
     "itemkey": "activator_rail",
@@ -907,7 +907,7 @@
   {
     "itemkey": "oak_button",
     "peid": 143,
-    "pedata": 0
+    "pedata": 5
   },
   {
     "itemkey": "anvil",
@@ -1447,7 +1447,7 @@
   {
     "itemkey": "shulker_box",
     "peid": 205,
-    "pedata": 0
+    "pedata": 16
   },
   {
     "itemkey": "end_stone_bricks",
