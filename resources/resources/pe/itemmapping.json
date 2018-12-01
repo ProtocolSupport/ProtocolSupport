@@ -2737,222 +2737,222 @@
   {
     "itemkey": "pig_spawn_egg",
     "peid": 383,
-    "pedata": 0
+    "pedata": 12
   },
   {
     "itemkey": "elder_guardian_spawn_egg",
     "peid": 383,
-    "pedata": 4
+    "pedata": 50
   },
   {
     "itemkey": "wither_skeleton_spawn_egg",
     "peid": 383,
-    "pedata": 5
+    "pedata": 48
   },
   {
     "itemkey": "stray_spawn_egg",
     "peid": 383,
-    "pedata": 6
+    "pedata": 46
   },
   {
     "itemkey": "husk_spawn_egg",
     "peid": 383,
-    "pedata": 23
+    "pedata": 47
   },
   {
     "itemkey": "zombie_villager_spawn_egg",
     "peid": 383,
-    "pedata": 27
+    "pedata": 44
   },
   {
     "itemkey": "skeleton_horse_spawn_egg",
     "peid": 383,
-    "pedata": 28
+    "pedata": 26
   },
   {
     "itemkey": "zombie_horse_spawn_egg",
     "peid": 383,
-    "pedata": 29
+    "pedata": 27
   },
   {
     "itemkey": "donkey_spawn_egg",
     "peid": 383,
-    "pedata": 31
+    "pedata": 24
   },
   {
     "itemkey": "mule_spawn_egg",
     "peid": 383,
-    "pedata": 32
+    "pedata": 25
   },
   {
     "itemkey": "evoker_spawn_egg",
     "peid": 383,
-    "pedata": 34
+    "pedata": 104
   },
   {
     "itemkey": "vex_spawn_egg",
     "peid": 383,
-    "pedata": 35
+    "pedata": 105
   },
   {
     "itemkey": "vindicator_spawn_egg",
     "peid": 383,
-    "pedata": 36
+    "pedata": 57
   },
   {
     "itemkey": "creeper_spawn_egg",
     "peid": 383,
-    "pedata": 50
+    "pedata": 33
   },
   {
     "itemkey": "skeleton_spawn_egg",
     "peid": 383,
-    "pedata": 51
+    "pedata": 34
   },
   {
     "itemkey": "spider_spawn_egg",
     "peid": 383,
-    "pedata": 52
+    "pedata": 35
   },
   {
     "itemkey": "zombie_spawn_egg",
     "peid": 383,
-    "pedata": 54
+    "pedata": 32
   },
   {
     "itemkey": "slime_spawn_egg",
     "peid": 383,
-    "pedata": 55
+    "pedata": 37
   },
   {
     "itemkey": "ghast_spawn_egg",
     "peid": 383,
-    "pedata": 56
+    "pedata": 41
   },
   {
     "itemkey": "zombie_pigman_spawn_egg",
     "peid": 383,
-    "pedata": 57
+    "pedata": 36
   },
   {
     "itemkey": "enderman_spawn_egg",
     "peid": 383,
-    "pedata": 58
+    "pedata": 38
   },
   {
     "itemkey": "cave_spider_spawn_egg",
     "peid": 383,
-    "pedata": 59
+    "pedata": 40
   },
   {
     "itemkey": "silverfish_spawn_egg",
     "peid": 383,
-    "pedata": 60
+    "pedata": 39
   },
   {
     "itemkey": "blaze_spawn_egg",
     "peid": 383,
-    "pedata": 61
+    "pedata": 43
   },
   {
     "itemkey": "magma_cube_spawn_egg",
     "peid": 383,
-    "pedata": 62
+    "pedata": 42
   },
   {
     "itemkey": "bat_spawn_egg",
     "peid": 383,
-    "pedata": 65
+    "pedata": 19
   },
   {
     "itemkey": "witch_spawn_egg",
     "peid": 383,
-    "pedata": 66
+    "pedata": 45
   },
   {
     "itemkey": "endermite_spawn_egg",
     "peid": 383,
-    "pedata": 67
+    "pedata": 55
   },
   {
     "itemkey": "guardian_spawn_egg",
     "peid": 383,
-    "pedata": 68
+    "pedata": 49
   },
   {
     "itemkey": "shulker_spawn_egg",
     "peid": 383,
-    "pedata": 69
+    "pedata": 54
   },
   {
     "itemkey": "sheep_spawn_egg",
     "peid": 383,
-    "pedata": 91
+    "pedata": 13
   },
   {
     "itemkey": "cow_spawn_egg",
     "peid": 383,
-    "pedata": 92
+    "pedata": 11
   },
   {
     "itemkey": "chicken_spawn_egg",
     "peid": 383,
-    "pedata": 93
+    "pedata": 10
   },
   {
     "itemkey": "squid_spawn_egg",
     "peid": 383,
-    "pedata": 94
+    "pedata": 17
   },
   {
     "itemkey": "wolf_spawn_egg",
     "peid": 383,
-    "pedata": 95
+    "pedata": 14
   },
   {
     "itemkey": "mooshroom_spawn_egg",
     "peid": 383,
-    "pedata": 96
+    "pedata": 16
   },
   {
     "itemkey": "ocelot_spawn_egg",
     "peid": 383,
-    "pedata": 98
+    "pedata": 22
   },
   {
     "itemkey": "horse_spawn_egg",
     "peid": 383,
-    "pedata": 100
+    "pedata": 23
   },
   {
     "itemkey": "rabbit_spawn_egg",
     "peid": 383,
-    "pedata": 101
+    "pedata": 18
   },
   {
     "itemkey": "polar_bear_spawn_egg",
     "peid": 383,
-    "pedata": 102
+    "pedata": 28
   },
   {
     "itemkey": "llama_spawn_egg",
     "peid": 383,
-    "pedata": 103
+    "pedata": 29
   },
   {
     "itemkey": "parrot_spawn_egg",
     "peid": 383,
-    "pedata": 105
+    "pedata": 30
   },
   {
     "itemkey": "villager_spawn_egg",
     "peid": 383,
-    "pedata": 120
+    "pedata": 15
   },
   {
     "itemkey": "turtle_spawn_egg",
     "peid": 383,
-    "pedata": 255
+    "pedata": 74
   },
   {
     "itemkey": "experience_bottle",
