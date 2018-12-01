@@ -1380,6 +1380,21 @@
     "pedata": 0
   },
   {
+    "itemkey": "prismarine_slab",
+    "peid": 182,
+    "pedata": 2
+  },
+  {
+    "itemkey": "dark_prismarine_slab",
+    "peid": 182,
+    "pedata": 3
+  },
+  {
+    "itemkey": "prismarine_brick_slab",
+    "peid": 182,
+    "pedata": 4
+  },
+  {
     "itemkey": "spruce_fence_gate",
     "peid": 183,
     "pedata": 0
