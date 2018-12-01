@@ -737,17 +737,17 @@
   {
     "itemkey": "brown_mushroom_block",
     "peid": 99,
-    "pedata": 0
+    "pedata": 14
   },
   {
     "itemkey": "mushroom_stem",
     "peid": 99,
-    "pedata": 10
+    "pedata": 15
   },
   {
     "itemkey": "red_mushroom_block",
     "peid": 100,
-    "pedata": 0
+    "pedata": 14
   },
   {
     "itemkey": "iron_bars",
@@ -1441,8 +1441,8 @@
   },
   {
     "itemkey": "purpur_slab",
-    "peid": 203,
-    "pedata": 0
+    "peid": 182,
+    "pedata": 1
   },
   {
     "itemkey": "shulker_box",
@@ -2527,7 +2527,7 @@
   {
     "itemkey": "red_bed",
     "peid": 355,
-    "pedata": 0
+    "pedata": 14
   },
   {
     "itemkey": "orange_bed",
