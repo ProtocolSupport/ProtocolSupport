@@ -2970,6 +2970,41 @@
     "pedata": 74
   },
   {
+    "itemkey": "tropical_fish_spawn_egg",
+    "peid": 383,
+    "pedata": 111
+  },
+  {
+    "itemkey": "cod_spawn_egg",
+    "peid": 383,
+    "pedata": 112
+  },
+  {
+    "itemkey": "pufferfish_spawn_egg",
+    "peid": 383,
+    "pedata": 108
+  },
+  {
+    "itemkey": "salmon_spawn_egg",
+    "peid": 383,
+    "pedata": 109
+  },
+  {
+    "itemkey": "dolphin_spawn_egg",
+    "peid": 383,
+    "pedata": 31
+  },
+  {
+    "itemkey": "drowned_spawn_egg",
+    "peid": 383,
+    "pedata": 110
+  },
+  {
+    "itemkey": "phantom_spawn_egg",
+    "peid": 383,
+    "pedata": 58
+  },
+  {
     "itemkey": "experience_bottle",
     "peid": 384,
     "pedata": 0
