@@ -2290,6 +2290,26 @@
     "pedata": 1
   },
   {
+    "itemkey": "cod_bucket",
+    "peid": 325,
+    "pedata": 2
+  },
+  {
+    "itemkey": "salmon_bucket",
+    "peid": 325,
+    "pedata": 3
+  },
+  {
+    "itemkey": "tropical_fish_bucket",
+    "peid": 325,
+    "pedata": 4
+  },
+  {
+    "itemkey": "pufferfish_bucket",
+    "peid": 325,
+    "pedata": 5
+  },
+  {
     "itemkey": "water_bucket",
     "peid": 325,
     "pedata": 8
