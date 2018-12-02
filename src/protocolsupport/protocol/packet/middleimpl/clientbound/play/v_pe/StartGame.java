@@ -118,6 +118,9 @@ public class StartGame extends MiddleStartGame {
 		//Set PE gamemode.
 		AttributesCache attrscache = cache.getAttributesCache();
 		attrscache.setPEGameMode(gamemode);
+		//Disable player mobility for right now
+		cache.getMovementCache().setClientImmobile(true);
+		packets.add(EntityMetadata.updatePlayerMobility(connection));
 		//Lock client bound packet queue until LocalPlayerInitialised or bungee confirm.
 		packets.add(CustomPayload.create(version, InternalPluginMessageRequest.PELockChannel));
 		return packets;

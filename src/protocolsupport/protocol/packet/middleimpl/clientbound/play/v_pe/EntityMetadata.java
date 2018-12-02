@@ -10,6 +10,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes.AttributeInfo;
 import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
@@ -60,6 +61,11 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				entityRemapper.getRemappedMetadata().put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(0));
 				entityRemapper.getRemappedMetadata().put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(0));
 			}
+		} else { //player flags
+			if (cache.getWatchedEntityCache().isSelf(entity.getId())) {
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_NO_AI, cache.getMovementCache().isClientImmobile());
+			}
+			entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_CAN_CLIMB, true);
 		}
 		//Meta health -> attribute packet remapper.
 		if (entity.getType().isOfType(NetworkEntityType.LIVING)) {
@@ -110,6 +116,17 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		DataWatcherSerializer.writePEData(serializer, version, locale, transform(entity, peMetadata, version));
 		return serializer;
+	}
+
+	public static ClientBoundPacketData updatePlayerMobility(ConnectionImpl connection) {
+		NetworkDataCache cache = connection.getCache();
+		ProtocolVersion version = connection.getVersion();
+		ArrayMap<DataWatcherObject<?>> peMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
+		String locale = cache.getAttributesCache().getLocale();
+		NetworkEntity player = cache.getWatchedEntityCache().getSelfPlayer();
+		player.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_NO_AI, cache.getMovementCache().isClientImmobile());
+		peMetadata.put(PeMetaBase.FLAGS, new DataWatcherObjectSVarLong(player.getDataCache().getPeBaseFlags()));
+		return create(player, locale, peMetadata, version);
 	}
 
 	public static class PeMetaBase {

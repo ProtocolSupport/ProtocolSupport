@@ -6,9 +6,11 @@ import java.util.Collection;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
@@ -56,9 +58,10 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 		return state == State.UNLOCKED;
 	}
 
-	public RecyclableCollection<ServerBoundPacketData> processServerBoundPackets(RecyclableCollection<ServerBoundPacketData> packets) {
+	public RecyclableCollection<ServerBoundPacketData> processServerBoundPackets(RecyclableCollection<ServerBoundPacketData> packets, ConnectionImpl connection) {
 		try {
 			RecyclableArrayList<ServerBoundPacketData> allowed = RecyclableArrayList.create();
+			boolean wasLocked = state == State.LOCKED;
 			for (ServerBoundPacketData packet : packets) {
 				if (!isPacketSendingAllowed() && packet.getPacketType() == ServerBoundPacket.PLAY_CUSTOM_PAYLOAD) {
 					ByteBuf peak = packet.duplicate();
@@ -72,6 +75,11 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 					state = State.UNLOCKED;
 				}
 				allowed.add(packet);
+			}
+			if (wasLocked && state == State.UNLOCKED) {
+				//Enable player mobility again
+				connection.getCache().getMovementCache().setClientImmobile(false);
+				queue.add(EntityMetadata.updatePlayerMobility(connection));
 			}
 			return allowed;
 		} finally {

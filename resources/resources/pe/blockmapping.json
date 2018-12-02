@@ -1785,31 +1785,31 @@
   },
   "minecraft:snow[layers=2]":{
     "pename":"minecraft:snow_layer",
-    "pedata":1
+    "pedata":3
   },
   "minecraft:snow[layers=3]":{
     "pename":"minecraft:snow_layer",
-    "pedata":2
+    "pedata":3
   },
   "minecraft:snow[layers=4]":{
     "pename":"minecraft:snow_layer",
     "pedata":3
   },
   "minecraft:snow[layers=5]":{
-    "pename":"minecraft:snow_layer",
-    "pedata":4
+    "pename":"minecraft:snow",
+    "pedata":0
   },
   "minecraft:snow[layers=6]":{
-    "pename":"minecraft:snow_layer",
-    "pedata":5
+    "pename":"minecraft:snow",
+    "pedata":0
   },
   "minecraft:snow[layers=7]":{
-    "pename":"minecraft:snow_layer",
-    "pedata":6
+    "pename":"minecraft:snow",
+    "pedata":0
   },
   "minecraft:snow[layers=8]":{
-    "pename":"minecraft:snow_layer",
-    "pedata":7
+    "pename":"minecraft:snow",
+    "pedata":0
   },
   "minecraft:cactus[age=0]":{
     "pename":"minecraft:cactus",

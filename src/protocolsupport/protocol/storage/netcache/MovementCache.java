@@ -61,6 +61,15 @@ public class MovementCache {
 	private double pePositionLeniency = 0.5;
 	private boolean peLeftPaddleTurning = false;
 	private boolean peRightPaddleTurning = false;
+	private boolean clientImmobile = false;
+
+	public boolean isClientImmobile() {
+		return clientImmobile;
+	}
+
+	public void setClientImmobile(boolean clientImmobile) {
+		this.clientImmobile = clientImmobile;
+	}
 
 	public void setPEClientPosition(double x, double y, double z) {
 		this.peClientX = x;

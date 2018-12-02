@@ -52,8 +52,14 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		MovementCache movecache = cache.getMovementCache();
 		NetworkEntity player = cache.getWatchedEntityCache().getSelfPlayer();
-		double yOffset = (y - movecache.getPEClientY()) > 0.01 ? 0.6 : 0;
+		//TODO: base Y offset on velocity
+		double yOffset = 0;
+		final double dX = x - movecache.getPEClientX();
+		final double dZ = z - movecache.getPEClientZ();
+		final double speed = Math.sqrt(dX * dX + dZ * dZ);
 		if (onGround) {
+			final double speedOffset = speed >= 0.28 ? 0.85 : 0.6;
+			yOffset = (y - movecache.getPEClientY()) > 0.01 ? speedOffset : 0;
 			movecache.updatePEPositionLeniency(y);
 		}
 		movecache.setPEClientPosition(x, y, z);
