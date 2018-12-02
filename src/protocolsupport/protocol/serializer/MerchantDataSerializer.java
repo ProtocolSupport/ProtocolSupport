@@ -95,7 +95,7 @@ public class MerchantDataSerializer {
 	//TODO: Find proper place for this.
 	private static NBTCompound ItemStackToPENBT(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		NBTCompound item = new NBTCompound();
-		itemstack = ItemStackSerializer.remapItemToClient(version, locale, itemstack);
+		itemstack = ItemStackSerializer.remapItemToClient(version, locale, itemstack.cloneItemStack());
 		item.setTag("Count", new NBTByte((byte) itemstack.getAmount()));
 		item.setTag("Damage", new NBTShort((short) itemstack.getLegacyData()));
 		item.setTag("id", new NBTShort((short) itemstack.getTypeId()));

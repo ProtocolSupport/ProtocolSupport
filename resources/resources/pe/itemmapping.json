@@ -630,7 +630,7 @@
     "pedata": 0
   },
   {
-    "itemkey": "carved_pumpkin",
+    "itemkey": "pumpkin",
     "peid": 86,
     "pedata": 0
   },
@@ -3505,9 +3505,9 @@
     "pedata": 0
   },
   {
-  "itemkey": "kelp",
-  "peid": 335,
-  "pedata": 0
+    "itemkey": "kelp",
+    "peid": 335,
+    "pedata": 0
   },
   {
     "itemkey": "dried_kelp",

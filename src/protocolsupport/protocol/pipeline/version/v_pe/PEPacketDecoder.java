@@ -93,7 +93,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 
 	@Override
 	protected RecyclableCollection<ServerBoundPacketData> processPackets(Channel channel, RecyclableCollection<ServerBoundPacketData> data) {
-		return dimswitchq.processServerBoundPackets(data);
+		return dimswitchq.processServerBoundPackets(data, connection);
 	}
 
 	@Override

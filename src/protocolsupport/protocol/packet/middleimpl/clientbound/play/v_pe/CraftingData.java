@@ -84,13 +84,11 @@ public class CraftingData extends MiddleDeclareRecipes {
 			for (Recipe recipe : recipes) {
 				if (recipe instanceof ShapelessRecipe) {
 					ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
-
 					expandRecipe(shapeless.getIngredients(), ingredients -> {
 						addRecipeShapeless(buffer, shapeless.getResult(), ingredients);
 					});
 				} else if(recipe instanceof ShapedRecipe) {
 					ShapedRecipe shaped = (ShapedRecipe) recipe;
-
 					expandRecipe(shaped.getIngredients(), ingredients -> {
 						addRecipeShaped(buffer, shaped.getResult(), shaped.getWidth(), shaped.getHeight(), ingredients);
 					});

@@ -41,7 +41,7 @@ public class PEFakeContainer {
 		regInvBlockType(WindowType.CRAFTING_TABLE, 	Material.CRAFTING_TABLE, 	TileEntityType.UNKNOWN);
 		regInvBlockType(WindowType.FURNACE, 		Material.FURNACE, 			TileEntityType.FURNACE);
 		regInvBlockType(WindowType.DISPENSER, 		Material.DISPENSER, 		TileEntityType.DISPENSER);
-		regInvBlockType(WindowType.ENCHANT,			Material.HOPPER,		 	TileEntityType.HOPPER); //Fake with hopper
+		regInvBlockType(WindowType.ENCHANT,			Material.ENCHANTING_TABLE,	TileEntityType.ENCHANTING_TABLE);
 		regInvBlockType(WindowType.BREWING,			Material.BREWING_STAND, 	TileEntityType.BREWING_STAND);
 		regInvBlockType(WindowType.BEACON,			Material.BEACON, 			TileEntityType.BEACON);
 		regInvBlockType(WindowType.ANVIL,			Material.ANVIL, 			TileEntityType.UNKNOWN);
