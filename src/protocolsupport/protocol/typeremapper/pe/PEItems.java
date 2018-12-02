@@ -66,7 +66,7 @@ public class PEItems {
 		if (fromPEId.containsKey(literalId)) {
 			return fromPEId.get(literalId);
 		} else if (fromPEId.containsKey(closestId)) {
-			System.out.println("Using closest guess for PE ID " + PEId);
+			System.out.println("Using closest guess for PE ID " + PEId + "(ignoring " + PEData + ")");
 			return fromPEId.get(closestId);
 		} else {
 			System.out.println("Using default item for PE ID " + PEId + ":" + PEData);

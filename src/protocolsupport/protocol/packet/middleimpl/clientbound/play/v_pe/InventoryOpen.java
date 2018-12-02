@@ -16,7 +16,7 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
-import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityInventoryData;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeContainer;
 import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeVillager;
@@ -44,7 +44,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 			//TODO: Fix lama filter in entitydata.json, add correct metadata for horse inventories.
 			NetworkEntity horse = cache.getWatchedEntityCache().getWatchedEntity(horseId);
 			if (horse != null) {
-				PEEntityData horseTypeData = PEDataValues.getEntityData(horse.getType());
+				PEEntityInventoryData horseTypeData = PEDataValues.getEntityInventoryData(horse.getType());
 				if (horseTypeData != null && horseTypeData.getInventoryFilter() != null) {
 					packets.add(openEquipment(connection.getVersion(), windowId, type, horseId, horseTypeData.getInventoryFilter().getFilter()));
 				}
