@@ -1636,11 +1636,11 @@
     "pedata":0
   },
   "minecraft:oak_pressure_plate[powered=true]":{
-    "pename":"minecraft:oak_pressure_plate",
+    "pename":"minecraft:wooden_pressure_plate",
     "pedata":1
   },
   "minecraft:oak_pressure_plate[powered=false]":{
-    "pename":"minecraft:oak_pressure_plate",
+    "pename":"minecraft:wooden_pressure_plate",
     "pedata":0
   },
   "minecraft:spruce_pressure_plate[powered=true]":{
@@ -4345,11 +4345,11 @@
   },
   "minecraft:prismarine_bricks":{
     "pename":"minecraft:prismarine",
-    "pedata":1
+    "pedata":2
   },
   "minecraft:dark_prismarine":{
     "pename":"minecraft:prismarine",
-    "pedata":2
+    "pedata":1
   },
   "minecraft:sea_lantern":{
     "pename":"minecraft:seaLantern",
@@ -4757,27 +4757,27 @@
   },
   "minecraft:nether_brick_slab[type=top,waterlogged=false]":{
     "pename":"minecraft:stone_slab",
-    "pedata":14
+    "pedata":15
   },
   "minecraft:nether_brick_slab[type=bottom,waterlogged=false]":{
     "pename":"minecraft:stone_slab",
-    "pedata":6
+    "pedata":7
   },
   "minecraft:nether_brick_slab[type=double,waterlogged=false]":{
     "pename":"minecraft:double_stone_slab",
-    "pedata":6
+    "pedata":7
   },
   "minecraft:quartz_slab[type=top,waterlogged=false]":{
     "pename":"minecraft:stone_slab",
-    "pedata":15
+    "pedata":14
   },
   "minecraft:quartz_slab[type=bottom,waterlogged=false]":{
     "pename":"minecraft:stone_slab",
-    "pedata":7
+    "pedata":6
   },
   "minecraft:quartz_slab[type=double,waterlogged=false]":{
     "pename":"minecraft:double_stone_slab",
-    "pedata":7
+    "pedata":6
   },
   "minecraft:red_sandstone_slab[type=top,waterlogged=false]":{
     "pename":"minecraft:stone_slab2",
@@ -5936,67 +5936,67 @@
     "pedata":15
   },
   "minecraft:white_concrete_powder":{
-    "pename":"minecraft:concretepowder",
+    "pename":"minecraft:concretePowder",
     "pedata":0
   },
   "minecraft:orange_concrete_powder":{
-    "pename":"minecraft:concretepowder",
+    "pename":"minecraft:concretePowder",
     "pedata":1
   },
   "minecraft:magenta_concrete_powder":{
-    "pename":"minecraft:concretepowder",
+    "pename":"minecraft:concretePowder",
     "pedata":2
   },
   "minecraft:light_blue_concrete_powder":{
-    "pename":"minecraft:concretepowder",
+    "pename":"minecraft:concretePowder",
     "pedata":3
   },
   "minecraft:yellow_concrete_powder":{
-    "pename":"minecraft:concretepowder",
+    "pename":"minecraft:concretePowder",
     "pedata":4
   },
   "minecraft:lime_concrete_powder":{
-    "pename":"minecraft:concretepowder",
+    "pename":"minecraft:concretePowder",
     "pedata":5
   },
   "minecraft:pink_concrete_powder":{
-    "pename":"minecraft:concretepowder",
+    "pename":"minecraft:concretePowder",
     "pedata":6
   },
   "minecraft:gray_concrete_powder":{
-    "pename":"minecraft:concretepowder",
+    "pename":"minecraft:concretePowder",
     "pedata":7
   },
   "minecraft:light_gray_concrete_powder":{
-    "pename":"minecraft:concretepowder",
+    "pename":"minecraft:concretePowder",
     "pedata":8
   },
   "minecraft:cyan_concrete_powder":{
-    "pename":"minecraft:concretepowder",
+    "pename":"minecraft:concretePowder",
     "pedata":9
   },
   "minecraft:purple_concrete_powder":{
-    "pename":"minecraft:concretepowder",
+    "pename":"minecraft:concretePowder",
     "pedata":10
   },
   "minecraft:blue_concrete_powder":{
-    "pename":"minecraft:concretepowder",
+    "pename":"minecraft:concretePowder",
     "pedata":11
   },
   "minecraft:brown_concrete_powder":{
-    "pename":"minecraft:concretepowder",
+    "pename":"minecraft:concretePowder",
     "pedata":12
   },
   "minecraft:green_concrete_powder":{
-    "pename":"minecraft:concretepowder",
+    "pename":"minecraft:concretePowder",
     "pedata":13
   },
   "minecraft:red_concrete_powder":{
-    "pename":"minecraft:concretepowder",
+    "pename":"minecraft:concretePowder",
     "pedata":14
   },
   "minecraft:black_concrete_powder":{
-    "pename":"minecraft:concretepowder",
+    "pename":"minecraft:concretePowder",
     "pedata":15
   },
   "minecraft:water[level=0]":{
