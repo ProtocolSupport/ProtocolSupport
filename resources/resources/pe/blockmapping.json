@@ -4345,11 +4345,11 @@
   },
   "minecraft:prismarine_bricks":{
     "pename":"minecraft:prismarine",
-    "pedata":1
+    "pedata":2
   },
   "minecraft:dark_prismarine":{
     "pename":"minecraft:prismarine",
-    "pedata":2
+    "pedata":1
   },
   "minecraft:sea_lantern":{
     "pename":"minecraft:seaLantern",
@@ -4757,27 +4757,27 @@
   },
   "minecraft:nether_brick_slab[type=top,waterlogged=false]":{
     "pename":"minecraft:stone_slab",
-    "pedata":14
+    "pedata":15
   },
   "minecraft:nether_brick_slab[type=bottom,waterlogged=false]":{
     "pename":"minecraft:stone_slab",
-    "pedata":6
+    "pedata":7
   },
   "minecraft:nether_brick_slab[type=double,waterlogged=false]":{
     "pename":"minecraft:double_stone_slab",
-    "pedata":6
+    "pedata":7
   },
   "minecraft:quartz_slab[type=top,waterlogged=false]":{
     "pename":"minecraft:stone_slab",
-    "pedata":15
+    "pedata":14
   },
   "minecraft:quartz_slab[type=bottom,waterlogged=false]":{
     "pename":"minecraft:stone_slab",
-    "pedata":7
+    "pedata":6
   },
   "minecraft:quartz_slab[type=double,waterlogged=false]":{
     "pename":"minecraft:double_stone_slab",
-    "pedata":7
+    "pedata":6
   },
   "minecraft:red_sandstone_slab[type=top,waterlogged=false]":{
     "pename":"minecraft:stone_slab2",
