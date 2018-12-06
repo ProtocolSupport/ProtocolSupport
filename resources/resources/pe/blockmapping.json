@@ -3183,6 +3183,10 @@
     "pename":"minecraft:redstone_lamp",
     "pedata":0
   },
+  "minecraft:redstone_lamp[lit=true]":{
+    "pename":"minecraft:lit_redstone_lamp",
+    "pedata":0
+  },
   "minecraft:cocoa[age=0,facing=north]":{
     "pename":"minecraft:cocoa",
     "pedata":2
