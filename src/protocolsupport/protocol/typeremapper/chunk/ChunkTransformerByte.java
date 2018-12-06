@@ -1,13 +1,13 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
 import protocolsupport.protocol.storage.netcache.TileDataCache;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.basic.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
 public class ChunkTransformerByte extends ChunkTransformerBA {
 
-	public ChunkTransformerByte(ArrayBasedIdRemappingTable blockRemappingTable, TileNBTRemapper tileremapper, TileDataCache tilecache) {
+	public ChunkTransformerByte(ArrayBasedIdRemappingTable blockRemappingTable, TileEntityRemapper tileremapper, TileDataCache tilecache) {
 		super(blockRemappingTable, tileremapper, tilecache);
 	}
 

@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockTileUp
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.basic.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.TileEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -18,7 +18,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		super(connection);
 	}
 
-	protected final TileNBTRemapper tileremapper = TileNBTRemapper.getRemapper(connection.getVersion());
+	protected final TileEntityRemapper tileremapper = TileEntityRemapper.getRemapper(connection.getVersion());
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
