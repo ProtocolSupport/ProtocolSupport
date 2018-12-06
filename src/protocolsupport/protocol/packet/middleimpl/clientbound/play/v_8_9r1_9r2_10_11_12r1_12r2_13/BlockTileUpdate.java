@@ -8,7 +8,8 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.basic.TileEntityRemapper;
+import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.types.TileEntity;
 import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -20,7 +21,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		super(connection);
 	}
 
-	protected final TileNBTRemapper tileremapper = TileNBTRemapper.getRemapper(connection.getVersion());
+	protected final TileEntityRemapper tileremapper = TileEntityRemapper.getRemapper(connection.getVersion());
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -34,7 +35,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9_4) && (tile.getType() == TileEntityType.SIGN)) {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID);
 			PositionSerializer.writePosition(serializer, tile.getPosition());
-			for (String line : TileNBTRemapper.getSignLines(tile.getNBT())) {
+			for (String line : CommonNBT.getSignLines(tile.getNBT())) {
 				StringSerializer.writeString(serializer, version, line);
 			}
 			return serializer;
