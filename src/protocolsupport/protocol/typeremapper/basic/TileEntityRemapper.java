@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.ObjIntConsumer;
@@ -119,21 +118,31 @@ public class TileEntityRemapper {
 
 	}
 
-	protected static class PEBedSupplier implements Function<Position, TileEntity> {
+	protected static class PEChestSupplier implements Function<Position, TileEntity> {
 
-		protected final byte color;
-		public PEBedSupplier(int color) {
-			this.color = (byte) color;
+		protected final boolean isDouble;
+		protected final boolean isLead;
+		protected final int pairx;
+		protected final int pairz;
+		public PEChestSupplier(boolean isDouble, boolean isLead, int pairx, int pairz) {
+			this.isDouble = isDouble;
+			this.isLead = isLead;
+			this.pairx = pairx;
+			this.pairz = pairz;
 		}
 
 		@Override
 		public TileEntity apply(Position position) {
 			NBTCompound tag = new NBTCompound();
-			tag.setTag("color", new NBTByte(color));
-			tag.setTag("id", new NBTString("Bed"));
+			tag.setTag("id", new NBTString("Chest"));
 			tag.setTag("x", new NBTInt(position.getX()));
 			tag.setTag("y", new NBTInt(position.getY()));
 			tag.setTag("z", new NBTInt(position.getZ()));
+			if (isDouble) {
+				tag.setTag("pairx", new NBTInt(position.getX() + pairx));
+				tag.setTag("pairz", new NBTInt(position.getZ() + pairz));
+				tag.setTag("pairlead", new NBTByte(isLead ? (byte) 1 : (byte) 0));
+			}
 			return new TileEntity(tag);
 		}
 
@@ -173,7 +182,6 @@ public class TileEntityRemapper {
 		register(TileEntityType.SIGN, new TileEntityToLegacyTypeNameRemapper("Sign"), ProtocolVersionsHelper.BEFORE_1_11_AND_PE);
 
 		//TODO implement these from legacy/block types.
-//		register(TileEntityType.CHEST, new TileEntityToLegacyTypeNameRemapper("Chest"), ProtocolVersionsHelper.ALL_PE);
 //		register(TileEntityType.ENDER_CHEST, new TileEntityToLegacyTypeNameRemapper("EnderChest"), ProtocolVersionsHelper.ALL_PE);
 //		register(TileEntityType.FURNACE, new TileEntityToLegacyTypeNameRemapper("Furnace"), ProtocolVersionsHelper.ALL_PE);
 //		register(TileEntityType.MOB_SPAWNER, new TileEntityToLegacyTypeNameRemapper("MobSpawner"), ProtocolVersionsHelper.ALL_PE);
@@ -265,59 +273,6 @@ public class TileEntityRemapper {
 			}
 			
 		}, ProtocolVersionsHelper.ALL_PE);
-
-
-		
-		
-//		TileEntityWithBlockDataNBTRemapper peDoubleChestLinker = new TileEntityWithBlockDataNBTRemapper() {
-//			protected void register(List<Entry<Consumer<NBTCompound>>> list, BlockData data, int pairx, int pairz, boolean pairlead) {
-//				list.add(new ArrayMap.Entry<>(MaterialAPI.getBlockDataNetworkId(data), nbt -> {
-//					int x = nbt.getNumberTag("x").getAsInt();
-//					int z = nbt.getNumberTag("z").getAsInt();
-//					nbt.setTag("pairx", new NBTInt(x + pairx));
-//					nbt.setTag("pairz", new NBTInt(z + pairz));
-//					nbt.setTag("pairlead", new NBTByte(pairlead ? (byte) 1 : (byte) 0));
-//					System.out.println("REMAPPED CHEST NBT TO BE " + nbt.toString());
-//				}));
-//			}
-//			@Override
-//			protected void init(List<Entry<Consumer<NBTCompound>>> list) {
-//				MaterialAPI.getBlockDataList(Material.CHEST).stream()
-//				.forEach(data -> {
-//					Chest chest = (Chest) data;
-//					switch (chest.getFacing()) {
-//						case NORTH: {
-//							if (chest.getType() == Chest.Type.RIGHT) 	 register(list, data, -1, 0, true);
-//							else if (chest.getType() == Chest.Type.LEFT) register(list, data,  1, 0, false);
-//							break;
-//						}
-//						case SOUTH: {
-//							if (chest.getType() == Chest.Type.RIGHT) 	 register(list, data,  1, 0, true);
-//							else if (chest.getType() == Chest.Type.LEFT) register(list, data, -1, 0, false);
-//							break;
-//						}
-//						case WEST: {
-//							if (chest.getType() == Chest.Type.RIGHT) 	 register(list, data, 0,  1, true);
-//							else if (chest.getType() == Chest.Type.LEFT) register(list, data, 0, -1, false);
-//							break;
-//						}
-//						case EAST: {
-//							if (chest.getType() == Chest.Type.RIGHT) 	 register(list, data, 0, -1, true);
-//							else if (chest.getType() == Chest.Type.LEFT) register(list, data, 0,  1, false);
-//							break;
-//						}
-//						default: {
-//							break;
-//						}
-//					}
-//				});
-//			}
-//			
-//		};
-//		register(TileEntityType.CHEST, new TileEntityToLegacyTypeNameRemapper("Chest"), ProtocolVersionsHelper.ALL_PE);
-//		register(TileEntityType.TRAPPED_CHEST, new TileEntityToLegacyTypeNameRemapper("Chest"), ProtocolVersionsHelper.ALL_PE);
-//		register(TileEntityType.CHEST, peDoubleChestLinker, ProtocolVersionsHelper.ALL_PE);
-//		register(TileEntityType.TRAPPED_CHEST, peDoubleChestLinker, ProtocolVersionsHelper.ALL_PE);
 
 		register(
 			TileEntityType.BANNER, new TileEntityWithBlockDataNBTRemapper() {
@@ -451,50 +406,28 @@ public class TileEntityRemapper {
 		registerLegacyState(Material.RED_BED, new BedTileEntitySupplier(14), ProtocolVersionsHelper.ALL_1_12);
 		registerLegacyState(Material.BLACK_BED, new BedTileEntitySupplier(15), ProtocolVersionsHelper.ALL_1_12);
 
-		BiFunction<Integer, Integer, Function<Position, TileEntity>> peChestMapper = (pairx, pairz) -> {
-			return (position) -> {
-				NBTCompound tag = new NBTCompound();
-				tag.setTag("id", new NBTString("Chest"));
-				tag.setTag("x", new NBTInt(position.getX()));
-				tag.setTag("y", new NBTInt(position.getY()));
-				tag.setTag("z", new NBTInt(position.getZ()));
-				if (pairx + pairz > -2) {
-					tag.setTag("pairx", new NBTInt(position.getX() + pairx));
-					tag.setTag("pairz", new NBTInt(position.getZ() + pairz));
-					tag.setTag("pairlead", new NBTByte((pairx + pairz > 0) ? (byte) 1 : (byte) 0));
+		Arrays.asList(Material.CHEST, Material.TRAPPED_CHEST).forEach(chestMaterial -> {
+			MaterialAPI.getBlockDataList(chestMaterial).stream()
+			.forEach(data -> {
+				Chest chest = (Chest) data;
+				switch (chest.getType()) {
+					case SINGLE: {
+						registerLegacyState(data, new PEChestSupplier(false, false, 0, 0), ProtocolVersionsHelper.ALL_PE);
+						break;
+					}
+					case RIGHT: {
+						registerLegacyState(data, new PEChestSupplier(true, true, chest.getFacing().getModZ(), -chest.getFacing().getModX()), ProtocolVersionsHelper.ALL_PE);
+						break;
+					}
+					case LEFT: {
+						registerLegacyState(data, new PEChestSupplier(true, true, -chest.getFacing().getModZ(), chest.getFacing().getModX()), ProtocolVersionsHelper.ALL_PE);
+						break;
+					}
+					default: {
+						break;
+					}
 				}
-				return new TileEntity(tag);
-			};
-		};
-		MaterialAPI.getBlockDataList(Material.CHEST).stream()
-		.forEach(data -> {
-			Chest chest = (Chest) data;
-			if (chest.getType() == Chest.Type.SINGLE) registerLegacyState(data, peChestMapper.apply(-1, -1), ProtocolVersionsHelper.ALL_PE);
-			switch (chest.getFacing()) {
-				case NORTH: {
-					if (chest.getType() == Chest.Type.RIGHT) registerLegacyState(data, peChestMapper.apply(-1, 0), ProtocolVersionsHelper.ALL_PE);
-					else registerLegacyState(data, peChestMapper.apply( 1, 0), ProtocolVersionsHelper.ALL_PE);
-					break;
-				}
-				case SOUTH: {
-					if (chest.getType() == Chest.Type.RIGHT) registerLegacyState(data, peChestMapper.apply( 1, 0), ProtocolVersionsHelper.ALL_PE);
-					else registerLegacyState(data, peChestMapper.apply(-1, 0), ProtocolVersionsHelper.ALL_PE);
-					break;
-				}
-				case WEST: {
-					if (chest.getType() == Chest.Type.RIGHT) registerLegacyState(data, peChestMapper.apply(0,  1), ProtocolVersionsHelper.ALL_PE);
-					else registerLegacyState(data, peChestMapper.apply(0, -1), ProtocolVersionsHelper.ALL_PE);
-					break;
-				}
-				case EAST: {
-					if (chest.getType() == Chest.Type.RIGHT) registerLegacyState(data, peChestMapper.apply(0, -1), ProtocolVersionsHelper.ALL_PE);
-					else registerLegacyState(data, peChestMapper.apply(0,  1), ProtocolVersionsHelper.ALL_PE);
-					break;
-				}
-				default: {
-					break;
-				}
-			}
+			});
 		});
 	}
 
