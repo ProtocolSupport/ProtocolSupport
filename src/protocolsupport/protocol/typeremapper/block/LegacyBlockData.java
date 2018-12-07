@@ -271,7 +271,15 @@ public class LegacyBlockData {
 					Material.JUNGLE_BUTTON, Material.SPRUCE_BUTTON
 				),
 				o -> toPre13ButtonState(o, (Switch) Material.OAK_BUTTON.createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			this.<Switch>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.ACACIA_BUTTON, Material.DARK_OAK_BUTTON, Material.BIRCH_BUTTON,
+					Material.JUNGLE_BUTTON, Material.SPRUCE_BUTTON
+				),
+				o -> toPre13ButtonState(o, (Switch) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.ALL_PE
 			);
 			this.<Door>registerRemapEntryForAllStates(
 				Arrays.asList(
