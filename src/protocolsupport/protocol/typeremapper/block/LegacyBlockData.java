@@ -257,14 +257,18 @@ public class LegacyBlockData {
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Switch>registerRemapEntryForAllStates(
-				Arrays.asList(Material.STONE_BUTTON, Material.LEVER),
+				Arrays.asList(
+					Material.STONE_BUTTON,
+					Material.LEVER,
+					Material.OAK_BUTTON
+				),
 				o -> toPre13ButtonState(o, (Switch) o.getMaterial().createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Switch>registerRemapEntryForAllStates(
 				Arrays.asList(
 					Material.ACACIA_BUTTON, Material.DARK_OAK_BUTTON, Material.BIRCH_BUTTON,
-					Material.JUNGLE_BUTTON, Material.OAK_BUTTON, Material.SPRUCE_BUTTON
+					Material.JUNGLE_BUTTON, Material.SPRUCE_BUTTON
 				),
 				o -> toPre13ButtonState(o, (Switch) Material.OAK_BUTTON.createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
@@ -290,12 +294,27 @@ public class LegacyBlockData {
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Slab>registerRemapEntryForAllStates(
-				Arrays.asList(
-					Material.PRISMARINE_BRICK_SLAB, Material.PRISMARINE_SLAB, Material.DARK_PRISMARINE_SLAB,
-					Material.PETRIFIED_OAK_SLAB
-				),
+				Arrays.asList(Material.PETRIFIED_OAK_SLAB),
 				o -> toPre13SlabState(o, (Slab) Material.COBBLESTONE_SLAB.createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+			);
+			this.<Slab>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.PRISMARINE_BRICK_SLAB,
+					Material.PRISMARINE_SLAB,
+					Material.DARK_PRISMARINE_SLAB
+				),
+				o -> toPre13SlabState(o, (Slab) Material.COBBLESTONE_SLAB.createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			this.<Slab>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.PRISMARINE_BRICK_SLAB,
+					Material.PRISMARINE_SLAB,
+					Material.DARK_PRISMARINE_SLAB
+				),
+				o -> toPre13SlabState(o, (Slab) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.ALL_PE
 			);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -303,7 +322,7 @@ public class LegacyBlockData {
 					Material.JUNGLE_PRESSURE_PLATE, Material.OAK_PRESSURE_PLATE, Material.SPRUCE_PRESSURE_PLATE
 				),
 				Material.OAK_PRESSURE_PLATE.createBlockData(),
-				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+				ProtocolVersionsHelper.BEFORE_1_13
 			);
 			this.<Stairs>registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -318,22 +337,37 @@ public class LegacyBlockData {
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Stairs>registerRemapEntryForAllStates(
-				Arrays.asList(Material.PRISMARINE_BRICK_STAIRS, Material.PRISMARINE_STAIRS, Material.DARK_PRISMARINE_STAIRS),
+				Arrays.asList(
+					Material.PRISMARINE_BRICK_STAIRS,
+					Material.PRISMARINE_STAIRS,
+					Material.DARK_PRISMARINE_STAIRS
+				),
 				o -> toPre13StairsState(o, (Stairs) Material.STONE_BRICK_STAIRS.createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<TrapDoor>registerRemapEntryForAllStates(
 				Arrays.asList(
-					Material.ACACIA_TRAPDOOR, Material.DARK_OAK_TRAPDOOR, Material.BIRCH_TRAPDOOR,
-					Material.JUNGLE_TRAPDOOR, Material.OAK_TRAPDOOR, Material.SPRUCE_TRAPDOOR
+					Material.IRON_TRAPDOOR,
+					Material.OAK_TRAPDOOR
 				),
-				o -> toPre13TrapDoor(o, (TrapDoor) Material.OAK_TRAPDOOR.createBlockData()),
+				o -> toPre13TrapDoor(o, (TrapDoor) o.getMaterial().createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<TrapDoor>registerRemapEntryForAllStates(
-				Material.IRON_TRAPDOOR,
+				Arrays.asList(
+					Material.ACACIA_TRAPDOOR, Material.DARK_OAK_TRAPDOOR, Material.BIRCH_TRAPDOOR,
+					Material.JUNGLE_TRAPDOOR,  Material.SPRUCE_TRAPDOOR
+				),
+				o -> toPre13TrapDoor(o, (TrapDoor) Material.OAK_TRAPDOOR.createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			this.<TrapDoor>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.ACACIA_TRAPDOOR, Material.DARK_OAK_TRAPDOOR, Material.BIRCH_TRAPDOOR,
+					Material.JUNGLE_TRAPDOOR,  Material.SPRUCE_TRAPDOOR
+				),
 				o -> toPre13TrapDoor(o, (TrapDoor) o.getMaterial().createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+				ProtocolVersionsHelper.ALL_PE
 			);
 			this.<Bed>registerRemapEntryForAllStates(
 				Arrays.asList(
