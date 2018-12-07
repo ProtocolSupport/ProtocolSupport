@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import io.netty.buffer.ByteBuf;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_13_R2.CraftChunk;
@@ -219,6 +220,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public Object createEmptyCustomPayloadPacket(String tag) {
 		return new PacketPlayOutCustomPayload(new MinecraftKey("ps", tag), emptyPDS);
+	}
+
+	@Override
+	public Object createOutboundPluginMessagePacket(String tag, ByteBuf data) {
+		return new PacketPlayOutCustomPayload(new MinecraftKey("ps", tag), new PacketDataSerializer(data));
 	}
 
 	@Override
