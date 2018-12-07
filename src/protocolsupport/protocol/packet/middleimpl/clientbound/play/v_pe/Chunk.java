@@ -47,6 +47,7 @@ public class Chunk extends MiddleChunk {
 				transformer.writeLegacyData(chunkdata);
 				chunkdata.writeByte(0); //borders
 				for (TileEntity tile : transformer.remapAndGetTiles()) {
+//					System.out.println("LOADING CHUNK TILE: " + tile.toString());
 					ItemStackSerializer.writeTag(chunkdata, true, version, tile.getNBT());
 				}
 			});

@@ -22,12 +22,11 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(create(
-			connection.getVersion(), tileremapper.remap(tile, cache.getTileCache().getBlockData(position))
-		));
+		return RecyclableSingletonList.create(create(connection.getVersion(), tileremapper.remap(tile, cache.getTileCache().getBlockData(position))));
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, TileEntity tile) {
+		System.out.println("TILE UPDATE!: " + tile.toString());
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.TILE_DATA_UPDATE);
 		PositionSerializer.writePEPosition(serializer, tile.getPosition());
 		ItemStackSerializer.writeTag(serializer, true, version, tile.getNBT());

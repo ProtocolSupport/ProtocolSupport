@@ -101,7 +101,6 @@ public class TileEntityRemapper {
 		}
 	}
 
-
 	protected static class BedTileEntitySupplier implements Function<Position, TileEntity> {
 
 		protected final int color;
@@ -114,6 +113,26 @@ public class TileEntityRemapper {
 			NBTCompound tag = new NBTCompound();
 			tag.setTag("color", new NBTInt(color));
 			return new TileEntity(TileEntityType.BED, position, tag);
+		}
+
+	}
+
+	protected static class PEBedSupplier implements Function<Position, TileEntity> {
+
+		protected final byte color;
+		public PEBedSupplier(int color) {
+			this.color = (byte) color;
+		}
+
+		@Override
+		public TileEntity apply(Position position) {
+			NBTCompound tag = new NBTCompound();
+			tag.setTag("color", new NBTByte(color));
+			tag.setTag("id", new NBTString("Bed"));
+			tag.setTag("x", new NBTInt(position.getX()));
+			tag.setTag("y", new NBTInt(position.getY()));
+			tag.setTag("z", new NBTInt(position.getZ()));
+			return new TileEntity(tag);
 		}
 
 	}
@@ -215,19 +234,39 @@ public class TileEntityRemapper {
 			},
 			ProtocolVersionsHelper.ALL_PE
 		);
-		// TODO Proper bed implementation for PE.
-//		register(
-//			TileEntityType.BED,
-//			tile -> {
-//				NBTNumber colorTag = tile.getNBT().getNumberTag("color");
-//				if (colorTag != null) {
-//					byte color = tile.getNBT().getNumberTag("color").getAsByte();
-//					tile.getNBT().removeTag("color");
-//					tile.getNBT().setTag("color", new NBTByte(color));
-//				}
-//			},
-//			ProtocolVersionsHelper.ALL_PE
-//		);
+
+		register(TileEntityType.BED, new TileEntityToLegacyTypeNameRemapper("Bed"), ProtocolVersionsHelper.ALL_PE);
+		register(TileEntityType.BED, new TileEntityWithBlockDataNBTRemapper() {
+			protected void register(List<Entry<Consumer<NBTCompound>>> list, Material bed, int color) {
+				for (BlockData blockdata : MaterialAPI.getBlockDataList(bed)) {
+					list.add(new ArrayMap.Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> {
+						System.out.println("REEEMAAPP BED!");
+						nbt.setTag("color", new NBTByte((byte) color));
+					}));
+				}
+			}
+			@Override
+			protected void init(List<Entry<Consumer<NBTCompound>>> list) {
+				register(list, Material.WHITE_BED, 0);
+				register(list, Material.ORANGE_BED, 1);
+				register(list, Material.MAGENTA_BED, 2);
+				register(list, Material.LIGHT_BLUE_BED, 3);
+				register(list, Material.YELLOW_BED, 4);
+				register(list, Material.LIME_BED, 5);
+				register(list, Material.PINK_BED, 6);
+				register(list, Material.GRAY_BED, 7);
+				register(list, Material.LIGHT_GRAY_BED, 8);
+				register(list, Material.CYAN_BED, 9);
+				register(list, Material.PURPLE_BED, 10);
+				register(list, Material.BLUE_BED, 11);
+				register(list, Material.BROWN_BED, 12);
+				register(list, Material.GREEN_BED, 13);
+				register(list, Material.RED_BED, 14);
+				register(list, Material.BLACK_BED, 15);
+			}
+			
+		}, ProtocolVersionsHelper.ALL_PE);
+
 		register(
 			TileEntityType.BANNER, new TileEntityWithBlockDataNBTRemapper() {
 				protected void register(List<Entry<Consumer<NBTCompound>>> list, Material banner, int color) {
