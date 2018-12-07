@@ -427,6 +427,11 @@ public class LegacyBlockData {
 				},
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
+			this.<Chest>registerRemapEntryForAllStates(
+				Arrays.asList(Material.CHEST, Material.TRAPPED_CHEST),
+				o -> cloneDirectional(o, (Directional) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.ALL_PE
+			);
 			this.<PistonHead>registerRemapEntryForAllStates(
 				Material.PISTON_HEAD,
 				o -> {
