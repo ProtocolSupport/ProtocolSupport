@@ -1725,19 +1725,19 @@
   },
   "minecraft:stone_button[face=floor,facing=north,powered=true]":{
     "pename":"minecraft:stone_button",
-    "pedata":13
+    "pedata":9
   },
   "minecraft:stone_button[face=floor,facing=north,powered=false]":{
     "pename":"minecraft:stone_button",
-    "pedata":5
+    "pedata":1
   },
   "minecraft:stone_button[face=wall,facing=north,powered=true]":{
     "pename":"minecraft:stone_button",
-    "pedata":12
+    "pedata":10
   },
   "minecraft:stone_button[face=wall,facing=north,powered=false]":{
     "pename":"minecraft:stone_button",
-    "pedata":4
+    "pedata":2
   },
   "minecraft:stone_button[face=wall,facing=south,powered=true]":{
     "pename":"minecraft:stone_button",
@@ -1749,19 +1749,19 @@
   },
   "minecraft:stone_button[face=wall,facing=west,powered=true]":{
     "pename":"minecraft:stone_button",
-    "pedata":10
+    "pedata":12
   },
   "minecraft:stone_button[face=wall,facing=west,powered=false]":{
     "pename":"minecraft:stone_button",
-    "pedata":2
+    "pedata":4
   },
   "minecraft:stone_button[face=wall,facing=east,powered=true]":{
     "pename":"minecraft:stone_button",
-    "pedata":9
+    "pedata":13
   },
   "minecraft:stone_button[face=wall,facing=east,powered=false]":{
     "pename":"minecraft:stone_button",
-    "pedata":1
+    "pedata":5
   },
   "minecraft:stone_button[face=ceiling,facing=north,powered=true]":{
     "pename":"minecraft:stone_button",
@@ -3613,19 +3613,19 @@
   },
   "minecraft:oak_button[face=floor,facing=north,powered=true]":{
     "pename":"minecraft:wooden_button",
-    "pedata":13
+    "pedata":9
   },
   "minecraft:oak_button[face=floor,facing=north,powered=false]":{
     "pename":"minecraft:wooden_button",
-    "pedata":5
+    "pedata":1
   },
   "minecraft:oak_button[face=wall,facing=north,powered=true]":{
     "pename":"minecraft:wooden_button",
-    "pedata":12
+    "pedata":10
   },
   "minecraft:oak_button[face=wall,facing=north,powered=false]":{
     "pename":"minecraft:wooden_button",
-    "pedata":4
+    "pedata":2
   },
   "minecraft:oak_button[face=wall,facing=south,powered=true]":{
     "pename":"minecraft:wooden_button",
@@ -3637,19 +3637,19 @@
   },
   "minecraft:oak_button[face=wall,facing=west,powered=true]":{
     "pename":"minecraft:wooden_button",
-    "pedata":10
+    "pedata":12
   },
   "minecraft:oak_button[face=wall,facing=west,powered=false]":{
     "pename":"minecraft:wooden_button",
-    "pedata":2
+    "pedata":4
   },
   "minecraft:oak_button[face=wall,facing=east,powered=true]":{
     "pename":"minecraft:wooden_button",
-    "pedata":9
+    "pedata":13
   },
   "minecraft:oak_button[face=wall,facing=east,powered=false]":{
     "pename":"minecraft:wooden_button",
-    "pedata":1
+    "pedata":5
   },
   "minecraft:oak_button[face=ceiling,facing=north,powered=true]":{
     "pename":"minecraft:wooden_button",
@@ -3657,6 +3657,246 @@
   },
   "minecraft:oak_button[face=ceiling,facing=north,powered=false]":{
     "pename":"minecraft:wooden_button",
+    "pedata":0
+  },
+  "minecraft:acacia_button[face=floor,facing=north,powered=true]":{
+    "pename":"minecraft:acacia_button",
+    "pedata":9
+  },
+  "minecraft:acacia_button[face=floor,facing=north,powered=false]":{
+    "pename":"minecraft:acacia_button",
+    "pedata":1
+  },
+  "minecraft:acacia_button[face=wall,facing=north,powered=true]":{
+    "pename":"minecraft:acacia_button",
+    "pedata":10
+  },
+  "minecraft:acacia_button[face=wall,facing=north,powered=false]":{
+    "pename":"minecraft:acacia_button",
+    "pedata":2
+  },
+  "minecraft:acacia_button[face=wall,facing=south,powered=true]":{
+    "pename":"minecraft:acacia_button",
+    "pedata":11
+  },
+  "minecraft:acacia_button[face=wall,facing=south,powered=false]":{
+    "pename":"minecraft:acacia_button",
+    "pedata":3
+  },
+  "minecraft:acacia_button[face=wall,facing=west,powered=true]":{
+    "pename":"minecraft:acacia_button",
+    "pedata":12
+  },
+  "minecraft:acacia_button[face=wall,facing=west,powered=false]":{
+    "pename":"minecraft:acacia_button",
+    "pedata":4
+  },
+  "minecraft:acacia_button[face=wall,facing=east,powered=true]":{
+    "pename":"minecraft:acacia_button",
+    "pedata":13
+  },
+  "minecraft:acacia_button[face=wall,facing=east,powered=false]":{
+    "pename":"minecraft:acacia_button",
+    "pedata":5
+  },
+  "minecraft:acacia_button[face=ceiling,facing=north,powered=true]":{
+    "pename":"minecraft:acacia_button",
+    "pedata":8
+  },
+  "minecraft:acacia_button[face=ceiling,facing=north,powered=false]":{
+    "pename":"minecraft:acacia_button",
+    "pedata":0
+  },
+  "minecraft:birch_button[face=floor,facing=north,powered=true]":{
+    "pename":"minecraft:birch_button",
+    "pedata":9
+  },
+  "minecraft:birch_button[face=floor,facing=north,powered=false]":{
+    "pename":"minecraft:birch_button",
+    "pedata":1
+  },
+  "minecraft:birch_button[face=wall,facing=north,powered=true]":{
+    "pename":"minecraft:birch_button",
+    "pedata":10
+  },
+  "minecraft:birch_button[face=wall,facing=north,powered=false]":{
+    "pename":"minecraft:birch_button",
+    "pedata":2
+  },
+  "minecraft:birch_button[face=wall,facing=south,powered=true]":{
+    "pename":"minecraft:birch_button",
+    "pedata":11
+  },
+  "minecraft:birch_button[face=wall,facing=south,powered=false]":{
+    "pename":"minecraft:birch_button",
+    "pedata":3
+  },
+  "minecraft:birch_button[face=wall,facing=west,powered=true]":{
+    "pename":"minecraft:birch_button",
+    "pedata":12
+  },
+  "minecraft:birch_button[face=wall,facing=west,powered=false]":{
+    "pename":"minecraft:birch_button",
+    "pedata":4
+  },
+  "minecraft:birch_button[face=wall,facing=east,powered=true]":{
+    "pename":"minecraft:birch_button",
+    "pedata":13
+  },
+  "minecraft:birch_button[face=wall,facing=east,powered=false]":{
+    "pename":"minecraft:birch_button",
+    "pedata":5
+  },
+  "minecraft:birch_button[face=ceiling,facing=north,powered=true]":{
+    "pename":"minecraft:birch_button",
+    "pedata":8
+  },
+  "minecraft:birch_button[face=ceiling,facing=north,powered=false]":{
+    "pename":"minecraft:birch_button",
+    "pedata":0
+  },
+  "minecraft:dark_oak_button[face=floor,facing=north,powered=true]":{
+    "pename":"minecraft:dark_oak_button",
+    "pedata":9
+  },
+  "minecraft:dark_oak_button[face=floor,facing=north,powered=false]":{
+    "pename":"minecraft:dark_oak_button",
+    "pedata":1
+  },
+  "minecraft:dark_oak_button[face=wall,facing=north,powered=true]":{
+    "pename":"minecraft:dark_oak_button",
+    "pedata":10
+  },
+  "minecraft:dark_oak_button[face=wall,facing=north,powered=false]":{
+    "pename":"minecraft:dark_oak_button",
+    "pedata":2
+  },
+  "minecraft:dark_oak_button[face=wall,facing=south,powered=true]":{
+    "pename":"minecraft:dark_oak_button",
+    "pedata":11
+  },
+  "minecraft:dark_oak_button[face=wall,facing=south,powered=false]":{
+    "pename":"minecraft:dark_oak_button",
+    "pedata":3
+  },
+  "minecraft:dark_oak_button[face=wall,facing=west,powered=true]":{
+    "pename":"minecraft:dark_oak_button",
+    "pedata":12
+  },
+  "minecraft:dark_oak_button[face=wall,facing=west,powered=false]":{
+    "pename":"minecraft:dark_oak_button",
+    "pedata":4
+  },
+  "minecraft:dark_oak_button[face=wall,facing=east,powered=true]":{
+    "pename":"minecraft:dark_oak_button",
+    "pedata":13
+  },
+  "minecraft:dark_oak_button[face=wall,facing=east,powered=false]":{
+    "pename":"minecraft:dark_oak_button",
+    "pedata":5
+  },
+  "minecraft:dark_oak_button[face=ceiling,facing=north,powered=true]":{
+    "pename":"minecraft:dark_oak_button",
+    "pedata":8
+  },
+  "minecraft:dark_oak_button[face=ceiling,facing=north,powered=false]":{
+    "pename":"minecraft:dark_oak_button",
+    "pedata":0
+  },
+  "minecraft:jungle_button[face=floor,facing=north,powered=true]":{
+    "pename":"minecraft:jungle_button",
+    "pedata":9
+  },
+  "minecraft:jungle_button[face=floor,facing=north,powered=false]":{
+    "pename":"minecraft:jungle_button",
+    "pedata":1
+  },
+  "minecraft:jungle_button[face=wall,facing=north,powered=true]":{
+    "pename":"minecraft:jungle_button",
+    "pedata":10
+  },
+  "minecraft:jungle_button[face=wall,facing=north,powered=false]":{
+    "pename":"minecraft:jungle_button",
+    "pedata":2
+  },
+  "minecraft:jungle_button[face=wall,facing=south,powered=true]":{
+    "pename":"minecraft:jungle_button",
+    "pedata":11
+  },
+  "minecraft:jungle_button[face=wall,facing=south,powered=false]":{
+    "pename":"minecraft:jungle_button",
+    "pedata":3
+  },
+  "minecraft:jungle_button[face=wall,facing=west,powered=true]":{
+    "pename":"minecraft:jungle_button",
+    "pedata":12
+  },
+  "minecraft:jungle_button[face=wall,facing=west,powered=false]":{
+    "pename":"minecraft:jungle_button",
+    "pedata":4
+  },
+  "minecraft:jungle_button[face=wall,facing=east,powered=true]":{
+    "pename":"minecraft:jungle_button",
+    "pedata":13
+  },
+  "minecraft:jungle_button[face=wall,facing=east,powered=false]":{
+    "pename":"minecraft:jungle_button",
+    "pedata":5
+  },
+  "minecraft:jungle_button[face=ceiling,facing=north,powered=true]":{
+    "pename":"minecraft:jungle_button",
+    "pedata":8
+  },
+  "minecraft:jungle_button[face=ceiling,facing=north,powered=false]":{
+    "pename":"minecraft:jungle_button",
+    "pedata":0
+  },
+  "minecraft:spruce_button[face=floor,facing=north,powered=true]":{
+    "pename":"minecraft:spruce_button",
+    "pedata":9
+  },
+  "minecraft:spruce_button[face=floor,facing=north,powered=false]":{
+    "pename":"minecraft:spruce_button",
+    "pedata":1
+  },
+  "minecraft:spruce_button[face=wall,facing=north,powered=true]":{
+    "pename":"minecraft:spruce_button",
+    "pedata":10
+  },
+  "minecraft:spruce_button[face=wall,facing=north,powered=false]":{
+    "pename":"minecraft:spruce_button",
+    "pedata":2
+  },
+  "minecraft:spruce_button[face=wall,facing=south,powered=true]":{
+    "pename":"minecraft:spruce_button",
+    "pedata":11
+  },
+  "minecraft:spruce_button[face=wall,facing=south,powered=false]":{
+    "pename":"minecraft:spruce_button",
+    "pedata":3
+  },
+  "minecraft:spruce_button[face=wall,facing=west,powered=true]":{
+    "pename":"minecraft:spruce_button",
+    "pedata":12
+  },
+  "minecraft:spruce_button[face=wall,facing=west,powered=false]":{
+    "pename":"minecraft:spruce_button",
+    "pedata":4
+  },
+  "minecraft:spruce_button[face=wall,facing=east,powered=true]":{
+    "pename":"minecraft:spruce_button",
+    "pedata":13
+  },
+  "minecraft:spruce_button[face=wall,facing=east,powered=false]":{
+    "pename":"minecraft:spruce_button",
+    "pedata":5
+  },
+  "minecraft:spruce_button[face=ceiling,facing=north,powered=true]":{
+    "pename":"minecraft:spruce_button",
+    "pedata":8
+  },
+  "minecraft:spruce_button[face=ceiling,facing=north,powered=false]":{
+    "pename":"minecraft:spruce_button",
     "pedata":0
   },
   "minecraft:anvil[facing=north]":{
@@ -4817,27 +5057,27 @@
   },
   "minecraft:prismarine_brick_slab[type=top,waterlogged=false]":{
     "pename":"minecraft:stone_slab2",
-    "pedata":11
+    "pedata":12
   },
   "minecraft:prismarine_brick_slab[type=bottom,waterlogged=false]":{
     "pename":"minecraft:stone_slab2",
-    "pedata":3
+    "pedata":4
   },
   "minecraft:prismarine_brick_slab[type=double,waterlogged=false]":{
     "pename":"minecraft:double_stone_slab2",
-    "pedata":3
+    "pedata":4
   },
   "minecraft:dark_prismarine_slab[type=top,waterlogged=false]":{
     "pename":"minecraft:stone_slab2",
-    "pedata":12
+    "pedata":11
   },
   "minecraft:dark_prismarine_slab[type=bottom,waterlogged=false]":{
     "pename":"minecraft:stone_slab2",
-    "pedata":4
+    "pedata":3
   },
   "minecraft:dark_prismarine_slab[type=double,waterlogged=false]":{
     "pename":"minecraft:double_stone_slab2",
-    "pedata":4
+    "pedata":3
   },
   "minecraft:smooth_stone":{
     "pename":"minecraft:double_stone_slab",
