@@ -3,6 +3,7 @@ package protocolsupport.zplatform;
 import java.security.PublicKey;
 import java.util.List;
 
+import io.netty.buffer.ByteBuf;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -57,6 +58,8 @@ public interface PlatformPacketFactory {
 	public Object createLoginSuccessPacket(GameProfile profile);
 
 	public Object createEmptyCustomPayloadPacket(String tag);
+
+	public Object createOutboundPluginMessagePacket(String tag, ByteBuf data);
 
 	public Object createFakeJoinGamePacket();
 

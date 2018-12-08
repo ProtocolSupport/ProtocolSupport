@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -26,6 +27,11 @@ public class CustomPayload extends MiddleCustomPayload {
 					cache, connection.getVersion(),
 					MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale()))
 			);
+		} else if (tag.equals(InternalPluginMessageRequest.PESkinUpdate)) {
+			//we do this using the normal ClientBoundPacketData stream so the queue can cache these on login
+			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_SKIN);
+			serializer.writeBytes(data);
+			return RecyclableSingletonList.create(serializer);
 		}
 		return RecyclableSingletonList.create(create(connection.getVersion(), tag, data));
 	}

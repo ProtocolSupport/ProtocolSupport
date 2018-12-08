@@ -10,6 +10,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -46,7 +47,7 @@ public class EntityStatus extends ServerBoundMiddlePacket {
 	protected static ServerBoundPacketData createTradeSelect(int page) {
 		ByteBuf payload = Unpooled.buffer();
 		payload.writeInt(page);
-		return MiddleCustomPayload.create("MC|TrSel", MiscSerializer.readAllBytes(payload));
+		return MiddleCustomPayload.create(LegacyCustomPayloadChannelName.LEGACY_TRADE_SELECT, MiscSerializer.readAllBytes(payload));
 	}
 
 	protected static void sendResponse(Connection connection, int entityId, byte status, int data) {
