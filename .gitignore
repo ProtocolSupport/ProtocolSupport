@@ -9,6 +9,7 @@ dllibss/
 dllibsc/
 /libraries_runtime/
 /libraries_shade/
+logs/latest.log
 
 .externalToolBuilders/
  # Eclipse Files #
