@@ -34,11 +34,11 @@ public abstract class PESkinsProvider {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		for (int y = 0; y < skin.getHeight(); y++) {
 			for (int x = 0; x < skin.getWidth(); x++) {
-                Color color = new Color(skin.getRGB(x, y), true);
-                stream.write(color.getRed());
-                stream.write(color.getGreen());
-                stream.write(color.getBlue());
-                stream.write(color.getAlpha());
+				Color color = new Color(skin.getRGB(x, y), true);
+				stream.write(color.getRed());
+				stream.write(color.getGreen());
+				stream.write(color.getBlue());
+				stream.write(color.getAlpha());
 			}
 		}
 		return stream.toByteArray();

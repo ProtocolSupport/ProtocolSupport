@@ -26,7 +26,7 @@ public class PEInventoryCache {
 	private int previousWindowId = 0;
 
 	public NetworkItemStack getItemInHand() {
-		return itemInHand; 
+		return itemInHand;
 	}
 
 	public void setItemInHand(NetworkItemStack itemInHand) {

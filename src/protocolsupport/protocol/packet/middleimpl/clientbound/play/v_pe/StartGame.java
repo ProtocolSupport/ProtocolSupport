@@ -109,7 +109,7 @@ public class StartGame extends MiddleStartGame {
 		VarNumberSerializer.writeSVarInt(chunkradius, (int) Math.ceil((Bukkit.getViewDistance() + 1) * Math.sqrt(2)));
 		packets.add(chunkradius);
 		//Send all creative items (from PE json)
-		PECreativeInventory peInv = PECreativeInventory.getInstance(); 
+		PECreativeInventory peInv = PECreativeInventory.getInstance();
 		ClientBoundPacketData creativeInventoryPacket = ClientBoundPacketData.create(PEPacketIDs.INVENTORY_CONTENT);
 		VarNumberSerializer.writeVarInt(creativeInventoryPacket, PESource.POCKET_CREATIVE_INVENTORY);
 		VarNumberSerializer.writeVarInt(creativeInventoryPacket, peInv.getItemCount());

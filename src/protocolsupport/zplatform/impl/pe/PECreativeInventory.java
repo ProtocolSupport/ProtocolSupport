@@ -16,21 +16,23 @@ import protocolsupport.utils.Utils;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PECreativeInventory {
-	
-	private PECreativeInventory() { }
+
+	private PECreativeInventory() {
+	}
+
 	private static final PECreativeInventory INSTANCE = new PECreativeInventory();
-	
+
 	public static PECreativeInventory getInstance() {
 		return INSTANCE;
 	}
 
 	private byte[] creativeItems;
 	private int itemCount;
-	
+
 	public byte[] getCreativeItems() {
 		return creativeItems;
 	}
-	
+
 	public int getItemCount() {
 		return itemCount;
 	}

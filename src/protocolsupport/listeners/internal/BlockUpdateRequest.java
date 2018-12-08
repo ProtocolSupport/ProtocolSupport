@@ -16,14 +16,14 @@ public class BlockUpdateRequest extends PluginMessageData {
 	public static final BiConsumer<Connection, BlockUpdateRequest> handler = (connection, request) -> {
 		Block block = request.getPosition().toBukkit(connection.getPlayer().getWorld()).getBlock();
 		connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockUpdatePacket(
-				request.getPosition(), ServerPlatform.get().getMiscUtils().getBlockDataNetworkId(block.getBlockData()))
+			request.getPosition(), ServerPlatform.get().getMiscUtils().getBlockDataNetworkId(block.getBlockData()))
 		);
 	};
 
 	protected Position position;
 
 	public BlockUpdateRequest() {
-		this(new Position(0,0,0));
+		this(new Position(0, 0, 0));
 	}
 
 	public BlockUpdateRequest(Position position) {

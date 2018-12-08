@@ -133,6 +133,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 
 		//PE's extra baseflags. TODO: Implement more flags (Easy Remapping)
 		protected static int flagId = 1;
+
 		protected static int takeNextFlag() {
 			return flagId++;
 		}
@@ -199,6 +200,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int FLAG_LAYING_EGG = takeNextFlag();
 
 		protected static int metaId = 0;
+
 		protected static int takeNextMeta() {
 			return metaId++;
 		}

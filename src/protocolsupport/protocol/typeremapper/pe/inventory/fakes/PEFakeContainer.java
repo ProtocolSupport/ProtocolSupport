@@ -35,7 +35,9 @@ public class PEFakeContainer {
 	private static void regInvBlockType(WindowType type, Material container, TileEntityType tileType) {
 		invBlockType.put(type, new Any<Material, TileEntityType>(container, tileType));
 	}
+
 	private static EnumMap<WindowType, Any<Material, TileEntityType>> invBlockType = new EnumMap<>(WindowType.class);
+
 	static {
 		regInvBlockType(WindowType.CHEST, 			Material.CHEST,			 	TileEntityType.CHEST);
 		regInvBlockType(WindowType.CRAFTING_TABLE, 	Material.CRAFTING_TABLE, 	TileEntityType.UNKNOWN);
@@ -49,6 +51,7 @@ public class PEFakeContainer {
 		regInvBlockType(WindowType.DROPPER,			Material.DROPPER, 			TileEntityType.DROPPER);
 		regInvBlockType(WindowType.SHULKER,			Material.CHEST,				TileEntityType.CHEST); //Fake with chest
 	}
+
 	private static Any<Material, TileEntityType> getContainerData(WindowType type) {
 		return invBlockType.get(type);
 	}
@@ -59,7 +62,7 @@ public class PEFakeContainer {
 		WindowCache winCache = cache.getWindowCache();
 		PEInventoryCache invCache = cache.getPEInventoryCache();
 		Any<Material, TileEntityType> typeData = getContainerData(winCache.getOpenedWindow());
-		Position position = new Position(0,0,0);
+		Position position = new Position(0, 0, 0);
 		if (typeData != null) {
 			//Get position under client's feet.
 			position.setX((int) cache.getMovementCache().getPEClientX() - 2);

@@ -126,11 +126,13 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	}
 
 	private static final DefaultJWSVerifierFactory jwsverifierfactory = new DefaultJWSVerifierFactory();
+
 	private static boolean verify(JWSObject object, PublicKey key) throws JOSEException {
 		return object.verify(jwsverifierfactory.createJWSVerifier(object.getHeader(), key));
 	}
 
 	private static final KeyFactory keyfactory = getKeyFactory();
+
 	private static KeyFactory getKeyFactory() {
 		try {
 			return KeyFactory.getInstance("EC");

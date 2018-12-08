@@ -38,30 +38,30 @@ public class PENBTSerializer extends NBTSerializer<ByteBuf, ByteBuf> {
 		registerType(NBTType.LONG, 4, stream -> new NBTLong(stream.readLongLE()), (stream, tag) -> stream.writeLongLE(tag.getAsLong()));
 		registerType(NBTType.DOUBLE, 6, stream -> new NBTDouble(stream.readDoubleLE()), (stream, tag) -> stream.writeDoubleLE(tag.getAsDouble()));
 		registerType(
-				NBTType.COMPOUND, 10,
-				stream -> {
-					NBTCompound compound = new NBTCompound();
-					NBTType<?> valueType = null;
-					while ((valueType = readTagType(stream)) != NBTType.END) {
-						compound.setTag(readTagName(stream), readTag(stream, valueType));
-					}
-					return compound;
-				},
-				(stream, tag) -> {
-					for (Entry<String, NBT> entry : tag.getTags().entrySet()) {
-						NBT value = entry.getValue();
-						writeTagType(stream, value.getType());
-						writeTagName(stream, entry.getKey());
-						writeTag(stream, value);
-					}
-					writeTagType(stream, NBTType.END);
+			NBTType.COMPOUND, 10,
+			stream -> {
+				NBTCompound compound = new NBTCompound();
+				NBTType<?> valueType = null;
+				while ((valueType = readTagType(stream)) != NBTType.END) {
+					compound.setTag(readTagName(stream), readTag(stream, valueType));
 				}
-			);
+				return compound;
+			},
+			(stream, tag) -> {
+				for (Entry<String, NBT> entry : tag.getTags().entrySet()) {
+					NBT value = entry.getValue();
+					writeTagType(stream, value.getType());
+					writeTagName(stream, entry.getKey());
+					writeTag(stream, value);
+				}
+				writeTagType(stream, NBTType.END);
+			}
+		);
 		// Pe has two similar but different formats.
 		if (varint) {
 			registerType(NBTType.INT, 3, stream -> new NBTInt(VarNumberSerializer.readSVarInt(stream)), (stream, tag) -> VarNumberSerializer.writeSVarInt(stream, tag.getAsInt()));
 			registerType(
-				NBTType.STRING, 8, 
+				NBTType.STRING, 8,
 				stream -> {
 					return new NBTString(new String(MiscSerializer.readBytes(stream, VarNumberSerializer.readVarInt(stream)), StandardCharsets.UTF_8));
 				},
@@ -74,7 +74,7 @@ public class PENBTSerializer extends NBTSerializer<ByteBuf, ByteBuf> {
 				NBTType.BYTE_ARRAY, 7,
 				stream -> {
 					byte[] array = new byte[VarNumberSerializer.readVarInt(stream)];
-					for(int i = 0; i < array.length; i++) {
+					for (int i = 0; i < array.length; i++) {
 						array[i] = stream.readByte();
 					}
 					return new NBTByteArray(array);
@@ -103,44 +103,44 @@ public class PENBTSerializer extends NBTSerializer<ByteBuf, ByteBuf> {
 				}
 			);
 			registerType(
-					NBTType.LIST, 9,
-					stream -> {
-						NBTType<? extends NBT> valueType = readTagType(stream);
-						int size = VarNumberSerializer.readSVarInt(stream);
-						if ((valueType == NBTType.END) && (size > 0)) {
-							throw new DecoderException("Missing nbt list values tag type");
-						}
-						NBTList<NBT> list = new NBTList<>((NBTType<NBT>) valueType);
-						for (int i = 0; i < size; i++) {
-							list.addTag(readTag(stream, valueType));
-						}
-						return list;
-					},
-					(stream, tag) -> {
-						writeTagType(stream, tag.getTagsType());
-						VarNumberSerializer.writeSVarInt(stream, tag.size());
-						for (NBT value : ((List<NBT>) tag.getTags())) {
-							writeTag(stream, value);
-						}
+				NBTType.LIST, 9,
+				stream -> {
+					NBTType<? extends NBT> valueType = readTagType(stream);
+					int size = VarNumberSerializer.readSVarInt(stream);
+					if ((valueType == NBTType.END) && (size > 0)) {
+						throw new DecoderException("Missing nbt list values tag type");
 					}
-				);
+					NBTList<NBT> list = new NBTList<>((NBTType<NBT>) valueType);
+					for (int i = 0; i < size; i++) {
+						list.addTag(readTag(stream, valueType));
+					}
+					return list;
+				},
+				(stream, tag) -> {
+					writeTagType(stream, tag.getTagsType());
+					VarNumberSerializer.writeSVarInt(stream, tag.size());
+					for (NBT value : ((List<NBT>) tag.getTags())) {
+						writeTag(stream, value);
+					}
+				}
+			);
 		} else {
 			registerType(NBTType.INT, 3, stream -> new NBTInt(stream.readIntLE()), (stream, tag) -> stream.writeIntLE(tag.getAsInt()));
 			registerType(
-					NBTType.STRING, 8, 
-					stream -> {
-						return new NBTString(new String(MiscSerializer.readBytes(stream, stream.readShortLE()), StandardCharsets.UTF_8));
-					},
-					(stream, tag) -> {
-						byte[] data = tag.getValue().getBytes(StandardCharsets.UTF_8);
-						stream.writeShortLE(data.length);
-						stream.writeBytes(data);
-					});
+				NBTType.STRING, 8,
+				stream -> {
+					return new NBTString(new String(MiscSerializer.readBytes(stream, stream.readShortLE()), StandardCharsets.UTF_8));
+				},
+				(stream, tag) -> {
+					byte[] data = tag.getValue().getBytes(StandardCharsets.UTF_8);
+					stream.writeShortLE(data.length);
+					stream.writeBytes(data);
+				});
 			registerType(
 				NBTType.BYTE_ARRAY, 7,
 				stream -> {
 					byte[] array = new byte[stream.readIntLE()];
-					for(int i = 0; i < array.length; i++) {
+					for (int i = 0; i < array.length; i++) {
 						array[i] = stream.readByte();
 					}
 					return new NBTByteArray(array);
