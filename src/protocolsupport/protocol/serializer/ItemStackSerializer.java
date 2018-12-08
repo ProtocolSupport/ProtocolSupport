@@ -29,6 +29,7 @@ import protocolsupport.protocol.utils.types.nbt.NBTList;
 import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
 import protocolsupport.protocol.utils.types.nbt.serializer.DefaultNBTSerializer;
+import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class ItemStackSerializer {
@@ -133,7 +134,9 @@ public class ItemStackSerializer {
 			} else {
 				throw new IllegalArgumentException(MessageFormat.format("Dont know how to read nbt of version {0}", version));
 			}
-		} catch (Exception e) {
+		} catch (EOFSignal e) {
+			throw e;
+		} catch (Exception e) {//TODO: only catch IO exception and specific exceptions from nbt serializer (after implementing them)
 			throw new DecoderException(e);
 		}
 	}
