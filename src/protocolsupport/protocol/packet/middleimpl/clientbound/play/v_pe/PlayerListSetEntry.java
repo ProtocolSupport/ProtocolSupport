@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import com.google.gson.JsonElement;
@@ -60,9 +61,10 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 				for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
 					UUID uuid = entry.getKey();
 					PlayerListEntry currentEntry = entry.getValue().getObj2();
+					String username = currentEntry.getCurrentName(attrscache.getLocale());
 					MiscSerializer.writeUUID(serializer, version, uuid);
 					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
-					StringSerializer.writeString(serializer, version, currentEntry.getCurrentName(attrscache.getLocale()));
+					StringSerializer.writeString(serializer, version, username);
 					Any<Boolean, String> skininfo = getSkinInfo(currentEntry.getProperties(true));
 					byte[] skindata = skininfo != null ? skinprovider.getSkinData(skininfo.getObj2()) : null;
 					if (skindata != null) {
@@ -70,7 +72,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 					} else {
 						writeSkinData(version, serializer, false, false, DefaultPESkinsProvider.DEFAULT_STEVE);
 						if (skininfo != null) {
-							skinprovider.scheduleGetSkinData(skininfo.getObj2(), new SkinUpdate(connection, uuid, skininfo.getObj1()));
+							skinprovider.scheduleGetSkinData(skininfo.getObj2(), new SkinUpdate(connection, uuid, skininfo.getObj1(), username));
 						}
 					}
 					StringSerializer.writeString(serializer, version, ""); //xuid
@@ -117,16 +119,26 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		private final ConnectionImpl connection;
 		private final UUID uuid;
 		private final Boolean isNormalModel;
-		public SkinUpdate(ConnectionImpl connection, UUID uuid, Boolean isNormalModel) {
+		private final String username;
+		public SkinUpdate(ConnectionImpl connection, UUID uuid, Boolean isNormalModel, String username) {
 			this.connection = connection;
 			this.uuid = uuid;
 			this.isNormalModel = isNormalModel;
+			this.username = username;
 		}
 		@Override
 		public void accept(byte[] skindata) {
+			ProtocolVersion version = connection.getVersion();
 			ByteBuf serializer = Unpooled.buffer();
-			MiscSerializer.writeUUID(serializer, connection.getVersion(), uuid);
-			writeSkinData(connection.getVersion(), serializer, true, isNormalModel, skindata);
+			serializer.writeByte(0);
+			VarNumberSerializer.writeVarInt(serializer, 1);
+			MiscSerializer.writeUUID(serializer, version, uuid);
+			VarNumberSerializer.writeVarInt(serializer, 0); //entity id
+			StringSerializer.writeString(serializer, version, username);
+			writeSkinData(version, serializer, false, isNormalModel, skindata);
+			StringSerializer.writeString(serializer, version, ""); //xuid
+			StringSerializer.writeString(serializer, version, ""); //Chat channel thing
+
 			connection.sendPacket(ServerPlatform.get().getPacketFactory().createOutboundPluginMessagePacket(InternalPluginMessageRequest.PESkinUpdateSuffix, serializer));
 		}
 	}
@@ -138,7 +150,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		}
 		StringSerializer.writeString(serializer, version, model.getSkinName());
 		if (isSkinUpdate) {
-			StringSerializer.writeString(serializer, version, model.getSkinName());
+			StringSerializer.writeString(serializer, version, "");
 		}
 		ArraySerializer.writeVarIntByteArray(serializer, skindata);
 		ArraySerializer.writeVarIntByteArray(serializer, new byte[0]); //cape data
