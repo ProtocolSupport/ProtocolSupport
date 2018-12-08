@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityStatus;
@@ -9,8 +8,9 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
-import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 import java.text.MessageFormat;
 
@@ -25,18 +25,14 @@ public class EntityStatus extends MiddleEntityStatus {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		NetworkEntityType entityType = cache.getWatchedEntityCache().getWatchedEntity(entityId).getType();
 		int peStatus = PEDataValues.getEntityStatusRemap(status, entityType);
-
 		if (peStatus != -1) {
-			ProtocolSupport.logTrace(MessageFormat.format("Entity status mapped from {0} to {1}",
-				status, peStatus));
-			packets.add(create(entityId, peStatus, connection.getVersion()));
+			return RecyclableSingletonList.create(create(entityId, peStatus, connection.getVersion()));
 		} else {
-			ProtocolSupport.logTrace(MessageFormat.format("Entity status {0} ignored", status));
+			System.out.println(MessageFormat.format("Entity status {0} ignored", status));
 		}
-		return packets;
+		return RecyclableEmptyList.get();
 	}
 
 	public static ClientBoundPacketData create(int entityId, int status, ProtocolVersion version) {

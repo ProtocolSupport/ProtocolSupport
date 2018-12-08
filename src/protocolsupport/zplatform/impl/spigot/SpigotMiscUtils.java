@@ -163,6 +163,16 @@ public class SpigotMiscUtils implements PlatformUtils {
 	}
 
 	@Override
+	public int getBlockDataNetworkTypeId(BlockData blockdata) {
+		return IRegistry.BLOCK.a(((CraftBlockData) blockdata).getState().getBlock());
+	}
+
+	@Override
+	public BlockData getBlockDataByNetworkTypeId(int id) {
+		return CraftBlockData.fromData(IRegistry.BLOCK.fromId(id).getBlockData());
+	}
+
+	@Override
 	public List<BlockData> getBlockDataList(Material material) {
 		return
 			CraftMagicNumbers.getBlock(material).getStates().a().stream()

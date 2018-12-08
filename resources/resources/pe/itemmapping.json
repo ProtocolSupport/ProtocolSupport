@@ -1,5 +1,105 @@
 [
   {
+    "itemkey": "turtle_egg",
+    "peid": -159,
+    "pedata": 0
+  },
+  {
+    "itemkey": "conduit",
+    "peid": -157,
+    "pedata": 0
+  },
+  {
+    "itemkey": "sea_pickle",
+    "peid": -156,
+    "pedata": 0
+  },
+  {
+    "itemkey": "carved_pumpkin",
+    "peid": -155,
+    "pedata": 0
+  },
+  {
+    "itemkey": "spruce_pressure_plate",
+    "peid": -154,
+    "pedata": 0
+  },
+  {
+    "itemkey": "jungle_pressure_plate",
+    "peid": -153,
+    "pedata": 0
+  },
+  {
+    "itemkey": "dark_oak_pressure_plate",
+    "peid": -152,
+    "pedata": 0
+  },
+  {
+    "itemkey": "birch_pressure_plate",
+    "peid": -151,
+    "pedata": 0
+  },
+  {
+    "itemkey": "acacia_pressure_plate",
+    "peid": -150,
+    "pedata": 0
+  },
+  {
+    "itemkey": "spruce_trapdoor",
+    "peid": -149,
+    "pedata": 0
+  },
+  {
+    "itemkey": "jungle_trapdoor",
+    "peid": -148,
+    "pedata": 0
+  },
+  {
+    "itemkey": "dark_oak_trapdoor",
+    "peid": -147,
+    "pedata": 0
+  },
+  {
+    "itemkey": "birch_trapdoor",
+    "peid": -146,
+    "pedata": 0
+  },
+  {
+    "itemkey": "acacia_trapdoor",
+    "peid": -145,
+    "pedata": 0
+  },
+  {
+    "itemkey": "spruce_button",
+    "peid": -144,
+    "pedata": 0
+  },
+  {
+    "itemkey": "jungle_button",
+    "peid": -143,
+    "pedata": 0
+  },
+  {
+    "itemkey": "dark_oak_button",
+    "peid": -142,
+    "pedata": 0
+  },
+  {
+    "itemkey": "birch_button",
+    "peid": -141,
+    "pedata": 0
+  },
+  {
+    "itemkey": "acacia_button",
+    "peid": -140,
+    "pedata": 0
+  },
+  {
+    "itemkey": "dried_kelp_block",
+    "peid": -139,
+    "pedata": 0
+  },
+  {
     "itemkey": "dead_tube_coral_fan",
     "peid": -134,
     "pedata": 0
@@ -123,6 +223,61 @@
     "itemkey": "horn_coral",
     "peid": -131,
     "pedata": 4
+  },
+  {
+    "itemkey": "seagrass",
+    "peid": -130,
+    "pedata": 0
+  },
+  {
+    "itemkey": "blue_ice",
+    "peid": -11,
+    "pedata": 0
+  },
+  {
+    "itemkey": "stripped_oak_log",
+    "peid": -10,
+    "pedata": 0
+  },
+  {
+    "itemkey": "stripped_dark_oak_log",
+    "peid": -9,
+    "pedata": 0
+  },
+  {
+    "itemkey": "stripped_acacia_log",
+    "peid": -8,
+    "pedata": 0
+  },
+  {
+    "itemkey": "stripped_jungle_log",
+    "peid": -7,
+    "pedata": 0
+  },
+  {
+    "itemkey": "stripped_birch_log",
+    "peid": -6,
+    "pedata": 0
+  },
+  {
+    "itemkey": "stripped_spruce_log",
+    "peid": -5,
+    "pedata": 0
+  },
+  {
+    "itemkey": "prismarine_brick_stairs",
+    "peid": -4,
+    "pedata": 0
+  },
+  {
+    "itemkey": "dark_prismarine_stairs",
+    "peid": -3,
+    "pedata": 0
+  },
+  {
+    "itemkey": "prismarine_stairs",
+    "peid": -2,
+    "pedata": 0
   },
   {
     "itemkey": "air",

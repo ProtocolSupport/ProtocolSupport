@@ -66,7 +66,7 @@ public class CollectionsUtils {
 		}
 
 		public int getMaxKey() {
-			return array.length + offset;
+			return getMinKey() + array.length;
 		}
 
 		@SuppressWarnings("unchecked")

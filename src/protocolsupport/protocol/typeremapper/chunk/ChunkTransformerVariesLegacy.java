@@ -4,13 +4,13 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.TileDataCache;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.basic.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
 public class ChunkTransformerVariesLegacy extends ChunkTransformerBB {
 
-	public ChunkTransformerVariesLegacy(ArrayBasedIdRemappingTable blockRemappingTable, TileNBTRemapper tileremapper, TileDataCache tilecache) {
+	public ChunkTransformerVariesLegacy(ArrayBasedIdRemappingTable blockRemappingTable, TileEntityRemapper tileremapper, TileDataCache tilecache) {
 		super(blockRemappingTable, tileremapper, tilecache);
 	}
 

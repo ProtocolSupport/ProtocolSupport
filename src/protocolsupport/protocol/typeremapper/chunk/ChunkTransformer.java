@@ -9,7 +9,7 @@ import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.TileDataCache;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.basic.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.ChunkCoord;
@@ -29,8 +29,8 @@ public abstract class ChunkTransformer {
 
 	protected final ArrayBasedIdRemappingTable blockTypeRemappingTable;
 	protected final TileDataCache tilecache;
-	protected final TileNBTRemapper tileremapper;
-	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable, TileNBTRemapper tileremapper, TileDataCache tilecache) {
+	protected final TileEntityRemapper tileremapper;
+	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable, TileEntityRemapper tileremapper, TileDataCache tilecache) {
 		this.blockTypeRemappingTable = blockRemappingTable;
 		this.tileremapper = tileremapper;
 		this.tilecache = tilecache;

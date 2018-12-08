@@ -9,7 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.basic.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerPE;
@@ -30,7 +30,7 @@ public class Chunk extends MiddleChunk {
 
 	private final ChunkTransformerBB transformer = new ChunkTransformerPE(
 			LegacyBlockData.REGISTRY.getTable(connection.getVersion()),
-			TileNBTRemapper.getRemapper(connection.getVersion()),
+			TileEntityRemapper.getRemapper(connection.getVersion()),
 			connection.getCache().getTileCache(),
 			PEDataValues.BIOME.getTable(connection.getVersion())
 	);
@@ -47,6 +47,7 @@ public class Chunk extends MiddleChunk {
 				transformer.writeLegacyData(chunkdata);
 				chunkdata.writeByte(0); //borders
 				for (TileEntity tile : transformer.remapAndGetTiles()) {
+//					System.out.println("LOADING CHUNK TILE: " + tile.toString());
 					ItemStackSerializer.writeTag(chunkdata, true, version, tile.getNBT());
 				}
 			});

@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.basic.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBA;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerShort;
@@ -22,7 +22,7 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	protected final ChunkTransformerBA transformer = new ChunkTransformerShort(LegacyBlockData.REGISTRY.getTable(connection.getVersion()), TileNBTRemapper.getRemapper(connection.getVersion()), cache.getTileCache());
+	protected final ChunkTransformerBA transformer = new ChunkTransformerShort(LegacyBlockData.REGISTRY.getTable(connection.getVersion()), TileEntityRemapper.getRemapper(connection.getVersion()), cache.getTileCache());
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {

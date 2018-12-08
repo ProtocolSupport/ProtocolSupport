@@ -2,7 +2,6 @@ package protocolsupport.protocol.typeremapper.pe;
 
 import java.io.BufferedReader;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
@@ -291,19 +290,17 @@ public class PEDataValues {
 		}
 	};
 
-	private static HashMap<NetworkEntityType, HashMap<Integer, Integer>> entityStatusRemaps = new HashMap<>();
+	private static EnumMap<NetworkEntityType, Int2IntOpenHashMap> entityStatusRemaps = new EnumMap<>(NetworkEntityType.class);
 
-	private static void registerEntityStatusRemap(int pcStatus, int peStatus, NetworkEntityType entityType) {
-		HashMap<Integer, Integer> mapping = entityStatusRemaps.get(entityType);
-		if (mapping == null) {
-			mapping = new HashMap<>();
-			entityStatusRemaps.put(entityType, mapping);
+	private static void registerEntityStatusRemap(int pcStatus, int peStatus, NetworkEntityType... entityTypes) {
+		for(NetworkEntityType entityType : entityTypes) {
+			Int2IntOpenHashMap mapping = entityStatusRemaps.computeIfAbsent(entityType, m -> new Int2IntOpenHashMap());
+			mapping.put(pcStatus, peStatus);
 		}
-		mapping.put(pcStatus, peStatus);
 	}
 
 	private static void registerEntityStatusRemap(int pcStatus, int peStatus) {
-		registerEntityStatusRemap(pcStatus, peStatus, null);
+		registerEntityStatusRemap(pcStatus, peStatus, NetworkEntityType.values());
 	}
 
 	private static void initEntityStatusRemaps() {
@@ -389,21 +386,7 @@ public class PEDataValues {
 	 * entity type. If no mapping is possible, -1 is returned.
 	 */
 	public static int getEntityStatusRemap(int pcStatus, NetworkEntityType entityType) {
-		int peStatus = -1;
-
-		HashMap<Integer, Integer> entity_mapping = entityStatusRemaps.get(entityType);
-		if (entity_mapping != null && entity_mapping.containsKey(pcStatus)) {
-			// If we have a specific key, use the value, even if it's -1 (that means
-			// that we should ignore the default mapping)
-			peStatus = entity_mapping.get(pcStatus);
-		} else {
-			HashMap<Integer, Integer> default_mapping = entityStatusRemaps.get(null);
-			if (entity_mapping != null && default_mapping.containsKey(pcStatus)) {
-				peStatus = default_mapping.get(pcStatus);
-			}
-		}
-
-		return peStatus;
+		return entityStatusRemaps.get(entityType).getOrDefault(pcStatus, -1);
 	}
 
 	private final static Map<NetworkEntityType, PEEntityData> entityData = new EnumMap<NetworkEntityType, PEEntityData>(NetworkEntityType.class);

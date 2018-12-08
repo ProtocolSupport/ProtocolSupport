@@ -4,13 +4,13 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.TileDataCache;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.basic.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
 public class ChunkTransformerPE extends ChunkTransformerBB {
 
-	public ChunkTransformerPE(ArrayBasedIdRemappingTable blockRemappingTable, TileNBTRemapper tileremapper, TileDataCache tilecache, ArrayBasedIdRemappingTable biomeRemappingTable) {
+	public ChunkTransformerPE(ArrayBasedIdRemappingTable blockRemappingTable, TileEntityRemapper tileremapper, TileDataCache tilecache, ArrayBasedIdRemappingTable biomeRemappingTable) {
 		super(blockRemappingTable, tileremapper, tilecache);
 		this.biomeRemappingTable = biomeRemappingTable;
 	}
@@ -34,8 +34,8 @@ public class ChunkTransformerPE extends ChunkTransformerBB {
 				chunkdata.writeByte((bitsPerBlock << 1) | flag_runtime);
 				int blockIndex = 0;
 				for (int x = 0; x < 16; x++) { for (int z = 0; z < 16; z++) { for (int y = 0; y < 16; y++) {
-					if (PEBlocks.isPCBlockWaterlogged(getBlockState(storage, x, y, z))) { waterstorage.setBlockState(blockIndex, 1); }
-					blockstorage.setBlockState(blockIndex++, palette.getRuntimeId(PEBlocks.getPocketRuntimeId(blockTypeRemappingTable.getRemap(getBlockState(storage, x, y, z)))));
+					if (PEBlocks.isPCBlockWaterlogged(getBlockState(i, storage, x, y, z))) { waterstorage.setBlockState(blockIndex, 1); }
+					blockstorage.setBlockState(blockIndex++, palette.getRuntimeId(PEBlocks.getPocketRuntimeId(blockTypeRemappingTable.getRemap(getBlockState(i, storage, x, y, z)))));
 				}}}
 				for (int word : blockstorage.getBlockData()) {
 					chunkdata.writeIntLE(word);
@@ -62,8 +62,8 @@ public class ChunkTransformerPE extends ChunkTransformerBB {
 		}
 	}
 
-	protected static int getBlockState(BlockStorageReader storage, int x, int y, int z) {
-		return storage.getBlockState((y << 8) | (z << 4) | (x));
+	protected int getBlockState(int section, BlockStorageReader storage, int x, int y, int z) {
+		return getBlockState(section, storage, (y << 8) | (z << 4) | (x));
 	}
 
 	protected static int getPocketBitsPerBlock(int pcBitsPerBlock) {

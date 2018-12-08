@@ -34,7 +34,7 @@ public class SpoofedDataParser {
 		try {
 			Class.forName(PlayerHandshakeEvent.class.getName());
 			return true;
-		} catch (ClassNotFoundException e) {
+		} catch (Throwable e) {
 			return false;
 		}
 	}
