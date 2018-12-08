@@ -57,9 +57,12 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 				PESkinsProvider skinprovider = PESkinsProviderSPI.getProvider();
 				ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_INFO);
 				serializer.writeByte(0);
-				VarNumberSerializer.writeVarInt(serializer, infos.size());
+				VarNumberSerializer.writeVarInt(serializer, infos.size() - 1);
 				for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
 					UUID uuid = entry.getKey();
+					if (uuid.equals(connection.getPlayer().getUniqueId())) {
+						continue;
+					}
 					PlayerListEntry currentEntry = entry.getValue().getObj2();
 					String username = currentEntry.getCurrentName(attrscache.getLocale());
 					MiscSerializer.writeUUID(serializer, version, uuid);
@@ -68,9 +71,9 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 					Any<Boolean, String> skininfo = getSkinInfo(currentEntry.getProperties(true));
 					byte[] skindata = skininfo != null ? skinprovider.getSkinData(skininfo.getObj2()) : null;
 					if (skindata != null) {
-						writeSkinData(version, serializer, false, skininfo.getObj1(), skindata);
+						writeSkinData(version, serializer, skininfo.getObj1(), skindata);
 					} else {
-						writeSkinData(version, serializer, false, false, DefaultPESkinsProvider.DEFAULT_STEVE);
+						writeSkinData(version, serializer,false, DefaultPESkinsProvider.DEFAULT_STEVE);
 						if (skininfo != null) {
 							skinprovider.scheduleGetSkinData(skininfo.getObj2(), new SkinUpdate(connection, uuid, skininfo.getObj1(), username));
 						}
@@ -135,7 +138,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 			MiscSerializer.writeUUID(serializer, version, uuid);
 			VarNumberSerializer.writeVarInt(serializer, 0); //entity id
 			StringSerializer.writeString(serializer, version, username);
-			writeSkinData(version, serializer, false, isNormalModel, skindata);
+			writeSkinData(version, serializer, isNormalModel, skindata);
 			StringSerializer.writeString(serializer, version, ""); //xuid
 			StringSerializer.writeString(serializer, version, ""); //Chat channel thing
 
@@ -143,15 +146,9 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		}
 	}
 
-	protected static void writeSkinData(ProtocolVersion version, ByteBuf serializer, boolean isSkinUpdate, boolean isSlim, byte[] skindata) {
+	protected static void writeSkinData(ProtocolVersion version, ByteBuf serializer, boolean isSlim, byte[] skindata) {
 		PESkinModel model = PESkinModel.getSkinModel(isSlim);
-		if (isSkinUpdate) {
-			StringSerializer.writeString(serializer, version, model.getSkinId());
-		}
 		StringSerializer.writeString(serializer, version, model.getSkinName());
-		if (isSkinUpdate) {
-			StringSerializer.writeString(serializer, version, "");
-		}
 		ArraySerializer.writeVarIntByteArray(serializer, skindata);
 		ArraySerializer.writeVarIntByteArray(serializer, new byte[0]); //cape data
 		StringSerializer.writeString(serializer, version, model.getGeometryId());
