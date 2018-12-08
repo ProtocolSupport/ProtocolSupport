@@ -1,10 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEntityAction;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -107,6 +109,9 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 			}
 			case START_GLIDE: {
 				return RecyclableSingletonList.create(MiddleEntityAction.create(selfId, MiddleEntityAction.Action.START_ELYTRA_FLY, 0));
+			}
+			case DIMENSION_CHANGE_ACK: {
+				return RecyclableSingletonList.create(MiddleCustomPayload.create(InternalPluginMessageRequest.PEUnlockChannel));
 			}
 			default: {
 				return RecyclableEmptyList.get();

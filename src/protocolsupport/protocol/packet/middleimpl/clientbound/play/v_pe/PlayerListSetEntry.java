@@ -16,13 +16,13 @@ import com.google.gson.JsonParser;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.unsafe.peskins.DefaultPESkinsProvider;
 import protocolsupport.api.unsafe.peskins.PESkinsProvider;
 import protocolsupport.api.unsafe.peskins.PESkinsProviderSPI;
 import protocolsupport.api.utils.Any;
 import protocolsupport.api.utils.ProfileProperty;
+import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -39,6 +39,7 @@ import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 
@@ -59,7 +60,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 				for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
 					UUID uuid = entry.getKey();
 					PlayerListEntry currentEntry = entry.getValue().getObj2();
-					MiscSerializer.writeUUID(serializer, version, uuid.equals(connection.getPlayer().getUniqueId()) ? attrscache.getPEClientUUID() : uuid);
+					MiscSerializer.writeUUID(serializer, version, uuid);
 					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
 					StringSerializer.writeString(serializer, version, currentEntry.getCurrentName(attrscache.getLocale()));
 					Any<Boolean, String> skininfo = getSkinInfo(currentEntry.getProperties(true));
@@ -69,7 +70,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 					} else {
 						writeSkinData(version, serializer, false, false, DefaultPESkinsProvider.DEFAULT_STEVE);
 						if (skininfo != null) {
-							skinprovider.scheduleGetSkinData(skininfo.getObj2(), new SkinUpdate(connection, uuid, attrscache.getPEClientUUID(), skininfo.getObj1()));
+							skinprovider.scheduleGetSkinData(skininfo.getObj2(), new SkinUpdate(connection, uuid, skininfo.getObj1()));
 						}
 					}
 					StringSerializer.writeString(serializer, version, ""); //xuid
@@ -113,23 +114,20 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 	}
 
 	public static class SkinUpdate implements Consumer<byte[]> {
-		private final Connection connection;
+		private final ConnectionImpl connection;
 		private final UUID uuid;
-		private final UUID clientUUID;
 		private final Boolean isNormalModel;
-		public SkinUpdate(Connection connection, UUID uuid, UUID clientUUID, Boolean isNormalModel) {
+		public SkinUpdate(ConnectionImpl connection, UUID uuid, Boolean isNormalModel) {
 			this.connection = connection;
 			this.uuid = uuid;
-			this.clientUUID = clientUUID;
 			this.isNormalModel = isNormalModel;
 		}
 		@Override
 		public void accept(byte[] skindata) {
 			ByteBuf serializer = Unpooled.buffer();
-			PEPacketEncoder.sWritePacketId(serializer, PEPacketIDs.PLAYER_SKIN);
-			MiscSerializer.writeUUID(serializer, connection.getVersion(), uuid.equals(connection.getPlayer().getUniqueId()) ? clientUUID : uuid);
+			MiscSerializer.writeUUID(serializer, connection.getVersion(), uuid);
 			writeSkinData(connection.getVersion(), serializer, true, isNormalModel, skindata);
-			connection.sendRawPacket(MiscSerializer.readAllBytes(serializer));
+			connection.sendPacket(ServerPlatform.get().getPacketFactory().createOutboundPluginMessagePacket(InternalPluginMessageRequest.PESkinUpdateSuffix, serializer));
 		}
 	}
 
@@ -140,7 +138,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		}
 		StringSerializer.writeString(serializer, version, model.getSkinName());
 		if (isSkinUpdate) {
-			StringSerializer.writeString(serializer, version, "Steve");
+			StringSerializer.writeString(serializer, version, model.getSkinName());
 		}
 		ArraySerializer.writeVarIntByteArray(serializer, skindata);
 		ArraySerializer.writeVarIntByteArray(serializer, new byte[0]); //cape data

@@ -20,7 +20,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class PEDimensionSwitchMovementConfirmationPacketQueue {
 
 	protected final ArrayList<ClientBoundPacketData> queue = new ArrayList<>(2000);
-	protected State state = State.UNLOCKED;
+	protected boolean isLocked = false;
 
 	@SuppressWarnings("unchecked")
 	public RecyclableCollection<ClientBoundPacketData> processClientBoundPackets(RecyclableCollection<ClientBoundPacketData> packets) {
@@ -29,6 +29,7 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 			if (isPacketSendingAllowed() && !queue.isEmpty()) {
 				ArrayList<ClientBoundPacketData> qclone = (ArrayList<ClientBoundPacketData>) queue.clone();
 				queue.clear();
+				queue.trimToSize();
 				processClientBoundPackets0(qclone, allowed);
 			}
 			processClientBoundPackets0(packets, allowed);
@@ -47,7 +48,7 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 				if (sendpacket.getPacketId() == PEPacketIDs.CUSTOM_EVENT) {
 					ByteBuf peak = sendpacket.duplicate();
 					if (StringSerializer.readString(peak, ProtocolVersion.MINECRAFT_PE).equals(InternalPluginMessageRequest.PELockChannel)) {
-						state = State.LOCKED;
+						isLocked = true;
 					}
 				}
 			}
@@ -55,28 +56,24 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 	}
 
 	private boolean isPacketSendingAllowed() {
-		return state == State.UNLOCKED;
+		return !isLocked;
 	}
 
 	public RecyclableCollection<ServerBoundPacketData> processServerBoundPackets(RecyclableCollection<ServerBoundPacketData> packets, ConnectionImpl connection) {
 		try {
 			RecyclableArrayList<ServerBoundPacketData> allowed = RecyclableArrayList.create();
-			boolean wasLocked = state == State.LOCKED;
+			boolean wasLocked = isLocked;
 			for (ServerBoundPacketData packet : packets) {
 				if (!isPacketSendingAllowed() && packet.getPacketType() == ServerBoundPacket.PLAY_CUSTOM_PAYLOAD) {
 					ByteBuf peak = packet.duplicate();
 					//This may also be mimicked by bungee during server changes.
 					if (StringSerializer.readString(peak, ProtocolVersionsHelper.LATEST_PC).equals(InternalPluginMessageRequest.PEUnlockChannel)) {
-						//TODO: do we need to do something to trigger the queue flush a bit faster?
-						state = State.UNLOCKED;
+						isLocked = false;
 					}
-				} else if (!isPacketSendingAllowed() && packet.getPacketType() == ServerBoundPacket.PLAY_POSITION_LOOK) {
-					//Client is alive in its world.
-					state = State.UNLOCKED;
 				}
 				allowed.add(packet);
 			}
-			if (wasLocked && state == State.UNLOCKED) {
+			if (wasLocked && !isLocked) {
 				//Enable player mobility again
 				connection.getCache().getMovementCache().setClientImmobile(false);
 				queue.add(EntityMetadata.updatePlayerMobility(connection));
@@ -86,9 +83,4 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 			packets.recycleObjectOnly();
 		}
 	}
-
-	protected enum State {
-		UNLOCKED, LOCKED
-	}
-
 }
