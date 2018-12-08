@@ -46,6 +46,28 @@ public class MaterialAPI {
 	}
 
 	/**
+	 * Returns current blockdata network <em>type</em> id.
+	 * Type id is not commonly used, but is
+	 * present in stuff like blockactions.
+	 * @param blockdata blockdata
+	 * @return current blockdata network type id
+	 */
+	public static int getBlockDataNetworkTypeId(BlockData blockdata) {
+		return ServerPlatform.get().getMiscUtils().getBlockDataNetworkTypeId(blockdata);
+	}
+
+	/**
+	 * Returns blockdata by network <em>type</em> id.
+	 * Type id is not commonly used, but is
+	 * present in stuff like blockactions.
+	 * @param id blockdata network type id.
+	 * @return blockdata for network type id
+	 */
+	public static BlockData getBlockDataByNetworkTypeId(int id) {
+		return ServerPlatform.get().getMiscUtils().getBlockDataByNetworkTypeId(id);
+	}
+
+	/**
 	 * Retunrs item network id
 	 * @param item item material
 	 * @return item network id

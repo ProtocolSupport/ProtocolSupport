@@ -15,6 +15,9 @@ import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Chest;
+import org.bukkit.block.data.type.Piston;
+import org.bukkit.block.data.type.PistonHead;
+import org.bukkit.block.data.type.TechnicalPiston;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -147,6 +150,78 @@ public class TileEntityRemapper {
 		}
 
 	}
+
+	protected static class PEPistonSupplier implements Function<Position, TileEntity> {
+
+		protected final BlockData blockData;
+		public PEPistonSupplier(BlockData blockData) {
+			this.blockData = blockData;
+		}
+
+		@Override
+		public TileEntity apply(Position position) {
+			NBTCompound nbt = new NBTCompound();
+			nbt.setTag("x", new NBTInt(position.getX()));
+			nbt.setTag("y", new NBTInt(position.getY()));
+			nbt.setTag("z", new NBTInt(position.getZ()));
+			nbt.setTag("id", new NBTString("PistonArm"));
+			switch (blockData.getMaterial()) {
+			case PISTON_HEAD: {
+				PistonHead head = (PistonHead) blockData;
+				nbt.setTag("y", new NBTInt(position.getY() - 1));
+				nbt.setTag("isMovable", new NBTByte((byte) 0));
+				nbt.setTag("State", new NBTByte((byte) 2));
+				nbt.setTag("NewState", new NBTByte((byte) 2));
+				nbt.setTag("LastProgress", new NBTFloat(1));
+				nbt.setTag("Progress", new NBTFloat(1));
+				nbt.setTag("Sticky", new NBTByte(head.getType() == TechnicalPiston.Type.STICKY ? (byte) 1 : (byte) 0));
+				break;
+			}
+			case STICKY_PISTON:
+			case PISTON: {
+				nbt.setTag("isMovable", new NBTByte((byte) 1));
+				nbt.setTag("State", new NBTByte((byte) 0));
+				nbt.setTag("NewState", new NBTByte((byte) 0));
+				nbt.setTag("LastProgress", new NBTFloat(0));
+				nbt.setTag("Progress", new NBTFloat(0));
+				nbt.setTag("Sticky", new NBTByte(blockData.getMaterial() == Material.STICKY_PISTON ? (byte) 1 : (byte) 0));
+				break;
+			}
+			default:
+				break;
+			}
+			System.out.println("PISTON: " + nbt);
+			return new TileEntity(nbt);
+		}
+		
+		
+	}
+//	registerLegacyState(Material.PISTON, (position) -> {
+//		NBTCompound nbt = new NBTCompound();
+//		nbt.setTag("x", new NBTInt(position.getX()));
+//		nbt.setTag("y", new NBTInt(position.getY()));
+//		nbt.setTag("z", new NBTInt(position.getZ()));
+//		// Piston head / source
+//		NBTCompound blockState = nbt.getTagOfType("blockState", NBTType.COMPOUND);
+//		if (blockState != null) {
+//			NBTString name = blockState.getTagOfType("Name", NBTType.STRING);
+//			if (name != null && name.getValue().equals("minecraft:piston_head")) {
+//				nbt.setTag("id", new NBTString("PistonArm"));
+//				nbt.setTag("Progress", nbt.getTag("progress"));
+//				byte sticky = 0;
+//				NBTCompound properties = blockState.getTagOfType("Properties", NBTType.COMPOUND);
+//				if (properties != null) {
+//					NBTString type = properties.getTagOfType("type", NBTType.STRING);
+//					if (type != null && type.getValue().equals("sticky")) sticky = 1;;
+//				}
+//				nbt.setTag("Sticky", new NBTByte(sticky));
+//			} else if (nbt.getNumberTag("source").getAsByte() != 1) {
+//				//nbt.setTag("id", new NBTString("MovingBlock"));
+//			}
+//		}
+//		System.out.println("PISTON NBT: " + nbt);
+//		return new TileEntity(nbt);
+//	}, ProtocolVersionsHelper.ALL_PE);
 
 	protected static class TileEntityToLegacyTypeNameRemapper implements Consumer<TileEntity> {
 		protected final String name;
@@ -407,7 +482,7 @@ public class TileEntityRemapper {
 		registerLegacyState(Material.BLACK_BED, new BedTileEntitySupplier(15), ProtocolVersionsHelper.ALL_1_12);
 
 		Arrays.asList(Material.CHEST, Material.TRAPPED_CHEST).forEach(chestMaterial -> {
-			MaterialAPI.getBlockDataList(chestMaterial).stream()
+			MaterialAPI.getBlockDataList(chestMaterial)
 			.forEach(data -> {
 				Chest chest = (Chest) data;
 				switch (chest.getType()) {
@@ -426,6 +501,20 @@ public class TileEntityRemapper {
 					default: {
 						break;
 					}
+				}
+			});
+		});
+
+		MaterialAPI.getBlockDataList(Material.PISTON_HEAD).stream()
+		.forEach(data -> {
+			registerLegacyState(data, new PEPistonSupplier(data), ProtocolVersionsHelper.ALL_PE);
+		});
+		Arrays.asList(Material.STICKY_PISTON, Material.PISTON).forEach(chestMaterial -> {
+			MaterialAPI.getBlockDataList(chestMaterial)
+			.forEach(data -> {
+				Piston piston = (Piston) data;
+				if (!piston.isExtended()) {
+					registerLegacyState(data, new PEPistonSupplier(data), ProtocolVersionsHelper.ALL_PE);
 				}
 			});
 		});

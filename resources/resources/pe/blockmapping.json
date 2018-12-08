@@ -643,19 +643,19 @@
     "pename":"minecraft:detector_rail",
     "pedata":5
   },
-  "minecraft:sticky_piston[extended=true,facing=north]":{
+  "minecraft:sticky_piston[extended=true,facing=south]":{
     "pename":"minecraft:sticky_piston",
     "pedata":10
   },
-  "minecraft:sticky_piston[extended=true,facing=east]":{
+  "minecraft:sticky_piston[extended=true,facing=west]":{
     "pename":"minecraft:sticky_piston",
     "pedata":13
   },
-  "minecraft:sticky_piston[extended=true,facing=south]":{
+  "minecraft:sticky_piston[extended=true,facing=north]":{
     "pename":"minecraft:sticky_piston",
     "pedata":11
   },
-  "minecraft:sticky_piston[extended=true,facing=west]":{
+  "minecraft:sticky_piston[extended=true,facing=east]":{
     "pename":"minecraft:sticky_piston",
     "pedata":12
   },
@@ -667,19 +667,19 @@
     "pename":"minecraft:sticky_piston",
     "pedata":8
   },
-  "minecraft:sticky_piston[extended=false,facing=north]":{
+  "minecraft:sticky_piston[extended=false,facing=south]":{
     "pename":"minecraft:sticky_piston",
     "pedata":2
   },
-  "minecraft:sticky_piston[extended=false,facing=east]":{
+  "minecraft:sticky_piston[extended=false,facing=west]":{
     "pename":"minecraft:sticky_piston",
     "pedata":5
   },
-  "minecraft:sticky_piston[extended=false,facing=south]":{
+  "minecraft:sticky_piston[extended=false,facing=north]":{
     "pename":"minecraft:sticky_piston",
     "pedata":3
   },
-  "minecraft:sticky_piston[extended=false,facing=west]":{
+  "minecraft:sticky_piston[extended=false,facing=east]":{
     "pename":"minecraft:sticky_piston",
     "pedata":4
   },
@@ -707,19 +707,19 @@
     "pename":"minecraft:deadbush",
     "pedata":0
   },
-  "minecraft:piston[extended=true,facing=north]":{
+  "minecraft:piston[extended=true,facing=south]":{
     "pename":"minecraft:piston",
     "pedata":10
   },
-  "minecraft:piston[extended=true,facing=east]":{
+  "minecraft:piston[extended=true,facing=west]":{
     "pename":"minecraft:piston",
     "pedata":13
   },
-  "minecraft:piston[extended=true,facing=south]":{
+  "minecraft:piston[extended=true,facing=north]":{
     "pename":"minecraft:piston",
     "pedata":11
   },
-  "minecraft:piston[extended=true,facing=west]":{
+  "minecraft:piston[extended=true,facing=east]":{
     "pename":"minecraft:piston",
     "pedata":12
   },
@@ -731,19 +731,19 @@
     "pename":"minecraft:piston",
     "pedata":8
   },
-  "minecraft:piston[extended=false,facing=north]":{
+  "minecraft:piston[extended=false,facing=south]":{
     "pename":"minecraft:piston",
     "pedata":2
   },
-  "minecraft:piston[extended=false,facing=east]":{
+  "minecraft:piston[extended=false,facing=west]":{
     "pename":"minecraft:piston",
     "pedata":5
   },
-  "minecraft:piston[extended=false,facing=south]":{
+  "minecraft:piston[extended=false,facing=north]":{
     "pename":"minecraft:piston",
     "pedata":3
   },
-  "minecraft:piston[extended=false,facing=west]":{
+  "minecraft:piston[extended=false,facing=east]":{
     "pename":"minecraft:piston",
     "pedata":4
   },
@@ -755,35 +755,35 @@
     "pename":"minecraft:piston",
     "pedata":0
   },
-  "minecraft:piston_head[facing=north,short=false,type=normal]":{
+  "minecraft:piston_head[facing=south,short=false,type=normal]":{
     "pename":"minecraft:pistonArmCollision",
     "pedata":2
   },
-  "minecraft:piston_head[facing=north,short=false,type=sticky]":{
+  "minecraft:piston_head[facing=south,short=false,type=sticky]":{
     "pename":"minecraft:pistonArmCollision",
     "pedata":10
   },
-  "minecraft:piston_head[facing=east,short=false,type=normal]":{
+  "minecraft:piston_head[facing=west,short=false,type=normal]":{
     "pename":"minecraft:pistonArmCollision",
     "pedata":5
   },
-  "minecraft:piston_head[facing=east,short=false,type=sticky]":{
+  "minecraft:piston_head[facing=west,short=false,type=sticky]":{
     "pename":"minecraft:pistonArmCollision",
     "pedata":13
   },
-  "minecraft:piston_head[facing=south,short=false,type=normal]":{
+  "minecraft:piston_head[facing=north,short=false,type=normal]":{
     "pename":"minecraft:pistonArmCollision",
     "pedata":3
   },
-  "minecraft:piston_head[facing=south,short=false,type=sticky]":{
+  "minecraft:piston_head[facing=north,short=false,type=sticky]":{
     "pename":"minecraft:pistonArmCollision",
     "pedata":11
   },
-  "minecraft:piston_head[facing=west,short=false,type=normal]":{
+  "minecraft:piston_head[facing=east,short=false,type=normal]":{
     "pename":"minecraft:pistonArmCollision",
     "pedata":4
   },
-  "minecraft:piston_head[facing=west,short=false,type=sticky]":{
+  "minecraft:piston_head[facing=east,short=false,type=sticky]":{
     "pename":"minecraft:pistonArmCollision",
     "pedata":12
   },
