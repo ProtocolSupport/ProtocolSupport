@@ -12,6 +12,7 @@ public enum Difficulty {
 	private static final ArrayMap<Difficulty> byId = CollectionsUtils.makeEnumMappingArrayMap(Difficulty.class, Difficulty::getId);
 
 	private final int id;
+
 	Difficulty(int id) {
 		this.id = id;
 	}

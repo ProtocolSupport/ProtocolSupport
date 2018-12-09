@@ -12,6 +12,7 @@ public class ThrottleTracker {
 	protected static final long time = Bukkit.getConnectionThrottle();
 
 	protected static final Object2LongOpenHashMap<InetAddress> tracker = new Object2LongOpenHashMap<>();
+
 	static {
 		tracker.defaultReturnValue(-1);
 	}

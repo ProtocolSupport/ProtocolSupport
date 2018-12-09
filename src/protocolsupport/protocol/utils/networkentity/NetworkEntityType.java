@@ -94,7 +94,7 @@ public enum NetworkEntityType {
 	FIREBALL(EType.OBJECT, 63, EntityType.FIREBALL, ENTITY),
 	FIRECHARGE(EType.OBJECT, 64, EntityType.SMALL_FIREBALL, ENTITY),
 	ENDERPEARL(EType.OBJECT, 65, EntityType.ENDER_PEARL, ENTITY),
-	WITHER_SKULL(EType.OBJECT, 66, EntityType.WITHER_SKULL ,FIREBALL),
+	WITHER_SKULL(EType.OBJECT, 66, EntityType.WITHER_SKULL, FIREBALL),
 	FALLING_OBJECT(EType.OBJECT, 70, EntityType.FALLING_BLOCK, ENTITY),
 	ENDEREYE(EType.OBJECT, 72, EntityType.ENDER_SIGNAL, ENTITY),
 	POTION(EType.OBJECT, 73, EntityType.SPLASH_POTION, ENTITY),
@@ -116,7 +116,7 @@ public enum NetworkEntityType {
 	EVOCATOR_FANGS(EType.OBJECT, 79, EntityType.EVOKER_FANGS, ENTITY),
 	ARMOR_STAND_OBJECT(EType.OBJECT, 78, EntityType.ARMOR_STAND, LIVING),
 	// Hack, use unused object ids, minecart is the only object where different types are sent using objectdata.
-	MINECART(EType.OBJECT, 10,  EntityType.MINECART, ENTITY),
+	MINECART(EType.OBJECT, 10, EntityType.MINECART, ENTITY),
 	MINECART_CHEST(EType.OBJECT, 211, EntityType.MINECART_CHEST, MINECART),
 	MINECART_FURNACE(EType.OBJECT, 212, EntityType.MINECART_FURNACE, MINECART),
 	MINECART_TNT(EType.OBJECT, 213, EntityType.MINECART_TNT, MINECART),
@@ -165,15 +165,16 @@ public enum NetworkEntityType {
 	private static final ArrayMap<NetworkEntityType> GLOBAL_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.GLOBAL), (w -> w.typeId));
 	private static final ArrayMap<NetworkEntityType> BY_R_INT_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()), (w -> w.bukkitType.getTypeId()));
 	private static final HashMap<String, NetworkEntityType> BY_R_STRING_ID = new HashMap<>();
+
 	static {
 		Arrays.stream(NetworkEntityType.values())
-		.forEach(w -> {
-			String rName = w.bukkitType.getName();
-			if (rName != null) {
-				BY_R_STRING_ID.put(w.bukkitType.getName(), w);
-				BY_R_STRING_ID.put(NamespacedKey.minecraft(w.bukkitType.getName()).toString(), w);
-			}
-		});
+			.forEach(w -> {
+				String rName = w.bukkitType.getName();
+				if (rName != null) {
+					BY_R_STRING_ID.put(w.bukkitType.getName(), w);
+					BY_R_STRING_ID.put(NamespacedKey.minecraft(w.bukkitType.getName()).toString(), w);
+				}
+			});
 	}
 
 	public static NetworkEntityType getObjectByNetworkTypeId(int objectTypeId) {

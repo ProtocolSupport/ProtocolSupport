@@ -20,6 +20,7 @@ public class NBTSerializer<IN, OUT> {
 	protected final IdWriter<OUT> idWriter;
 	protected final NameReader<IN> nameReader;
 	protected final NameWriter<OUT> nameWriter;
+
 	public NBTSerializer(
 		IdReader<IN> idReader, IdWriter<OUT> idWriter,
 		NameReader<IN> nameReader, NameWriter<OUT> nameWriter
@@ -32,9 +33,11 @@ public class NBTSerializer<IN, OUT> {
 
 	protected final Int2ObjectMap<NBTType<? extends NBT>> idToType = new Int2ObjectOpenHashMap<>();
 	protected final Object2IntMap<NBTType<? extends NBT>> typeToId = new Object2IntOpenHashMap<>();
+
 	{
 		typeToId.defaultReturnValue(-1);
 	}
+
 	protected final Map<NBTType<? extends NBT>, TagReader<IN, ? extends NBT>> typeReaders = new HashMap<>();
 	protected final Map<NBTType<? extends NBT>, TagWriter<OUT, ? extends NBT>> typeWriters = new HashMap<>();
 

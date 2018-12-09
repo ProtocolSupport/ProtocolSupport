@@ -41,6 +41,7 @@ public enum TileEntityType {
 
 	private static final HashMap<String, TileEntityType> by_r_id = new HashMap<>();
 	private static final ArrayMap<TileEntityType> by_n_id = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(values()).filter(v -> v.networkId > 0), (v -> v.networkId));
+
 	static {
 		Arrays.stream(values()).forEach(v -> {
 			by_r_id.put(v.registryId, v);
@@ -59,6 +60,7 @@ public enum TileEntityType {
 
 	private final int networkId;
 	private final String registryId;
+
 	TileEntityType(int networkId, String registryId) {
 		this.networkId = networkId;
 		this.registryId = registryId;

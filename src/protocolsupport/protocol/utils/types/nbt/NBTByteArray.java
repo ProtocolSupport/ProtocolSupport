@@ -10,6 +10,7 @@ public class NBTByteArray extends NBT {
 	}
 
 	protected final byte[] array;
+
 	public NBTByteArray(byte[] array) {
 		this.array = array;
 	}

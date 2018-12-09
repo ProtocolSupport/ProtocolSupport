@@ -11,6 +11,7 @@ import protocolsupport.utils.netty.ReusableWriteHeapBuffer;
 public class PacketEncrypter extends MessageToByteEncoder<ByteBuf> {
 
 	protected final Cipher cipher;
+
 	public PacketEncrypter(Cipher cipher) {
 		this.cipher = cipher;
 	}

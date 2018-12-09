@@ -89,6 +89,7 @@ public class CollectionsUtils {
 		public static class Entry<T> {
 			private final int key;
 			private final T value;
+
 			public Entry(int key, T value) {
 				this.key = key;
 				this.value = value;

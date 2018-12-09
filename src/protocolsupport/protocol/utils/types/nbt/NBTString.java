@@ -8,6 +8,7 @@ public class NBTString extends NBT {
 	}
 
 	protected final String string;
+
 	public NBTString(String string) {
 		this.string = string;
 	}

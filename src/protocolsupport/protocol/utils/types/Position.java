@@ -62,7 +62,7 @@ public class Position {
 		return new Position(
 			(chunkCoord.getX() << 4) + ((localCoord >> 12) & 0xF),
 			(localCoord & 0xFF),
-			(chunkCoord.getZ() << 4) + ((localCoord >>  8) & 0xF)
+			(chunkCoord.getZ() << 4) + ((localCoord >> 8) & 0xF)
 		);
 	}
 

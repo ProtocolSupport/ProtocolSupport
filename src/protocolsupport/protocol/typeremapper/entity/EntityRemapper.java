@@ -19,6 +19,7 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 public class EntityRemapper {
 
 	protected final EntityRemappingTable table;
+
 	public EntityRemapper(ProtocolVersion version) {
 		this.table = EntityRemappersRegistry.REGISTRY.getTable(version);
 	}

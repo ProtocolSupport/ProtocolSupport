@@ -11,6 +11,7 @@ import protocolsupport.protocol.packet.middle.MiddlePacket;
 public class MiddlePacketRegistry<T extends MiddlePacket> {
 
 	protected final ConnectionImpl connection;
+
 	public MiddlePacketRegistry(ConnectionImpl connection) {
 		this.connection = connection;
 	}
@@ -32,12 +33,14 @@ public class MiddlePacketRegistry<T extends MiddlePacket> {
 	protected static class Lazy<T> {
 		protected final ConnectionImpl connection;
 		protected final Function<ConnectionImpl, T> func;
+
 		public Lazy(ConnectionImpl connection, Function<ConnectionImpl, T> middlepacket) {
 			this.connection = connection;
 			this.func = middlepacket;
 		}
 
 		protected T instance;
+
 		public T getInstance() {
 			if (instance == null) {
 				instance = func.apply(connection);

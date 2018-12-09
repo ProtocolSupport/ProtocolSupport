@@ -8,6 +8,7 @@ import protocolsupport.protocol.ConnectionImpl;
 public class RawPacketDataCaptureReceive extends ChannelInboundHandlerAdapter {
 
 	private final ConnectionImpl connection;
+
 	public RawPacketDataCaptureReceive(ConnectionImpl connection) {
 		this.connection = connection;
 	}

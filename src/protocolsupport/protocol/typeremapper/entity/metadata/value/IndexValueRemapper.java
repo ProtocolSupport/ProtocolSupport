@@ -10,6 +10,7 @@ public abstract class IndexValueRemapper<T extends DataWatcherObject<?>> extends
 
 	private final DataWatcherObjectIndex<T> fromIndex;
 	private final int toIndex;
+
 	public IndexValueRemapper(DataWatcherObjectIndex<T> fromIndex, int toIndex) {
 		this.fromIndex = fromIndex;
 		this.toIndex = toIndex;

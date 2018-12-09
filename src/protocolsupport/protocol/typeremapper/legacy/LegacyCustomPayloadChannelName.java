@@ -53,6 +53,7 @@ public class LegacyCustomPayloadChannelName {
 	}
 
 	protected static final Pattern invalid_pattern = Pattern.compile("[^a-z0-9._-]+");
+
 	public static String fromPre13(String legacyName) {
 		switch (legacyName) {
 			case LEGACY_REGISTER: {

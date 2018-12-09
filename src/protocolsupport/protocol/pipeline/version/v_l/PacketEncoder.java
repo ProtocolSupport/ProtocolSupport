@@ -12,6 +12,7 @@ import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 public class PacketEncoder extends AbstractLegacyPacketEncoder {
 
 	protected static final PacketIdTransformerRegistry packetIdRegistry = new PacketIdTransformerRegistry();
+
 	static {
 		packetIdRegistry.register(NetworkState.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, 0xFF);
 		packetIdRegistry.register(NetworkState.STATUS, ClientBoundPacket.STATUS_SERVER_INFO_ID, 0xFF);

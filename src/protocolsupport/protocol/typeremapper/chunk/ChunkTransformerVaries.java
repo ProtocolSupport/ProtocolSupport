@@ -9,6 +9,7 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 public class ChunkTransformerVaries extends ChunkTransformerBB {
 
 	protected final ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable;
+
 	public ChunkTransformerVaries(ArrayBasedIdRemappingTable blockTypeRemappingTable, ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable, TileEntityRemapper tileremapper, TileDataCache tilecache) {
 		super(blockTypeRemappingTable, tileremapper, tilecache);
 		this.blockFlatteningIdRemappingTable = blockFlatteningIdRemappingTable;

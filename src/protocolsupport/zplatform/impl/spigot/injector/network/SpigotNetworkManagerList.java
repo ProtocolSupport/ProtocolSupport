@@ -7,6 +7,7 @@ import net.minecraft.server.v1_13_R2.NetworkManager;
 public class SpigotNetworkManagerList {
 
 	protected final List<NetworkManager> list;
+
 	public SpigotNetworkManagerList(List<NetworkManager> list) {
 		this.list = list;
 	}

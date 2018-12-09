@@ -8,6 +8,7 @@ public class NBTLong extends NBTNumber {
 	}
 
 	protected final long value;
+
 	public NBTLong(long value) {
 		this.value = value;
 	}

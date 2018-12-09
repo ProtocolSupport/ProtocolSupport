@@ -23,11 +23,13 @@ public enum WindowType {
 	PLAYER("_____FAKETYPE_PLAYER");
 
 	private final String id;
+
 	WindowType(String id) {
 		this.id = id;
 	}
 
 	private static final Map<String, WindowType> byId = CollectionsUtils.makeEnumMappingMap(WindowType.class, WindowType::getId);
+
 	static {
 		byId.put("minecraft:container", WindowType.CHEST);
 	}

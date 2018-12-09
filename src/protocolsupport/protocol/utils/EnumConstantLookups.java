@@ -8,9 +8,11 @@ public class EnumConstantLookups {
 
 	public static class EnumConstantLookup<T extends Enum<T>> {
 		private final T[] enumConstans;
+
 		public EnumConstantLookup(Class<T> enumClass) {
 			this.enumConstans = enumClass.getEnumConstants();
 		}
+
 		public T getByOrdinal(int ordinal) {
 			return enumConstans[ordinal];
 		}

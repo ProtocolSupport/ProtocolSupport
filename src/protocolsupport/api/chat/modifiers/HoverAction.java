@@ -39,7 +39,7 @@ public class HoverAction {
 	public HoverAction(EntityInfo entityinfo) {
 		this.type = Type.SHOW_ENTITY;
 		//TODO: use nbt compound after implementing our own mojangson serializer
-		this.value = "{type:\"" + entityinfo.getType().getName() + "\", id:\"" + entityinfo.getUUID().toString() + "\", name:\"" +  entityinfo.getName() + "\"}";
+		this.value = "{type:\"" + entityinfo.getType().getName() + "\", id:\"" + entityinfo.getUUID().toString() + "\", name:\"" + entityinfo.getName() + "\"}";
 	}
 
 	public Type getType() {

@@ -13,6 +13,7 @@ import protocolsupport.utils.netty.ReusableWriteHeapBuffer;
 public class PacketDecrypter extends ByteToMessageDecoder {
 
 	protected final Cipher cipher;
+
 	public PacketDecrypter(Cipher cipher) {
 		this.cipher = cipher;
 	}

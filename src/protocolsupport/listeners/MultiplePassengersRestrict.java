@@ -17,6 +17,7 @@ public class MultiplePassengersRestrict implements Listener {
 	}
 
 	private static final ProtocolVersion[] singlePassengerVersions = ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_8);
+
 	private static boolean needsRestrict() {
 		for (ProtocolVersion version : singlePassengerVersions) {
 			if (ProtocolSupportAPI.isProtocolVersionEnabled(version)) {

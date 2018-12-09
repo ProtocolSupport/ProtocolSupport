@@ -26,6 +26,7 @@ public abstract class MiddleStatistics extends ClientBoundMiddlePacket {
 		public final int category;
 		public final int id;
 		public final int value;
+
 		public Statistic(int category, int id, int value) {
 			this.category = category;
 			this.id = id;

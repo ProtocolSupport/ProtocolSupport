@@ -16,6 +16,7 @@ public enum ServerPlatformIdentifier {
 	}
 
 	private final String name;
+
 	private ServerPlatformIdentifier(String name) {
 		this.name = name;
 	}

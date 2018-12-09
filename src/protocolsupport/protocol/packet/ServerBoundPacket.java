@@ -55,6 +55,7 @@ public enum ServerBoundPacket {
 	PLAY_UPDATE_STRUCTURE_BLOCK(ServerPlatform.get().getPacketFactory().getInPlayUpdateStructureBlockPacketId());
 
 	private final int id;
+
 	ServerBoundPacket(int id) {
 		this.id = id;
 	}

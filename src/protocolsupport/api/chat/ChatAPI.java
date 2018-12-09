@@ -23,11 +23,11 @@ import protocolsupport.zplatform.ServerPlatform;
 public class ChatAPI {
 
 	private static final Gson gson = new GsonBuilder()
-	.registerTypeHierarchyAdapter(BaseComponent.class, new ComponentSerializer())
-	.registerTypeHierarchyAdapter(Modifier.class, new ModifierSerializer())
-	.registerTypeHierarchyAdapter(ClickAction.class, new ClickActionSerializer())
-	.registerTypeHierarchyAdapter(HoverAction.class, new HoverActionSerializer())
-	.create();
+		.registerTypeHierarchyAdapter(BaseComponent.class, new ComponentSerializer())
+		.registerTypeHierarchyAdapter(Modifier.class, new ModifierSerializer())
+		.registerTypeHierarchyAdapter(ClickAction.class, new ClickActionSerializer())
+		.registerTypeHierarchyAdapter(HoverAction.class, new HoverActionSerializer())
+		.create();
 
 	/**
 	 * Convers json string to chat component
@@ -98,6 +98,7 @@ public class ChatAPI {
 
 	public static class JsonParseException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
+
 		public JsonParseException(String msg, Exception e) {
 			super(MessageFormat.format("Unable to parse json string {0}", msg), e);
 		}

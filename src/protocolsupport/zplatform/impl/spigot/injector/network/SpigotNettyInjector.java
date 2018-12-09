@@ -35,6 +35,7 @@ public class SpigotNettyInjector {
 
 		private final List<NetworkManager> networkManagersList;
 		private final List<ChannelFuture> originalList;
+
 		public ChannelInjectList(List<NetworkManager> networkManagerList, List<ChannelFuture> originalList) {
 			this.originalList = originalList;
 			this.networkManagersList = networkManagerList;

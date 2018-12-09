@@ -24,14 +24,14 @@ import protocolsupport.utils.JsonUtils;
 public class PingResponse {
 
 	private static final Gson gson = new GsonBuilder()
-	.registerTypeAdapter(PingResponse.class, new PingResponse.Serializer())
-	.registerTypeAdapter(PingResponseProtocolData.class, new PingResponseProtocolData.Serializer())
-	.registerTypeAdapter(PingResponsePlayers.class, new PingResponsePlayers.Serializer())
-	.registerTypeHierarchyAdapter(BaseComponent.class, new ComponentSerializer())
-	.registerTypeHierarchyAdapter(Modifier.class, new ModifierSerializer())
-	.registerTypeHierarchyAdapter(ClickAction.class, new ClickActionSerializer())
-	.registerTypeHierarchyAdapter(HoverAction.class, new HoverActionSerializer())
-	.create();
+		.registerTypeAdapter(PingResponse.class, new PingResponse.Serializer())
+		.registerTypeAdapter(PingResponseProtocolData.class, new PingResponseProtocolData.Serializer())
+		.registerTypeAdapter(PingResponsePlayers.class, new PingResponsePlayers.Serializer())
+		.registerTypeHierarchyAdapter(BaseComponent.class, new ComponentSerializer())
+		.registerTypeHierarchyAdapter(Modifier.class, new ModifierSerializer())
+		.registerTypeHierarchyAdapter(ClickAction.class, new ClickActionSerializer())
+		.registerTypeHierarchyAdapter(HoverAction.class, new HoverActionSerializer())
+		.create();
 
 	public static PingResponse fromJson(String json) {
 		return gson.fromJson(json, PingResponse.class);

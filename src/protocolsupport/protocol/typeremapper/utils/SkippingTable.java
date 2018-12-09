@@ -18,6 +18,7 @@ public class SkippingTable {
 	public static class ArrayBasedIntSkippingTable extends IntSkippingTable {
 
 		protected final boolean[] table;
+
 		public ArrayBasedIntSkippingTable(int size) {
 			table = new boolean[size];
 			for (int i = 0; i < table.length; i++) {
@@ -70,6 +71,7 @@ public class SkippingTable {
 	public static class EnumSkippingTable<T extends Enum<T>> extends SkippingTable {
 
 		protected final EnumSet<T> set;
+
 		public EnumSkippingTable(Class<T> clazz) {
 			this.set = EnumSet.noneOf(clazz);
 		}

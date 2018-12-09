@@ -27,6 +27,7 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	private final NetworkManager internal;
+
 	public SpigotNetworkManagerWrapper(NetworkManager internal) {
 		this.internal = internal;
 	}
@@ -108,8 +109,8 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 		}
 		return
 			Arrays.asList(internal.spoofedProfile).stream()
-			.map(prop -> new ProfileProperty(prop.getName(), prop.getValue(), prop.getSignature()))
-			.collect(Collectors.toList());
+				.map(prop -> new ProfileProperty(prop.getName(), prop.getValue(), prop.getSignature()))
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -117,9 +118,9 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 		internal.spoofedUUID = uuid;
 		if (properties != null) {
 			internal.spoofedProfile = properties.stream()
-			.map(prop -> new Property(prop.getName(), prop.getValue(), prop.getSignature()))
-			.collect(Collectors.toList())
-			.toArray(new Property[0]);
+				.map(prop -> new Property(prop.getName(), prop.getValue(), prop.getSignature()))
+				.collect(Collectors.toList())
+				.toArray(new Property[0]);
 		}
 	}
 

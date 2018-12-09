@@ -23,6 +23,7 @@ public class ClientBoundPacketData extends WrappingBuffer implements Recyclable 
 	}
 
 	private final Handle<ClientBoundPacketData> handle;
+
 	private ClientBoundPacketData(Handle<ClientBoundPacketData> handle) {
 		super(Unpooled.buffer());
 		this.handle = handle;

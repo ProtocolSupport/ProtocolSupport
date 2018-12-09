@@ -43,6 +43,7 @@ public class SpigotLoginListener extends AbstractLoginListener implements ITicka
 			public SecretKey getSecretKey(PrivateKey key) {
 				return packet.a(key);
 			}
+
 			@Override
 			public byte[] getNonce(PrivateKey key) {
 				return packet.b(key);

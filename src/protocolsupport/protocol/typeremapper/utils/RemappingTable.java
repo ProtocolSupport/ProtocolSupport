@@ -18,6 +18,7 @@ public class RemappingTable {
 	public static class ArrayBasedIdRemappingTable extends IdRemappingTable {
 
 		protected final int[] table;
+
 		public ArrayBasedIdRemappingTable(int size) {
 			table = new int[size];
 			for (int i = 0; i < table.length; i++) {
@@ -44,6 +45,7 @@ public class RemappingTable {
 	public static class HashMapBasedIdRemappingTable extends IdRemappingTable {
 
 		protected final Int2IntOpenHashMap table = new Int2IntOpenHashMap();
+
 		{
 			table.defaultReturnValue(-1);
 		}
@@ -64,6 +66,7 @@ public class RemappingTable {
 	public static class EnumRemappingTable<T extends Enum<T>> extends RemappingTable {
 
 		protected final EnumMap<T, T> table;
+
 		public EnumRemappingTable(Class<T> enumClazz) {
 			table = new EnumMap<>(enumClazz);
 		}

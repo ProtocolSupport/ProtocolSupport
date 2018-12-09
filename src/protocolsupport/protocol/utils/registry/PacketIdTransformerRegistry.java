@@ -8,6 +8,7 @@ import protocolsupport.api.utils.NetworkState;
 public class PacketIdTransformerRegistry {
 
 	protected final int[] registry = new int[NetworkState.values().length << 8];
+
 	{
 		Arrays.fill(registry, -1);
 	}

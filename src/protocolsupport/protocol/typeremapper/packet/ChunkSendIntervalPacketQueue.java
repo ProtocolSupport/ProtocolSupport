@@ -21,16 +21,20 @@ public class ChunkSendIntervalPacketQueue {
 		ClientBoundPacket.PLAY_UPDATE_TILE_ID, ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID,
 		ClientBoundPacket.PLAY_BED_ID
 	});
+
 	protected static boolean shouldQueue(ClientBoundPacketData packet) {
 		return queuedPacketTypes.contains(packet.getPacketId());
 	}
+
 	protected static boolean shouldLock(ClientBoundPacketData packet) {
 		return packet.getPacketId() == ClientBoundPacket.PLAY_CHUNK_SINGLE_ID;
 	}
+
 	protected static final long chunkSendInterval = TimeUnit.MILLISECONDS.toNanos(Utils.getJavaPropertyValue("chunksend18interval", 5L, Long::parseLong));
 
 	protected State state = State.UNLOCKED;
 	protected final ArrayDeque<ClientBoundPacketData> queue = new ArrayDeque<>(1024);
+
 	public RecyclableCollection<ClientBoundPacketData> processPackets(RecyclableCollection<ClientBoundPacketData> packets) {
 		try {
 			RecyclableArrayList<ClientBoundPacketData> allowed = RecyclableArrayList.create();

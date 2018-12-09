@@ -35,6 +35,7 @@ public class DataWatcherSerializer {
 
 	@SuppressWarnings("unchecked")
 	private static final Supplier<? extends ReadableDataWatcherObject<?>>[] registry = new Supplier[256];
+
 	static {
 		register(DataWatcherObjectByte::new);
 		register(DataWatcherObjectVarInt::new);

@@ -54,6 +54,7 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 		public final AdvancementDisplay display;
 		public final String[] criteria;
 		public final String[][] requirements;
+
 		public Advancement(String parentId, AdvancementDisplay display, String[] criterias, String[][] requirments) {
 			this.parentId = parentId;
 			this.display = display;
@@ -86,6 +87,7 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 		public final String background;
 		public final float x;
 		public final float y;
+
 		public AdvancementDisplay(BaseComponent title, BaseComponent description, NetworkItemStack icon, FrameType frametype, int flags, String background, float x, float y) {
 			this.title = title;
 			this.description = description;
@@ -114,6 +116,7 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 		}
 
 		public final Any<String, Long>[] criterionsProgress;
+
 		public AdvancementProgress(Any<String, Long>[] criterionsProgress) {
 			this.criterionsProgress = criterionsProgress;
 		}

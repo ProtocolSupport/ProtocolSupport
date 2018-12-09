@@ -8,6 +8,7 @@ public class NBTShort extends NBTNumber {
 	}
 
 	protected final short value;
+
 	public NBTShort(short value) {
 		this.value = value;
 	}

@@ -31,6 +31,7 @@ public class ConnectionImpl extends Connection {
 	protected static final AttributeKey<ConnectionImpl> key = AttributeKey.valueOf("PSConnectionImpl");
 
 	protected final NetworkManagerWrapper networkmanager;
+
 	public ConnectionImpl(NetworkManagerWrapper networkmanager) {
 		this.networkmanager = networkmanager;
 	}
@@ -192,6 +193,7 @@ public class ConnectionImpl extends Connection {
 		}
 
 		protected final Handle<LPacketEvent> handle;
+
 		protected LPacketEvent(Handle<LPacketEvent> handle) {
 			this.handle = handle;
 		}
@@ -259,6 +261,7 @@ public class ConnectionImpl extends Connection {
 		}
 
 		protected final Handle<LRawPacketEvent> handle;
+
 		protected LRawPacketEvent(Handle<LRawPacketEvent> handle) {
 			this.handle = handle;
 		}

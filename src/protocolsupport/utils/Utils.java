@@ -39,7 +39,7 @@ public class Utils {
 						if ((value == null) || !value.getClass().isArray()) {
 							joiner.add(field.getName() + ": " + Objects.toString(value));
 						} else {
-							joiner.add(field.getName() + ": " + Arrays.deepToString(new Object[] {value}));
+							joiner.add(field.getName() + ": " + Arrays.deepToString(new Object[]{value}));
 						}
 					}
 				}
@@ -84,9 +84,9 @@ public class Utils {
 		}
 		return
 			Arrays.stream(arrays)
-			.flatMap(Arrays::stream)
-			.collect(Collectors.toList())
-			.toArray((T[]) Array.newInstance(arrays[0].getClass().getComponentType(), 0));
+				.flatMap(Arrays::stream)
+				.collect(Collectors.toList())
+				.toArray((T[]) Array.newInstance(arrays[0].getClass().getComponentType(), 0));
 	}
 
 	public static int getSplitCount(int length, int maxlength) {
@@ -115,11 +115,11 @@ public class Utils {
 	}
 
 	public static void repeat(int count, Runnable action) {
-	    IntStream.range(0, count).forEach(i -> action.run());
+		IntStream.range(0, count).forEach(i -> action.run());
 	}
 
 	public static <T> T getJavaPropertyValue(String property, T defaultValue, Function<String, T> converter) {
-		return getRawJavaPropertyValue("protocolsupport."+property, defaultValue, converter);
+		return getRawJavaPropertyValue("protocolsupport." + property, defaultValue, converter);
 	}
 
 	public static <T> T getRawJavaPropertyValue(String property, T defaultValue, Function<String, T> converter) {
@@ -155,7 +155,7 @@ public class Utils {
 
 	public static Iterable<JsonElement> iterateJsonArrayResource(String name) {
 		BufferedReader reader = getResourceBuffered(name);
-		return reader != null ?  Utils.GSON.fromJson(reader, JsonArray.class) : null;
+		return reader != null ? Utils.GSON.fromJson(reader, JsonArray.class) : null;
 	}
 
 }

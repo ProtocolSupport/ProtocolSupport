@@ -46,10 +46,12 @@ public class GenericIdSkipper {
 			registerSkipEntry(Enchantment.LURE, ProtocolVersionsHelper.BEFORE_1_7);
 			registerSkipEntry(Enchantment.LUCK, ProtocolVersionsHelper.BEFORE_1_7);
 		}
+
 		protected void registerSkipEntry(Enchantment ench, ProtocolVersion... versions) {
 			registerSkipEntry(ench.getKey().getKey(), versions);
 			registerSkipEntry(ench.getKey().toString(), versions);
 		}
+
 		@Override
 		protected GenericSkippingTable<String> createTable() {
 			return new GenericSkippingTable<>();
@@ -69,10 +71,12 @@ public class GenericIdSkipper {
 			registerSkipEntry(PotionEffectType.ABSORPTION, ProtocolVersionsHelper.BEFORE_1_6);
 			registerSkipEntry(PotionEffectType.SATURATION, ProtocolVersionsHelper.BEFORE_1_6);
 		}
+
 		@SuppressWarnings("deprecation")
 		protected void registerSkipEntry(PotionEffectType effecttype, ProtocolVersion... versions) {
 			registerSkipEntry(effecttype.getId(), versions);
 		}
+
 		@Override
 		protected ArrayBasedIntSkippingTable createTable() {
 			return new ArrayBasedIntSkippingTable(32);
@@ -87,6 +91,7 @@ public class GenericIdSkipper {
 			registerSkipEntry("generic.armor", ProtocolVersionsHelper.BEFORE_1_9);
 			registerSkipEntry("generic.attackSpeed", ProtocolVersionsHelper.BEFORE_1_9);
 		}
+
 		@Override
 		protected GenericSkippingTable<String> createTable() {
 			return new GenericSkippingTable<>();
@@ -98,6 +103,7 @@ public class GenericIdSkipper {
 			registerSkipEntry(WindowType.HORSE, ProtocolVersionsHelper.BEFORE_1_6);
 			registerSkipEntry(WindowType.HOPPER, ProtocolVersionsHelper.BEFORE_1_5);
 		}
+
 		@Override
 		protected EnumSkippingTable<WindowType> createTable() {
 			return new EnumSkippingTable<>(WindowType.class);

@@ -12,6 +12,7 @@ public enum Environment {
 	private static final ArrayMap<Environment> byId = CollectionsUtils.makeEnumMappingArrayMap(Environment.class, Environment::getId);
 
 	private final int id;
+
 	Environment(int id) {
 		this.id = id;
 	}

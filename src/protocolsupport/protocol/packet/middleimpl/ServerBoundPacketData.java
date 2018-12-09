@@ -24,6 +24,7 @@ public class ServerBoundPacketData extends WrappingBuffer implements Recyclable 
 	}
 
 	private final Handle<ServerBoundPacketData> handle;
+
 	private ServerBoundPacketData(Handle<ServerBoundPacketData> handle) {
 		super(Unpooled.buffer());
 		this.handle = handle;

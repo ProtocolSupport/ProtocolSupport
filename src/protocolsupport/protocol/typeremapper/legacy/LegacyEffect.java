@@ -41,6 +41,7 @@ public class LegacyEffect {
 			registerRemapEntry(1036, 1003, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry(1037, 1006, ProtocolVersionsHelper.BEFORE_1_9);
 		}
+
 		@Override
 		protected HashMapBasedIdRemappingTable createTable() {
 			return new HashMapBasedIdRemappingTable();

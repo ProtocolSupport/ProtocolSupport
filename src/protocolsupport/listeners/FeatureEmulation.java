@@ -32,15 +32,15 @@ public class FeatureEmulation implements Listener {
 			ProtocolSupport.getInstance(),
 			() ->
 				Bukkit.getOnlinePlayers().stream()
-				.filter(player -> {
-					ProtocolVersion version = ProtocolSupportAPI.getProtocolVersion(player);
-					return (version.getProtocolType() == ProtocolType.PC) && version.isBefore(ProtocolVersion.MINECRAFT_1_9);
-				})
-				.filter(player ->
-					!player.isFlying() &&
-					(player.hasPotionEffect(PotionEffectType.LEVITATION) || player.hasPotionEffect(PotionEffectType.SLOW_FALLING))
-				)
-				.forEach(player -> player.setVelocity(player.getVelocity())),
+					.filter(player -> {
+						ProtocolVersion version = ProtocolSupportAPI.getProtocolVersion(player);
+						return (version.getProtocolType() == ProtocolType.PC) && version.isBefore(ProtocolVersion.MINECRAFT_1_9);
+					})
+					.filter(player ->
+						!player.isFlying() &&
+							(player.hasPotionEffect(PotionEffectType.LEVITATION) || player.hasPotionEffect(PotionEffectType.SLOW_FALLING))
+					)
+					.forEach(player -> player.setVelocity(player.getVelocity())),
 			1, 1
 		);
 	}
@@ -70,9 +70,9 @@ public class FeatureEmulation implements Listener {
 		Connection connection = ProtocolSupportAPI.getConnection(player);
 		if (
 			player.isInsideVehicle() &&
-			(connection != null) &&
-			(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
-			connection.getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)
+				(connection != null) &&
+				(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
+				connection.getVersion().isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)
 		) {
 			player.leaveVehicle();
 		}
@@ -83,8 +83,8 @@ public class FeatureEmulation implements Listener {
 		Connection connection = ProtocolSupportAPI.getConnection(event.getPlayer());
 		if (
 			(connection != null) &&
-			(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
-			connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)
+				(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
+				connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)
 		) {
 			Block block = event.getBlock();
 			connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockBreakSoundPacket(new Position(block.getX(), block.getY(), block.getZ()), block.getType()));
@@ -99,8 +99,8 @@ public class FeatureEmulation implements Listener {
 					Connection connection = ProtocolSupportAPI.getConnection(player);
 					if (
 						(connection != null) &&
-						(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
-						connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_12)
+							(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
+							connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_12)
 					) {
 						connection.sendPacket(ServerPlatform.get().getPacketFactory().createEntityStatusPacket(event.getEntity(), 2));
 					}

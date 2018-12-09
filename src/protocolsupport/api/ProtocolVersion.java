@@ -53,24 +53,26 @@ public enum ProtocolVersion {
 	}
 
 	private static final ProtocolVersion[] allSupported = Arrays.stream(ProtocolVersion.values())
-	.filter(ProtocolVersion::isSupported)
-	.collect(Collectors.toList())
-	.toArray(new ProtocolVersion[0]);
+		.filter(ProtocolVersion::isSupported)
+		.collect(Collectors.toList())
+		.toArray(new ProtocolVersion[0]);
 
 	private static final Int2ObjectOpenHashMap<ProtocolVersion> byProtocolId = new Int2ObjectOpenHashMap<>();
+
 	static {
 		Arrays.stream(ProtocolVersion.getAllSupported()).forEach(version -> byProtocolId.put(version.id, version));
 	}
 
 	private static final EnumMap<ProtocolType, ProtocolVersion[]> byOrderId = new EnumMap<>(ProtocolType.class);
+
 	static {
 		for (ProtocolType type : ProtocolType.values()) {
 			if (type != ProtocolType.UNKNOWN) {
 				byOrderId.put(type,
 					Arrays.stream(ProtocolVersion.values())
-					.filter(version -> version.getProtocolType() == type)
-					.sorted((o1, o2) -> o1.orderId.compareTo(o2.orderId))
-					.toArray(size -> new ProtocolVersion[size])
+						.filter(version -> version.getProtocolType() == type)
+						.sorted((o1, o2) -> o1.orderId.compareTo(o2.orderId))
+						.toArray(size -> new ProtocolVersion[size])
 				);
 			}
 		}

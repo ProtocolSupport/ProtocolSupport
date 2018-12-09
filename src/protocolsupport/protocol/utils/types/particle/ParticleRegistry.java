@@ -12,7 +12,7 @@ public class ParticleRegistry {
 	public static final int ID_SKIP = -1;
 
 	private static final Int2ObjectMap<IntFunction<Particle>> idToParticle = new Int2ObjectArrayMap<>(50);
-	private static final Object2IntMap<Class<?extends Particle>> particleToId = new Object2IntArrayMap<>(50);
+	private static final Object2IntMap<Class<? extends Particle>> particleToId = new Object2IntArrayMap<>(50);
 	private static int nextParticleId = 0;
 
 	private static void register(IntFunction<Particle> particle) {

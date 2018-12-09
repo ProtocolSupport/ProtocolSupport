@@ -25,6 +25,7 @@ public abstract class AbstractPacketEncoder extends MessageToMessageEncoder<Byte
 
 	protected final Connection connection;
 	protected final MiddlePacketRegistry<ClientBoundMiddlePacket> registry;
+
 	public AbstractPacketEncoder(ConnectionImpl connection) {
 		this.connection = connection;
 		this.registry = new MiddlePacketRegistry<>(connection);

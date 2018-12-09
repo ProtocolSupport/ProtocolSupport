@@ -22,6 +22,7 @@ public class Decompressor {
 
 	protected final Inflater inflater = new Inflater();
 	protected final Handle<Decompressor> handle;
+
 	protected Decompressor(Handle<Decompressor> handle) {
 		this.handle = handle;
 	}

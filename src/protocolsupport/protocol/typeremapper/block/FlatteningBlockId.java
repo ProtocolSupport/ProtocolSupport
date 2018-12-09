@@ -39,10 +39,10 @@ public class FlatteningBlockId {
 					if (blockdataObject.has("properties")) {
 						blockdata +=
 							"[" +
-							blockdataObject.getAsJsonObject("properties").entrySet().stream()
-							.map(bdEntry -> bdEntry.getKey() + "=" + bdEntry.getValue().getAsString())
-							.collect(Collectors.joining(",")) +
-							"]";
+								blockdataObject.getAsJsonObject("properties").entrySet().stream()
+									.map(bdEntry -> bdEntry.getKey() + "=" + bdEntry.getValue().getAsString())
+									.collect(Collectors.joining(",")) +
+								"]";
 					}
 					table.setRemap(MaterialAPI.getBlockDataNetworkId(Bukkit.createBlockData(blockdata)), JsonUtils.getInt(blockdataObject, "id"));
 				}

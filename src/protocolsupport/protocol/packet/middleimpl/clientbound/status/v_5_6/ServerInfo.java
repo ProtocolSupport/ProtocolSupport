@@ -22,13 +22,13 @@ public class ServerInfo extends MiddleServerInfo {
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.STATUS_SERVER_INFO_ID);
 		String response = new StringJoiner("\u0000")
-		.add("§1")
-		.add(String.valueOf(ping.getProtocolData().getVersion()))
-		.add(ping.getProtocolData().getName())
-		.add(ping.getMotd().toLegacyText(cache.getAttributesCache().getLocale()))
-		.add(String.valueOf(ping.getPlayers().getOnline()))
-		.add(String.valueOf(ping.getPlayers().getMax()))
-		.toString();
+			.add("§1")
+			.add(String.valueOf(ping.getProtocolData().getVersion()))
+			.add(ping.getProtocolData().getName())
+			.add(ping.getMotd().toLegacyText(cache.getAttributesCache().getLocale()))
+			.add(String.valueOf(ping.getPlayers().getOnline()))
+			.add(String.valueOf(ping.getPlayers().getMax()))
+			.toString();
 		StringSerializer.writeString(serializer, version, response);
 		return RecyclableSingletonList.create(serializer);
 	}

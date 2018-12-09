@@ -22,6 +22,7 @@ import protocolsupport.zplatform.ServerPlatform;
 public class LogicHandler extends MessageToMessageCodec<Object, Object> {
 
 	protected static final HashSet<Class<? extends Throwable>> ignoreExceptions = new HashSet<>();
+
 	static {
 		ignoreExceptions.add(ClosedChannelException.class);
 		ignoreExceptions.add(ReadTimeoutException.class);
@@ -31,6 +32,7 @@ public class LogicHandler extends MessageToMessageCodec<Object, Object> {
 
 	protected final ConnectionImpl connection;
 	protected final Class<?> nativePacketSuperClass;
+
 	public LogicHandler(ConnectionImpl connection, Class<?> nativePacketSuperClass) {
 		this.connection = connection;
 		this.nativePacketSuperClass = nativePacketSuperClass;

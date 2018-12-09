@@ -18,6 +18,7 @@ public class NBTType<T extends NBT> {
 	public static final NBTType<NBTLongArray> LONG_ARRAY = new NBTType<>(NBTLongArray.class);
 
 	protected final Class<T> clazz;
+
 	protected NBTType(Class<T> clazz) {
 		this.clazz = clazz;
 	}

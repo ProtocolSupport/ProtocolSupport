@@ -10,6 +10,7 @@ public class NBTLongArray extends NBT {
 	}
 
 	protected final long[] array;
+
 	public NBTLongArray(long[] array) {
 		this.array = array;
 	}

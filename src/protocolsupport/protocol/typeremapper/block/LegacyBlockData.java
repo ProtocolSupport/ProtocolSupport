@@ -817,7 +817,7 @@ public class LegacyBlockData {
 
 		protected void registerRemapEntryForAllStates(Material from, BlockData to, ProtocolVersion... versions) {
 			MaterialAPI.getBlockDataList(from)
-			.forEach(blockdata -> registerRemapEntry(blockdata, to, versions));
+				.forEach(blockdata -> registerRemapEntry(blockdata, to, versions));
 		}
 
 		protected <T extends BlockData> void registerRemapEntryForAllStates(List<Material> materials, Function<T, BlockData> remapFunc, ProtocolVersion... versions) {
@@ -829,7 +829,7 @@ public class LegacyBlockData {
 		@SuppressWarnings("unchecked")
 		protected <T extends BlockData> void registerRemapEntryForAllStates(Material from, Function<T, BlockData> remapFunc, ProtocolVersion... versions) {
 			MaterialAPI.getBlockDataList(from)
-			.forEach(blockdata -> registerRemapEntry(blockdata, remapFunc.apply((T) blockdata), versions));
+				.forEach(blockdata -> registerRemapEntry(blockdata, remapFunc.apply((T) blockdata), versions));
 		}
 
 		protected void registerRemapEntry(BlockData from, BlockData to, ProtocolVersion... versions) {

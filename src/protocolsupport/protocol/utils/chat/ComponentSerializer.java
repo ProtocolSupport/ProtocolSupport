@@ -96,7 +96,7 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>, Jso
 			}
 			return component;
 		}
-        throw new JsonParseException("Don't know how to turn " + element.toString() + " into a Component");
+		throw new JsonParseException("Don't know how to turn " + element.toString() + " into a Component");
 	}
 
 	@Override

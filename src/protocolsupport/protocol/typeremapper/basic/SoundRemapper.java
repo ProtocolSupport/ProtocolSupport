@@ -557,6 +557,7 @@ public class SoundRemapper {
 			registerRemapEntry("music_disc.ward", "records.ward", ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry("music_disc.ward", "record.ward", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 		}
+
 		@Override
 		protected GenericRemappingTable<String> createTable() {
 			return new GenericRemappingTable<>();

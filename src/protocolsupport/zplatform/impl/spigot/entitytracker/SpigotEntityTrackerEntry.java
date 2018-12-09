@@ -81,6 +81,7 @@ import protocolsupport.utils.CachedInstanceOfChain;
 public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 
 	protected static final boolean paperTrackedPlayersMapPresent = checkPaperTrackedPlayersMap();
+
 	protected static final boolean checkPaperTrackedPlayersMap() {
 		try {
 			EntityTrackerEntry.class.getDeclaredField("trackedPlayerMap");
@@ -371,6 +372,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 	}
 
 	protected static final CachedInstanceOfChain<Function<Entity, Packet<?>>> createSpawnPacketMethods = new CachedInstanceOfChain<>();
+
 	static {
 		createSpawnPacketMethods.setKnownPath(EntityPlayer.class, entity -> new PacketPlayOutNamedEntitySpawn((EntityHuman) entity));
 		createSpawnPacketMethods.setKnownPath(IAnimal.class, entity -> new PacketPlayOutSpawnEntityLiving((EntityLiving) entity));
@@ -397,8 +399,8 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 		createSpawnPacketMethods.setKnownPath(EntitySnowball.class, entity -> new PacketPlayOutSpawnEntity(entity, 61));
 		createSpawnPacketMethods.setKnownPath(EntityThrownTrident.class, entity -> {
 			Entity shooter = ((EntityArrow) entity).getShooter();
-            return new PacketPlayOutSpawnEntity(entity, 94, 1 + ((shooter == null) ? entity.getId() : shooter.getId()));
-        });
+			return new PacketPlayOutSpawnEntity(entity, 94, 1 + ((shooter == null) ? entity.getId() : shooter.getId()));
+		});
 		createSpawnPacketMethods.setKnownPath(EntityLlamaSpit.class, entity -> new PacketPlayOutSpawnEntity(entity, 68));
 		createSpawnPacketMethods.setKnownPath(EntityPotion.class, entity -> new PacketPlayOutSpawnEntity(entity, 73));
 		createSpawnPacketMethods.setKnownPath(EntityThrownExpBottle.class, entity -> new PacketPlayOutSpawnEntity(entity, 75));

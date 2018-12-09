@@ -15,7 +15,7 @@ public class InventoryData extends MiddleInventoryData {
 		super(connection);
 	}
 
-	private static final int[] furTypeTr = { 1, 2, 0 };
+	private static final int[] furTypeTr = {1, 2, 0};
 	private final int[] enchTypeVal = new int[10];
 
 	@Override

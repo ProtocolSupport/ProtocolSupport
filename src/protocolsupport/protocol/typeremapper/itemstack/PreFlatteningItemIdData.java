@@ -18,12 +18,14 @@ public class PreFlatteningItemIdData {
 	protected static final int combinedLegacyStoneId = formLegacyCombinedId(1, 0);
 	protected static final int[] toLegacyId = new int[MinecraftData.ITEM_COUNT];
 	protected static final Int2IntMap fromLegacyId = new Int2IntOpenHashMap();
+
 	protected static void register(String modernKey, int legacyMainId, int legacyData) {
 		int modernId = ItemMaterialLookup.getRuntimeId(ItemMaterialLookup.getByKey(modernKey));
 		int combinedLegacyId = formLegacyCombinedId(legacyMainId, legacyData);
 		toLegacyId[modernId] = combinedLegacyId;
 		fromLegacyId.put(combinedLegacyId, modernId);
 	}
+
 	static {
 		Arrays.fill(toLegacyId, combinedLegacyStoneId);
 		for (JsonElement element : Utils.iterateJsonArrayResource(MappingsData.getResourcePath("preflatteningitemiddata.json"))) {

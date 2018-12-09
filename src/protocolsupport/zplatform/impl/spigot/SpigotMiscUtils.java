@@ -97,7 +97,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 		}
 	}
 
-	public static EnumProtocol netStateToProtocol(NetworkState state)  {
+	public static EnumProtocol netStateToProtocol(NetworkState state) {
 		switch (state) {
 			case HANDSHAKING: {
 				return EnumProtocol.HANDSHAKING;
@@ -127,8 +127,8 @@ public class SpigotMiscUtils implements PlatformUtils {
 		profile.getProperties().entrySet().forEach(entry -> mojangProperties.putAll(
 			entry.getKey(),
 			entry.getValue().stream()
-			.map(p -> new Property(p.getName(), p.getValue(), p.getSignature()))
-			.collect(Collectors.toList()))
+				.map(p -> new Property(p.getName(), p.getValue(), p.getSignature()))
+				.collect(Collectors.toList()))
 		);
 		return mojangGameProfile;
 	}
@@ -164,8 +164,8 @@ public class SpigotMiscUtils implements PlatformUtils {
 	public List<BlockData> getBlockDataList(Material material) {
 		return
 			CraftMagicNumbers.getBlock(material).getStates().a().stream()
-			.map(CraftBlockData::fromData)
-			.collect(Collectors.toList());
+				.map(CraftBlockData::fromData)
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -327,8 +327,8 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public void enableCompression(ChannelPipeline pipeline, int compressionThreshold) {
 		pipeline
-		.addAfter(SpigotChannelHandlers.SPLITTER, "decompress", new SpigotPacketDecompressor(compressionThreshold))
-		.addAfter(SpigotChannelHandlers.PREPENDER, "compress", new SpigotPacketCompressor(compressionThreshold));
+			.addAfter(SpigotChannelHandlers.SPLITTER, "decompress", new SpigotPacketDecompressor(compressionThreshold))
+			.addAfter(SpigotChannelHandlers.PREPENDER, "compress", new SpigotPacketCompressor(compressionThreshold));
 	}
 
 	@Override

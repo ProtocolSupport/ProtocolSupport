@@ -24,9 +24,9 @@ public class PlayerListSubCommand implements SubCommand {
 		sender.sendMessage(ChatColor.YELLOW + "ProtocolSupport Players:");
 		for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
 			List<String> players = Bukkit.getOnlinePlayers().stream()
-			.filter(player -> ProtocolSupportAPI.getProtocolVersion(player) == version)
-			.map(Player::getName)
-			.collect(Collectors.toList());
+				.filter(player -> ProtocolSupportAPI.getProtocolVersion(player) == version)
+				.map(Player::getName)
+				.collect(Collectors.toList());
 			if (!players.isEmpty() || verbose) {
 				sender.sendMessage(ChatColor.YELLOW + "[" + version.getName() + "]: " + ChatColor.GREEN + String.join(", ", players));
 			}

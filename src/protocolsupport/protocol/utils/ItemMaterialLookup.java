@@ -22,16 +22,16 @@ public class ItemMaterialLookup {
 	static {
 		toRuntimeId.defaultReturnValue(-1);
 		Arrays.stream(Material.values())
-		.filter(m -> !m.isLegacy())
-		.forEach(material -> {
-			int id = ServerPlatform.get().getMiscUtils().getItemNetworkId(material);
-			if (id != -1) {
-				byKey.put(material.getKey().getKey(), material);
-				byKey.put(material.getKey().toString(), material);
-				byRuntimeId.put(id, material);
-				toRuntimeId.put(material, id);
-			}
-		});
+			.filter(m -> !m.isLegacy())
+			.forEach(material -> {
+				int id = ServerPlatform.get().getMiscUtils().getItemNetworkId(material);
+				if (id != -1) {
+					byKey.put(material.getKey().getKey(), material);
+					byKey.put(material.getKey().toString(), material);
+					byRuntimeId.put(id, material);
+					toRuntimeId.put(material, id);
+				}
+			});
 	}
 
 	public static Material getByKey(String key) {

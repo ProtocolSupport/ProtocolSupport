@@ -8,6 +8,7 @@ public class NBTInt extends NBTNumber {
 	}
 
 	protected final int value;
+
 	public NBTInt(int value) {
 		this.value = value;
 	}

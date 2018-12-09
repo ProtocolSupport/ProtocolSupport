@@ -60,6 +60,7 @@ public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 		public String key;
 		public double value;
 		public Modifier[] modifiers;
+
 		@Override
 		public String toString() {
 			return Utils.toStringAllFields(this);
@@ -70,6 +71,7 @@ public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 		public UUID uuid;
 		public double amount;
 		public int operation;
+
 		@Override
 		public String toString() {
 			return Utils.toStringAllFields(this);

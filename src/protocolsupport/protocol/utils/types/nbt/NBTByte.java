@@ -8,6 +8,7 @@ public class NBTByte extends NBTNumber {
 	}
 
 	protected final byte value;
+
 	public NBTByte(byte value) {
 		this.value = value;
 	}

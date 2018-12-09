@@ -157,6 +157,7 @@ public class ProtocolSupport extends JavaPlugin {
 		public final String buildtime;
 		public final String buildhost;
 		public final String buildnumber;
+
 		public BuildInfo() throws IOException {
 			Properties properties = new Properties();
 			properties.load(Utils.getResourceBuffered("buildinfo"));
@@ -164,6 +165,7 @@ public class ProtocolSupport extends JavaPlugin {
 			buildhost = properties.getProperty("buildhost");
 			buildnumber = properties.getProperty("buildnumber");
 		}
+
 		@Override
 		public String toString() {
 			return Utils.toStringAllFields(this);

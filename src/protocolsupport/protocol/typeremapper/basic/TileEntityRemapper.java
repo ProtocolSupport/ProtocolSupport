@@ -39,6 +39,7 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap.Entry;
 public class TileEntityRemapper {
 
 	protected static final EnumMap<ProtocolVersion, TileEntityRemapper> tileEntityRemappers = new EnumMap<>(ProtocolVersion.class);
+
 	static {
 		for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
 			tileEntityRemappers.put(version, new TileEntityRemapper());
@@ -52,8 +53,8 @@ public class TileEntityRemapper {
 	protected static void register(TileEntityType type, Consumer<TileEntity> transformer, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
 			tileEntityRemappers.get(version).tileToTile
-			.computeIfAbsent(type, k -> new ArrayList<>())
-			.add((tile, blockdata) -> transformer.accept(tile));
+				.computeIfAbsent(type, k -> new ArrayList<>())
+				.add((tile, blockdata) -> transformer.accept(tile));
 		}
 	}
 
@@ -61,22 +62,25 @@ public class TileEntityRemapper {
 		for (ProtocolVersion version : versions) {
 			TileEntityRemapper remapper = tileEntityRemappers.get(version);
 			IntStream.rangeClosed(transformer.remappers.getMinKey(), transformer.remappers.getMaxKey())
-			.filter(i -> transformer.remappers.get(i) != null)
-			.forEach(remapper.tileNeedsBlockData::add);
+				.filter(i -> transformer.remappers.get(i) != null)
+				.forEach(remapper.tileNeedsBlockData::add);
 			remapper.tileToTile
-			.computeIfAbsent(type, k -> new ArrayList<>())
-			.add(transformer);
+				.computeIfAbsent(type, k -> new ArrayList<>())
+				.add(transformer);
 		}
 	}
 
 	protected abstract static class TileEntityWithBlockDataNBTRemapper implements ObjIntConsumer<TileEntity> {
 		protected final ArrayMap<Consumer<NBTCompound>> remappers;
+
 		protected TileEntityWithBlockDataNBTRemapper() {
 			List<ArrayMap.Entry<Consumer<NBTCompound>>> list = new ArrayList<>();
 			init(list);
 			remappers = new ArrayMap<>(list);
 		}
+
 		protected abstract void init(List<ArrayMap.Entry<Consumer<NBTCompound>>> list);
+
 		@Override
 		public void accept(TileEntity tile, int blockdata) {
 			Consumer<NBTCompound> remapper = remappers.get(blockdata);
@@ -100,6 +104,7 @@ public class TileEntityRemapper {
 	protected static class BedTileEntitySupplier implements Function<Position, TileEntity> {
 
 		protected final int color;
+
 		public BedTileEntitySupplier(int color) {
 			this.color = color;
 		}
@@ -115,9 +120,11 @@ public class TileEntityRemapper {
 
 	protected static class TileEntityToLegacyTypeNameRemapper implements Consumer<TileEntity> {
 		protected final String name;
+
 		public TileEntityToLegacyTypeNameRemapper(String name) {
 			this.name = name;
 		}
+
 		@Override
 		public void accept(TileEntity tile) {
 			tile.getNBT().setTag("id", new NBTString(name));
@@ -175,6 +182,7 @@ public class TileEntityRemapper {
 						list.add(new ArrayMap.Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> nbt.setTag("Base", new NBTInt(color))));
 					}
 				}
+
 				@Override
 				protected void init(List<Entry<Consumer<NBTCompound>>> list) {
 					register(list, Material.WHITE_BANNER, 15);
@@ -247,6 +255,7 @@ public class TileEntityRemapper {
 						}));
 					}
 				}
+
 				@Override
 				protected void init(List<Entry<Consumer<NBTCompound>>> list) {
 					register(list, Material.SKELETON_SKULL, 0);

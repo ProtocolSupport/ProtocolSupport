@@ -14,7 +14,7 @@ public class Compressor {
 	protected static final int compressionLevel = Utils.getJavaPropertyValue("compressionlevel", 3, Integer::parseInt);
 
 	static {
-		ProtocolSupport.logInfo("Compression level: "+compressionLevel);
+		ProtocolSupport.logInfo("Compression level: " + compressionLevel);
 	}
 
 	protected static final Recycler<Compressor> recycler = new Recycler<Compressor>() {
@@ -30,6 +30,7 @@ public class Compressor {
 
 	protected final Deflater deflater = new Deflater(compressionLevel);
 	protected final Handle<Compressor> handle;
+
 	protected Compressor(Handle<Compressor> handle) {
 		this.handle = handle;
 	}

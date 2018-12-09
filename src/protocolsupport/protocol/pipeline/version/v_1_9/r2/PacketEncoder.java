@@ -98,6 +98,7 @@ import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 public class PacketEncoder extends AbstractModernPacketEncoder {
 
 	private static final PacketIdTransformerRegistry packetIdRegistry = new PacketIdTransformerRegistry();
+
 	static {
 		packetIdRegistry.register(NetworkState.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, 0x0);
 		packetIdRegistry.register(NetworkState.LOGIN, ClientBoundPacket.LOGIN_ENCRYPTION_BEGIN_ID, 0x1);

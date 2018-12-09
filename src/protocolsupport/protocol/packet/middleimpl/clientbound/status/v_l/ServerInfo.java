@@ -24,10 +24,10 @@ public class ServerInfo extends MiddleServerInfo {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.STATUS_SERVER_INFO_ID);
 		String response = new StringJoiner("§")
-		.add(ChatColor.stripColor(ping.getMotd().toLegacyText(cache.getAttributesCache().getLocale())).replace("§", ""))
-		.add(String.valueOf(ping.getPlayers().getOnline()))
-		.add(String.valueOf(ping.getPlayers().getMax()))
-		.toString();
+			.add(ChatColor.stripColor(ping.getMotd().toLegacyText(cache.getAttributesCache().getLocale())).replace("§", ""))
+			.add(String.valueOf(ping.getPlayers().getOnline()))
+			.add(String.valueOf(ping.getPlayers().getMax()))
+			.toString();
 		StringSerializer.writeString(serializer, ProtocolVersion.getOldest(ProtocolType.PC), response);
 		return RecyclableSingletonList.create(serializer);
 	}

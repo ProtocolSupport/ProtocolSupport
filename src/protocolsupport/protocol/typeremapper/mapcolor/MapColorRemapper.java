@@ -16,6 +16,7 @@ public class MapColorRemapper {
 				registerRemapEntry(color.getId(), MapColorHelper.getSimilarLegacyColor(color).getId(), ProtocolVersionsHelper.BEFORE_1_7);
 			}
 		}
+
 		@Override
 		protected ArrayBasedIdRemappingTable createTable() {
 			return new ArrayBasedIdRemappingTable(256);

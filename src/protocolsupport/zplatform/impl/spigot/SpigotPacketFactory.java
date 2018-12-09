@@ -126,6 +126,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	private final UUID profileUUID = UUID.randomUUID();
+
 	@Override
 	public Object createStausServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, String motd, int maxPlayers) {
 		ServerPingPlayerSample playerSample = new ServerPingPlayerSample(maxPlayers, profiles.size());
@@ -153,6 +154,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	protected static final PacketDataSerializer emptyPDS = new PacketDataSerializer(Unpooled.EMPTY_BUFFER);
+
 	@Override
 	public Object createEmptyCustomPayloadPacket(String tag) {
 		return new PacketPlayOutCustomPayload(new MinecraftKey("ps", tag), emptyPDS);

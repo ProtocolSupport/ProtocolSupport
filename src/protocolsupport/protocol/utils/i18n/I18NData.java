@@ -43,7 +43,7 @@ public class I18NData {
 		I18N i18n = new I18N(
 			locale,
 			Utils.GSON.fromJson(stream, JsonObject.class).entrySet().stream()
-			.collect(Collectors.toMap(Entry::getKey, entry -> entry.getValue().getAsString()))
+				.collect(Collectors.toMap(Entry::getKey, entry -> entry.getValue().getAsString()))
 		);
 		i18ns.put(locale, i18n);
 		return i18n;

@@ -22,20 +22,21 @@ public class LegacyItemType {
 		{
 			applyDefaultRemaps();
 		}
+
 		public void applyDefaultRemaps() {
 
 			Arrays.stream(Material.values())
-			.filter(m -> m.isItem() && m.isBlock())
-			.forEach(materialFrom -> {
-				int networkIdFrom = MaterialAPI.getBlockDataNetworkId(materialFrom.createBlockData());
-				Arrays.stream(ProtocolVersion.getAllSupported())
-				.forEach(version -> {
-					Material materialTo = MaterialAPI.getBlockDataByNetworkId(LegacyBlockData.REGISTRY.getTable(version).getRemap(networkIdFrom)).getMaterial();
-					if (!materialFrom.equals(materialTo) && !materialTo.equals(Material.AIR) && materialTo.isItem()) {
-						registerRemapEntry(materialFrom, materialTo, version);
-					}
+				.filter(m -> m.isItem() && m.isBlock())
+				.forEach(materialFrom -> {
+					int networkIdFrom = MaterialAPI.getBlockDataNetworkId(materialFrom.createBlockData());
+					Arrays.stream(ProtocolVersion.getAllSupported())
+						.forEach(version -> {
+							Material materialTo = MaterialAPI.getBlockDataByNetworkId(LegacyBlockData.REGISTRY.getTable(version).getRemap(networkIdFrom)).getMaterial();
+							if (!materialFrom.equals(materialTo) && !materialTo.equals(Material.AIR) && materialTo.isItem()) {
+								registerRemapEntry(materialFrom, materialTo, version);
+							}
+						});
 				});
-			});
 
 
 			registerRemapEntry(Material.CHEST, Material.CHEST, ProtocolVersionsHelper.ALL_PC);
@@ -115,7 +116,7 @@ public class LegacyItemType {
 			registerRemapEntry(Material.TRAPPED_CHEST, Material.CHEST, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 
-		protected void registerRemapEntry(List<Material> from, Material to, ProtocolVersion...versions) {
+		protected void registerRemapEntry(List<Material> from, Material to, ProtocolVersion... versions) {
 			from.forEach(material -> registerRemapEntry(material, to, versions));
 		}
 

@@ -66,8 +66,6 @@ public class PositionSerializer {
 		to.writeInt(position.getZ());
 	}
 
-
-
 	public static ChunkCoord readChunkCoord(ByteBuf from) {
 		return new ChunkCoord(from.readInt(), from.readInt());
 	}

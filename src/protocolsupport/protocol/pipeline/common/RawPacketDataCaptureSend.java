@@ -9,6 +9,7 @@ import protocolsupport.protocol.ConnectionImpl;
 public class RawPacketDataCaptureSend extends ChannelOutboundHandlerAdapter {
 
 	private final ConnectionImpl connection;
+
 	public RawPacketDataCaptureSend(ConnectionImpl connection) {
 		this.connection = connection;
 	}

@@ -42,6 +42,7 @@ public class ServerPlatform {
 	private final PlatformInjector injector;
 	private final PlatformUtils utils;
 	private final PlatformPacketFactory packetfactory;
+
 	private ServerPlatform(ServerPlatformIdentifier identifier, PlatformInjector injector, PlatformUtils miscutils, PlatformPacketFactory packetfactory) {
 		this.identifier = identifier;
 		this.injector = injector;

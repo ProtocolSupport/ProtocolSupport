@@ -109,6 +109,7 @@ public class SpigotEntityTracker extends EntityTracker {
 	}
 
 	protected static final CachedInstanceOfChain<BiConsumer<SpigotEntityTracker, Entity>> entityTrackMethods = new CachedInstanceOfChain<>();
+
 	static {
 		entityTrackMethods.setKnownPath(EntityPlayer.class, (tracker, entity) -> {
 			tracker.addEntity(entity, 512, 2);

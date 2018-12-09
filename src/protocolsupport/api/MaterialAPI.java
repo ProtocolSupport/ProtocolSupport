@@ -61,7 +61,7 @@ public class MaterialAPI {
 	 * @return material for network id
 	 */
 	public static Material getItemByNetworkId(int id) {
-		 return ItemMaterialLookup.getByRuntimeId(id);
+		return ItemMaterialLookup.getByRuntimeId(id);
 	}
 
 }

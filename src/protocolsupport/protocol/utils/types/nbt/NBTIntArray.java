@@ -10,6 +10,7 @@ public class NBTIntArray extends NBT {
 	}
 
 	protected final int[] array;
+
 	public NBTIntArray(int[] array) {
 		this.array = array;
 	}

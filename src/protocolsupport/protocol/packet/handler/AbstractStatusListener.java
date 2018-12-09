@@ -44,6 +44,7 @@ public abstract class AbstractStatusListener {
 	);
 
 	protected final NetworkManagerWrapper networkManager;
+
 	public AbstractStatusListener(NetworkManagerWrapper networkmanager) {
 		this.networkManager = networkmanager;
 	}
@@ -96,12 +97,14 @@ public abstract class AbstractStatusListener {
 	public static class InternalServerListPingEvent extends ServerListPingEvent {
 
 		protected final List<Player> players;
+
 		protected InternalServerListPingEvent(InetAddress address, String motd, int maxPlayers, List<Player> players) {
 			super(address, motd, maxPlayers);
 			this.players = players;
 		}
 
 		protected CachedServerIcon icon;
+
 		public CachedServerIcon getIcon() {
 			return icon;
 		}

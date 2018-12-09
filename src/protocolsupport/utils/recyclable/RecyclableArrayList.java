@@ -24,6 +24,7 @@ public class RecyclableArrayList<E> extends ArrayList<E> implements RecyclableCo
 
 	@SuppressWarnings("rawtypes")
 	private final Handle<RecyclableArrayList> handle;
+
 	@SuppressWarnings("rawtypes")
 	private RecyclableArrayList(Handle<RecyclableArrayList> handle) {
 		this.handle = handle;

@@ -65,15 +65,15 @@ public class ItemStackComplexRemapperRegistry {
 		EnchantToLegacyIdComplexRemapper enchanttolegacyid = new EnchantToLegacyIdComplexRemapper();
 		DisplayNameToLegacyTextComplexRemapper dnametolegacytext = new DisplayNameToLegacyTextComplexRemapper();
 		Arrays.stream(Material.values())
-		.filter(Material::isItem)
-		.forEach(material -> {
-			if (material.getMaxDurability() > 0) {
-				registerToClient(material, durabilitymapper, ProtocolVersionsHelper.BEFORE_1_13);
-			}
-			registerToClient(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);
-			registerToClient(material, enchanttolegacyid, ProtocolVersionsHelper.BEFORE_1_13);
-			registerToClient(material, dnametolegacytext, ProtocolVersionsHelper.BEFORE_1_13);
-		});
+			.filter(Material::isItem)
+			.forEach(material -> {
+				if (material.getMaxDurability() > 0) {
+					registerToClient(material, durabilitymapper, ProtocolVersionsHelper.BEFORE_1_13);
+				}
+				registerToClient(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);
+				registerToClient(material, enchanttolegacyid, ProtocolVersionsHelper.BEFORE_1_13);
+				registerToClient(material, dnametolegacytext, ProtocolVersionsHelper.BEFORE_1_13);
+			});
 	}
 
 	static {
@@ -82,11 +82,11 @@ public class ItemStackComplexRemapperRegistry {
 		EnchantFromLegacyIdComplexRemapper enchantfromlegacyid = new EnchantFromLegacyIdComplexRemapper();
 		DisplayNameFromLegacyTextComplexRemapper dnamefromlegacytext = new DisplayNameFromLegacyTextComplexRemapper();
 		Arrays.stream(Material.values())
-		.filter(Material::isItem)
-		.forEach(material -> {
-			registerFromClient(material, enchantfromlegacyid, ProtocolVersionsHelper.BEFORE_1_13);
-			registerFromClient(material, dnamefromlegacytext, ProtocolVersionsHelper.BEFORE_1_13);
-		});
+			.filter(Material::isItem)
+			.forEach(material -> {
+				registerFromClient(material, enchantfromlegacyid, ProtocolVersionsHelper.BEFORE_1_13);
+				registerFromClient(material, dnamefromlegacytext, ProtocolVersionsHelper.BEFORE_1_13);
+			});
 	}
 
 	protected static NetworkItemStack remapComplex(
@@ -106,7 +106,7 @@ public class ItemStackComplexRemapperRegistry {
 		return itemstack;
 	}
 
-	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale,  NetworkItemStack itemstack) {
+	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		return remapComplex(toClientRemapper, version, locale, itemstack);
 	}
 

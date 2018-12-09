@@ -12,6 +12,7 @@ import org.bukkit.event.server.ServerCommandEvent;
 public class ReloadCommandBlocker implements Listener {
 
 	private final Set<String> blacklist = new HashSet<>();
+
 	{
 		blacklist.add("reload");
 		blacklist.add("reload confirm");

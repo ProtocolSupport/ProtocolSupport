@@ -57,12 +57,12 @@ public class RecyclableEmptyList<E> implements RecyclableCollection<E> {
 
 	@Override
 	public boolean add(E e) {
-        throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public boolean remove(Object o) {
-        throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -72,22 +72,22 @@ public class RecyclableEmptyList<E> implements RecyclableCollection<E> {
 
 	@Override
 	public boolean addAll(Collection<? extends E> c) {
-        throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
-        throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
-        throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void clear() {
-        throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 
 	@SuppressWarnings("unchecked")

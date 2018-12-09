@@ -54,7 +54,7 @@ public class LegacyChatJson {
 			if ((click != null) && (click.getType() == ClickAction.Type.OPEN_URL)) {
 				String url = click.getValue();
 				if (!url.startsWith("http://") && !url.startsWith("https://")) {
-					url = "http://"+url;
+					url = "http://" + url;
 				}
 				component.setClickAction(new ClickAction(ClickAction.Type.OPEN_URL, url));
 			}

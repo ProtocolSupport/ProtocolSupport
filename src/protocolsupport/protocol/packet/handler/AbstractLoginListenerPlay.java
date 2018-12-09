@@ -92,8 +92,8 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 
 		//kick players with same uuid
 		Bukkit.getOnlinePlayers().stream()
-		.filter(player -> player.getUniqueId().equals(connection.getProfile().getUUID()))
-		.forEach(player -> player.kickPlayer("You logged in from another location"));
+			.filter(player -> player.getUniqueId().equals(connection.getProfile().getUUID()))
+			.forEach(player -> player.kickPlayer("You logged in from another location"));
 
 		//get player
 		JoinData joindata = createJoinData();
@@ -170,10 +170,12 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 	protected abstract class JoinData {
 		public final Player player;
 		public final Object[] data;
+
 		public JoinData(Player player, Object... data) {
 			this.player = player;
 			this.data = data;
 		}
+
 		protected abstract void close();
 	}
 

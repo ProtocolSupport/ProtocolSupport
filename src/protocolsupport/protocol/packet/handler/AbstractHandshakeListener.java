@@ -19,6 +19,7 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 public abstract class AbstractHandshakeListener implements IPacketListener {
 
 	protected final NetworkManagerWrapper networkManager;
+
 	protected AbstractHandshakeListener(NetworkManagerWrapper networkmanager) {
 		this.networkManager = networkmanager;
 	}

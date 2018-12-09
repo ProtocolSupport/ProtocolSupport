@@ -8,6 +8,7 @@ public class NBTFloat extends NBTNumber {
 	}
 
 	protected final float value;
+
 	public NBTFloat(float value) {
 		this.value = value;
 	}

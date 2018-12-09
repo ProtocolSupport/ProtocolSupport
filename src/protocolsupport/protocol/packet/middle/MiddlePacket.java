@@ -8,6 +8,7 @@ public abstract class MiddlePacket {
 
 	protected final ConnectionImpl connection;
 	protected final NetworkDataCache cache; //TODO: remove this field and use ConnectinImpl#getCache where needed
+
 	public MiddlePacket(ConnectionImpl connection) {
 		this.connection = connection;
 		this.cache = connection.getCache();

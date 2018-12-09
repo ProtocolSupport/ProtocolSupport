@@ -10,6 +10,7 @@ public class I18N {
 	private final HashMap<String, String> i18n = new HashMap<>();
 
 	private final String lang;
+
 	public I18N(String locale, Map<String, String> i18n) {
 		this.lang = locale;
 		this.i18n.putAll(i18n);

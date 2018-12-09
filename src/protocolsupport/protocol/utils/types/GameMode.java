@@ -12,6 +12,7 @@ public enum GameMode {
 	private static final ArrayMap<GameMode> byId = CollectionsUtils.makeEnumMappingArrayMap(GameMode.class, GameMode::getId);
 
 	private final int id;
+
 	GameMode(int id) {
 		this.id = id;
 	}

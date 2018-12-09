@@ -54,6 +54,7 @@ public class ProtocolStorage {
 	protected static class Data {
 		protected final ConnectionImpl connection;
 		protected final Set<SocketAddress> addresses = Collections.newSetFromMap(new ConcurrentHashMap<>());
+
 		public Data(ConnectionImpl connection) {
 			this.connection = connection;
 		}

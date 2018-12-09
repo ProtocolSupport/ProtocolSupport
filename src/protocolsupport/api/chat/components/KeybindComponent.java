@@ -10,6 +10,7 @@ import protocolsupport.protocol.utils.minecraftdata.KeybindData;
 public class KeybindComponent extends BaseComponent {
 
 	private final String keybind;
+
 	public KeybindComponent(String keybind) {
 		this.keybind = keybind;
 	}

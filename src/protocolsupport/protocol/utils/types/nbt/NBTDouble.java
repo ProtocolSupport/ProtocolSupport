@@ -8,6 +8,7 @@ public class NBTDouble extends NBTNumber {
 	}
 
 	protected final double value;
+
 	public NBTDouble(double value) {
 		this.value = value;
 	}

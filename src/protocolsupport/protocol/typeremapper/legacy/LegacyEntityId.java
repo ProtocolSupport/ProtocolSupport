@@ -7,6 +7,7 @@ import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 public class LegacyEntityId {
 
 	private static final EnumMap<NetworkEntityType, String> legacyNames = new EnumMap<>(NetworkEntityType.class);
+
 	static {
 		legacyNames.put(NetworkEntityType.FIREWORK, "FireworksRocketEntity");
 		legacyNames.put(NetworkEntityType.SKELETON_HORSE, "SkeletonHorse");

@@ -19,9 +19,9 @@ public class PlayerEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 10), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.ADDITIONAL_HEARTS, 17), ProtocolVersionsHelper.BEFORE_1_9);
 
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.SCORE, 12),  ProtocolVersionsHelper.RANGE__1_10__1_13_2);
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.SCORE, 11),  ProtocolVersionsHelper.ALL_1_9);
-		addRemap(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Player.SCORE, 18),  ProtocolVersionsHelper.BEFORE_1_9);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.SCORE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.SCORE, 11), ProtocolVersionsHelper.ALL_1_9);
+		addRemap(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Player.SCORE, 18), ProtocolVersionsHelper.BEFORE_1_9);
 
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.SKIN_FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Player.SKIN_FLAGS, 12), ProtocolVersionsHelper.ALL_1_9);
@@ -36,12 +36,12 @@ public class PlayerEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 				DataWatcherObjectIndex.Entity.FLAGS.getValue(original)
-				.ifPresent(baseflags -> entity.getDataCache().setBaseFlags(baseflags.getValue()));
+					.ifPresent(baseflags -> entity.getDataCache().setBaseFlags(baseflags.getValue()));
 				DataWatcherObjectIndex.EntityLiving.HAND_USE.getValue(original)
-				.ifPresent(activehandflags -> {
-					entity.getDataCache().setBaseFlag(5, activehandflags.getValue());
-					remapped.put(0, new DataWatcherObjectByte(entity.getDataCache().getBaseFlags()));
-				});
+					.ifPresent(activehandflags -> {
+						entity.getDataCache().setBaseFlag(5, activehandflags.getValue());
+						remapped.put(0, new DataWatcherObjectByte(entity.getDataCache().getBaseFlags()));
+					});
 			}
 		}, ProtocolVersionsHelper.BEFORE_1_9);
 	}

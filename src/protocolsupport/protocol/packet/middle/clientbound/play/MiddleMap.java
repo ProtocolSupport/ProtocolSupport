@@ -55,6 +55,7 @@ public abstract class MiddleMap extends ClientBoundMiddlePacket {
 		public final int z;
 		public final int direction;
 		public final String displayName;
+
 		public Icon(int type, int x, int z, int direction, String displayName) {
 			this.type = type;
 			this.x = x;

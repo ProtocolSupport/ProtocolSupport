@@ -11,11 +11,11 @@ public class KeybindData {
 
 	static {
 		Utils.getResourceBuffered(MinecraftData.getResourcePath("keybinds")).lines()
-		.filter(line -> !line.isEmpty())
-		.forEach(line -> {
-			String[] split = line.split("[:]");
-			nameToKeyRepr.put(split[0], KeyEvent.getKeyText(Integer.parseInt(split[1])));
-		});
+			.filter(line -> !line.isEmpty())
+			.forEach(line -> {
+				String[] split = line.split("[:]");
+				nameToKeyRepr.put(split[0], KeyEvent.getKeyText(Integer.parseInt(split[1])));
+			});
 	}
 
 	public static String getKey(String name) {

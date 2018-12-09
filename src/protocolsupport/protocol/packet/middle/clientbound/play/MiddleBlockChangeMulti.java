@@ -33,10 +33,12 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 	public static class Record {
 		public final int localCoord;
 		public final int id;
+
 		public Record(int localCoord, int id) {
 			this.localCoord = localCoord;
 			this.id = id;
 		}
+
 		@Override
 		public String toString() {
 			return Utils.toStringAllFields(this);

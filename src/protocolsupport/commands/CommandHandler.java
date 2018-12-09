@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 public class CommandHandler implements CommandExecutor, TabCompleter {
 
 	private final Map<String, SubCommand> subcommands = new LinkedHashMap<>();
+
 	{
 		subcommands.put("buildinfo", new BuildInfoSubCommand());
 		subcommands.put("debug", new DebugSubCommand());
@@ -69,8 +70,8 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
 		return subcommands.keySet().stream()
-		.filter(subcommand -> subcommand.startsWith(args[0]))
-		.collect(Collectors.toList());
+			.filter(subcommand -> subcommand.startsWith(args[0]))
+			.collect(Collectors.toList());
 	}
 
 }

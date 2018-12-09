@@ -30,6 +30,7 @@ public abstract class ChunkTransformer {
 	protected final ArrayBasedIdRemappingTable blockTypeRemappingTable;
 	protected final TileDataCache tilecache;
 	protected final TileEntityRemapper tileremapper;
+
 	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable, TileEntityRemapper tileremapper, TileDataCache tilecache) {
 		this.blockTypeRemappingTable = blockRemappingTable;
 		this.tileremapper = tileremapper;
@@ -60,8 +61,8 @@ public abstract class ChunkTransformer {
 	public TileEntity[] remapAndGetTiles() {
 		return
 			tilesNBTData.stream()
-			.map(tile -> tileremapper.remap(tile, tilesBlockData.get(tile.getPosition().getLocalCoord())))
-			.toArray(TileEntity[]::new);
+				.map(tile -> tileremapper.remap(tile, tilesBlockData.get(tile.getPosition().getLocalCoord())))
+				.toArray(TileEntity[]::new);
 	}
 
 	protected int getBlockState(int section, BlockStorageReader blockstorage, int blockindex) {
@@ -98,6 +99,7 @@ public abstract class ChunkTransformer {
 
 		protected static final int globalPaletteBitsPerBlock = 14;
 		protected static final int[] globalPaletteData = new int[MinecraftData.BLOCKDATA_COUNT];
+
 		static {
 			for (int i = 0; i < globalPaletteData.length; i++) {
 				globalPaletteData[i] = i;

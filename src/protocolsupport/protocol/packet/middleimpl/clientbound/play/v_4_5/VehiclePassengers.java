@@ -17,6 +17,7 @@ public class VehiclePassengers extends MiddleVehiclePassengers {
 	}
 
 	protected final Int2IntOpenHashMap vehiclePassenger = new Int2IntOpenHashMap();
+
 	{
 		vehiclePassenger.defaultReturnValue(-1);
 	}

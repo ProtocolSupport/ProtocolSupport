@@ -18,6 +18,7 @@ import protocolsupport.protocol.storage.ProtocolStorage;
 public class ProtocolSupportAPI {
 
 	private static final BigInteger apiversion = BigInteger.valueOf(6);
+
 	/**
 	 * Returns ProtocolSupport API version <br>
 	 * This number is incremented every time API changes (behavior change, method/field added/removed)
@@ -79,6 +80,7 @@ public class ProtocolSupportAPI {
 
 
 	private static final Set<ProtocolVersion> enabledVersions = Collections.newSetFromMap(new ConcurrentHashMap<>());
+
 	static {
 		enabledVersions.addAll(Arrays.asList(ProtocolVersion.getAllSupported()));
 	}

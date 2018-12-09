@@ -27,6 +27,7 @@ public class RecyclableSingletonList<E> extends AbstractCollection<E> implements
 
 	@SuppressWarnings("rawtypes")
 	private final Handle<RecyclableSingletonList> handle;
+
 	@SuppressWarnings("rawtypes")
 	private RecyclableSingletonList(Handle<RecyclableSingletonList> handle) {
 		this.handle = handle;

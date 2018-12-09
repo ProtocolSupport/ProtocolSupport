@@ -12,7 +12,7 @@ public class VarIntFrameDecoder implements IPacketSplitter {
 	private int packetLength = -1;
 
 	@Override
-	public void split(ChannelHandlerContext ctx, ByteBuf input, List<Object> list)  {
+	public void split(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) {
 		if (packetLength == -1) {
 			input.markReaderIndex();
 			int tmpPacketLength = 0;
@@ -33,11 +33,11 @@ public class VarIntFrameDecoder implements IPacketSplitter {
 			}
 			throw new CorruptedFrameException("Packet length varint length is more than 21 bits");
 		}
-        if (input.readableBytes() < packetLength) {
-            return;
-        }
-        list.add(input.readRetainedSlice(packetLength));
-        packetLength = -1;
+		if (input.readableBytes() < packetLength) {
+			return;
+		}
+		list.add(input.readRetainedSlice(packetLength));
+		packetLength = -1;
 	}
 
 }

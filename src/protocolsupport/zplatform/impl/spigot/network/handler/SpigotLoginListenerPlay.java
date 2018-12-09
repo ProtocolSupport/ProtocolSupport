@@ -98,6 +98,7 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 	}
 
 	private static final String BAN_DATE_FORMAT_STRING = "yyyy-MM-dd 'at' HH:mm:ss z";
+
 	@Override
 	protected void checkBans(PlayerLoginEvent event, Object[] data) {
 		PlayerList playerlist = server.getPlayerList();
@@ -110,7 +111,7 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 			if (!hasExpired(profileban)) {
 				String reason = "You are banned from this server!\nReason: " + profileban.getReason();
 				if (profileban.getExpires() != null) {
-					reason = reason + "\nYour ban will be removed on " +  new SimpleDateFormat(BAN_DATE_FORMAT_STRING).format(profileban.getExpires());
+					reason = reason + "\nYour ban will be removed on " + new SimpleDateFormat(BAN_DATE_FORMAT_STRING).format(profileban.getExpires());
 				}
 				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, reason);
 			}

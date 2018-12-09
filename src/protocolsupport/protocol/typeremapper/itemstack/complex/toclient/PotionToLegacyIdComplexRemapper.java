@@ -17,6 +17,7 @@ import protocolsupport.protocol.utils.types.nbt.NBTType;
 public class PotionToLegacyIdComplexRemapper implements ItemStackComplexRemapper {
 
 	private final boolean isThrowablePotion;
+
 	public PotionToLegacyIdComplexRemapper(boolean isThrowablePotion) {
 		this.isThrowablePotion = isThrowablePotion;
 	}

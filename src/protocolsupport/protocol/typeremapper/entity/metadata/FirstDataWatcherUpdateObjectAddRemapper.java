@@ -8,6 +8,7 @@ public class FirstDataWatcherUpdateObjectAddRemapper extends DataWatcherObjectRe
 
 	private final int index;
 	private final DataWatcherObject<?> object;
+
 	public FirstDataWatcherUpdateObjectAddRemapper(int index, DataWatcherObject<?> object) {
 		this.index = index;
 		this.object = object;
