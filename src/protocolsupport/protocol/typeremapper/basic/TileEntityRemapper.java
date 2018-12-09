@@ -13,6 +13,7 @@ import java.util.stream.IntStream;
 
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Piston;
@@ -306,7 +307,53 @@ public class TileEntityRemapper {
 				register(list, Material.RED_BED, 14);
 				register(list, Material.BLACK_BED, 15);
 			}
-			
+		}, ProtocolVersionsHelper.ALL_PE);
+
+		register(TileEntityType.SHULKER_BOX, new TileEntityToLegacyTypeNameRemapper("ShulkerBox"), ProtocolVersionsHelper.ALL_PE);
+		register(TileEntityType.SHULKER_BOX, new TileEntityWithBlockDataNBTRemapper() {
+			protected void register(List<Entry<Consumer<NBTCompound>>> list, Material shulker, boolean undyed) {
+				for (BlockData blockdata : MaterialAPI.getBlockDataList(shulker)) {
+					byte facing = 1;
+					if (blockdata instanceof Directional) {
+						Directional directional = (Directional) blockdata;
+						switch (directional.getFacing()) {
+							case DOWN: facing = 0; break;
+							case EAST: facing = 5; break;
+							case NORTH: facing = 2; break;
+							case SOUTH: facing = 3; break;
+							case UP: facing = 1; break;
+							case WEST: facing = 4; break;
+							default: break;
+						}
+					}
+					byte facingF = facing;
+					list.add(new ArrayMap.Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> {
+						nbt.setTag("facing", new NBTByte(facingF));
+						nbt.setTag("isUndyed", new NBTByte(undyed ? (byte) 1 : (byte) 0));
+					}));
+				}
+			}
+			@Override
+			protected void init(List<Entry<Consumer<NBTCompound>>> list) {
+				register(list, Material.SHULKER_BOX, true);
+				register(list, Material.WHITE_SHULKER_BOX, false);
+				register(list, Material.ORANGE_SHULKER_BOX, false);
+				register(list, Material.MAGENTA_SHULKER_BOX, false);
+				register(list, Material.LIGHT_BLUE_SHULKER_BOX, false);
+				register(list, Material.YELLOW_SHULKER_BOX, false);
+				register(list, Material.LIME_SHULKER_BOX, false);
+				register(list, Material.PINK_SHULKER_BOX, false);
+				register(list, Material.GRAY_SHULKER_BOX, false);
+				register(list, Material.LIGHT_GRAY_SHULKER_BOX, false);
+				register(list, Material.CYAN_SHULKER_BOX, false);
+				register(list, Material.PURPLE_SHULKER_BOX, false);
+				register(list, Material.BLUE_SHULKER_BOX, false);
+				register(list, Material.BROWN_SHULKER_BOX, false);
+				register(list, Material.GREEN_SHULKER_BOX, false);
+				register(list, Material.RED_SHULKER_BOX, false);
+				register(list, Material.BLACK_SHULKER_BOX, false);
+				
+			}
 		}, ProtocolVersionsHelper.ALL_PE);
 
 		register(

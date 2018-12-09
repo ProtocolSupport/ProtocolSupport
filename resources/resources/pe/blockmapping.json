@@ -5727,6 +5727,10 @@
     "pename":"minecraft:bone_block",
     "pedata":8
   },
+  "minecraft:shulker_box[facing=up]":{
+    "pename":"minecraft:undyed_shulker_box",
+	"pedata":0
+  },
   "minecraft:white_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
     "pedata":0

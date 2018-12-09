@@ -141,7 +141,6 @@ public class LegacyBlockData {
 		public void applyDefaultRemaps() {
 			clear();
 
-			this.registerRemapEntryForAllStates(Material.SHULKER_BOX, Material.PURPLE_SHULKER_BOX.createBlockData(), ProtocolVersion.MINECRAFT_PE);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(
 					Material.WHITE_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.MAGENTA_SHULKER_BOX,
@@ -149,13 +148,9 @@ public class LegacyBlockData {
 					Material.PINK_SHULKER_BOX, Material.GRAY_SHULKER_BOX, Material.LIGHT_GRAY_SHULKER_BOX,
 					Material.CYAN_SHULKER_BOX, Material.CYAN_SHULKER_BOX, Material.PURPLE_SHULKER_BOX,
 					Material.BLUE_SHULKER_BOX, Material.BROWN_SHULKER_BOX, Material.GREEN_SHULKER_BOX,
-					Material.RED_SHULKER_BOX, Material.BLACK_SHULKER_BOX
+					Material.RED_SHULKER_BOX, Material.BLACK_SHULKER_BOX, Material.SHULKER_BOX
 				),
-				o -> {
-					Directional shulker = (Directional) o;
-					shulker.setFacing(BlockFace.UP);
-					return shulker;
-				},
+				o -> o.getMaterial().createBlockData(),
 				ProtocolVersion.MINECRAFT_PE
 			);
 			this.registerRemapEntryForAllStates(Material.KELP_PLANT, Material.KELP.createBlockData((blockdata)-> {
