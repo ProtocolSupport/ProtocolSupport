@@ -75,6 +75,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 
 	public static ClientBoundPacketData updateGeneral(ProtocolVersion version, NetworkEntity entity, double x, double y, double z, byte pitch, byte headYaw, byte yaw, boolean onGround, boolean teleported) {
 		if (entity.getType() == NetworkEntityType.PLAYER) {
+			entity.getDataCache().setPitch(pitch); //Store pitch for headyaw / pitch update.
 			return SetPosition.create(entity, x, y, z, pitch, yaw, teleported ? SetPosition.ANIMATION_MODE_TELEPORT : SetPosition.ANIMATION_MODE_ALL);
 		} else {
 			return create(version, entity, x, y, z, pitch, headYaw, yaw, onGround, teleported);

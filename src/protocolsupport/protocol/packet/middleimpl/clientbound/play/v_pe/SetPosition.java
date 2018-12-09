@@ -45,6 +45,7 @@ public class SetPosition extends MiddleSetPosition {
 
 	public static final int ANIMATION_MODE_ALL = 0;
 	public static final int ANIMATION_MODE_TELEPORT = 2;
+	public static final int ANIMATION_MODE_PITCH = 3;
 
 	public static ClientBoundPacketData create(NetworkEntity entity, double x, double y, double z, float pitch, float yaw, int mode) {
 		y = y + 1.6200000047683716D;
