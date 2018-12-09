@@ -13,11 +13,10 @@ import java.util.stream.IntStream;
 
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Piston;
-import org.bukkit.block.data.type.PistonHead;
-import org.bukkit.block.data.type.TechnicalPiston;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -153,9 +152,11 @@ public class TileEntityRemapper {
 
 	protected static class PEPistonSupplier implements Function<Position, TileEntity> {
 
-		protected final BlockData blockData;
-		public PEPistonSupplier(BlockData blockData) {
-			this.blockData = blockData;
+		protected final boolean extended;
+		protected final boolean sticky;
+		public PEPistonSupplier(boolean extended, boolean sticky) {
+			this.extended = extended;
+			this.sticky = sticky;
 		}
 
 		@Override
@@ -165,63 +166,26 @@ public class TileEntityRemapper {
 			nbt.setTag("y", new NBTInt(position.getY()));
 			nbt.setTag("z", new NBTInt(position.getZ()));
 			nbt.setTag("id", new NBTString("PistonArm"));
-			switch (blockData.getMaterial()) {
-			case PISTON_HEAD: {
-				PistonHead head = (PistonHead) blockData;
-				nbt.setTag("y", new NBTInt(position.getY() - 1));
+			nbt.setTag("Sticky", new NBTByte(sticky ? (byte) 1 : (byte) 0));
+			if (extended) {
 				nbt.setTag("isMovable", new NBTByte((byte) 0));
 				nbt.setTag("State", new NBTByte((byte) 2));
 				nbt.setTag("NewState", new NBTByte((byte) 2));
 				nbt.setTag("LastProgress", new NBTFloat(1));
 				nbt.setTag("Progress", new NBTFloat(1));
-				nbt.setTag("Sticky", new NBTByte(head.getType() == TechnicalPiston.Type.STICKY ? (byte) 1 : (byte) 0));
-				break;
-			}
-			case STICKY_PISTON:
-			case PISTON: {
+				
+			} else {
 				nbt.setTag("isMovable", new NBTByte((byte) 1));
 				nbt.setTag("State", new NBTByte((byte) 0));
 				nbt.setTag("NewState", new NBTByte((byte) 0));
 				nbt.setTag("LastProgress", new NBTFloat(0));
 				nbt.setTag("Progress", new NBTFloat(0));
-				nbt.setTag("Sticky", new NBTByte(blockData.getMaterial() == Material.STICKY_PISTON ? (byte) 1 : (byte) 0));
-				break;
 			}
-			default:
-				break;
-			}
-			System.out.println("PISTON: " + nbt);
 			return new TileEntity(nbt);
 		}
 		
 		
 	}
-//	registerLegacyState(Material.PISTON, (position) -> {
-//		NBTCompound nbt = new NBTCompound();
-//		nbt.setTag("x", new NBTInt(position.getX()));
-//		nbt.setTag("y", new NBTInt(position.getY()));
-//		nbt.setTag("z", new NBTInt(position.getZ()));
-//		// Piston head / source
-//		NBTCompound blockState = nbt.getTagOfType("blockState", NBTType.COMPOUND);
-//		if (blockState != null) {
-//			NBTString name = blockState.getTagOfType("Name", NBTType.STRING);
-//			if (name != null && name.getValue().equals("minecraft:piston_head")) {
-//				nbt.setTag("id", new NBTString("PistonArm"));
-//				nbt.setTag("Progress", nbt.getTag("progress"));
-//				byte sticky = 0;
-//				NBTCompound properties = blockState.getTagOfType("Properties", NBTType.COMPOUND);
-//				if (properties != null) {
-//					NBTString type = properties.getTagOfType("type", NBTType.STRING);
-//					if (type != null && type.getValue().equals("sticky")) sticky = 1;;
-//				}
-//				nbt.setTag("Sticky", new NBTByte(sticky));
-//			} else if (nbt.getNumberTag("source").getAsByte() != 1) {
-//				//nbt.setTag("id", new NBTString("MovingBlock"));
-//			}
-//		}
-//		System.out.println("PISTON NBT: " + nbt);
-//		return new TileEntity(nbt);
-//	}, ProtocolVersionsHelper.ALL_PE);
 
 	protected static class TileEntityToLegacyTypeNameRemapper implements Consumer<TileEntity> {
 		protected final String name;
@@ -257,15 +221,12 @@ public class TileEntityRemapper {
 		register(TileEntityType.SIGN, new TileEntityToLegacyTypeNameRemapper("Sign"), ProtocolVersionsHelper.BEFORE_1_11_AND_PE);
 
 		//TODO implement these from legacy/block types.
-//		register(TileEntityType.ENDER_CHEST, new TileEntityToLegacyTypeNameRemapper("EnderChest"), ProtocolVersionsHelper.ALL_PE);
-//		register(TileEntityType.FURNACE, new TileEntityToLegacyTypeNameRemapper("Furnace"), ProtocolVersionsHelper.ALL_PE);
 //		register(TileEntityType.MOB_SPAWNER, new TileEntityToLegacyTypeNameRemapper("MobSpawner"), ProtocolVersionsHelper.ALL_PE);
 //		register(TileEntityType.ENCHANTING_TABLE, new TileEntityToLegacyTypeNameRemapper("EnchantTable"), ProtocolVersionsHelper.ALL_PE);
 //		register(TileEntityType.BREWING_STAND, new TileEntityToLegacyTypeNameRemapper("BrewingStand"), ProtocolVersionsHelper.ALL_PE);
 //		register(TileEntityType.DAYLIGHT_DETECTOR, new TileEntityToLegacyTypeNameRemapper("DaylightDetector"), ProtocolVersionsHelper.ALL_PE);
 //		register(TileEntityType.NOTE_BLOCK, new TileEntityToLegacyTypeNameRemapper("Music"), ProtocolVersionsHelper.ALL_PE);
 //		register(TileEntityType.SHULKER_BOX, new TileEntityToLegacyTypeNameRemapper("ShulkerBox"), ProtocolVersionsHelper.ALL_PE);
-//		register(TileEntityType.BED, new TileEntityToLegacyTypeNameRemapper("Bed"), ProtocolVersionsHelper.ALL_PE);
 //		register(TileEntityType.BANNER, new TileEntityToLegacyTypeNameRemapper("Banner"), ProtocolVersionsHelper.ALL_PE);
 
 		register(
@@ -346,7 +307,53 @@ public class TileEntityRemapper {
 				register(list, Material.RED_BED, 14);
 				register(list, Material.BLACK_BED, 15);
 			}
-			
+		}, ProtocolVersionsHelper.ALL_PE);
+
+		register(TileEntityType.SHULKER_BOX, new TileEntityToLegacyTypeNameRemapper("ShulkerBox"), ProtocolVersionsHelper.ALL_PE);
+		register(TileEntityType.SHULKER_BOX, new TileEntityWithBlockDataNBTRemapper() {
+			protected void register(List<Entry<Consumer<NBTCompound>>> list, Material shulker, boolean undyed) {
+				for (BlockData blockdata : MaterialAPI.getBlockDataList(shulker)) {
+					byte facing = 1;
+					if (blockdata instanceof Directional) {
+						Directional directional = (Directional) blockdata;
+						switch (directional.getFacing()) {
+							case DOWN: facing = 0; break;
+							case EAST: facing = 5; break;
+							case NORTH: facing = 2; break;
+							case SOUTH: facing = 3; break;
+							case UP: facing = 1; break;
+							case WEST: facing = 4; break;
+							default: break;
+						}
+					}
+					byte facingF = facing;
+					list.add(new ArrayMap.Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> {
+						nbt.setTag("facing", new NBTByte(facingF));
+						nbt.setTag("isUndyed", new NBTByte(undyed ? (byte) 1 : (byte) 0));
+					}));
+				}
+			}
+			@Override
+			protected void init(List<Entry<Consumer<NBTCompound>>> list) {
+				register(list, Material.SHULKER_BOX, true);
+				register(list, Material.WHITE_SHULKER_BOX, false);
+				register(list, Material.ORANGE_SHULKER_BOX, false);
+				register(list, Material.MAGENTA_SHULKER_BOX, false);
+				register(list, Material.LIGHT_BLUE_SHULKER_BOX, false);
+				register(list, Material.YELLOW_SHULKER_BOX, false);
+				register(list, Material.LIME_SHULKER_BOX, false);
+				register(list, Material.PINK_SHULKER_BOX, false);
+				register(list, Material.GRAY_SHULKER_BOX, false);
+				register(list, Material.LIGHT_GRAY_SHULKER_BOX, false);
+				register(list, Material.CYAN_SHULKER_BOX, false);
+				register(list, Material.PURPLE_SHULKER_BOX, false);
+				register(list, Material.BLUE_SHULKER_BOX, false);
+				register(list, Material.BROWN_SHULKER_BOX, false);
+				register(list, Material.GREEN_SHULKER_BOX, false);
+				register(list, Material.RED_SHULKER_BOX, false);
+				register(list, Material.BLACK_SHULKER_BOX, false);
+				
+			}
 		}, ProtocolVersionsHelper.ALL_PE);
 
 		register(
@@ -505,19 +512,14 @@ public class TileEntityRemapper {
 			});
 		});
 
-		MaterialAPI.getBlockDataList(Material.PISTON_HEAD).stream()
-		.forEach(data -> {
-			registerLegacyState(data, new PEPistonSupplier(data), ProtocolVersionsHelper.ALL_PE);
-		});
-		Arrays.asList(Material.STICKY_PISTON, Material.PISTON).forEach(chestMaterial -> {
-			MaterialAPI.getBlockDataList(chestMaterial)
+		Arrays.asList(Material.STICKY_PISTON, Material.PISTON).forEach(material -> {
+			MaterialAPI.getBlockDataList(material)
 			.forEach(data -> {
 				Piston piston = (Piston) data;
-				if (!piston.isExtended()) {
-					registerLegacyState(data, new PEPistonSupplier(data), ProtocolVersionsHelper.ALL_PE);
-				}
+				registerLegacyState(data, new PEPistonSupplier(piston.isExtended(), material == Material.STICKY_PISTON), ProtocolVersionsHelper.ALL_PE);
 			});
 		});
+
 	}
 
 	// Util functions

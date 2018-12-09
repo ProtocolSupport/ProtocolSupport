@@ -55,6 +55,10 @@ public class InventoryOpen extends MiddleInventoryOpen {
 			villager.setTitle(title);
 			packets.add(villager.spawnVillager(cache, version));
 		} else {
+			//Fake shulker with chest, because shulker is way too buggy.
+			if (type == WindowType.SHULKER) {
+				type = WindowType.CHEST;
+			}
 			//Normal inventory, requires fake blocks to open. First check if plugins (Hmmpf) have closed inventory.
 			if (invCache.getPreviousWindowId() != 0 && invCache.getPreviousWindowId() != windowId) {
 				packets.add(InventoryClose.create(version, invCache.getPreviousWindowId()));

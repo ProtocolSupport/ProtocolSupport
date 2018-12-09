@@ -141,7 +141,6 @@ public class LegacyBlockData {
 		public void applyDefaultRemaps() {
 			clear();
 
-			this.registerRemapEntryForAllStates(Material.SHULKER_BOX, Material.PURPLE_SHULKER_BOX.createBlockData(), ProtocolVersion.MINECRAFT_PE);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(
 					Material.WHITE_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.MAGENTA_SHULKER_BOX,
@@ -149,13 +148,9 @@ public class LegacyBlockData {
 					Material.PINK_SHULKER_BOX, Material.GRAY_SHULKER_BOX, Material.LIGHT_GRAY_SHULKER_BOX,
 					Material.CYAN_SHULKER_BOX, Material.CYAN_SHULKER_BOX, Material.PURPLE_SHULKER_BOX,
 					Material.BLUE_SHULKER_BOX, Material.BROWN_SHULKER_BOX, Material.GREEN_SHULKER_BOX,
-					Material.RED_SHULKER_BOX, Material.BLACK_SHULKER_BOX
+					Material.RED_SHULKER_BOX, Material.BLACK_SHULKER_BOX, Material.SHULKER_BOX
 				),
-				o -> {
-					Directional shulker = (Directional) o;
-					shulker.setFacing(BlockFace.UP);
-					return shulker;
-				},
+				o -> o.getMaterial().createBlockData(),
 				ProtocolVersion.MINECRAFT_PE
 			);
 			this.registerRemapEntryForAllStates(Material.KELP_PLANT, Material.KELP.createBlockData((blockdata)-> {
@@ -178,11 +173,12 @@ public class LegacyBlockData {
 				},
 				ProtocolVersion.MINECRAFT_PE
 			);
-			this.registerRemapEntryForAllStates(Material.PISTON_HEAD, o -> {
-				PistonHead pistonHead = (PistonHead) o;
-				pistonHead.setShort(false);
-				return pistonHead;
-			}, ProtocolVersion.MINECRAFT_PE);
+			// Remove everything except direction from piston stuff. The rest is handled in tilenbt.
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(Material.PISTON, Material.STICKY_PISTON, Material.PISTON_HEAD), 
+				o -> cloneDirectional((Directional) o, (Directional) o.getMaterial().createBlockData()), 
+				ProtocolVersionsHelper.ALL_PE);
+			
 			this.registerRemapEntryForAllStates(
 				//Clear waterlog from remaining non rotatable corals.
 				Arrays.asList(
