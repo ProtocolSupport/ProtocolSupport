@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import com.google.gson.JsonElement;
@@ -27,7 +26,6 @@ import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -55,9 +53,10 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		switch (action) {
 			case ADD: {
 				PESkinsProvider skinprovider = PESkinsProviderSPI.getProvider();
+				boolean containsOurPlayer = infos.containsKey(connection.getPlayer().getUniqueId());
 				ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_INFO);
 				serializer.writeByte(0);
-				VarNumberSerializer.writeVarInt(serializer, infos.size() - 1);
+				VarNumberSerializer.writeVarInt(serializer, infos.size() - (containsOurPlayer ? 1 : 0));
 				for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
 					UUID uuid = entry.getKey();
 					if (uuid.equals(connection.getPlayer().getUniqueId())) {
