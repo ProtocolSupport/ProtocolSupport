@@ -178,11 +178,12 @@ public class LegacyBlockData {
 				},
 				ProtocolVersion.MINECRAFT_PE
 			);
-			this.registerRemapEntryForAllStates(Material.PISTON_HEAD, o -> {
-				PistonHead pistonHead = (PistonHead) o;
-				pistonHead.setShort(false);
-				return pistonHead;
-			}, ProtocolVersion.MINECRAFT_PE);
+			// Remove everything except direction from piston stuff. The rest is handled in tilenbt.
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(Material.PISTON, Material.STICKY_PISTON, Material.PISTON_HEAD), 
+				o -> cloneDirectional((Directional) o, (Directional) o.getMaterial().createBlockData()), 
+				ProtocolVersionsHelper.ALL_PE);
+			
 			this.registerRemapEntryForAllStates(
 				//Clear waterlog from remaining non rotatable corals.
 				Arrays.asList(
