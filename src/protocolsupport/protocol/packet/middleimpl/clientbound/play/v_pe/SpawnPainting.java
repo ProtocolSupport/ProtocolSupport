@@ -46,7 +46,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 		VarNumberSerializer.writeSVarInt(serializer, mcpeZ);
 		VarNumberSerializer.writeSVarInt(serializer, direction);
 		//TODO: Fix Type
-		StringSerializer.writeString(serializer, connection.getVersion(), ""+type);
+		StringSerializer.writeString(serializer, connection.getVersion(), "" + type);
 		return RecyclableSingletonList.create(serializer);
 	}
 }

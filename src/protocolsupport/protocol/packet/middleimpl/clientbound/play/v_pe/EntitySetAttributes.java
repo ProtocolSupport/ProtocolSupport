@@ -37,27 +37,33 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 		protected final float minValue;
 		protected final float defaultValue;
 		protected final float maxValue;
+
 		AttributeInfo(String name, float minValue, float defaultValue, float maxValue) {
 			this.name = name;
 			this.minValue = minValue;
 			this.defaultValue = defaultValue;
 			this.maxValue = maxValue;
 		}
+
 		public String getName() {
 			return name;
 		}
+
 		public float getMinValue() {
 			return minValue;
 		}
+
 		public float getDefaultValue() {
 			return defaultValue;
 		}
+
 		public float getMaxValue() {
 			return maxValue;
 		}
 	}
 
 	protected static final HashMap<String, AttributeInfo> remapAttrs = new HashMap<>();
+
 	static {
 		remapAttrs.put("generic.movementSpeed", AttributeInfo.MOVE_SPEED);
 		remapAttrs.put("generic.attackDamage", AttributeInfo.ATTACK_DAMAGE);
@@ -74,9 +80,9 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 			return RecyclableSingletonList.create(create(
 				connection.getVersion(), entity,
 				attributes.values().stream()
-				.map(attr -> new ObjectFloatTuple<>(remapAttrs.get(attr.key), calcAttrValue(attr.value, attr.modifiers)))
-				.filter(tuple -> tuple.getObject() != null)
-				.toArray(ObjectFloatTuple[]::new)
+					.map(attr -> new ObjectFloatTuple<>(remapAttrs.get(attr.key), calcAttrValue(attr.value, attr.modifiers)))
+					.filter(tuple -> tuple.getObject() != null)
+					.toArray(ObjectFloatTuple[]::new)
 			));
 		}
 		return RecyclableEmptyList.get();

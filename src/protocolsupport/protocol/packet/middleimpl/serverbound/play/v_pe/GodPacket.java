@@ -51,7 +51,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		String locale = cache.getAttributesCache().getLocale();
 		actionId = VarNumberSerializer.readVarInt(clientdata);
 		transactions = new InvTransaction[VarNumberSerializer.readVarInt(clientdata)];
-		for(int i = 0; i < transactions.length; i++) {
+		for (int i = 0; i < transactions.length; i++) {
 			transactions[i] = InvTransaction.readFromStream(clientdata, locale, connection.getVersion());
 		}
 		switch (actionId) {
@@ -101,12 +101,12 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				if (remapper.isCreativeTransaction(cache)) {
 					remapper.processCreativeTransaction(cache, transaction, packets);
 				} else {
-					if ((winCache.getOpenedWindow() != WindowType.ENCHANT) || 
-							invCache.getFakeEnchanting().handleInventoryClick(cache, transaction, packets)) {
+					if ((winCache.getOpenedWindow() != WindowType.ENCHANT) ||
+						invCache.getFakeEnchanting().handleInventoryClick(cache, transaction, packets)) {
 						if (winCache.getOpenedWindow() == WindowType.ANVIL) {
 							processAnvilName(transaction, packets);
 						}
-						remapper.cacheTransaction(transaction);	
+						remapper.cacheTransaction(transaction);
 					}
 				}
 			}
@@ -121,7 +121,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	}
 
 	public static class InvTransaction {
-		
+
 		//Special slot ids from remapping.
 		public static final int CURSOR = -1;
 		public static final int TABLE = -333;
@@ -162,12 +162,12 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			transaction.oldItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			transaction.newItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			PETransactionRemapper.bug("Inv transaction read:"
-					+ " sId: " + transaction.sourceId 
-					+ " wId: " + transaction.inventoryId 
-					+ " action: " + transaction.action 
-					+ " slot: " + transaction.slot 
-					+ " oldItem: " + transaction.oldItem.toString() + ((!transaction.oldItem.isNull() && transaction.oldItem.getNBT() != null) ? transaction.oldItem.getNBT() : "")
-					+ " newItem: " + transaction.newItem.toString() + ((!transaction.newItem.isNull() && transaction.newItem.getNBT() != null) ? transaction.newItem.getNBT() : ""));
+				+ " sId: " + transaction.sourceId
+				+ " wId: " + transaction.inventoryId
+				+ " action: " + transaction.action
+				+ " slot: " + transaction.slot
+				+ " oldItem: " + transaction.oldItem.toString() + ((!transaction.oldItem.isNull() && transaction.oldItem.getNBT() != null) ? transaction.oldItem.getNBT() : "")
+				+ " newItem: " + transaction.newItem.toString() + ((!transaction.newItem.isNull() && transaction.newItem.getNBT() != null) ? transaction.newItem.getNBT() : ""));
 			return transaction;
 		}
 
@@ -213,7 +213,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		}
 
 	}
-	
+
 	protected static void processAnvilName(InvTransaction transaction, RecyclableArrayList<ServerBoundPacketData> packets) {
 		//Anvil naming is only done and known based on the clicked item.
 		if (transaction.getSlot() == 2 && !transaction.getOldItem().isNull()) {

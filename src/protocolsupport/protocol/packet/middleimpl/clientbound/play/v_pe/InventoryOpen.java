@@ -28,7 +28,7 @@ import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class InventoryOpen extends MiddleInventoryOpen {
-	
+
 	public InventoryOpen(ConnectionImpl connection) {
 		super(connection);
 	}
@@ -62,17 +62,17 @@ public class InventoryOpen extends MiddleInventoryOpen {
 			Position open = PEFakeContainer.prepareContainer(title, connection, cache, packets);
 			//The fake blocks take some time, we schedule the opening be requesting a delay from the server.
 			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InventoryOpenRequest(
-					windowId, type, open, -1, 2
+				windowId, type, open, -1, 2
 			));
 		}
 		invCache.setPreviousWindowId(windowId);
 		return packets;
 	}
-	
+
 	public static ClientBoundPacketData create(ProtocolVersion version, int windowId, WindowType type, Position pePosition, int horseId) {
 		return (ClientBoundPacketData) serialize(ClientBoundPacketData.create(PEPacketIDs.CONTAINER_OPEN), version, windowId, type, pePosition, horseId);
 	}
-	
+
 	public static ClientBoundPacketData openEquipment(ProtocolVersion version, int windowId, WindowType type, long entityId, NBTCompound nbt) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.EQUIPMENT);
 		serializer.writeByte(windowId);
@@ -82,14 +82,14 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		ItemStackSerializer.writeTag(serializer, true, version, nbt);
 		return serializer;
 	}
-	
+
 	public static void sendInventoryOpen(Connection connection, int windowId, WindowType type, Position pePosition, int horseId) {
 		ByteBuf serializer = Unpooled.buffer();
 		PEPacketEncoder.sWritePacketId(serializer, PEPacketIDs.CONTAINER_OPEN);
 		serialize(serializer, connection.getVersion(), windowId, type, pePosition, horseId);
 		connection.sendRawPacket(MiscSerializer.readAllBytes(serializer));
 	}
-	
+
 	private static ByteBuf serialize(ByteBuf serializer, ProtocolVersion version, int windowId, WindowType type, Position pePosition, int horseId) {
 		serializer.writeByte(windowId);
 		serializer.writeByte(PEDataValues.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()));

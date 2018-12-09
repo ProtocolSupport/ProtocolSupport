@@ -44,7 +44,7 @@ public class BookEdit extends ServerBoundMiddlePacket {
 		ProtocolVersion version = connection.getVersion();
 		type = clientdata.readByte();
 		slot = clientdata.readByte();
-		switch(type) {
+		switch (type) {
 			case TYPE_REPLACE: {
 				pagenum = clientdata.readByte();
 				text = StringSerializer.readString(clientdata, version);
@@ -89,7 +89,7 @@ public class BookEdit extends ServerBoundMiddlePacket {
 			int maxpage = ((pagenum + 1) > pages.size()) ? (pagenum + 1) : (pages.size());
 			//We can't set the text at an index, so we have to reiterate and construct a new pages list for each action.
 			NBTList<NBTString> newpages = new NBTList<>(NBTType.STRING);
-			switch(type) {
+			switch (type) {
 				case TYPE_REPLACE: {
 					//Cut the crap. No text changed? No packet.
 					if ((pages.isEmpty() && text == "") || (pages.getTag(pagenum).getValue().equals(text))) {
@@ -117,7 +117,8 @@ public class BookEdit extends ServerBoundMiddlePacket {
 							newpages.addTag(new NBTString(text));
 						} else if (i >= pages.size()) {
 							newpages.addTag(new NBTString(""));
-						} if (i < pages.size()) {
+						}
+						if (i < pages.size()) {
 							newpages.addTag(pages.getTag(i));
 						}
 					}
@@ -162,13 +163,13 @@ public class BookEdit extends ServerBoundMiddlePacket {
 		}
 		return RecyclableEmptyList.get();
 	}
-	
+
 	private static ServerBoundPacketData editBook(NetworkItemStack book) {
 		ByteBuf payload = Unpooled.buffer();
 		ItemStackSerializer.writeItemStack(payload, ProtocolVersionsHelper.LATEST_PC, I18NData.DEFAULT_LOCALE, book, false);
 		return MiddleCustomPayload.create("minecraft:BEdit", MiscSerializer.readAllBytes(payload));
 	}
-	
+
 	private static ServerBoundPacketData signBook(NetworkItemStack book) {
 		ByteBuf payload = Unpooled.buffer();
 		ItemStackSerializer.writeItemStack(payload, ProtocolVersionsHelper.LATEST_PC, I18NData.DEFAULT_LOCALE, book, false);

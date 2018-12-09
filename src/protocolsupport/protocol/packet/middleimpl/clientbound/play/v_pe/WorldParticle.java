@@ -28,7 +28,7 @@ public class WorldParticle extends MiddleWorldParticle {
 	public static RecyclableArrayList<ClientBoundPacketData> create(int peParticle, float x, float y, float z, float offX, float offY, float offZ, int data, int count) {
 		RecyclableArrayList<ClientBoundPacketData> particles = RecyclableArrayList.create();
 		Random random = new Random();
-		for(int i = 0; i < count; i++) {
+		for (int i = 0; i < count; i++) {
 			particles.add(PELevelEvent.createPacket(peParticle,
 				(float) (x + (offX * random.nextGaussian())), (float) (y + (offY * random.nextGaussian())), (float) (z + (offZ * random.nextGaussian())),
 				data));

@@ -100,8 +100,8 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 	protected static Any<Boolean, String> getSkinInfo(List<ProfileProperty> properties) {
 		Optional<ProfileProperty> property =
 			properties.stream()
-			.filter(p -> p.getName().equals("textures"))
-			.findAny();
+				.filter(p -> p.getName().equals("textures"))
+				.findAny();
 		if (property.isPresent()) {
 			JsonElement propertyjson = new JsonParser().parse(new InputStreamReader(new ByteArrayInputStream(Base64.getDecoder().decode(property.get().getValue())), StandardCharsets.UTF_8));
 			JsonObject texturesobject = JsonUtils.getJsonObject(JsonUtils.getAsJsonObject(propertyjson, "root element"), "textures");
@@ -128,6 +128,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 			this.isNormalModel = isNormalModel;
 			this.username = username;
 		}
+
 		@Override
 		public void accept(byte[] skindata) {
 			ProtocolVersion version = connection.getVersion();

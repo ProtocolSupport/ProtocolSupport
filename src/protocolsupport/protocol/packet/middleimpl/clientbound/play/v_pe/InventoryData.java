@@ -22,15 +22,15 @@ public class InventoryData extends MiddleInventoryData {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		PEInventoryCache invCache = cache.getPEInventoryCache();
-		switch(cache.getWindowCache().getOpenedWindow()) {
+		switch (cache.getWindowCache().getOpenedWindow()) {
 			case FURNACE: {
-				switch(type) {
+				switch (type) {
 					case 0: { //Fire icon (Update how much fuel has burned)
 						int peValue = Math.round((((float) value * 200) / invCache.getFuelTime()));
 						return RecyclableSingletonList.create(create(windowId, 1, peValue));
 					}
 					case 1: { //Fuel burn time (Set max amount of fuel available)
-						if(value != 0) {
+						if (value != 0) {
 							invCache.setFuelTime(value);
 						}
 						break;
@@ -40,7 +40,7 @@ public class InventoryData extends MiddleInventoryData {
 						return RecyclableSingletonList.create(create(windowId, 0, peValue));
 					}
 					case 3: { //Smelt time (Set how long it takes for the item to smelt)
-						if(value != 0) {
+						if (value != 0) {
 							invCache.setSmeltTime(value);
 						}
 						break;
@@ -61,7 +61,7 @@ public class InventoryData extends MiddleInventoryData {
 				break;
 			}
 			case BEACON: {
-				switch(type) {
+				switch (type) {
 					case 0: {
 						invCache.getFakeBeacon().setLevel(value);
 						return invCache.getFakeBeacon().updateTemple(version, cache);
@@ -81,16 +81,16 @@ public class InventoryData extends MiddleInventoryData {
 				break; //Once PE starts trusting the server we need to send xp cost from here.
 			}
 			case BREWING: {
-				switch(type) {
+				switch (type) {
 					case 0: { //Brew time (0 - 400) (400 is empty)
 						return RecyclableSingletonList.create(create(windowId, 0, Math.round(value / 2f) * 2));
 					}
 					case 1: { //Fuel remaining (0 - 20) (20 is full)
 						RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 						// FuelAmount: Current amount of fuel (0-20)
-						packets.add(create( windowId, 1, value));
+						packets.add(create(windowId, 1, value));
 						// FuelTotal: Maximum amount of fuel (always 20)
-						packets.add(create( windowId, 2, 20));
+						packets.add(create(windowId, 2, 20));
 						return packets;
 					}
 				}
@@ -102,7 +102,7 @@ public class InventoryData extends MiddleInventoryData {
 		}
 		return RecyclableEmptyList.get();
 	}
-	
+
 	public static ClientBoundPacketData create(int windowId, int type, int value) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CONTAINER_DATA);
 		serializer.writeByte(windowId);
@@ -110,5 +110,5 @@ public class InventoryData extends MiddleInventoryData {
 		VarNumberSerializer.writeSVarInt(serializer, value);
 		return serializer;
 	}
-	
+
 }

@@ -48,7 +48,7 @@ public class PEFakeBeacon {
 						block.mod(x, -i, z);
 						invCache.getFakeContainers().addLast(block);
 						BlockChangeSingle.create(version, block, cache,
-								PEBlocks.toPocketBlock(version, Material.EMERALD_BLOCK), packets);
+							PEBlocks.toPocketBlock(version, Material.EMERALD_BLOCK), packets);
 					}
 				}
 			}

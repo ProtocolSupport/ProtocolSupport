@@ -62,7 +62,7 @@ public class Map extends MiddleMap {
 			VarNumberSerializer.writeVarInt(serializer, columns * rows);
 			RemappingTable.ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(connection.getVersion());
 			for (int i = 0; i < colors.length; i++) {
-					VarNumberSerializer.writeVarInt(serializer, colorRemapper.getRemap(colors[i] & 0xFF));
+				VarNumberSerializer.writeVarInt(serializer, colorRemapper.getRemap(colors[i] & 0xFF));
 			}
 		}
 

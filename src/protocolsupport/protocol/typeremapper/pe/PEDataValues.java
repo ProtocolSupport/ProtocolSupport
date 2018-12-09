@@ -42,10 +42,12 @@ public class PEDataValues {
 
 	private static final EnumMap<NetworkEntityType, Integer> entityType = new EnumMap<>(NetworkEntityType.class);
 	private static final Int2ObjectOpenHashMap<NetworkEntityType> livingTypeFromNetwork = new Int2ObjectOpenHashMap<>();
+
 	private static void registerLivingType(NetworkEntityType type, int networkId) {
 		entityType.put(type, networkId);
 		livingTypeFromNetwork.put(networkId, type);
 	}
+
 	static {
 		registerLivingType(NetworkEntityType.WITHER_SKELETON, 48);
 		registerLivingType(NetworkEntityType.WOLF, 14);
@@ -154,10 +156,12 @@ public class PEDataValues {
 
 	private static final Int2IntOpenHashMap pcEnchantToPe = new Int2IntOpenHashMap();
 	private static final Int2IntOpenHashMap peEnchantToPc = new Int2IntOpenHashMap();
+
 	private static void registerEnchantRemap(Enchantment enchantment, int peId) {
 		pcEnchantToPe.put(LegacyEnchantmentId.getId(enchantment), peId);
 		peEnchantToPc.put(peId, LegacyEnchantmentId.getId(enchantment));
 	}
+
 	static {
 		registerEnchantRemap(Enchantment.OXYGEN, 6);
 		registerEnchantRemap(Enchantment.WATER_WORKER, 8);
@@ -186,6 +190,7 @@ public class PEDataValues {
 	public static int pcToPeEnchant(int pcId) {
 		return pcEnchantToPe.get(pcId);
 	}
+
 	public static int peToPcEnchant(int peId) {
 		return peEnchantToPc.get(peId);
 	}
@@ -228,6 +233,7 @@ public class PEDataValues {
 			registerRemapEntry(Particle.END_ROD.ordinal(), PELevelEvent.PARTICLE_END_ROT, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(Particle.FALLING_DUST.ordinal(), PELevelEvent.PARTICLE_FALLING_DUST, ProtocolVersion.MINECRAFT_PE);
 		}
+
 		@Override
 		protected HashMapBasedIdRemappingTable createTable() {
 			return new HashMapBasedIdRemappingTable();
@@ -250,6 +256,7 @@ public class PEDataValues {
 			registerRemapEntry(Biome.FROZEN_OCEAN, 46, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(Biome.DEEP_FROZEN_OCEAN, 47, ProtocolVersion.MINECRAFT_PE);
 		}
+
 		@Override
 		protected ArrayBasedIdRemappingTable createTable() {
 			return new ArrayBasedIdRemappingTable(167); //Largest biome id.
@@ -280,6 +287,7 @@ public class PEDataValues {
 			registerRemapEntry(WindowType.BEACON, 13, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(WindowType.VILLAGER, 15, ProtocolVersion.MINECRAFT_PE);
 		}
+
 		@Override
 		protected ArrayBasedIdRemappingTable createTable() {
 			return new ArrayBasedIdRemappingTable(14);
@@ -293,7 +301,7 @@ public class PEDataValues {
 	private static EnumMap<NetworkEntityType, Int2IntOpenHashMap> entityStatusRemaps = new EnumMap<>(NetworkEntityType.class);
 
 	private static void registerEntityStatusRemap(int pcStatus, int peStatus, NetworkEntityType... entityTypes) {
-		for(NetworkEntityType entityType : entityTypes) {
+		for (NetworkEntityType entityType : entityTypes) {
 			Int2IntOpenHashMap mapping = entityStatusRemaps.computeIfAbsent(entityType, m -> new Int2IntOpenHashMap());
 			mapping.put(pcStatus, peStatus);
 		}
@@ -391,6 +399,7 @@ public class PEDataValues {
 
 	private final static Map<NetworkEntityType, PEEntityData> entityData = new EnumMap<NetworkEntityType, PEEntityData>(NetworkEntityType.class);
 	private final static Map<NetworkEntityType, PEEntityInventoryData> entityInventoryData = new EnumMap<NetworkEntityType, PEEntityInventoryData>(NetworkEntityType.class);
+
 	static {
 		getFileObject("entitydata.json").entrySet().forEach(entry -> {
 			entityData.put(NetworkEntityType.valueOf(entry.getKey()), Utils.GSON.fromJson(entry.getValue(), PEEntityData.class));
@@ -496,7 +505,7 @@ public class PEDataValues {
 		}
 
 		public PEEntityInventoryData init() {
-			if(inventoryFilter != null) {
+			if (inventoryFilter != null) {
 				inventoryFilter.init();
 			}
 			return this;
