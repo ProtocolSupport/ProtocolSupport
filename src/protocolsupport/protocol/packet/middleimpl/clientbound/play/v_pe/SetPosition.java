@@ -23,7 +23,7 @@ public class SetPosition extends MiddleSetPosition {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		ChunkCoord chunk = new ChunkCoord(NumberConversions.floor(x) >> 4,  NumberConversions.floor(z) >> 4);
+		ChunkCoord chunk = new ChunkCoord(NumberConversions.floor(x) >> 4, NumberConversions.floor(z) >> 4);
 		if (!cache.getPEChunkMapCache().isMarkedAsSent(chunk)) {
 			packets.add(Chunk.createEmptyChunk(version, chunk));
 		}
@@ -48,7 +48,7 @@ public class SetPosition extends MiddleSetPosition {
 
 	public static ClientBoundPacketData create(NetworkEntity entity, double x, double y, double z, float pitch, float yaw, int mode) {
 		y = y + 1.6200000047683716D;
-		float headYaw = (float) (yaw  * (360D/256D));
+		float headYaw = (float) (yaw * (360D / 256D));
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_MOVE);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		serializer.writeFloatLE((float) x);

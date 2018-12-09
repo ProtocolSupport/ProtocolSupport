@@ -17,6 +17,7 @@ public class WorldEvent extends MiddleWorldEvent {
 	}
 
 	private static final Int2IntOpenHashMap remaps = new Int2IntOpenHashMap();
+
 	static {
 		remaps.put(1000, PELevelEvent.SOUND_CLICK);
 		remaps.put(1001, PELevelEvent.SOUND_CLICK_FAIL);

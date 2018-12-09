@@ -142,6 +142,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 	}
 
 	protected final PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq;
+
 	public PEPacketEncoder(ConnectionImpl connection, PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq) {
 		super(connection);
 		this.dimswitchq = dimswitchq;

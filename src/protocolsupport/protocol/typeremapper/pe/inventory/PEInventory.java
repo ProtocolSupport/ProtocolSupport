@@ -11,6 +11,7 @@ import protocolsupport.protocol.utils.types.NetworkItemStack;
 public class PEInventory {
 
 	private static List<Material> clickUpdateMaterials = new ArrayList<Material>(9);
+
 	static {
 		clickUpdateMaterials.add(Material.OAK_BOAT);
 		clickUpdateMaterials.add(Material.ACACIA_BOAT);
@@ -19,6 +20,7 @@ public class PEInventory {
 		clickUpdateMaterials.add(Material.JUNGLE_BOAT);
 		clickUpdateMaterials.add(Material.SPRUCE_BOAT);
 	}
+
 	public static boolean shouldDoClickUpdate(NetworkItemStack itemstack) {
 		return !itemstack.isNull() && clickUpdateMaterials.contains(MaterialAPI.getItemByNetworkId(itemstack.getTypeId()));
 	}
@@ -26,7 +28,7 @@ public class PEInventory {
 	//Slot thingy numbers.
 	public static class PESource {
 		public static final int POCKET_FAUX_DROP = -999;
-		public static final int POCKET_BEACON = -24;                   
+		public static final int POCKET_BEACON = -24;
 		public static final int POCKET_TRADE_OUTPUT = -23;
 		public static final int POCKET_TRADE_USE_INGREDIENT = -22;
 		public static final int POCKET_TRADE_INPUT_2 = -21;

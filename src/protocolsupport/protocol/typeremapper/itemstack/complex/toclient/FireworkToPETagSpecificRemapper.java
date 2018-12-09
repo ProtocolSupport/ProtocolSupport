@@ -24,7 +24,7 @@ public class FireworkToPETagSpecificRemapper implements ItemStackComplexRemapper
 		}
 		NBTCompound fireworks = tag.getTagOfType("Fireworks", NBTType.COMPOUND);
 		if (fireworks != null) {
-			NBTList<NBTCompound> explosions = tag.getTagListOfType("Explosions", NBTType.COMPOUND); 
+			NBTList<NBTCompound> explosions = tag.getTagListOfType("Explosions", NBTType.COMPOUND);
 			if (explosions != null) {
 				fireworks.setTag("Explosions", remapExplosions(explosions));
 			}
@@ -67,7 +67,7 @@ public class FireworkToPETagSpecificRemapper implements ItemStackComplexRemapper
 
 	private byte[] remapColors(int[] pcColors) {
 		byte[] peColors = new byte[pcColors.length];
-		for(int i = 0; i < pcColors.length; i++) {
+		for (int i = 0; i < pcColors.length; i++) {
 			peColors[i] = remapColor(pcColors[i]);
 		}
 		return peColors;
@@ -75,7 +75,7 @@ public class FireworkToPETagSpecificRemapper implements ItemStackComplexRemapper
 
 	//Fireworks have a custom color system. Since PE only supports the Dye colors, here's a basic switcher for now.
 	private byte remapColor(int pcColor) {
-		switch(pcColor) {
+		switch (pcColor) {
 			case 1973019:				return  0;
 			case 11743532:				return  1;
 			case 3887386:				return  2;
@@ -91,7 +91,8 @@ public class FireworkToPETagSpecificRemapper implements ItemStackComplexRemapper
 			case 6719955:				return 12;
 			case 12801229:				return 13;
 			case 15435844: 				return 14;
-			default: case 15790320: 	return 15;
+			default:
+			case 15790320: 				return 15;
 		}
 	}
 

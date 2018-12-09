@@ -29,10 +29,10 @@ public class Chunk extends MiddleChunk {
 	}
 
 	private final ChunkTransformerBB transformer = new ChunkTransformerPE(
-			LegacyBlockData.REGISTRY.getTable(connection.getVersion()),
-			TileEntityRemapper.getRemapper(connection.getVersion()),
-			connection.getCache().getTileCache(),
-			PEDataValues.BIOME.getTable(connection.getVersion())
+		LegacyBlockData.REGISTRY.getTable(connection.getVersion()),
+		TileEntityRemapper.getRemapper(connection.getVersion()),
+		connection.getCache().getTileCache(),
+		PEDataValues.BIOME.getTable(connection.getVersion())
 	);
 
 	@Override

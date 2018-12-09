@@ -38,7 +38,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 		if (remapped != null) {
 			return RecyclableSingletonList.create(remapped);
 		}
-		
+
 		return RecyclableEmptyList.get();
 	}
 

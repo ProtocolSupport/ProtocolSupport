@@ -4935,6 +4935,10 @@
     "pename":"minecraft:stone_slab",
     "pedata":0
   },
+  "minecraft:stone_slab[type=double,waterlogged=false]":{
+    "pename":"minecraft:double_stone_slab",
+    "pedata":0
+  },
   "minecraft:sandstone_slab[type=top,waterlogged=false]":{
     "pename":"minecraft:stone_slab",
     "pedata":9

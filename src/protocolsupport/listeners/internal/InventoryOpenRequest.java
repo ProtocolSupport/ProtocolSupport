@@ -31,7 +31,7 @@ public class InventoryOpenRequest extends PluginMessageData {
 	protected int delayTicks;
 
 	public InventoryOpenRequest() {
-		this(0, WindowType.PLAYER, new Position(0,0,0), 0, 0);
+		this(0, WindowType.PLAYER, new Position(0, 0, 0), 0, 0);
 	}
 
 	public InventoryOpenRequest(int windowId, WindowType type, Position position, int horseId, int delayTicks) {
