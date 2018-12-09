@@ -72,7 +72,7 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		if (player.getDataCache().isRiding()) {
 			NetworkEntity vehicle = cache.getWatchedEntityCache().getWatchedEntity(player.getDataCache().getVehicleId());
 			if (vehicle.getType() == NetworkEntityType.BOAT) {
-				yaw = ((360f/256f) * cache.getAttributesCache().getPELastVehicleYaw()) + yaw + 90;
+				yaw = ((360f / 256f) * cache.getAttributesCache().getPELastVehicleYaw()) + yaw + 90;
 			}
 		}
 		packets.add(MiddleMoveLook.create(x, y + yOffset, z, yaw, pitch, onGround));

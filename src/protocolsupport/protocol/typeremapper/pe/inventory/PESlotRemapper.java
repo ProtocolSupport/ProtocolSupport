@@ -19,7 +19,7 @@ public class PESlotRemapper {
 		String locale = cache.getAttributesCache().getLocale();
 		PEInventoryCache invCache = cache.getPEInventoryCache();
 		WindowCache winCache = cache.getWindowCache();
-		switch(cache.getWindowCache().getOpenedWindow()) {
+		switch (cache.getWindowCache().getOpenedWindow()) {
 			case PLAYER: {
 				if (slot == 0) {
 					return InventorySetSlot.create(version, locale, PESource.POCKET_CRAFTING_RESULT, 0, item);
@@ -34,7 +34,9 @@ public class PESlotRemapper {
 				} else if (slot <= 35) {
 					return InventorySetSlot.create(version, locale, PESource.POCKET_INVENTORY, slot, item);
 				} else if (slot <= 44) {
-					if(slot - 36 == invCache.getSelectedSlot()) { invCache.setItemInHand(item); }
+					if (slot - 36 == invCache.getSelectedSlot()) {
+						invCache.setItemInHand(item);
+					}
 					return InventorySetSlot.create(version, locale, PESource.POCKET_INVENTORY, slot - 36, item);
 				} else if (slot == 45) {
 					return InventorySetSlot.create(version, locale, PESource.POCKET_OFFHAND, 0, item);
@@ -52,7 +54,7 @@ public class PESlotRemapper {
 				return InventorySetSlot.create(version, locale, winCache.getOpenedWindowId(), slot, item);
 			}
 			case ANVIL: {
-				switch(slot) {
+				switch (slot) {
 					case 0: {
 						return InventorySetSlot.create(version, locale, PESource.POCKET_ANVIL_INPUT, 0, item);
 					}
@@ -101,7 +103,7 @@ public class PESlotRemapper {
 				}
 			}
 			case VILLAGER: {
-				switch(slot) {
+				switch (slot) {
 					case 0: {
 						return InventorySetSlot.create(version, locale, PESource.POCKET_TRADE_INPUT_1, 0, item);
 					}
@@ -119,7 +121,9 @@ public class PESlotRemapper {
 			default: {
 				int wSlots = cache.getWindowCache().getOpenedWindowSlots();
 				//Makes malformated inventory slot amounts to work. (Essentials's /invsee for example)
-				if(wSlots > 16) { wSlots = wSlots / 9 * 9; }
+				if (wSlots > 16) {
+					wSlots = wSlots / 9 * 9;
+				}
 				if (slot > wSlots) {
 					slot -= wSlots;
 					if (slot >= 27) {
@@ -139,9 +143,11 @@ public class PESlotRemapper {
 		String locale = cache.getAttributesCache().getLocale();
 		PEInventoryCache invCache = cache.getPEInventoryCache();
 		WindowCache winCache = cache.getWindowCache();
-		switch(winCache.getOpenedWindow()) {
+		switch (winCache.getOpenedWindow()) {
 			case PLAYER: {
-				if (items.length < 46) { break; }
+				if (items.length < 46) {
+					break;
+				}
 				NetworkItemStack[] peInvGridResult = new NetworkItemStack[1];
 				NetworkItemStack[] peInvGrid = new NetworkItemStack[5];
 				NetworkItemStack[] peArmor = new NetworkItemStack[4];
@@ -247,7 +253,7 @@ public class PESlotRemapper {
 			default: {
 				int wSlots = cache.getWindowCache().getOpenedWindowSlots();
 				int peWSlots = wSlots;
-				if(wSlots > 16) { 
+				if (wSlots > 16) {
 					//PE only has doublechest or single chest interface for high slots.
 					wSlots = wSlots / 9 * 9;
 					peWSlots = wSlots > 27 ? 54 : 27;
@@ -267,9 +273,9 @@ public class PESlotRemapper {
 
 	public static void remapServerboundSlot(NetworkDataCache cache, InvTransaction transaction) {
 		WindowCache winCache = cache.getWindowCache();
-		switch(winCache.getOpenedWindow()) {
+		switch (winCache.getOpenedWindow()) {
 			case PLAYER: {
-				switch(transaction.getInventoryId()) {
+				switch (transaction.getInventoryId()) {
 					case PESource.POCKET_CRAFTING_RESULT: {
 						transaction.setSlot(0);
 						break;
@@ -287,7 +293,7 @@ public class PESlotRemapper {
 						transaction.setSlot(45);
 						break;
 					}
-					case PESource.POCKET_CRAFTING_GRID_USE_INGREDIENT:  {
+					case PESource.POCKET_CRAFTING_GRID_USE_INGREDIENT: {
 						transaction.setSlot(-333);
 						break;
 					}
@@ -318,7 +324,7 @@ public class PESlotRemapper {
 				break;
 			}
 			case ANVIL: {
-				switch(transaction.getInventoryId()) {
+				switch (transaction.getInventoryId()) {
 					case PESource.POCKET_ANVIL_INPUT: {
 						transaction.setSlot(0);
 						break;
@@ -351,7 +357,7 @@ public class PESlotRemapper {
 				}
 			}
 			case CRAFTING_TABLE: {
-				switch(transaction.getInventoryId()) {
+				switch (transaction.getInventoryId()) {
 					case PESource.POCKET_CRAFTING_RESULT: {
 						transaction.setSlot(0);
 						break;
@@ -361,7 +367,7 @@ public class PESlotRemapper {
 						transaction.setSlot(transaction.getSlot() + 1);
 						break;
 					}
-					case PESource.POCKET_CRAFTING_GRID_USE_INGREDIENT:  {
+					case PESource.POCKET_CRAFTING_GRID_USE_INGREDIENT: {
 						transaction.setSlot(InvTransaction.TABLE);
 						break;
 					}
@@ -379,7 +385,7 @@ public class PESlotRemapper {
 				break;
 			}
 			case VILLAGER: {
-				switch(transaction.getInventoryId()) {
+				switch (transaction.getInventoryId()) {
 					case PESource.POCKET_TRADE_INPUT_1: {
 						transaction.setSlot(0);
 						break;
@@ -409,7 +415,7 @@ public class PESlotRemapper {
 				if (transaction.getInventoryId() == winCache.getOpenedWindowId()) {
 					NetworkEntity horse = cache.getWatchedEntityCache().getWatchedEntity(winCache.getHorseId());
 					if (horse != null) {
-						switch(horse.getType()) {
+						switch (horse.getType()) {
 							case DONKEY:
 							case MULE: {
 								if (transaction.getSlot() == 0) {
@@ -434,14 +440,16 @@ public class PESlotRemapper {
 			}
 			default: {
 				int wSlots = winCache.getOpenedWindowSlots();
-				if (wSlots > 16) { wSlots = wSlots / 9 * 9; }
+				if (wSlots > 16) {
+					wSlots = wSlots / 9 * 9;
+				}
 				transaction.setSlot(invSlotToContainerSlot(transaction.getInventoryId(), wSlots, transaction.getSlot()));
 			}
 		}
 	}
 
 	private static int invSlotToContainerSlot(int peInventoryId, int start, int peSlot) {
-		switch(peInventoryId) {
+		switch (peInventoryId) {
 			case PESource.POCKET_CLICKED_SLOT: {
 				return -1;
 			}

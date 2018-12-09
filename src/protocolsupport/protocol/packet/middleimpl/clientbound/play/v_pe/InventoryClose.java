@@ -22,7 +22,7 @@ public class InventoryClose extends MiddleInventoryClose {
 		PEFakeContainer.destroyContainers(connection, cache);
 		return RecyclableSingletonList.create(create(connection.getVersion(), windowId));
 	}
-	
+
 	public static ClientBoundPacketData create(ProtocolVersion version, int windowId) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CONTAINER_CLOSE);
 		serializer.writeByte(windowId);

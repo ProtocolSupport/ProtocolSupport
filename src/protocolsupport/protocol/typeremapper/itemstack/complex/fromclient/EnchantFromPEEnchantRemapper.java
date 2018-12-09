@@ -13,7 +13,7 @@ public class EnchantFromPEEnchantRemapper implements ItemStackComplexRemapper {
 
 	@Override
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		if((itemstack.getNBT() != null)) {
+		if ((itemstack.getNBT() != null)) {
 			NBTCompound tag = itemstack.getNBT();
 			NBTList<NBTCompound> ench = tag.getTagListOfType("ench", NBTType.COMPOUND);
 			if (ench != null) {

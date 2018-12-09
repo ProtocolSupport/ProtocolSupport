@@ -51,7 +51,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 			//see if all ingredients are variants of the same type
 			for (NetworkItemStack ing : possibleStacks) {
 				NetworkItemStack thisType = ItemStackSerializer.remapItemToClient(connection.getVersion(), locale, ing.cloneItemStack());
-				if(thisType.getTypeId() != firstType.getTypeId() || thisType.getAmount() != 1) {
+				if (thisType.getTypeId() != firstType.getTypeId() || thisType.getAmount() != 1) {
 					allSameType = false;
 					break;
 				}
@@ -87,12 +87,12 @@ public class CraftingData extends MiddleDeclareRecipes {
 					expandRecipe(shapeless.getIngredients(), ingredients -> {
 						addRecipeShapeless(buffer, shapeless.getResult(), ingredients);
 					});
-				} else if(recipe instanceof ShapedRecipe) {
+				} else if (recipe instanceof ShapedRecipe) {
 					ShapedRecipe shaped = (ShapedRecipe) recipe;
 					expandRecipe(shaped.getIngredients(), ingredients -> {
 						addRecipeShaped(buffer, shaped.getResult(), shaped.getWidth(), shaped.getHeight(), ingredients);
 					});
-				} else if(recipe instanceof SmeltingRecipe) {
+				} else if (recipe instanceof SmeltingRecipe) {
 					SmeltingRecipe smelting = (SmeltingRecipe) recipe;
 					expandRecipe(new Ingredient[]{smelting.getIngredient()}, ingredients -> {
 						addRecipeFurnace(buffer, smelting.getResult(), ingredients.get(0));
