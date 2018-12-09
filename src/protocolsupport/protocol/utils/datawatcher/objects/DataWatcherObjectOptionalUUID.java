@@ -20,7 +20,7 @@ public class DataWatcherObjectOptionalUUID extends ReadableDataWatcherObject<UUI
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
 		to.writeBoolean(value != null);
 		if (value != null) {
-			MiscSerializer.writeUUID(to, value);
+			MiscSerializer.writeUUID(to, version, value);
 		}
 	}
 

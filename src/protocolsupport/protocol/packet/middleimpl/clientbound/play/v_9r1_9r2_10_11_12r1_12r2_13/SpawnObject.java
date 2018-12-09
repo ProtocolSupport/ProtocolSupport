@@ -22,7 +22,7 @@ public class SpawnObject extends MiddleSpawnObject {
 		objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
-		MiscSerializer.writeUUID(serializer, entity.getUUID());
+		MiscSerializer.writeUUID(serializer, connection.getVersion(), entity.getUUID());
 		serializer.writeByte(type.getNetworkTypeId());
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);
