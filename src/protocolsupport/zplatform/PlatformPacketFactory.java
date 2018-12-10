@@ -69,6 +69,7 @@ public interface PlatformPacketFactory {
 
 	public Object createBlockUpdatePacket(Position pos, int block);
 
+
 	public int getOutLoginDisconnectPacketId();
 
 	public int getOutLoginEncryptionBeginPacketId();

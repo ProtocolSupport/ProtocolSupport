@@ -21,7 +21,8 @@ import protocolsupport.protocol.utils.types.MerchantData;
 
 public class PEFakeVillager {
 
-	private final NetworkEntity villager = new NetworkEntity(UUID.randomUUID(), Integer.MAX_VALUE - 10, NetworkEntityType.VILLAGER);
+	private static final int FAKE_VILLAGER_ID = Integer.MAX_VALUE - 10;
+	private final NetworkEntity villager = new NetworkEntity(UUID.randomUUID(), FAKE_VILLAGER_ID, NetworkEntityType.VILLAGER);
 	private BaseComponent title;
 	private boolean spawned = false;
 
