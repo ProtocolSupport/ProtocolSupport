@@ -53,7 +53,6 @@ public class LegacyBlockData {
 			applyDefaultRemaps();
 		}
 
-		
 		protected Gate toPre13GateState(Gate from, Gate to) {
 			to.setInWall(false);
 			to.setFacing(from.getFacing());

@@ -44,7 +44,7 @@ public class MiscSerializer {
 	}
 
 	private static boolean isUsingLittleEndian(ProtocolVersion version) {
-		return version.getProtocolType() == ProtocolType.PE;
+		return version.getProtocolType() != ProtocolType.PC;
 	}
 
 	public static byte[] readAllBytes(ByteBuf buf) {

@@ -11,7 +11,6 @@ public class ItemStackRemapper {
 		setComplexlyRemapped(itemstack, false);
 		itemstack = ItemStackComplexRemapperRegistry.remapToClient(version, locale, itemstack);
 		itemstack.setTypeId(LegacyItemType.REGISTRY.getTable(version).getRemap(itemstack.getTypeId()));
-
 		if (version == ProtocolVersion.MINECRAFT_PE) {
 			int peCombinedId = PEItems.getPECombinedIdByModernId(itemstack.getTypeId());
 			itemstack.setTypeId(PEItems.getIdFromPECombinedId(peCombinedId));
