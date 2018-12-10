@@ -59,7 +59,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 				for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
 					UUID uuid = entry.getKey();
 					PlayerListEntry currentEntry = entry.getValue().getObj2();
-					MiscSerializer.writeUUID(serializer, version, uuid);
+					MiscSerializer.writePEUUID(serializer, uuid);
 					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
 					StringSerializer.writeString(serializer, version, currentEntry.getCurrentName(attrscache.getLocale()));
 					Any<Boolean, String> skininfo = getSkinInfo(currentEntry.getProperties(true));
@@ -82,7 +82,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 				serializer.writeByte(1);
 				VarNumberSerializer.writeVarInt(serializer, infos.size());
 				for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
-					MiscSerializer.writeUUID(serializer, version, entry.getKey());
+					MiscSerializer.writePEUUID(serializer, entry.getKey());
 				}
 				return RecyclableSingletonList.create(serializer);
 			}
@@ -126,7 +126,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		@Override
 		public void accept(byte[] skindata) {
 			ByteBuf serializer = Unpooled.buffer();
-			MiscSerializer.writeUUID(serializer, connection.getVersion(), uuid);
+			MiscSerializer.writePEUUID(serializer, uuid);
 			writeSkinData(connection.getVersion(), serializer, true, isNormalModel, skindata);
 			connection.sendPacket(ServerPlatform.get().getPacketFactory().createOutboundPluginMessagePacket(InternalPluginMessageRequest.PESkinUpdateSuffix, serializer));
 		}
