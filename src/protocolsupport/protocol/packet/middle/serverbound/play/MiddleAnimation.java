@@ -19,9 +19,13 @@ public abstract class MiddleAnimation extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		return RecyclableSingletonList.create(create(hand));
+	}
+
+	public static ServerBoundPacketData create(UsedHand hand) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_ANIMATION);
 		MiscSerializer.writeVarIntEnum(creator, hand);
-		return RecyclableSingletonList.create(creator);
+		return creator;
 	}
 
 }

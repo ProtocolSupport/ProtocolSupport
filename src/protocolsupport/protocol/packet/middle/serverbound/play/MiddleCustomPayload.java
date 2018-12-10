@@ -10,7 +10,6 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-
 public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 
 	public MiddleCustomPayload(ConnectionImpl connection) {
@@ -23,6 +22,12 @@ public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		return RecyclableSingletonList.create(create(tag, data));
+	}
+
+	public static ServerBoundPacketData create(String tag) {
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CUSTOM_PAYLOAD);
+		StringSerializer.writeString(serializer, ProtocolVersionsHelper.LATEST_PC, tag);
+		return serializer;
 	}
 
 	public static ServerBoundPacketData create(String tag, byte[] data) {

@@ -19,11 +19,15 @@ public abstract class MiddleInventoryTransaction extends ServerBoundMiddlePacket
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		return RecyclableSingletonList.create(create(windowId, actionNumber, accepted));
+	}
+
+	public static ServerBoundPacketData create(int windowId, int actionNumber, boolean accepted) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_WINDOW_TRANSACTION);
 		creator.writeByte(windowId);
 		creator.writeShort(actionNumber);
 		creator.writeBoolean(accepted);
-		return RecyclableSingletonList.create(creator);
+		return creator;
 	}
 
 }
