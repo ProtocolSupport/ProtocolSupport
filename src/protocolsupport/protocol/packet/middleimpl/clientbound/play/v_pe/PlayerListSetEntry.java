@@ -42,6 +42,9 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 
+	protected static final int PE_PLAYER_LIST_ADD = 0;
+	protected static final int PE_PLAYER_LIST_REMOVE = 1;
+
 	public PlayerListSetEntry(ConnectionImpl connection) {
 		super(connection);
 	}
@@ -53,39 +56,36 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		switch (action) {
 			case ADD: {
 				PESkinsProvider skinprovider = PESkinsProviderSPI.getProvider();
-				boolean containsOurPlayer = infos.containsKey(connection.getPlayer().getUniqueId());
 				ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_INFO);
-				serializer.writeByte(0);
-				VarNumberSerializer.writeVarInt(serializer, infos.size() - (containsOurPlayer ? 1 : 0));
+				ByteBuf scratchBuffer = Unpooled.buffer();
+				int numEntries = 0;
 				for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
 					UUID uuid = entry.getKey();
 					if (uuid.equals(connection.getPlayer().getUniqueId())) {
 						continue;
 					}
+					numEntries++;
 					PlayerListEntry currentEntry = entry.getValue().getObj2();
 					String username = currentEntry.getCurrentName(attrscache.getLocale());
-					MiscSerializer.writeUUID(serializer, version, uuid);
-					VarNumberSerializer.writeVarInt(serializer, 0); //entity id
-					StringSerializer.writeString(serializer, version, username);
 					Any<Boolean, String> skininfo = getSkinInfo(currentEntry.getProperties(true));
 					byte[] skindata = skininfo != null ? skinprovider.getSkinData(skininfo.getObj2()) : null;
 					if (skindata != null) {
-						writeSkinData(version, serializer, skininfo.getObj1(), skindata);
+						writeSkinData(version, scratchBuffer, skininfo.getObj1(), skindata);
 					} else {
-						writeSkinData(version, serializer,false, DefaultPESkinsProvider.DEFAULT_STEVE);
+						writePlayerListEntry(version, scratchBuffer, DefaultPESkinsProvider.DEFAULT_STEVE, uuid, false, username);
 						if (skininfo != null) {
 							skinprovider.scheduleGetSkinData(skininfo.getObj2(), new SkinUpdate(connection, uuid, skininfo.getObj1(), username));
 						}
 					}
-					StringSerializer.writeString(serializer, version, ""); //xuid
-					StringSerializer.writeString(serializer, version, ""); //Chat channel thing
 				}
+				writePlayerListHeader(serializer, PE_PLAYER_LIST_ADD, numEntries);
+				serializer.writeBytes(scratchBuffer);
+				scratchBuffer.release();
 				return RecyclableSingletonList.create(serializer);
 			}
 			case REMOVE: {
 				ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_INFO);
-				serializer.writeByte(1);
-				VarNumberSerializer.writeVarInt(serializer, infos.size());
+				writePlayerListHeader(serializer, PE_PLAYER_LIST_REMOVE, infos.size());
 				for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
 					MiscSerializer.writeUUID(serializer, version, entry.getKey());
 				}
@@ -133,17 +133,24 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		public void accept(byte[] skindata) {
 			ProtocolVersion version = connection.getVersion();
 			ByteBuf serializer = Unpooled.buffer();
-			serializer.writeByte(0);
-			VarNumberSerializer.writeVarInt(serializer, 1);
-			MiscSerializer.writeUUID(serializer, version, uuid);
-			VarNumberSerializer.writeVarInt(serializer, 0); //entity id
-			StringSerializer.writeString(serializer, version, username);
-			writeSkinData(version, serializer, isNormalModel, skindata);
-			StringSerializer.writeString(serializer, version, ""); //xuid
-			StringSerializer.writeString(serializer, version, ""); //Chat channel thing
-
+			writePlayerListHeader(serializer, PE_PLAYER_LIST_ADD, 1);
+			writePlayerListEntry(version, serializer, skindata, uuid, isNormalModel, username);
 			connection.sendPacket(ServerPlatform.get().getPacketFactory().createOutboundPluginMessagePacket(InternalPluginMessageRequest.PESkinUpdateSuffix, serializer));
 		}
+	}
+
+	protected static void writePlayerListHeader(ByteBuf serializer, int type, int count) {
+		serializer.writeByte(type);
+		VarNumberSerializer.writeVarInt(serializer, count);
+	}
+
+	protected static void writePlayerListEntry(ProtocolVersion version, ByteBuf serializer, byte[] skindata, UUID uuid, Boolean isNormalModel, String username) {
+		MiscSerializer.writeUUID(serializer, version, uuid);
+		VarNumberSerializer.writeVarInt(serializer, 0); //entity id
+		StringSerializer.writeString(serializer, version, username);
+		writeSkinData(version, serializer, isNormalModel, skindata);
+		StringSerializer.writeString(serializer, version, ""); //xuid
+		StringSerializer.writeString(serializer, version, ""); //Chat channel thing
 	}
 
 	protected static void writeSkinData(ProtocolVersion version, ByteBuf serializer, boolean isSlim, byte[] skindata) {

@@ -5,12 +5,11 @@ import io.netty.buffer.Unpooled;
 import protocolsupport.api.Connection;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSelectTrade;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -39,15 +38,9 @@ public class EntityStatus extends ServerBoundMiddlePacket {
 			//For some reason you need to resend the packet sent by the client to confirm he's eating.
 			sendResponse(connection, (int) entityId, status, data);
 		} else if (status == 62) {
-			return RecyclableSingletonList.create(createTradeSelect(data));
+			return RecyclableSingletonList.create(MiddleSelectTrade.create(data));
 		}
 		return RecyclableEmptyList.get();
-	}
-
-	protected static ServerBoundPacketData createTradeSelect(int page) {
-		ByteBuf payload = Unpooled.buffer();
-		payload.writeInt(page);
-		return MiddleCustomPayload.create(LegacyCustomPayloadChannelName.LEGACY_TRADE_SELECT, MiscSerializer.readAllBytes(payload));
 	}
 
 	protected static void sendResponse(Connection connection, int entityId, byte status, int data) {

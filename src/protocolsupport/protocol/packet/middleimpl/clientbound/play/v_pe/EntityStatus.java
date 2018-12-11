@@ -30,7 +30,7 @@ public class EntityStatus extends MiddleEntityStatus {
 		if (peStatus != -1) {
 			return RecyclableSingletonList.create(create(entityId, peStatus, connection.getVersion()));
 		} else {
-			System.out.println(MessageFormat.format("Entity status {0} ignored", status));
+			//System.out.println(MessageFormat.format("Entity status {0} ignored", status));
 		}
 		return RecyclableEmptyList.get();
 	}

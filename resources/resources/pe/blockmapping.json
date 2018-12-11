@@ -1615,6 +1615,10 @@
     "pename":"minecraft:redstone_ore",
     "pedata":0
   },
+  "minecraft:redstone_ore[lit=true]":{
+    "pename":"minecraft:lit_redstone_ore",
+    "pedata":0
+  },
   "minecraft:redstone_torch[lit=true]":{
     "pename":"minecraft:redstone_torch",
     "pedata":5
