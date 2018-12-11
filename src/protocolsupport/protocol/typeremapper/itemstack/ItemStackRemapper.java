@@ -3,7 +3,10 @@ package protocolsupport.protocol.typeremapper.itemstack;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapperRegistry;
 import protocolsupport.protocol.typeremapper.pe.PEItems;
+import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTShort;
 
 public class ItemStackRemapper {
 
@@ -12,6 +15,15 @@ public class ItemStackRemapper {
 		itemstack = ItemStackComplexRemapperRegistry.remapToClient(version, locale, itemstack);
 		itemstack.setTypeId(LegacyItemType.REGISTRY.getTable(version).getRemap(itemstack.getTypeId()));
 		if (version == ProtocolVersion.MINECRAFT_PE) {
+			if (PEItems.hasDurability(itemstack.getTypeId())) {
+				NBTCompound nbt = itemstack.getNBT();
+				if (nbt == null) {
+					nbt = new NBTCompound();
+				}
+				System.out.println(nbt.toString());
+				nbt.setTag(CommonNBT.DAMAGE, new NBTShort((short) itemstack.getLegacyData()));
+				itemstack.setNBT(nbt);
+			}
 			int peCombinedId = PEItems.getPECombinedIdByModernId(itemstack.getTypeId());
 			itemstack.setTypeId(PEItems.getIdFromPECombinedId(peCombinedId));
 			itemstack.setLegacyData(PEItems.getDataFromPECombinedId(peCombinedId));
