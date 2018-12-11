@@ -70,7 +70,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 					Any<Boolean, String> skininfo = getSkinInfo(currentEntry.getProperties(true));
 					byte[] skindata = skininfo != null ? skinprovider.getSkinData(skininfo.getObj2()) : null;
 					if (skindata != null) {
-						writeSkinData(version, scratchBuffer, skininfo.getObj1(), skindata);
+						writePlayerListEntry(version, scratchBuffer, skindata, uuid, skininfo.getObj1(), username);
 					} else {
 						writePlayerListEntry(version, scratchBuffer, DefaultPESkinsProvider.DEFAULT_STEVE, uuid, false, username);
 						if (skininfo != null) {
