@@ -1,8 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.typeremapper.basic.TileEntityRemapper;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -13,12 +15,14 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		super(connection);
 	}
 
+	protected final TileEntityRemapper tileremapper = TileEntityRemapper.getRemapper(connection.getVersion());
+
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		Int2IntMap tilestates = cache.getTileCache().getChunk(chunk);
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		for (Record record : records) {
-			int xz = record.coord >> 8;
-			BlockChangeSingle.create(connection.getVersion(), new Position((chunkX << 4) + (xz >> 4), record.coord & 0xFF, (chunkZ << 4) + (xz & 0xF)), record.id, packets);
+			BlockChangeSingle.create(connection.getVersion(), Position.fromLocal(chunk, record.localCoord), tileremapper, tilestates, record.id, packets);
 		}
 		return packets;
 	}

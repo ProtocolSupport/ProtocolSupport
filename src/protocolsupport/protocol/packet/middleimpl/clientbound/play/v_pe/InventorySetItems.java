@@ -21,7 +21,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		if(cache.getPEInventoryCache().isInventoryLocked()) {
+		if (cache.getPEInventoryCache().isInventoryLocked()) {
 			return RecyclableEmptyList.get();
 		}
 		NetworkItemStack[] items = itemstacks.toArray(new NetworkItemStack[itemstacks.size()]);

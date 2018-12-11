@@ -52,8 +52,13 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		MovementCache movecache = cache.getMovementCache();
 		NetworkEntity player = cache.getWatchedEntityCache().getSelfPlayer();
-		double yOffset = (y - movecache.getPEClientY()) > 0.01 ? 0.6 : 0;
+		double yOffset = 0;
 		if (onGround) {
+			final double dX = x - movecache.getPEClientX();
+			final double dZ = z - movecache.getPEClientZ();
+			final double speed = Math.sqrt(dX * dX + dZ * dZ);
+			final double speedOffset = speed >= 0.28 ? 0.9 : 0.6;
+			yOffset = (y - movecache.getPEClientY()) > 0.01 ? speedOffset : 0;
 			movecache.updatePEPositionLeniency(y);
 		}
 		movecache.setPEClientPosition(x, y, z);
@@ -67,7 +72,7 @@ public class PositionLook extends ServerBoundMiddlePacket {
 		if (player.getDataCache().isRiding()) {
 			NetworkEntity vehicle = cache.getWatchedEntityCache().getWatchedEntity(player.getDataCache().getVehicleId());
 			if (vehicle.getType() == NetworkEntityType.BOAT) {
-				yaw = ((360f/256f) * cache.getAttributesCache().getPELastVehicleYaw()) + yaw + 90;
+				yaw = ((360f / 256f) * cache.getAttributesCache().getPELastVehicleYaw()) + yaw + 90;
 			}
 		}
 		packets.add(MiddleMoveLook.create(x, y + yOffset, z, yaw, pitch, onGround));

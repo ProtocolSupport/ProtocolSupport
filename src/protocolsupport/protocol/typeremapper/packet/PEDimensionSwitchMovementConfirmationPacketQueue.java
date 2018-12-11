@@ -5,9 +5,12 @@ import java.util.Collection;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.listeners.InternalPluginMessageRequest;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
@@ -17,7 +20,7 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 public class PEDimensionSwitchMovementConfirmationPacketQueue {
 
 	protected final ArrayList<ClientBoundPacketData> queue = new ArrayList<>(2000);
-	protected State state = State.UNLOCKED;
+	protected boolean isLocked = false;
 
 	@SuppressWarnings("unchecked")
 	public RecyclableCollection<ClientBoundPacketData> processClientBoundPackets(RecyclableCollection<ClientBoundPacketData> packets) {
@@ -26,6 +29,7 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 			if (isPacketSendingAllowed() && !queue.isEmpty()) {
 				ArrayList<ClientBoundPacketData> qclone = (ArrayList<ClientBoundPacketData>) queue.clone();
 				queue.clear();
+				queue.trimToSize();
 				processClientBoundPackets0(qclone, allowed);
 			}
 			processClientBoundPackets0(packets, allowed);
@@ -43,8 +47,8 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 				allowed.add(sendpacket);
 				if (sendpacket.getPacketId() == PEPacketIDs.CUSTOM_EVENT) {
 					ByteBuf peak = sendpacket.duplicate();
-					if (StringSerializer.readString(peak, ProtocolVersion.MINECRAFT_PE).equals("ps:clientlock")) {
-						state = State.LOCKED;
+					if (StringSerializer.readString(peak, ProtocolVersion.MINECRAFT_PE).equals(InternalPluginMessageRequest.PELockChannel)) {
+						isLocked = true;
 					}
 				}
 			}
@@ -52,34 +56,31 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 	}
 
 	private boolean isPacketSendingAllowed() {
-		return state == State.UNLOCKED;
+		return !isLocked;
 	}
 
-	public RecyclableCollection<ServerBoundPacketData> processServerBoundPackets(RecyclableCollection<ServerBoundPacketData> packets) {
+	public RecyclableCollection<ServerBoundPacketData> processServerBoundPackets(RecyclableCollection<ServerBoundPacketData> packets, ConnectionImpl connection) {
 		try {
 			RecyclableArrayList<ServerBoundPacketData> allowed = RecyclableArrayList.create();
+			boolean wasLocked = isLocked;
 			for (ServerBoundPacketData packet : packets) {
 				if (!isPacketSendingAllowed() && packet.getPacketType() == ServerBoundPacket.PLAY_CUSTOM_PAYLOAD) {
 					ByteBuf peak = packet.duplicate();
-					// this may also be mimicked by bungee during server changes
-					if (StringSerializer.readString(peak, ProtocolVersionsHelper.LATEST_PC).equals("ps:clientunlock")) {
-						//TODO: do we need to do something to trigger the queue flush a bit faster?
-						state = State.UNLOCKED;
+					//This may also be mimicked by bungee during server changes.
+					if (StringSerializer.readString(peak, ProtocolVersionsHelper.LATEST_PC).equals(InternalPluginMessageRequest.PEUnlockChannel)) {
+						isLocked = false;
 					}
-				} else if (!isPacketSendingAllowed() && packet.getPacketType() == ServerBoundPacket.PLAY_POSITION_LOOK) {
-					// client is alive in its world
-					state = State.UNLOCKED;
 				}
 				allowed.add(packet);
+			}
+			if (wasLocked && !isLocked) {
+				//Enable player mobility again
+				connection.getCache().getMovementCache().setClientImmobile(false);
+				queue.add(EntityMetadata.updatePlayerMobility(connection));
 			}
 			return allowed;
 		} finally {
 			packets.recycleObjectOnly();
 		}
 	}
-
-	protected enum State {
-		UNLOCKED, LOCKED
-	}
-
 }

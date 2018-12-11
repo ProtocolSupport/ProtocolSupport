@@ -85,7 +85,7 @@ public class ItemStackComplexRemapperRegistry {
 			registerToClient(material, dnametolegacytext, ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
 			registerToClient(material, peenchantremapper, ProtocolVersion.MINECRAFT_PE);
 		});
-		registerToClient(Material.MAP, new MapItemLegacyIdToNbtSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
+		registerToClient(Material.FILLED_MAP, new MapItemLegacyIdToNbtSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
 		PotionToPEIdSpecificRemapper pepotion = new PotionToPEIdSpecificRemapper();
 		registerToClient(Material.POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
 		registerToClient(Material.SPLASH_POTION, pepotion, ProtocolVersion.MINECRAFT_PE);

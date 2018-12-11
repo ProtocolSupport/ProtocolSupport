@@ -4,6 +4,8 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.types.TileEntity;
+import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 
 public abstract class MiddleBlockTileUpdate extends MiddleBlock {
@@ -12,14 +14,14 @@ public abstract class MiddleBlockTileUpdate extends MiddleBlock {
 		super(connection);
 	}
 
-	protected int type;
-	protected NBTCompound tag;
+	protected TileEntity tile;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		super.readFromServerData(serverdata);
-		type = serverdata.readUnsignedByte();
-		tag = ItemStackSerializer.readTag(serverdata, ProtocolVersionsHelper.LATEST_PC);
+		int type = serverdata.readUnsignedByte();
+		NBTCompound tag = ItemStackSerializer.readTag(serverdata, ProtocolVersionsHelper.LATEST_PC);
+		tile = new TileEntity(TileEntityType.getByNetworkId(type), position, tag);
 	}
 
 }

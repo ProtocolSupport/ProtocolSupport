@@ -393,7 +393,6 @@
   "selectWorld.backupJoinConfirmButton": "Ndabere na ibu Ibu",
   "selectWorld.backupJoinSkipButton": "Amaara m ihe m na-eme!",
   "selectWorld.backupQuestion.customized": "Agaghị akwado ndị ụwa ahaziri",
-  "selectWorld.backupWarning": "Ekere ụwa ikpeazụ a na %s; ị nọ na sistemụ %s. Biko mee nkwado ma ọ bụrụ na ị nwere mmebi ụwa!",
   "selectWorld.backupWarning.customized": "O bu ihe nwute, anyi adighi akwado uwa ndi ozo na version nke Minecraft. Anyị ka nwere ike ibu ụwa a ma debe ihe niile dịka ọ dị, mana ebe a ga-emezigharị agaghị emegharị. Anyị rịọ mgbaghara maka nsogbu ahụ!",
   "selectWorld.deleteWarning": "Ụwa \"%s\" ga-efu ruo mgbe ebighị ebi! (ọ bụ ogologo oge!)",
   "selectWorld.edit.backup": "Mee ndabere",

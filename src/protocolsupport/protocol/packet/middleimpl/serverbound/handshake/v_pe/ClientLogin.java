@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe;
 
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -72,7 +73,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 		ByteBuf logindata = ArraySerializer.readVarIntByteArraySlice(clientdata);
 		try {
 			Any<Key, JsonObject> chaindata = extractChainData(Utils.GSON.fromJson(
-				new InputStreamReader(new ByteBufInputStream(logindata, logindata.readIntLE())),
+				new InputStreamReader(new ByteBufInputStream(logindata, logindata.readIntLE()), StandardCharsets.UTF_8),
 				new TypeToken<Map<String, List<String>>>() {}.getType()
 			));
 			username = JsonUtils.getString(chaindata.getObj2(), "displayName");
@@ -80,7 +81,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 			if (chaindata.getObj1() != null) {
 				connection.addMetadata(XUID_METADATA_KEY, JsonUtils.getString(chaindata.getObj2(), "XUID"));
 			}
-			JWSObject additionaldata = JWSObject.parse(new String(MiscSerializer.readBytes(logindata, logindata.readIntLE())));
+			JWSObject additionaldata = JWSObject.parse(new String(MiscSerializer.readBytes(logindata, logindata.readIntLE()), StandardCharsets.UTF_8));
 			Map<String, String> clientinfo = Utils.GSON.fromJson(additionaldata.getPayload().toString(), new TypeToken<Map<String, String>>() {}.getType());
 			String rserveraddress = clientinfo.get("ServerAddress");
 			if (rserveraddress == null) {
@@ -125,11 +126,13 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	}
 
 	private static final DefaultJWSVerifierFactory jwsverifierfactory = new DefaultJWSVerifierFactory();
+
 	private static boolean verify(JWSObject object, PublicKey key) throws JOSEException {
 		return object.verify(jwsverifierfactory.createJWSVerifier(object.getHeader(), key));
 	}
 
 	private static final KeyFactory keyfactory = getKeyFactory();
+
 	private static KeyFactory getKeyFactory() {
 		try {
 			return KeyFactory.getInstance("EC");

@@ -10,6 +10,8 @@ import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.TileEntity;
+import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTInt;
@@ -45,8 +47,8 @@ public class PEFakeBeacon {
 						Position block = position.clone();
 						block.mod(x, -i, z);
 						invCache.getFakeContainers().addLast(block);
-						BlockChangeSingle.create(version, block,
-								PEBlocks.toPocketBlock(version, Material.EMERALD_BLOCK), packets);
+						BlockChangeSingle.create(version, block, cache,
+							PEBlocks.toPocketBlock(version, Material.EMERALD_BLOCK), packets);
 					}
 				}
 			}
@@ -62,7 +64,8 @@ public class PEFakeBeacon {
 			tag.setTag("id", new NBTString("beacon"));
 			tag.setTag("primary", new NBTInt(primary));
 			tag.setTag("secondary", new NBTInt(secondary));
-			packets.add(BlockTileUpdate.create(version, invCache.getFakeContainers().getFirst(), tag));
+			TileEntity tile = new TileEntity(TileEntityType.BEACON, invCache.getFakeContainers().getFirst(), tag);
+			packets.add(BlockTileUpdate.create(version, tile));
 		}
 		return packets;
 	}

@@ -44,11 +44,11 @@ public class PEProxyServerInfoHandler implements PingHandler {
 
 	public static final int PACKET_ID = PEPacketIDs.SERVER_TO_CLIENT_HANDSHAKE;
 
-	protected static AttributeKey<Boolean> sentInfoKey = AttributeKey.valueOf("___PSPEServerInfoSentInfo");
+	private static final AttributeKey<Boolean> SENT_INFO_KEY = AttributeKey.valueOf("___PSPEServerInfoSentInfo");
 
 	@Override
 	public String getServerInfo(Channel channel) {
-		if (Utils.isTrue(channel.attr(sentInfoKey).getAndSet(Boolean.TRUE))) {
+		if (Utils.isTrue(channel.attr(SENT_INFO_KEY).getAndSet(Boolean.TRUE))) {
 			return "";
 		}
 		try {

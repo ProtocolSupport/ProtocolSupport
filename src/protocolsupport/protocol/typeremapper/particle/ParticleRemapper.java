@@ -72,7 +72,9 @@ public class ParticleRemapper {
 				registerRemap(ParticleItem.class, from -> new ParticleItem(from.getId(), version, I18NData.DEFAULT_LOCALE, from.getItemStack()), version);
 			});
 
-			registerRemap(ParticlePoof.class, () -> new LegacyParticle(0, "explode"), ProtocolVersionsHelper.BEFORE_1_13);
+			LegacyParticle explode = new LegacyParticle(0, "explode");
+			registerRemap(ParticlePoof.class, () -> explode, ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemap(ParticleDragonBreath.class, () -> explode, ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemap(ParticleExplosion.class, () -> new LegacyParticle(1, "largeexplode"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleExplosionEmitter.class, () -> new LegacyParticle(2, "hugeexplosion"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(ParticleFirework.class, () -> new LegacyParticle(3, "fireworksSpark"), ProtocolVersionsHelper.BEFORE_1_13);

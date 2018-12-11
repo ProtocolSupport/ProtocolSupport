@@ -17,10 +17,10 @@ import protocolsupport.utils.recyclable.RecyclableArrayList;
 
 //See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-Inventory-Managing)
 public class PETransactionRemapper {
-	
+
 	private ArrayDequeMultiMap<ItemKey, SlotBudget> surpluses = new ArrayDequeMultiMap<>();
 	private ArrayDequeMultiMap<ItemKey, SlotBudget> deficits = new ArrayDequeMultiMap<>();
-	
+
 	//See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-Inventory-Managing#surplus--deficit)
 	public void cacheTransaction(InvTransaction transaction) {
 		if (transaction.isValid()) {
@@ -57,19 +57,22 @@ public class PETransactionRemapper {
 
 	public void customCursor(NetworkItemStack item) {
 		clear();
-		if(!item.isNull()) {
+		if (!item.isNull()) {
 			bug("customCursor surpluses.put " + item);
 			surpluses.put(new ItemKey(item), new SlotBudget(InvTransaction.CURSOR, item.getAmount(), item.getAmount()), true);
 		}
-		
+
 	}
-	
+
 	private static boolean godlyDebug = true;
+
 	//TODO: Remove debug (can delete all lines starting with "bug(") if all is well.
 	public static void bug(String bugger) {
-		if(godlyDebug) { System.out.println(bugger); }
+		if (godlyDebug) {
+			System.out.println(bugger);
+		}
 	}
-	
+
 	//See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-Inventory-Managing#the-real-stuff)
 	public void processTransactions(NetworkDataCache cache, RecyclableArrayList<ServerBoundPacketData> packets) {
 		//bug("processTransactions deficits " + deficits);
@@ -82,7 +85,7 @@ public class PETransactionRemapper {
 				itemDeficit.cycleUp(deficit -> {
 					itemSurplus.cycleDown(surplus -> {
 						int money = deficit.getAmount() < surplus.getAmount() ? deficit.getAmount() : surplus.getAmount();
-						bug(item.getKeyItem().toString() + "-> [" + surplus.getSlot() + ", " + surplus.getSlotAmount() + ", " + surplus.getAmount() + "] - [" + deficit.getSlot() + ", " + deficit.getSlotAmount()+ ", " + deficit.getAmount() + "]");
+						bug(item.getKeyItem().toString() + "-> [" + surplus.getSlot() + ", " + surplus.getSlotAmount() + ", " + surplus.getAmount() + "] - [" + deficit.getSlot() + ", " + deficit.getSlotAmount() + ", " + deficit.getAmount() + "]");
 						if (surplus.getSlot() != deficit.getSlot() && !deficit.isToUseInTable()) {
 							if (!surplus.isCursor() && !(deficit.isCursor() && deficit.hasStack() && surplus.isCraftingResult(cache))) {
 								bug("Getting stack..");
@@ -97,7 +100,7 @@ public class PETransactionRemapper {
 								for (int i = 0; i < (surplus.getSlotAmount() - money); i++) {
 									Click.RIGHT.on(surplus.getSlot(), (i == 0) ? NetworkItemStack.NULL : item.get(i), cache, packets);
 								}
-							} 
+							}
 							if (!deficit.isCursor()) {
 								if (money == surplus.getSlotAmount()) {
 									if (!isSwapping(deficit)) { //not swapping.
@@ -174,21 +177,21 @@ public class PETransactionRemapper {
 		
 		private final int mode;
 		private final int button;
-		
+
 		Click(int mode, int button) {
 			this.mode = mode;
 			this.button = button;
 		}
-		
+
 		public void on(int slot, NetworkItemStack item, NetworkDataCache cache, RecyclableArrayList<ServerBoundPacketData> packets) {
 			bug("CLICK " + toString() + " on: " + slot + " with: " + item.toString());
 			int actionNumber = cache.getPEInventoryCache().getActionNumber();
 			packets.add(MiddleInventoryClick.create(cache.getAttributesCache().getLocale(), cache.getWindowCache().getOpenedWindowId(), slot, button, actionNumber, mode, item));
-			if(!item.isNull() && item.getNBT() != null) {
+			if (!item.isNull() && item.getNBT() != null) {
 				packets.add(MiddleInventoryTransaction.create(cache.getWindowCache().getOpenedWindowId(), actionNumber, false));
 			}
 		}
-		
+
 	}
 
 	protected static class SlotBudget {
@@ -260,7 +263,7 @@ public class PETransactionRemapper {
 		private int hash = 0;
 
 		public ItemKey(NetworkItemStack keyItem) {
-			if(!keyItem.isNull()) {
+			if (!keyItem.isNull()) {
 				NBTCompound nbt = keyItem.getNBT();
 				this.keyItem = keyItem;
 				hash = 41 * hash + keyItem.getTypeId();
@@ -287,20 +290,20 @@ public class PETransactionRemapper {
 
 		@Override
 		public boolean equals(Object object) {
-			if(object instanceof ItemKey) {
+			if (object instanceof ItemKey) {
 				ItemKey wrapper = (ItemKey) object;
-				if(wrapper.getKeyItem().isNull() || this.getKeyItem().isNull()) {
+				if (wrapper.getKeyItem().isNull() || this.getKeyItem().isNull()) {
 					return false;
 				}
 				NBTCompound nbtA = wrapper.getKeyItem().getNBT();
 				NBTCompound nbtB = this.getKeyItem().getNBT();
-				return 
+				return
 						(wrapper.getKeyItem().getTypeId() == this.getKeyItem().getTypeId()) &&
 						(wrapper.getKeyItem().getLegacyData() == this.getKeyItem().getLegacyData()) &&
 						(nbtA == nbtB || (nbtA != null ? nbtA.equals(nbtB) : false));
 			}
 			return false;
-			
+
 		}
 
 		@Override

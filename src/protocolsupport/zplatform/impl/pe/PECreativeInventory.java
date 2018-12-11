@@ -13,24 +13,28 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.Utils;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PECreativeInventory {
-	
-	private PECreativeInventory() { }
+
+	private PECreativeInventory() {
+	}
+
 	private static final PECreativeInventory INSTANCE = new PECreativeInventory();
-	
+
 	public static PECreativeInventory getInstance() {
 		return INSTANCE;
 	}
 
 	private byte[] creativeItems;
 	private int itemCount;
-	
+
 	public byte[] getCreativeItems() {
 		return creativeItems;
 	}
-	
+
 	public int getItemCount() {
 		return itemCount;
 	}
@@ -39,15 +43,23 @@ public class PECreativeInventory {
 		JsonArray array = new JsonParser().parse(Utils.getResourceBuffered("pe/creativeitems.json")).getAsJsonArray();
 		AtomicInteger itemcount = new AtomicInteger();
 		ByteBuf itembuf = Unpooled.buffer();
+		Set<Integer> foundNBTItems = new HashSet<Integer>();
 
 		for (JsonElement _item : array) {
 			JsonObject item = _item.getAsJsonObject();
 
-			if (item.has("nbt_hex")) { // For now, let's ignore the NBT tag
-				continue;
+			int id = item.get("id").getAsInt();
+			if (item.has("nbt_b64")) {
+				// FIXME: The proper solution is to decode the base64-coded NBT and sent it along with each item.
+				// But for now, only sent the first instance of each item that has an NBT tag, such as
+				// enchanted books, fireworks, etc.
+				if (foundNBTItems.contains(id)) {
+					continue;
+				} else {
+					foundNBTItems.add(id);
+				}
 			}
 
-			int id = item.get("id").getAsInt();
 			int damage = item.has("damage") ? item.get("damage").getAsInt() : 0;
 			int amount = 1;
 

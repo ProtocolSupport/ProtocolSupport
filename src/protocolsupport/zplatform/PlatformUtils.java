@@ -45,6 +45,10 @@ public interface PlatformUtils {
 
 	public BlockData getBlockDataByNetworkId(int id);
 
+	public int getBlockDataNetworkTypeId(BlockData blockdata);
+
+	public BlockData getBlockDataByNetworkTypeId(int id);
+
 	public List<BlockData> getBlockDataList(Material material);
 
 	public List<Player> getNearbyPlayers(Location location, double rX, double rY, double rZ);

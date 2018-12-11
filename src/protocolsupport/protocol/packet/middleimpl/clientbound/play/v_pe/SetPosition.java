@@ -11,6 +11,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.MovementCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.types.ChunkCoord;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -25,10 +26,9 @@ public class SetPosition extends MiddleSetPosition {
 		MovementCache movecache = cache.getMovementCache();
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-		int chunkX = NumberConversions.floor(x) >> 4;
-		int chunkZ = NumberConversions.floor(z) >> 4;
-		if (!cache.getPEChunkMapCache().isMarkedAsSent(chunkX, chunkZ)) {
-			packets.add(Chunk.createEmptyChunk(version, chunkX, chunkZ));
+		ChunkCoord chunk = new ChunkCoord(NumberConversions.floor(x) >> 4, NumberConversions.floor(z) >> 4);
+		if (!cache.getPEChunkMapCache().isMarkedAsSent(chunk)) {
+			packets.add(Chunk.createEmptyChunk(version, chunk));
 		}
 		//PE sends position that intersects blocks bounding boxes in some cases
 		//Server doesn't accept such movements and will send a set position, but we ignore it unless it is above leniency
@@ -58,7 +58,7 @@ public class SetPosition extends MiddleSetPosition {
 
 	public static ClientBoundPacketData create(NetworkEntity entity, double x, double y, double z, float pitch, float yaw, int mode) {
 		y = y + 1.6200000047683716D;
-		float headYaw = (float) (yaw  * (360D/256D));
+		float headYaw = (float) (yaw * (360D / 256D));
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_MOVE);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		serializer.writeFloatLE((float) x);

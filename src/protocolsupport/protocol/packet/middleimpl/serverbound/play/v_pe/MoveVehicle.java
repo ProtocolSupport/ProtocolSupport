@@ -63,8 +63,8 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 			}
 		}
 		cache.getAttributesCache().setPELastVehicleYaw(yaw);
-		float realPitch = (360f/256f) * pitch;
-		float realYaw = (360f/256f) * yaw;
+		float realPitch = (360f / 256f) * pitch;
+		float realYaw = (360f / 256f) * yaw;
 		packets.add(MiddleMoveVehicle.create(x, y, z, realYaw, realPitch));
 		return packets;
 	}

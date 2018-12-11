@@ -21,7 +21,8 @@ import protocolsupport.protocol.utils.types.MerchantData;
 
 public class PEFakeVillager {
 
-	private final NetworkEntity villager = new NetworkEntity(UUID.randomUUID(), Integer.MAX_VALUE - 10, NetworkEntityType.VILLAGER);
+	private static final int FAKE_VILLAGER_ID = Integer.MAX_VALUE - 10;
+	private final NetworkEntity villager = new NetworkEntity(UUID.randomUUID(), FAKE_VILLAGER_ID, NetworkEntityType.VILLAGER);
 	private BaseComponent title;
 	private boolean spawned = false;
 
@@ -35,19 +36,19 @@ public class PEFakeVillager {
 
 	public ClientBoundPacketData spawnVillager(NetworkDataCache cache, ProtocolVersion version) {
 		spawned = true;
-		return SpawnLiving.createSimple(version, 
-				cache.getAttributesCache().getLocale(),
-				villager,
-				cache.getMovementCache().getPEClientX(), 
-				cache.getMovementCache().getPEClientY() - 2, 
-				cache.getMovementCache().getPEClientZ() 
+		return SpawnLiving.createSimple(version,
+			cache.getAttributesCache().getLocale(),
+			villager,
+			cache.getMovementCache().getPEClientX(),
+			cache.getMovementCache().getPEClientY() - 2,
+			cache.getMovementCache().getPEClientZ()
 		);
 	}
 
 	public ClientBoundPacketData updateTrade(NetworkDataCache cache, ProtocolVersion version, MerchantData data) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.TRADE_UPDATE);
-		MerchantDataSerializer.writePEMerchantData(serializer, 
-				version, cache, villager.getId(), title.toLegacyText(cache.getAttributesCache().getLocale()), data
+		MerchantDataSerializer.writePEMerchantData(serializer,
+			version, cache, villager.getId(), title.toLegacyText(cache.getAttributesCache().getLocale()), data
 		);
 		return serializer;
 	}

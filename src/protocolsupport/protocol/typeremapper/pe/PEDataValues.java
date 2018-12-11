@@ -2,11 +2,11 @@ package protocolsupport.protocol.typeremapper.pe;
 
 import java.io.BufferedReader;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.bukkit.Particle;
 import org.bukkit.block.Biome;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.util.Vector;
@@ -154,10 +154,12 @@ public class PEDataValues {
 
 	private static final Int2IntOpenHashMap pcEnchantToPe = new Int2IntOpenHashMap();
 	private static final Int2IntOpenHashMap peEnchantToPc = new Int2IntOpenHashMap();
+
 	private static void registerEnchantRemap(Enchantment enchantment, int peId) {
 		pcEnchantToPe.put(LegacyEnchantmentId.getId(enchantment), peId);
 		peEnchantToPc.put(peId, LegacyEnchantmentId.getId(enchantment));
 	}
+
 	static {
 		registerEnchantRemap(Enchantment.OXYGEN, 6);
 		registerEnchantRemap(Enchantment.WATER_WORKER, 8);
@@ -186,6 +188,7 @@ public class PEDataValues {
 	public static int pcToPeEnchant(int pcId) {
 		return pcEnchantToPe.get(pcId);
 	}
+
 	public static int peToPcEnchant(int peId) {
 		return peEnchantToPc.get(peId);
 	}
@@ -193,42 +196,42 @@ public class PEDataValues {
 	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> PARTICLE = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
 		{
 			//TODO: Check values. (Speculative = names don't match) Only a few values have been tested by hand.
-			//TODO: Use particle enum
-			registerRemapEntry(0, PELevelEvent.PARTICLE_EXPLODE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(1, PELevelEvent.PARTICLE_HUGE_EXPLOSION, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(2, PELevelEvent.PARTICLE_HUGE_EXPLOSION_SEED, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(4, PELevelEvent.PARTICLE_BUBBLE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(5, PELevelEvent.PARTICLE_SPLASH, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(6, PELevelEvent.PARTICLE_WATER_WAKE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(9, PELevelEvent.PARTICLE_CRITICAL, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(10, PELevelEvent.PARTICLE_CRITICAL, ProtocolVersion.MINECRAFT_PE); //Magiccrit..?
-			registerRemapEntry(11, PELevelEvent.PARTICLE_SMOKE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(12, PELevelEvent.PARTICLE_LARGE_SMOKE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(13, PELevelEvent.PARTICLE_MOB_SPELL, ProtocolVersion.MINECRAFT_PE); //Speculative
-			registerRemapEntry(14, PELevelEvent.PARTICLE_MOB_SPELL_INSTANTANIOUS, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(15, PELevelEvent.PARTICLE_MOB_SPELL, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(16, PELevelEvent.PARTICLE_MOB_SPELL_INSTANTANIOUS, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(17, PELevelEvent.PARTICLE_WITCH_SPELL, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(18, PELevelEvent.PARTICLE_DRIP_WATER, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(19, PELevelEvent.PARTICLE_DRIP_LAVA, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(20, PELevelEvent.PARTICLE_VILLAGER_ANGRY, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(21, PELevelEvent.PARTICLE_VILLAGER_HAPPY, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(22, PELevelEvent.PARTICLE_TOWN_AURA, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(23, PELevelEvent.PARTICLE_NOTE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(24, PELevelEvent.PARTICLE_PORTAL, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(25, PELevelEvent.PARTICLE_ENCHANTMENT_TABLE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(26, PELevelEvent.PARTICLE_FLAME, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(27, PELevelEvent.PARTICLE_LAVA, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(30, PELevelEvent.PARTICLE_RISING_RED_DUST, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(31, PELevelEvent.PARTICLE_SNOWBALL_POOF, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(33, PELevelEvent.PARTICLE_SLIME, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(34, PELevelEvent.PARTICLE_HEART, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(35, PELevelEvent.PARTICLE_BLOCK_FORCE_FIELD, ProtocolVersion.MINECRAFT_PE); //Speculative
-			registerRemapEntry(40, PELevelEvent.CAULDRON_TAKE_WATER, ProtocolVersion.MINECRAFT_PE); //Speculative
-			registerRemapEntry(42, PELevelEvent.PARTICLE_DRAGONS_BREATH, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(43, PELevelEvent.PARTICLE_END_ROT, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(46, PELevelEvent.PARTICLE_FALLING_DUST, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.EXPLOSION_NORMAL.ordinal(), PELevelEvent.PARTICLE_EXPLODE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.EXPLOSION_LARGE.ordinal(), PELevelEvent.PARTICLE_HUGE_EXPLOSION, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.EXPLOSION_HUGE.ordinal(), PELevelEvent.PARTICLE_HUGE_EXPLOSION_SEED, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.WATER_BUBBLE.ordinal(), PELevelEvent.PARTICLE_BUBBLE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.WATER_SPLASH.ordinal(), PELevelEvent.PARTICLE_SPLASH, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.WATER_WAKE.ordinal(), PELevelEvent.PARTICLE_WATER_WAKE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.CRIT.ordinal(), PELevelEvent.PARTICLE_CRITICAL, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.CRIT_MAGIC.ordinal(), PELevelEvent.PARTICLE_CRITICAL, ProtocolVersion.MINECRAFT_PE); //Magiccrit..?
+			registerRemapEntry(Particle.SMOKE_NORMAL.ordinal(), PELevelEvent.PARTICLE_SMOKE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.SMOKE_LARGE.ordinal(), PELevelEvent.PARTICLE_LARGE_SMOKE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.SPELL.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL, ProtocolVersion.MINECRAFT_PE); //Speculative
+			registerRemapEntry(Particle.SPELL_INSTANT.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL_INSTANTANIOUS, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.SPELL_MOB.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.SPELL_MOB_AMBIENT.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL_INSTANTANIOUS, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.SPELL_WITCH.ordinal(), PELevelEvent.PARTICLE_WITCH_SPELL, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.DRIP_WATER.ordinal(), PELevelEvent.PARTICLE_DRIP_WATER, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.DRIP_LAVA.ordinal(), PELevelEvent.PARTICLE_DRIP_LAVA, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.VILLAGER_ANGRY.ordinal(), PELevelEvent.PARTICLE_VILLAGER_ANGRY, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.VILLAGER_HAPPY.ordinal(), PELevelEvent.PARTICLE_VILLAGER_HAPPY, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.TOWN_AURA.ordinal(), PELevelEvent.PARTICLE_TOWN_AURA, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.NOTE.ordinal(), PELevelEvent.PARTICLE_NOTE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.PORTAL.ordinal(), PELevelEvent.PARTICLE_PORTAL, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.ENCHANTMENT_TABLE.ordinal(), PELevelEvent.PARTICLE_ENCHANTMENT_TABLE, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.FLAME.ordinal(), PELevelEvent.PARTICLE_FLAME, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.LAVA.ordinal(), PELevelEvent.PARTICLE_LAVA, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.REDSTONE.ordinal(), PELevelEvent.PARTICLE_RISING_RED_DUST, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.SNOWBALL.ordinal(), PELevelEvent.PARTICLE_SNOWBALL_POOF, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.SLIME.ordinal(), PELevelEvent.PARTICLE_SLIME, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.HEART.ordinal(), PELevelEvent.PARTICLE_HEART, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.BARRIER.ordinal(), PELevelEvent.PARTICLE_BLOCK_FORCE_FIELD, ProtocolVersion.MINECRAFT_PE); //Speculative
+			registerRemapEntry(Particle.WATER_DROP.ordinal(), PELevelEvent.CAULDRON_TAKE_WATER, ProtocolVersion.MINECRAFT_PE); //Speculative
+			registerRemapEntry(Particle.DRAGON_BREATH.ordinal(), PELevelEvent.PARTICLE_DRAGONS_BREATH, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.END_ROD.ordinal(), PELevelEvent.PARTICLE_END_ROT, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.FALLING_DUST.ordinal(), PELevelEvent.PARTICLE_FALLING_DUST, ProtocolVersion.MINECRAFT_PE);
 		}
+
 		@Override
 		protected HashMapBasedIdRemappingTable createTable() {
 			return new HashMapBasedIdRemappingTable();
@@ -251,6 +254,7 @@ public class PEDataValues {
 			registerRemapEntry(Biome.FROZEN_OCEAN, 46, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(Biome.DEEP_FROZEN_OCEAN, 47, ProtocolVersion.MINECRAFT_PE);
 		}
+
 		@Override
 		protected ArrayBasedIdRemappingTable createTable() {
 			return new ArrayBasedIdRemappingTable(167); //Largest biome id.
@@ -281,6 +285,7 @@ public class PEDataValues {
 			registerRemapEntry(WindowType.BEACON, 13, ProtocolVersion.MINECRAFT_PE);
 			registerRemapEntry(WindowType.VILLAGER, 15, ProtocolVersion.MINECRAFT_PE);
 		}
+
 		@Override
 		protected ArrayBasedIdRemappingTable createTable() {
 			return new ArrayBasedIdRemappingTable(14);
@@ -291,19 +296,17 @@ public class PEDataValues {
 		}
 	};
 
-	private static HashMap<NetworkEntityType, HashMap<Integer, Integer>> entityStatusRemaps = new HashMap<>();
+	private static EnumMap<NetworkEntityType, Int2IntOpenHashMap> entityStatusRemaps = new EnumMap<>(NetworkEntityType.class);
 
-	private static void registerEntityStatusRemap(int pcStatus, int peStatus, NetworkEntityType entityType) {
-		HashMap<Integer, Integer> mapping = entityStatusRemaps.get(entityType);
-		if (mapping == null) {
-			mapping = new HashMap<>();
-			entityStatusRemaps.put(entityType, mapping);
+	private static void registerEntityStatusRemap(int pcStatus, int peStatus, NetworkEntityType... entityTypes) {
+		for (NetworkEntityType entityType : entityTypes) {
+			Int2IntOpenHashMap mapping = entityStatusRemaps.computeIfAbsent(entityType, m -> new Int2IntOpenHashMap());
+			mapping.put(pcStatus, peStatus);
 		}
-		mapping.put(pcStatus, peStatus);
 	}
 
 	private static void registerEntityStatusRemap(int pcStatus, int peStatus) {
-		registerEntityStatusRemap(pcStatus, peStatus, null);
+		registerEntityStatusRemap(pcStatus, peStatus, NetworkEntityType.values());
 	}
 
 	private static void initEntityStatusRemaps() {
@@ -389,32 +392,27 @@ public class PEDataValues {
 	 * entity type. If no mapping is possible, -1 is returned.
 	 */
 	public static int getEntityStatusRemap(int pcStatus, NetworkEntityType entityType) {
-		int peStatus = -1;
-
-		HashMap<Integer, Integer> entity_mapping = entityStatusRemaps.get(entityType);
-		if (entity_mapping != null && entity_mapping.containsKey(pcStatus)) {
-			// If we have a specific key, use the value, even if it's -1 (that means
-			// that we should ignore the default mapping)
-			peStatus = entity_mapping.get(pcStatus);
-		} else {
-			HashMap<Integer, Integer> default_mapping = entityStatusRemaps.get(null);
-			if (entity_mapping != null && default_mapping.containsKey(pcStatus)) {
-				peStatus = default_mapping.get(pcStatus);
-			}
-		}
-
-		return peStatus;
+		return entityStatusRemaps.get(entityType).getOrDefault(pcStatus, -1);
 	}
 
 	private final static Map<NetworkEntityType, PEEntityData> entityData = new EnumMap<NetworkEntityType, PEEntityData>(NetworkEntityType.class);
+	private final static Map<NetworkEntityType, PEEntityInventoryData> entityInventoryData = new EnumMap<NetworkEntityType, PEEntityInventoryData>(NetworkEntityType.class);
+
 	static {
 		getFileObject("entitydata.json").entrySet().forEach(entry -> {
-			entityData.put(NetworkEntityType.valueOf(entry.getKey()), Utils.GSON.fromJson(entry.getValue(), PEEntityData.class).init());
+			entityData.put(NetworkEntityType.valueOf(entry.getKey()), Utils.GSON.fromJson(entry.getValue(), PEEntityData.class));
+		});
+		getFileObject("entitydata_inventory.json").entrySet().forEach(entry -> {
+			entityInventoryData.put(NetworkEntityType.valueOf(entry.getKey()), Utils.GSON.fromJson(entry.getValue(), PEEntityInventoryData.class).init());
 		});
 	}
 
 	public static PEEntityData getEntityData(NetworkEntityType type) {
 		return entityData.get(type);
+	}
+
+	public static PEEntityInventoryData getEntityInventoryData(NetworkEntityType type) {
+		return entityInventoryData.get(type);
 	}
 
 	public static class PEEntityData {
@@ -427,9 +425,6 @@ public class PEDataValues {
 		@SerializedName("RiderInfo")
 		private RiderInfo riderInfo;
 
-		@SerializedName("InventoryFilter")
-		private PocketInventoryFilter inventoryFilter;
-
 		public BoundingBox getBoundingBox() {
 			return boundingBox;
 		}
@@ -440,17 +435,6 @@ public class PEDataValues {
 
 		public RiderInfo getRiderInfo() {
 			return riderInfo;
-		}
-
-		public PocketInventoryFilter getInventoryFilter() {
-			return inventoryFilter;
-		}
-
-		public PEEntityData init() {
-			if(inventoryFilter != null) {
-				inventoryFilter.init();
-			}
-			return this;
 		}
 
 		public static class BoundingBox {
@@ -507,15 +491,30 @@ public class PEDataValues {
 			public Float getRotationLock() {
 				return rotationlock;
 			}
+		}
+	}
 
+	public static class PEEntityInventoryData {
+		@SerializedName("InventoryFilter")
+		private PocketInventoryFilter inventoryFilter;
+
+		public PocketInventoryFilter getInventoryFilter() {
+			return inventoryFilter;
+		}
+
+		public PEEntityInventoryData init() {
+			if (inventoryFilter != null) {
+				inventoryFilter.init();
+			}
+			return this;
 		}
 
 		public static class PocketInventoryFilter {
 			private String Filter;
-			private transient NBTCompound filterNBT;
+			private transient NBTCompound filterNBT = null;
 
 			protected void init() {
-				Filter.hashCode();
+				System.out.println("Skipping inventory filter because NBT code still needs to be formatted: " + Filter);
 				//TODO GET THIS???
 				//filterNBT = new createNBTCompoundFromJson(Filter.replaceAll("\'", "\""));
 			}
@@ -524,7 +523,5 @@ public class PEDataValues {
 				return filterNBT;
 			}
 		}
-
 	}
-
 }

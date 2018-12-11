@@ -28,10 +28,10 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class PEBlocks {
 
-	protected static byte[] peBlockDef;
-	protected static final int[] pcToPeRuntimeId = new int[MinecraftData.BLOCKDATA_COUNT];
-	protected static final int[] pcWaterlogged = new int[MinecraftData.BLOCKDATA_COUNT];
-	protected static final EnumMap<ProtocolVersion, Integer> waterRuntime = new EnumMap<>(ProtocolVersion.class);;
+	private static final byte[] peBlockDef;
+	private static final int[] pcToPeRuntimeId = new int[MinecraftData.BLOCKDATA_COUNT];
+	private static final int[] pcWaterlogged = new int[MinecraftData.BLOCKDATA_COUNT];
+	private static final EnumMap<ProtocolVersion, Integer> waterRuntime = new EnumMap<>(ProtocolVersion.class);
 
 	private static final int CAN_BE_WATERLOGGED = 1;
 	private static final int IS_WATERLOGGED = 2;
@@ -57,7 +57,7 @@ public class PEBlocks {
 				pcWaterlogged[i] = IS_WATERLOGGED;
 			}
 			//Remap to PE
-			if(peMappings.has(data.getAsString())) {
+			if (peMappings.has(data.getAsString())) {
 				PEBlock peBlock = new PEBlock(JsonUtils.getJsonObject(peMappings, data.getAsString()));
 				pcToPeRuntimeId[i] = peBlocks.indexOf(peBlock);
 				System.out.println("REMAPPED [" + i + "] (" + data.getAsString() + ") TO: " + peBlock.getName() + ":" + peBlock.getData());
@@ -106,10 +106,10 @@ public class PEBlocks {
 	}
 
 	private static class PEBlock {
-		
+
 		private final String name;
 		private final short data;
-		
+
 		public PEBlock(String name, short data) {
 			this.name = name;
 			this.data = data;
@@ -140,7 +140,7 @@ public class PEBlocks {
 			if (obj instanceof PEBlock) {
 				PEBlock block = (PEBlock) obj;
 				return block.name.equals(name) &&
-						block.data == data;
+					block.data == data;
 			}
 			return false;
 		}

@@ -33,4 +33,5 @@ public abstract class MiddleUpdateSign extends ServerBoundMiddlePacket {
 		}
 		return creator;
 	}
+
 }

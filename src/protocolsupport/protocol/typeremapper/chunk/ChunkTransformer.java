@@ -1,25 +1,43 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import io.netty.buffer.ByteBuf;
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.TileDataCache;
+import protocolsupport.protocol.typeremapper.basic.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.types.ChunkCoord;
+import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.types.TileEntity;
 
 public abstract class ChunkTransformer {
 
+	protected ChunkCoord chunk;
 	protected int columnsCount;
 	protected boolean hasSkyLight;
 	protected boolean hasBiomeData;
 	protected final ChunkSection[] sections = new ChunkSection[16];
 	protected final int[] biomeData = new int[256];
+	protected List<TileEntity> tilesNBTData;
+	protected Int2IntMap tilesBlockData;
 
 	protected final ArrayBasedIdRemappingTable blockTypeRemappingTable;
-	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable) {
+	protected final TileDataCache tilecache;
+	protected final TileEntityRemapper tileremapper;
+	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable, TileEntityRemapper tileremapper, TileDataCache tilecache) {
 		this.blockTypeRemappingTable = blockRemappingTable;
+		this.tileremapper = tileremapper;
+		this.tilecache = tilecache;
 	}
 
-	public void loadData(ByteBuf chunkdata, int bitmap, boolean hasSkyLight, boolean hasBiomeData) {
+	public void loadData(ChunkCoord chunk, ByteBuf chunkdata, int bitmap, boolean hasSkyLight, boolean hasBiomeData, TileEntity[] tiles) {
+		this.chunk = chunk;
 		this.columnsCount = Integer.bitCount(bitmap);
 		this.hasSkyLight = hasSkyLight;
 		this.hasBiomeData = hasBiomeData;
@@ -35,6 +53,43 @@ public abstract class ChunkTransformer {
 				biomeData[i] = chunkdata.readInt();
 			}
 		}
+		this.tilesNBTData = new ArrayList<>(Arrays.asList(tiles));
+		this.tilesBlockData = tilecache.getOrCreateChunk(chunk);
+	}
+
+	public TileEntity[] remapAndGetTiles() {
+		return
+			tilesNBTData.stream()
+			.map(tile -> tileremapper.remap(tile, tilesBlockData.get(tile.getPosition().getLocalCoord())))
+			.toArray(TileEntity[]::new);
+	}
+
+	protected int getBlockState(int section, BlockStorageReader blockstorage, int blockindex) {
+		int blockstate = blockstorage.getBlockState(blockindex);
+		if (tileremapper.tileThatNeedsBlockData(blockstate)) {
+			tilesBlockData.put(getLocalPositionFromSectionIndex(section, blockindex), blockstate);
+		} else {
+			tilesBlockData.remove(getLocalPositionFromSectionIndex(section, blockindex));
+		}
+		if (tileremapper.usedToBeTile(blockstate)) {
+			TileEntity tile = tileremapper.getLegacyTileFromBlock(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);
+			if (tile != null) {
+				tilesNBTData.add(tile);
+			}
+		}
+		return blockstate;
+	}
+
+	protected int getLocalPositionFromSectionIndex(int section, int blockindex) {
+		return ((blockindex & 0xF) << 12) | (((blockindex >> 4) & 0xF) << 8) | ((section * 16) + ((blockindex >> 8) & 0xF));
+	}
+
+	protected Position getGlobalPositionFromSectionIndex(int section, int blockindex) {
+		return new Position(
+			(chunk.getX() << 4) + (blockindex & 0xF),
+			(section * 16) + ((blockindex >> 8) & 0xF),
+			(chunk.getZ() << 4) + ((blockindex >> 4) & 0xF)
+		);
 	}
 
 	protected static final int blocksInSection = 16 * 16 * 16;

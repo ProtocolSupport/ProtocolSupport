@@ -1,7 +1,5 @@
 package protocolsupport.protocol.typeremapper.pe;
 
-import java.util.Arrays;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -23,6 +21,7 @@ public class PEItems {
 
 	protected static final int[] toPEId = new int[MinecraftData.ITEM_COUNT];
 	protected static final Int2IntMap fromPEId = new Int2IntOpenHashMap();
+
 	protected static void register(String modernKey, int legacyMainId, int legacyData) {
 		int modernId = ItemMaterialLookup.getRuntimeId(ItemMaterialLookup.getByKey(modernKey));
 		int combinedLegacyId = formLegacyCombinedId(legacyMainId, legacyData);
@@ -34,6 +33,7 @@ public class PEItems {
 		toPEId[modernId] = combinedLegacyId;
 		fromPEId.put(combinedLegacyId, modernId);
 	}
+
 	static {
 		for (JsonElement element : Utils.iterateJsonArrayResource(PEDataValues.getResourcePath("itemmapping.json"))) {
 			JsonObject object = element.getAsJsonObject();
@@ -52,7 +52,7 @@ public class PEItems {
 	public static int getPECombinedIdByModernId(int modernId) {
 		final int result = toPEId[modernId];
 
-		if (result == 0) {
+		if (result == 0 && modernId != 0) {
 			Material mat = ItemMaterialLookup.getByRuntimeId(modernId);
 			System.out.println("Using default PE ID for material " + mat + ", key: " + mat.getKey());
 			return combinedPEStoneId;
@@ -68,7 +68,7 @@ public class PEItems {
 		if (fromPEId.containsKey(literalId)) {
 			return fromPEId.get(literalId);
 		} else if (fromPEId.containsKey(closestId)) {
-			System.out.println("Using closest guess for PE ID " + PEId);
+			System.out.println("Using closest guess for PE ID " + PEId + "(ignoring " + PEData + ")");
 			return fromPEId.get(closestId);
 		} else {
 			System.out.println("Using default item for PE ID " + PEId + ":" + PEData);

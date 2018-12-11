@@ -12,13 +12,13 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.ClientLogin;
 import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_pe.Ping;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Animation;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.BlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.BookEdit;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Chat;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.ClientSettings;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.CommandRequest;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.EntityStatus;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.HeldSlot;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.Interact;
@@ -71,6 +71,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 	}
 
 	protected final PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq;
+
 	public PEPacketDecoder(ConnectionImpl connection, PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq) {
 		super(connection);
 		this.dimswitchq = dimswitchq;
@@ -93,7 +94,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 
 	@Override
 	protected RecyclableCollection<ServerBoundPacketData> processPackets(Channel channel, RecyclableCollection<ServerBoundPacketData> data) {
-		return dimswitchq.processServerBoundPackets(data);
+		return dimswitchq.processServerBoundPackets(data, connection);
 	}
 
 	@Override
@@ -106,7 +107,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		return id;
 	}
 
-	public class Noop extends ServerBoundMiddlePacket {
+	public static class Noop extends ServerBoundMiddlePacket {
 
 		public Noop(ConnectionImpl connection) {
 			super(connection);

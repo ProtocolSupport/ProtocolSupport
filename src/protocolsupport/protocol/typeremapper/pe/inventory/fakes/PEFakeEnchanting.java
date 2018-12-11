@@ -57,11 +57,16 @@ public class PEFakeEnchanting {
 		contents[1] = lapisSlot;
 		for (int i = 0; i < 3; i++) {
 			//Create option item & nbt
-			if (optionEnch[i] < 0) { contents[i+2] = NetworkItemStack.NULL; break;}
+			if (optionEnch[i] < 0) {
+				contents[i + 2] = NetworkItemStack.NULL;
+				break;
+			}
 			NetworkItemStack option = inputOutputSlot.cloneItemStack();
-			if (option.isNull()) { break; }
+			if (option.isNull()) {
+				break;
+			}
 			NBTCompound tag = (option.getNBT() == null) ?
-			new NBTCompound() : option.getNBT();
+				new NBTCompound() : option.getNBT();
 			//Display
 			NBTCompound display = tag.getTagOfType("display", NBTType.COMPOUND);
 			if (display == null) {
@@ -76,13 +81,15 @@ public class PEFakeEnchanting {
 			tag.setTag("display", display);
 			//Enchantment
 			NBTList<NBTCompound> ench = new NBTList<>(NBTType.COMPOUND);
-			if(ench.isEmpty()) { ench.addTag(new NBTCompound()); }
+			if (ench.isEmpty()) {
+				ench.addTag(new NBTCompound());
+			}
 			ench.getTag(0).setTag("id", new NBTShort((short) optionEnch[i]));
-			ench.getTag(0).setTag("lvl", new NBTShort((short) optionLvl [i]));
+			ench.getTag(0).setTag("lvl", new NBTShort((short) optionLvl[i]));
 			tag.setTag("ench", ench);
 			//Wrap up
 			option.setNBT(tag);
-			contents[i+2] = option;
+			contents[i + 2] = option;
 		}
 		return contents;
 	}

@@ -29,7 +29,11 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 		type = WindowType.getById(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 32));
 		title = ChatAPI.fromJSON(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
 		slots = serverdata.readUnsignedByte();
-		horseId = type == WindowType.HORSE ? serverdata.readInt() : -1;
+		if (type == WindowType.HORSE) {
+			horseId = serverdata.readInt();
+		} else {
+			horseId = -1;
+		}
 	}
 
 	@Override

@@ -25,7 +25,7 @@ import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.typeremapper.basic.GenericIdRemapper;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.basic.SoundRemapper;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.basic.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
@@ -60,7 +60,6 @@ import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.impl.pe.PECraftingManager;
 import protocolsupport.zplatform.impl.pe.PECreativeInventory;
 import protocolsupport.zplatform.impl.pe.PEProxyServer;
 import protocolsupport.zplatform.impl.pe.PEProxyServerInfoHandler;
@@ -125,7 +124,7 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(LegacyBlockData.class.getName());
 			Class.forName(FlatteningBlockId.class.getName());
 			Class.forName(PreFlatteningBlockIdData.class.getName());
-			Class.forName(TileNBTRemapper.class.getName());
+			Class.forName(TileEntityRemapper.class.getName());
 			Class.forName(ItemMaterialLookup.class.getName());
 			Class.forName(LegacyItemType.class.getName());
 			Class.forName(FlatteningItemId.class.getName());
@@ -143,7 +142,6 @@ public class ProtocolSupport extends JavaPlugin {
 			Class.forName(AbstractLoginListener.class.getName());
 			Class.forName(AbstractStatusListener.class.getName());
 			Class.forName(SoundRemapper.class.getName());
-			Class.forName(TileNBTRemapper.class.getName());
 			Class.forName(MapColorRemapper.class.getName());
 			Class.forName(LegacyPotionId.class.getName());
 			Class.forName(LegacyEntityId.class.getName());
@@ -176,7 +174,6 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getMessenger().registerIncomingPluginChannel(this, InternalPluginMessageRequest.TAG, new InternalPluginMessageRequest());
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
 			Thread pocketPacketCache = new Thread(() -> {
-				PECraftingManager.getInstance().registerRecipes();
 				PECreativeInventory.getInstance().generateCreativeInventoryItems();
 			});
 			pocketPacketCache.setDaemon(true);

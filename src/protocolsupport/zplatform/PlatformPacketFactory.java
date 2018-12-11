@@ -3,6 +3,7 @@ package protocolsupport.zplatform;
 import java.security.PublicKey;
 import java.util.List;
 
+import io.netty.buffer.ByteBuf;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -58,6 +59,8 @@ public interface PlatformPacketFactory {
 
 	public Object createEmptyCustomPayloadPacket(String tag);
 
+	public Object createOutboundPluginMessagePacket(String tag, ByteBuf data);
+
 	public Object createFakeJoinGamePacket();
 
 	public Object createEntityStatusPacket(Entity entity, int status);
@@ -65,6 +68,7 @@ public interface PlatformPacketFactory {
 	public Object createUpdateChunkPacket(Chunk chunk);
 
 	public Object createBlockUpdatePacket(Position pos, int block);
+
 
 	public int getOutLoginDisconnectPacketId();
 

@@ -10,6 +10,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes.AttributeInfo;
 import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
@@ -42,13 +43,14 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		}
 		//TODO add these as some kind of function based on NetworkEntityType, if this gets unmanagable.
 		//Special metadata -> other packet remapper.
+		//Item type -> Spawn item remapper.
 		if (entity.getType().isOfType(NetworkEntityType.ITEM)) {
 			DataWatcherObjectIndex.Item.ITEM.getValue(entityRemapper.getOriginalMetadata()).ifPresent(itemWatcher -> {
 				NetworkEntityItemDataCache itemDataCache = (NetworkEntityItemDataCache) entity.getDataCache();
 				packets.addAll(itemDataCache.updateItem(version, entity.getId(), itemWatcher.getValue()));
 			});
 		}
-		//TODO: this can probably go in the remapper, but i couldnt get it to work there....
+		//Invisible names. Applied after possible size remappers.
 		if (!entity.getType().isOfType(NetworkEntityType.PLAYER)) {
 			//text doesnt display when invisible, so lets restore the java behavior and make it invisible another way
 			boolean hasName = entity.getDataCache().getPeBaseFlag(PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG);
@@ -59,12 +61,19 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				entityRemapper.getRemappedMetadata().put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(0));
 				entityRemapper.getRemappedMetadata().put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(0));
 			}
+		} else { //player flags
+			if (cache.getWatchedEntityCache().isSelf(entity.getId())) {
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_NO_AI, cache.getMovementCache().isClientImmobile());
+			}
+			entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_CAN_CLIMB, true);
 		}
+		//Meta health -> attribute packet remapper.
 		if (entity.getType().isOfType(NetworkEntityType.LIVING)) {
 			DataWatcherObjectIndex.EntityLiving.HEALTH.getValue(entityRemapper.getOriginalMetadata()).ifPresent(healthWatcher -> {
 				packets.add(EntitySetAttributes.create(version, entity, new ObjectFloatTuple<>(AttributeInfo.HEALTH, healthWatcher.getValue())));
 			});
 		}
+		//Meta armor -> armor packet remapper.
 		if (entity.getType().isOfType(NetworkEntityType.COMMON_HORSE)) {
 			DataWatcherObjectIndex.BattleHorse.ARMOR.getValue(entityRemapper.getOriginalMetadata()).ifPresent(armorWatcher -> {
 				NetworkItemStack armour = new NetworkItemStack();
@@ -109,10 +118,22 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		return serializer;
 	}
 
+	public static ClientBoundPacketData updatePlayerMobility(ConnectionImpl connection) {
+		NetworkDataCache cache = connection.getCache();
+		ProtocolVersion version = connection.getVersion();
+		ArrayMap<DataWatcherObject<?>> peMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
+		String locale = cache.getAttributesCache().getLocale();
+		NetworkEntity player = cache.getWatchedEntityCache().getSelfPlayer();
+		player.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_NO_AI, cache.getMovementCache().isClientImmobile());
+		peMetadata.put(PeMetaBase.FLAGS, new DataWatcherObjectSVarLong(player.getDataCache().getPeBaseFlags()));
+		return create(player, locale, peMetadata, version);
+	}
+
 	public static class PeMetaBase {
 
 		//PE's extra baseflags. TODO: Implement more flags (Easy Remapping)
 		protected static int flagId = 1;
+
 		protected static int takeNextFlag() {
 			return flagId++;
 		}
@@ -179,6 +200,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int FLAG_LAYING_EGG = takeNextFlag();
 
 		protected static int metaId = 0;
+
 		protected static int takeNextMeta() {
 			return metaId++;
 		}
@@ -199,7 +221,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int PADDLE_TIME_LEFT = takeNextMeta();
 		public static final int PADDLE_TIME_RIGHT = takeNextMeta();
 		public static final int XP_VALUE = takeNextMeta();
-		public static final int MINECART_BLOCK = takeNextMeta(), EATING_HAYSTACK = 16, FIREWORK_TYPE = 16;
+		public static final int MINECART_BLOCK = takeNextMeta(), EATING_HAYSTACK = MINECART_BLOCK, FIREWORK_TYPE = MINECART_BLOCK;
 		public static final int MINECART_OFFSET = takeNextMeta();
 		public static final int MINECART_DISPLAY = takeNextMeta();
 		public static final int UNKNOWN_2 = takeNextMeta();
@@ -271,4 +293,5 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int PUFFERFISH_SIZE = takeNextMeta();
 
 	}
+
 }

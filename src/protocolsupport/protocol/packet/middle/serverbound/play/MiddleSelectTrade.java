@@ -18,9 +18,13 @@ public abstract class MiddleSelectTrade extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		return RecyclableSingletonList.create(create(slot));
+	}
+
+	public static ServerBoundPacketData create(int slot) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_SELECT_TRADE);
 		VarNumberSerializer.writeVarInt(creator, slot);
-		return RecyclableSingletonList.create(creator);
+		return creator;
 	}
 
 }

@@ -1,19 +1,18 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
 import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.basic.TileNBTRemapper;
+import protocolsupport.protocol.typeremapper.basic.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerVariesLegacy;
-import protocolsupport.protocol.utils.types.TileEntityType;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.TileEntity;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -23,27 +22,20 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	protected final ChunkTransformerBB transformer = new ChunkTransformerVariesLegacy(LegacyBlockData.REGISTRY.getTable(connection.getVersion()));
+	protected final ChunkTransformerBB transformer = new ChunkTransformerVariesLegacy(LegacyBlockData.REGISTRY.getTable(connection.getVersion()), TileEntityRemapper.getRemapper(connection.getVersion()), cache.getTileCache());
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		transformer.loadData(data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full);
-		ProtocolVersion version = connection.getVersion();
+		transformer.loadData(chunk, data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full, tiles);
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
-		chunkdata.writeInt(chunkX);
-		chunkdata.writeInt(chunkZ);
+		PositionSerializer.writeChunkCoord(chunkdata, chunk);
 		chunkdata.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(chunkdata, bitmask);
 		ArraySerializer.writeVarIntByteArray(chunkdata, transformer::writeLegacyData);
 		packets.add(chunkdata);
-		for (NBTCompound tile : tiles) {
-			packets.add(BlockTileUpdate.createPacketData(
-				version,
-				TileEntityType.getByRegistryId(TileNBTRemapper.getTileType(tile)),
-				TileNBTRemapper.getPosition(tile),
-				tile
-			));
+		for (TileEntity tile : transformer.remapAndGetTiles()) {
+			packets.add(BlockTileUpdate.create(connection, tile));
 		}
 		return packets;
 	}

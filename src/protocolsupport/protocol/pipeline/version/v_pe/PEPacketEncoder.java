@@ -20,6 +20,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.ChangeGa
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chat;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CollectEffect;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CraftingData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityEffectAdd;
@@ -137,9 +138,11 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, InventorySetSlot::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_DATA_ID, InventoryData::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_TRANSACTION_ID, InventoryConfirmTransaction::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_RECIPES, CraftingData::new);
 	}
 
 	protected final PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq;
+
 	public PEPacketEncoder(ConnectionImpl connection, PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq) {
 		super(connection);
 		this.dimswitchq = dimswitchq;

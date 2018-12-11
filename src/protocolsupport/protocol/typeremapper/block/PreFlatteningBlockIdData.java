@@ -3,7 +3,6 @@ package protocolsupport.protocol.typeremapper.block;
 import java.util.Arrays;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -14,7 +13,6 @@ import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 
-@SuppressWarnings("deprecation")
 public class PreFlatteningBlockIdData {
 
 	protected static final int[] toLegacyId = new int[MinecraftData.BLOCKDATA_COUNT];
@@ -37,15 +35,6 @@ public class PreFlatteningBlockIdData {
 			register(JsonUtils.getString(object, "blockdata"), JsonUtils.getInt(object, "legacyid"), JsonUtils.getInt(object, "legacydata"));
 		}
 		//manual mappings for some blocks
-		for (Material material : Arrays.asList(
-			Material.CREEPER_HEAD, Material.CREEPER_WALL_HEAD,
-			Material.ZOMBIE_HEAD, Material.ZOMBIE_WALL_HEAD,
-			Material.SKELETON_SKULL, Material.SKELETON_WALL_SKULL,
-			Material.WITHER_SKELETON_SKULL, Material.WITHER_SKELETON_WALL_SKULL,
-			Material.PLAYER_HEAD, Material.PLAYER_WALL_HEAD
-		)) {
-			register(material.createBlockData().getAsString(), Material.LEGACY_SKULL.getId(), 0);
-		}
 	}
 
 	public static int getCombinedId(int modernId) {

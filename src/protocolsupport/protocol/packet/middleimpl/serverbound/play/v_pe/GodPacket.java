@@ -1,24 +1,20 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
+import protocolsupport.listeners.internal.InventoryUpdateRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleNameItem;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.inventory.PESlotRemapper;
 import protocolsupport.protocol.typeremapper.pe.inventory.PETransactionRemapper;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.WindowType;
@@ -55,7 +51,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		String locale = cache.getAttributesCache().getLocale();
 		actionId = VarNumberSerializer.readVarInt(clientdata);
 		transactions = new InvTransaction[VarNumberSerializer.readVarInt(clientdata)];
-		for(int i = 0; i < transactions.length; i++) {
+		for (int i = 0; i < transactions.length; i++) {
 			transactions[i] = InvTransaction.readFromStream(clientdata, locale, connection.getVersion());
 		}
 		switch (actionId) {
@@ -105,12 +101,12 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				if (remapper.isCreativeTransaction(cache)) {
 					remapper.processCreativeTransaction(cache, transaction, packets);
 				} else {
-					if ((winCache.getOpenedWindow() != WindowType.ENCHANT) || 
-							invCache.getFakeEnchanting().handleInventoryClick(cache, transaction, packets)) {
+					if ((winCache.getOpenedWindow() != WindowType.ENCHANT) ||
+						invCache.getFakeEnchanting().handleInventoryClick(cache, transaction, packets)) {
 						if (winCache.getOpenedWindow() == WindowType.ANVIL) {
 							processAnvilName(transaction, packets);
 						}
-						remapper.cacheTransaction(transaction);	
+						remapper.cacheTransaction(transaction);
 					}
 				}
 			}
@@ -118,14 +114,14 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		}
 		if (invCache.shouldSendUpdate() && cache.getAttributesCache().getPEGameMode() != GameMode.CREATIVE) {
 			//Trigger inventory update, ALWAYS since PE sometimes 'guesses' or doesn't trust the server, we generally want an inventory update scheduled.
-			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InternalPluginMessageRequest.InventoryUpdateRequest(7));
+			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new InventoryUpdateRequest(7));
 			invCache.lockInventoryUpdate();
 		}
 		return packets;
 	}
 
 	public static class InvTransaction {
-		
+
 		//Special slot ids from remapping.
 		public static final int CURSOR = -1;
 		public static final int TABLE = -333;
@@ -166,12 +162,12 @@ public class GodPacket extends ServerBoundMiddlePacket {
 			transaction.oldItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			transaction.newItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			PETransactionRemapper.bug("Inv transaction read:"
-					+ " sId: " + transaction.sourceId 
-					+ " wId: " + transaction.inventoryId 
-					+ " action: " + transaction.action 
-					+ " slot: " + transaction.slot 
-					+ " oldItem: " + transaction.oldItem.toString() + ((!transaction.oldItem.isNull() && transaction.oldItem.getNBT() != null) ? transaction.oldItem.getNBT() : "")
-					+ " newItem: " + transaction.newItem.toString() + ((!transaction.newItem.isNull() && transaction.newItem.getNBT() != null) ? transaction.newItem.getNBT() : ""));
+				+ " sId: " + transaction.sourceId
+				+ " wId: " + transaction.inventoryId
+				+ " action: " + transaction.action
+				+ " slot: " + transaction.slot
+				+ " oldItem: " + transaction.oldItem.toString() + ((!transaction.oldItem.isNull() && transaction.oldItem.getNBT() != null) ? transaction.oldItem.getNBT() : "")
+				+ " newItem: " + transaction.newItem.toString() + ((!transaction.newItem.isNull() && transaction.newItem.getNBT() != null) ? transaction.newItem.getNBT() : ""));
 			return transaction;
 		}
 
@@ -217,7 +213,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		}
 
 	}
-	
+
 	protected static void processAnvilName(InvTransaction transaction, RecyclableArrayList<ServerBoundPacketData> packets) {
 		//Anvil naming is only done and known based on the clicked item.
 		if (transaction.getSlot() == 2 && !transaction.getOldItem().isNull()) {

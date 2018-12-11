@@ -49,11 +49,10 @@ public class LegacyBlockData {
 
 	public static class BlockIdRemappingRegistry extends IdRemappingRegistry<ArrayBasedIdRemappingTable> {
 
-		{
+		public BlockIdRemappingRegistry() {
 			applyDefaultRemaps();
 		}
 
-		
 		protected Gate toPre13GateState(Gate from, Gate to) {
 			to.setInWall(false);
 			to.setFacing(from.getFacing());
@@ -139,9 +138,8 @@ public class LegacyBlockData {
 		}
 
 		public void applyDefaultRemaps() {
-			remappings.clear();
+			clear();
 
-			this.registerRemapEntryForAllStates(Material.SHULKER_BOX, Material.PURPLE_SHULKER_BOX.createBlockData(), ProtocolVersion.MINECRAFT_PE);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(
 					Material.WHITE_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.MAGENTA_SHULKER_BOX,
@@ -149,13 +147,9 @@ public class LegacyBlockData {
 					Material.PINK_SHULKER_BOX, Material.GRAY_SHULKER_BOX, Material.LIGHT_GRAY_SHULKER_BOX,
 					Material.CYAN_SHULKER_BOX, Material.CYAN_SHULKER_BOX, Material.PURPLE_SHULKER_BOX,
 					Material.BLUE_SHULKER_BOX, Material.BROWN_SHULKER_BOX, Material.GREEN_SHULKER_BOX,
-					Material.RED_SHULKER_BOX, Material.BLACK_SHULKER_BOX
+					Material.RED_SHULKER_BOX, Material.BLACK_SHULKER_BOX, Material.SHULKER_BOX
 				),
-				o -> {
-					Directional shulker = (Directional) o;
-					shulker.setFacing(BlockFace.UP);
-					return shulker;
-				},
+				o -> o.getMaterial().createBlockData(),
 				ProtocolVersion.MINECRAFT_PE
 			);
 			this.registerRemapEntryForAllStates(Material.KELP_PLANT, Material.KELP.createBlockData((blockdata)-> {
@@ -178,11 +172,12 @@ public class LegacyBlockData {
 				},
 				ProtocolVersion.MINECRAFT_PE
 			);
-			this.registerRemapEntryForAllStates(Material.PISTON_HEAD, o -> {
-				PistonHead pistonHead = (PistonHead) o;
-				pistonHead.setShort(false);
-				return pistonHead;
-			}, ProtocolVersion.MINECRAFT_PE);
+			// Remove everything except direction from piston stuff. The rest is handled in tilenbt.
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(Material.PISTON, Material.STICKY_PISTON, Material.PISTON_HEAD), 
+				o -> cloneDirectional((Directional) o, (Directional) o.getMaterial().createBlockData()), 
+				ProtocolVersionsHelper.ALL_PE);
+			
 			this.registerRemapEntryForAllStates(
 				//Clear waterlog from remaining non rotatable corals.
 				Arrays.asList(
@@ -204,15 +199,34 @@ public class LegacyBlockData {
 					Material.GRAY_STAINED_GLASS_PANE, Material.GREEN_STAINED_GLASS_PANE, Material.LIGHT_BLUE_STAINED_GLASS_PANE, Material.LIGHT_GRAY_STAINED_GLASS_PANE,
 					Material.LIME_STAINED_GLASS_PANE, Material.MAGENTA_STAINED_GLASS_PANE, Material.ORANGE_STAINED_GLASS_PANE, Material.PINK_STAINED_GLASS_PANE,
 					Material.PURPLE_STAINED_GLASS_PANE, Material.RED_STAINED_GLASS_PANE, Material.WHITE_STAINED_GLASS_PANE, Material.YELLOW_STAINED_GLASS_PANE,
-					Material.CREEPER_HEAD, Material.CREEPER_WALL_HEAD,
-					Material.ZOMBIE_HEAD, Material.ZOMBIE_WALL_HEAD,
-					Material.SKELETON_SKULL, Material.SKELETON_WALL_SKULL,
-					Material.WITHER_SKELETON_SKULL, Material.WITHER_SKELETON_WALL_SKULL,
-					Material.PLAYER_HEAD, Material.PLAYER_WALL_HEAD,
 					Material.GRASS_BLOCK, Material.MYCELIUM, Material.PODZOL,
 					Material.NOTE_BLOCK
 				),
 				o -> o.getMaterial().createBlockData(),
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+			);
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.SKELETON_SKULL,
+					Material.WITHER_SKELETON_SKULL,
+					Material.CREEPER_HEAD,
+					Material.DRAGON_HEAD,
+					Material.PLAYER_HEAD,
+					Material.ZOMBIE_HEAD
+				),
+				Material.SKELETON_SKULL.createBlockData(),
+				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+			);
+			this.<Directional>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.SKELETON_WALL_SKULL,
+					Material.WITHER_SKELETON_WALL_SKULL,
+					Material.CREEPER_WALL_HEAD,
+					Material.DRAGON_WALL_HEAD,
+					Material.PLAYER_WALL_HEAD,
+					Material.ZOMBIE_WALL_HEAD
+				),
+				o -> cloneDirectional(o, (Directional) Material.SKELETON_WALL_SKULL.createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<MultipleFacing>registerRemapEntryForAllStates(
@@ -238,17 +252,29 @@ public class LegacyBlockData {
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Switch>registerRemapEntryForAllStates(
-				Arrays.asList(Material.STONE_BUTTON, Material.LEVER),
+				Arrays.asList(
+					Material.STONE_BUTTON,
+					Material.LEVER,
+					Material.OAK_BUTTON
+				),
 				o -> toPre13ButtonState(o, (Switch) o.getMaterial().createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Switch>registerRemapEntryForAllStates(
 				Arrays.asList(
 					Material.ACACIA_BUTTON, Material.DARK_OAK_BUTTON, Material.BIRCH_BUTTON,
-					Material.JUNGLE_BUTTON, Material.OAK_BUTTON, Material.SPRUCE_BUTTON
+					Material.JUNGLE_BUTTON, Material.SPRUCE_BUTTON
 				),
 				o -> toPre13ButtonState(o, (Switch) Material.OAK_BUTTON.createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			this.<Switch>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.ACACIA_BUTTON, Material.DARK_OAK_BUTTON, Material.BIRCH_BUTTON,
+					Material.JUNGLE_BUTTON, Material.SPRUCE_BUTTON
+				),
+				o -> toPre13ButtonState(o, (Switch) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.ALL_PE
 			);
 			this.<Door>registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -271,12 +297,27 @@ public class LegacyBlockData {
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Slab>registerRemapEntryForAllStates(
-				Arrays.asList(
-					Material.PRISMARINE_BRICK_SLAB, Material.PRISMARINE_SLAB, Material.DARK_PRISMARINE_SLAB,
-					Material.PETRIFIED_OAK_SLAB
-				),
+				Arrays.asList(Material.PETRIFIED_OAK_SLAB),
 				o -> toPre13SlabState(o, (Slab) Material.COBBLESTONE_SLAB.createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+			);
+			this.<Slab>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.PRISMARINE_BRICK_SLAB,
+					Material.PRISMARINE_SLAB,
+					Material.DARK_PRISMARINE_SLAB
+				),
+				o -> toPre13SlabState(o, (Slab) Material.COBBLESTONE_SLAB.createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			this.<Slab>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.PRISMARINE_BRICK_SLAB,
+					Material.PRISMARINE_SLAB,
+					Material.DARK_PRISMARINE_SLAB
+				),
+				o -> toPre13SlabState(o, (Slab) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.ALL_PE
 			);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -284,7 +325,7 @@ public class LegacyBlockData {
 					Material.JUNGLE_PRESSURE_PLATE, Material.OAK_PRESSURE_PLATE, Material.SPRUCE_PRESSURE_PLATE
 				),
 				Material.OAK_PRESSURE_PLATE.createBlockData(),
-				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+				ProtocolVersionsHelper.BEFORE_1_13
 			);
 			this.<Stairs>registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -299,22 +340,37 @@ public class LegacyBlockData {
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<Stairs>registerRemapEntryForAllStates(
-				Arrays.asList(Material.PRISMARINE_BRICK_STAIRS, Material.PRISMARINE_STAIRS, Material.DARK_PRISMARINE_STAIRS),
+				Arrays.asList(
+					Material.PRISMARINE_BRICK_STAIRS,
+					Material.PRISMARINE_STAIRS,
+					Material.DARK_PRISMARINE_STAIRS
+				),
 				o -> toPre13StairsState(o, (Stairs) Material.STONE_BRICK_STAIRS.createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<TrapDoor>registerRemapEntryForAllStates(
 				Arrays.asList(
-					Material.ACACIA_TRAPDOOR, Material.DARK_OAK_TRAPDOOR, Material.BIRCH_TRAPDOOR,
-					Material.JUNGLE_TRAPDOOR, Material.OAK_TRAPDOOR, Material.SPRUCE_TRAPDOOR
+					Material.IRON_TRAPDOOR,
+					Material.OAK_TRAPDOOR
 				),
-				o -> toPre13TrapDoor(o, (TrapDoor) Material.OAK_TRAPDOOR.createBlockData()),
+				o -> toPre13TrapDoor(o, (TrapDoor) o.getMaterial().createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
 			this.<TrapDoor>registerRemapEntryForAllStates(
-				Material.IRON_TRAPDOOR,
+				Arrays.asList(
+					Material.ACACIA_TRAPDOOR, Material.DARK_OAK_TRAPDOOR, Material.BIRCH_TRAPDOOR,
+					Material.JUNGLE_TRAPDOOR,  Material.SPRUCE_TRAPDOOR
+				),
+				o -> toPre13TrapDoor(o, (TrapDoor) Material.OAK_TRAPDOOR.createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			this.<TrapDoor>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.ACACIA_TRAPDOOR, Material.DARK_OAK_TRAPDOOR, Material.BIRCH_TRAPDOOR,
+					Material.JUNGLE_TRAPDOOR,  Material.SPRUCE_TRAPDOOR
+				),
 				o -> toPre13TrapDoor(o, (TrapDoor) o.getMaterial().createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+				ProtocolVersionsHelper.ALL_PE
 			);
 			this.<Bed>registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -365,6 +421,11 @@ public class LegacyBlockData {
 					return enderChest;
 				},
 				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			this.<Chest>registerRemapEntryForAllStates(
+				Arrays.asList(Material.CHEST, Material.TRAPPED_CHEST),
+				o -> cloneDirectional(o, (Directional) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.ALL_PE
 			);
 			this.<PistonHead>registerRemapEntryForAllStates(
 				Material.PISTON_HEAD,
@@ -467,10 +528,11 @@ public class LegacyBlockData {
 			this.registerRemapEntryForAllStates(Material.DRIED_KELP_BLOCK, Material.GREEN_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(Material.SHULKER_BOX, Material.PINK_SHULKER_BOX.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(
-				Arrays.asList(Material.SEAGRASS, Material.SEA_PICKLE, Material.TURTLE_EGG),
-				Material.GRASS.createBlockData(),
+				Arrays.asList(Material.SEA_PICKLE, Material.TURTLE_EGG),
+				Material.CAKE.createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
+			this.registerRemapEntryForAllStates(Material.SEAGRASS, Material.GRASS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13);
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(Material.TALL_SEAGRASS, Material.KELP, Material.KELP_PLANT),
 				Material.TALL_GRASS.createBlockData(),
@@ -603,7 +665,11 @@ public class LegacyBlockData {
 			this.registerRemapEntryForAllStates(Material.NETHER_WART_BLOCK, Material.RED_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
 			this.registerRemapEntryForAllStates(Material.RED_NETHER_BRICKS, Material.NETHER_BRICKS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
 			this.registerRemapEntryForAllStates(Material.MAGMA_BLOCK, Material.NETHERRACK.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
-			this.registerRemapEntryForAllStates(Material.BONE_BLOCK, Material.BRICKS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
+			this.registerRemapEntryForAllStates(Material.BONE_BLOCK, (o) -> {
+				Slab slab = (Slab) Material.STONE_SLAB.createBlockData();
+				slab.setType(Slab.Type.DOUBLE);
+				return slab;
+			}, ProtocolVersionsHelper.BEFORE_1_10);
 
 
 			this.registerRemapEntryForAllStates(Material.END_GATEWAY, Material.END_PORTAL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_9);
