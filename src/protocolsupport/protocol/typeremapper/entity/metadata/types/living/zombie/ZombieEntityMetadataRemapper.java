@@ -36,7 +36,7 @@ public class ZombieEntityMetadataRemapper extends InsentientEntityMetadataRemapp
 					}
 				});
 			}
-		}, ProtocolVersion.MINECRAFT_PE);
+		}, ProtocolVersionsHelper.ALL_PE);
 
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Zombie.BABY, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Zombie.BABY, 11), ProtocolVersionsHelper.ALL_1_9);

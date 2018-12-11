@@ -15,12 +15,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEnchantmentId;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
@@ -41,7 +41,65 @@ public class PEDataValues {
 	}
 
 	private static final EnumMap<NetworkEntityType, String> entityType = new EnumMap<>(NetworkEntityType.class);
+	private static final EnumMap<NetworkEntityType, Integer> legacyEntityId = new EnumMap<>(NetworkEntityType.class);
 	static {
+		legacyEntityId.put(NetworkEntityType.WITHER_SKELETON, 48);
+		legacyEntityId.put(NetworkEntityType.WOLF, 14);
+		legacyEntityId.put(NetworkEntityType.RABBIT, 18);
+		legacyEntityId.put(NetworkEntityType.CHICKEN, 10);
+		legacyEntityId.put(NetworkEntityType.COW, 11);
+		legacyEntityId.put(NetworkEntityType.SHEEP, 13);
+		legacyEntityId.put(NetworkEntityType.PIG, 12);
+		legacyEntityId.put(NetworkEntityType.MUSHROOM_COW, 16);
+		legacyEntityId.put(NetworkEntityType.SHULKER, 54);
+		legacyEntityId.put(NetworkEntityType.GUARDIAN, 49);
+		legacyEntityId.put(NetworkEntityType.ENDERMITE, 55);
+		legacyEntityId.put(NetworkEntityType.WITCH, 45);
+		legacyEntityId.put(NetworkEntityType.BAT, 19);
+		legacyEntityId.put(NetworkEntityType.WITHER, 52);
+		legacyEntityId.put(NetworkEntityType.ENDER_DRAGON, 53);
+		legacyEntityId.put(NetworkEntityType.MAGMA_CUBE, 42);
+		legacyEntityId.put(NetworkEntityType.BLAZE, 43);
+		legacyEntityId.put(NetworkEntityType.SILVERFISH, 39);
+		legacyEntityId.put(NetworkEntityType.CAVE_SPIDER, 40);
+		legacyEntityId.put(NetworkEntityType.ENDERMAN, 38);
+		legacyEntityId.put(NetworkEntityType.ZOMBIE_PIGMAN, 36);
+		legacyEntityId.put(NetworkEntityType.GHAST, 41);
+		legacyEntityId.put(NetworkEntityType.SLIME, 37);
+		legacyEntityId.put(NetworkEntityType.ZOMBIE, 32);
+		legacyEntityId.put(NetworkEntityType.SPIDER, 35);
+		legacyEntityId.put(NetworkEntityType.SKELETON, 34);
+		legacyEntityId.put(NetworkEntityType.CREEPER, 33);
+		legacyEntityId.put(NetworkEntityType.VILLAGER, 15);
+		legacyEntityId.put(NetworkEntityType.MULE, 25);
+		legacyEntityId.put(NetworkEntityType.DONKEY, 24);
+		legacyEntityId.put(NetworkEntityType.ZOMBIE_HORSE, 27);
+		legacyEntityId.put(NetworkEntityType.SKELETON_HORSE, 26);
+		legacyEntityId.put(NetworkEntityType.ZOMBIE_VILLAGER, 44);
+		legacyEntityId.put(NetworkEntityType.HUSK, 47);
+		legacyEntityId.put(NetworkEntityType.SQUID, 17);
+		legacyEntityId.put(NetworkEntityType.STRAY, 46);
+		legacyEntityId.put(NetworkEntityType.POLAR_BEAR, 28);
+		legacyEntityId.put(NetworkEntityType.ELDER_GUARDIAN, 50);
+		legacyEntityId.put(NetworkEntityType.COMMON_HORSE, 23);
+		legacyEntityId.put(NetworkEntityType.IRON_GOLEM, 20);
+		legacyEntityId.put(NetworkEntityType.OCELOT, 22);
+		legacyEntityId.put(NetworkEntityType.SNOWMAN, 21);
+		legacyEntityId.put(NetworkEntityType.LAMA, 29);
+		legacyEntityId.put(NetworkEntityType.PARROT, 30);
+		legacyEntityId.put(NetworkEntityType.ARMOR_STAND_MOB, 61);
+		legacyEntityId.put(NetworkEntityType.VINDICATOR, 57);
+		legacyEntityId.put(NetworkEntityType.EVOKER, 104);
+		legacyEntityId.put(NetworkEntityType.VEX, 105);
+		legacyEntityId.put(NetworkEntityType.DOLPHIN, 31);
+		legacyEntityId.put(NetworkEntityType.PUFFERFISH, 108);
+		legacyEntityId.put(NetworkEntityType.SALMON, 109);
+		legacyEntityId.put(NetworkEntityType.TROPICAL_FISH, 111);
+		legacyEntityId.put(NetworkEntityType.COD, 112);
+		legacyEntityId.put(NetworkEntityType.DROWNED, 110);
+		legacyEntityId.put(NetworkEntityType.TURTLE, 74);
+		legacyEntityId.put(NetworkEntityType.PHANTOM, 58);
+		
 		//entityType.put(NetworkEntityType.NPC, "minecraft:npc");
 		entityType.put(NetworkEntityType.PLAYER, "minecraft:player");
 		entityType.put(NetworkEntityType.WITHER_SKELETON, "minecraft:wither_skeleton");
@@ -143,6 +201,15 @@ public class PEDataValues {
 		//entityType.put(NetworkEntityType.TRIPOD_CAMERA, "minecraft:tripod_camera"
 	}
 
+	public static int getLegacyEntityId(NetworkEntityType type) {
+		Integer id = legacyEntityId.get(type);
+		if (id == null) {
+			System.err.println("Missing PE entity key for " + type);
+			id = legacyEntityId.get(NetworkEntityType.ARMOR_STAND_MOB);
+		}
+		return id;
+	}
+
 	public static String getEntityKey(NetworkEntityType type) {
 		String key = entityType.get(type);
 		if (key == null) {
@@ -196,40 +263,40 @@ public class PEDataValues {
 	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> PARTICLE = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
 		{
 			//TODO: Check values. (Speculative = names don't match) Only a few values have been tested by hand.
-			registerRemapEntry(Particle.EXPLOSION_NORMAL.ordinal(), PELevelEvent.PARTICLE_EXPLODE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.EXPLOSION_LARGE.ordinal(), PELevelEvent.PARTICLE_HUGE_EXPLOSION, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.EXPLOSION_HUGE.ordinal(), PELevelEvent.PARTICLE_HUGE_EXPLOSION_SEED, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.WATER_BUBBLE.ordinal(), PELevelEvent.PARTICLE_BUBBLE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.WATER_SPLASH.ordinal(), PELevelEvent.PARTICLE_SPLASH, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.WATER_WAKE.ordinal(), PELevelEvent.PARTICLE_WATER_WAKE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.CRIT.ordinal(), PELevelEvent.PARTICLE_CRITICAL, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.CRIT_MAGIC.ordinal(), PELevelEvent.PARTICLE_CRITICAL, ProtocolVersion.MINECRAFT_PE); //Magiccrit..?
-			registerRemapEntry(Particle.SMOKE_NORMAL.ordinal(), PELevelEvent.PARTICLE_SMOKE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.SMOKE_LARGE.ordinal(), PELevelEvent.PARTICLE_LARGE_SMOKE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.SPELL.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL, ProtocolVersion.MINECRAFT_PE); //Speculative
-			registerRemapEntry(Particle.SPELL_INSTANT.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL_INSTANTANIOUS, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.SPELL_MOB.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.SPELL_MOB_AMBIENT.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL_INSTANTANIOUS, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.SPELL_WITCH.ordinal(), PELevelEvent.PARTICLE_WITCH_SPELL, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.DRIP_WATER.ordinal(), PELevelEvent.PARTICLE_DRIP_WATER, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.DRIP_LAVA.ordinal(), PELevelEvent.PARTICLE_DRIP_LAVA, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.VILLAGER_ANGRY.ordinal(), PELevelEvent.PARTICLE_VILLAGER_ANGRY, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.VILLAGER_HAPPY.ordinal(), PELevelEvent.PARTICLE_VILLAGER_HAPPY, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.TOWN_AURA.ordinal(), PELevelEvent.PARTICLE_TOWN_AURA, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.NOTE.ordinal(), PELevelEvent.PARTICLE_NOTE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.PORTAL.ordinal(), PELevelEvent.PARTICLE_PORTAL, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.ENCHANTMENT_TABLE.ordinal(), PELevelEvent.PARTICLE_ENCHANTMENT_TABLE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.FLAME.ordinal(), PELevelEvent.PARTICLE_FLAME, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.LAVA.ordinal(), PELevelEvent.PARTICLE_LAVA, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.REDSTONE.ordinal(), PELevelEvent.PARTICLE_RISING_RED_DUST, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.SNOWBALL.ordinal(), PELevelEvent.PARTICLE_SNOWBALL_POOF, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.SLIME.ordinal(), PELevelEvent.PARTICLE_SLIME, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.HEART.ordinal(), PELevelEvent.PARTICLE_HEART, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.BARRIER.ordinal(), PELevelEvent.PARTICLE_BLOCK_FORCE_FIELD, ProtocolVersion.MINECRAFT_PE); //Speculative
-			registerRemapEntry(Particle.WATER_DROP.ordinal(), PELevelEvent.CAULDRON_TAKE_WATER, ProtocolVersion.MINECRAFT_PE); //Speculative
-			registerRemapEntry(Particle.DRAGON_BREATH.ordinal(), PELevelEvent.PARTICLE_DRAGONS_BREATH, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.END_ROD.ordinal(), PELevelEvent.PARTICLE_END_ROT, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.FALLING_DUST.ordinal(), PELevelEvent.PARTICLE_FALLING_DUST, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.EXPLOSION_NORMAL.ordinal(), PELevelEvent.PARTICLE_EXPLODE, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.EXPLOSION_LARGE.ordinal(), PELevelEvent.PARTICLE_HUGE_EXPLOSION, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.EXPLOSION_HUGE.ordinal(), PELevelEvent.PARTICLE_HUGE_EXPLOSION_SEED, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.WATER_BUBBLE.ordinal(), PELevelEvent.PARTICLE_BUBBLE, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.WATER_SPLASH.ordinal(), PELevelEvent.PARTICLE_SPLASH, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.WATER_WAKE.ordinal(), PELevelEvent.PARTICLE_WATER_WAKE, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.CRIT.ordinal(), PELevelEvent.PARTICLE_CRITICAL, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.CRIT_MAGIC.ordinal(), PELevelEvent.PARTICLE_CRITICAL, ProtocolVersionsHelper.ALL_PE); //Magiccrit..?
+			registerRemapEntry(Particle.SMOKE_NORMAL.ordinal(), PELevelEvent.PARTICLE_SMOKE, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.SMOKE_LARGE.ordinal(), PELevelEvent.PARTICLE_LARGE_SMOKE, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.SPELL.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL, ProtocolVersionsHelper.ALL_PE); //Speculative
+			registerRemapEntry(Particle.SPELL_INSTANT.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL_INSTANTANIOUS, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.SPELL_MOB.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.SPELL_MOB_AMBIENT.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL_INSTANTANIOUS, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.SPELL_WITCH.ordinal(), PELevelEvent.PARTICLE_WITCH_SPELL, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.DRIP_WATER.ordinal(), PELevelEvent.PARTICLE_DRIP_WATER, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.DRIP_LAVA.ordinal(), PELevelEvent.PARTICLE_DRIP_LAVA, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.VILLAGER_ANGRY.ordinal(), PELevelEvent.PARTICLE_VILLAGER_ANGRY, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.VILLAGER_HAPPY.ordinal(), PELevelEvent.PARTICLE_VILLAGER_HAPPY, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.TOWN_AURA.ordinal(), PELevelEvent.PARTICLE_TOWN_AURA, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.NOTE.ordinal(), PELevelEvent.PARTICLE_NOTE, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.PORTAL.ordinal(), PELevelEvent.PARTICLE_PORTAL, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.ENCHANTMENT_TABLE.ordinal(), PELevelEvent.PARTICLE_ENCHANTMENT_TABLE, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.FLAME.ordinal(), PELevelEvent.PARTICLE_FLAME, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.LAVA.ordinal(), PELevelEvent.PARTICLE_LAVA, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.REDSTONE.ordinal(), PELevelEvent.PARTICLE_RISING_RED_DUST, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.SNOWBALL.ordinal(), PELevelEvent.PARTICLE_SNOWBALL_POOF, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.SLIME.ordinal(), PELevelEvent.PARTICLE_SLIME, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.HEART.ordinal(), PELevelEvent.PARTICLE_HEART, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.BARRIER.ordinal(), PELevelEvent.PARTICLE_BLOCK_FORCE_FIELD, ProtocolVersionsHelper.ALL_PE); //Speculative
+			registerRemapEntry(Particle.WATER_DROP.ordinal(), PELevelEvent.CAULDRON_TAKE_WATER, ProtocolVersionsHelper.ALL_PE); //Speculative
+			registerRemapEntry(Particle.DRAGON_BREATH.ordinal(), PELevelEvent.PARTICLE_DRAGONS_BREATH, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.END_ROD.ordinal(), PELevelEvent.PARTICLE_END_ROT, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.FALLING_DUST.ordinal(), PELevelEvent.PARTICLE_FALLING_DUST, ProtocolVersionsHelper.ALL_PE);
 		}
 
 		@Override
@@ -240,19 +307,19 @@ public class PEDataValues {
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> BIOME = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
-			registerRemapEntry(Biome.SMALL_END_ISLANDS, Biome.THE_END, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.END_MIDLANDS, Biome.THE_END, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.END_HIGHLANDS, Biome.THE_END, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.END_BARRENS, Biome.THE_END, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.THE_VOID, Biome.THE_END, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.WARM_OCEAN, 40, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.LUKEWARM_OCEAN, 42, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.COLD_OCEAN, 44, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.DEEP_WARM_OCEAN, 41, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.DEEP_LUKEWARM_OCEAN, 43, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.DEEP_COLD_OCEAN, 45, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.FROZEN_OCEAN, 46, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.DEEP_FROZEN_OCEAN, 47, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Biome.SMALL_END_ISLANDS, Biome.THE_END, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.END_MIDLANDS, Biome.THE_END, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.END_HIGHLANDS, Biome.THE_END, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.END_BARRENS, Biome.THE_END, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.THE_VOID, Biome.THE_END, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.WARM_OCEAN, 40, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.LUKEWARM_OCEAN, 42, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.COLD_OCEAN, 44, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.DEEP_WARM_OCEAN, 41, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.DEEP_LUKEWARM_OCEAN, 43, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.DEEP_COLD_OCEAN, 45, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.FROZEN_OCEAN, 46, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.DEEP_FROZEN_OCEAN, 47, ProtocolVersionsHelper.ALL_PE);
 		}
 
 		@Override
@@ -260,30 +327,32 @@ public class PEDataValues {
 			return new ArrayBasedIdRemappingTable(167); //Largest biome id.
 		}
 
-		private void registerRemapEntry(Biome type, int to, ProtocolVersion version) {
-			registerRemapEntry(type.ordinal(), to, version);
+		private void registerRemapEntry(Biome type, int to, ProtocolVersion... versions) {
+			for (ProtocolVersion version : versions) {
+				registerRemapEntry(type.ordinal(), to, version);
+			}
 		}
 
-		private void registerRemapEntry(Biome type, Biome to, ProtocolVersion version) {
-			registerRemapEntry(type.ordinal(), to.ordinal(), version);
+		private void registerRemapEntry(Biome type, Biome to, ProtocolVersion... versions) {
+			registerRemapEntry(type.ordinal(), to.ordinal(), versions);
 		}
 	};
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> WINDOWTYPE = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
-			registerRemapEntry(WindowType.PLAYER, -1, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.CHEST, 0, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.CRAFTING_TABLE, 1, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.FURNACE, 2, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.ENCHANT, 3, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.BREWING, 4, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.ANVIL, 5, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.DISPENSER, 6, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.DROPPER, 7, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.HOPPER, 8, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.HORSE, 12, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.BEACON, 13, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.VILLAGER, 15, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.PLAYER, -1, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.CHEST, 0, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.CRAFTING_TABLE, 1, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.FURNACE, 2, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.ENCHANT, 3, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.BREWING, 4, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.ANVIL, 5, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.DISPENSER, 6, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.DROPPER, 7, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.HOPPER, 8, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.HORSE, 12, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.BEACON, 13, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.VILLAGER, 15, ProtocolVersionsHelper.ALL_PE);
 		}
 
 		@Override
@@ -291,8 +360,10 @@ public class PEDataValues {
 			return new ArrayBasedIdRemappingTable(14);
 		}
 
-		private void registerRemapEntry(WindowType type, int to, ProtocolVersion version) {
-			registerRemapEntry(type.toLegacyId(), to, version);
+		private void registerRemapEntry(WindowType type, int to, ProtocolVersion... versions) {
+			for (ProtocolVersion version : versions) {
+				registerRemapEntry(type.toLegacyId(), to, version);
+			}
 		}
 	};
 

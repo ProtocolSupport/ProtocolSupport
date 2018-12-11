@@ -21,7 +21,7 @@ public class MinecartEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 
 	public MinecartEntityMetadataRemapper() {
 		//TODO Block Remapping for PE/
-		//addRemap(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Minecart.BLOCK, PeMetaBase.MINECART_BLOCK), ProtocolVersion.MINECRAFT_PE),
+		//addRemap(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Minecart.BLOCK, PeMetaBase.MINECART_BLOCK), ProtocolVersionsHelper.ALL_PE),
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHAKING_POWER, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.SHAKING_POWER, 5), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.SHAKING_POWER, 17), ProtocolVersionsHelper.BEFORE_1_9);
@@ -66,8 +66,8 @@ public class MinecartEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 			},
 			ProtocolVersionsHelper.BEFORE_1_8
 		);
-		addRemap(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Minecart.BLOCK_Y, PeMetaBase.MINECART_OFFSET), ProtocolVersion.MINECRAFT_PE);
-		addRemap(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Minecart.SHOW_BLOCK, PeMetaBase.MINECART_DISPLAY), ProtocolVersion.MINECRAFT_PE);
+		addRemap(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Minecart.BLOCK_Y, PeMetaBase.MINECART_OFFSET), ProtocolVersionsHelper.ALL_PE);
+		addRemap(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Minecart.SHOW_BLOCK, PeMetaBase.MINECART_DISPLAY), ProtocolVersionsHelper.ALL_PE);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK_Y, 10), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK_Y, 9), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Minecart.BLOCK_Y, 21), ProtocolVersionsHelper.BEFORE_1_9);

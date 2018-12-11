@@ -17,7 +17,7 @@ public class EndermanEntityMetadataRemapper extends InsentientEntityMetadataRema
 //				remapped.put(PeMetaBase.ENDERMAN_BLOCK, new DataWatcherObjectShortLe((short) MinecraftData.getBlockIdFromState(stateWatcher.getValue())));
 //			});
 //		}
-//	}, ProtocolVersion.MINECRAFT_PE),
+//	}, ProtocolVersionsHelper.ALL_PE),
 //		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 12), ProtocolVersionsHelper.RANGE__1_10__1_13),
 //		new Entry(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 11), ProtocolVersionsHelper.ALL_1_9),
 //		new Entry(new IndexValueRemapper<Integer, DataWatcherObjectBlockState>(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 16) {

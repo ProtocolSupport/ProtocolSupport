@@ -13,7 +13,7 @@ public class BatEntityMetadataRemapper extends InsentientEntityMetadataRemapper 
 	public BatEntityMetadataRemapper() {
 		addRemap(new PeFlagRemapper(DataWatcherObjectIndex.Bat.HANGING,
 				new int[] {1, 1}, new int[] {PeMetaBase.FLAG_RESTING, -PeMetaBase.FLAG_GRAVITY}), //If the bat is hanging, remove it's gravity to prevent it from falling.
-		ProtocolVersion.MINECRAFT_PE);
+		ProtocolVersionsHelper.ALL_PE);
 
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Bat.HANGING, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Bat.HANGING, 11), ProtocolVersionsHelper.ALL_1_9);

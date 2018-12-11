@@ -11,7 +11,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarIn
 public class LegacyMuleEntityMetadataRemapper extends CargoHorseEntityMetadataRemapper {
 
 	public LegacyMuleEntityMetadataRemapper() {
-		addRemap(new FirstDataWatcherUpdateObjectAddRemapper(PeMetaBase.STRENGTH, new DataWatcherObjectSVarInt(5)), ProtocolVersion.MINECRAFT_PE); //Fake strength for when chested.
+		addRemap(new FirstDataWatcherUpdateObjectAddRemapper(PeMetaBase.STRENGTH, new DataWatcherObjectSVarInt(5)), ProtocolVersionsHelper.ALL_PE); //Fake strength for when chested.
 
 		addRemap(new FirstDataWatcherUpdateObjectAddRemapper(14, new DataWatcherObjectVarInt(2)), ProtocolVersion.MINECRAFT_1_10);
 		addRemap(new FirstDataWatcherUpdateObjectAddRemapper(13, new DataWatcherObjectVarInt(2)), ProtocolVersionsHelper.ALL_1_9);

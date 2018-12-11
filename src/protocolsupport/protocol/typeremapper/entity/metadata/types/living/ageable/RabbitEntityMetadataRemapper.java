@@ -12,7 +12,7 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 public class RabbitEntityMetadataRemapper extends AgeableEntityMetadataRemapper {
 
 	public RabbitEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Rabbit.VARIANT, PeMetaBase.VARIANT), ProtocolVersion.MINECRAFT_PE);
+		addRemap(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Rabbit.VARIANT, PeMetaBase.VARIANT), ProtocolVersionsHelper.ALL_PE);
 
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Rabbit.VARIANT, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Rabbit.VARIANT, 12), ProtocolVersionsHelper.ALL_1_9);

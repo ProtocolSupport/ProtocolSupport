@@ -12,7 +12,7 @@ public class PolarBearEntityMetadataRemapper extends AgeableEntityMetadataRemapp
 
 	public PolarBearEntityMetadataRemapper() {
 		//TODO: Just like horses, disappears. Perhaps send a unknown entitystatus aswell? Meh.
-		addRemap(new PeSimpleFlagRemapper(DataWatcherObjectIndex.PolarBear.STANDING_UP, PeMetaBase.FLAG_REARING), ProtocolVersion.MINECRAFT_PE);
+		addRemap(new PeSimpleFlagRemapper(DataWatcherObjectIndex.PolarBear.STANDING_UP, PeMetaBase.FLAG_REARING), ProtocolVersionsHelper.ALL_PE);
 
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.PolarBear.STANDING_UP, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 	}
