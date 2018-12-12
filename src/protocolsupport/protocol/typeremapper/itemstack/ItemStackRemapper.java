@@ -15,7 +15,7 @@ public class ItemStackRemapper {
 		setComplexlyRemapped(itemstack, false);
 		itemstack = ItemStackComplexRemapperRegistry.remapToClient(version, locale, itemstack);
 		itemstack.setTypeId(LegacyItemType.REGISTRY.getTable(version).getRemap(itemstack.getTypeId()));
-		if (version == ProtocolVersion.MINECRAFT_PE) {
+		if (version.getProtocolType() == ProtocolType.PE) {
 			if (PEItems.hasDurability(itemstack.getTypeId())) {
 				NBTCompound nbt = itemstack.getNBT();
 				if (nbt == null) {
