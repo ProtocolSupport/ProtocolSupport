@@ -269,7 +269,7 @@ public class TileEntityRemapper {
 				NBTCompound compound = tile.getNBT().getTagOfType("SpawnData", NBTType.COMPOUND);
 				if (compound != null) {
 					NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(compound.getTagOfType("id", NBTType.STRING).getValue());
-					compound.setTag("Type", new NBTInt(PEDataValues.getLegacyEntityId(type)));
+					compound.setTag("Type", new NBTInt(PEDataValues.getEntityNetworkId(type)));
 				}
 			},
 			ProtocolVersion.MINECRAFT_PE_1_7
