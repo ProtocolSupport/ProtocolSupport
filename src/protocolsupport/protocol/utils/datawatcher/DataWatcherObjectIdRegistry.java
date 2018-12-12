@@ -76,17 +76,17 @@ public class DataWatcherObjectIdRegistry {
 		register(DataWatcherObjectShort.class, 1, ProtocolVersionsHelper.BEFORE_1_9);
 		register(DataWatcherObjectInt.class, 2, ProtocolVersionsHelper.BEFORE_1_9);
 		register(DataWatcherObjectVector3i.class, 6, ProtocolVersionsHelper.BEFORE_1_9);
-		register(DataWatcherObjectByte.class, 0, ProtocolVersion.MINECRAFT_PE);
-		register(DataWatcherObjectShortLe.class, 1, ProtocolVersion.MINECRAFT_PE);
-		register(DataWatcherObjectVarInt.class, 2, ProtocolVersion.MINECRAFT_PE);
-		register(DataWatcherObjectSVarInt.class, 2, ProtocolVersion.MINECRAFT_PE);
-		register(DataWatcherObjectFloatLe.class, 3, ProtocolVersion.MINECRAFT_PE);
-		register(DataWatcherObjectString.class, 4, ProtocolVersion.MINECRAFT_PE);
-		register(DataWatcherObjectItemStack.class, 5, ProtocolVersion.MINECRAFT_PE);
-		register(DataWatcherObjectVector3vi.class, 6, ProtocolVersion.MINECRAFT_PE);
-		register(DataWatcherObjectVarLong.class, 7, ProtocolVersion.MINECRAFT_PE);
-		register(DataWatcherObjectSVarLong.class, 7, ProtocolVersion.MINECRAFT_PE);
-		register(DataWatcherObjectVector3fLe.class, 8, ProtocolVersion.MINECRAFT_PE);
+		register(DataWatcherObjectByte.class, 0, ProtocolVersionsHelper.ALL_PE);
+		register(DataWatcherObjectShortLe.class, 1, ProtocolVersionsHelper.ALL_PE);
+		register(DataWatcherObjectVarInt.class, 2, ProtocolVersionsHelper.ALL_PE);
+		register(DataWatcherObjectSVarInt.class, 2, ProtocolVersionsHelper.ALL_PE);
+		register(DataWatcherObjectFloatLe.class, 3, ProtocolVersionsHelper.ALL_PE);
+		register(DataWatcherObjectString.class, 4, ProtocolVersionsHelper.ALL_PE);
+		register(DataWatcherObjectItemStack.class, 5, ProtocolVersionsHelper.ALL_PE);
+		register(DataWatcherObjectVector3vi.class, 6, ProtocolVersionsHelper.ALL_PE);
+		register(DataWatcherObjectVarLong.class, 7, ProtocolVersionsHelper.ALL_PE);
+		register(DataWatcherObjectSVarLong.class, 7, ProtocolVersionsHelper.ALL_PE);
+		register(DataWatcherObjectVector3fLe.class, 8, ProtocolVersionsHelper.ALL_PE);
 	}
 
 	public static int getTypeId(@SuppressWarnings("rawtypes") Class<? extends DataWatcherObject> clazz, ProtocolVersion version) {

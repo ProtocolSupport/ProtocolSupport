@@ -19,9 +19,9 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 public class AreaEffectCloudEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 
 	public AreaEffectCloudEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNumberToFloatLe(DataWatcherObjectIndex.AreaEffectCloud.RADIUS, PeMetaBase.AREA_EFFECT_RADIUS), ProtocolVersion.MINECRAFT_PE);
+		addRemap(new IndexValueRemapperNumberToFloatLe(DataWatcherObjectIndex.AreaEffectCloud.RADIUS, PeMetaBase.AREA_EFFECT_RADIUS), ProtocolVersionsHelper.ALL_PE);
 		//TODO: area effectcloud waiting? Particle?
-		//addRemap(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.AreaEffectCloud.PARTICLE, PeMetaBase.AREA_EFFECT_PARTICLE), ProtocolVersion.MINECRAFT_PE),
+		//addRemap(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.AreaEffectCloud.PARTICLE, PeMetaBase.AREA_EFFECT_PARTICLE), ProtocolVersionsHelper.ALL_PE),
 
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.PARTICLE, 9), ProtocolVersionsHelper.UP_1_13);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.RADIUS, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

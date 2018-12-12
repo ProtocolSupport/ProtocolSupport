@@ -47,7 +47,7 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 				allowed.add(sendpacket);
 				if (sendpacket.getPacketId() == PEPacketIDs.CUSTOM_EVENT) {
 					ByteBuf peak = sendpacket.duplicate();
-					if (StringSerializer.readString(peak, ProtocolVersion.MINECRAFT_PE).equals(InternalPluginMessageRequest.PELockChannel)) {
+					if (StringSerializer.readString(peak, ProtocolVersionsHelper.LATEST_PE).equals(InternalPluginMessageRequest.PELockChannel)) {
 						isLocked = true;
 					}
 				}

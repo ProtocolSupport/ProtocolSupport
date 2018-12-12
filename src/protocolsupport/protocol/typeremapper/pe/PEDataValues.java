@@ -15,12 +15,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEnchantmentId;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
@@ -40,118 +40,183 @@ public class PEDataValues {
 		return new JsonParser().parse(getResource(name)).getAsJsonObject();
 	}
 
-	private static final EnumMap<NetworkEntityType, Integer> entityType = new EnumMap<>(NetworkEntityType.class);
-	private static final Int2ObjectOpenHashMap<NetworkEntityType> livingTypeFromNetwork = new Int2ObjectOpenHashMap<>();
-
-	private static void registerLivingType(NetworkEntityType type, int networkId) {
-		entityType.put(type, networkId);
-		livingTypeFromNetwork.put(networkId, type);
-	}
-
+	private static final EnumMap<NetworkEntityType, String> entityType = new EnumMap<>(NetworkEntityType.class);
+	private static final EnumMap<NetworkEntityType, Integer> legacyEntityId = new EnumMap<>(NetworkEntityType.class);
 	static {
-		registerLivingType(NetworkEntityType.WITHER_SKELETON, 48);
-		registerLivingType(NetworkEntityType.WOLF, 14);
-		registerLivingType(NetworkEntityType.RABBIT, 18);
-		registerLivingType(NetworkEntityType.CHICKEN, 10);
-		registerLivingType(NetworkEntityType.COW, 11);
-		registerLivingType(NetworkEntityType.SHEEP, 13);
-		registerLivingType(NetworkEntityType.PIG, 12);
-		registerLivingType(NetworkEntityType.MUSHROOM_COW, 16);
-		registerLivingType(NetworkEntityType.SHULKER, 54);
-		registerLivingType(NetworkEntityType.GUARDIAN, 49);
-		registerLivingType(NetworkEntityType.ENDERMITE, 55);
-		registerLivingType(NetworkEntityType.WITCH, 45);
-		registerLivingType(NetworkEntityType.BAT, 19);
-		registerLivingType(NetworkEntityType.WITHER, 52);
-		registerLivingType(NetworkEntityType.ENDER_DRAGON, 53);
-		registerLivingType(NetworkEntityType.MAGMA_CUBE, 42);
-		registerLivingType(NetworkEntityType.BLAZE, 43);
-		registerLivingType(NetworkEntityType.SILVERFISH, 39);
-		registerLivingType(NetworkEntityType.CAVE_SPIDER, 40);
-		registerLivingType(NetworkEntityType.ENDERMAN, 38);
-		registerLivingType(NetworkEntityType.ZOMBIE_PIGMAN, 36);
-		registerLivingType(NetworkEntityType.GHAST, 41);
-		registerLivingType(NetworkEntityType.SLIME, 37);
-		registerLivingType(NetworkEntityType.ZOMBIE, 32);
-		registerLivingType(NetworkEntityType.SPIDER, 35);
-		registerLivingType(NetworkEntityType.SKELETON, 34);
-		registerLivingType(NetworkEntityType.CREEPER, 33);
-		registerLivingType(NetworkEntityType.VILLAGER, 15);
-		registerLivingType(NetworkEntityType.MULE, 25);
-		registerLivingType(NetworkEntityType.DONKEY, 24);
-		registerLivingType(NetworkEntityType.ZOMBIE_HORSE, 27);
-		registerLivingType(NetworkEntityType.SKELETON_HORSE, 26);
-		registerLivingType(NetworkEntityType.ZOMBIE_VILLAGER, 44);
-		registerLivingType(NetworkEntityType.HUSK, 47);
-		registerLivingType(NetworkEntityType.SQUID, 17);
-		registerLivingType(NetworkEntityType.STRAY, 46);
-		registerLivingType(NetworkEntityType.POLAR_BEAR, 28);
-		registerLivingType(NetworkEntityType.ELDER_GUARDIAN, 50);
-		registerLivingType(NetworkEntityType.COMMON_HORSE, 23);
-		registerLivingType(NetworkEntityType.IRON_GOLEM, 20);
-		registerLivingType(NetworkEntityType.OCELOT, 22);
-		registerLivingType(NetworkEntityType.SNOWMAN, 21);
-		registerLivingType(NetworkEntityType.LAMA, 29);
-		registerLivingType(NetworkEntityType.PARROT, 30);
-		registerLivingType(NetworkEntityType.ARMOR_STAND_MOB, 61);
-		registerLivingType(NetworkEntityType.VINDICATOR, 57);
-		registerLivingType(NetworkEntityType.EVOKER, 104);
-		registerLivingType(NetworkEntityType.VEX, 105);
-		registerLivingType(NetworkEntityType.DOLPHIN, 31);
-		registerLivingType(NetworkEntityType.PUFFERFISH, 108);
-		registerLivingType(NetworkEntityType.SALMON, 109);
-		registerLivingType(NetworkEntityType.TROPICAL_FISH, 111);
-		registerLivingType(NetworkEntityType.COD, 112);
-		registerLivingType(NetworkEntityType.DROWNED, 110);
-		registerLivingType(NetworkEntityType.TURTLE, 74);
-		registerLivingType(NetworkEntityType.PHANTOM, 58);
-
-		entityType.put(NetworkEntityType.ARMOR_STAND_OBJECT, 61);
-		entityType.put(NetworkEntityType.TNT, 65);
-		entityType.put(NetworkEntityType.FALLING_OBJECT, 66);
-		//TODO: Fix pistons, moving blocks? -> 67
-		entityType.put(NetworkEntityType.EXP_BOTTLE, 68);
-		entityType.put(NetworkEntityType.EXP_ORB, 69);
-		entityType.put(NetworkEntityType.ENDEREYE, 70);
-		entityType.put(NetworkEntityType.ENDER_CRYSTAL, 71);
-		entityType.put(NetworkEntityType.FIREWORK, 72);
-		entityType.put(NetworkEntityType.THROWN_TRIDENT, 73);
-		entityType.put(NetworkEntityType.SHULKER_BULLET, 76);
-		entityType.put(NetworkEntityType.FISHING_FLOAT, 77);
-		entityType.put(NetworkEntityType.DRAGON_FIREBALL, 79);
-		entityType.put(NetworkEntityType.ARROW, 80);
-		entityType.put(NetworkEntityType.SNOWBALL, 81);
-		entityType.put(NetworkEntityType.EGG, 82);
-		entityType.put(NetworkEntityType.MINECART, 84);
-		entityType.put(NetworkEntityType.FIREBALL, 85);
-		entityType.put(NetworkEntityType.POTION, 86);
-		entityType.put(NetworkEntityType.ENDERPEARL, 87);
-		entityType.put(NetworkEntityType.LEASH_KNOT, 88);
-		entityType.put(NetworkEntityType.WITHER_SKULL, 89);
-		entityType.put(NetworkEntityType.BOAT, 90);
-		//TODO: WitherSkull dangerous? -> 91
-		entityType.put(NetworkEntityType.FIRECHARGE, 94);
-		entityType.put(NetworkEntityType.AREA_EFFECT_CLOUD, 95);
-		entityType.put(NetworkEntityType.MINECART_HOPPER, 96);
-		entityType.put(NetworkEntityType.MINECART_TNT, 97);
-		entityType.put(NetworkEntityType.MINECART_CHEST, 98);
-		entityType.put(NetworkEntityType.MINECART_COMMAND, 100);
-		//TODO: Lingering Potion? -> 101
-		entityType.put(NetworkEntityType.LAMA_SPIT, 102);
-		entityType.put(NetworkEntityType.EVOCATOR_FANGS, 103);
+		legacyEntityId.put(NetworkEntityType.WITHER_SKELETON, 48);
+		legacyEntityId.put(NetworkEntityType.WOLF, 14);
+		legacyEntityId.put(NetworkEntityType.RABBIT, 18);
+		legacyEntityId.put(NetworkEntityType.CHICKEN, 10);
+		legacyEntityId.put(NetworkEntityType.COW, 11);
+		legacyEntityId.put(NetworkEntityType.SHEEP, 13);
+		legacyEntityId.put(NetworkEntityType.PIG, 12);
+		legacyEntityId.put(NetworkEntityType.MUSHROOM_COW, 16);
+		legacyEntityId.put(NetworkEntityType.SHULKER, 54);
+		legacyEntityId.put(NetworkEntityType.GUARDIAN, 49);
+		legacyEntityId.put(NetworkEntityType.ENDERMITE, 55);
+		legacyEntityId.put(NetworkEntityType.WITCH, 45);
+		legacyEntityId.put(NetworkEntityType.BAT, 19);
+		legacyEntityId.put(NetworkEntityType.WITHER, 52);
+		legacyEntityId.put(NetworkEntityType.ENDER_DRAGON, 53);
+		legacyEntityId.put(NetworkEntityType.MAGMA_CUBE, 42);
+		legacyEntityId.put(NetworkEntityType.BLAZE, 43);
+		legacyEntityId.put(NetworkEntityType.SILVERFISH, 39);
+		legacyEntityId.put(NetworkEntityType.CAVE_SPIDER, 40);
+		legacyEntityId.put(NetworkEntityType.ENDERMAN, 38);
+		legacyEntityId.put(NetworkEntityType.ZOMBIE_PIGMAN, 36);
+		legacyEntityId.put(NetworkEntityType.GHAST, 41);
+		legacyEntityId.put(NetworkEntityType.SLIME, 37);
+		legacyEntityId.put(NetworkEntityType.ZOMBIE, 32);
+		legacyEntityId.put(NetworkEntityType.SPIDER, 35);
+		legacyEntityId.put(NetworkEntityType.SKELETON, 34);
+		legacyEntityId.put(NetworkEntityType.CREEPER, 33);
+		legacyEntityId.put(NetworkEntityType.VILLAGER, 15);
+		legacyEntityId.put(NetworkEntityType.MULE, 25);
+		legacyEntityId.put(NetworkEntityType.DONKEY, 24);
+		legacyEntityId.put(NetworkEntityType.ZOMBIE_HORSE, 27);
+		legacyEntityId.put(NetworkEntityType.SKELETON_HORSE, 26);
+		legacyEntityId.put(NetworkEntityType.ZOMBIE_VILLAGER, 44);
+		legacyEntityId.put(NetworkEntityType.HUSK, 47);
+		legacyEntityId.put(NetworkEntityType.SQUID, 17);
+		legacyEntityId.put(NetworkEntityType.STRAY, 46);
+		legacyEntityId.put(NetworkEntityType.POLAR_BEAR, 28);
+		legacyEntityId.put(NetworkEntityType.ELDER_GUARDIAN, 50);
+		legacyEntityId.put(NetworkEntityType.COMMON_HORSE, 23);
+		legacyEntityId.put(NetworkEntityType.IRON_GOLEM, 20);
+		legacyEntityId.put(NetworkEntityType.OCELOT, 22);
+		legacyEntityId.put(NetworkEntityType.SNOWMAN, 21);
+		legacyEntityId.put(NetworkEntityType.LAMA, 29);
+		legacyEntityId.put(NetworkEntityType.PARROT, 30);
+		legacyEntityId.put(NetworkEntityType.ARMOR_STAND_MOB, 61);
+		legacyEntityId.put(NetworkEntityType.VINDICATOR, 57);
+		legacyEntityId.put(NetworkEntityType.EVOKER, 104);
+		legacyEntityId.put(NetworkEntityType.VEX, 105);
+		legacyEntityId.put(NetworkEntityType.DOLPHIN, 31);
+		legacyEntityId.put(NetworkEntityType.PUFFERFISH, 108);
+		legacyEntityId.put(NetworkEntityType.SALMON, 109);
+		legacyEntityId.put(NetworkEntityType.TROPICAL_FISH, 111);
+		legacyEntityId.put(NetworkEntityType.COD, 112);
+		legacyEntityId.put(NetworkEntityType.DROWNED, 110);
+		legacyEntityId.put(NetworkEntityType.TURTLE, 74);
+		legacyEntityId.put(NetworkEntityType.PHANTOM, 58);
+		
+		//entityType.put(NetworkEntityType.NPC, "minecraft:npc");
+		entityType.put(NetworkEntityType.PLAYER, "minecraft:player");
+		entityType.put(NetworkEntityType.WITHER_SKELETON, "minecraft:wither_skeleton");
+		entityType.put(NetworkEntityType.HUSK, "minecraft:husk");
+		entityType.put(NetworkEntityType.STRAY, "minecraft:stray");
+		entityType.put(NetworkEntityType.WITCH, "minecraft:witch");
+		entityType.put(NetworkEntityType.ZOMBIE_VILLAGER, "minecraft:zombie_villager");
+		entityType.put(NetworkEntityType.BLAZE, "minecraft:blaze");
+		entityType.put(NetworkEntityType.MAGMA_CUBE, "minecraft:magma_cube");
+		entityType.put(NetworkEntityType.GHAST, "minecraft:ghast");
+		entityType.put(NetworkEntityType.CAVE_SPIDER, "minecraft:cave_spider");
+		entityType.put(NetworkEntityType.SILVERFISH, "minecraft:silverfish");
+		entityType.put(NetworkEntityType.ENDERMAN, "minecraft:enderman");
+		entityType.put(NetworkEntityType.SLIME, "minecraft:slime");
+		entityType.put(NetworkEntityType.ZOMBIE_PIGMAN, "minecraft:zombie_pigman");
+		entityType.put(NetworkEntityType.SPIDER, "minecraft:spider");
+		entityType.put(NetworkEntityType.SKELETON, "minecraft:skeleton");
+		entityType.put(NetworkEntityType.CREEPER, "minecraft:creeper");
+		entityType.put(NetworkEntityType.ZOMBIE, "minecraft:zombie");
+		entityType.put(NetworkEntityType.SKELETON_HORSE, "minecraft:skeleton_horse");
+		entityType.put(NetworkEntityType.MULE, "minecraft:mule");
+		entityType.put(NetworkEntityType.DONKEY, "minecraft:donkey");
+		entityType.put(NetworkEntityType.DOLPHIN, "minecraft:dolphin");
+		entityType.put(NetworkEntityType.TROPICAL_FISH, "minecraft:tropicalfish");
+		entityType.put(NetworkEntityType.WOLF, "minecraft:wolf");
+		entityType.put(NetworkEntityType.SQUID, "minecraft:squid");
+		entityType.put(NetworkEntityType.DROWNED, "minecraft:drowned");
+		entityType.put(NetworkEntityType.SHEEP, "minecraft:sheep");
+		entityType.put(NetworkEntityType.MUSHROOM_COW, "minecraft:mooshroom");
+		//entityType.put(NetworkEntityType.PANDA, "minecraft:panda");
+		entityType.put(NetworkEntityType.SALMON, "minecraft:salmon");
+		entityType.put(NetworkEntityType.PIG, "minecraft:pig");
+		entityType.put(NetworkEntityType.VILLAGER, "minecraft:villager");
+		entityType.put(NetworkEntityType.COD, "minecraft:cod");
+		entityType.put(NetworkEntityType.PUFFERFISH, "minecraft:pufferfish");
+		entityType.put(NetworkEntityType.COW, "minecraft:cow");
+		entityType.put(NetworkEntityType.CHICKEN, "minecraft:chicken");
+		//entityType.put(NetworkEntityType.BALLOON, "minecraft:balloon");
+		entityType.put(NetworkEntityType.LAMA, "minecraft:llama");
+		entityType.put(NetworkEntityType.IRON_GOLEM, "minecraft:iron_golem");
+		entityType.put(NetworkEntityType.RABBIT, "minecraft:rabbit");
+		//entityType.put(NetworkEntityType.SNOW_GOLEM, "minecraft:snow_golem");
+		entityType.put(NetworkEntityType.BAT, "minecraft:bat");
+		entityType.put(NetworkEntityType.OCELOT, "minecraft:ocelot");
+		entityType.put(NetworkEntityType.COMMON_HORSE, "minecraft:horse");
+		entityType.put(NetworkEntityType.OCELOT, "minecraft:cat");
+		entityType.put(NetworkEntityType.POLAR_BEAR, "minecraft:polar_bear");
+		entityType.put(NetworkEntityType.ZOMBIE_HORSE, "minecraft:zombie_horse");
+		entityType.put(NetworkEntityType.TURTLE, "minecraft:turtle");
+		entityType.put(NetworkEntityType.PARROT, "minecraft:parrot");
+		entityType.put(NetworkEntityType.GUARDIAN, "minecraft:guardian");
+		entityType.put(NetworkEntityType.ELDER_GUARDIAN, "minecraft:elder_guardian");
+		entityType.put(NetworkEntityType.VINDICATOR, "minecraft:vindicator");
+		entityType.put(NetworkEntityType.WITHER, "minecraft:wither");
+		entityType.put(NetworkEntityType.ENDER_DRAGON, "minecraft:ender_dragon");
+		entityType.put(NetworkEntityType.SHULKER, "minecraft:shulker");
+		entityType.put(NetworkEntityType.ENDERMITE, "minecraft:endermite");
+		entityType.put(NetworkEntityType.MINECART, "minecraft:minecart");
+		entityType.put(NetworkEntityType.MINECART_HOPPER, "minecraft:hopper_minecart");
+		entityType.put(NetworkEntityType.MINECART_TNT, "minecraft:tnt_minecart");
+		entityType.put(NetworkEntityType.MINECART_CHEST, "minecraft:chest_minecart");
+		entityType.put(NetworkEntityType.MINECART_COMMAND, "minecraft:command_block_minecart");
+		entityType.put(NetworkEntityType.ARMOR_STAND_OBJECT, "minecraft:armor_stand");
+		//entityType.put(NetworkEntityType.ARMOR_STAND_MOB, "minecraft:armor_stand");
+		entityType.put(NetworkEntityType.ITEM, "minecraft:item");
+		entityType.put(NetworkEntityType.TNT, "minecraft:tnt");
+		entityType.put(NetworkEntityType.FALLING_OBJECT, "minecraft:falling_block");
+		entityType.put(NetworkEntityType.EXP_BOTTLE, "minecraft:xp_bottle");
+		entityType.put(NetworkEntityType.EXP_ORB, "minecraft:xp_orb");
+		entityType.put(NetworkEntityType.ENDEREYE, "minecraft:eye_of_ender_signal");
+		entityType.put(NetworkEntityType.ENDER_CRYSTAL, "minecraft:ender_crystal");
+		entityType.put(NetworkEntityType.SHULKER_BULLET, "minecraft:shulker_bullet");
+		entityType.put(NetworkEntityType.FISHING_FLOAT, "minecraft:fishing_hook");
+		entityType.put(NetworkEntityType.DRAGON_FIREBALL, "minecraft:dragon_fireball");
+		entityType.put(NetworkEntityType.ARROW, "minecraft:arrow");
+		entityType.put(NetworkEntityType.SNOWBALL, "minecraft:snowball");
+		entityType.put(NetworkEntityType.EGG, "minecraft:egg");
+		entityType.put(NetworkEntityType.PAINTING, "minecraft:painting");
+		entityType.put(NetworkEntityType.THROWN_TRIDENT, "minecraft:thrown_trident");
+		entityType.put(NetworkEntityType.FIREBALL, "minecraft:fireball");
+		entityType.put(NetworkEntityType.POTION, "minecraft:splash_potion");
+		entityType.put(NetworkEntityType.ENDERPEARL, "minecraft:ender_pearl");
+		entityType.put(NetworkEntityType.LEASH_KNOT, "minecraft:leash_knot");
+		entityType.put(NetworkEntityType.WITHER_SKULL, "minecraft:wither_skull");
+		//entityType.put(NetworkEntityType.WITHER_SKULL_DANGEROUS, "minecraft:wither_skull_dangerous");
+		entityType.put(NetworkEntityType.BOAT, "minecraft:boat");
+		//entityType.put(NetworkEntityType.LIGHTNING_BOLT, "minecraft:lightning_bolt");
+		entityType.put(NetworkEntityType.FIREBALL, "minecraft:small_fireball");
+		entityType.put(NetworkEntityType.LAMA_SPIT, "minecraft:llama_spit");
+		entityType.put(NetworkEntityType.AREA_EFFECT_CLOUD, "minecraft:area_effect_cloud");
+		//entityType.put(NetworkEntityType.LINGERING_POTION, "minecraft:lingering_potion");
+		entityType.put(NetworkEntityType.FIREWORK, "minecraft:fireworks_rocket");
+		entityType.put(NetworkEntityType.EVOCATOR_FANGS, "minecraft:evocation_fang");
+		//entityType.put(NetworkEntityType.EVOCATION_ILLAGER, "minecraft:evocation_illager");
+		entityType.put(NetworkEntityType.VEX, "minecraft:vex");
+		//entityType.put(NetworkEntityType.AGENT, "minecraft:agent");
+		//entityType.put(NetworkEntityType.ICE_BOMB, "minecraft:ice_bomb");
+		entityType.put(NetworkEntityType.PHANTOM, "minecraft:phantom");
+		//entityType.put(NetworkEntityType.TRIPOD_CAMERA, "minecraft:tripod_camera"
 	}
 
-	public static int getEntityTypeId(NetworkEntityType type) {
-		try {
-			return entityType.get(type);
-		} catch (NullPointerException e) {
-			System.err.println("Missing entity mapping type for " + type);
-			return entityType.get(NetworkEntityType.ARMOR_STAND_MOB);
+	public static int getLegacyEntityId(NetworkEntityType type) {
+		Integer id = legacyEntityId.get(type);
+		if (id == null) {
+			System.err.println("Missing PE entity key for " + type);
+			id = legacyEntityId.get(NetworkEntityType.ARMOR_STAND_MOB);
 		}
+		return id;
 	}
 
-	public static NetworkEntityType getLivingTypeFromPeNetworkId(int networkId) {
-		return livingTypeFromNetwork.get(networkId);
+	public static String getEntityKey(NetworkEntityType type) {
+		String key = entityType.get(type);
+		if (key == null) {
+			System.err.println("Missing PE entity key for " + type);
+			key = "minecraft:armor_stand";
+		}
+		return key;
 	}
 
 	private static final Int2IntOpenHashMap pcEnchantToPe = new Int2IntOpenHashMap();
@@ -198,40 +263,40 @@ public class PEDataValues {
 	public static final IdRemappingRegistry<HashMapBasedIdRemappingTable> PARTICLE = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {
 		{
 			//TODO: Check values. (Speculative = names don't match) Only a few values have been tested by hand.
-			registerRemapEntry(Particle.EXPLOSION_NORMAL.ordinal(), PELevelEvent.PARTICLE_EXPLODE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.EXPLOSION_LARGE.ordinal(), PELevelEvent.PARTICLE_HUGE_EXPLOSION, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.EXPLOSION_HUGE.ordinal(), PELevelEvent.PARTICLE_HUGE_EXPLOSION_SEED, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.WATER_BUBBLE.ordinal(), PELevelEvent.PARTICLE_BUBBLE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.WATER_SPLASH.ordinal(), PELevelEvent.PARTICLE_SPLASH, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.WATER_WAKE.ordinal(), PELevelEvent.PARTICLE_WATER_WAKE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.CRIT.ordinal(), PELevelEvent.PARTICLE_CRITICAL, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.CRIT_MAGIC.ordinal(), PELevelEvent.PARTICLE_CRITICAL, ProtocolVersion.MINECRAFT_PE); //Magiccrit..?
-			registerRemapEntry(Particle.SMOKE_NORMAL.ordinal(), PELevelEvent.PARTICLE_SMOKE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.SMOKE_LARGE.ordinal(), PELevelEvent.PARTICLE_LARGE_SMOKE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.SPELL.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL, ProtocolVersion.MINECRAFT_PE); //Speculative
-			registerRemapEntry(Particle.SPELL_INSTANT.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL_INSTANTANIOUS, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.SPELL_MOB.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.SPELL_MOB_AMBIENT.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL_INSTANTANIOUS, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.SPELL_WITCH.ordinal(), PELevelEvent.PARTICLE_WITCH_SPELL, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.DRIP_WATER.ordinal(), PELevelEvent.PARTICLE_DRIP_WATER, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.DRIP_LAVA.ordinal(), PELevelEvent.PARTICLE_DRIP_LAVA, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.VILLAGER_ANGRY.ordinal(), PELevelEvent.PARTICLE_VILLAGER_ANGRY, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.VILLAGER_HAPPY.ordinal(), PELevelEvent.PARTICLE_VILLAGER_HAPPY, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.TOWN_AURA.ordinal(), PELevelEvent.PARTICLE_TOWN_AURA, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.NOTE.ordinal(), PELevelEvent.PARTICLE_NOTE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.PORTAL.ordinal(), PELevelEvent.PARTICLE_PORTAL, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.ENCHANTMENT_TABLE.ordinal(), PELevelEvent.PARTICLE_ENCHANTMENT_TABLE, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.FLAME.ordinal(), PELevelEvent.PARTICLE_FLAME, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.LAVA.ordinal(), PELevelEvent.PARTICLE_LAVA, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.REDSTONE.ordinal(), PELevelEvent.PARTICLE_RISING_RED_DUST, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.SNOWBALL.ordinal(), PELevelEvent.PARTICLE_SNOWBALL_POOF, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.SLIME.ordinal(), PELevelEvent.PARTICLE_SLIME, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.HEART.ordinal(), PELevelEvent.PARTICLE_HEART, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.BARRIER.ordinal(), PELevelEvent.PARTICLE_BLOCK_FORCE_FIELD, ProtocolVersion.MINECRAFT_PE); //Speculative
-			registerRemapEntry(Particle.WATER_DROP.ordinal(), PELevelEvent.CAULDRON_TAKE_WATER, ProtocolVersion.MINECRAFT_PE); //Speculative
-			registerRemapEntry(Particle.DRAGON_BREATH.ordinal(), PELevelEvent.PARTICLE_DRAGONS_BREATH, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.END_ROD.ordinal(), PELevelEvent.PARTICLE_END_ROT, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Particle.FALLING_DUST.ordinal(), PELevelEvent.PARTICLE_FALLING_DUST, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Particle.EXPLOSION_NORMAL.ordinal(), PELevelEvent.PARTICLE_EXPLODE, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.EXPLOSION_LARGE.ordinal(), PELevelEvent.PARTICLE_HUGE_EXPLOSION, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.EXPLOSION_HUGE.ordinal(), PELevelEvent.PARTICLE_HUGE_EXPLOSION_SEED, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.WATER_BUBBLE.ordinal(), PELevelEvent.PARTICLE_BUBBLE, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.WATER_SPLASH.ordinal(), PELevelEvent.PARTICLE_SPLASH, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.WATER_WAKE.ordinal(), PELevelEvent.PARTICLE_WATER_WAKE, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.CRIT.ordinal(), PELevelEvent.PARTICLE_CRITICAL, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.CRIT_MAGIC.ordinal(), PELevelEvent.PARTICLE_CRITICAL, ProtocolVersionsHelper.ALL_PE); //Magiccrit..?
+			registerRemapEntry(Particle.SMOKE_NORMAL.ordinal(), PELevelEvent.PARTICLE_SMOKE, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.SMOKE_LARGE.ordinal(), PELevelEvent.PARTICLE_LARGE_SMOKE, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.SPELL.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL, ProtocolVersionsHelper.ALL_PE); //Speculative
+			registerRemapEntry(Particle.SPELL_INSTANT.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL_INSTANTANIOUS, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.SPELL_MOB.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.SPELL_MOB_AMBIENT.ordinal(), PELevelEvent.PARTICLE_MOB_SPELL_INSTANTANIOUS, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.SPELL_WITCH.ordinal(), PELevelEvent.PARTICLE_WITCH_SPELL, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.DRIP_WATER.ordinal(), PELevelEvent.PARTICLE_DRIP_WATER, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.DRIP_LAVA.ordinal(), PELevelEvent.PARTICLE_DRIP_LAVA, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.VILLAGER_ANGRY.ordinal(), PELevelEvent.PARTICLE_VILLAGER_ANGRY, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.VILLAGER_HAPPY.ordinal(), PELevelEvent.PARTICLE_VILLAGER_HAPPY, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.TOWN_AURA.ordinal(), PELevelEvent.PARTICLE_TOWN_AURA, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.NOTE.ordinal(), PELevelEvent.PARTICLE_NOTE, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.PORTAL.ordinal(), PELevelEvent.PARTICLE_PORTAL, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.ENCHANTMENT_TABLE.ordinal(), PELevelEvent.PARTICLE_ENCHANTMENT_TABLE, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.FLAME.ordinal(), PELevelEvent.PARTICLE_FLAME, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.LAVA.ordinal(), PELevelEvent.PARTICLE_LAVA, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.REDSTONE.ordinal(), PELevelEvent.PARTICLE_RISING_RED_DUST, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.SNOWBALL.ordinal(), PELevelEvent.PARTICLE_SNOWBALL_POOF, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.SLIME.ordinal(), PELevelEvent.PARTICLE_SLIME, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.HEART.ordinal(), PELevelEvent.PARTICLE_HEART, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.BARRIER.ordinal(), PELevelEvent.PARTICLE_BLOCK_FORCE_FIELD, ProtocolVersionsHelper.ALL_PE); //Speculative
+			registerRemapEntry(Particle.WATER_DROP.ordinal(), PELevelEvent.CAULDRON_TAKE_WATER, ProtocolVersionsHelper.ALL_PE); //Speculative
+			registerRemapEntry(Particle.DRAGON_BREATH.ordinal(), PELevelEvent.PARTICLE_DRAGONS_BREATH, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.END_ROD.ordinal(), PELevelEvent.PARTICLE_END_ROT, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Particle.FALLING_DUST.ordinal(), PELevelEvent.PARTICLE_FALLING_DUST, ProtocolVersionsHelper.ALL_PE);
 		}
 
 		@Override
@@ -242,19 +307,19 @@ public class PEDataValues {
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> BIOME = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
-			registerRemapEntry(Biome.SMALL_END_ISLANDS, Biome.THE_END, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.END_MIDLANDS, Biome.THE_END, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.END_HIGHLANDS, Biome.THE_END, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.END_BARRENS, Biome.THE_END, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.THE_VOID, Biome.THE_END, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.WARM_OCEAN, 40, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.LUKEWARM_OCEAN, 42, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.COLD_OCEAN, 44, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.DEEP_WARM_OCEAN, 41, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.DEEP_LUKEWARM_OCEAN, 43, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.DEEP_COLD_OCEAN, 45, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.FROZEN_OCEAN, 46, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(Biome.DEEP_FROZEN_OCEAN, 47, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(Biome.SMALL_END_ISLANDS, Biome.THE_END, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.END_MIDLANDS, Biome.THE_END, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.END_HIGHLANDS, Biome.THE_END, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.END_BARRENS, Biome.THE_END, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.THE_VOID, Biome.THE_END, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.WARM_OCEAN, 40, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.LUKEWARM_OCEAN, 42, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.COLD_OCEAN, 44, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.DEEP_WARM_OCEAN, 41, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.DEEP_LUKEWARM_OCEAN, 43, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.DEEP_COLD_OCEAN, 45, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.FROZEN_OCEAN, 46, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(Biome.DEEP_FROZEN_OCEAN, 47, ProtocolVersionsHelper.ALL_PE);
 		}
 
 		@Override
@@ -262,30 +327,32 @@ public class PEDataValues {
 			return new ArrayBasedIdRemappingTable(167); //Largest biome id.
 		}
 
-		private void registerRemapEntry(Biome type, int to, ProtocolVersion version) {
-			registerRemapEntry(type.ordinal(), to, version);
+		private void registerRemapEntry(Biome type, int to, ProtocolVersion... versions) {
+			for (ProtocolVersion version : versions) {
+				registerRemapEntry(type.ordinal(), to, version);
+			}
 		}
 
-		private void registerRemapEntry(Biome type, Biome to, ProtocolVersion version) {
-			registerRemapEntry(type.ordinal(), to.ordinal(), version);
+		private void registerRemapEntry(Biome type, Biome to, ProtocolVersion... versions) {
+			registerRemapEntry(type.ordinal(), to.ordinal(), versions);
 		}
 	};
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> WINDOWTYPE = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
-			registerRemapEntry(WindowType.PLAYER, -1, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.CHEST, 0, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.CRAFTING_TABLE, 1, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.FURNACE, 2, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.ENCHANT, 3, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.BREWING, 4, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.ANVIL, 5, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.DISPENSER, 6, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.DROPPER, 7, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.HOPPER, 8, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.HORSE, 12, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.BEACON, 13, ProtocolVersion.MINECRAFT_PE);
-			registerRemapEntry(WindowType.VILLAGER, 15, ProtocolVersion.MINECRAFT_PE);
+			registerRemapEntry(WindowType.PLAYER, -1, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.CHEST, 0, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.CRAFTING_TABLE, 1, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.FURNACE, 2, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.ENCHANT, 3, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.BREWING, 4, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.ANVIL, 5, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.DISPENSER, 6, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.DROPPER, 7, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.HOPPER, 8, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.HORSE, 12, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.BEACON, 13, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.VILLAGER, 15, ProtocolVersionsHelper.ALL_PE);
 		}
 
 		@Override
@@ -293,8 +360,10 @@ public class PEDataValues {
 			return new ArrayBasedIdRemappingTable(14);
 		}
 
-		private void registerRemapEntry(WindowType type, int to, ProtocolVersion version) {
-			registerRemapEntry(type.toLegacyId(), to, version);
+		private void registerRemapEntry(WindowType type, int to, ProtocolVersion... versions) {
+			for (ProtocolVersion version : versions) {
+				registerRemapEntry(type.toLegacyId(), to, version);
+			}
 		}
 	};
 

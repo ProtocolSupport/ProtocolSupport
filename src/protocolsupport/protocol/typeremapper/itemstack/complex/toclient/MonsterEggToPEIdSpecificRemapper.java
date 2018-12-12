@@ -31,7 +31,7 @@ public class MonsterEggToPEIdSpecificRemapper implements ItemStackComplexRemappe
 		if (StringUtils.isEmpty(id)) {
 			return itemstack;
 		}
-		itemstack.setLegacyData(PEDataValues.getEntityTypeId(NetworkEntityType.getByRegistrySTypeId(id)));
+		//itemstack.setLegacyData(PEDataValues.getEntityTypeId(NetworkEntityType.getByRegistrySTypeId(id)));
 		return itemstack;
 	}
 

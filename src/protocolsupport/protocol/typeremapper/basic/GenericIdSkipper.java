@@ -45,9 +45,9 @@ public class GenericIdSkipper {
 			registerSkipEntry(Enchantment.DEPTH_STRIDER, ProtocolVersionsHelper.BEFORE_1_8);
 			registerSkipEntry(Enchantment.LURE, ProtocolVersionsHelper.BEFORE_1_7);
 			registerSkipEntry(Enchantment.LUCK, ProtocolVersionsHelper.BEFORE_1_7);
-			registerSkipEntry(Enchantment.BINDING_CURSE, ProtocolVersion.MINECRAFT_PE);
-			registerSkipEntry(Enchantment.SWEEPING_EDGE, ProtocolVersion.MINECRAFT_PE);
-			registerSkipEntry(Enchantment.VANISHING_CURSE, ProtocolVersion.MINECRAFT_PE);
+			registerSkipEntry(Enchantment.BINDING_CURSE, ProtocolVersionsHelper.ALL_PE);
+			registerSkipEntry(Enchantment.SWEEPING_EDGE, ProtocolVersionsHelper.ALL_PE);
+			registerSkipEntry(Enchantment.VANISHING_CURSE, ProtocolVersionsHelper.ALL_PE);
 		}
 		protected void registerSkipEntry(Enchantment ench, ProtocolVersion... versions) {
 			registerSkipEntry(ench.getKey().getKey(), versions);

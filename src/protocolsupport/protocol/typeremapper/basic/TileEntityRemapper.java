@@ -266,14 +266,34 @@ public class TileEntityRemapper {
 		register(
 			TileEntityType.MOB_SPAWNER,
 			tile -> {
-				tile.getNBT().removeTag("SpawnPotentials");
-				int entityId = 0;
 				NBTCompound compound = tile.getNBT().getTagOfType("SpawnData", NBTType.COMPOUND);
 				if (compound != null) {
-					entityId = PEDataValues.getEntityTypeId(NetworkEntityType.getByRegistrySTypeId(compound.getTagOfType("id", NBTType.STRING).getValue()));
-					compound.setTag("Type", new NBTInt(entityId));
+					NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(compound.getTagOfType("id", NBTType.STRING).getValue());
+					compound.setTag("Type", new NBTInt(PEDataValues.getLegacyEntityId(type)));
 				}
-				tile.getNBT().setTag("EntityId", new NBTInt(entityId));
+			},
+			ProtocolVersion.MINECRAFT_PE_1_7
+		);
+		register(
+			TileEntityType.MOB_SPAWNER,
+			tile -> {
+				NBTCompound compound = tile.getNBT().getTagOfType("SpawnData", NBTType.COMPOUND);
+				if (compound != null) {
+					NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(compound.getTagOfType("id", NBTType.STRING).getValue());
+					compound.setTag("Type", new NBTString(PEDataValues.getEntityKey(type)));
+				}
+			},
+			ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_PE_1_8)
+		);
+		register(
+			TileEntityType.MOB_SPAWNER,
+			tile -> {
+				tile.getNBT().removeTag("SpawnPotentials");
+				NBTCompound compound = tile.getNBT().getTagOfType("SpawnData", NBTType.COMPOUND);
+				if (compound != null) {
+					NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(compound.getTagOfType("id", NBTType.STRING).getValue());
+					compound.setTag("Type", new NBTString(PEDataValues.getEntityKey(type)));
+				}
 				tile.getNBT().setTag("DisplayEntityWidth", new NBTFloat(1));
 				tile.getNBT().setTag("DisplayEntityHeight", new NBTFloat(1));
 				tile.getNBT().setTag("DisplayEntityScale", new NBTFloat(1));

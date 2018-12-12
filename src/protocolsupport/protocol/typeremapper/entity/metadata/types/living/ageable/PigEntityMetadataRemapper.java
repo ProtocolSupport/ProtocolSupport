@@ -12,7 +12,7 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 public class PigEntityMetadataRemapper extends AgeableEntityMetadataRemapper {
 
 	public PigEntityMetadataRemapper() {
-		addRemap(new PeSimpleFlagRemapper(DataWatcherObjectIndex.Pig.HAS_SADLLE, PeMetaBase.FLAG_SADDLED), ProtocolVersion.MINECRAFT_PE);
+		addRemap(new PeSimpleFlagRemapper(DataWatcherObjectIndex.Pig.HAS_SADLLE, PeMetaBase.FLAG_SADDLED), ProtocolVersionsHelper.ALL_PE);
 
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Pig.HAS_SADLLE, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Pig.HAS_SADLLE, 12), ProtocolVersionsHelper.ALL_1_9);

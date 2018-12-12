@@ -25,7 +25,7 @@ public class CargoHorseEntityMetadataRemapper extends BaseHorseEntityMetadataRem
 					remapped.put(PeMetaBase.HORSE_CONTAINER_MULTIPLIER, new DataWatcherObjectSVarInt(boolWatcher.getValue() ? 3 : 0)); //Strength multiplier for chest size.
 				});
 			}
-		}, ProtocolVersion.MINECRAFT_PE);
+		}, ProtocolVersionsHelper.ALL_PE);
 
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.CargoHorse.HAS_CHEST, 15), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 	}

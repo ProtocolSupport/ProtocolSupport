@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.itemstack;
 
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapperRegistry;
 import protocolsupport.protocol.typeremapper.pe.PEItems;
@@ -40,7 +41,7 @@ public class ItemStackRemapper {
 	}
 
 	public static NetworkItemStack remapFromClient(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		if (version == ProtocolVersion.MINECRAFT_PE) {
+		if (version.getProtocolType() == ProtocolType.PE) {
 			int modernId = PEItems.getModernIdByPEIdData(itemstack.getTypeId(), itemstack.getLegacyData());
 			itemstack.setTypeId(modernId);
 			itemstack.setLegacyData(0);

@@ -83,29 +83,29 @@ public class ItemStackComplexRemapperRegistry {
 			registerToClient(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);
 			registerToClient(material, enchanttolegacyid, ProtocolVersionsHelper.BEFORE_1_13);
 			registerToClient(material, dnametolegacytext, ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
-			registerToClient(material, peenchantremapper, ProtocolVersion.MINECRAFT_PE);
+			registerToClient(material, peenchantremapper, ProtocolVersionsHelper.ALL_PE);
 		});
-		registerToClient(Material.FILLED_MAP, new MapItemLegacyIdToNbtSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
+		registerToClient(Material.FILLED_MAP, new MapItemLegacyIdToNbtSpecificRemapper(), ProtocolVersionsHelper.ALL_PE);
 		PotionToPEIdSpecificRemapper pepotion = new PotionToPEIdSpecificRemapper();
-		registerToClient(Material.POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
-		registerToClient(Material.SPLASH_POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
-		registerToClient(Material.LINGERING_POTION, pepotion, ProtocolVersion.MINECRAFT_PE);
-		registerToClient(Material.TIPPED_ARROW, pepotion, ProtocolVersion.MINECRAFT_PE);
+		registerToClient(Material.POTION, pepotion, ProtocolVersionsHelper.ALL_PE);
+		registerToClient(Material.SPLASH_POTION, pepotion, ProtocolVersionsHelper.ALL_PE);
+		registerToClient(Material.LINGERING_POTION, pepotion, ProtocolVersionsHelper.ALL_PE);
+		registerToClient(Material.TIPPED_ARROW, pepotion, ProtocolVersionsHelper.ALL_PE);
 		//TODO FIX
-		//registerToClient(Material.MONSTER_EGG, new MonsterEggToPEIdSpecificRemapper(), ProtocolVersion.MINECRAFT_PE);
+		//registerToClient(Material.MONSTER_EGG, new MonsterEggToPEIdSpecificRemapper(), ProtocolVersionsHelper.ALL_PE);
 		BookPagesToPESpecificRemapper pebook = new BookPagesToPESpecificRemapper();
-		registerToClient(Material.WRITTEN_BOOK, pebook, ProtocolVersion.MINECRAFT_PE);
+		registerToClient(Material.WRITTEN_BOOK, pebook, ProtocolVersionsHelper.ALL_PE);
 		//TODO FIX
-		//registerToClient(Material.BOOK_AND_QUILL, pebook, ProtocolVersion.MINECRAFT_PE);
+		//registerToClient(Material.BOOK_AND_QUILL, pebook, ProtocolVersionsHelper.ALL_PE);
 		//FireworkToPETagSpecificRemapper pefireworks = new FireworkToPETagSpecificRemapper();
 		//TODO FIX
-		//registerToClient(Material.FIREWORK_CHARGE, pefireworks, ProtocolVersion.MINECRAFT_PE);
-		//registerToClient(Material.FIREWORK, pefireworks, ProtocolVersion.MINECRAFT_PE);
+		//registerToClient(Material.FIREWORK_CHARGE, pefireworks, ProtocolVersionsHelper.ALL_PE);
+		//registerToClient(Material.FIREWORK, pefireworks, ProtocolVersionsHelper.ALL_PE);
 		LeatherArmorToPESpecificRemapper peleatherarmor = new LeatherArmorToPESpecificRemapper();
-		registerToClient(Material.LEATHER_HELMET, peleatherarmor, ProtocolVersion.MINECRAFT_PE);
-		registerToClient(Material.LEATHER_CHESTPLATE, peleatherarmor, ProtocolVersion.MINECRAFT_PE);
-		registerToClient(Material.LEATHER_LEGGINGS, peleatherarmor, ProtocolVersion.MINECRAFT_PE);
-		registerToClient(Material.LEATHER_BOOTS, peleatherarmor, ProtocolVersion.MINECRAFT_PE);
+		registerToClient(Material.LEATHER_HELMET, peleatherarmor, ProtocolVersionsHelper.ALL_PE);
+		registerToClient(Material.LEATHER_CHESTPLATE, peleatherarmor, ProtocolVersionsHelper.ALL_PE);
+		registerToClient(Material.LEATHER_LEGGINGS, peleatherarmor, ProtocolVersionsHelper.ALL_PE);
+		registerToClient(Material.LEATHER_BOOTS, peleatherarmor, ProtocolVersionsHelper.ALL_PE);
 	}
 
 	static {
@@ -119,29 +119,29 @@ public class ItemStackComplexRemapperRegistry {
 		.forEach(material -> {
 			registerFromClient(material, enchantfromlegacyid, ProtocolVersionsHelper.BEFORE_1_13);
 			registerFromClient(material, dnamefromlegacytext, ProtocolVersionsHelper.BEFORE_1_13);
-			registerFromClient(material, frompeenchantremapper, ProtocolVersion.MINECRAFT_PE);
+			registerFromClient(material, frompeenchantremapper, ProtocolVersionsHelper.ALL_PE);
 		});
 		//TODO FIX
-		//registerFromClient(Material.MAP, new MapItemNbtToLegacyIdRemapper(), ProtocolVersion.MINECRAFT_PE);
-		//registerFromClient(Material.MONSTER_EGG, new MonsterEggFromPEIdRemapper(), ProtocolVersion.MINECRAFT_PE);
+		//registerFromClient(Material.MAP, new MapItemNbtToLegacyIdRemapper(), ProtocolVersionsHelper.ALL_PE);
+		//registerFromClient(Material.MONSTER_EGG, new MonsterEggFromPEIdRemapper(), ProtocolVersionsHelper.ALL_PE);
 		BookPagesFromPERemapper frompebook = new BookPagesFromPERemapper();
-		registerFromClient(Material.WRITTEN_BOOK, frompebook, ProtocolVersion.MINECRAFT_PE);
+		registerFromClient(Material.WRITTEN_BOOK, frompebook, ProtocolVersionsHelper.ALL_PE);
 		//TODO FIX
-		//registerFromClient(Material.BOOK_AND_QUILL, frompebook, ProtocolVersion.MINECRAFT_PE);
+		//registerFromClient(Material.BOOK_AND_QUILL, frompebook, ProtocolVersionsHelper.ALL_PE);
 		PotionFromPEIdRemapper frompepotion = new PotionFromPEIdRemapper();
-		registerFromClient(Material.POTION, frompepotion, ProtocolVersion.MINECRAFT_PE);
-		registerFromClient(Material.SPLASH_POTION, frompepotion, ProtocolVersion.MINECRAFT_PE);
-		registerFromClient(Material.LINGERING_POTION, frompepotion, ProtocolVersion.MINECRAFT_PE);
-		registerFromClient(Material.TIPPED_ARROW, frompepotion, ProtocolVersion.MINECRAFT_PE);
+		registerFromClient(Material.POTION, frompepotion, ProtocolVersionsHelper.ALL_PE);
+		registerFromClient(Material.SPLASH_POTION, frompepotion, ProtocolVersionsHelper.ALL_PE);
+		registerFromClient(Material.LINGERING_POTION, frompepotion, ProtocolVersionsHelper.ALL_PE);
+		registerFromClient(Material.TIPPED_ARROW, frompepotion, ProtocolVersionsHelper.ALL_PE);
 		LeatherArmorFromPERemapper frompeleatherarmor = new LeatherArmorFromPERemapper();
-		registerFromClient(Material.LEATHER_HELMET, frompeleatherarmor, ProtocolVersion.MINECRAFT_PE);
-		registerFromClient(Material.LEATHER_CHESTPLATE, frompeleatherarmor, ProtocolVersion.MINECRAFT_PE);
-		registerFromClient(Material.LEATHER_LEGGINGS, frompeleatherarmor, ProtocolVersion.MINECRAFT_PE);
-		registerFromClient(Material.LEATHER_BOOTS, frompeleatherarmor, ProtocolVersion.MINECRAFT_PE);
+		registerFromClient(Material.LEATHER_HELMET, frompeleatherarmor, ProtocolVersionsHelper.ALL_PE);
+		registerFromClient(Material.LEATHER_CHESTPLATE, frompeleatherarmor, ProtocolVersionsHelper.ALL_PE);
+		registerFromClient(Material.LEATHER_LEGGINGS, frompeleatherarmor, ProtocolVersionsHelper.ALL_PE);
+		registerFromClient(Material.LEATHER_BOOTS, frompeleatherarmor, ProtocolVersionsHelper.ALL_PE);
 		//TODO FIX
 		//FireworkFromPETagRemapper frompefireworks = new FireworkFromPETagRemapper();
-		//registerFromClient(Material.FIREWORK_CHARGE, frompefireworks, ProtocolVersion.MINECRAFT_PE);
-		//registerFromClient(Material.FIREWORK, frompefireworks, ProtocolVersion.MINECRAFT_PE);
+		//registerFromClient(Material.FIREWORK_CHARGE, frompefireworks, ProtocolVersionsHelper.ALL_PE);
+		//registerFromClient(Material.FIREWORK, frompefireworks, ProtocolVersionsHelper.ALL_PE);
 	}
 
 	protected static NetworkItemStack remapComplex(
