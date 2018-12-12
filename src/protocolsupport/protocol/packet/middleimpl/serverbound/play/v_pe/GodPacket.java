@@ -84,6 +84,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	public static final int SOURCE_GLOBAL = 1;
 	public static final int SOURCE_WORLD_INTERACTION = 2;
 	public static final int SOURCE_CREATIVE = 3;
+	public static final int SOURCE_CRAFT_SLOT = 100;
 	public static final int SOURCE_TODO = 99999;
 
 	@Override
@@ -147,6 +148,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					transaction.action = VarNumberSerializer.readVarInt(from);
 					break;
 				}
+				case SOURCE_CRAFT_SLOT:
 				case SOURCE_TODO: {
 					transaction.inventoryId = VarNumberSerializer.readSVarInt(from);
 					transaction.action = 0;
