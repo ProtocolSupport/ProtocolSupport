@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import org.bukkit.Material;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
@@ -22,7 +21,6 @@ public class PEItems {
 
 	protected static final int[] toPEId = new int[MinecraftData.ITEM_COUNT];
 	protected static final Int2IntMap fromPEId = new Int2IntOpenHashMap();
-	protected static final IntOpenHashSet hasDurabilitySet = new IntOpenHashSet();
 
 	protected static void register(String modernKey, int legacyMainId, int legacyData) {
 		int modernId = ItemMaterialLookup.getRuntimeId(ItemMaterialLookup.getByKey(modernKey));
@@ -41,13 +39,6 @@ public class PEItems {
 			JsonObject object = element.getAsJsonObject();
 			register(JsonUtils.getString(object, "itemkey"), JsonUtils.getInt(object, "peid"), JsonUtils.getInt(object, "pedata"));
 		}
-		for (Material mat : Material.values()) {
-			if (mat.getMaxDurability() == 0) {
-				continue;
-			}
-			int modernId = ItemMaterialLookup.getRuntimeId(mat);
-			hasDurabilitySet.add(modernId);
-		}
 	}
 
 	public static int getIdFromPECombinedId(int PEId) {
@@ -56,10 +47,6 @@ public class PEItems {
 
 	public static int getDataFromPECombinedId(int PEId) {
 		return PEId & 0xFFFF;
-	}
-
-	public static boolean hasDurability(int modernId) {
-		return hasDurabilitySet.contains(modernId);
 	}
 
 	public static int getPECombinedIdByModernId(int modernId) {

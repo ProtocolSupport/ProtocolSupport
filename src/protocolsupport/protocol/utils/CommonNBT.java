@@ -9,7 +9,6 @@ public class CommonNBT {
 	public static final String DISPLAY = "display";
 	public static final String DISPLAY_NAME = "Name";
 	public static final String DISPLAY_LORE = "Lore";
-	public static final String DAMAGE = "Damage";
 
 	public static NBTCompound getOrCreateDisplayTag(NBTCompound rootTag) {
 		NBTCompound display = rootTag.getTagOfType(DISPLAY, NBTType.COMPOUND);
