@@ -78,7 +78,7 @@ public class ItemStackComplexRemapperRegistry {
 		.filter(Material::isItem)
 		.forEach(material -> {
 			if (material.getMaxDurability() > 0) {
-				registerToClient(material, durabilitymapper, ProtocolVersionsHelper.BEFORE_1_13);
+				registerToClient(material, durabilitymapper, ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
 			}
 			registerToClient(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);
 			registerToClient(material, enchanttolegacyid, ProtocolVersionsHelper.BEFORE_1_13);
@@ -117,6 +117,7 @@ public class ItemStackComplexRemapperRegistry {
 		Arrays.stream(Material.values())
 		.filter(Material::isItem)
 		.forEach(material -> {
+			//TODO: remap durability backwards, will improve transactions
 			registerFromClient(material, enchantfromlegacyid, ProtocolVersionsHelper.BEFORE_1_13);
 			registerFromClient(material, dnamefromlegacytext, ProtocolVersionsHelper.BEFORE_1_13);
 			registerFromClient(material, frompeenchantremapper, ProtocolVersionsHelper.ALL_PE);

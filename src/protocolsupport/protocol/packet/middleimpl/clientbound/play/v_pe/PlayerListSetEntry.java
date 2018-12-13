@@ -64,7 +64,6 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 					if (uuid.equals(connection.getPlayer().getUniqueId())) {
 						continue;
 					}
-					numEntries++;
 					PlayerListEntry currentEntry = entry.getValue().getObj2();
 					String username = currentEntry.getCurrentName(attrscache.getLocale());
 					Any<Boolean, String> skininfo = getSkinInfo(currentEntry.getProperties(true));
@@ -77,6 +76,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 							skinprovider.scheduleGetSkinData(skininfo.getObj2(), new SkinUpdate(connection, uuid, skininfo.getObj1(), username));
 						}
 					}
+					numEntries++;
 				}
 				writePlayerListHeader(serializer, PE_PLAYER_LIST_ADD, numEntries);
 				serializer.writeBytes(scratchBuffer);

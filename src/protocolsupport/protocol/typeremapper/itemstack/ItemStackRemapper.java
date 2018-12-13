@@ -14,8 +14,11 @@ public class ItemStackRemapper {
 		itemstack.setTypeId(LegacyItemType.REGISTRY.getTable(version).getRemap(itemstack.getTypeId()));
 		if (version.getProtocolType() == ProtocolType.PE) {
 			int peCombinedId = PEItems.getPECombinedIdByModernId(itemstack.getTypeId());
+			int peData = PEItems.getDataFromPECombinedId(peCombinedId);
 			itemstack.setTypeId(PEItems.getIdFromPECombinedId(peCombinedId));
-			itemstack.setLegacyData(PEItems.getDataFromPECombinedId(peCombinedId));
+			if (peData != 0) { //only set special data, otherwise keep (durability)
+				itemstack.setLegacyData(peData);
+			}
 		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			int legacyCombinedId = PreFlatteningItemIdData.getLegacyCombinedIdByModernId(itemstack.getTypeId());
 			itemstack.setTypeId(PreFlatteningItemIdData.getIdFromLegacyCombinedId(legacyCombinedId));
