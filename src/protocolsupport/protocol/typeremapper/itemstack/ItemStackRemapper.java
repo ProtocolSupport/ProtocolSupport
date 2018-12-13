@@ -21,7 +21,6 @@ public class ItemStackRemapper {
 				if (nbt == null) {
 					nbt = new NBTCompound();
 				}
-				System.out.println(nbt.toString());
 				nbt.setTag(CommonNBT.DAMAGE, new NBTShort((short) itemstack.getLegacyData()));
 				itemstack.setNBT(nbt);
 			}
