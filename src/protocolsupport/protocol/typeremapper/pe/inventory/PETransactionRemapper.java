@@ -18,14 +18,14 @@ import protocolsupport.utils.recyclable.RecyclableArrayList;
 //See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-Inventory-Managing)
 public class PETransactionRemapper {
 
-	private ArrayDequeMultiMap<ItemKey, SlotBudget> surpluses = new ArrayDequeMultiMap<>();
-	private ArrayDequeMultiMap<ItemKey, SlotBudget> deficits = new ArrayDequeMultiMap<>();
+	private ArrayDequeMultiMap<NetworkItemStack, SlotBudget> surpluses = new ArrayDequeMultiMap<>();
+	private ArrayDequeMultiMap<NetworkItemStack, SlotBudget> deficits = new ArrayDequeMultiMap<>();
 
 	//See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-Inventory-Managing#surplus--deficit)
 	public void cacheTransaction(InvTransaction transaction) {
 		if (transaction.isValid()) {
-			ItemKey oldItem = new ItemKey(transaction.getOldItem());
-			ItemKey newItem = new ItemKey(transaction.getNewItem());
+			NetworkItemStack oldItem = getAmount(transaction.getOldItem(), 1);
+			NetworkItemStack newItem = getAmount(transaction.getNewItem(), 1);
 			if (oldItem.equals(newItem) && !transaction.isCursor()) {
 				int money = transaction.getOldItem().getAmount() - transaction.getNewItem().getAmount();
 				if (money > 0) {
@@ -59,7 +59,7 @@ public class PETransactionRemapper {
 		clear();
 		if (!item.isNull()) {
 			bug("customCursor surpluses.put " + item);
-			surpluses.put(new ItemKey(item), new SlotBudget(InvTransaction.CURSOR, item.getAmount(), item.getAmount()), true);
+			surpluses.put(getAmount(item, 1), new SlotBudget(InvTransaction.CURSOR, item.getAmount(), item.getAmount()), true);
 		}
 
 	}
@@ -71,6 +71,15 @@ public class PETransactionRemapper {
 		if (godlyDebug) {
 			System.out.println(bugger);
 		}
+	}
+
+	protected static NetworkItemStack getAmount(NetworkItemStack item, int amount) {
+		if (item.isNull()) {
+			return item;
+		}
+		NetworkItemStack out = item.cloneItemStack();
+		out.setAmount(amount);
+		return out;
 	}
 
 	//See [Documentation](https://github.com/ProtocolSupport/ProtocolSupport/wiki/PSPE:-Inventory-Managing#the-real-stuff)
@@ -85,34 +94,34 @@ public class PETransactionRemapper {
 				itemDeficit.cycleUp(deficit -> {
 					itemSurplus.cycleDown(surplus -> {
 						int money = deficit.getAmount() < surplus.getAmount() ? deficit.getAmount() : surplus.getAmount();
-						bug(item.getKeyItem().toString() + "-> [" + surplus.getSlot() + ", " + surplus.getSlotAmount() + ", " + surplus.getAmount() + "] - [" + deficit.getSlot() + ", " + deficit.getSlotAmount() + ", " + deficit.getAmount() + "]");
+						bug(item.toString() + "-> [" + surplus.getSlot() + ", " + surplus.getSlotAmount() + ", " + surplus.getAmount() + "] - [" + deficit.getSlot() + ", " + deficit.getSlotAmount() + ", " + deficit.getAmount() + "]");
 						if (surplus.getSlot() != deficit.getSlot() && !deficit.isToUseInTable()) {
 							if (!surplus.isCursor() && !(deficit.isCursor() && deficit.hasStack() && surplus.isCraftingResult(cache))) {
 								bug("Getting stack..");
-								Click.LEFT.on(surplus.getSlot(), item.get(surplus.getSlotAmount()), cache, packets);
+								Click.LEFT.on(surplus.getSlot(), getAmount(item, surplus.getSlotAmount()), cache, packets);
 							}
 							if (deficit.isCursor() && !surplus.isCursor()) {
 								if (deficit.hasStack()) {
 									bug("Deficit was in cursor and we already clicked so we need to pick it up again.");
-									Click.LEFT.on(surplus.getSlot(), item.get(surplus.getSlotAmount() + deficit.getSlotAmount()), cache, packets);
+									Click.LEFT.on(surplus.getSlot(), getAmount(item, surplus.getSlotAmount() + deficit.getSlotAmount()), cache, packets);
 								}
 								bug("Paying back");
 								for (int i = 0; i < (surplus.getSlotAmount() - money); i++) {
-									Click.RIGHT.on(surplus.getSlot(), (i == 0) ? NetworkItemStack.NULL : item.get(i), cache, packets);
+									Click.RIGHT.on(surplus.getSlot(), (i == 0) ? NetworkItemStack.NULL : getAmount(item, i), cache, packets);
 								}
 							}
 							if (!deficit.isCursor()) {
 								if (money == surplus.getSlotAmount()) {
 									if (!isSwapping(deficit)) { //not swapping.
 										bug("Putting all on deficit!");
-										Click.LEFT.on(deficit.getSlot(), (!deficit.hasStack()) ? NetworkItemStack.NULL : item.get(deficit.getSlotAmount()), cache, packets);
+										Click.LEFT.on(deficit.getSlot(), (!deficit.hasStack()) ? NetworkItemStack.NULL : getAmount(item, deficit.getSlotAmount()), cache, packets);
 									} else {
 										bug("swapping!");
 									}
 								} else {
 									bug("putting some on deficit!");
 									for (int i = 0; i < money; i++) {
-										Click.RIGHT.on(deficit.getSlot(), ((deficit.getSlotAmount() + i) == 0) ? NetworkItemStack.NULL : item.get(deficit.getSlotAmount() + i), cache, packets);
+										Click.RIGHT.on(deficit.getSlot(), ((deficit.getSlotAmount() + i) == 0) ? NetworkItemStack.NULL : getAmount(item, deficit.getSlotAmount() + i), cache, packets);
 									}
 								}
 							}
@@ -132,9 +141,9 @@ public class PETransactionRemapper {
 						if (!surplus.isEmpty() && !surplus.isCursor()) {
 							bug("WRAPPING TO CURSOR!");
 							int money = surplus.getSlotAmount() - surplus.getAmount();
-							Click.LEFT.on(surplus.getSlot(), item.get(surplus.getSlotAmount()), cache, packets);
+							Click.LEFT.on(surplus.getSlot(), getAmount(item, surplus.getSlotAmount()), cache, packets);
 							for (int i = 0; i < money; i++) {
-								Click.RIGHT.on(surplus.getSlot(), (i == 0) ? NetworkItemStack.NULL : item.get(i), cache, packets);
+								Click.RIGHT.on(surplus.getSlot(), (i == 0) ? NetworkItemStack.NULL : getAmount(item, i), cache, packets);
 							}
 							itemSurplus.removeLast();
 							surpluses.put(item, new SlotBudget(InvTransaction.CURSOR, surplus.getAmount(), surplus.getAmount()));
@@ -186,7 +195,7 @@ public class PETransactionRemapper {
 		public void on(int slot, NetworkItemStack item, NetworkDataCache cache, RecyclableArrayList<ServerBoundPacketData> packets) {
 			bug("CLICK " + toString() + " on: " + slot + " with: " + item.toString());
 			int actionNumber = cache.getPEInventoryCache().getActionNumber();
-			packets.add(MiddleInventoryClick.create(cache.getAttributesCache().getLocale(), cache.getWindowCache().getOpenedWindowId(), slot, button, actionNumber, mode, item));
+			packets.add(MiddleInventoryClick.create(cache.getAttributesCache().getLocale(), cache.getWindowCache().getOpenedWindowId(), slot, button, actionNumber, mode, item.cloneItemStack()));
 			if (!item.isNull() && item.getNBT() != null) {
 				packets.add(MiddleInventoryTransaction.create(cache.getWindowCache().getOpenedWindowId(), actionNumber, false));
 			}
@@ -256,61 +265,4 @@ public class PETransactionRemapper {
 		}
 
 	}
-
-	protected static class ItemKey {
-
-		private NetworkItemStack keyItem = NetworkItemStack.NULL;
-		private int hash = 0;
-
-		public ItemKey(NetworkItemStack keyItem) {
-			if (!keyItem.isNull()) {
-				NBTCompound nbt = keyItem.getNBT();
-				this.keyItem = keyItem;
-				hash = 41 * hash + keyItem.getTypeId();
-				hash = 41 * hash + keyItem.getLegacyData();
-				hash = 41 * hash + (nbt == null ? 0 : nbt.hashCode());
-			}
-		}
-
-		@Deprecated
-		public NetworkItemStack getKeyItem() {
-			return keyItem;
-		}
-
-		public NetworkItemStack get(int amount) {
-			NetworkItemStack item = getKeyItem().cloneItemStack();
-			item.setAmount(amount);
-			return item;
-		}
-
-		@Override
-		public int hashCode() {
-			return hash;
-		}
-
-		@Override
-		public boolean equals(Object object) {
-			if (object instanceof ItemKey) {
-				ItemKey wrapper = (ItemKey) object;
-				if (wrapper.getKeyItem().isNull() || this.getKeyItem().isNull()) {
-					return false;
-				}
-				NBTCompound nbtA = wrapper.getKeyItem().getNBT();
-				NBTCompound nbtB = this.getKeyItem().getNBT();
-				return
-						(wrapper.getKeyItem().getTypeId() == this.getKeyItem().getTypeId()) &&
-						(wrapper.getKeyItem().getLegacyData() == this.getKeyItem().getLegacyData()) &&
-						(nbtA == nbtB || (nbtA != null ? nbtA.equals(nbtB) : false));
-			}
-			return false;
-
-		}
-
-		@Override
-		public String toString() {
-			return keyItem.toString();
-		}
-
-	}
-
 }

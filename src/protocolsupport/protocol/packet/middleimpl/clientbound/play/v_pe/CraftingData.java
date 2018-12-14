@@ -43,7 +43,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 		Ingredient first = tail.removeFirst();
 		NetworkItemStack[] possibleStacks = first.getPossibleStacks();
 		if (possibleStacks.length == 0) { //empty
-			possibleStacks = new NetworkItemStack[]{null};
+			possibleStacks = new NetworkItemStack[]{NetworkItemStack.NULL};
 		}
 		if (possibleStacks.length > 2) { //'large' ingredient set
 			NetworkItemStack firstType = ItemStackSerializer.remapItemToClient(connection.getVersion(), locale, possibleStacks[0].cloneItemStack());
@@ -109,44 +109,47 @@ public class CraftingData extends MiddleDeclareRecipes {
 	}
 
 	protected void addRecipeShaped(ByteBuf to, NetworkItemStack output, int width, int height, List<NetworkItemStack> required) {
+		output = output.cloneItemStack();
 		String locale = connection.getCache().getAttributesCache().getLocale();
 		VarNumberSerializer.writeSVarInt(to, PE_RECIPE_TYPE_SHAPED); //recipe type
 		VarNumberSerializer.writeSVarInt(to, width);
 		VarNumberSerializer.writeSVarInt(to, height);
 		for (NetworkItemStack stack : required) {
-			ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, stack, stack == null || stack.getLegacyData() != -1);
+			ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, stack.cloneItemStack(), stack.isNull() || stack.getLegacyData() != -1);
 		}
-		VarNumberSerializer.writeVarInt(to, 1); // result item count (PC only supports one itemstack output, so hardcoded to 1)
+		VarNumberSerializer.writeVarInt(to, 1); // result item count
 		ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output, true);
 		MiscSerializer.writeUUID(to, connection.getVersion(), UUID.nameUUIDFromBytes(to.array()));
 		recipesWritten++;
 	}
 
 	protected void addRecipeShapeless(ByteBuf to, NetworkItemStack output, List<NetworkItemStack> required) {
+		output = output.cloneItemStack();
 		String locale = connection.getCache().getAttributesCache().getLocale();
 		VarNumberSerializer.writeSVarInt(to, PE_RECIPE_TYPE_SHAPELESS); //recipe type
 		VarNumberSerializer.writeVarInt(to, required.size());
 		for (NetworkItemStack stack : required) {
-			ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, stack, stack == null || stack.getLegacyData() != -1);
+			ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, stack.cloneItemStack(), stack.isNull() || stack.getLegacyData() != -1);
 		}
-		VarNumberSerializer.writeVarInt(to, 1); // result item count (PC only supports one itemstack output, so hardcoded to 1)
+		VarNumberSerializer.writeVarInt(to, 1); // result item count
 		ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output, true);
 		MiscSerializer.writeUUID(to, connection.getVersion(), UUID.nameUUIDFromBytes(to.array()));
 		recipesWritten++;
 	}
 
 	protected void addRecipeFurnace(ByteBuf to, NetworkItemStack output, NetworkItemStack input) {
+		output = output.cloneItemStack();
 		String locale = connection.getCache().getAttributesCache().getLocale();
 		int peCombinedId = PEItems.getPECombinedIdByModernId(input.getTypeId());
 		if (PEItems.getDataFromPECombinedId(peCombinedId) == 0) {
 			VarNumberSerializer.writeSVarInt(to, PE_RECIPE_TYPE_FURNACE); //recipe type
 			VarNumberSerializer.writeSVarInt(to, PEItems.getIdFromPECombinedId(peCombinedId));
-			ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output, output == null || output.getLegacyData() != -1);
+			ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output, output.isNull() || output.getLegacyData() != -1);
 		} else { //meta recipe
 			VarNumberSerializer.writeSVarInt(to, PE_RECIPE_TYPE_FURNACE_META); //recipe type, with data
 			VarNumberSerializer.writeSVarInt(to, PEItems.getIdFromPECombinedId(peCombinedId));
 			VarNumberSerializer.writeSVarInt(to, PEItems.getDataFromPECombinedId(peCombinedId));
-			ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output, output == null || output.getLegacyData() != -1);
+			ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output, output.isNull() || output.getLegacyData() != -1);
 		}
 		recipesWritten++;
 	}

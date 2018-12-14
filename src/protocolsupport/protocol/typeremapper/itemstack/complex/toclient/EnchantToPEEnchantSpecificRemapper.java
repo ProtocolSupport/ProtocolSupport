@@ -27,10 +27,6 @@ public class EnchantToPEEnchantSpecificRemapper implements ItemStackComplexRemap
 				tag.setTag("stored-enchants", remapEnchantList(stored_enchants));
 			}
 			itemstack.setNBT(tag);
-			//TODO Whut?
-			if (MaterialAPI.getItemByNetworkId(itemstack.getTypeId()) == Material.TIPPED_ARROW) {
-				itemstack.setTypeId(MaterialAPI.getItemNetworkId(Material.ARROW));
-			}
 		}
 		return itemstack;
 	}

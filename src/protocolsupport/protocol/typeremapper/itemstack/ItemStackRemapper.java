@@ -9,14 +9,17 @@ import protocolsupport.protocol.utils.types.NetworkItemStack;
 public class ItemStackRemapper {
 
 	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale,  NetworkItemStack itemstack) {
-		setComplexlyRemapped(itemstack, false);
+		if (version.getProtocolType() != ProtocolType.PE) {
+			setComplexlyRemapped(itemstack, false);
+		}
 		itemstack = ItemStackComplexRemapperRegistry.remapToClient(version, locale, itemstack);
 		itemstack.setTypeId(LegacyItemType.REGISTRY.getTable(version).getRemap(itemstack.getTypeId()));
 		if (version.getProtocolType() == ProtocolType.PE) {
-			int peCombinedId = PEItems.getPECombinedIdByModernId(itemstack.getTypeId());
+			int modernId = itemstack.getTypeId();
+			int peCombinedId = PEItems.getPECombinedIdByModernId(modernId);
 			int peData = PEItems.getDataFromPECombinedId(peCombinedId);
 			itemstack.setTypeId(PEItems.getIdFromPECombinedId(peCombinedId));
-			if (peData != 0) { //only set special data, otherwise keep (durability)
+			if (itemstack.getLegacyData() == 0) { //preserve legacy durability data
 				itemstack.setLegacyData(peData);
 			}
 		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {

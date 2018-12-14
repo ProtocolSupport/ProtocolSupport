@@ -17,6 +17,7 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.Leathe
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.MapFromLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.PotionFromLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.PotionFromPEIdRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.NBTUnStashRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.BookPagesToLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.BookPagesToPESpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DisplayNameToLegacyTextComplexRemapper;
@@ -32,6 +33,7 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.MapToLeg
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PotionToLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PotionToPEIdSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.NBTStashRemapper;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
@@ -74,14 +76,16 @@ public class ItemStackComplexRemapperRegistry {
 		EnchantToLegacyIdComplexRemapper enchanttolegacyid = new EnchantToLegacyIdComplexRemapper();
 		DisplayNameToLegacyTextComplexRemapper dnametolegacytext = new DisplayNameToLegacyTextComplexRemapper();
 		EnchantToPEEnchantSpecificRemapper peenchantremapper = new EnchantToPEEnchantSpecificRemapper();
+		ItemStackNBTComplexRemapper pestashremapper = new NBTStashRemapper();
 		Arrays.stream(Material.values())
 		.filter(Material::isItem)
 		.forEach(material -> {
+			registerToClient(material, pestashremapper, ProtocolVersionsHelper.ALL_PE);
 			if (material.getMaxDurability() > 0) {
 				registerToClient(material, durabilitymapper, ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
 			}
 			registerToClient(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);
-			registerToClient(material, enchanttolegacyid, ProtocolVersionsHelper.BEFORE_1_13);
+			registerToClient(material, enchanttolegacyid, ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
 			registerToClient(material, dnametolegacytext, ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
 			registerToClient(material, peenchantremapper, ProtocolVersionsHelper.ALL_PE);
 		});
@@ -114,13 +118,14 @@ public class ItemStackComplexRemapperRegistry {
 		EnchantFromLegacyIdComplexRemapper enchantfromlegacyid = new EnchantFromLegacyIdComplexRemapper();
 		DisplayNameFromLegacyTextComplexRemapper dnamefromlegacytext = new DisplayNameFromLegacyTextComplexRemapper();
 		EnchantFromPEEnchantRemapper frompeenchantremapper = new EnchantFromPEEnchantRemapper();
+		ItemStackNBTComplexRemapper pestashremapper = new NBTUnStashRemapper();
 		Arrays.stream(Material.values())
 		.filter(Material::isItem)
 		.forEach(material -> {
-			//TODO: remap durability backwards, will improve transactions
-			registerFromClient(material, enchantfromlegacyid, ProtocolVersionsHelper.BEFORE_1_13);
+			//TODO: do we need these anymore? backwards mapping done with stashed NBT now
 			registerFromClient(material, dnamefromlegacytext, ProtocolVersionsHelper.BEFORE_1_13);
 			registerFromClient(material, frompeenchantremapper, ProtocolVersionsHelper.ALL_PE);
+			registerFromClient(material, enchantfromlegacyid, ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
 		});
 		//TODO FIX
 		//registerFromClient(Material.MAP, new MapItemNbtToLegacyIdRemapper(), ProtocolVersionsHelper.ALL_PE);
@@ -143,6 +148,11 @@ public class ItemStackComplexRemapperRegistry {
 		//FireworkFromPETagRemapper frompefireworks = new FireworkFromPETagRemapper();
 		//registerFromClient(Material.FIREWORK_CHARGE, frompefireworks, ProtocolVersionsHelper.ALL_PE);
 		//registerFromClient(Material.FIREWORK, frompefireworks, ProtocolVersionsHelper.ALL_PE);
+		Arrays.stream(Material.values())
+		.filter(Material::isItem)
+		.forEach(material -> {
+			registerFromClient(material, pestashremapper, ProtocolVersionsHelper.ALL_PE);
+		});
 	}
 
 	protected static NetworkItemStack remapComplex(

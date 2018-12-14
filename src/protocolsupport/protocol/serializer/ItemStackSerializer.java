@@ -3,7 +3,6 @@ package protocolsupport.protocol.serializer;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -17,17 +16,11 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.chat.ChatAPI;
-import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
-import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTEnd;
-import protocolsupport.protocol.utils.types.nbt.NBTList;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
 import protocolsupport.protocol.utils.types.nbt.serializer.DefaultNBTSerializer;
 import protocolsupport.protocol.utils.types.nbt.serializer.PENBTSerializer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
@@ -84,7 +77,7 @@ public class ItemStackSerializer {
 			itemstack.setNBT(readTag(from, version));
 		}
 		if (isFromClient) {
-			itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack.cloneItemStack());
+			itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack);
 		}
 		return itemstack;
 	}
@@ -102,7 +95,7 @@ public class ItemStackSerializer {
 		}
 		NetworkItemStack witemstack = itemstack;
 		if (isToClient) {
-			witemstack = remapItemToClient(version, locale, witemstack.cloneItemStack());
+			witemstack = remapItemToClient(version, locale, witemstack);
 		}
 		if (version.getProtocolType() == ProtocolType.PE) {
 			VarNumberSerializer.writeSVarInt(to, witemstack.getTypeId());
@@ -219,32 +212,6 @@ public class ItemStackSerializer {
 			ItemStack bukkitStack = ServerPlatform.get().getMiscUtils().createItemStackFromNetwork(itemstack);
 			ItemStackWriteEvent event = new ItemStackWriteEvent(version, locale, bukkitStack);
 			Bukkit.getPluginManager().callEvent(event);
-			List<String> additionalLore = event.getAdditionalLore();
-			BaseComponent forcedDisplayName = event.getForcedDisplayName();
-			if ((forcedDisplayName != null) || !additionalLore.isEmpty()) {
-				NBTCompound nbt = itemstack.getNBT();
-				if (nbt == null) {
-					nbt = new NBTCompound();
-				}
-				NBTCompound displayNBT = CommonNBT.getOrCreateDisplayTag(nbt);
-
-				if (forcedDisplayName != null) {
-					displayNBT.setTag(CommonNBT.DISPLAY_NAME, new NBTString(ChatAPI.toJSON(forcedDisplayName)));
-				}
-
-				if (!additionalLore.isEmpty()) {
-					NBTList<NBTString> loreNBT = displayNBT.getTagListOfType(CommonNBT.DISPLAY_LORE, NBTType.STRING);
-					if (loreNBT == null) {
-						loreNBT = new NBTList<>(NBTType.STRING);
-					}
-					for (String lore : additionalLore) {
-						loreNBT.addTag(new NBTString(lore));
-					}
-					displayNBT.setTag(CommonNBT.DISPLAY_LORE, loreNBT);
-				}
-
-				itemstack.setNBT(nbt);
-			}
 		}
 		return ItemStackRemapper.remapToClient(version, locale, itemstack);
 	}

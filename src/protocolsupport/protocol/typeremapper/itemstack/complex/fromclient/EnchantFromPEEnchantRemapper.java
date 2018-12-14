@@ -24,8 +24,6 @@ public class EnchantFromPEEnchantRemapper implements ItemStackComplexRemapper {
 				tag.setTag("stored-enchants", remapEnchantList(stored_enchants));
 			}
 			itemstack.setNBT(tag);
-			//TODO WITH REMAP!
-			//if (MaterialAPI.getItemByNetworkId(itemstack.getTypeId()) == Material.ARROW) { itemstack.setTypeId(MaterialAPI.getItemNetworkId(Material.TIPPED_ARROW)); }
 		}
 		return itemstack;
 	}
