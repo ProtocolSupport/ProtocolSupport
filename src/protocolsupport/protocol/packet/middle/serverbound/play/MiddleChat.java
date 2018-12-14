@@ -27,4 +27,5 @@ public abstract class MiddleChat extends ServerBoundMiddlePacket {
 		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, message);
 		return creator;
 	}
+
 }

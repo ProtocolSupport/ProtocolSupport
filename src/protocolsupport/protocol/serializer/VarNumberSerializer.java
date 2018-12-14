@@ -47,7 +47,6 @@ public class VarNumberSerializer {
 		to.writeByte(i);
 	}
 
-
 	public static int readSVarInt(ByteBuf from) {
 		int varint = readVarInt(from);
 		return (varint >> 1) ^ -(varint & 1);

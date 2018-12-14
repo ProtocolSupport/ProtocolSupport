@@ -39,7 +39,6 @@ public class NetworkEntityDataCache {
 		this.firstMeta = firstMeta;
 	}
 
-
 	protected long peBaseFlags = 0;
 	protected float sizeModifier = 1f;
 	protected int attachedId = -1;

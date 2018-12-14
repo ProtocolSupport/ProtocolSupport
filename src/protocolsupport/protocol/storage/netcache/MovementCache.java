@@ -38,9 +38,7 @@ public class MovementCache {
 			(Math.abs(this.y - y) < acceptableError) &&
 			(Math.abs(this.z - z) < acceptableError)
 		) {
-			int r = teleportConfirmId;
-			teleportConfirmId = -1;
-			return r;
+			return teleportConfirm();
 		}
 		return -1;
 	}

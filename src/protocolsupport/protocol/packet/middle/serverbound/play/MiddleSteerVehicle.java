@@ -29,4 +29,5 @@ public abstract class MiddleSteerVehicle extends ServerBoundMiddlePacket {
 		creator.writeByte(flags);
 		return creator;
 	}
+
 }
