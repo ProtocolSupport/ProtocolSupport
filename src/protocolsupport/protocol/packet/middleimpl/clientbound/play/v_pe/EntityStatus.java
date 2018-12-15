@@ -12,8 +12,6 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-import java.text.MessageFormat;
-
 public class EntityStatus extends MiddleEntityStatus {
 
 	/* The UNLEASH entity status is sent from the EntityLeash packet */

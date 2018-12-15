@@ -7,8 +7,6 @@ import java.util.function.ObjIntConsumer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.EnumConstantLookups;
 
 public class MiscSerializer {
