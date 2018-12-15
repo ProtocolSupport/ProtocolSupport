@@ -10,9 +10,9 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public abstract class MiddleSpecate extends ServerBoundMiddlePacket {
+public abstract class MiddleSpectate extends ServerBoundMiddlePacket {
 
-	public MiddleSpecate(ConnectionImpl connection) {
+	public MiddleSpectate(ConnectionImpl connection) {
 		super(connection);
 	}
 
