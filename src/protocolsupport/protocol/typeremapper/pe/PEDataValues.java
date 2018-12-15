@@ -1,6 +1,7 @@
 package protocolsupport.protocol.typeremapper.pe;
 
 import java.io.BufferedReader;
+import java.text.MessageFormat;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -44,167 +45,138 @@ public class PEDataValues {
 	private static final EnumMap<NetworkEntityType, String> entityKey = new EnumMap<>(NetworkEntityType.class);
 	private static final EnumMap<NetworkEntityType, Integer> entityNetworkId = new EnumMap<>(NetworkEntityType.class);
 	private static final Int2ObjectOpenHashMap<NetworkEntityType> entityNetworkIdToType = new Int2ObjectOpenHashMap<>();
+
+	private static void registerEntity(NetworkEntityType type, Integer id, String key) {
+		entityKey.put(type, key);
+		entityNetworkId.put(type, id);
+		if (id != null) {
+			entityNetworkIdToType.put((int) id, type);
+		}
+	}
+
 	static {
-		entityNetworkId.put(NetworkEntityType.WITHER_SKELETON, 48);
-		entityNetworkId.put(NetworkEntityType.WOLF, 14);
-		entityNetworkId.put(NetworkEntityType.RABBIT, 18);
-		entityNetworkId.put(NetworkEntityType.CHICKEN, 10);
-		entityNetworkId.put(NetworkEntityType.COW, 11);
-		entityNetworkId.put(NetworkEntityType.SHEEP, 13);
-		entityNetworkId.put(NetworkEntityType.PIG, 12);
-		entityNetworkId.put(NetworkEntityType.MUSHROOM_COW, 16);
-		entityNetworkId.put(NetworkEntityType.SHULKER, 54);
-		entityNetworkId.put(NetworkEntityType.GUARDIAN, 49);
-		entityNetworkId.put(NetworkEntityType.ENDERMITE, 55);
-		entityNetworkId.put(NetworkEntityType.WITCH, 45);
-		entityNetworkId.put(NetworkEntityType.BAT, 19);
-		entityNetworkId.put(NetworkEntityType.WITHER, 52);
-		entityNetworkId.put(NetworkEntityType.ENDER_DRAGON, 53);
-		entityNetworkId.put(NetworkEntityType.MAGMA_CUBE, 42);
-		entityNetworkId.put(NetworkEntityType.BLAZE, 43);
-		entityNetworkId.put(NetworkEntityType.SILVERFISH, 39);
-		entityNetworkId.put(NetworkEntityType.CAVE_SPIDER, 40);
-		entityNetworkId.put(NetworkEntityType.ENDERMAN, 38);
-		entityNetworkId.put(NetworkEntityType.ZOMBIE_PIGMAN, 36);
-		entityNetworkId.put(NetworkEntityType.GHAST, 41);
-		entityNetworkId.put(NetworkEntityType.SLIME, 37);
-		entityNetworkId.put(NetworkEntityType.ZOMBIE, 32);
-		entityNetworkId.put(NetworkEntityType.SPIDER, 35);
-		entityNetworkId.put(NetworkEntityType.SKELETON, 34);
-		entityNetworkId.put(NetworkEntityType.CREEPER, 33);
-		entityNetworkId.put(NetworkEntityType.VILLAGER, 15);
-		entityNetworkId.put(NetworkEntityType.MULE, 25);
-		entityNetworkId.put(NetworkEntityType.DONKEY, 24);
-		entityNetworkId.put(NetworkEntityType.ZOMBIE_HORSE, 27);
-		entityNetworkId.put(NetworkEntityType.SKELETON_HORSE, 26);
-		entityNetworkId.put(NetworkEntityType.ZOMBIE_VILLAGER, 44);
-		entityNetworkId.put(NetworkEntityType.HUSK, 47);
-		entityNetworkId.put(NetworkEntityType.SQUID, 17);
-		entityNetworkId.put(NetworkEntityType.STRAY, 46);
-		entityNetworkId.put(NetworkEntityType.POLAR_BEAR, 28);
-		entityNetworkId.put(NetworkEntityType.ELDER_GUARDIAN, 50);
-		entityNetworkId.put(NetworkEntityType.COMMON_HORSE, 23);
-		entityNetworkId.put(NetworkEntityType.IRON_GOLEM, 20);
-		entityNetworkId.put(NetworkEntityType.OCELOT, 22);
-		entityNetworkId.put(NetworkEntityType.SNOWMAN, 21);
-		entityNetworkId.put(NetworkEntityType.LAMA, 29);
-		entityNetworkId.put(NetworkEntityType.PARROT, 30);
-		entityNetworkId.put(NetworkEntityType.ARMOR_STAND_MOB, 61);
-		entityNetworkId.put(NetworkEntityType.VINDICATOR, 57);
-		entityNetworkId.put(NetworkEntityType.EVOKER, 104);
-		entityNetworkId.put(NetworkEntityType.VEX, 105);
-		entityNetworkId.put(NetworkEntityType.DOLPHIN, 31);
-		entityNetworkId.put(NetworkEntityType.PUFFERFISH, 108);
-		entityNetworkId.put(NetworkEntityType.SALMON, 109);
-		entityNetworkId.put(NetworkEntityType.TROPICAL_FISH, 111);
-		entityNetworkId.put(NetworkEntityType.COD, 112);
-		entityNetworkId.put(NetworkEntityType.DROWNED, 110);
-		entityNetworkId.put(NetworkEntityType.TURTLE, 74);
-		entityNetworkId.put(NetworkEntityType.PHANTOM, 58);
-		
+		//registerEntity(NetworkEntityType.NONE, null, null);
+		//registerEntity(NetworkEntityType.ENTITY, null, null);
+		//registerEntity(NetworkEntityType.LIVING, null, null);
+		//registerEntity(NetworkEntityType.INSENTIENT, null, null);
+		registerEntity(NetworkEntityType.PLAYER, null, "minecraft:player");
+		//registerEntity(NetworkEntityType.AGEABLE, null, null);
+		//registerEntity(NetworkEntityType.TAMEABLE, null, null);
+		//registerEntity(NetworkEntityType.BASE_FISH, null, null);
+		registerEntity(NetworkEntityType.EXP_ORB, null, "minecraft:xp_orb");
+		registerEntity(NetworkEntityType.PAINTING, null, "minecraft:painting");
+		//registerEntity(NetworkEntityType.THUNDERBOLT, null, null);
+		registerEntity(NetworkEntityType.COW, 11, "minecraft:cow");
+		registerEntity(NetworkEntityType.MUSHROOM_COW, 16, "minecraft:mooshroom");
+		registerEntity(NetworkEntityType.CHICKEN, 10, "minecraft:chicken");
+		registerEntity(NetworkEntityType.SQUID, 17, "minecraft:squid");
+		registerEntity(NetworkEntityType.COMMON_HORSE, 23, "minecraft:horse");
+		registerEntity(NetworkEntityType.ZOMBIE_HORSE, 27, "minecraft:zombie_horse");
+		registerEntity(NetworkEntityType.SKELETON_HORSE, 26, "minecraft:skeleton_horse");
+		registerEntity(NetworkEntityType.DONKEY, 24, "minecraft:donkey");
+		registerEntity(NetworkEntityType.MULE, 25, "minecraft:mule");
+		registerEntity(NetworkEntityType.LAMA, 29, "minecraft:llama");
+		registerEntity(NetworkEntityType.BAT, 19, "minecraft:bat");
+		registerEntity(NetworkEntityType.OCELOT, 22, "minecraft:cat");
+		registerEntity(NetworkEntityType.WOLF, 14, "minecraft:wolf");
+		registerEntity(NetworkEntityType.PIG, 12, "minecraft:pig");
+		registerEntity(NetworkEntityType.RABBIT, 18, "minecraft:rabbit");
+		registerEntity(NetworkEntityType.SHEEP, 13, "minecraft:sheep");
+		registerEntity(NetworkEntityType.POLAR_BEAR, 28, "minecraft:polar_bear");
+		registerEntity(NetworkEntityType.VILLAGER, 15, "minecraft:villager");
+		registerEntity(NetworkEntityType.ENDERMAN, 38, "minecraft:enderman");
+		//registerEntity(NetworkEntityType.GIANT, null, null);
+		registerEntity(NetworkEntityType.SILVERFISH, 39, "minecraft:silverfish");
+		registerEntity(NetworkEntityType.ENDERMITE, 55, "minecraft:endermite");
+		registerEntity(NetworkEntityType.ENDER_DRAGON, 53, "minecraft:ender_dragon");
+		//registerEntity(NetworkEntityType.SNOWMAN, 21, null);
+		registerEntity(NetworkEntityType.ZOMBIE, 32, "minecraft:zombie");
+		registerEntity(NetworkEntityType.ZOMBIE_VILLAGER, 44, "minecraft:zombie_villager");
+		registerEntity(NetworkEntityType.HUSK, 47, "minecraft:husk");
+		registerEntity(NetworkEntityType.ZOMBIE_PIGMAN, 36, "minecraft:zombie_pigman");
+		registerEntity(NetworkEntityType.DROWNED, 110, "minecraft:drowned");
+		registerEntity(NetworkEntityType.BLAZE, 43, "minecraft:blaze");
+		registerEntity(NetworkEntityType.SPIDER, 35, "minecraft:spider");
+		registerEntity(NetworkEntityType.CAVE_SPIDER, 40, "minecraft:cave_spider");
+		registerEntity(NetworkEntityType.CREEPER, 33, "minecraft:creeper");
+		registerEntity(NetworkEntityType.GHAST, 41, "minecraft:ghast");
+		registerEntity(NetworkEntityType.SLIME, 37, "minecraft:slime");
+		registerEntity(NetworkEntityType.MAGMA_CUBE, 42, "minecraft:magma_cube");
+		registerEntity(NetworkEntityType.SKELETON, 34, "minecraft:skeleton");
+		registerEntity(NetworkEntityType.WITHER_SKELETON, 48, "minecraft:wither_skeleton");
+		registerEntity(NetworkEntityType.STRAY, 46, "minecraft:stray");
+		registerEntity(NetworkEntityType.WITCH, 45, "minecraft:witch");
+		registerEntity(NetworkEntityType.IRON_GOLEM, 20, "minecraft:iron_golem");
+		registerEntity(NetworkEntityType.SHULKER, 54, "minecraft:shulker");
+		registerEntity(NetworkEntityType.WITHER, 52, "minecraft:wither");
+		registerEntity(NetworkEntityType.GUARDIAN, 49, "minecraft:guardian");
+		registerEntity(NetworkEntityType.ELDER_GUARDIAN, 50, "minecraft:elder_guardian");
+		registerEntity(NetworkEntityType.VINDICATOR, 57, "minecraft:vindicator");
+		registerEntity(NetworkEntityType.EVOKER, 104, "minecraft:evocation_illager");
+		//registerEntity(NetworkEntityType.ILLUSIONER, null, null);
+		registerEntity(NetworkEntityType.VEX, 105, "minecraft:vex");
+		registerEntity(NetworkEntityType.PARROT, 30, "minecraft:parrot");
+		registerEntity(NetworkEntityType.PHANTOM, 58, "minecraft:phantom");
+		registerEntity(NetworkEntityType.DOLPHIN, 31, "minecraft:dolphin");
+		registerEntity(NetworkEntityType.TURTLE, 74, "minecraft:turtle");
+		registerEntity(NetworkEntityType.COD, 112, "minecraft:cod");
+		registerEntity(NetworkEntityType.SALMON, 109, "minecraft:salmon");
+		registerEntity(NetworkEntityType.PUFFERFISH, 108, "minecraft:pufferfish");
+		registerEntity(NetworkEntityType.TROPICAL_FISH, 111, "minecraft:tropicalfish");
+		registerEntity(NetworkEntityType.ARMOR_STAND_OBJECT, 61, "minecraft:armor_stand");
+		registerEntity(NetworkEntityType.BOAT, null, "minecraft:boat");
+		registerEntity(NetworkEntityType.TNT, null, "minecraft:tnt");
+		registerEntity(NetworkEntityType.SNOWBALL, null, "minecraft:snowball");
+		registerEntity(NetworkEntityType.EGG, null, "minecraft:egg");
+		registerEntity(NetworkEntityType.FIREBALL, null, "minecraft:small_fireball");
+		//registerEntity(NetworkEntityType.FIRECHARGE, null, null);
+		registerEntity(NetworkEntityType.ENDERPEARL, null, "minecraft:ender_pearl");
+		registerEntity(NetworkEntityType.WITHER_SKULL, null, "minecraft:wither_skull");
+		registerEntity(NetworkEntityType.FALLING_OBJECT, null, "minecraft:falling_block");
+		registerEntity(NetworkEntityType.ENDEREYE, null, "minecraft:eye_of_ender_signal");
+		registerEntity(NetworkEntityType.POTION, null, "minecraft:splash_potion");
+		registerEntity(NetworkEntityType.EXP_BOTTLE, null, "minecraft:xp_bottle");
+		registerEntity(NetworkEntityType.LEASH_KNOT, null, "minecraft:leash_knot");
+		registerEntity(NetworkEntityType.FISHING_FLOAT, null, "minecraft:fishing_hook");
+		registerEntity(NetworkEntityType.ITEM, null, "minecraft:item");
+		registerEntity(NetworkEntityType.ARROW, null, "minecraft:arrow");
+		//registerEntity(NetworkEntityType.SPECTRAL_ARROW, null, null);
+		//registerEntity(NetworkEntityType.TIPPED_ARROW, null, null);
+		registerEntity(NetworkEntityType.THROWN_TRIDENT, null, "minecraft:thrown_trident");
+		registerEntity(NetworkEntityType.FIREWORK, null, "minecraft:fireworks_rocket");
+		registerEntity(NetworkEntityType.ITEM_FRAME, 199, "minecraft:item_frame");
+		registerEntity(NetworkEntityType.ENDER_CRYSTAL, null, "minecraft:ender_crystal");
+		registerEntity(NetworkEntityType.AREA_EFFECT_CLOUD, null, "minecraft:area_effect_cloud");
+		registerEntity(NetworkEntityType.SHULKER_BULLET, null, "minecraft:shulker_bullet");
+		registerEntity(NetworkEntityType.LAMA_SPIT, null, "minecraft:llama_spit");
+		registerEntity(NetworkEntityType.DRAGON_FIREBALL, null, "minecraft:dragon_fireball");
+		registerEntity(NetworkEntityType.EVOCATOR_FANGS, null, "minecraft:evocation_fang");
+		//registerEntity(NetworkEntityType.ARMOR_STAND_MOB, null, "minecraft:armor_stand");
+		registerEntity(NetworkEntityType.MINECART, null, "minecraft:minecart");
+		registerEntity(NetworkEntityType.MINECART_CHEST, null, "minecraft:chest_minecart");
+		//registerEntity(NetworkEntityType.MINECART_FURNACE, null, null);
+		registerEntity(NetworkEntityType.MINECART_TNT, null, "minecraft:tnt_minecart");
+		//registerEntity(NetworkEntityType.MINECART_MOB_SPAWNER, null, null);
+		registerEntity(NetworkEntityType.MINECART_HOPPER, null, "minecraft:hopper_minecart");
+		registerEntity(NetworkEntityType.MINECART_COMMAND, null, "minecraft:command_block_minecart");
+
+		//TODO: add entity remappers for these
+		//remapEntity(NetworkEntityType.SPECTRAL_ARROW, NetworkEntityType.ARROW);
+		//remapEntity(NetworkEntityType.TIPPED_ARROW, NetworkEntityType.ARROW);
+		//remapEntity(NetworkEntityType.ARMOR_STAND_MOB, NetworkEntityType.ARMOR_STAND_OBJECT);
+		//plus more
+
 		//entityKey.put(NetworkEntityType.NPC, "minecraft:npc");
-		entityKey.put(NetworkEntityType.PLAYER, "minecraft:player");
-		entityKey.put(NetworkEntityType.WITHER_SKELETON, "minecraft:wither_skeleton");
-		entityKey.put(NetworkEntityType.HUSK, "minecraft:husk");
-		entityKey.put(NetworkEntityType.STRAY, "minecraft:stray");
-		entityKey.put(NetworkEntityType.WITCH, "minecraft:witch");
-		entityKey.put(NetworkEntityType.ZOMBIE_VILLAGER, "minecraft:zombie_villager");
-		entityKey.put(NetworkEntityType.BLAZE, "minecraft:blaze");
-		entityKey.put(NetworkEntityType.MAGMA_CUBE, "minecraft:magma_cube");
-		entityKey.put(NetworkEntityType.GHAST, "minecraft:ghast");
-		entityKey.put(NetworkEntityType.CAVE_SPIDER, "minecraft:cave_spider");
-		entityKey.put(NetworkEntityType.SILVERFISH, "minecraft:silverfish");
-		entityKey.put(NetworkEntityType.ENDERMAN, "minecraft:enderman");
-		entityKey.put(NetworkEntityType.SLIME, "minecraft:slime");
-		entityKey.put(NetworkEntityType.ZOMBIE_PIGMAN, "minecraft:zombie_pigman");
-		entityKey.put(NetworkEntityType.SPIDER, "minecraft:spider");
-		entityKey.put(NetworkEntityType.SKELETON, "minecraft:skeleton");
-		entityKey.put(NetworkEntityType.CREEPER, "minecraft:creeper");
-		entityKey.put(NetworkEntityType.ZOMBIE, "minecraft:zombie");
-		entityKey.put(NetworkEntityType.SKELETON_HORSE, "minecraft:skeleton_horse");
-		entityKey.put(NetworkEntityType.MULE, "minecraft:mule");
-		entityKey.put(NetworkEntityType.DONKEY, "minecraft:donkey");
-		entityKey.put(NetworkEntityType.DOLPHIN, "minecraft:dolphin");
-		entityKey.put(NetworkEntityType.TROPICAL_FISH, "minecraft:tropicalfish");
-		entityKey.put(NetworkEntityType.WOLF, "minecraft:wolf");
-		entityKey.put(NetworkEntityType.SQUID, "minecraft:squid");
-		entityKey.put(NetworkEntityType.DROWNED, "minecraft:drowned");
-		entityKey.put(NetworkEntityType.SHEEP, "minecraft:sheep");
-		entityKey.put(NetworkEntityType.MUSHROOM_COW, "minecraft:mooshroom");
 		//entityKey.put(NetworkEntityType.PANDA, "minecraft:panda");
-		entityKey.put(NetworkEntityType.SALMON, "minecraft:salmon");
-		entityKey.put(NetworkEntityType.PIG, "minecraft:pig");
-		entityKey.put(NetworkEntityType.VILLAGER, "minecraft:villager");
-		entityKey.put(NetworkEntityType.COD, "minecraft:cod");
-		entityKey.put(NetworkEntityType.PUFFERFISH, "minecraft:pufferfish");
-		entityKey.put(NetworkEntityType.COW, "minecraft:cow");
-		entityKey.put(NetworkEntityType.CHICKEN, "minecraft:chicken");
 		//entityKey.put(NetworkEntityType.BALLOON, "minecraft:balloon");
-		entityKey.put(NetworkEntityType.LAMA, "minecraft:llama");
-		entityKey.put(NetworkEntityType.IRON_GOLEM, "minecraft:iron_golem");
-		entityKey.put(NetworkEntityType.RABBIT, "minecraft:rabbit");
 		//entityKey.put(NetworkEntityType.SNOW_GOLEM, "minecraft:snow_golem");
-		entityKey.put(NetworkEntityType.BAT, "minecraft:bat");
-		entityKey.put(NetworkEntityType.OCELOT, "minecraft:ocelot");
-		entityKey.put(NetworkEntityType.COMMON_HORSE, "minecraft:horse");
-		entityKey.put(NetworkEntityType.OCELOT, "minecraft:cat");
-		entityKey.put(NetworkEntityType.POLAR_BEAR, "minecraft:polar_bear");
-		entityKey.put(NetworkEntityType.ZOMBIE_HORSE, "minecraft:zombie_horse");
-		entityKey.put(NetworkEntityType.TURTLE, "minecraft:turtle");
-		entityKey.put(NetworkEntityType.PARROT, "minecraft:parrot");
-		entityKey.put(NetworkEntityType.GUARDIAN, "minecraft:guardian");
-		entityKey.put(NetworkEntityType.ELDER_GUARDIAN, "minecraft:elder_guardian");
-		entityKey.put(NetworkEntityType.VINDICATOR, "minecraft:vindicator");
-		entityKey.put(NetworkEntityType.WITHER, "minecraft:wither");
-		entityKey.put(NetworkEntityType.ENDER_DRAGON, "minecraft:ender_dragon");
-		entityKey.put(NetworkEntityType.SHULKER, "minecraft:shulker");
-		entityKey.put(NetworkEntityType.ENDERMITE, "minecraft:endermite");
-		entityKey.put(NetworkEntityType.MINECART, "minecraft:minecart");
-		entityKey.put(NetworkEntityType.MINECART_HOPPER, "minecraft:hopper_minecart");
-		entityKey.put(NetworkEntityType.MINECART_TNT, "minecraft:tnt_minecart");
-		entityKey.put(NetworkEntityType.MINECART_CHEST, "minecraft:chest_minecart");
-		entityKey.put(NetworkEntityType.MINECART_COMMAND, "minecraft:command_block_minecart");
-		entityKey.put(NetworkEntityType.ARMOR_STAND_OBJECT, "minecraft:armor_stand");
-		//entityKey.put(NetworkEntityType.ARMOR_STAND_MOB, "minecraft:armor_stand");
-		entityKey.put(NetworkEntityType.ITEM, "minecraft:item");
-		entityKey.put(NetworkEntityType.TNT, "minecraft:tnt");
-		entityKey.put(NetworkEntityType.FALLING_OBJECT, "minecraft:falling_block");
-		entityKey.put(NetworkEntityType.EXP_BOTTLE, "minecraft:xp_bottle");
-		entityKey.put(NetworkEntityType.EXP_ORB, "minecraft:xp_orb");
-		entityKey.put(NetworkEntityType.ENDEREYE, "minecraft:eye_of_ender_signal");
-		entityKey.put(NetworkEntityType.ENDER_CRYSTAL, "minecraft:ender_crystal");
-		entityKey.put(NetworkEntityType.SHULKER_BULLET, "minecraft:shulker_bullet");
-		entityKey.put(NetworkEntityType.FISHING_FLOAT, "minecraft:fishing_hook");
-		entityKey.put(NetworkEntityType.DRAGON_FIREBALL, "minecraft:dragon_fireball");
-		entityKey.put(NetworkEntityType.ARROW, "minecraft:arrow");
-		entityKey.put(NetworkEntityType.SNOWBALL, "minecraft:snowball");
-		entityKey.put(NetworkEntityType.EGG, "minecraft:egg");
-		entityKey.put(NetworkEntityType.PAINTING, "minecraft:painting");
-		entityKey.put(NetworkEntityType.THROWN_TRIDENT, "minecraft:thrown_trident");
-		entityKey.put(NetworkEntityType.FIREBALL, "minecraft:fireball");
-		entityKey.put(NetworkEntityType.POTION, "minecraft:splash_potion");
-		entityKey.put(NetworkEntityType.ENDERPEARL, "minecraft:ender_pearl");
-		entityKey.put(NetworkEntityType.LEASH_KNOT, "minecraft:leash_knot");
-		entityKey.put(NetworkEntityType.WITHER_SKULL, "minecraft:wither_skull");
 		//entityKey.put(NetworkEntityType.WITHER_SKULL_DANGEROUS, "minecraft:wither_skull_dangerous");
-		entityKey.put(NetworkEntityType.BOAT, "minecraft:boat");
 		//entityKey.put(NetworkEntityType.LIGHTNING_BOLT, "minecraft:lightning_bolt");
-		entityKey.put(NetworkEntityType.FIREBALL, "minecraft:small_fireball");
-		entityKey.put(NetworkEntityType.LAMA_SPIT, "minecraft:llama_spit");
-		entityKey.put(NetworkEntityType.AREA_EFFECT_CLOUD, "minecraft:area_effect_cloud");
 		//entityKey.put(NetworkEntityType.LINGERING_POTION, "minecraft:lingering_potion");
-		entityKey.put(NetworkEntityType.FIREWORK, "minecraft:fireworks_rocket");
-		entityKey.put(NetworkEntityType.EVOCATOR_FANGS, "minecraft:evocation_fang");
 		//entityKey.put(NetworkEntityType.EVOCATION_ILLAGER, "minecraft:evocation_illager");
-		entityKey.put(NetworkEntityType.VEX, "minecraft:vex");
 		//entityKey.put(NetworkEntityType.AGENT, "minecraft:agent");
 		//entityKey.put(NetworkEntityType.ICE_BOMB, "minecraft:ice_bomb");
-		entityKey.put(NetworkEntityType.PHANTOM, "minecraft:phantom");
 		//entityKey.put(NetworkEntityType.TRIPOD_CAMERA, "minecraft:tripod_camera"
-
-		for (Map.Entry<NetworkEntityType, Integer> entry : entityNetworkId.entrySet()) {
-			entityNetworkIdToType.put((int) entry.getValue(), entry.getKey());
-		}
 	}
 
 	public static NetworkEntityType getEntityTypeFromNetworkId(int networkId) {
@@ -214,8 +186,8 @@ public class PEDataValues {
 	public static int getEntityNetworkId(NetworkEntityType type) {
 		Integer id = entityNetworkId.get(type);
 		if (id == null) {
-			System.err.println("Missing PE entity key for " + type);
-			id = entityNetworkId.get(NetworkEntityType.ARMOR_STAND_MOB);
+			System.err.println("Missing PE entity id for " + type);
+			return entityNetworkId.get(NetworkEntityType.ARMOR_STAND_MOB);
 		}
 		return id;
 	}
@@ -224,7 +196,7 @@ public class PEDataValues {
 		String key = entityKey.get(type);
 		if (key == null) {
 			System.err.println("Missing PE entity key for " + type);
-			key = "minecraft:armor_stand";
+			return entityKey.get(NetworkEntityType.ARMOR_STAND_MOB);
 		}
 		return key;
 	}

@@ -138,7 +138,13 @@ public class ProtocolVersionsHelper {
 
 	public static ProtocolVersion getPEProtocolVersion(int protocolid) {
 		ProtocolVersion version = byPEProtocolId.get(protocolid);
-		return version != null ? version : ProtocolVersion.MINECRAFT_PE_FUTURE;
+		if (version != null) {
+			return version;
+		} else if (protocolid > LATEST_PE.getId()) {
+			return ProtocolVersion.MINECRAFT_PE_FUTURE;
+		} else {
+			return ProtocolVersion.MINECRAFT_PE_LEGACY;
+		}
 	}
 
 }
