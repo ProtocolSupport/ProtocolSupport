@@ -10,11 +10,10 @@ import protocolsupport.protocol.utils.types.nbt.NBTType;
 public class NBTUnStashRemapper extends ItemStackNBTComplexRemapper {
 	@Override
 	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
-		if (tag.getTag(CommonNBT.NBT_STASH) == null) {
-			return tag;
-		}
-		NBTCompound stashedNBT = tag.getTagOfType(CommonNBT.NBT_STASH, NBTType.COMPOUND);
 		itemstack.setTypeId(tag.getNumberTag(CommonNBT.ID_STASH).getAsInt());
-		return stashedNBT;
+		if (tag.getTag(CommonNBT.NBT_STASH) != null) {
+			return tag.getTagOfType(CommonNBT.NBT_STASH, NBTType.COMPOUND);
+		}
+		return null;
 	}
 }

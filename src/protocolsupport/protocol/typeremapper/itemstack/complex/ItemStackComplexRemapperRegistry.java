@@ -71,12 +71,12 @@ public class ItemStackComplexRemapperRegistry {
 		registerToClient(Material.LINGERING_POTION, new PotionToLegacyIdComplexRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
 		registerToClient(Material.WRITABLE_BOOK, new EmptyBookPageAdderComplexRemapper(), ProtocolVersionsHelper.ALL_PC);
 		registerToClient(Material.WRITTEN_BOOK, new BookPagesToLegacyTextComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_8);
-		ItemDurabilityToLegacyDataComplexRemapper durabilitymapper = new ItemDurabilityToLegacyDataComplexRemapper();
-		EnchantFilterNBTComplexRemapper enchantfilter = new EnchantFilterNBTComplexRemapper();
-		EnchantToLegacyIdComplexRemapper enchanttolegacyid = new EnchantToLegacyIdComplexRemapper();
-		DisplayNameToLegacyTextComplexRemapper dnametolegacytext = new DisplayNameToLegacyTextComplexRemapper();
-		EnchantToPEEnchantSpecificRemapper peenchantremapper = new EnchantToPEEnchantSpecificRemapper();
-		ItemStackNBTComplexRemapper pestashremapper = new NBTStashRemapper();
+		ItemStackComplexRemapper durabilitymapper 	= new ItemDurabilityToLegacyDataComplexRemapper();
+		ItemStackComplexRemapper enchantfilter 		= new EnchantFilterNBTComplexRemapper();
+		ItemStackComplexRemapper enchanttolegacyid 	= new EnchantToLegacyIdComplexRemapper();
+		ItemStackComplexRemapper dnametolegacytext 	= new DisplayNameToLegacyTextComplexRemapper();
+		ItemStackComplexRemapper peenchantremapper 	= new EnchantToPEEnchantSpecificRemapper();
+		ItemStackComplexRemapper pestashremapper 	= new NBTStashRemapper();
 		Arrays.stream(Material.values())
 		.filter(Material::isItem)
 		.forEach(material -> {
@@ -115,10 +115,10 @@ public class ItemStackComplexRemapperRegistry {
 	static {
 		registerFromClient(Material.FILLED_MAP, new MapFromLegacyIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
 		registerFromClient(Material.POTION, new PotionFromLegacyIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
-		EnchantFromLegacyIdComplexRemapper enchantfromlegacyid = new EnchantFromLegacyIdComplexRemapper();
-		DisplayNameFromLegacyTextComplexRemapper dnamefromlegacytext = new DisplayNameFromLegacyTextComplexRemapper();
-		EnchantFromPEEnchantRemapper frompeenchantremapper = new EnchantFromPEEnchantRemapper();
-		ItemStackNBTComplexRemapper pestashremapper = new NBTUnStashRemapper();
+		ItemStackComplexRemapper enchantfromlegacyid 	= new EnchantFromLegacyIdComplexRemapper();
+		ItemStackComplexRemapper dnamefromlegacytext 	= new DisplayNameFromLegacyTextComplexRemapper();
+		ItemStackComplexRemapper frompeenchantremapper 	= new EnchantFromPEEnchantRemapper();
+		ItemStackComplexRemapper pestashremapper 		= new NBTUnStashRemapper();
 		Arrays.stream(Material.values())
 		.filter(Material::isItem)
 		.forEach(material -> {
