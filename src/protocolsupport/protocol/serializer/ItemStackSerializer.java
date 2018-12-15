@@ -225,7 +225,7 @@ public class ItemStackSerializer {
 	}
 
 	private static final boolean isUsingPENBT(ProtocolVersion version) {
-		return (version.getProtocolType() == ProtocolType.PE) && (version.getProtocolType() == ProtocolType.PE);
+		return version.getProtocolType() == ProtocolType.PE;
 	}
 
 }
