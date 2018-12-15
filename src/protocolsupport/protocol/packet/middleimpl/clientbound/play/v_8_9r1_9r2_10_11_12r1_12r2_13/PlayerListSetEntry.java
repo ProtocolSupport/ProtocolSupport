@@ -31,7 +31,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		VarNumberSerializer.writeVarInt(serializer, action.ordinal());
 		VarNumberSerializer.writeVarInt(serializer, infos.size());
 		for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
-			MiscSerializer.writeUUID(serializer, version, entry.getKey());
+			MiscSerializer.writeUUID(serializer, entry.getKey());
 			PlayerListEntry currentEntry = entry.getValue().getObj2();
 			switch (action) {
 				case ADD: {

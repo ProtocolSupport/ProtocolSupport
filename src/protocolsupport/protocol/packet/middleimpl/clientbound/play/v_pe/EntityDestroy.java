@@ -5,6 +5,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityDestr
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityDataCache;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -16,8 +17,11 @@ public class EntityDestroy extends MiddleEntityDestroy {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		NetworkEntityDataCache dataCache = cache.getWatchedEntityCache().getSelfPlayer().getDataCache();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		for (int entityId : entityIds) {
+			if (dataCache.getVehicleId() == entityId) // If the user is riding something and the vehicle is destroyed, the unlink packet is never sent, causing desync (and errors) with the cache
+				dataCache.setVehicleId(0);
 			packets.add(create(entityId));
 		}
 		return packets;
