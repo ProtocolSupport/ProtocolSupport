@@ -159,24 +159,23 @@ public class PEDataValues {
 		//registerEntity(NetworkEntityType.MINECART_MOB_SPAWNER, null, null);
 		registerEntity(NetworkEntityType.MINECART_HOPPER, null, "minecraft:hopper_minecart");
 		registerEntity(NetworkEntityType.MINECART_COMMAND, null, "minecraft:command_block_minecart");
+		//registerEntity(NetworkEntityType.NPC, null, "minecraft:npc");
+		//registerEntity(NetworkEntityType.PANDA, null, "minecraft:panda");
+		//registerEntity(NetworkEntityType.BALLOON, null, "minecraft:balloon");
+		//registerEntity(NetworkEntityType.SNOW_GOLEM, null, "minecraft:snow_golem");
+		//registerEntity(NetworkEntityType.WITHER_SKULL_DANGEROUS, null, "minecraft:wither_skull_dangerous");
+		//registerEntity(NetworkEntityType.LIGHTNING_BOLT, null, "minecraft:lightning_bolt");
+		//registerEntity(NetworkEntityType.LINGERING_POTION, null, "minecraft:lingering_potion");
+		//registerEntity(NetworkEntityType.EVOCATION_ILLAGER, null, "minecraft:evocation_illager");
+		//registerEntity(NetworkEntityType.AGENT, null, "minecraft:agent");
+		//registerEntity(NetworkEntityType.ICE_BOMB, null, "minecraft:ice_bomb");
+		//registerEntity(NetworkEntityType.TRIPOD_CAMERA, null, "minecraft:tripod_camera"
 
 		//TODO: add entity remappers for these
 		//remapEntity(NetworkEntityType.SPECTRAL_ARROW, NetworkEntityType.ARROW);
 		//remapEntity(NetworkEntityType.TIPPED_ARROW, NetworkEntityType.ARROW);
 		//remapEntity(NetworkEntityType.ARMOR_STAND_MOB, NetworkEntityType.ARMOR_STAND_OBJECT);
-		//plus more
-
-		//entityKey.put(NetworkEntityType.NPC, "minecraft:npc");
-		//entityKey.put(NetworkEntityType.PANDA, "minecraft:panda");
-		//entityKey.put(NetworkEntityType.BALLOON, "minecraft:balloon");
-		//entityKey.put(NetworkEntityType.SNOW_GOLEM, "minecraft:snow_golem");
-		//entityKey.put(NetworkEntityType.WITHER_SKULL_DANGEROUS, "minecraft:wither_skull_dangerous");
-		//entityKey.put(NetworkEntityType.LIGHTNING_BOLT, "minecraft:lightning_bolt");
-		//entityKey.put(NetworkEntityType.LINGERING_POTION, "minecraft:lingering_potion");
-		//entityKey.put(NetworkEntityType.EVOCATION_ILLAGER, "minecraft:evocation_illager");
-		//entityKey.put(NetworkEntityType.AGENT, "minecraft:agent");
-		//entityKey.put(NetworkEntityType.ICE_BOMB, "minecraft:ice_bomb");
-		//entityKey.put(NetworkEntityType.TRIPOD_CAMERA, "minecraft:tripod_camera"
+		//plus more....
 	}
 
 	public static NetworkEntityType getEntityTypeFromNetworkId(int networkId) {
