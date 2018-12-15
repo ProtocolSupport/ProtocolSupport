@@ -40,7 +40,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 	public static final String PELockChannel = "ps:ir_lockchannel";
 	public static final String PEUnlockChannel = "ps:ir_unlockchannel";
 	public static final String PESkinUpdateSuffix = "skinupdate";
-	public static final String PESkinUpdate = "ps:" + PESkinUpdateSuffix;
+	public static final String PESkinUpdateChannel = "ps:" + PESkinUpdateSuffix;
 
 	static {
 		//Register (optional) request handlers. Handlers can and often contain code that needs bukkit/server access.

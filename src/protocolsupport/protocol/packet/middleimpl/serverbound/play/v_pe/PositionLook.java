@@ -57,7 +57,8 @@ public class PositionLook extends ServerBoundMiddlePacket {
 			final double dX = x - movecache.getPEClientX();
 			final double dZ = z - movecache.getPEClientZ();
 			final double speed = Math.sqrt(dX * dX + dZ * dZ);
-			final double speedOffset = speed >= 0.28 ? 0.9 : 0.6;
+			//TODO: figure out actual values here, should just be a normal line: offset = C1 * speed + C2
+			final double speedOffset = speed >= 0.25 ? 0.9 : 0.6;
 			yOffset = (y - movecache.getPEClientY()) > 0.01 ? speedOffset : 0;
 			movecache.updatePEPositionLeniency(y);
 		}
