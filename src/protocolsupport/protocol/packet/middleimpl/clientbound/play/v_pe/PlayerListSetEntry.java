@@ -87,7 +87,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 				ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_INFO);
 				writePlayerListHeader(serializer, PE_PLAYER_LIST_REMOVE, infos.size());
 				for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
-					MiscSerializer.writeUUID(serializer, version, entry.getKey());
+					MiscSerializer.writePEUUID(serializer, entry.getKey());
 				}
 				return RecyclableSingletonList.create(serializer);
 			}
@@ -145,7 +145,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 	}
 
 	protected static void writePlayerListEntry(ProtocolVersion version, ByteBuf serializer, byte[] skindata, UUID uuid, Boolean isNormalModel, String username) {
-		MiscSerializer.writeUUID(serializer, version, uuid);
+		MiscSerializer.writePEUUID(serializer, uuid);
 		VarNumberSerializer.writeVarInt(serializer, 0); //entity id
 		StringSerializer.writeString(serializer, version, username);
 		writeSkinData(version, serializer, isNormalModel, skindata);

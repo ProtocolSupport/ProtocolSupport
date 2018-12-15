@@ -119,7 +119,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 		}
 		VarNumberSerializer.writeVarInt(to, 1); // result item count
 		ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output, true);
-		MiscSerializer.writeUUID(to, connection.getVersion(), UUID.nameUUIDFromBytes(to.array()));
+		MiscSerializer.writePEUUID(to, UUID.nameUUIDFromBytes(to.array()));
 		recipesWritten++;
 	}
 
@@ -133,7 +133,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 		}
 		VarNumberSerializer.writeVarInt(to, 1); // result item count
 		ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output, true);
-		MiscSerializer.writeUUID(to, connection.getVersion(), UUID.nameUUIDFromBytes(to.array()));
+		MiscSerializer.writePEUUID(to, UUID.nameUUIDFromBytes(to.array()));
 		recipesWritten++;
 	}
 
