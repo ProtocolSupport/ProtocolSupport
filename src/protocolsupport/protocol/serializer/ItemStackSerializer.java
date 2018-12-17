@@ -30,7 +30,7 @@ public class ItemStackSerializer {
 
 	public static NetworkItemStack readItemStack(ByteBuf from, ProtocolVersion version, String locale, boolean isFromClient) {
 		int type = 0;
-		if (version.getProtocolType() == ProtocolType.PE) {
+		if (version.isPE()) {
 			type = VarNumberSerializer.readSVarInt(from);
 		} else if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
 			if (!from.readBoolean()) {
@@ -42,7 +42,7 @@ public class ItemStackSerializer {
 			type = from.readShort();
 		}
 		// PE can have -1 for new blocks :F
-		if (version.getProtocolType() == ProtocolType.PE) {
+		if (version.isPE()) {
 			if (type == 0) {
 				return NetworkItemStack.NULL;
 			}
@@ -53,17 +53,17 @@ public class ItemStackSerializer {
 		}
 		NetworkItemStack itemstack = new NetworkItemStack();
 		itemstack.setTypeId(type);
-		if (version.getProtocolType() == ProtocolType.PE) {
+		if (version.isPE()) {
 			int amountdata = VarNumberSerializer.readSVarInt(from);
 			itemstack.setAmount(amountdata & 0x7F);
 			itemstack.setLegacyData((amountdata >> 8) & 0x7FFF);
 		} else {
 			itemstack.setAmount(from.readByte());
 		}
-		if ((version.getProtocolType() == ProtocolType.PC) && version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
+		if (version.isPC() && version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			itemstack.setLegacyData(from.readUnsignedShort());
 		}
-		if (version.getProtocolType() == ProtocolType.PE) {
+		if (version.isPE()) {
 			itemstack.setNBT(readTag(from, false, version));
 			//TODO: CanPlaceOn PE
 			for (int i = 0; i < VarNumberSerializer.readSVarInt(from); i++) {
@@ -84,7 +84,7 @@ public class ItemStackSerializer {
 
 	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, NetworkItemStack itemstack, boolean isToClient) {
 		if ((itemstack == null) || itemstack.isNull()) {
-			if (version.getProtocolType() == ProtocolType.PE) {
+			if (version.isPE()) {
 				VarNumberSerializer.writeVarInt(to, 0);
 			} else if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
 				to.writeBoolean(false);
@@ -97,7 +97,7 @@ public class ItemStackSerializer {
 		if (isToClient) {
 			witemstack = remapItemToClient(version, locale, witemstack);
 		}
-		if (version.getProtocolType() == ProtocolType.PE) {
+		if (version.isPE()) {
 			VarNumberSerializer.writeSVarInt(to, witemstack.getTypeId());
 			VarNumberSerializer.writeSVarInt(to, ((witemstack.getLegacyData() & 0x7FFF) << 8) | witemstack.getAmount());
 			writeTag(to, false, version, witemstack.getNBT());
@@ -217,15 +217,15 @@ public class ItemStackSerializer {
 	}
 
 	private static final boolean isUsingShortLengthNBT(ProtocolVersion version) {
-		return (version.getProtocolType() == ProtocolType.PC) && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10);
+		return version.isPC() && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10);
 	}
 
 	private static final boolean isUsingDirectNBT(ProtocolVersion version) {
-		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+		return version.isPC() && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
 	}
 
 	private static final boolean isUsingPENBT(ProtocolVersion version) {
-		return version.getProtocolType() == ProtocolType.PE;
+		return version.isPE();
 	}
 
 }

@@ -294,11 +294,11 @@ public abstract class AbstractLoginListener implements IPacketListener {
 	}
 
 	protected static boolean isFullEncryption(ProtocolVersion version) {
-		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5);
+		return version.isPC() && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5);
 	}
 
 	protected static boolean hasCompression(ProtocolVersion version) {
-		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+		return version.isPC() && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
 	}
 
 }

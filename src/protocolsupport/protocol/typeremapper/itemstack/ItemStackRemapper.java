@@ -14,9 +14,8 @@ public class ItemStackRemapper {
 		}
 		itemstack = ItemStackComplexRemapperRegistry.remapToClient(version, locale, itemstack);
 		itemstack.setTypeId(LegacyItemType.REGISTRY.getTable(version).getRemap(itemstack.getTypeId()));
-		if (version.getProtocolType() == ProtocolType.PE) {
-			int modernId = itemstack.getTypeId();
-			int peCombinedId = PEItems.getPECombinedIdByModernId(modernId);
+		if (version.isPE()) {
+			int peCombinedId = PEItems.getPECombinedIdByModernId(itemstack.getTypeId());
 			int peData = PEItems.getDataFromPECombinedId(peCombinedId);
 			itemstack.setTypeId(PEItems.getIdFromPECombinedId(peCombinedId));
 			if (itemstack.getLegacyData() == 0) { //preserve legacy durability data
@@ -35,7 +34,7 @@ public class ItemStackRemapper {
 	}
 
 	public static NetworkItemStack remapFromClient(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		if (version.getProtocolType() == ProtocolType.PE) {
+		if (version.isPE()) {
 			int modernId = PEItems.getModernIdByPEIdData(itemstack.getTypeId(), itemstack.getLegacyData());
 			itemstack.setTypeId(modernId);
 			itemstack.setLegacyData(0);

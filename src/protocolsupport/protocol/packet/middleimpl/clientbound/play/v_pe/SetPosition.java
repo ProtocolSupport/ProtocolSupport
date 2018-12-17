@@ -38,12 +38,7 @@ public class SetPosition extends MiddleSetPosition {
 		movecache.setPEClientPosition(x, y, z);
 		//TODO: this might have a better home somewhere- but client must be pos-dim-switch-ack, and PSPE must know the new player location
 		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_8)) {
-			ClientBoundPacketData networkChunkUpdate = ClientBoundPacketData.create(PEPacketIDs.NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET);
-			VarNumberSerializer.writeSVarInt(networkChunkUpdate, (int) x);
-			VarNumberSerializer.writeVarInt(networkChunkUpdate, (int) y);
-			VarNumberSerializer.writeSVarInt(networkChunkUpdate, (int) z);
-			VarNumberSerializer.writeVarInt(networkChunkUpdate, Bukkit.getViewDistance() << 4);
-			packets.add(networkChunkUpdate);
+			packets.add(Chunk.createChunkPublisherUpdate((int) x, (int) y, (int) z));
 		}
 		return packets;
 	}

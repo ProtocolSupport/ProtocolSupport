@@ -1,7 +1,6 @@
 package protocolsupport.protocol.typeremapper.pe;
 
 import java.io.BufferedReader;
-import java.text.MessageFormat;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -170,12 +169,6 @@ public class PEDataValues {
 		//registerEntity(NetworkEntityType.AGENT, null, "minecraft:agent");
 		//registerEntity(NetworkEntityType.ICE_BOMB, null, "minecraft:ice_bomb");
 		//registerEntity(NetworkEntityType.TRIPOD_CAMERA, null, "minecraft:tripod_camera"
-
-		//TODO: add entity remappers for these
-		//remapEntity(NetworkEntityType.SPECTRAL_ARROW, NetworkEntityType.ARROW);
-		//remapEntity(NetworkEntityType.TIPPED_ARROW, NetworkEntityType.ARROW);
-		//remapEntity(NetworkEntityType.ARMOR_STAND_MOB, NetworkEntityType.ARMOR_STAND_OBJECT);
-		//plus more....
 	}
 
 	public static NetworkEntityType getEntityTypeFromNetworkId(int networkId) {
@@ -186,7 +179,7 @@ public class PEDataValues {
 		Integer id = entityNetworkId.get(type);
 		if (id == null) {
 			System.err.println("Missing PE entity id for " + type);
-			return entityNetworkId.get(NetworkEntityType.ARMOR_STAND_MOB);
+			return entityNetworkId.get(NetworkEntityType.ARMOR_STAND_OBJECT);
 		}
 		return id;
 	}
@@ -195,7 +188,7 @@ public class PEDataValues {
 		String key = entityKey.get(type);
 		if (key == null) {
 			System.err.println("Missing PE entity key for " + type);
-			return entityKey.get(NetworkEntityType.ARMOR_STAND_MOB);
+			return entityKey.get(NetworkEntityType.ARMOR_STAND_OBJECT);
 		}
 		return key;
 	}
