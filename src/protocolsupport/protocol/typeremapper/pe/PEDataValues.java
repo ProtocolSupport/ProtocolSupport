@@ -170,12 +170,6 @@ public class PEDataValues {
 		//registerEntity(NetworkEntityType.AGENT, null, "minecraft:agent");
 		//registerEntity(NetworkEntityType.ICE_BOMB, null, "minecraft:ice_bomb");
 		//registerEntity(NetworkEntityType.TRIPOD_CAMERA, null, "minecraft:tripod_camera"
-
-		//TODO: add entity remappers for these
-		//remapEntity(NetworkEntityType.SPECTRAL_ARROW, NetworkEntityType.ARROW);
-		//remapEntity(NetworkEntityType.TIPPED_ARROW, NetworkEntityType.ARROW);
-		//remapEntity(NetworkEntityType.ARMOR_STAND_MOB, NetworkEntityType.ARMOR_STAND_OBJECT);
-		//plus more....
 	}
 
 	public static NetworkEntityType getEntityTypeFromNetworkId(int networkId) {
