@@ -58,12 +58,7 @@ public class Chunk extends MiddleChunk {
 			});
 			packets.add(serializer);
 			if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_8)) {
-				ClientBoundPacketData networkChunkUpdate = ClientBoundPacketData.create(PEPacketIDs.NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET);
-				VarNumberSerializer.writeSVarInt(networkChunkUpdate, (int) movecache.getPEClientX());
-				VarNumberSerializer.writeVarInt(networkChunkUpdate, (int) movecache.getPEClientY());
-				VarNumberSerializer.writeSVarInt(networkChunkUpdate, (int) movecache.getPEClientZ());
-				VarNumberSerializer.writeVarInt(networkChunkUpdate, Bukkit.getViewDistance() << 4); //TODO: client view distance yo
-				packets.add(networkChunkUpdate);
+				packets.add(createChunkPublisherUpdate((int) movecache.getPEClientX(), (int) movecache.getPEClientY(), (int) movecache.getPEClientZ()));
 			}
 			return packets;
 		} else { //Request a full chunk.
@@ -77,6 +72,16 @@ public class Chunk extends MiddleChunk {
 		PositionSerializer.writePEChunkCoord(serializer, chunk);
 		serializer.writeBytes(EmptyChunk.getPEChunkData());
 		return serializer;
+	}
+
+	public static ClientBoundPacketData createChunkPublisherUpdate(int x, int y, int z) {
+		ClientBoundPacketData networkChunkUpdate = ClientBoundPacketData.create(PEPacketIDs.NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET);
+		VarNumberSerializer.writeSVarInt(networkChunkUpdate, x);
+		VarNumberSerializer.writeVarInt(networkChunkUpdate, y);
+		VarNumberSerializer.writeSVarInt(networkChunkUpdate, z);
+		//TODO: client view distance
+		VarNumberSerializer.writeVarInt(networkChunkUpdate, Bukkit.getViewDistance() << 4);
+		return networkChunkUpdate;
 	}
 
 }
