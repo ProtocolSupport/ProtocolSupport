@@ -367,7 +367,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 	}
 
 	protected boolean canPlayerSeeTrackerChunk(EntityPlayer entityplayer) {
-		return entityplayer.getWorldServer().getPlayerChunkMap().a(entityplayer, entity.ae, entity.ag);
+		return entityplayer.getWorldServer().getPlayerChunkMap().a(entityplayer, entity.chunkX, entity.chunkZ);
 	}
 
 	protected static final CachedInstanceOfChain<Function<Entity, Packet<?>>> createSpawnPacketMethods = new CachedInstanceOfChain<>();
