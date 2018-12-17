@@ -62,7 +62,7 @@ public class SpigotEntityTracker extends EntityTracker {
 	public SpigotEntityTracker(WorldServer worldserver) {
 		super(worldserver);
 		world = worldserver;
-		viewDistance = worldserver.getMinecraftServer().getPlayerList().d();
+		viewDistance = worldserver.getMinecraftServer().getPlayerList().getViewDistance();
 		try {
 			trackerEntries = (Set<EntityTrackerEntry>) trackerEntriesField.get(this);
 		} catch (IllegalArgumentException | IllegalAccessException e) {

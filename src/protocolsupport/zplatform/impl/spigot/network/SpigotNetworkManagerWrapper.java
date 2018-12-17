@@ -48,7 +48,7 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public void setAddress(InetSocketAddress address) {
-		internal.l = address;
+		internal.socketAddress = address;
 	}
 
 	@Override
