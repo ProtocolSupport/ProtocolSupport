@@ -10,10 +10,8 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleNameItem;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.inventory.PESlotRemapper;
 import protocolsupport.protocol.typeremapper.pe.inventory.PETransactionRemapper;
@@ -50,10 +48,11 @@ public class GodPacket extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
+		String locale = cache.getAttributesCache().getLocale();
 		actionId = VarNumberSerializer.readVarInt(clientdata);
 		transactions = new InvTransaction[VarNumberSerializer.readVarInt(clientdata)];
 		for (int i = 0; i < transactions.length; i++) {
-			transactions[i] = InvTransaction.readFromStream(clientdata, cache, connection.getVersion());
+			transactions[i] = InvTransaction.readFromStream(clientdata, locale, connection.getVersion());
 		}
 		switch (actionId) {
 			case ACTION_USE_ITEM: {
@@ -136,8 +135,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		private NetworkItemStack oldItem;
 		private NetworkItemStack newItem;
 
-		private static InvTransaction readFromStream(ByteBuf from, NetworkDataCache cache, ProtocolVersion version) {
-			String locale = cache.getAttributesCache().getLocale();
+		private static InvTransaction readFromStream(ByteBuf from, String locale, ProtocolVersion version) {
 			InvTransaction transaction = new InvTransaction();
 			transaction.sourceId = VarNumberSerializer.readVarInt(from);
 			switch (transaction.sourceId) {
@@ -163,7 +161,6 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				}
 			}
 			transaction.slot = VarNumberSerializer.readVarInt(from);
-			//TODO: insert reverse mapping cache here
 			transaction.oldItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			transaction.newItem = ItemStackSerializer.readItemStack(from, version, locale, true);
 			PETransactionRemapper.bug("Inv transaction read:"
