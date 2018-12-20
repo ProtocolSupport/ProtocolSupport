@@ -77,6 +77,9 @@ public class ItemStackComplexRemapperRegistry {
 		ItemStackComplexRemapper dnametolegacytext 	= new DisplayNameToLegacyTextComplexRemapper();
 		ItemStackComplexRemapper peenchantremapper 	= new EnchantToPEEnchantSpecificRemapper();
 		ItemStackComplexRemapper pestashremapper 	= new NBTStashRemapper();
+		PotionToPEIdSpecificRemapper pepotion 		= new PotionToPEIdSpecificRemapper();
+		BookPagesToPESpecificRemapper pebook 		= new BookPagesToPESpecificRemapper();
+		LeatherArmorToPESpecificRemapper peleatherarmor = new LeatherArmorToPESpecificRemapper();
 		Arrays.stream(Material.values())
 		.filter(Material::isItem)
 		.forEach(material -> {
@@ -90,14 +93,12 @@ public class ItemStackComplexRemapperRegistry {
 			registerToClient(material, peenchantremapper, ProtocolVersionsHelper.ALL_PE);
 		});
 		registerToClient(Material.FILLED_MAP, new MapItemLegacyIdToNbtSpecificRemapper(), ProtocolVersionsHelper.ALL_PE);
-		PotionToPEIdSpecificRemapper pepotion = new PotionToPEIdSpecificRemapper();
 		registerToClient(Material.POTION, pepotion, ProtocolVersionsHelper.ALL_PE);
 		registerToClient(Material.SPLASH_POTION, pepotion, ProtocolVersionsHelper.ALL_PE);
 		registerToClient(Material.LINGERING_POTION, pepotion, ProtocolVersionsHelper.ALL_PE);
 		registerToClient(Material.TIPPED_ARROW, pepotion, ProtocolVersionsHelper.ALL_PE);
 		//TODO FIX
 		//registerToClient(Material.MONSTER_EGG, new MonsterEggToPEIdSpecificRemapper(), ProtocolVersionsHelper.ALL_PE);
-		BookPagesToPESpecificRemapper pebook = new BookPagesToPESpecificRemapper();
 		registerToClient(Material.WRITTEN_BOOK, pebook, ProtocolVersionsHelper.ALL_PE);
 		//TODO FIX
 		//registerToClient(Material.BOOK_AND_QUILL, pebook, ProtocolVersionsHelper.ALL_PE);
@@ -105,7 +106,6 @@ public class ItemStackComplexRemapperRegistry {
 		//TODO FIX
 		//registerToClient(Material.FIREWORK_CHARGE, pefireworks, ProtocolVersionsHelper.ALL_PE);
 		//registerToClient(Material.FIREWORK, pefireworks, ProtocolVersionsHelper.ALL_PE);
-		LeatherArmorToPESpecificRemapper peleatherarmor = new LeatherArmorToPESpecificRemapper();
 		registerToClient(Material.LEATHER_HELMET, peleatherarmor, ProtocolVersionsHelper.ALL_PE);
 		registerToClient(Material.LEATHER_CHESTPLATE, peleatherarmor, ProtocolVersionsHelper.ALL_PE);
 		registerToClient(Material.LEATHER_LEGGINGS, peleatherarmor, ProtocolVersionsHelper.ALL_PE);
@@ -119,6 +119,9 @@ public class ItemStackComplexRemapperRegistry {
 		ItemStackComplexRemapper dnamefromlegacytext 	= new DisplayNameFromLegacyTextComplexRemapper();
 		ItemStackComplexRemapper frompeenchantremapper 	= new EnchantFromPEEnchantRemapper();
 		ItemStackComplexRemapper pestashremapper 		= new NBTUnStashRemapper();
+		BookPagesFromPERemapper frompebook 				= new BookPagesFromPERemapper();
+		PotionFromPEIdRemapper frompepotion 			= new PotionFromPEIdRemapper();
+		LeatherArmorFromPERemapper frompeleatherarmor 	= new LeatherArmorFromPERemapper();
 		Arrays.stream(Material.values())
 		.filter(Material::isItem)
 		.forEach(material -> {
@@ -130,16 +133,13 @@ public class ItemStackComplexRemapperRegistry {
 		//TODO FIX
 		//registerFromClient(Material.MAP, new MapItemNbtToLegacyIdRemapper(), ProtocolVersionsHelper.ALL_PE);
 		//registerFromClient(Material.MONSTER_EGG, new MonsterEggFromPEIdRemapper(), ProtocolVersionsHelper.ALL_PE);
-		BookPagesFromPERemapper frompebook = new BookPagesFromPERemapper();
 		registerFromClient(Material.WRITTEN_BOOK, frompebook, ProtocolVersionsHelper.ALL_PE);
 		//TODO FIX
 		//registerFromClient(Material.BOOK_AND_QUILL, frompebook, ProtocolVersionsHelper.ALL_PE);
-		PotionFromPEIdRemapper frompepotion = new PotionFromPEIdRemapper();
 		registerFromClient(Material.POTION, frompepotion, ProtocolVersionsHelper.ALL_PE);
 		registerFromClient(Material.SPLASH_POTION, frompepotion, ProtocolVersionsHelper.ALL_PE);
 		registerFromClient(Material.LINGERING_POTION, frompepotion, ProtocolVersionsHelper.ALL_PE);
 		registerFromClient(Material.TIPPED_ARROW, frompepotion, ProtocolVersionsHelper.ALL_PE);
-		LeatherArmorFromPERemapper frompeleatherarmor = new LeatherArmorFromPERemapper();
 		registerFromClient(Material.LEATHER_HELMET, frompeleatherarmor, ProtocolVersionsHelper.ALL_PE);
 		registerFromClient(Material.LEATHER_CHESTPLATE, frompeleatherarmor, ProtocolVersionsHelper.ALL_PE);
 		registerFromClient(Material.LEATHER_LEGGINGS, frompeleatherarmor, ProtocolVersionsHelper.ALL_PE);
