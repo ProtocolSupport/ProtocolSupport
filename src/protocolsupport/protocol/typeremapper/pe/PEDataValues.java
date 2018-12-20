@@ -202,11 +202,15 @@ public class PEDataValues {
 	}
 
 	static {
-		registerEnchantRemap(Enchantment.OXYGEN, 6);
-		registerEnchantRemap(Enchantment.WATER_WORKER, 8);
+		registerEnchantRemap(Enchantment.PROTECTION_ENVIRONMENTAL, 0);
+		registerEnchantRemap(Enchantment.PROTECTION_FIRE, 1);
+		registerEnchantRemap(Enchantment.PROTECTION_FALL, 2);
+		registerEnchantRemap(Enchantment.PROTECTION_EXPLOSIONS, 3);
+		registerEnchantRemap(Enchantment.PROTECTION_PROJECTILE, 4);
 		registerEnchantRemap(Enchantment.THORNS, 5);
+		registerEnchantRemap(Enchantment.OXYGEN, 6);
 		registerEnchantRemap(Enchantment.DEPTH_STRIDER, 7);
-		registerEnchantRemap(Enchantment.FROST_WALKER, 25);
+		registerEnchantRemap(Enchantment.WATER_WORKER, 8);
 		registerEnchantRemap(Enchantment.DAMAGE_ALL, 9);
 		registerEnchantRemap(Enchantment.DAMAGE_UNDEAD, 10);
 		registerEnchantRemap(Enchantment.DAMAGE_ARTHROPODS, 11);
@@ -223,7 +227,14 @@ public class PEDataValues {
 		registerEnchantRemap(Enchantment.ARROW_INFINITE, 22);
 		registerEnchantRemap(Enchantment.LUCK, 23);
 		registerEnchantRemap(Enchantment.LURE, 24);
+		registerEnchantRemap(Enchantment.FROST_WALKER, 25);
 		registerEnchantRemap(Enchantment.MENDING, 26);
+		registerEnchantRemap(Enchantment.BINDING_CURSE, 27);
+		registerEnchantRemap(Enchantment.VANISHING_CURSE, 28);
+		registerEnchantRemap(Enchantment.IMPALING, 29);
+		registerEnchantRemap(Enchantment.RIPTIDE, 30);
+		registerEnchantRemap(Enchantment.LOYALTY, 31);
+		registerEnchantRemap(Enchantment.CHANNELING, 32);
 	}
 
 	public static int pcToPeEnchant(int pcId) {
