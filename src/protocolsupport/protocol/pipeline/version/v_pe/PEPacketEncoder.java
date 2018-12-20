@@ -28,6 +28,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityEf
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityHeadRotation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityLeash;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityLook;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityStatus;
@@ -105,6 +106,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_VELOCITY_ID, EntityVelocity::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID, EntityTeleport::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_HEAD_ROTATION_ID, EntityHeadRotation::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_LOOK_ID, EntityLook::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_DESTROY_ID, EntityDestroy::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_PLAYER_INFO_ID, PlayerListSetEntry::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_NAMED_ID, SpawnNamed::new);
