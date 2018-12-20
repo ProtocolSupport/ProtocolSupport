@@ -223,11 +223,13 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		//Anvil naming is only done and known based on the clicked item.
 		if (transaction.getSlot() == 2 && !transaction.getOldItem().isNull()) {
 			NBTCompound tag = transaction.getOldItem().getNBT();
-			NBTCompound display = tag.getTagOfType("display", NBTType.COMPOUND);
-			if (display != null) {
-				NBTString name = display.getTagOfType("Name", NBTType.STRING);
-				if (name != null) {
-					packets.add(MiddleNameItem.create(name.getValue()));
+			if (tag != null) {
+				NBTCompound display = tag.getTagOfType("display", NBTType.COMPOUND);
+				if (display != null) {
+					NBTString name = display.getTagOfType("Name", NBTType.STRING);
+					if (name != null) {
+						packets.add(MiddleNameItem.create(name.getValue()));
+					}
 				}
 			}
 		}

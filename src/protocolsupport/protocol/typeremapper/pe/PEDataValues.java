@@ -7,6 +7,7 @@ import java.util.Map;
 import com.google.gson.annotations.SerializedName;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.bukkit.Particle;
 import org.bukkit.block.Biome;
 import org.bukkit.enchantments.Enchantment;
@@ -193,12 +194,12 @@ public class PEDataValues {
 		return key;
 	}
 
-	private static final Int2IntOpenHashMap pcEnchantToPe = new Int2IntOpenHashMap();
-	private static final Int2IntOpenHashMap peEnchantToPc = new Int2IntOpenHashMap();
+	private static final Object2IntOpenHashMap<String> pcEnchantToPe = new Object2IntOpenHashMap();
+	private static final Int2ObjectOpenHashMap<String> peEnchantToPc = new Int2ObjectOpenHashMap();
 
 	private static void registerEnchantRemap(Enchantment enchantment, int peId) {
-		pcEnchantToPe.put(LegacyEnchantmentId.getId(enchantment), peId);
-		peEnchantToPc.put(peId, LegacyEnchantmentId.getId(enchantment));
+		pcEnchantToPe.put(enchantment.getKey().toString(), peId);
+		peEnchantToPc.put(peId, enchantment.getKey().toString());
 	}
 
 	static {
@@ -237,11 +238,11 @@ public class PEDataValues {
 		registerEnchantRemap(Enchantment.CHANNELING, 32);
 	}
 
-	public static int pcToPeEnchant(int pcId) {
-		return pcEnchantToPe.get(pcId);
+	public static int pcToPeEnchant(String pcKey) {
+		return pcEnchantToPe.getInt(pcKey);
 	}
 
-	public static int peToPcEnchant(int peId) {
+	public static String peToPcEnchant(int peId) {
 		return peEnchantToPc.get(peId);
 	}
 

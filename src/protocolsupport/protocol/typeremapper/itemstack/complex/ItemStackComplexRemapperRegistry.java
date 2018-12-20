@@ -85,7 +85,7 @@ public class ItemStackComplexRemapperRegistry {
 				registerToClient(material, durabilitymapper, ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
 			}
 			registerToClient(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);
-			registerToClient(material, enchanttolegacyid, ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
+			registerToClient(material, enchanttolegacyid, ProtocolVersionsHelper.BEFORE_1_13);
 			registerToClient(material, dnametolegacytext, ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
 			registerToClient(material, peenchantremapper, ProtocolVersionsHelper.ALL_PE);
 		});
@@ -125,7 +125,7 @@ public class ItemStackComplexRemapperRegistry {
 			//TODO: do we need these anymore? backwards mapping done with stashed NBT now
 			registerFromClient(material, dnamefromlegacytext, ProtocolVersionsHelper.BEFORE_1_13);
 			registerFromClient(material, frompeenchantremapper, ProtocolVersionsHelper.ALL_PE);
-			registerFromClient(material, enchantfromlegacyid, ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
+			registerFromClient(material, enchantfromlegacyid, ProtocolVersionsHelper.BEFORE_1_13);
 		});
 		//TODO FIX
 		//registerFromClient(Material.MAP, new MapItemNbtToLegacyIdRemapper(), ProtocolVersionsHelper.ALL_PE);
