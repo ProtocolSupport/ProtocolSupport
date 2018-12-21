@@ -71,7 +71,7 @@ public class PEBlocks {
 		ByteBuf def = Unpooled.buffer();
 		VarNumberSerializer.writeVarInt(def, peBlocks.size());
 		peBlocks.forEach(block -> {
-			StringSerializer.writeString(def, ProtocolVersion.MINECRAFT_PE, block.getName());
+			StringSerializer.writeString(def, ProtocolVersionsHelper.LATEST_PE, block.getName());
 			def.writeShortLE(block.getData());
 		});
 		peBlockDef = MiscSerializer.readAllBytes(def);

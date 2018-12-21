@@ -28,7 +28,7 @@ public class CommandRequest extends ServerBoundMiddlePacket {
 		command = StringSerializer.readString(clientdata, connection.getVersion());
 		int type = VarNumberSerializer.readVarInt(clientdata);
 		MiscSerializer.readUUID(clientdata); // UUID
-		StringSerializer.readString(clientdata, ProtocolVersion.MINECRAFT_PE); // request ID
+		StringSerializer.readString(clientdata, connection.getVersion()); // request ID
 		if ((type == ORIGIN_DEV_CONSOLE) || (type == ORIGIN_TEST)) {
 			VarNumberSerializer.readSVarLong(clientdata); // ???
 		}

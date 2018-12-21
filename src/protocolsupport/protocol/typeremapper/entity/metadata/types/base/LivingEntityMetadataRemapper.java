@@ -15,9 +15,9 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarIn
 public class LivingEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 
 	public LivingEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.POTION_COLOR, PeMetaBase.POTION_COLOR), ProtocolVersion.MINECRAFT_PE);
-		addRemap(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.EntityLiving.POTION_AMBIENT, PeMetaBase.POTION_AMBIENT), ProtocolVersion.MINECRAFT_PE);
-		addRemap(new FirstDataWatcherUpdateObjectAddRemapper(PeMetaBase.HEALTH, new DataWatcherObjectVarInt(10)), ProtocolVersion.MINECRAFT_PE);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.EntityLiving.POTION_COLOR, PeMetaBase.POTION_COLOR), ProtocolVersionsHelper.ALL_PE);
+		addRemap(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.EntityLiving.POTION_AMBIENT, PeMetaBase.POTION_AMBIENT), ProtocolVersionsHelper.ALL_PE);
+		addRemap(new FirstDataWatcherUpdateObjectAddRemapper(PeMetaBase.HEALTH, new DataWatcherObjectVarInt(10)), ProtocolVersionsHelper.ALL_PE);
 
 		addRemap(new IndexValueRemapperOptionalChatToString(DataWatcherObjectIndex.Entity.NAMETAG, 2, 64), ProtocolVersion.MINECRAFT_1_8);
 		addRemap(new IndexValueRemapperOptionalChatToString(DataWatcherObjectIndex.Entity.NAMETAG, 10, 64), ProtocolVersionsHelper.RANGE__1_6__1_7);

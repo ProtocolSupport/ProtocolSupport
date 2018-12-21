@@ -18,10 +18,10 @@ public class SheepEntityMetadataRemapper extends AgeableEntityMetadataRemapper {
 			public DataWatcherObjectByte remapValue(DataWatcherObjectByte object) {
 				return new DataWatcherObjectByte((byte) (object.getValue() & 0x0F));
 			}
-		}, ProtocolVersion.MINECRAFT_PE);
+		}, ProtocolVersionsHelper.ALL_PE);
 		addRemap(new PeFlagRemapper(DataWatcherObjectIndex.Sheep.FLAGS,
 			new int[] {5}, new int[] {PeMetaBase.FLAG_SHEARED}),
-		ProtocolVersion.MINECRAFT_PE);
+		ProtocolVersionsHelper.ALL_PE);
 
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Sheep.FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Sheep.FLAGS, 12), ProtocolVersionsHelper.ALL_1_9);

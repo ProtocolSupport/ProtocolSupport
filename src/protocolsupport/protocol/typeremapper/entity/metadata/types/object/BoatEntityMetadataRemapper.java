@@ -16,19 +16,19 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat
 public class BoatEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 
 	public BoatEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Boat.VARIANT, PeMetaBase.VARIANT), ProtocolVersion.MINECRAFT_PE);
+		addRemap(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Boat.VARIANT, PeMetaBase.VARIANT), ProtocolVersionsHelper.ALL_PE);
 		addRemap(new IndexValueRemapper<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Boat.LEFT_PADDLE, PeMetaBase.PADDLE_TIME_LEFT) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectBoolean object) {
 				//TODO: Actually increment and send correct 'paddletime'.
 				return new DataWatcherObjectFloatLe(object.getValue() ? 0.05f: 0f);
-		}}, ProtocolVersion.MINECRAFT_PE);
+		}}, ProtocolVersionsHelper.ALL_PE);
 		addRemap(new IndexValueRemapper<DataWatcherObjectBoolean>(DataWatcherObjectIndex.Boat.RIGHT_PADDLE, PeMetaBase.PADDLE_TIME_RIGHT) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectBoolean object) {
 				//TODO: Actually increment and send correct 'paddletime'.
 				return new DataWatcherObjectFloatLe(object.getValue() ? 0.05f: 0f);
-		}}, ProtocolVersion.MINECRAFT_PE);
+		}}, ProtocolVersionsHelper.ALL_PE);
 
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.TIME_SINCE_LAST_HIT, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Boat.TIME_SINCE_LAST_HIT, 5), ProtocolVersionsHelper.ALL_1_9);

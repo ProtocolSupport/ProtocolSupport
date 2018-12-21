@@ -29,7 +29,7 @@ public class BlockTileUpdate extends ServerBoundMiddlePacket {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		PositionSerializer.readPEPosition(clientdata);
-		nbt = ItemStackSerializer.readTag(clientdata, true, ProtocolVersion.MINECRAFT_PE);
+		nbt = ItemStackSerializer.readTag(clientdata, true, connection.getVersion());
 	}
 
 	@Override

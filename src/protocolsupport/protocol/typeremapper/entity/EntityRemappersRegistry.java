@@ -311,6 +311,7 @@ public class EntityRemappersRegistry {
 			new Mapping(NetworkEntityType.ILLUSIONER)
 			.addMapping(NetworkEntityType.ILLUSIONER, EvokerEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11_AND_PE)
 			.addMapping(NetworkEntityType.WITCH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
+			.addMapping(NetworkEntityType.WITCH, EntityMetadataRemapper.NOOP, ProtocolVersionsHelper.ALL_PE)
 			.register();
 			new Mapping(NetworkEntityType.VEX)
 			.addMapping(NetworkEntityType.VEX, new VexEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_11_AND_PE)
@@ -351,6 +352,7 @@ public class EntityRemappersRegistry {
 			new Mapping(NetworkEntityType.ARMOR_STAND_MOB)
 			.addMapping(NetworkEntityType.ARMOR_STAND_MOB, ArmorStandEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_8_AND_PE)
 			.addMapping(NetworkEntityType.ARMOR_STAND_MOB, EntityMetadataRemapper.NOOP, ProtocolVersionsHelper.BEFORE_1_8)
+			.addMapping(NetworkEntityType.ARMOR_STAND_OBJECT, EntityMetadataRemapper.NOOP, ProtocolVersionsHelper.ALL_PE)
 			.register();
 			new Mapping(NetworkEntityType.GIANT)
 			.addMapping(NetworkEntityType.ZOMBIE, GiantEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PE)

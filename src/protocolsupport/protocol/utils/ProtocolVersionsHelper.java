@@ -118,10 +118,12 @@ public class ProtocolVersionsHelper {
 
 	protected static final Int2ObjectOpenHashMap<ProtocolVersion> byOldProtocolId = new Int2ObjectOpenHashMap<>();
 	protected static final Int2ObjectOpenHashMap<ProtocolVersion> byNewProtocolId = new Int2ObjectOpenHashMap<>();
+	protected static final Int2ObjectOpenHashMap<ProtocolVersion> byPEProtocolId = new Int2ObjectOpenHashMap<>();
 
 	static {
 		Arrays.stream(ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_6_4)).forEach(version -> byOldProtocolId.put(version.getId(), version));
 		Arrays.stream(ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_7_5)).forEach(version -> byNewProtocolId.put(version.getId(), version));
+		Arrays.stream(ALL_PE).forEach(version -> byPEProtocolId.put(version.getId(), version));
 	}
 
 	public static ProtocolVersion getOldProtocolVersion(int protocolid) {
@@ -132,6 +134,17 @@ public class ProtocolVersionsHelper {
 	public static ProtocolVersion getNewProtocolVersion(int protocolid) {
 		ProtocolVersion version = byNewProtocolId.get(protocolid);
 		return version != null ? version : ProtocolVersion.MINECRAFT_FUTURE;
+	}
+
+	public static ProtocolVersion getPEProtocolVersion(int protocolid) {
+		ProtocolVersion version = byPEProtocolId.get(protocolid);
+		if (version != null) {
+			return version;
+		} else if (protocolid > LATEST_PE.getId()) {
+			return ProtocolVersion.MINECRAFT_PE_FUTURE;
+		} else {
+			return ProtocolVersion.MINECRAFT_PE_LEGACY;
+		}
 	}
 
 }

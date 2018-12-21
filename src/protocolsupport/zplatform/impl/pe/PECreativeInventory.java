@@ -11,6 +11,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
 
 import java.util.HashSet;
@@ -69,7 +70,7 @@ public class PECreativeInventory {
 			// ByteBuf, without any consequences. ;)
 			VarNumberSerializer.writeSVarInt(itembuf, id);
 			VarNumberSerializer.writeSVarInt(itembuf, ((damage & 0xFFFF) << 8) | amount);
-			ItemStackSerializer.writeTag(itembuf, false, ProtocolVersion.MINECRAFT_PE, null);
+			ItemStackSerializer.writeTag(itembuf, false, ProtocolVersionsHelper.LATEST_PE, null);
 			itembuf.writeByte(0); //TODO: CanPlaceOn PE
 			itembuf.writeByte(0); //TODO: CanDestroy PE
 

@@ -267,13 +267,11 @@ public class TileEntityRemapper {
 			TileEntityType.MOB_SPAWNER,
 			tile -> {
 				tile.getNBT().removeTag("SpawnPotentials");
-				int entityId = 0;
 				NBTCompound compound = tile.getNBT().getTagOfType("SpawnData", NBTType.COMPOUND);
 				if (compound != null) {
-					entityId = PEDataValues.getEntityTypeId(NetworkEntityType.getByRegistrySTypeId(compound.getTagOfType("id", NBTType.STRING).getValue()));
-					compound.setTag("Type", new NBTInt(entityId));
+					NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(compound.getTagOfType("id", NBTType.STRING).getValue());
+					compound.setTag("Type", new NBTInt(PEDataValues.getEntityNetworkId(type)));
 				}
-				tile.getNBT().setTag("EntityId", new NBTInt(entityId));
 				tile.getNBT().setTag("DisplayEntityWidth", new NBTFloat(1));
 				tile.getNBT().setTag("DisplayEntityHeight", new NBTFloat(1));
 				tile.getNBT().setTag("DisplayEntityScale", new NBTFloat(1));
