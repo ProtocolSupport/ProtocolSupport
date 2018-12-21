@@ -45,6 +45,7 @@ import net.minecraft.server.v1_13_R2.EntityTrackerEntry;
 import net.minecraft.server.v1_13_R2.EntityWither;
 import net.minecraft.server.v1_13_R2.IAnimal;
 import net.minecraft.server.v1_13_R2.IRegistry;
+import net.minecraft.server.v1_13_R2.PlayerChunkMap;
 import net.minecraft.server.v1_13_R2.ReportedException;
 import net.minecraft.server.v1_13_R2.WorldServer;
 import protocolsupport.utils.CachedInstanceOfChain;
@@ -57,12 +58,12 @@ public class SpigotEntityTracker extends EntityTracker {
 
 	protected final WorldServer world;
 	protected final Set<EntityTrackerEntry> trackerEntries;
-	protected final int viewDistance;
+	protected final int maxTrackRange;
 
 	public SpigotEntityTracker(WorldServer worldserver) {
 		super(worldserver);
 		world = worldserver;
-		viewDistance = worldserver.getMinecraftServer().getPlayerList().d();
+		maxTrackRange = PlayerChunkMap.getFurthestViewableBlock(worldserver.spigotConfig.viewDistance);
 		try {
 			trackerEntries = (Set<EntityTrackerEntry>) trackerEntriesField.get(this);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
@@ -71,25 +72,25 @@ public class SpigotEntityTracker extends EntityTracker {
 	}
 
 	@Override
-	public void addEntity(Entity entity, int trackRange, int updateInterval, boolean updateVelocity) {
+	public void addEntity(Entity entity, int defaultTrackRange, int updateInterval, boolean updateVelocity) {
 		AsyncCatcher.catchOp("entity track");
-		trackRange = TrackingRange.getEntityTrackingRange(entity, trackRange);
+		defaultTrackRange = TrackingRange.getEntityTrackingRange(entity, defaultTrackRange);
 		try {
 			if (trackedEntities.b(entity.getId())) {
 				throw new IllegalStateException("Entity is already tracked!");
 			}
-			EntityTrackerEntry entitytrackerentry = createTrackerEntry(entity, trackRange, updateInterval, updateVelocity);
+			EntityTrackerEntry entitytrackerentry = createTrackerEntry(entity, defaultTrackRange, updateInterval, updateVelocity);
 			trackerEntries.add(entitytrackerentry);
 			trackedEntities.a(entity.getId(), entitytrackerentry);
 			entitytrackerentry.scanPlayers(world.players);
 		} catch (Throwable throwable) {
 			CrashReport crashreport = CrashReport.a(throwable, "Adding entity to track");
 			CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Entity To Track");
-			crashreportsystemdetails.a("Tracking range", String.valueOf(trackRange) + " blocks");
-			int finalTrackTrange = trackRange;
+			crashreportsystemdetails.a("Tracking range", String.valueOf(defaultTrackRange) + " blocks");
+			int finalTrackRange = defaultTrackRange;
 			crashreportsystemdetails.a("Update interval", () -> {
-				String s = "Once per " + finalTrackTrange + " ticks";
-				if (finalTrackTrange == Integer.MAX_VALUE) {
+				String s = "Once per " + finalTrackRange + " ticks";
+				if (finalTrackRange == Integer.MAX_VALUE) {
 					s = "Maximum (" + s + ")";
 				}
 				return s;
@@ -104,8 +105,8 @@ public class SpigotEntityTracker extends EntityTracker {
 		}
 	}
 
-	protected EntityTrackerEntry createTrackerEntry(final Entity entity, int trackRange, int updateInterval, final boolean flag) {
-		return new SpigotEntityTrackerEntry(entity, trackRange, viewDistance, updateInterval, flag);
+	protected EntityTrackerEntry createTrackerEntry(final Entity entity, int defaultTrackRange, int updateInterval, final boolean flag) {
+		return new SpigotEntityTrackerEntry(entity, defaultTrackRange, maxTrackRange, updateInterval, flag);
 	}
 
 	protected static final CachedInstanceOfChain<BiConsumer<SpigotEntityTracker, Entity>> entityTrackMethods = new CachedInstanceOfChain<>();

@@ -18,10 +18,14 @@ public abstract class MiddleInventoryEnchant extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
+		return RecyclableSingletonList.create(create(windowId, enchantment));
+	}
+
+	public static ServerBoundPacketData create(int windowId, int enchantment) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_ENCHANT_SELECT);
 		creator.writeByte(windowId);
 		creator.writeByte(enchantment);
-		return RecyclableSingletonList.create(creator);
+		return creator;
 	}
 
 }
