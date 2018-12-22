@@ -43,6 +43,7 @@ public class NetworkEntityDataCache {
 	protected float sizeModifier = 1f;
 	protected int attachedId = -1;
 	protected Byte headRotation = null;
+	protected Byte pitch = null;
 	protected int vehicleId = 0;
 	protected Vector riderPosition = null;
 	protected Float rotationlock = null;
@@ -148,6 +149,17 @@ public class NetworkEntityDataCache {
 			return headRotation;
 		}
 		return normalRotation;
+	}
+
+	public void setPitch(byte pitch) {
+		this.pitch = pitch;
+	}
+
+	public byte getPitch(byte normalPitch) {
+		if (pitch != null) {
+			return pitch;
+		}
+		return normalPitch;
 	}
 
 	public int getVehicleId() {
