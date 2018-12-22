@@ -46,7 +46,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 					float relYaw = (float) ((headYaw - vehicle.getDataCache().getHeadRotation(yaw)) + 11.38);
 					if (relYaw <= -128) { relYaw += 256; }
 					if (relYaw > 128) { relYaw -= 256; }
-					return RecyclableSingletonList.create(updateGeneral(version, entity, x, y, z, pitch, (byte) 0, (byte) relYaw, onGround, false));
+					return RecyclableSingletonList.create(updateGeneral(version, entity, x, y, z, pitch, (byte) relYaw, (byte) 0, onGround, false));
 				}
 			} else {
 				//If the vehicle is killed a unlink might not be sent yet.
@@ -56,10 +56,10 @@ public class EntityTeleport extends MiddleEntityTeleport {
 		if (entity.getType() == NetworkEntityType.BOAT) {
 			entity.getDataCache().setHeadRotation(yaw);
 		}
-		return RecyclableSingletonList.create(updateGeneral(version, entity, x, y, z, pitch, headYaw, yaw, onGround, false));
+		return RecyclableSingletonList.create(updateGeneral(version, entity, x, y, z, pitch, yaw, headYaw, onGround, false));
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, NetworkEntity entity, double x, double y, double z, byte pitch, byte headYaw, byte yaw, boolean onGround, boolean teleported) {
+	public static ClientBoundPacketData create(ProtocolVersion version, NetworkEntity entity, double x, double y, double z, byte pitch, byte yaw, byte headYaw, boolean onGround, boolean teleported) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		int flag = onGround ? (teleported ? 192 : 128) : (teleported ? 64 : 0);
@@ -68,16 +68,16 @@ public class EntityTeleport extends MiddleEntityTeleport {
 		serializer.writeFloatLE((float) y);
 		serializer.writeFloatLE((float) z);
 		serializer.writeByte(pitch);
-		serializer.writeByte(headYaw);
 		serializer.writeByte(yaw);
+		serializer.writeByte(headYaw);
 		return serializer;
 	}
 
-	public static ClientBoundPacketData updateGeneral(ProtocolVersion version, NetworkEntity entity, double x, double y, double z, byte pitch, byte headYaw, byte yaw, boolean onGround, boolean teleported) {
+	public static ClientBoundPacketData updateGeneral(ProtocolVersion version, NetworkEntity entity, double x, double y, double z, byte pitch, byte yaw, byte headYaw, boolean onGround, boolean teleported) {
 		if (entity.getType() == NetworkEntityType.PLAYER) {
 			return SetPosition.create(entity, x, y, z, pitch, yaw, teleported ? SetPosition.ANIMATION_MODE_TELEPORT : SetPosition.ANIMATION_MODE_ALL);
 		} else {
-			return create(version, entity, x, y, z, pitch, headYaw, yaw, onGround, teleported);
+			return create(version, entity, x, y, z, pitch, yaw, headYaw, onGround, teleported);
 		}
 	}
 
