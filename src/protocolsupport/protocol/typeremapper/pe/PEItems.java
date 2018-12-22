@@ -75,4 +75,8 @@ public class PEItems {
 		}
 	}
 
+	public static int getModernIdByPECombined(int PEcombined) {
+		return fromPEId.get(PEcombined);
+	}
+
 }

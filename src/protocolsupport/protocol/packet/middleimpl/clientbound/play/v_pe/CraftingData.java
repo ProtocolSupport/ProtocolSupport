@@ -118,7 +118,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 			ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, stack.cloneItemStack(), stack.isNull() || stack.getLegacyData() != -1);
 		}
 		VarNumberSerializer.writeVarInt(to, 1); // result item count
-		ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output, true);
+		ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output.cloneItemStack(), true);
 		MiscSerializer.writePEUUID(to, UUID.nameUUIDFromBytes(to.array()));
 		recipesWritten++;
 	}
@@ -132,7 +132,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 			ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, stack.cloneItemStack(), stack.isNull() || stack.getLegacyData() != -1);
 		}
 		VarNumberSerializer.writeVarInt(to, 1); // result item count
-		ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output, true);
+		ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output.cloneItemStack(), true);
 		MiscSerializer.writePEUUID(to, UUID.nameUUIDFromBytes(to.array()));
 		recipesWritten++;
 	}
@@ -144,12 +144,14 @@ public class CraftingData extends MiddleDeclareRecipes {
 		if (PEItems.getDataFromPECombinedId(peCombinedId) == 0) {
 			VarNumberSerializer.writeSVarInt(to, PE_RECIPE_TYPE_FURNACE); //recipe type
 			VarNumberSerializer.writeSVarInt(to, PEItems.getIdFromPECombinedId(peCombinedId));
-			ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output, output.isNull() || output.getLegacyData() != -1);
+			ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale,
+				output.cloneItemStack(), output.isNull() || output.getLegacyData() != -1);
 		} else { //meta recipe
 			VarNumberSerializer.writeSVarInt(to, PE_RECIPE_TYPE_FURNACE_META); //recipe type, with data
 			VarNumberSerializer.writeSVarInt(to, PEItems.getIdFromPECombinedId(peCombinedId));
 			VarNumberSerializer.writeSVarInt(to, PEItems.getDataFromPECombinedId(peCombinedId));
-			ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output, output.isNull() || output.getLegacyData() != -1);
+			ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale,
+				output.cloneItemStack(), output.isNull() || output.getLegacyData() != -1);
 		}
 		recipesWritten++;
 	}
