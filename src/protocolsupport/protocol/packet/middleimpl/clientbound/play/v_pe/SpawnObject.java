@@ -42,8 +42,8 @@ public class SpawnObject extends MiddleSpawnObject {
 					version, cache.getAttributesCache().getLocale(),
 					entity,
 					x, y, z,
-					motX / 8.000F, motY / 8000.F, motZ / 8000.F,
-					pitch, yaw, 0,
+					motX / 8000.F, motY / 8000.F, motZ / 8000.F,
+					pitch * 360.F / 256.F, yaw * 360.F / 256.F, 0,
 					spawnmeta
 				));
 			}
