@@ -1,5 +1,7 @@
 package protocolsupport.protocol.typeremapper.itemstack.complex.toclient;
 
+import org.bukkit.Material;
+import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPotion;
@@ -11,6 +13,8 @@ import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class PotionToPEIdSpecificRemapper implements ItemStackComplexRemapper {
+
+	public static final int ID_TIPPED_ARROW = MaterialAPI.getItemNetworkId(Material.TIPPED_ARROW);
 
 	@Override
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
@@ -29,7 +33,11 @@ public class PotionToPEIdSpecificRemapper implements ItemStackComplexRemapper {
 				tag.removeTag("Potion");
 				tag.removeTag("CustomPotionEffects");
 				itemstack.setNBT(tag);
-				itemstack.setLegacyData(PEPotion.toPEId(potion));
+				int data = PEPotion.toPEId(potion);
+				if (itemstack.getTypeId() == ID_TIPPED_ARROW) {
+					data++;// We should increased data values if item is tipped_arrow
+				}
+				itemstack.setLegacyData(data);
 			}
 		}
 		return itemstack;
