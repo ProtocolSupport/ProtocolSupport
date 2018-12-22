@@ -63,17 +63,17 @@ public class EntityEquipment extends MiddleEntityEquipment {
 	public static ClientBoundPacketData create(ProtocolVersion version, String locale, long entityId, NetworkItemStack helmet, NetworkItemStack chestplate, NetworkItemStack leggings, NetworkItemStack boots) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_ARMOR_EQUIPMENT);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
-		ItemStackSerializer.writeItemStack(serializer, version, locale, helmet.cloneItemStack(), true);
-		ItemStackSerializer.writeItemStack(serializer, version, locale, chestplate.cloneItemStack(), true);
-		ItemStackSerializer.writeItemStack(serializer, version, locale, leggings.cloneItemStack(), true);
-		ItemStackSerializer.writeItemStack(serializer, version, locale, boots.cloneItemStack(), true);
+		ItemStackSerializer.writeItemStack(serializer, version, locale, helmet, true);
+		ItemStackSerializer.writeItemStack(serializer, version, locale, chestplate, true);
+		ItemStackSerializer.writeItemStack(serializer, version, locale, leggings, true);
+		ItemStackSerializer.writeItemStack(serializer, version, locale, boots, true);
 		return serializer;
 	}
 
 	public static ClientBoundPacketData createUpdateHand(ProtocolVersion version, String locale, int entityId, NetworkItemStack itemstack, int slot, boolean isMainHand) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOB_EQUIPMENT);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
-		ItemStackSerializer.writeItemStack(serializer, version, locale, itemstack.cloneItemStack(), true);
+		ItemStackSerializer.writeItemStack(serializer, version, locale, itemstack, true);
 		serializer.writeByte(slot);
 		serializer.writeByte(slot);
 		serializer.writeByte(isMainHand ? PESource.POCKET_OFFHAND : PESource.POCKET_INVENTORY);

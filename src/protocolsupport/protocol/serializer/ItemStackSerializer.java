@@ -83,7 +83,7 @@ public class ItemStackSerializer {
 			itemstack.setNBT(readTag(from, version));
 		}
 		if (isFromClient) {
-			itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack);
+			itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack.cloneItemStack());
 		}
 		return itemstack;
 	}
@@ -101,7 +101,7 @@ public class ItemStackSerializer {
 		}
 		NetworkItemStack witemstack = itemstack;
 		if (isToClient) {
-			witemstack = remapItemToClient(version, locale, witemstack);
+			witemstack = remapItemToClient(version, locale, witemstack.cloneItemStack());
 		}
 		if (version.isPE()) {
 			VarNumberSerializer.writeSVarInt(to, witemstack.getTypeId());

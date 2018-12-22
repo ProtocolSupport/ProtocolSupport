@@ -195,7 +195,7 @@ public class PETransactionRemapper {
 		public void on(int slot, NetworkItemStack item, NetworkDataCache cache, RecyclableArrayList<ServerBoundPacketData> packets) {
 			bug("CLICK " + toString() + " on: " + slot + " with: " + item.toString());
 			int actionNumber = cache.getPEInventoryCache().getActionNumber();
-			packets.add(MiddleInventoryClick.create(cache.getAttributesCache().getLocale(), cache.getWindowCache().getOpenedWindowId(), slot, button, actionNumber, mode, item.cloneItemStack()));
+			packets.add(MiddleInventoryClick.create(cache.getAttributesCache().getLocale(), cache.getWindowCache().getOpenedWindowId(), slot, button, actionNumber, mode, item));
 			if (!item.isNull() && item.getNBT() != null) {
 				packets.add(MiddleInventoryTransaction.create(cache.getWindowCache().getOpenedWindowId(), actionNumber, false));
 			}
