@@ -54,7 +54,7 @@ task updateRuntimeLibraries(type: UpdateLibrariesTask) {
 task updateShadeLibraries(type: UpdateLibrariesTask) {
 	directory = librariesShadeDirectory
 	libraries = [
-		[name: 'raknetserver-8.jar', url: 'http://download1478.mediafire.com/ivnksmdln8xg/eat5qakchy3bhm8/RakNetServer.jar'],
+		[name: 'raknetserver-8.jar', url: 'https://build.true-games.org/job/RakNetServer/29/artifact/target/RakNetServer.jar'],
 		[name: 'udpserver-2.jar', url: 'https://build.true-games.org/job/UdpServerSocketChannel/11/artifact/target/UdpServerSocketChannel.jar']
 	]
 }
