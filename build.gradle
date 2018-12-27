@@ -36,17 +36,24 @@ version '4.29-dev'
 sourceCompatibility = JavaVersion.VERSION_1_8
 
 
-File librariesRuntimeDirectory = new File('libraries_runtime')
+File librariesRuntimeDirectory = new File("libraries_runtime")
 librariesRuntimeDirectory.mkdirs()
 
-File librariesShadeDirectory = new File('libraries_shade')
+File librariesShadeDirectory = new File("libraries_shade")
 librariesShadeDirectory.mkdirs()
+
+task updateSpigot(type: BuildLibraryTask) {
+	targetDirectory = librariesRuntimeDirectory
+	targetLibraryName = "spigot-1.13.2-3.jar"
+	builderUrl = "https://papermc.io/ci/job/Paper-1.13/488/artifact/paperclip-488.jar"
+	buildCommand = "java -Dpaperclip.patchonly=true -jar {BUILDER}"
+	builtLibraryName = "cache/patched_1.13.2.jar"
+}
 
 task updateRuntimeLibraries(type: UpdateLibrariesTask) {
 	directory = librariesRuntimeDirectory
-	libraries = [
-		[name: 'spigot-1.13.2-2.jar', url: 'https://repo.perfectdreams.net/com/destroystokyo/paper/paper/1.13.2-R0.1-SNAPSHOT/paper-1.13.2-R0.1-SNAPSHOT.jar']
-	]
+	libraries = []
+	manualLibraries = new HashSet<>(Arrays.asList(updateSpigot.targetLibraryName))
 }
 
 task updateShadeLibraries(type: UpdateLibrariesTask) {
@@ -124,16 +131,6 @@ task generateInfo(type: DefaultTask) {doLast{
 	new FileOutputStream(buildInfoFile).withCloseable({ properties.store(it, "Build info") })
 }}
 
-task copyFinalJarToTarget(type: Copy) {
-	// JitPack searches for the output jar at the standard Gradle output directory (jar.archivePath)
-	// By copying it from there to our target destination JitPack can archive it in a Maven repository
-	from jar.archivePath.getPath()
-	into 'target'
-
-	//remove version suffix
-	rename (jar.archiveName, jar.baseName + '.jar')
-}
-
 shadowJar {
 	doFirst {
 		new File(destinationDir, archiveName).delete()
@@ -143,7 +140,6 @@ shadowJar {
 	from 'LICENSE'
 	from genDir
 
-	//remove the -all suffix
 	archiveName = jar.archiveName
 	minimizeJar = true
 
@@ -153,8 +149,15 @@ shadowJar {
 	relocate 'com.google.gson', 'protocolsupport.libs.com.google.gson'
 }
 
+task copyFinalJarToTarget(type: Copy) {
+	from jar.archivePath.getPath()
+	into 'target'
+
+	rename (jar.archiveName, jar.baseName + '.jar')
+}
 
 compileJava.dependsOn(clean)
+compileJava.dependsOn(updateSpigot)
 compileJava.dependsOn(updateRuntimeLibraries)
 compileJava.dependsOn(updateShadeLibraries)
 compileJava.finalizedBy(test)
