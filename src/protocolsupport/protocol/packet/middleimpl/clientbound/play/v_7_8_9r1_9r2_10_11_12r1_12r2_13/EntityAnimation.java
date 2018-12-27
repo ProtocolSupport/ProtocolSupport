@@ -2,15 +2,15 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleAnimation;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityAnimation;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class Animation extends MiddleAnimation {
+public class EntityAnimation extends MiddleEntityAnimation {
 
-	public Animation(ConnectionImpl connection) {
+	public EntityAnimation(ConnectionImpl connection) {
 		super(connection);
 	}
 
@@ -18,7 +18,7 @@ public class Animation extends MiddleAnimation {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ANIMATION_ID);
 		VarNumberSerializer.writeVarInt(serializer, entityId);
-		serializer.writeByte(animation);
+		serializer.writeByte(animation.getId());
 		return RecyclableSingletonList.create(serializer);
 	}
 
