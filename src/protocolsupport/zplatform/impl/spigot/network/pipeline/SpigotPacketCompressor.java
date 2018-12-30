@@ -25,7 +25,7 @@ public class SpigotPacketCompressor extends net.minecraft.server.v1_13_R2.Packet
 	protected final ReusableReadHeapBuffer readBuffer = new ReusableReadHeapBuffer();
 
 	@Override
-	protected void a(ChannelHandlerContext ctx, ByteBuf from, ByteBuf to) throws Exception {
+	protected void encode(ChannelHandlerContext ctx, ByteBuf from, ByteBuf to) throws Exception {
 		int readable = from.readableBytes();
 		if (readable == 0) {
 			return;

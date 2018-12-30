@@ -25,7 +25,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopTitl
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopUnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopVehicleMove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldBorder;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Animation;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.EntityAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockAction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockBreakAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockChangeSingle;
@@ -190,7 +190,7 @@ public class PacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_POSITION_ID, SetPosition::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_HELD_SLOT_ID, HeldSlot::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BED_ID, UseBed::new);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ANIMATION_ID, Animation::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ANIMATION_ID, EntityAnimation::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_NAMED_ID, SpawnNamed::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_COLLECT_EFFECT_ID, CollectEffect::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_OBJECT_ID, SpawnObject::new);
