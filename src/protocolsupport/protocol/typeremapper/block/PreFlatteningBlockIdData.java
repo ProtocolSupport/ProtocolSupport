@@ -4,14 +4,15 @@ import java.util.Arrays;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Rotatable;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import protocolsupport.api.MaterialAPI;
+import protocolsupport.protocol.typeremapper.legacy.LegacyBlockFace;
 import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.JsonUtils;
@@ -31,18 +32,22 @@ public class PreFlatteningBlockIdData {
 		toLegacyId[ServerPlatform.get().getMiscUtils().getBlockDataNetworkId(Bukkit.createBlockData(modernBlockState))] = formLegacyCombinedId(legacyId, legacyData);
 	}
 
-	protected static byte getSkullLegacyRotation(BlockData skull) {
-		if (skull instanceof Directional) {
-			BlockFace face = ((Directional) skull).getFacing();
-			switch (face) {
-				case NORTH: return 2;
-				case SOUTH: return 3;
-				case WEST: return 4;
-				case EAST: return 5;
-				default: break;
-			}
+	protected static byte getBannerLegacyData(BlockData banner) {
+		if (banner instanceof Rotatable) {
+			return LegacyBlockFace.getLegacyRotatableId(((Rotatable) banner).getRotation());
+		} else if (banner instanceof Directional) {
+			return LegacyBlockFace.getLegacyDirectionalId(((Directional) banner).getFacing());
+		} else {
+			return 1;
 		}
-		return 1;
+	}
+
+	protected static byte getSkullLegacyData(BlockData skull) {
+		if (skull instanceof Directional) {
+			return LegacyBlockFace.getLegacyDirectionalId(((Directional) skull).getFacing());
+		} else {
+			return 1;
+		}
 	}
 
 	static {
@@ -64,7 +69,27 @@ public class PreFlatteningBlockIdData {
 			Material.DRAGON_HEAD, Material.DRAGON_WALL_HEAD
 		)) {
 			for (BlockData blockdata : MaterialAPI.getBlockDataList(material)) {
-				register(blockdata.getAsString(), Material.LEGACY_SKULL.getId(), getSkullLegacyRotation(blockdata));
+				register(blockdata.getAsString(), Material.LEGACY_SKULL.getId(), getSkullLegacyData(blockdata));
+			}
+		}
+		for (Material material : Arrays.asList(
+			Material.BLACK_BANNER, Material.BLUE_BANNER, Material.BROWN_BANNER, Material.CYAN_BANNER,
+			Material.GRAY_BANNER, Material.GREEN_BANNER, Material.LIGHT_BLUE_BANNER, Material.LIGHT_GRAY_BANNER,
+			Material.LIME_BANNER, Material.MAGENTA_BANNER, Material.ORANGE_BANNER, Material.PINK_BANNER,
+			Material.PURPLE_BANNER, Material.RED_BANNER, Material.WHITE_BANNER, Material.YELLOW_BANNER
+		)) {
+			for (BlockData blockdata : MaterialAPI.getBlockDataList(material)) {
+				register(blockdata.getAsString(), Material.LEGACY_STANDING_BANNER.getId(), getBannerLegacyData(blockdata));
+			}
+		}
+		for (Material material : Arrays.asList(
+			Material.BLACK_WALL_BANNER, Material.BLUE_WALL_BANNER, Material.BROWN_WALL_BANNER, Material.CYAN_WALL_BANNER,
+			Material.GRAY_WALL_BANNER, Material.GREEN_WALL_BANNER, Material.LIGHT_BLUE_WALL_BANNER, Material.LIGHT_GRAY_WALL_BANNER,
+			Material.LIME_WALL_BANNER, Material.MAGENTA_WALL_BANNER, Material.ORANGE_WALL_BANNER, Material.PINK_WALL_BANNER,
+			Material.PURPLE_WALL_BANNER, Material.RED_WALL_BANNER, Material.WHITE_WALL_BANNER, Material.YELLOW_WALL_BANNER
+		)) {
+			for (BlockData blockdata : MaterialAPI.getBlockDataList(material)) {
+				register(blockdata.getAsString(), Material.LEGACY_WALL_BANNER.getId(), getBannerLegacyData(blockdata));
 			}
 		}
 	}

@@ -286,26 +286,6 @@ public class LegacyBlockData {
 				},
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
-			this.<Rotatable>registerRemapEntryForAllStates(
-				Arrays.asList(
-					Material.BLACK_BANNER, Material.BLUE_BANNER, Material.BROWN_BANNER, Material.CYAN_BANNER,
-					Material.GRAY_BANNER, Material.GREEN_BANNER, Material.LIGHT_BLUE_BANNER, Material.LIGHT_GRAY_BANNER,
-					Material.LIME_BANNER, Material.MAGENTA_BANNER, Material.ORANGE_BANNER, Material.PINK_BANNER,
-					Material.PURPLE_BANNER, Material.RED_BANNER, Material.WHITE_BANNER, Material.YELLOW_BANNER
-				),
-				o -> cloneRotatable(o, (Rotatable) Material.WHITE_BANNER.createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
-			);
-			this.<Directional>registerRemapEntryForAllStates(
-				Arrays.asList(
-					Material.BLACK_WALL_BANNER, Material.BLUE_WALL_BANNER, Material.BROWN_WALL_BANNER, Material.CYAN_WALL_BANNER,
-					Material.GRAY_WALL_BANNER, Material.GREEN_WALL_BANNER, Material.LIGHT_BLUE_WALL_BANNER, Material.LIGHT_GRAY_WALL_BANNER,
-					Material.LIME_WALL_BANNER, Material.MAGENTA_WALL_BANNER, Material.ORANGE_WALL_BANNER, Material.PINK_WALL_BANNER,
-					Material.PURPLE_WALL_BANNER, Material.RED_WALL_BANNER, Material.WHITE_WALL_BANNER, Material.YELLOW_WALL_BANNER
-				),
-				o -> cloneDirectional(o, (Directional) Material.WHITE_WALL_BANNER.createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
-			);
 			this.<Directional>registerRemapEntryForAllStates(
 				Arrays.asList(Material.LADDER, Material.ENDER_CHEST),
 				o -> cloneDirectional(o, (Directional) o.getMaterial().createBlockData()),
