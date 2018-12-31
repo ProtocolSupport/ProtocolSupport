@@ -20,6 +20,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopPlay
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopServerDifficulty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopSetCooldown;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopStatistics;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopStopSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopTitle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopUnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopVehicleMove;
@@ -265,6 +266,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_COMMANDS, NoopDeclareCommands::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_RECIPES, NoopDeclareRecipes::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_TAGS, NoopDeclareTags::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_STOP_SOUND, NoopStopSound::new);
 	}
 
 	public PacketEncoder(ConnectionImpl connection) {
