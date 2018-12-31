@@ -754,6 +754,7 @@ public class LegacyBlockData {
 
 
 			this.registerRemapEntryForAllStates(Material.QUARTZ_BLOCK, Material.STONE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_5);
+			this.registerRemapEntryForAllStates(Material.QUARTZ_PILLAR, Material.STONE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_5);
 			this.registerRemapEntryForAllStates(Material.NETHER_QUARTZ_ORE, Material.COAL_ORE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_5);
 			this.registerRemapEntryForAllStates(Material.DAYLIGHT_DETECTOR, Material.COBBLESTONE_SLAB.createBlockData(), ProtocolVersionsHelper.BEFORE_1_5);
 			this.registerRemapEntryForAllStates(Material.REDSTONE_BLOCK, Material.EMERALD_BLOCK.createBlockData(), ProtocolVersionsHelper.BEFORE_1_5);
