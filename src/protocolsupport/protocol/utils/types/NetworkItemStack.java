@@ -1,12 +1,15 @@
 package protocolsupport.protocol.utils.types;
 
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.utils.Utils;
 
 public class NetworkItemStack {
 
+	public static final int DEFAULT_LEGACY_DATA = -1;
+
 	protected int runtimeId;
 	protected int amount;
-	protected int legacyData;
+	protected int legacyData = DEFAULT_LEGACY_DATA;
 	protected NBTCompound nbt;
 
 	public boolean isNull() {
@@ -101,5 +104,10 @@ public class NetworkItemStack {
 		}
 
 	};
+
+	@Override
+	public String toString() {
+		return Utils.toStringAllFields(this);
+	}
 
 }

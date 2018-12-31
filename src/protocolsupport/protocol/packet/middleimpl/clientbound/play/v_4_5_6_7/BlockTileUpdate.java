@@ -9,7 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.typeremapper.basic.TileEntityRemapper;
+import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.types.TileEntity;
 import protocolsupport.protocol.utils.types.TileEntityType;

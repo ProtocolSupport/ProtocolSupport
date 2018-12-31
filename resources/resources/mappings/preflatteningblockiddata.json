@@ -4325,31 +4325,6 @@
     "legacydata": 13
   },
   {
-    "blockdata": "minecraft:skeleton_skull[rotation=0]",
-    "legacyid": 144,
-    "legacydata": 1
-  },
-  {
-    "blockdata": "minecraft:skeleton_wall_skull[facing=north]",
-    "legacyid": 144,
-    "legacydata": 2
-  },
-  {
-    "blockdata": "minecraft:skeleton_wall_skull[facing=south]",
-    "legacyid": 144,
-    "legacydata": 3
-  },
-  {
-    "blockdata": "minecraft:skeleton_wall_skull[facing=east]",
-    "legacyid": 144,
-    "legacydata": 4
-  },
-  {
-    "blockdata": "minecraft:skeleton_wall_skull[facing=west]",
-    "legacyid": 144,
-    "legacydata": 5
-  },
-  {
     "blockdata": "minecraft:anvil[facing=south]",
     "legacyid": 145,
     "legacydata": 0

@@ -158,18 +158,6 @@ public class LegacyBlockData {
 				o -> o.getMaterial().createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_13
 			);
-			this.registerRemapEntryForAllStates(
-				Arrays.asList(
-					Material.SKELETON_SKULL,
-					Material.WITHER_SKELETON_SKULL,
-					Material.CREEPER_HEAD,
-					Material.DRAGON_HEAD,
-					Material.PLAYER_HEAD,
-					Material.ZOMBIE_HEAD
-				),
-				Material.SKELETON_SKULL.createBlockData(),
-				ProtocolVersionsHelper.BEFORE_1_13
-			);
 			this.<Directional>registerRemapEntryForAllStates(
 				Arrays.asList(
 					Material.SKELETON_WALL_SKULL,

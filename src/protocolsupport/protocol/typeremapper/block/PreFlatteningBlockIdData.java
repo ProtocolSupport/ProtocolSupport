@@ -3,16 +3,22 @@ package protocolsupport.protocol.typeremapper.block;
 import java.util.Arrays;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import protocolsupport.api.MaterialAPI;
 import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 
+@SuppressWarnings("deprecation")
 public class PreFlatteningBlockIdData {
 
 	protected static final int[] toLegacyId = new int[MinecraftData.BLOCKDATA_COUNT];
@@ -25,6 +31,20 @@ public class PreFlatteningBlockIdData {
 		toLegacyId[ServerPlatform.get().getMiscUtils().getBlockDataNetworkId(Bukkit.createBlockData(modernBlockState))] = formLegacyCombinedId(legacyId, legacyData);
 	}
 
+	protected static byte getSkullLegacyRotation(BlockData skull) {
+		if (skull instanceof Directional) {
+			BlockFace face = ((Directional) skull).getFacing();
+			switch (face) {
+				case NORTH: return 2;
+				case SOUTH: return 3;
+				case WEST: return 4;
+				case EAST: return 5;
+				default: break;
+			}
+		}
+		return 1;
+	}
+
 	static {
 		Arrays.fill(toLegacyId, formLegacyCombinedId(1, 0));
 		//air
@@ -35,6 +55,18 @@ public class PreFlatteningBlockIdData {
 			register(JsonUtils.getString(object, "blockdata"), JsonUtils.getInt(object, "legacyid"), JsonUtils.getInt(object, "legacydata"));
 		}
 		//manual mappings for some blocks
+		for (Material material : Arrays.asList(
+			Material.CREEPER_HEAD, Material.CREEPER_WALL_HEAD,
+			Material.ZOMBIE_HEAD, Material.ZOMBIE_WALL_HEAD,
+			Material.SKELETON_SKULL, Material.SKELETON_WALL_SKULL,
+			Material.WITHER_SKELETON_SKULL, Material.WITHER_SKELETON_WALL_SKULL,
+			Material.PLAYER_HEAD, Material.PLAYER_WALL_HEAD,
+			Material.DRAGON_HEAD, Material.DRAGON_WALL_HEAD
+		)) {
+			for (BlockData blockdata : MaterialAPI.getBlockDataList(material)) {
+				register(blockdata.getAsString(), Material.LEGACY_SKULL.getId(), getSkullLegacyRotation(blockdata));
+			}
+		}
 	}
 
 	public static int getCombinedId(int modernId) {

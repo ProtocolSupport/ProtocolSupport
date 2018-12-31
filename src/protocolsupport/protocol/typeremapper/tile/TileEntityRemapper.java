@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.basic;
+package protocolsupport.protocol.typeremapper.tile;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -11,7 +11,6 @@ import java.util.stream.IntStream;
 
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Rotatable;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -96,33 +95,6 @@ public class TileEntityRemapper {
 		}
 	}
 
-
-	protected static class BedTileEntitySupplier implements Function<Position, TileEntity> {
-
-		protected final int color;
-		public BedTileEntitySupplier(int color) {
-			this.color = color;
-		}
-
-		@Override
-		public TileEntity apply(Position position) {
-			NBTCompound tag = new NBTCompound();
-			tag.setTag("color", new NBTInt(color));
-			return new TileEntity(TileEntityType.BED, position, tag);
-		}
-
-	}
-
-	protected static class TileEntityToLegacyTypeNameRemapper implements Consumer<TileEntity> {
-		protected final String name;
-		public TileEntityToLegacyTypeNameRemapper(String name) {
-			this.name = name;
-		}
-		@Override
-		public void accept(TileEntity tile) {
-			tile.getNBT().setTag("id", new NBTString(name));
-		}
-	}
 
 	static {
 		register(
@@ -213,58 +185,7 @@ public class TileEntityRemapper {
 			},
 			ProtocolVersionsHelper.BEFORE_1_13
 		);
-		register(
-			TileEntityType.SKULL, new TileEntityWithBlockDataNBTRemapper() {
-				protected void register(List<Entry<Consumer<NBTCompound>>> list, Material skull, int skulltype) {
-					for (BlockData blockdata : MaterialAPI.getBlockDataList(skull)) {
-						byte rotation = 0;
-						if (blockdata instanceof Rotatable) {
-							Rotatable rotatable = (Rotatable) blockdata;
-							switch (rotatable.getRotation()) {
-								case SOUTH: rotation = 0; break;
-								case SOUTH_SOUTH_WEST: rotation = 1; break;
-								case SOUTH_WEST: rotation = 2; break;
-								case WEST_SOUTH_WEST: rotation = 3; break;
-								case WEST: rotation = 4; break;
-								case WEST_NORTH_WEST: rotation = 5; break;
-								case NORTH_WEST: rotation = 6; break;
-								case NORTH_NORTH_WEST: rotation = 7; break;
-								case NORTH: rotation = 8; break;
-								case NORTH_NORTH_EAST: rotation = 9; break;
-								case NORTH_EAST: rotation = 10; break;
-								case EAST_NORTH_EAST: rotation = 11; break;
-								case EAST: rotation = 12; break;
-								case EAST_SOUTH_EAST: rotation = 13; break;
-								case SOUTH_EAST: rotation = 14; break;
-								case SOUTH_SOUTH_EAST: rotation = 15; break;
-								default: break;
-							}
-						}
-						byte rotationF = rotation;
-						list.add(new Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> {
-							nbt.setTag("SkullType", new NBTByte((byte) skulltype));
-							nbt.setTag("Rot", new NBTByte(rotationF));
-						}));
-					}
-				}
-				@Override
-				protected void init(List<Entry<Consumer<NBTCompound>>> list) {
-					register(list, Material.SKELETON_SKULL, 0);
-					register(list, Material.WITHER_SKELETON_SKULL, 1);
-					register(list, Material.ZOMBIE_HEAD, 2);
-					register(list, Material.PLAYER_HEAD, 3);
-					register(list, Material.CREEPER_HEAD, 4);
-					register(list, Material.DRAGON_HEAD, 5);
-					register(list, Material.SKELETON_WALL_SKULL, 0);
-					register(list, Material.WITHER_SKELETON_WALL_SKULL, 1);
-					register(list, Material.ZOMBIE_WALL_HEAD, 2);
-					register(list, Material.PLAYER_WALL_HEAD, 3);
-					register(list, Material.CREEPER_WALL_HEAD, 4);
-					register(list, Material.DRAGON_WALL_HEAD, 5);
-				}
-			},
-			ProtocolVersionsHelper.BEFORE_1_13
-		);
+		register(TileEntityType.SKULL, new TileEntitySkullRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
 		register(
 			TileEntityType.SKULL,
 			tile -> {
@@ -283,22 +204,22 @@ public class TileEntityRemapper {
 			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5)
 		);
 
-		registerLegacyState(Material.WHITE_BED, new BedTileEntitySupplier(0), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.ORANGE_BED, new BedTileEntitySupplier(1), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.MAGENTA_BED, new BedTileEntitySupplier(2), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.LIGHT_BLUE_BED, new BedTileEntitySupplier(3), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.YELLOW_BED, new BedTileEntitySupplier(4), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.LIME_BED, new BedTileEntitySupplier(5), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.PINK_BED, new BedTileEntitySupplier(6), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.GRAY_BED, new BedTileEntitySupplier(7), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.LIGHT_GRAY_BED, new BedTileEntitySupplier(8), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.CYAN_BED, new BedTileEntitySupplier(9), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.PURPLE_BED, new BedTileEntitySupplier(10), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.BLUE_BED, new BedTileEntitySupplier(11), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.BROWN_BED, new BedTileEntitySupplier(12), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.GREEN_BED, new BedTileEntitySupplier(13), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.RED_BED, new BedTileEntitySupplier(14), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.BLACK_BED, new BedTileEntitySupplier(15), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.WHITE_BED, new TileEntityBedSupplier(0), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.ORANGE_BED, new TileEntityBedSupplier(1), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.MAGENTA_BED, new TileEntityBedSupplier(2), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.LIGHT_BLUE_BED, new TileEntityBedSupplier(3), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.YELLOW_BED, new TileEntityBedSupplier(4), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.LIME_BED, new TileEntityBedSupplier(5), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.PINK_BED, new TileEntityBedSupplier(6), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.GRAY_BED, new TileEntityBedSupplier(7), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.LIGHT_GRAY_BED, new TileEntityBedSupplier(8), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.CYAN_BED, new TileEntityBedSupplier(9), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.PURPLE_BED, new TileEntityBedSupplier(10), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.BLUE_BED, new TileEntityBedSupplier(11), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.BROWN_BED, new TileEntityBedSupplier(12), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.GREEN_BED, new TileEntityBedSupplier(13), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.RED_BED, new TileEntityBedSupplier(14), ProtocolVersionsHelper.ALL_1_12);
+		registerLegacyState(Material.BLACK_BED, new TileEntityBedSupplier(15), ProtocolVersionsHelper.ALL_1_12);
 	}
 
 	protected final Map<TileEntityType, List<ObjIntConsumer<TileEntity>>> tileToTile = new EnumMap<>(TileEntityType.class);
