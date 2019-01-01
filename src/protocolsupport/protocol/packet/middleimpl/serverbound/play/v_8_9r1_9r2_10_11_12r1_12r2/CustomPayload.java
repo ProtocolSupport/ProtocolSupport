@@ -51,6 +51,9 @@ public class CustomPayload extends AbstractCustomPayload {
 			case LegacyCustomPayloadChannelName.LEGACY_STRUCTURE_BLOCK: {
 				return transformStructureBlock();
 			}
+			case LegacyCustomPayloadChannelName.LEGACY_TRADE_SELECT: {
+				return transformTradeSelect();
+			}
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_RIGHT_NAME:
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_TYPO_NAME:
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_BLOCK_NAME: {

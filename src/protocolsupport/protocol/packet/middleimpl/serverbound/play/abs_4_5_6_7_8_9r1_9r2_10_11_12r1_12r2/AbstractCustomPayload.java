@@ -14,6 +14,7 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPaylo
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEditBook;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleNameItem;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePickItem;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSelectTrade;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSetBeaconEffect;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -138,6 +139,11 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 	protected RecyclableCollection<ServerBoundPacketData> transformPickItem() {
 		int slot = VarNumberSerializer.readVarInt(data);
 		return RecyclableSingletonList.create(MiddlePickItem.create(slot));
+	}
+
+	protected RecyclableCollection<ServerBoundPacketData> transformTradeSelect() {
+		int slot = data.readInt();
+		return RecyclableSingletonList.create(MiddleSelectTrade.create(slot));
 	}
 
 	protected RecyclableCollection<ServerBoundPacketData> transformCustomPayload() {
