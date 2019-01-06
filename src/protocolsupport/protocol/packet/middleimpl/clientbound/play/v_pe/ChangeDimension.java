@@ -49,7 +49,6 @@ public class ChangeDimension extends MiddleChangeDimension {
 		changedim.writeBoolean(true); //respawn
 		packets.add(changedim);
 		addFakeChunksAndPos(version, player, posY, packets);
-		packets.add(LoginSuccess.createPlayStatus(LoginSuccess.PLAYER_SPAWN));
 		//Lock client bound packet queue until LocalPlayerInitialised or bungee confirm.
 		packets.add(CustomPayload.create(version, InternalPluginMessageRequest.PELockChannel));
 	}

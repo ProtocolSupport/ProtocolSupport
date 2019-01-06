@@ -1,12 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import org.bukkit.Bukkit;
 import org.bukkit.util.NumberConversions;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPosition;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.MovementCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -27,8 +27,14 @@ public class SetPosition extends MiddleSetPosition {
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ChunkCoord chunk = new ChunkCoord(NumberConversions.floor(x) >> 4, NumberConversions.floor(z) >> 4);
-		if (!cache.getPEChunkMapCache().isMarkedAsSent(chunk)) {
-			packets.add(Chunk.createEmptyChunk(version, chunk));
+		//TODO: *maybe* make this based on a 2 chunk radius or something
+		if (cache.getPEChunkMapCache().isMarkedAsSent(chunk)) {
+			packets.add(LoginSuccess.createPlayStatus(LoginSuccess.PLAYER_SPAWN));
+			cache.getMovementCache().setClientImmobile(false);
+			packets.add(EntityMetadata.updatePlayerMobility(connection));
+		} else {
+			cache.getMovementCache().setClientImmobile(true);
+			packets.add(EntityMetadata.updatePlayerMobility(connection));
 		}
 		//PE sends position that intersects blocks bounding boxes in some cases
 		//Server doesn't accept such movements and will send a set position, but we ignore it unless it is above leniency
