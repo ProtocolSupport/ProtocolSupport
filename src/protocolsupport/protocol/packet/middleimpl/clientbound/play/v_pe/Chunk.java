@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import org.bukkit.Bukkit;
+import org.bukkit.util.NumberConversions;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.listeners.internal.ChunkUpdateRequest;
@@ -57,6 +58,11 @@ public class Chunk extends MiddleChunk {
 				}
 			});
 			packets.add(serializer);
+			ChunkCoord playerChunk = new ChunkCoord(NumberConversions.floor(movecache.getPEClientX()) >> 4, NumberConversions.floor(movecache.getPEClientZ()) >> 4);
+			if (playerChunk.equals(chunk)) {
+				cache.getMovementCache().setClientImmobile(false);
+				packets.add(EntityMetadata.updatePlayerMobility(connection));
+			}
 			if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_8)) {
 				packets.add(createChunkPublisherUpdate((int) movecache.getPEClientX(), (int) movecache.getPEClientY(), (int) movecache.getPEClientZ()));
 			}
