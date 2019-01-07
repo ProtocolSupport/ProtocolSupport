@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public abstract class MiddleInventorySetSlot extends ClientBoundMiddlePacket {
@@ -21,7 +20,7 @@ public abstract class MiddleInventorySetSlot extends ClientBoundMiddlePacket {
 	public void readFromServerData(ByteBuf serverdata) {
 		windowId = serverdata.readUnsignedByte();
 		slot = serverdata.readShort();
-		itemstack = ItemStackSerializer.readItemStack(serverdata, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale(), false);
+		itemstack = ItemStackSerializer.readItemStack(serverdata);
 	}
 
 }

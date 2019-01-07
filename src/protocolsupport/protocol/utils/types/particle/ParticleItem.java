@@ -3,8 +3,6 @@ package protocolsupport.protocol.utils.types.particle;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public class ParticleItem extends Particle {
@@ -31,12 +29,12 @@ public class ParticleItem extends Particle {
 
 	@Override
 	public void readData(ByteBuf buf) {
-		itemstack = ItemStackSerializer.readItemStack(buf, ProtocolVersionsHelper.LATEST_PC, I18NData.DEFAULT_LOCALE, false);
+		itemstack = ItemStackSerializer.readItemStack(buf);
 	}
 
 	@Override
 	public void writeData(ByteBuf buf) {
-		ItemStackSerializer.writeItemStack(buf, version, locale, itemstack, true);
+		ItemStackSerializer.writeItemStack(buf, version, locale, itemstack);
 	}
 
 }

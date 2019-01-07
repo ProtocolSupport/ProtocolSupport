@@ -31,7 +31,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 		serializer.writeByte(windowId);
 		serializer.writeShort(itemstacks.size());
 		for (NetworkItemStack itemstack : itemstacks) {
-			ItemStackSerializer.writeItemStack(serializer, version, cache.getAttributesCache().getLocale(), itemstack, true);
+			ItemStackSerializer.writeItemStack(serializer, version, cache.getAttributesCache().getLocale(), itemstack);
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

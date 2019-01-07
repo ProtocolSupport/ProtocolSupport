@@ -5,14 +5,15 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
 
 public class DataWatcherObjectOptionalChat extends ReadableDataWatcherObject<BaseComponent> {
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
+	public void readFromStream(ByteBuf from) {
 		if (from.readBoolean()) {
-			value = ChatAPI.fromJSON(StringSerializer.readString(from, version));
+			value = ChatAPI.fromJSON(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC));
 		}
 	}
 

@@ -20,7 +20,7 @@ public abstract class MiddleEntityMetadata extends MiddleEntity {
 		super.readFromServerData(serverdata);
 		entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if (entity != null) {
-			entityRemapper.readEntityWithMetadata(cache.getAttributesCache().getLocale(), entity, serverdata);
+			entityRemapper.readEntityWithMetadata(entity, serverdata);
 		} else {
 			serverdata.skipBytes(serverdata.readableBytes());
 		}

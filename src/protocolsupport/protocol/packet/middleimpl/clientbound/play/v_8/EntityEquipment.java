@@ -26,7 +26,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID);
 			VarNumberSerializer.writeVarInt(serializer, entityId);
 			serializer.writeShort(slot == 0 ? slot : slot - 1);
-			ItemStackSerializer.writeItemStack(serializer, version, cache.getAttributesCache().getLocale(), itemstack, true);
+			ItemStackSerializer.writeItemStack(serializer, version, cache.getAttributesCache().getLocale(), itemstack);
 			return RecyclableSingletonList.create(serializer);
 		}
 	}

@@ -9,7 +9,6 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MerchantDataSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -35,7 +34,7 @@ public class CustomPayload extends MiddleCustomPayload {
 					serializer,
 					to -> MerchantDataSerializer.writeMerchantData(
 						to, version, locale,
-						MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, locale)
+						MerchantDataSerializer.readMerchantData(data)
 					)
 				);
 				break;

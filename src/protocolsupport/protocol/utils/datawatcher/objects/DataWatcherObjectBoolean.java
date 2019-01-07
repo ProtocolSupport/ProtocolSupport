@@ -7,7 +7,7 @@ import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
 public class DataWatcherObjectBoolean extends ReadableDataWatcherObject<Boolean> {
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
+	public void readFromStream(ByteBuf from) {
 		value = from.readBoolean();
 	}
 

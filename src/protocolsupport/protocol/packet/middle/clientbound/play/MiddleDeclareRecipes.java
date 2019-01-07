@@ -10,7 +10,6 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
@@ -39,7 +38,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 			int possibleStacksCount = VarNumberSerializer.readVarInt(serverdata);
 			possibleStacks = new NetworkItemStack[possibleStacksCount];
 			for (int i = 0; i < possibleStacksCount; i++) {
-				possibleStacks[i] = ItemStackSerializer.readItemStack(serverdata, ProtocolVersionsHelper.LATEST_PC, I18NData.DEFAULT_LOCALE, false);
+				possibleStacks[i] = ItemStackSerializer.readItemStack(serverdata);
 			}
 		}
 
@@ -80,7 +79,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 			for (int j = 0; j < ingredientCount; j++) {
 				ingredients[j] = new Ingredient(data);
 			}
-			result = ItemStackSerializer.readItemStack(data, ProtocolVersionsHelper.LATEST_PC, I18NData.DEFAULT_LOCALE, false);
+			result = ItemStackSerializer.readItemStack(data);
 		}
 
 		public String getGroup() {
@@ -114,7 +113,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 			for (int j = 0; j < ingredientCount; j++) {
 				ingredients[j] = new Ingredient(data);
 			}
-			result = ItemStackSerializer.readItemStack(data, ProtocolVersionsHelper.LATEST_PC, I18NData.DEFAULT_LOCALE, false);
+			result = ItemStackSerializer.readItemStack(data);
 		}
 
 		public String getGroup() {
@@ -150,7 +149,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 
 			group = StringSerializer.readString(data, ProtocolVersionsHelper.LATEST_PC);
 			ingredient = new Ingredient(data);
-			result = ItemStackSerializer.readItemStack(data, ProtocolVersionsHelper.LATEST_PC, I18NData.DEFAULT_LOCALE, false);
+			result = ItemStackSerializer.readItemStack(data);
 			exp = data.readFloat();
 			time = VarNumberSerializer.readVarInt(data);
 		}

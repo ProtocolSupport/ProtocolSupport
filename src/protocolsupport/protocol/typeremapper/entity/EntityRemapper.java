@@ -10,7 +10,6 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
 import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
@@ -36,13 +35,13 @@ public class EntityRemapper {
 		originalEntity = entity;
 	}
 
-	public void readEntityWithMetadata(String locale, NetworkEntity entity, ByteBuf serverdata) {
+	public void readEntityWithMetadata(NetworkEntity entity, ByteBuf serverdata) {
 		if (entity == null) {
 			throw new IllegalArgumentException("Entity can't be null");
 		}
 		originalEntity = entity;
 		originalMetadata.clear();
-		DataWatcherSerializer.readDataTo(serverdata, ProtocolVersionsHelper.LATEST_PC, locale, originalMetadata);
+		DataWatcherSerializer.readDataTo(serverdata, originalMetadata);
 	}
 
 	public void remap(boolean metadata) {
