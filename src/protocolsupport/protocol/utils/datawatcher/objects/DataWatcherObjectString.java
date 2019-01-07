@@ -3,7 +3,6 @@ package protocolsupport.protocol.utils.datawatcher.objects;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
 
 public class DataWatcherObjectString extends ReadableDataWatcherObject<String> {
@@ -17,7 +16,7 @@ public class DataWatcherObjectString extends ReadableDataWatcherObject<String> {
 
 	@Override
 	public void readFromStream(ByteBuf from) {
-		value = StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC);
+		value = StringSerializer.readVarIntUTF8String(from);
 	}
 
 	@Override

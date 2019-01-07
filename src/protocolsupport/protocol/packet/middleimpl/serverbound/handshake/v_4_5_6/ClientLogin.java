@@ -36,12 +36,12 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		ServerBoundPacketData hsscreator = ServerBoundPacketData.create(ServerBoundPacket.HANDSHAKE_START);
 		VarNumberSerializer.writeVarInt(hsscreator, ProtocolVersionsHelper.LATEST_PC.getId());
-		StringSerializer.writeString(hsscreator, ProtocolVersionsHelper.LATEST_PC, hostname);
+		StringSerializer.writeVarIntUTF8String(hsscreator, hostname);
 		hsscreator.writeShort(port);
 		VarNumberSerializer.writeVarInt(hsscreator, 2);
 		packets.add(hsscreator);
 		ServerBoundPacketData lscreator = ServerBoundPacketData.create(ServerBoundPacket.LOGIN_START);
-		StringSerializer.writeString(lscreator, ProtocolVersionsHelper.LATEST_PC, username);
+		StringSerializer.writeVarIntUTF8String(lscreator, username);
 		packets.add(lscreator);
 		return packets;
 	}

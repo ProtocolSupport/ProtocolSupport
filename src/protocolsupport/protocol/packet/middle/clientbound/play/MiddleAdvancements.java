@@ -11,7 +11,6 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookups;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
@@ -31,22 +30,22 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 		reset = serverdata.readBoolean();
 		advancementsMapping = ArraySerializer.readVarIntTArray(
 			serverdata, Any.class,
-			buf -> new Any<String, Advancement>(StringSerializer.readString(buf, ProtocolVersionsHelper.LATEST_PC), Advancement.read(buf))
+			buf -> new Any<String, Advancement>(StringSerializer.readVarIntUTF8String(buf), Advancement.read(buf))
 		);
-		removeAdvancements = ArraySerializer.readVarIntStringArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
+		removeAdvancements = ArraySerializer.readVarIntVarIntUTF8StringArray(serverdata);
 		advancementsProgress = ArraySerializer.readVarIntTArray(
 			serverdata, Any.class,
-			buf -> new Any<String, AdvancementProgress>(StringSerializer.readString(buf, ProtocolVersionsHelper.LATEST_PC), AdvancementProgress.read(buf))
+			buf -> new Any<String, AdvancementProgress>(StringSerializer.readVarIntUTF8String(buf), AdvancementProgress.read(buf))
 		);
 	}
 
 	protected static class Advancement {
 
 		protected static Advancement read(ByteBuf from) {
-			String parentId = from.readBoolean() ? StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC) : null;
+			String parentId = from.readBoolean() ? StringSerializer.readVarIntUTF8String(from) : null;
 			AdvancementDisplay display = from.readBoolean() ? AdvancementDisplay.read(from) : null;
-			String[] criterias = ArraySerializer.readVarIntStringArray(from, ProtocolVersionsHelper.LATEST_PC);
-			String[][] requirments = ArraySerializer.readVarIntTArray(from, String[].class, buf -> ArraySerializer.readVarIntStringArray(buf, ProtocolVersionsHelper.LATEST_PC));
+			String[] criterias = ArraySerializer.readVarIntVarIntUTF8StringArray(from);
+			String[][] requirments = ArraySerializer.readVarIntTArray(from, String[].class, ArraySerializer::readVarIntVarIntUTF8StringArray);
 			return new Advancement(parentId, display, criterias, requirments);
 		}
 
@@ -67,12 +66,12 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 		public static final int flagHasBackgroundOffset = 0x1;
 
 		protected static AdvancementDisplay read(ByteBuf from) {
-			BaseComponent title = ChatAPI.fromJSON(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC));
-			BaseComponent description = ChatAPI.fromJSON(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC));
+			BaseComponent title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(from));
+			BaseComponent description = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(from));
 			NetworkItemStack icon = ItemStackSerializer.readItemStack(from);
 			FrameType type = MiscSerializer.readVarIntEnum(from, FrameType.CONSTANT_LOOKUP);
 			int flags = from.readInt();
-			String background = (flags & flagHasBackgroundOffset) != 0 ? StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC) : null;
+			String background = (flags & flagHasBackgroundOffset) != 0 ? StringSerializer.readVarIntUTF8String(from) : null;
 			float x = from.readFloat();
 			float y = from.readFloat();
 			return new AdvancementDisplay(title, description, icon, type, flags, background, x, y);
@@ -109,7 +108,7 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 		protected static AdvancementProgress read(ByteBuf from) {
 			return new AdvancementProgress(ArraySerializer.readVarIntTArray(
 				from, Any.class,
-				buf -> new Any<String, Long>(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC), buf.readBoolean() ? buf.readLong() : null)
+				buf -> new Any<String, Long>(StringSerializer.readVarIntUTF8String(from), buf.readBoolean() ? buf.readLong() : null)
 			));
 		}
 

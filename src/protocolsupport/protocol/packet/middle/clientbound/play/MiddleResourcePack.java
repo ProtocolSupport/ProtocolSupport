@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleResourcePack extends ClientBoundMiddlePacket {
 
@@ -17,8 +16,8 @@ public abstract class MiddleResourcePack extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		url = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
-		hash = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+		url = StringSerializer.readVarIntUTF8String(serverdata);
+		hash = StringSerializer.readVarIntUTF8String(serverdata);
 	}
 
 }

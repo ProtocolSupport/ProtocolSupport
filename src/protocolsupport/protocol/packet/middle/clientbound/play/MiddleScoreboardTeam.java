@@ -8,7 +8,6 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 
@@ -30,19 +29,19 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		name = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 16);
+		name = StringSerializer.readVarIntUTF8String(serverdata);
 		mode = serverdata.readUnsignedByte();
 		if ((mode == 0) || (mode == 2)) {
-			displayName = ChatAPI.fromJSON(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
+			displayName = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
 			friendlyFire = serverdata.readUnsignedByte();
-			nameTagVisibility = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 32);
-			collisionRule = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 32);
+			nameTagVisibility = StringSerializer.readVarIntUTF8String(serverdata);
+			collisionRule = StringSerializer.readVarIntUTF8String(serverdata);
 			color = VarNumberSerializer.readVarInt(serverdata);
-			prefix = ChatAPI.fromJSON(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
-			suffix = ChatAPI.fromJSON(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
+			prefix = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
+			suffix = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
 		}
 		if ((mode == 0) || (mode == 3) || (mode == 4)) {
-			players = ArraySerializer.readVarIntStringArray(serverdata, ProtocolVersionsHelper.LATEST_PC, 40);
+			players = ArraySerializer.readVarIntVarIntUTF8StringArray(serverdata);
 		}
 	}
 

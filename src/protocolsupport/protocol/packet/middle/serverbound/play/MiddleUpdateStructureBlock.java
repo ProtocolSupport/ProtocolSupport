@@ -9,7 +9,6 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookups;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -43,14 +42,14 @@ public abstract class MiddleUpdateStructureBlock extends ServerBoundMiddlePacket
 	}
 
 	public static ServerBoundPacketData create(Position position, Action action, Mode mode, String name,
-			byte offsetX, byte offsetY, byte offsetZ, byte sizeX, byte sizeY, byte sizeZ,
-			Mirror mirror, Rotation rotation, String metadata, float integrity, long seed, byte flags
+		byte offsetX, byte offsetY, byte offsetZ, byte sizeX, byte sizeY, byte sizeZ,
+		Mirror mirror, Rotation rotation, String metadata, float integrity, long seed, byte flags
 	) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_UPDATE_STRUCTURE_BLOCK);
 		PositionSerializer.writePosition(creator, position);
 		MiscSerializer.writeVarIntEnum(creator, action);
 		MiscSerializer.writeVarIntEnum(creator, mode);
-		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, name);
+		StringSerializer.writeVarIntUTF8String(creator, name);
 		creator.writeByte(offsetX);
 		creator.writeByte(offsetY);
 		creator.writeByte(offsetZ);
@@ -59,7 +58,7 @@ public abstract class MiddleUpdateStructureBlock extends ServerBoundMiddlePacket
 		creator.writeByte(sizeZ);
 		MiscSerializer.writeVarIntEnum(creator, mirror);
 		MiscSerializer.writeVarIntEnum(creator, rotation);
-		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, metadata);
+		StringSerializer.writeVarIntUTF8String(creator, metadata);
 		creator.writeFloat(integrity);
 		VarNumberSerializer.writeVarLong(creator, seed);
 		creator.writeByte(flags);

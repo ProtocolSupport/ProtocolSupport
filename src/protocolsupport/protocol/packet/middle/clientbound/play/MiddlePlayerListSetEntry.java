@@ -15,7 +15,6 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.protocol.utils.EnumConstantLookups;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.utils.Utils;
 
@@ -41,14 +40,14 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 					if (oldEntry != null) {
 						oldEntry = oldEntry.clone();
 					}
-					String username = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 16);
+					String username = StringSerializer.readVarIntUTF8String(serverdata);
 					ArrayList<ProfileProperty> properties = new ArrayList<>();
 					Utils.repeat(VarNumberSerializer.readVarInt(serverdata), () -> {
-						String name = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
-						String value = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+						String name = StringSerializer.readVarIntUTF8String(serverdata);
+						String value = StringSerializer.readVarIntUTF8String(serverdata);
 						String signature = null;
 						if (serverdata.readBoolean()) {
-							signature = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+							signature = StringSerializer.readVarIntUTF8String(serverdata);
 						}
 						properties.add(new ProfileProperty(name, value, signature));
 					});
@@ -56,7 +55,7 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 					int ping = VarNumberSerializer.readVarInt(serverdata);
 					String displayNameJson = null;
 					if (serverdata.readBoolean()) {
-						displayNameJson = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+						displayNameJson = StringSerializer.readVarIntUTF8String(serverdata);
 					}
 					PlayerListEntry currentEntry = new PlayerListEntry(username, ping, gamemode, displayNameJson, properties);
 					plcache.addEntry(uuid, currentEntry);
@@ -86,7 +85,7 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 				case DISPLAY_NAME: {
 					String displayNameJson = null;
 					if (serverdata.readBoolean()) {
-						displayNameJson = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+						displayNameJson = StringSerializer.readVarIntUTF8String(serverdata);
 					}
 					PlayerListEntry currentEntry = plcache.getEntry(uuid);
 					if (currentEntry != null) {

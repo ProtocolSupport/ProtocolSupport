@@ -22,7 +22,7 @@ public abstract class MiddleStopSound extends ClientBoundMiddlePacket {
 	public void readFromServerData(ByteBuf serverdata) {
 		int flags = serverdata.readByte();
 		source = (flags & FLAG_SOURCE) == FLAG_SOURCE ? VarNumberSerializer.readVarInt(serverdata) : -1;
-		name = (flags & FLAG_NAME) == FLAG_NAME ? StringSerializer.readString(serverdata, connection.getVersion()) : null;
+		name = (flags & FLAG_NAME) == FLAG_NAME ? StringSerializer.readVarIntUTF8String(serverdata) : null;
 	}
 
 }

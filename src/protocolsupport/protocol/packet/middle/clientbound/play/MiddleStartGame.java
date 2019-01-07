@@ -5,7 +5,6 @@ import protocolsupport.api.tab.TabAPI;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.types.Difficulty;
 import protocolsupport.protocol.utils.types.Environment;
@@ -36,7 +35,7 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 		difficulty = Difficulty.getById(serverdata.readByte());
 		serverdata.readByte();
 		maxplayers = TabAPI.getMaxTabSize();
-		leveltype = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 16);
+		leveltype = StringSerializer.readVarIntUTF8String(serverdata);
 		reducedDebugInfo = serverdata.readBoolean();
 	}
 

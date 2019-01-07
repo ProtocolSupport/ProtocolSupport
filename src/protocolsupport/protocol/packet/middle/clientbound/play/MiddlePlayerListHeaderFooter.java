@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddlePlayerListHeaderFooter extends ClientBoundMiddlePacket {
 
@@ -17,8 +16,8 @@ public abstract class MiddlePlayerListHeaderFooter extends ClientBoundMiddlePack
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		headerJson = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
-		footerJson = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+		headerJson = StringSerializer.readVarIntUTF8String(serverdata);
+		footerJson = StringSerializer.readVarIntUTF8String(serverdata);
 	}
 
 }

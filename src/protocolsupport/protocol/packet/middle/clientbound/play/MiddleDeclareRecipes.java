@@ -9,7 +9,6 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
@@ -25,8 +24,8 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 		int count = VarNumberSerializer.readVarInt(serverdata);
 		recipes = new Recipe[count];
 		for (int i = 0; i < count; i++) {
-			String id = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
-			RecipeType type = RecipeType.getByInternalName(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
+			String id = StringSerializer.readVarIntUTF8String(serverdata);
+			RecipeType type = RecipeType.getByInternalName(StringSerializer.readVarIntUTF8String(serverdata));
 			recipes[i] = type.read(id, serverdata);
 		}
 	}
@@ -73,7 +72,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 		public ShapelessRecipe(String id, ByteBuf data) {
 			super(id, RecipeType.CRAFTING_SHAPELESS);
 
-			group = StringSerializer.readString(data, ProtocolVersionsHelper.LATEST_PC);
+			group = StringSerializer.readVarIntUTF8String(data);
 			int ingredientCount = VarNumberSerializer.readVarInt(data);
 			ingredients = new Ingredient[ingredientCount];
 			for (int j = 0; j < ingredientCount; j++) {
@@ -107,7 +106,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 
 			width = VarNumberSerializer.readVarInt(data);
 			height = VarNumberSerializer.readVarInt(data);
-			group = StringSerializer.readString(data, ProtocolVersionsHelper.LATEST_PC);
+			group = StringSerializer.readVarIntUTF8String(data);
 			int ingredientCount = width * height;
 			ingredients = new Ingredient[ingredientCount];
 			for (int j = 0; j < ingredientCount; j++) {
@@ -147,7 +146,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 		public SmeltingRecipe(String id, ByteBuf data) {
 			super(id, RecipeType.SMELTING);
 
-			group = StringSerializer.readString(data, ProtocolVersionsHelper.LATEST_PC);
+			group = StringSerializer.readVarIntUTF8String(data);
 			ingredient = new Ingredient(data);
 			result = ItemStackSerializer.readItemStack(data);
 			exp = data.readFloat();

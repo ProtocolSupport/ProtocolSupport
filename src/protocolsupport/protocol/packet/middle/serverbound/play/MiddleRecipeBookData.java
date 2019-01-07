@@ -7,7 +7,6 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookups;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -30,7 +29,7 @@ public abstract class MiddleRecipeBookData extends ServerBoundMiddlePacket {
 		MiscSerializer.writeVarIntEnum(creator, type);
 		switch (type) {
 			case DISPLAYED_RECIPE: {
-				StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, recipeId);
+				StringSerializer.writeVarIntUTF8String(creator, recipeId);
 				break;
 			}
 			case RECIPE_BOOK_STATUS: {

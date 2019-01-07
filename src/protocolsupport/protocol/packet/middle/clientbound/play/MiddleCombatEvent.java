@@ -7,7 +7,6 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookups;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleCombatEvent extends ClientBoundMiddlePacket {
 
@@ -36,7 +35,7 @@ public abstract class MiddleCombatEvent extends ClientBoundMiddlePacket {
 			case ENTITY_DEAD: {
 				playerId = VarNumberSerializer.readVarInt(serverdata);
 				entityId = serverdata.readInt();
-				message = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+				message = StringSerializer.readVarIntUTF8String(serverdata);
 				break;
 			}
 		}
