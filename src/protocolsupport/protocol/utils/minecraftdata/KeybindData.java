@@ -4,7 +4,9 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
 import protocolsupport.utils.Utils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class KeybindData {
 
 	private static final HashMap<String, String> nameToKeyRepr = new HashMap<>();

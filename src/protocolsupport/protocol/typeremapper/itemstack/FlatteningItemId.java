@@ -15,7 +15,9 @@ import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.Utils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class FlatteningItemId {
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> REGISTRY_TO_CLIENT = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {

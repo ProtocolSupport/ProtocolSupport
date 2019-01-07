@@ -8,7 +8,9 @@ import io.netty.util.Recycler;
 import io.netty.util.Recycler.Handle;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.utils.Utils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class Compressor {
 
 	protected static final int compressionLevel = Utils.getJavaPropertyValue("compressionlevel", 3, Integer::parseInt);

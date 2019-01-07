@@ -26,7 +26,9 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PotionTo
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class ItemStackComplexRemapperRegistry {
 
 	protected static final Int2ObjectOpenHashMap<EnumMap<ProtocolVersion, List<ItemStackComplexRemapper>>> toClientRemapper = new Int2ObjectOpenHashMap<>();

@@ -1,7 +1,9 @@
 package protocolsupport.protocol.packet;
 
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public enum ServerBoundPacket {
 
 	HANDSHAKE_START(ServerPlatform.get().getPacketFactory().getInHandshakeStartPacketId()),

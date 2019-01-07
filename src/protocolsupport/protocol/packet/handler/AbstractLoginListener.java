@@ -36,8 +36,10 @@ import protocolsupport.protocol.utils.authlib.MinecraftSessionService.Authentica
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
+import protocolsupportbuildprocessor.Preload;
 
 @SuppressWarnings("deprecation")
+@Preload
 public abstract class AbstractLoginListener implements IPacketListener {
 
 	protected static final int loginThreadKeepAlive = Utils.getJavaPropertyValue("loginthreadskeepalive", 60, Integer::parseInt);

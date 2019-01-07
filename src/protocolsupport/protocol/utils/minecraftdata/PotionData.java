@@ -8,7 +8,9 @@ import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.Utils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class PotionData {
 
 	private static final Int2ObjectOpenHashMap<String> idToName = new Int2ObjectOpenHashMap<>();

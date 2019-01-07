@@ -18,8 +18,10 @@ import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupportbuildprocessor.Preload;
 
 @SuppressWarnings("deprecation")
+@Preload
 public class PreFlatteningBlockIdData {
 
 	protected static final int[] toLegacyId = new int[MinecraftData.BLOCKDATA_COUNT];

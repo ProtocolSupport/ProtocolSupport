@@ -12,7 +12,9 @@ import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.Utils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class PreFlatteningItemIdData {
 
 	protected static final int combinedLegacyStoneId = formLegacyCombinedId(1, 0);

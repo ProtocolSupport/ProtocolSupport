@@ -12,7 +12,9 @@ import java.util.stream.Collectors;
 import com.google.gson.JsonObject;
 
 import protocolsupport.utils.Utils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class I18NData {
 
 	protected static final String resource_path = "i18n/";

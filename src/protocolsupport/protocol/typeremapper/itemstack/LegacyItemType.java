@@ -13,7 +13,9 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class LegacyItemType {
 
 	public static final ItemIdRemappingRegistry REGISTRY = new ItemIdRemappingRegistry();

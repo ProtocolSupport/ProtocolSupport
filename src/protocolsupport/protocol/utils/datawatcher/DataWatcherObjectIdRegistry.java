@@ -25,7 +25,9 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectStrin
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3i;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class DataWatcherObjectIdRegistry {
 
 	private static final HashMap<Class<? extends DataWatcherObject<?>>, EnumMap<ProtocolVersion, Integer>> registry = new HashMap<>();

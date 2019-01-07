@@ -34,7 +34,9 @@ import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.CollectionsUtils.ArrayMap.Entry;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class TileEntityRemapper {
 
 	protected static final EnumMap<ProtocolVersion, TileEntityRemapper> tileEntityRemappers = new EnumMap<>(ProtocolVersion.class);

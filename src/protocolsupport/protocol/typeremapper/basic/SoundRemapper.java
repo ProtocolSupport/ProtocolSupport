@@ -5,7 +5,9 @@ import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.GenericRema
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.GenericRemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.SoundData;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class SoundRemapper {
 
 	public static final GenericRemappingRegistry<String, GenericRemappingTable<String>> SOUND_REMAPPING_REGISTRY = new GenericRemappingRegistry<String, GenericRemappingTable<String>>() {

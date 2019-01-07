@@ -61,7 +61,9 @@ import protocolsupport.protocol.utils.types.particle.ParticleSweepAttack;
 import protocolsupport.protocol.utils.types.particle.ParticleTotemOfUndying;
 import protocolsupport.protocol.utils.types.particle.ParticleUnderwater;
 import protocolsupport.protocol.utils.types.particle.ParticleWitch;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class ParticleRemapper {
 
 	protected static final RemappingRegistry<ParticleRemappingTable> REGISTRY = new RemappingRegistry<ParticleRemappingTable>() {

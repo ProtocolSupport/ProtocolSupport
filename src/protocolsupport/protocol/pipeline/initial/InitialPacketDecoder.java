@@ -31,7 +31,9 @@ import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolInfo;
 import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolUtils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	protected static final int ping152delay = Utils.getJavaPropertyValue("ping152delay", 100, Integer::parseInt);

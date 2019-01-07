@@ -11,8 +11,10 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupportbuildprocessor.Preload;
 
 @SuppressWarnings("deprecation")
+@Preload
 public class ItemMaterialLookup {
 
 	protected static final Map<String, Material> byKey = new HashMap<>();

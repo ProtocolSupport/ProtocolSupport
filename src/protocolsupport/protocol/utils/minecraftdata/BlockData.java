@@ -10,7 +10,9 @@ import com.google.gson.JsonObject;
 
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.Utils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class BlockData {
 
 	private static final Map<Material, BlockDataEntry> byMaterial = new EnumMap<>(Material.class);

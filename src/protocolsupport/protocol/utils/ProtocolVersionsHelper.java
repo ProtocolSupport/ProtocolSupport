@@ -5,7 +5,9 @@ import java.util.Arrays;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class ProtocolVersionsHelper {
 
 	public static final ProtocolVersion LATEST_PC = ProtocolVersion.getLatest(ProtocolType.PC);

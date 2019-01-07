@@ -26,7 +26,9 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public abstract class AbstractStatusListener {
 
 	private static final int statusThreads = Utils.getJavaPropertyValue("statusthreads", 2, Integer::parseInt);

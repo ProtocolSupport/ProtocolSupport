@@ -42,7 +42,9 @@ import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemapping
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class LegacyBlockData {
 
 	public static final BlockIdRemappingRegistry REGISTRY = new BlockIdRemappingRegistry();
