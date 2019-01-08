@@ -19,6 +19,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDecl
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDeclareTags;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopEntityLeash;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopEntitySetAttributes;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopLookAt;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopPlayerListHeaderFooter;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopResourcePack;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopScoreboardDisplay;
@@ -252,6 +253,7 @@ public class PacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_RECIPES, NoopDeclareRecipes::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_TAGS, NoopDeclareTags::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_STOP_SOUND, NoopStopSound::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_LOOK_AT, NoopLookAt::new);
 	}
 
 	public PacketEncoder(ConnectionImpl connection) {
