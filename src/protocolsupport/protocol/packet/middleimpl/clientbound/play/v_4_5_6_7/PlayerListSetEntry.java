@@ -11,7 +11,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListS
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
-import protocolsupport.utils.Utils;
+import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -78,7 +78,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 
 	protected static ClientBoundPacketData create(ProtocolVersion version, String name, boolean addOrUpdate, short ping) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID);
-		StringSerializer.writeString(serializer, version, Utils.clampString(name, 16));
+		StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(name, 16));
 		serializer.writeBoolean(addOrUpdate);
 		serializer.writeShort(ping);
 		return serializer;

@@ -13,6 +13,7 @@ import protocolsupport.listeners.FeatureEmulation;
 import protocolsupport.listeners.LocaleUseLoader;
 import protocolsupport.listeners.MultiplePassengersRestrict;
 import protocolsupport.listeners.ReloadCommandBlocker;
+import protocolsupport.utils.ResourceUtils;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 
@@ -56,7 +57,7 @@ public class ProtocolSupport extends JavaPlugin {
 			return;
 		}
 		try {
-			Utils.getResourceBuffered("preload").lines().forEach(name -> {
+			ResourceUtils.getAsBufferedReader("preload").lines().forEach(name -> {
 				try {
 					Class.forName(name);
 				} catch (ClassNotFoundException e) {
@@ -96,7 +97,7 @@ public class ProtocolSupport extends JavaPlugin {
 		public final String buildnumber;
 		public BuildInfo() throws IOException {
 			Properties properties = new Properties();
-			properties.load(Utils.getResourceBuffered("buildinfo"));
+			properties.load(ResourceUtils.getAsBufferedReader("buildinfo"));
 			buildtime = properties.getProperty("buildtime");
 			buildhost = properties.getProperty("buildhost");
 			buildnumber = properties.getProperty("buildnumber");

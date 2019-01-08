@@ -23,7 +23,7 @@ import protocolsupport.protocol.pipeline.common.VarIntFrameEncoder;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.JavaSystemProperty;
 import protocolsupport.utils.netty.Decompressor;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
@@ -36,8 +36,8 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
-	protected static final int ping152delay = Utils.getJavaPropertyValue("ping152delay", 100, Integer::parseInt);
-	protected static final int pingLegacyDelay = Utils.getJavaPropertyValue("pinglegacydelay", 200, Integer::parseInt);
+	protected static final int ping152delay = JavaSystemProperty.getValue("ping152delay", 100, Integer::parseInt);
+	protected static final int pingLegacyDelay = JavaSystemProperty.getValue("pinglegacydelay", 200, Integer::parseInt);
 
 	static {
 		ProtocolSupport.logInfo("Assume 1.5.2 ping delay: "+ping152delay);

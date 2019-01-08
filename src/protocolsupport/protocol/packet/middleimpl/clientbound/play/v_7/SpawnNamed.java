@@ -13,7 +13,7 @@ import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
-import protocolsupport.utils.Utils;
+import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -32,7 +32,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		StringSerializer.writeString(serializer, version, version == ProtocolVersion.MINECRAFT_1_7_10 ? uuid.toString() : uuid.toString().replace("-", ""));
 		PlayerListEntry entry = cache.getPlayerListCache().getEntry(uuid);
 		if (entry != null) {
-			StringSerializer.writeString(serializer, version, Utils.clampString(entry.getCurrentName(cache.getAttributesCache().getLocale()), 16));
+			StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(entry.getCurrentName(cache.getAttributesCache().getLocale()), 16));
 			if (version == ProtocolVersion.MINECRAFT_1_7_10) {
 				List<ProfileProperty> properties = entry.getProperties(true);
 				VarNumberSerializer.writeVarInt(serializer, properties.size());

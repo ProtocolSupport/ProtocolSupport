@@ -7,13 +7,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
 import io.netty.util.Recycler.Handle;
 import protocolsupport.ProtocolSupport;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.JavaSystemProperty;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
 public class Compressor {
 
-	protected static final int compressionLevel = Utils.getJavaPropertyValue("compressionlevel", 3, Integer::parseInt);
+	protected static final int compressionLevel = JavaSystemProperty.getValue("compressionlevel", 3, Integer::parseInt);
 
 	static {
 		ProtocolSupport.logInfo("Compression level: "+compressionLevel);
