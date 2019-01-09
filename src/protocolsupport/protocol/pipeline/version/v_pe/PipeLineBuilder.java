@@ -17,7 +17,7 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 	@Override
 	public void buildCodec(Channel channel, ConnectionImpl connection) {
 		ChannelPipeline pipeline = channel.pipeline();
-		PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq = new PEDimensionSwitchMovementConfirmationPacketQueue();
+		PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq = new PEDimensionSwitchMovementConfirmationPacketQueue(connection);
 		pipeline.addAfter(ChannelHandlers.RAW_CAPTURE_RECEIVE, ChannelHandlers.DECODER_TRANSFORMER, new PEPacketDecoder(connection, dimswitchq));
 		pipeline.addAfter(ChannelHandlers.RAW_CAPTURE_SEND, ChannelHandlers.ENCODER_TRANSFORMER, new PEPacketEncoder(connection, dimswitchq));
 	}

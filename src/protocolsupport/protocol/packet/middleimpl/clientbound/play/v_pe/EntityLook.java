@@ -25,7 +25,6 @@ public class EntityLook extends MiddleEntityLook {
 		if (entity == null) {
 			return RecyclableEmptyList.get();
 		}
-		System.out.println("ENTITY LOOK: " + yaw + ", " + pitch);
 		if (entity.getType() == NetworkEntityType.PLAYER) {
 			//Player uses special animation mode pitch to only update pitch and headyaw. Yaw is updated by extra teleport packets from entitytracker.
 			return RecyclableSingletonList.create(SetPosition.create(entity, 0, 0, 0, pitch, yaw, SetPosition.ANIMATION_MODE_PITCH));

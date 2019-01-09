@@ -27,8 +27,8 @@ public class SetPosition extends MiddleSetPosition {
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ChunkCoord chunk = new ChunkCoord(NumberConversions.floor(x) >> 4, NumberConversions.floor(z) >> 4);
-		//TODO: *maybe* make this based on a 2 chunk radius or something
 		if (cache.getPEChunkMapCache().isMarkedAsSent(chunk)) {
+			cache.getMovementCache().setFirstLocationSent(true);
 			packets.add(LoginSuccess.createPlayStatus(LoginSuccess.PLAYER_SPAWN));
 			cache.getMovementCache().setClientImmobile(false);
 			packets.add(EntityMetadata.updatePlayerMobility(connection));
