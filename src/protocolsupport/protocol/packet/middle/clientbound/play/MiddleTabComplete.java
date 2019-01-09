@@ -30,7 +30,7 @@ public abstract class MiddleTabComplete extends ClientBoundMiddlePacket {
 		});
 	}
 
-	public class CommandMatch {
+	public static class CommandMatch {
 
 		protected final String match;
 		protected final String tooltip;
