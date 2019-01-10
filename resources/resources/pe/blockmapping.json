@@ -1615,6 +1615,10 @@
     "pename":"minecraft:redstone_ore",
     "pedata":0
   },
+  "minecraft:redstone_ore[lit=true]":{
+    "pename":"minecraft:lit_redstone_ore",
+    "pedata":0
+  },
   "minecraft:redstone_torch[lit=true]":{
     "pename":"minecraft:redstone_torch",
     "pedata":5
@@ -5729,7 +5733,7 @@
   },
   "minecraft:shulker_box[facing=up]":{
     "pename":"minecraft:undyed_shulker_box",
-	"pedata":0
+    "pedata":0
   },
   "minecraft:white_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
@@ -6317,7 +6321,15 @@
   },
   "minecraft:stripped_oak_wood[axis=x]":{
     "pename":"minecraft:stripped_oak_log",
-    "pedata": 3
+    "pedata": 1
+  },
+  "minecraft:stripped_oak_wood[axis=y]":{
+    "pename":"minecraft:stripped_oak_log",
+    "pedata": 0
+  },
+  "minecraft:stripped_oak_wood[axis=z]":{
+    "pename":"minecraft:stripped_oak_log",
+    "pedata": 2
   },
   "minecraft:stripped_spruce_log[axis=x]":{
     "pename":"minecraft:stripped_spruce_log",
@@ -6333,7 +6345,15 @@
   },
   "minecraft:stripped_spruce_wood[axis=x]":{
     "pename":"minecraft:stripped_spruce_log",
-    "pedata": 3
+    "pedata": 1
+  },
+  "minecraft:stripped_spruce_wood[axis=y]":{
+    "pename":"minecraft:stripped_spruce_log",
+    "pedata": 0
+  },
+  "minecraft:stripped_spruce_wood[axis=z]":{
+    "pename":"minecraft:stripped_spruce_log",
+    "pedata": 2
   },
   "minecraft:stripped_birch_log[axis=x]":{
     "pename":"minecraft:stripped_oak_log",
@@ -6348,8 +6368,16 @@
     "pedata": 2
   },
   "minecraft:stripped_birch_wood[axis=x]":{
+    "pename":"minecraft:stripped_oak_log",
+    "pedata": 1
+  },
+  "minecraft:stripped_birch_wood[axis=y]":{
     "pename":"minecraft:stripped_birch_log",
-    "pedata": 3
+    "pedata": 0
+  },
+  "minecraft:stripped_birch_wood[axis=z]":{
+    "pename":"minecraft:stripped_birch_log",
+    "pedata": 2
   },
   "minecraft:stripped_jungle_log[axis=x]":{
     "pename":"minecraft:stripped_jungle_log",
@@ -6365,7 +6393,15 @@
   },
   "minecraft:stripped_jungle_wood[axis=x]":{
     "pename":"minecraft:stripped_jungle_log",
-    "pedata": 3
+    "pedata": 1
+  },
+  "minecraft:stripped_jungle_wood[axis=y]":{
+    "pename":"minecraft:stripped_jungle_log",
+    "pedata": 0
+  },
+  "minecraft:stripped_jungle_wood[axis=z]":{
+    "pename":"minecraft:stripped_jungle_log",
+    "pedata": 2
   },
   "minecraft:stripped_acacia_log[axis=x]":{
     "pename":"minecraft:stripped_acacia_log",
@@ -6381,7 +6417,15 @@
   },
   "minecraft:stripped_acacia_wood[axis=x]":{
     "pename":"minecraft:stripped_acacia_log",
-    "pedata": 3
+    "pedata": 1
+  },
+  "minecraft:stripped_acacia_wood[axis=y]":{
+    "pename":"minecraft:stripped_acacia_log",
+    "pedata": 0
+  },
+  "minecraft:stripped_acacia_wood[axis=z]":{
+    "pename":"minecraft:stripped_acacia_log",
+    "pedata": 2
   },
   "minecraft:stripped_dark_oak_log[axis=x]":{
     "pename":"minecraft:stripped_dark_oak_log",
@@ -6397,7 +6441,15 @@
   },
   "minecraft:stripped_dark_oak_wood[axis=x]":{
     "pename":"minecraft:stripped_dark_oak_log",
-    "pedata": 3
+    "pedata": 1
+  },
+  "minecraft:stripped_dark_oak_wood[axis=y]":{
+    "pename":"minecraft:stripped_dark_oak_log",
+    "pedata": 0
+  },
+  "minecraft:stripped_dark_oak_wood[axis=z]":{
+    "pename":"minecraft:stripped_dark_oak_log",
+    "pedata": 2
   },
   "minecraft:seagrass":{
   "pename":"minecraft:seagrass",

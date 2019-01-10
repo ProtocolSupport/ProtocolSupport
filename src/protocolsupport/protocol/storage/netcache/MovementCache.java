@@ -1,5 +1,6 @@
 package protocolsupport.protocol.storage.netcache;
 
+import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.utils.Utils;
 
 public class MovementCache {
@@ -38,9 +39,7 @@ public class MovementCache {
 			(Math.abs(this.y - y) < acceptableError) &&
 			(Math.abs(this.z - z) < acceptableError)
 		) {
-			int r = teleportConfirmId;
-			teleportConfirmId = -1;
-			return r;
+			return teleportConfirm();
 		}
 		return -1;
 	}
@@ -62,6 +61,24 @@ public class MovementCache {
 	private boolean peLeftPaddleTurning = false;
 	private boolean peRightPaddleTurning = false;
 	private boolean clientImmobile = false;
+	private boolean firstLocationSent = false;
+	private ClientBoundMiddlePacket heldSpawn = null;
+
+	public ClientBoundMiddlePacket getHeldSpawn() {
+		return heldSpawn;
+	}
+
+	public void setHeldSpawn(ClientBoundMiddlePacket heldSpawn) {
+		this.heldSpawn = heldSpawn;
+	}
+
+	public boolean isFirstLocationSent() {
+		return firstLocationSent;
+	}
+
+	public void setFirstLocationSent(boolean firstLocationSent) {
+		this.firstLocationSent = firstLocationSent;
+	}
 
 	public boolean isClientImmobile() {
 		return clientImmobile;

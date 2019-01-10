@@ -1,12 +1,12 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.living;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
 import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloatLe;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
@@ -29,7 +29,7 @@ public class GiantEntityMetadataRemapper extends InsentientEntityMetadataRemappe
 					remapped.put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));
 				}
 			}
-		}, ProtocolVersion.MINECRAFT_PE);
+		}, ProtocolVersionsHelper.ALL_PE);
 	}
 
 }

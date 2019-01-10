@@ -54,7 +54,7 @@ public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 		return true;
 	}
 
-	public static class Attribute {
+	protected static class Attribute {
 		public String key;
 		public double value;
 		public Modifier[] modifiers;
@@ -64,7 +64,7 @@ public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 		}
 	}
 
-	public static class Modifier {
+	protected static class Modifier {
 		public UUID uuid;
 		public double amount;
 		public int operation;

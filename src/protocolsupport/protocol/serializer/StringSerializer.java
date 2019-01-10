@@ -41,13 +41,13 @@ public class StringSerializer {
 	}
 
 	private static boolean isUsingUTF16(ProtocolVersion version) {
-		return (version.getProtocolType() == ProtocolType.PC) && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4);
+		return version.isPC() && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4);
 	}
 
 	private static boolean isUsingUTF8(ProtocolVersion version) {
 		return
-			((version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5)) ||
-			(version.getProtocolType() == ProtocolType.PE);
+			(version.isPC() && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5)) ||
+			(version.isPE());
 	}
 
 }

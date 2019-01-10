@@ -27,9 +27,9 @@ public class CustomPayload extends MiddleCustomPayload {
 				cache, connection.getVersion(),
 				MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale()))
 			);
-		} else if (tag.equals(InternalPluginMessageRequest.PESkinUpdate)) {
+		} else if (tag.equals(InternalPluginMessageRequest.PESkinUpdateChannel)) {
 			//we do this using the normal ClientBoundPacketData stream so the queue can cache these on login
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_SKIN);
+			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_INFO);
 			serializer.writeBytes(data);
 			return RecyclableSingletonList.create(serializer);
 		}

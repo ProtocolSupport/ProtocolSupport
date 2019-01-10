@@ -1,7 +1,7 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.object.minecart;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
@@ -19,7 +19,7 @@ public class MinecartSpawnerEntityMetadataRemapper extends MinecartEntityMetadat
 				//remapped.put(PeMetaBase.MINECART_OFFSET, new DataWatcherObjectSVarInt(6));
 				//remapped.put(PeMetaBase.MINECART_DISPLAY, new DataWatcherObjectByte((byte) 1));
 			}
-		}, ProtocolVersion.MINECRAFT_PE);
+		}, ProtocolVersionsHelper.ALL_PE);
 	}
 	
 }

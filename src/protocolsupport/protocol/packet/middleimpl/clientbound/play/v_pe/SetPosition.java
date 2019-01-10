@@ -6,7 +6,9 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPosition;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.MovementCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.types.ChunkCoord;
@@ -21,16 +23,28 @@ public class SetPosition extends MiddleSetPosition {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		MovementCache movecache = cache.getMovementCache();
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ChunkCoord chunk = new ChunkCoord(NumberConversions.floor(x) >> 4, NumberConversions.floor(z) >> 4);
-		if (!cache.getPEChunkMapCache().isMarkedAsSent(chunk)) {
-			packets.add(Chunk.createEmptyChunk(version, chunk));
+		if (cache.getPEChunkMapCache().isMarkedAsSent(chunk)) {
+			cache.getMovementCache().setFirstLocationSent(true);
+			packets.add(LoginSuccess.createPlayStatus(LoginSuccess.PLAYER_SPAWN));
+			cache.getMovementCache().setClientImmobile(false);
+			packets.add(EntityMetadata.updatePlayerMobility(connection));
+		} else {
+			cache.getMovementCache().setClientImmobile(true);
+			packets.add(EntityMetadata.updatePlayerMobility(connection));
 		}
 		//PE sends position that intersects blocks bounding boxes in some cases
 		//Server doesn't accept such movements and will send a set position, but we ignore it unless it is above leniency
-		if (cache.getMovementCache().isPEPositionAboveLeniency()) {
+		if (movecache.isPEPositionAboveLeniency()) {
 			packets.add(create(cache.getWatchedEntityCache().getSelfPlayer(), x, y + 0.01, z, pitch, yaw, ANIMATION_MODE_TELEPORT));
+		}
+		movecache.setPEClientPosition(x, y, z);
+		//TODO: this might have a better home somewhere- but client must be pos-dim-switch-ack, and PSPE must know the new player location
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_8)) {
+			packets.add(Chunk.createChunkPublisherUpdate((int) x, (int) y, (int) z));
 		}
 		return packets;
 	}
@@ -45,6 +59,7 @@ public class SetPosition extends MiddleSetPosition {
 
 	public static final int ANIMATION_MODE_ALL = 0;
 	public static final int ANIMATION_MODE_TELEPORT = 2;
+	public static final int ANIMATION_MODE_PITCH = 3;
 
 	public static ClientBoundPacketData create(NetworkEntity entity, double x, double y, double z, float pitch, float yaw, int mode) {
 		y = y + 1.6200000047683716D;

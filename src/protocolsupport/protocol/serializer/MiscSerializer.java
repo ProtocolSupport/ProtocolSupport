@@ -7,8 +7,6 @@ import java.util.function.ObjIntConsumer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.EnumConstantLookups;
 
 public class MiscSerializer {
@@ -33,18 +31,14 @@ public class MiscSerializer {
 		return new UUID(from.readLong(), from.readLong());
 	}
 
-	public static void writeUUID(ByteBuf to, ProtocolVersion version, UUID uuid) {
-		if (isUsingLittleEndian(version)) {
-			to.writeLongLE(uuid.getMostSignificantBits());
-			to.writeLongLE(uuid.getLeastSignificantBits());
-		} else {
-			to.writeLong(uuid.getMostSignificantBits());
-			to.writeLong(uuid.getLeastSignificantBits());
-		}
+	public static void writeUUID(ByteBuf to, UUID uuid) {
+		to.writeLong(uuid.getMostSignificantBits());
+		to.writeLong(uuid.getLeastSignificantBits());
 	}
 
-	private static boolean isUsingLittleEndian(ProtocolVersion version) {
-		return version.getProtocolType() == ProtocolType.PE;
+	public static void writePEUUID(ByteBuf to, UUID uuid) {
+		to.writeLongLE(uuid.getMostSignificantBits());
+		to.writeLongLE(uuid.getLeastSignificantBits());
 	}
 
 	public static byte[] readAllBytes(ByteBuf buf) {

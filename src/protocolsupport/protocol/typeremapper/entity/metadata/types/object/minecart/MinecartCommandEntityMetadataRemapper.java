@@ -9,7 +9,7 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 public class MinecartCommandEntityMetadataRemapper extends MinecartEntityMetadataRemapper {
 
 	public MinecartCommandEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartCommand.COMMAND, PeMetaBase.COMMAND_COMMAND), ProtocolVersion.MINECRAFT_PE);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartCommand.COMMAND, PeMetaBase.COMMAND_COMMAND), ProtocolVersionsHelper.ALL_PE);
 
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartCommand.COMMAND, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.MinecartCommand.COMMAND, 11), ProtocolVersionsHelper.ALL_1_9);

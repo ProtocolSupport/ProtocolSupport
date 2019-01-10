@@ -34,7 +34,7 @@ public class AgeableEntityMetadataRemapper extends InsentientEntityMetadataRemap
 					entity.getUUID(), entity.getId(), entity.getType().getBukkitType()
 				)));
 			}
-		}, ProtocolVersion.MINECRAFT_PE);
+		}, ProtocolVersionsHelper.ALL_PE);
 
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ageable.IS_BABY, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ageable.IS_BABY, 11), ProtocolVersionsHelper.ALL_1_9);

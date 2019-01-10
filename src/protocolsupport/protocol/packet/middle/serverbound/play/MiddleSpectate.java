@@ -10,9 +10,9 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public abstract class MiddleSpecate extends ServerBoundMiddlePacket {
+public abstract class MiddleSpectate extends ServerBoundMiddlePacket {
 
-	public MiddleSpecate(ConnectionImpl connection) {
+	public MiddleSpectate(ConnectionImpl connection) {
 		super(connection);
 	}
 
@@ -21,7 +21,7 @@ public abstract class MiddleSpecate extends ServerBoundMiddlePacket {
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_SPECTATE);
-		MiscSerializer.writeUUID(creator, connection.getVersion(), entityUUID);
+		MiscSerializer.writeUUID(creator, entityUUID);
 		return RecyclableSingletonList.create(creator);
 	}
 

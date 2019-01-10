@@ -77,13 +77,6 @@ public class PlayerLoginStartEvent extends PlayerAbstractLoginEvent {
 		return list;
 	}
 
-
-
-
-
-
-
-
 	/**
 	 * Returns true if online-mode uuid will be assigned to player <by>
 	 * Only used if player authed using online-mode checks <br>

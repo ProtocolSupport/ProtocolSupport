@@ -112,5 +112,9 @@ public class PEPacketIDs {
 	public static final int STACK_LATANCY = 115;
 	//public static final int UNKOWN = 116;
 	public static final int CUSTOM_EVENT = 117;
-
+	public static final int SPAWN_PARTICLE_EFFECT_PACKET = 118;
+	public static final int AVAILABLE_ENTITY_IDENTIFIERS_PACKET = 119;
+	public static final int LEVEL_SOUND_EVENT_PACKET_V2 = 120;
+	public static final int NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET = 121;
+	public static final int BIOME_DEFINITION_LIST_PACKET = 122;
 }

@@ -84,6 +84,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 	public static final int SOURCE_GLOBAL = 1;
 	public static final int SOURCE_WORLD_INTERACTION = 2;
 	public static final int SOURCE_CREATIVE = 3;
+	public static final int SOURCE_CRAFT_SLOT = 100;
 	public static final int SOURCE_TODO = 99999;
 
 	@Override
@@ -147,6 +148,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 					transaction.action = VarNumberSerializer.readVarInt(from);
 					break;
 				}
+				case SOURCE_CRAFT_SLOT:
 				case SOURCE_TODO: {
 					transaction.inventoryId = VarNumberSerializer.readSVarInt(from);
 					transaction.action = 0;
@@ -218,11 +220,13 @@ public class GodPacket extends ServerBoundMiddlePacket {
 		//Anvil naming is only done and known based on the clicked item.
 		if (transaction.getSlot() == 2 && !transaction.getOldItem().isNull()) {
 			NBTCompound tag = transaction.getOldItem().getNBT();
-			NBTCompound display = tag.getTagOfType("display", NBTType.COMPOUND);
-			if (display != null) {
-				NBTString name = display.getTagOfType("Name", NBTType.STRING);
-				if (name != null) {
-					packets.add(MiddleNameItem.create(name.getValue()));
+			if (tag != null) {
+				NBTCompound display = tag.getTagOfType("display", NBTType.COMPOUND);
+				if (display != null) {
+					NBTString name = display.getTagOfType("Name", NBTType.STRING);
+					if (name != null) {
+						packets.add(MiddleNameItem.create(name.getValue()));
+					}
 				}
 			}
 		}

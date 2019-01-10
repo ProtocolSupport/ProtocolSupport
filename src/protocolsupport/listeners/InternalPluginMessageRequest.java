@@ -40,7 +40,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 	public static final String PELockChannel = "ps:ir_lockchannel";
 	public static final String PEUnlockChannel = "ps:ir_unlockchannel";
 	public static final String PESkinUpdateSuffix = "skinupdate";
-	public static final String PESkinUpdate = "ps:" + PESkinUpdateSuffix;
+	public static final String PESkinUpdateChannel = "ps:" + PESkinUpdateSuffix;
 
 	static {
 		//Register (optional) request handlers. Handlers can and often contain code that needs bukkit/server access.
@@ -61,7 +61,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 	public static ServerBoundPacketData newPluginMessageRequest(PluginMessageData data) {
 		ByteBuf buf = Unpooled.buffer();
 		try {
-			MiscSerializer.writeUUID(buf, ProtocolVersionsHelper.LATEST_PC, uuid);
+			MiscSerializer.writeUUID(buf, uuid);
 			StringSerializer.writeString(buf, ProtocolVersionsHelper.LATEST_PC, (data.getClass().getSimpleName()));
 			data.write(buf);
 			return protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload.create(TAG, buf);
@@ -73,7 +73,7 @@ public class InternalPluginMessageRequest implements PluginMessageListener {
 	public static void receivePluginMessageRequest(Connection connection, PluginMessageData data) {
 		ByteBuf buf = Unpooled.buffer();
 		try {
-			MiscSerializer.writeUUID(buf, ProtocolVersionsHelper.LATEST_PC, uuid);
+			MiscSerializer.writeUUID(buf, uuid);
 			StringSerializer.writeString(buf, ProtocolVersionsHelper.LATEST_PC, (data.getClass().getSimpleName()));
 			data.write(buf);
 			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundPluginMessagePacket(TAG, MiscSerializer.readAllBytes(buf)));

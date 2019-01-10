@@ -53,7 +53,6 @@ public class LegacyBlockData {
 			applyDefaultRemaps();
 		}
 
-		
 		protected Gate toPre13GateState(Gate from, Gate to) {
 			to.setInWall(false);
 			to.setFacing(from.getFacing());
@@ -151,17 +150,17 @@ public class LegacyBlockData {
 					Material.RED_SHULKER_BOX, Material.BLACK_SHULKER_BOX, Material.SHULKER_BOX
 				),
 				o -> o.getMaterial().createBlockData(),
-				ProtocolVersion.MINECRAFT_PE
+				ProtocolVersionsHelper.ALL_PE
 			);
 			this.registerRemapEntryForAllStates(Material.KELP_PLANT, Material.KELP.createBlockData((blockdata)-> {
 				((Ageable) blockdata).setAge(25); //Max age.
-			}), ProtocolVersion.MINECRAFT_PE);
+			}), ProtocolVersionsHelper.ALL_PE);
 			//Remap to closest match. The normal dead variants get broken instantly in PE.
-			this.registerRemapEntryForAllStates(Material.DEAD_TUBE_CORAL, Material.DEAD_TUBE_CORAL_FAN.createBlockData(), ProtocolVersion.MINECRAFT_PE);
-			this.registerRemapEntryForAllStates(Material.DEAD_BRAIN_CORAL, Material.DEAD_BRAIN_CORAL_FAN.createBlockData(), ProtocolVersion.MINECRAFT_PE);
-			this.registerRemapEntryForAllStates(Material.DEAD_BUBBLE_CORAL, Material.DEAD_BUBBLE_CORAL_FAN.createBlockData(), ProtocolVersion.MINECRAFT_PE);
-			this.registerRemapEntryForAllStates(Material.DEAD_FIRE_CORAL, Material.DEAD_FIRE_CORAL_FAN.createBlockData(), ProtocolVersion.MINECRAFT_PE);
-			this.registerRemapEntryForAllStates(Material.DEAD_HORN_CORAL, Material.DEAD_HORN_CORAL_FAN.createBlockData(), ProtocolVersion.MINECRAFT_PE);
+			this.registerRemapEntryForAllStates(Material.DEAD_TUBE_CORAL, Material.DEAD_TUBE_CORAL_FAN.createBlockData(), ProtocolVersionsHelper.ALL_PE);
+			this.registerRemapEntryForAllStates(Material.DEAD_BRAIN_CORAL, Material.DEAD_BRAIN_CORAL_FAN.createBlockData(), ProtocolVersionsHelper.ALL_PE);
+			this.registerRemapEntryForAllStates(Material.DEAD_BUBBLE_CORAL, Material.DEAD_BUBBLE_CORAL_FAN.createBlockData(), ProtocolVersionsHelper.ALL_PE);
+			this.registerRemapEntryForAllStates(Material.DEAD_FIRE_CORAL, Material.DEAD_FIRE_CORAL_FAN.createBlockData(), ProtocolVersionsHelper.ALL_PE);
+			this.registerRemapEntryForAllStates(Material.DEAD_HORN_CORAL, Material.DEAD_HORN_CORAL_FAN.createBlockData(), ProtocolVersionsHelper.ALL_PE);
 			this.registerRemapEntryForAllStates(
 				//Clear all waterlog, but not rotation of all the corals.
 				Arrays.asList(
@@ -171,7 +170,7 @@ public class LegacyBlockData {
 				o -> {
 					return cloneDirectional((Directional) o, (Directional) o.getMaterial().createBlockData());
 				},
-				ProtocolVersion.MINECRAFT_PE
+				ProtocolVersionsHelper.ALL_PE
 			);
 			// Remove everything except direction from piston stuff. The rest is handled in tilenbt.
 			this.registerRemapEntryForAllStates(
@@ -185,7 +184,7 @@ public class LegacyBlockData {
 					Material.DEAD_TUBE_CORAL_FAN, Material.DEAD_BRAIN_CORAL_FAN, Material.DEAD_BUBBLE_CORAL_FAN, Material.DEAD_FIRE_CORAL_FAN, Material.DEAD_HORN_CORAL_FAN
 				),
 				o -> o.getMaterial().createBlockData(),
-				ProtocolVersion.MINECRAFT_PE
+				ProtocolVersionsHelper.ALL_PE
 			);
 
 			this.registerRemapEntryForAllStates(

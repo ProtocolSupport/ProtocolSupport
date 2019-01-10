@@ -13,10 +13,10 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 public class WitherEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
 	public WitherEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNumberToSVarLong(DataWatcherObjectIndex.Wither.TARGET1, PeMetaBase.WITHER_TARGET1), ProtocolVersion.MINECRAFT_PE);
-		addRemap(new IndexValueRemapperNumberToSVarLong(DataWatcherObjectIndex.Wither.TARGET2, PeMetaBase.WITHER_TARGET2), ProtocolVersion.MINECRAFT_PE);
-		addRemap(new IndexValueRemapperNumberToSVarLong(DataWatcherObjectIndex.Wither.TARGET3, PeMetaBase.WITHER_TARGET3), ProtocolVersion.MINECRAFT_PE);
-		addRemap(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Wither.INVULNERABLE_TIME, PeMetaBase.INVULNERABLE_TIME), ProtocolVersion.MINECRAFT_PE);
+		addRemap(new IndexValueRemapperNumberToSVarLong(DataWatcherObjectIndex.Wither.TARGET1, PeMetaBase.WITHER_TARGET1), ProtocolVersionsHelper.ALL_PE);
+		addRemap(new IndexValueRemapperNumberToSVarLong(DataWatcherObjectIndex.Wither.TARGET2, PeMetaBase.WITHER_TARGET2), ProtocolVersionsHelper.ALL_PE);
+		addRemap(new IndexValueRemapperNumberToSVarLong(DataWatcherObjectIndex.Wither.TARGET3, PeMetaBase.WITHER_TARGET3), ProtocolVersionsHelper.ALL_PE);
+		addRemap(new IndexValueRemapperNumberToSVarInt(DataWatcherObjectIndex.Wither.INVULNERABLE_TIME, PeMetaBase.INVULNERABLE_TIME), ProtocolVersionsHelper.ALL_PE);
 
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wither.TARGET1, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wither.TARGET1, 11), ProtocolVersionsHelper.ALL_1_9);

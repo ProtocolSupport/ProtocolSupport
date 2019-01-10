@@ -24,7 +24,7 @@ public abstract class BaseHorseEntityMetadataRemapper extends AgeableEntityMetad
 		addRemap(new PeFlagRemapper(DataWatcherObjectIndex.BaseHorse.FLAGS,
 				new int[] {2, 3, 3, 3, 4, /*5,*/ 6, 7},
 				new int[] {PeMetaBase.FLAG_TAMED, PeMetaBase.FLAG_SADDLED, PeMetaBase.FLAG_WASD_CONTROLLED, PeMetaBase.FLAG_CAN_POWER_JUMP, PeMetaBase.FLAG_IN_LOVE, /*PeMetaBase.FLAG_USING_ITEM,*/ PeMetaBase.FLAG_REARING, PeMetaBase.FLAG_BREATHING}
-			), ProtocolVersion.MINECRAFT_PE);
+			), ProtocolVersionsHelper.ALL_PE);
 		addRemap(new DataWatcherObjectRemapper(){
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
@@ -32,12 +32,12 @@ public abstract class BaseHorseEntityMetadataRemapper extends AgeableEntityMetad
 					remapped.put(PeMetaBase.EATING_HAYSTACK, new DataWatcherObjectVarInt(((byteWatcher.getValue() & (1 << (6-1))) != 0) ? 0b100000 : 0));
 					if ((byteWatcher.getValue() & (1 << (2-1))) != 0) {
 						//When tamed set these weird properties to make the inventory work. FFS Mojang.
-						remapped.put(PeMetaBase.HORSE_CONTAINER_TYPE, new DataWatcherObjectByte((byte) PEDataValues.WINDOWTYPE.getTable(ProtocolVersion.MINECRAFT_PE).getRemap(WindowType.HORSE.toLegacyId()))); //Inventory Type
+						remapped.put(PeMetaBase.HORSE_CONTAINER_TYPE, new DataWatcherObjectByte((byte) PEDataValues.WINDOWTYPE.getTable(ProtocolVersionsHelper.LATEST_PE).getRemap(WindowType.HORSE.toLegacyId()))); //Inventory Type
 						remapped.put(PeMetaBase.HORSE_ANIMAL_SLOTS, new DataWatcherObjectSVarInt(2)); //Animal slots (left side of the image)
 					}
 				});
 			}
-		}, ProtocolVersion.MINECRAFT_PE);
+		}, ProtocolVersionsHelper.ALL_PE);
 
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BaseHorse.FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BaseHorse.FLAGS, 12), ProtocolVersionsHelper.ALL_1_9);

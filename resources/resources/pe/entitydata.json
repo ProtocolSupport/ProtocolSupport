@@ -49,11 +49,11 @@
       "pitch": 0,
       "x": 0,
       "y": 0.4,
-      "yaw": 64,
+      "yaw": 90,
       "z": 0
     },
     "RiderInfo": {
-      "rotationlock": 105,
+      "rotationlock": 0,
       "x": 0,
       "y": -0.2,
       "z": 0
@@ -190,6 +190,18 @@
     "BoundingBox": {
       "height": 4,
       "width": 13
+    },
+    "Offset": {
+      "pitch": 0,
+      "x": 0,
+      "y": 0.4,
+      "yaw": 25,
+      "z": 0
+    },
+    "RiderInfo": {
+      "x": 0,
+      "y": 3.5,
+      "z": 0
     }
   },
   "EVOCATOR_FANGS": {
