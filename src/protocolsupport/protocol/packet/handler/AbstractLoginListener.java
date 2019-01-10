@@ -24,7 +24,6 @@ import org.bukkit.event.player.PlayerPreLoginEvent;
 
 import io.netty.channel.ChannelPipeline;
 import protocolsupport.ProtocolSupport;
-import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.api.events.PlayerProfileCompleteEvent;

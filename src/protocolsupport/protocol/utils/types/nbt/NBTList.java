@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class NBTList<T extends NBT> extends NBT {
+public class NBTList<T extends NBT> extends NBT.Cloneable {
 
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -69,5 +69,17 @@ public class NBTList<T extends NBT> extends NBT {
 	public int hashCode() {
 		return type.hashCode() + tags.hashCode();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public NBTList<T> clone() {
+		//TODO Improve?
+		NBTList<T> clone = new NBTList<>(type);
+		tags.forEach((t) -> {
+			clone.addTag(t instanceof NBT.Cloneable ? (T) ((NBT.Cloneable) t).clone() : t);
+		});
+		return clone;
+	}
+
 
 }

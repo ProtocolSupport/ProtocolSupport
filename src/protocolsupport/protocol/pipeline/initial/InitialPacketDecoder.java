@@ -13,7 +13,6 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.util.concurrent.Future;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolSupportAPI;
-import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;

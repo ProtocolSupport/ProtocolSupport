@@ -4,7 +4,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 
 public class StringSerializer {

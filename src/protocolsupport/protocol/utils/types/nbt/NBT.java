@@ -17,4 +17,11 @@ public abstract class NBT {
 		return Utils.toStringAllFields(this);
 	}
 
+	public static abstract class Cloneable extends NBT {
+
+		@Override
+		public abstract Cloneable clone();
+
+	}
+
 }

@@ -10,7 +10,6 @@ import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.utils.ArrayDequeMultiMap;
 import protocolsupport.utils.ArrayDequeMultiMap.ChildDeque;
 import protocolsupport.utils.recyclable.RecyclableArrayList;

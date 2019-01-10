@@ -10,7 +10,6 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.AttributesCache;
 import protocolsupport.protocol.storage.netcache.MovementCache;
 import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
 import protocolsupport.protocol.typeremapper.pe.PEBlocks;

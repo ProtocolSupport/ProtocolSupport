@@ -10,7 +10,6 @@ import org.bukkit.event.player.PlayerLoginEvent;
 
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
 import protocolsupport.api.events.PlayerSyncLoginEvent;

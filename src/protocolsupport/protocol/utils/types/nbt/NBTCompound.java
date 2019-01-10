@@ -1,17 +1,11 @@
 package protocolsupport.protocol.utils.types.nbt;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.Unpooled;
-import protocolsupport.protocol.utils.types.nbt.serializer.DefaultNBTSerializer;
-
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class NBTCompound extends NBT {
+public class NBTCompound extends NBT.Cloneable {
 
 	@Override
 	public NBTType<NBTCompound> getType() {
@@ -91,16 +85,12 @@ public class NBTCompound extends NBT {
 
 	@Override
 	public NBTCompound clone() {
-		//TODO: better clone method
-		ByteBuf buf = Unpooled.buffer();
-		try {
-			DefaultNBTSerializer.INSTANCE.serializeTag(new ByteBufOutputStream(buf), this);
-			return DefaultNBTSerializer.INSTANCE.deserializeTag(new ByteBufInputStream(buf));
-		} catch (Exception e) {
-			throw new RuntimeException("failed to clone NBT", e);
-		} finally {
-			buf.release();
-		}
+		// TODO Improve?
+		NBTCompound clone = new NBTCompound();
+		tags.forEach((k, v) -> {
+			clone.setTag(k, v instanceof NBT.Cloneable ? ((NBT.Cloneable) v).clone() : v); 
+		});
+		return clone;
 	}
 
 }

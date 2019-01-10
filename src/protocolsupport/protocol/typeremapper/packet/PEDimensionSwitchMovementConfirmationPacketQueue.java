@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
@@ -29,12 +28,11 @@ public class PEDimensionSwitchMovementConfirmationPacketQueue {
 		this.connection = connection;
 	}
 
-	@SuppressWarnings("unchecked")
 	public RecyclableCollection<ClientBoundPacketData> processClientBoundPackets(RecyclableCollection<ClientBoundPacketData> packets) {
 		try {
 			RecyclableArrayList<ClientBoundPacketData> allowed = RecyclableArrayList.create();
 			if (isPacketSendingAllowed() && !queue.isEmpty()) {
-				ArrayList<ClientBoundPacketData> qclone = new ArrayList(queue);
+				ArrayList<ClientBoundPacketData> qclone = new ArrayList<ClientBoundPacketData>(queue);
 				queue.clear();
 				queue.trimToSize();
 				processClientBoundPackets0(qclone, allowed);

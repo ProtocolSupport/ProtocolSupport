@@ -1,6 +1,5 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AgeableEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperBooleanToByte;
