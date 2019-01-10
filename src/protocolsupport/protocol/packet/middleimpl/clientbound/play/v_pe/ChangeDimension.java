@@ -60,7 +60,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 				packets.add(Chunk.createEmptyChunk(version, new ChunkCoord(x, z)));
 			}
 		}
-		packets.add(SetPosition.create(player, 0, posY, 0, 0, 0, SetPosition.ANIMATION_MODE_TELEPORT));
+		packets.add(SetPosition.create(player, 0, posY, 0, 0, 0, 0, SetPosition.ANIMATION_MODE_TELEPORT));
 	}
 
 	public static int getPeDimensionId(Environment dimId) {
