@@ -69,7 +69,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 	}
 
 	protected int loginTicks;
-	public void tick() {
+	public void loginTick() {
 		if (loginTicks++ == 600) {
 			disconnect("Took too long to log in");
 		}
