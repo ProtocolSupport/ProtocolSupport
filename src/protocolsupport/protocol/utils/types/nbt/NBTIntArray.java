@@ -28,4 +28,9 @@ public class NBTIntArray extends NBT {
 		return Arrays.hashCode(array);
 	}
 
+	@Override
+	public NBTIntArray clone() {
+		return new NBTIntArray(array.clone());
+	}
+
 }

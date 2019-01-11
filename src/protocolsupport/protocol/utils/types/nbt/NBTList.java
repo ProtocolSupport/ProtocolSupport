@@ -70,4 +70,13 @@ public class NBTList<T extends NBT> extends NBT {
 		return type.hashCode() + tags.hashCode();
 	}
 
+	@Override
+	public NBTList<T> clone() {
+		List<T> newTags = new ArrayList(tags.size());
+		for (NBT item : tags) {
+			newTags.add((T) item.clone());
+		}
+		return new NBTList(type, newTags);
+	}
+
 }

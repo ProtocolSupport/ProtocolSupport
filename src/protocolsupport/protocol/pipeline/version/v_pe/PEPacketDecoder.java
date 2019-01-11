@@ -31,7 +31,6 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAc
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PositionLook;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.RiderJump;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.SteerVehicle;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.LocalPlayerInitialised;
 import protocolsupport.protocol.pipeline.version.util.decoder.AbstractPacketDecoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.packet.PEDimensionSwitchMovementConfirmationPacketQueue;
@@ -67,7 +66,6 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		registry.register(NetworkState.PLAY, PEPacketIDs.ADVENTURE_SETTINGS, PlayerAbilities::new);
 		registry.register(NetworkState.PLAY, PEPacketIDs.CONTAINER_CLOSE, InventoryClose::new);
 		registry.register(NetworkState.PLAY, PEPacketIDs.CUSTOM_EVENT, CustomPayload::new);
-		registry.register(NetworkState.PLAY, PEPacketIDs.SET_LOCAL_PLAYER_INITIALISED, LocalPlayerInitialised::new);
 	}
 
 	protected final PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq;

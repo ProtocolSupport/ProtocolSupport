@@ -91,16 +91,11 @@ public class NBTCompound extends NBT {
 
 	@Override
 	public NBTCompound clone() {
-		//TODO: better clone method
-		ByteBuf buf = Unpooled.buffer();
-		try {
-			DefaultNBTSerializer.INSTANCE.serializeTag(new ByteBufOutputStream(buf), this);
-			return DefaultNBTSerializer.INSTANCE.deserializeTag(new ByteBufInputStream(buf));
-		} catch (Exception e) {
-			throw new RuntimeException("failed to clone NBT", e);
-		} finally {
-			buf.release();
+		NBTCompound newCompound = new NBTCompound();
+		for (String key : tags.keySet()) {
+			newCompound.setTag(key, tags.get(key).clone());
 		}
+		return newCompound;
 	}
 
 }
