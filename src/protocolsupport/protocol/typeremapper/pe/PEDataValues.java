@@ -18,7 +18,6 @@ import com.google.gson.JsonParser;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.legacy.LegacyEnchantmentId;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
@@ -194,8 +193,8 @@ public class PEDataValues {
 		return key;
 	}
 
-	private static final Object2IntOpenHashMap<String> pcEnchantToPe = new Object2IntOpenHashMap();
-	private static final Int2ObjectOpenHashMap<String> peEnchantToPc = new Int2ObjectOpenHashMap();
+	private static final Object2IntOpenHashMap<String> pcEnchantToPe = new Object2IntOpenHashMap<>();
+	private static final Int2ObjectOpenHashMap<String> peEnchantToPc = new Int2ObjectOpenHashMap<>();
 
 	private static void registerEnchantRemap(Enchantment enchantment, int peId) {
 		pcEnchantToPe.put(enchantment.getKey().toString(), peId);

@@ -1,6 +1,5 @@
 package protocolsupport.protocol.typeremapper.basic;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.EnumRemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.EnumRemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;

@@ -4,7 +4,6 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import protocolsupport.ProtocolSupport;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
