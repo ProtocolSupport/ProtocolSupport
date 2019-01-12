@@ -86,9 +86,7 @@ public class NBTCompound extends NBT {
 	@Override
 	public NBTCompound clone() {
 		NBTCompound newCompound = new NBTCompound();
-		for (String key : tags.keySet()) {
-			newCompound.setTag(key, tags.get(key).clone());
-		}
+		tags.forEach((k, v) -> newCompound.setTag(k, v.clone()));
 		return newCompound;
 	}
 
