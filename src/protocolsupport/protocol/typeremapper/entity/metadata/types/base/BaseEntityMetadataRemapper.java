@@ -63,8 +63,8 @@ public class BaseEntityMetadataRemapper extends EntityMetadataRemapper {
 					remapped.put(PeMetaBase.RIDER_POSITION, new DataWatcherObjectVector3fLe(data.getRiderPosition()));
 					remapped.put(PeMetaBase.RIDER_LOCK, new DataWatcherObjectByte((byte) ((data.getRotationLock() != null) ? 1 : 0)));
 					if (data.getRotationLock() != null) {
-						remapped.put(PeMetaBase.RIDER_MAX_ROTATION, new DataWatcherObjectFloatLe(-data.getRotationLock()));
-						remapped.put(PeMetaBase.RIDER_MIN_ROTATION, new DataWatcherObjectFloatLe(data.getRotationLock()));
+						remapped.put(PeMetaBase.RIDER_MAX_ROTATION, new DataWatcherObjectFloatLe(data.getRotationLock()));
+						remapped.put(PeMetaBase.RIDER_MIN_ROTATION, new DataWatcherObjectFloatLe(-data.getRotationLock()));
 					}
 				} else {
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, false);

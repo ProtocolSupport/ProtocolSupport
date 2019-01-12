@@ -14,4 +14,9 @@ public abstract class NBTNumber extends NBT {
 
 	public abstract double getAsDouble();
 
+	@Override
+	public NBTNumber clone() {
+		return this;
+	}
+
 }

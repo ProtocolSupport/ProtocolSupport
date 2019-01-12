@@ -45,7 +45,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		packets.add(create(
 			version, cache.getAttributesCache().getLocale(),
 			entity, x, y, z,
-			motX / 8000F, motY / 8000F, motZ / 8000F,
+			motX / 8000.F, motY / 8000.F, motZ / 8000.F,
 			pitch * 360.F / 256.F, yaw * 360.F / 256.F, headYaw * 360.F / 256.F,
 			entityRemapper.getRemappedMetadata()
 		));

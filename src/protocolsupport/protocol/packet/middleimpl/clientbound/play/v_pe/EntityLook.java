@@ -18,11 +18,11 @@ public class EntityLook extends MiddleEntityLook {
 		super(connection);
 	}
 
-	public static final int FLAG_HAS_X = 0b1;
-	public static final int FLAG_HAS_Y = 0b10;
-	public static final int FLAG_HAS_Z = 0b100;
-	public static final int FLAG_HAS_ROT_X = 0b1000;
-	public static final int FLAG_HAS_ROT_Y = 0b10000;
+	public static final int FLAG_HAS_X =          0b1;
+	public static final int FLAG_HAS_Y =         0b10;
+	public static final int FLAG_HAS_Z =        0b100;
+	public static final int FLAG_HAS_ROT_X =   0b1000;
+	public static final int FLAG_HAS_ROT_Y =  0b10000;
 	public static final int FLAG_HAS_ROT_Z = 0b100000;
 
 	// bytes must be added in to packet in order of X, Y, Z
