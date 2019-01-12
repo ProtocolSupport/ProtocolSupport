@@ -2,7 +2,7 @@ package protocolsupport.protocol.utils.types.nbt;
 
 import protocolsupport.utils.Utils;
 
-public abstract class NBT implements Cloneable {
+public abstract class NBT {
 
 	public abstract NBTType<?> getType();
 
@@ -13,13 +13,7 @@ public abstract class NBT implements Cloneable {
 	public abstract int hashCode();
 
 	@Override
-	public NBT clone() {
-		try {
-			return (NBT) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException("Failed to clone NBT", e);
-		}
-	}
+	public abstract NBT clone();
 
 	@Override
 	public String toString() {

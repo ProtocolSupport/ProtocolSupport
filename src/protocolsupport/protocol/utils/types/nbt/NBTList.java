@@ -73,7 +73,7 @@ public class NBTList<T extends NBT> extends NBT {
 	@Override
 	public NBTList<T> clone() {
 		List<T> newTags = new ArrayList(tags.size());
-		for (NBT item : tags) {
+		for (T item : tags) {
 			newTags.add((T) item.clone());
 		}
 		return new NBTList(type, newTags);
