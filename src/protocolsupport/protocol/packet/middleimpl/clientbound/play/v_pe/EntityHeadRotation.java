@@ -17,12 +17,16 @@ public class EntityHeadRotation extends MiddleEntityHeadRotation {
 		super(connection);
 	}
 
-	public static final int HEAD_YAW_FLAG = 0x20;
-
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if (entity != null) {
+			if (entity.getDataCache().isRiding()) {
+				NetworkEntity vehicle = cache.getWatchedEntityCache().getWatchedEntity(entity.getDataCache().getVehicleId());
+				if (vehicle != null && vehicle.getType() == NetworkEntityType.BOAT) {
+					headRot -= vehicle.getDataCache().getHeadRotation((byte) 0);
+				}
+			}
 			entity.getDataCache().setHeadRotation(headRot);
 		}
 		if (entity.getType() == NetworkEntityType.PLAYER || entity.getType().isOfType(NetworkEntityType.ARROW)) {
@@ -32,7 +36,7 @@ public class EntityHeadRotation extends MiddleEntityHeadRotation {
 		} else {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOVE_ENTITY_DELTA);
 			VarNumberSerializer.writeVarLong(serializer, entityId);
-			serializer.writeByte(HEAD_YAW_FLAG);
+			serializer.writeByte(EntityLook.FLAG_HAS_HEAD_YAW);
 			serializer.writeByte(headRot);
 			return RecyclableSingletonList.create(serializer);
 		}

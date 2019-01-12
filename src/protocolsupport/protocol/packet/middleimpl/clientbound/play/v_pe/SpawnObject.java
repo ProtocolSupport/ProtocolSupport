@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
 import protocolsupport.protocol.serializer.DataWatcherSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarInt;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityItemDataCache;
@@ -38,6 +39,15 @@ public class SpawnObject extends MiddleSpawnObject {
 				spawnmeta.put(PeMetaBase.VARIANT, new DataWatcherObjectSVarInt(objectdata));
 			}
 			default: {
+				PEDataValues.PEEntityData typeData = PEDataValues.getEntityData(entity.getType());
+				if ((typeData != null) && (typeData.getOffset() != null)) {
+					PEDataValues.PEEntityData.Offset offset = typeData.getOffset();
+					x += offset.getX();
+					y += offset.getY();
+					z += offset.getZ();
+					pitch += offset.getPitch();
+					yaw += offset.getYaw();
+				}
 				return RecyclableSingletonList.create(SpawnLiving.create(
 					version, cache.getAttributesCache().getLocale(),
 					entity,

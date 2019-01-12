@@ -23,9 +23,9 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 	protected double x;
 	protected double y;
 	protected double z;
-	protected int yaw;
-	protected int pitch;
-	protected int headPitch;
+	protected byte yaw;
+	protected byte pitch;
+	protected byte headYaw;
 	protected int motX;
 	protected int motY;
 	protected int motZ;
@@ -39,9 +39,9 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();
 		z = serverdata.readDouble();
-		yaw = serverdata.readUnsignedByte();
-		pitch = serverdata.readUnsignedByte();
-		headPitch = serverdata.readUnsignedByte();
+		yaw = serverdata.readByte();
+		pitch = serverdata.readByte();
+		headYaw = serverdata.readByte();
 		motX = serverdata.readShort();
 		motY = serverdata.readShort();
 		motZ = serverdata.readShort();

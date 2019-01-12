@@ -32,10 +32,21 @@ public class SpawnLiving extends MiddleSpawnLiving {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+		PEEntityData typeData = PEDataValues.getEntityData(entity.getType());
+		if ((typeData != null) && (typeData.getOffset() != null)) {
+			Offset offset = typeData.getOffset();
+			x += offset.getX();
+			y += offset.getY();
+			z += offset.getZ();
+			pitch += offset.getPitch();
+			yaw += offset.getYaw();
+		}
+		entity.getDataCache().setHeadRotation(headYaw);
 		packets.add(create(
 			version, cache.getAttributesCache().getLocale(),
 			entity, x, y, z,
-			motX / 8.000F, motY / 8000.F, motZ / 8000.F, pitch, yaw, headPitch,
+			motX / 8000F, motY / 8000F, motZ / 8000F,
+			pitch * 360.F / 256.F, yaw * 360.F / 256.F, headYaw * 360.F / 256.F,
 			entityRemapper.getRemappedMetadata()
 		));
 		if (entity.getType() == NetworkEntityType.PIG) {
@@ -58,15 +69,6 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		float pitch, float yaw, float headYaw,
 		ArrayMap<DataWatcherObject<?>> metadata
 	) {
-		PEEntityData typeData = PEDataValues.getEntityData(entity.getType());
-		if ((typeData != null) && (typeData.getOffset() != null)) {
-			Offset offset = typeData.getOffset();
-			x += offset.getX();
-			y += offset.getY();
-			z += offset.getZ();
-			pitch += offset.getPitch();
-			yaw += offset.getYaw();
-		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SPAWN_ENTITY);
 		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());

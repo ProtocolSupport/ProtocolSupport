@@ -49,11 +49,11 @@
       "pitch": 0,
       "x": 0,
       "y": 0.4,
-      "yaw": 90,
+      "yaw": 64,
       "z": 0
     },
     "RiderInfo": {
-      "rotationlock": 0,
+      "rotationlock": 90,
       "x": 0,
       "y": -0.2,
       "z": 0
@@ -195,7 +195,7 @@
       "pitch": 0,
       "x": 0,
       "y": 0.4,
-      "yaw": 25,
+      "yaw": 0,
       "z": 0
     },
     "RiderInfo": {

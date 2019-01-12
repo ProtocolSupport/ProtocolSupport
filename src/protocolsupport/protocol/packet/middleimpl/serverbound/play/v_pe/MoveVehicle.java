@@ -37,8 +37,8 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 		y = clientdata.readFloatLE();
 		z = clientdata.readFloatLE();
 		pitch = clientdata.readByte();
-		headYaw = clientdata.readByte();
 		yaw = clientdata.readByte();
+		headYaw = clientdata.readByte();
 	}
 
 	@Override
@@ -58,8 +58,8 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 				x -= offset.getX();
 				y -= offset.getY();
 				z -= offset.getZ();
-				pitch = (byte) Utils.shortDegree(pitch - offset.getPitch(), 256);
-				yaw = (byte) Utils.shortDegree(yaw - offset.getYaw(), 256);
+				pitch -= offset.getPitch();
+				yaw -= offset.getYaw();
 			}
 		}
 		cache.getAttributesCache().setPELastVehicleYaw(yaw);
