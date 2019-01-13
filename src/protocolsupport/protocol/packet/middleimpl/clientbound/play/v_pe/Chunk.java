@@ -77,7 +77,7 @@ public class Chunk extends MiddleChunk {
 		}
 	}
 
-	public static ClientBoundPacketData createEmptyChunk(ProtocolVersion version, ChunkCoord chunk) {
+	public static ClientBoundPacketData createEmptyChunk(ChunkCoord chunk) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA);
 		PositionSerializer.writePEChunkCoord(serializer, chunk);
 		serializer.writeBytes(EmptyChunk.getPEChunkData());

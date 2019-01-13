@@ -17,6 +17,9 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityTeleport extends MiddleEntityTeleport {
 
+	public static final int FLAG_TELEPORTED = 0x1;
+	public static final int FLAG_ONGROUND = 0x2;
+
 	public EntityTeleport(ConnectionImpl connection) {
 		super(connection);
 	}
@@ -59,8 +62,8 @@ public class EntityTeleport extends MiddleEntityTeleport {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		byte flag = 0;
-		flag |= teleported ? 0x01 : 0;
-		flag |= onGround ? 0x02 : 0;
+		flag |= teleported ? FLAG_TELEPORTED : 0;
+		flag |= onGround ? FLAG_ONGROUND : 0;
 		serializer.writeByte(flag);
 		serializer.writeFloatLE((float) x);
 		serializer.writeFloatLE((float) y);

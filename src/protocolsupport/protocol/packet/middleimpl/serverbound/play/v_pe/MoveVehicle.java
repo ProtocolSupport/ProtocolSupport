@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleMoveVehicle;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerBoat;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityTeleport;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData;
@@ -30,8 +31,8 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 	public void readFromClientData(ByteBuf clientdata) {
 		vehicleId = (int) VarNumberSerializer.readVarLong(clientdata);
 		byte flag = clientdata.readByte();
-		onGround = (flag & 128) == 128;
-		teleported = (flag & 64) == 64;
+		onGround = (flag & EntityTeleport.FLAG_ONGROUND) != 0;
+		teleported = (flag & EntityTeleport.FLAG_TELEPORTED) != 0;
 		x = clientdata.readFloatLE();
 		y = clientdata.readFloatLE();
 		z = clientdata.readFloatLE();
