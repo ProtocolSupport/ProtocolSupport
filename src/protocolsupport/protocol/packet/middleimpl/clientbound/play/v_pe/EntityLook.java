@@ -18,9 +18,9 @@ public class EntityLook extends MiddleEntityLook {
 		super(connection);
 	}
 
-	public static final int FLAG_HAS_X =          0b1;
-	public static final int FLAG_HAS_Y =         0b10;
-	public static final int FLAG_HAS_Z =        0b100;
+	public static final int FLAG_HAS_X     =      0b1;
+	public static final int FLAG_HAS_Y     =     0b10;
+	public static final int FLAG_HAS_Z     =    0b100;
 	public static final int FLAG_HAS_ROT_X =   0b1000;
 	public static final int FLAG_HAS_ROT_Y =  0b10000;
 	public static final int FLAG_HAS_ROT_Z = 0b100000;
@@ -43,10 +43,13 @@ public class EntityLook extends MiddleEntityLook {
 				pitch * 360.F / 256.F, 0, headYaw * 360.F / 256.F, SetPosition.ANIMATION_MODE_PITCH));
 		} else {
 			PEDataValues.PEEntityData typeData = PEDataValues.getEntityData(entity.getType());
-			if ((typeData != null) && (typeData.getOffset() != null)) {
+			if (typeData != null && typeData.getOffset() != null) {
 				PEDataValues.PEEntityData.Offset offset = typeData.getOffset();
 				pitch += offset.getPitch();
 				yaw += offset.getYaw();
+			}
+			if (entity.getType() == NetworkEntityType.BOAT) {
+				entity.getDataCache().setHeadRotation(yaw);
 			}
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOVE_ENTITY_DELTA);
 			VarNumberSerializer.writeVarLong(serializer, entityId);

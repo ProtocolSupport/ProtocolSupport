@@ -26,14 +26,13 @@ public class EntityTeleport extends MiddleEntityTeleport {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
 		NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if (entity == null) {
 			return RecyclableEmptyList.get();
 		}
 		byte headYaw = entity.getDataCache().getHeadRotation(yaw);
 		PEEntityData typeData = PEDataValues.getEntityData(entity.getType());
-		if ((typeData != null) && (typeData.getOffset() != null)) {
+		if (typeData != null && typeData.getOffset() != null) {
 			Offset offset = typeData.getOffset();
 			x += offset.getX();
 			y += offset.getY();
@@ -53,7 +52,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 			}
 		}
 		if (entity.getType() == NetworkEntityType.BOAT) {
-			entity.getDataCache().setHeadRotation(yaw);
+			entity.getDataCache().setHeadRotation(yaw); //stash this for use in rider head offset
 		}
 		return RecyclableSingletonList.create(updateGeneral(entity, x, y, z, pitch, yaw, headYaw, onGround, false));
 	}

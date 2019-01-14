@@ -40,7 +40,7 @@ public class SpawnObject extends MiddleSpawnObject {
 			}
 			default: {
 				PEDataValues.PEEntityData typeData = PEDataValues.getEntityData(entity.getType());
-				if ((typeData != null) && (typeData.getOffset() != null)) {
+				if (typeData != null && typeData.getOffset() != null) {
 					PEDataValues.PEEntityData.Offset offset = typeData.getOffset();
 					x += offset.getX();
 					y += offset.getY();

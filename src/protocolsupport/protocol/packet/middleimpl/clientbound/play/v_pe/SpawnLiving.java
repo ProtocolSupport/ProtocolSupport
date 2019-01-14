@@ -33,7 +33,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		PEEntityData typeData = PEDataValues.getEntityData(entity.getType());
-		if ((typeData != null) && (typeData.getOffset() != null)) {
+		if (typeData != null && typeData.getOffset() != null) {
 			Offset offset = typeData.getOffset();
 			x += offset.getX();
 			y += offset.getY();
