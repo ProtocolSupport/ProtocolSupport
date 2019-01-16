@@ -57,6 +57,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 	}
 
 	public static void addFakeChunksAndPos(RecyclableCollection<ClientBoundPacketData> packets) {
+		//TODO: one chunk fine?
 		for (int x = -2; x <= 2; x++) {
 			for (int z = -2; z <= 2; z++) {
 				packets.add(Chunk.createEmptyChunk(new ChunkCoord(x, z)));

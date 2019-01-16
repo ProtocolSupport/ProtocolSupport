@@ -42,9 +42,12 @@ public class SpawnLiving extends MiddleSpawnLiving {
 			yaw += offset.getYaw();
 		}
 		entity.getDataCache().setHeadRotation(headYaw);
+		entity.getDataCache().setPos((float) x, (float) y, (float) z);
+		entity.getDataCache().setYaw(yaw);
+		entity.getDataCache().setPitch(pitch);
 		packets.add(create(
 			version, cache.getAttributesCache().getLocale(),
-			entity, x, y, z,
+			entity, (float) x, (float) y, (float) z,
 			motX / 8000.F, motY / 8000.F, motZ / 8000.F,
 			pitch * 360.F / 256.F, yaw * 360.F / 256.F, headYaw * 360.F / 256.F,
 			entityRemapper.getRemappedMetadata()
@@ -58,13 +61,13 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		return packets;
 	}
 
-	public static ClientBoundPacketData createSimple(ProtocolVersion version, String locale, NetworkEntity entity, double x, double y, double z) {
+	public static ClientBoundPacketData createSimple(ProtocolVersion version, String locale, NetworkEntity entity, float x, float y, float z) {
 		return create(version, locale, entity, x, y, z, 0, 0, 0, 0, 0, 0, null);
 	}
 
 	public static ClientBoundPacketData create(
 		ProtocolVersion version, String locale,
-		NetworkEntity entity, double x, double y, double z,
+		NetworkEntity entity, float x, float y, float z,
 		float motX, float motY, float motZ,
 		float pitch, float yaw, float headYaw,
 		ArrayMap<DataWatcherObject<?>> metadata
@@ -78,9 +81,9 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		} else {
 			VarNumberSerializer.writeVarInt(serializer, PEDataValues.getEntityNetworkId(entityType));
 		}
-		serializer.writeFloatLE((float) x);
-		serializer.writeFloatLE((float) y);
-		serializer.writeFloatLE((float) z);
+		serializer.writeFloatLE(x);
+		serializer.writeFloatLE(y);
+		serializer.writeFloatLE(z);
 		serializer.writeFloatLE(motX);
 		serializer.writeFloatLE(motY);
 		serializer.writeFloatLE(motZ);

@@ -40,6 +40,9 @@ public class EntityTeleport extends MiddleEntityTeleport {
 			pitch += offset.getPitch();
 			yaw += offset.getYaw();
 		}
+		entity.getDataCache().setPos((float) x, (float) y, (float) z);
+		entity.getDataCache().setYaw(yaw);
+		entity.getDataCache().setPitch(pitch);
 		if (entity.getDataCache().isRiding()) {
 			NetworkEntity vehicle = cache.getWatchedEntityCache().getWatchedEntity(entity.getDataCache().getVehicleId());
 			if (vehicle != null) {
@@ -51,29 +54,27 @@ public class EntityTeleport extends MiddleEntityTeleport {
 				entity.getDataCache().setVehicleId(0);
 			}
 		}
-		if (entity.getType() == NetworkEntityType.BOAT) {
-			entity.getDataCache().setHeadRotation(yaw); //stash this for use in rider head offset
-		}
-		return RecyclableSingletonList.create(updateGeneral(entity, x, y, z, pitch, yaw, headYaw, onGround, false));
+		return RecyclableSingletonList.create(updateGeneral(entity, (float) x, (float) y, (float) z,
+			pitch, yaw, headYaw, onGround, false));
 	}
 
-	public static ClientBoundPacketData create(NetworkEntity entity, double x, double y, double z, byte pitch, byte yaw, byte headYaw, boolean onGround, boolean teleported) {
+	public static ClientBoundPacketData create(NetworkEntity entity, float x, float y, float z, byte pitch, byte yaw, byte headYaw, boolean onGround, boolean teleported) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		byte flag = 0;
 		flag |= teleported ? FLAG_TELEPORTED : 0;
 		flag |= onGround ? FLAG_ONGROUND : 0;
 		serializer.writeByte(flag);
-		serializer.writeFloatLE((float) x);
-		serializer.writeFloatLE((float) y);
-		serializer.writeFloatLE((float) z);
+		serializer.writeFloatLE(x);
+		serializer.writeFloatLE(y);
+		serializer.writeFloatLE(z);
 		serializer.writeByte(pitch);
 		serializer.writeByte(yaw);
 		serializer.writeByte(headYaw);
 		return serializer;
 	}
 
-	public static ClientBoundPacketData updateGeneral(NetworkEntity entity, double x, double y, double z, byte pitch, byte yaw, byte headYaw, boolean onGround, boolean teleported) {
+	public static ClientBoundPacketData updateGeneral(NetworkEntity entity, float x, float y, float z, byte pitch, byte yaw, byte headYaw, boolean onGround, boolean teleported) {
 		if (entity.getType() == NetworkEntityType.PLAYER) {
 			return SetPosition.create(entity, x, y, z, pitch * 360.F / 256.F, yaw * 360.F / 256.F, headYaw * 360.F / 256.F,
 				teleported ? SetPosition.ANIMATION_MODE_TELEPORT : SetPosition.ANIMATION_MODE_ALL);

@@ -27,7 +27,7 @@ public class SpawnObject extends MiddleSpawnObject {
 				switch (objectdata) {
 					case 0: {
 						z -= 32;
-						yaw = 128;
+						yaw = (byte) 128;
 						break;
 					}
 					case 1: {
@@ -42,7 +42,7 @@ public class SpawnObject extends MiddleSpawnObject {
 					}
 					case 3: {
 						x -= 32;
-						yaw = 192;
+						yaw = (byte) 192;
 						break;
 					}
 				}

@@ -28,6 +28,17 @@
       "z": 0
     }
   },
+  "THROWN_TRIDENT": {
+    "BoundingBox": {
+      "height": 0.25,
+      "width": 0.25
+    },
+    "RiderInfo": {
+      "x": 0,
+      "y": 0.5,
+      "z": 0
+    }
+  },
   "BAT": {
     "BoundingBox": {
       "height": 0.9,
