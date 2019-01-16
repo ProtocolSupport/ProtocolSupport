@@ -8,6 +8,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityDataCache;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -40,27 +41,21 @@ public class EntityRelMove extends MiddleEntityRelMove {
 		}
 	}
 
-	private static final int floatCastInt(float x) {
-		final ByteBuf buf = Unpooled.wrappedBuffer(new byte[4]);
-		buf.clear();
-		buf.writeFloat(Math.round(x * 100f) / 100f);
-		return buf.readInt();
-	}
-
 	public static void writeAndUpdateRelMove(ByteBuf serializer, NetworkEntity entity, short relX, short relY, short relZ) {
-		final float oldX = entity.getDataCache().getPosX();
-		final float oldY = entity.getDataCache().getPosY();
-		final float oldZ = entity.getDataCache().getPosZ();
+		final NetworkEntityDataCache cache = entity.getDataCache();
+		final float oldX = cache.getPosX();
+		final float oldY = cache.getPosY();
+		final float oldZ = cache.getPosZ();
 		final float newX = oldX + relX * REL_TO_FLOAT;
 		final float newY = oldY + relY * REL_TO_FLOAT;
 		final float newZ = oldZ + relZ * REL_TO_FLOAT;
+		cache.setPos(newX, newY, newZ);
 		if (serializer != null) {
 			//signed integer difference of cast float. thanks MiNET!
-			VarNumberSerializer.writeSVarInt(serializer, floatCastInt(newX) - floatCastInt(oldX));
-			VarNumberSerializer.writeSVarInt(serializer, floatCastInt(newY) - floatCastInt(oldY));
-			VarNumberSerializer.writeSVarInt(serializer, floatCastInt(newZ) - floatCastInt(oldZ));
+			VarNumberSerializer.writeSVarInt(serializer, Float.floatToRawIntBits(newX) - Float.floatToRawIntBits(oldX));
+			VarNumberSerializer.writeSVarInt(serializer, Float.floatToRawIntBits(newY) - Float.floatToRawIntBits(oldY));
+			VarNumberSerializer.writeSVarInt(serializer, Float.floatToRawIntBits(newZ) - Float.floatToRawIntBits(oldZ));
 		}
-		entity.getDataCache().setPos(newX, newY, newZ);
 	}
 
 	public static void updateRelMove(NetworkEntity entity, short relX, short relY, short relZ) {

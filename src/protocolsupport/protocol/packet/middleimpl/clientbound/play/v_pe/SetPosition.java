@@ -28,11 +28,13 @@ public class SetPosition extends MiddleSetPosition {
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ChunkCoord chunk = new ChunkCoord(NumberConversions.floor(x) >> 4, NumberConversions.floor(z) >> 4);
-		if (cache.getPEChunkMapCache().isMarkedAsSent(chunk) && !movecache.isFirstLocationSent()) {
+		if (cache.getPEChunkMapCache().isMarkedAsSent(chunk)) {
 			movecache.setFirstLocationSent(true);
-			movecache.setClientImmobile(false);
 			packets.add(LoginSuccess.createPlayStatus(LoginSuccess.PLAYER_SPAWN));
-			packets.add(EntityMetadata.updatePlayerMobility(connection));
+			if (movecache.isClientImmobile()) {
+				movecache.setClientImmobile(false);
+				packets.add(EntityMetadata.updatePlayerMobility(connection));
+			}
 		} else if (!movecache.isClientImmobile()) {
 			movecache.setClientImmobile(true);
 			packets.add(EntityMetadata.updatePlayerMobility(connection));
