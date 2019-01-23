@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -14,6 +15,7 @@ public abstract class MiddleWorldCustomSound extends ClientBoundMiddlePacket {
 	}
 
 	protected String id;
+	protected String idPE;
 	protected int category;
 	protected int x;
 	protected int y;
@@ -23,7 +25,15 @@ public abstract class MiddleWorldCustomSound extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		id = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+		if(connection.getVersion() == ProtocolVersionsHelper.LATEST_PE)
+		{
+			id = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+			id = id.replaceAll("minecraft:", "");
+		}
+		else
+		{
+			id = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+		}
 		category = VarNumberSerializer.readVarInt(serverdata);
 		x = serverdata.readInt();
 		y = serverdata.readInt();
