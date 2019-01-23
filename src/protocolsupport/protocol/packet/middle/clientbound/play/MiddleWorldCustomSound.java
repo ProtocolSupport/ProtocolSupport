@@ -15,7 +15,6 @@ public abstract class MiddleWorldCustomSound extends ClientBoundMiddlePacket {
 	}
 
 	protected String id;
-	protected String idPE;
 	protected int category;
 	protected int x;
 	protected int y;
