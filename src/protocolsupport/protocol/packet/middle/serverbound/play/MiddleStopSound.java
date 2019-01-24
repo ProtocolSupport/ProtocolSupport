@@ -13,8 +13,6 @@ public abstract class MiddleStopSound extends ClientBoundMiddlePacket {
 
 	//TODO: structure
 	protected ByteBuf data;
-	protected String name = "";
-	protected boolean stopAll = true;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {

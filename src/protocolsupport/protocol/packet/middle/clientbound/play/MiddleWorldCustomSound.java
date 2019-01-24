@@ -24,15 +24,7 @@ public abstract class MiddleWorldCustomSound extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		if(connection.getVersion() == ProtocolVersionsHelper.LATEST_PE)
-		{
-			id = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
-			id = id.replaceAll("minecraft:", "");
-		}
-		else
-		{
-			id = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
-		}
+		id = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
 		category = VarNumberSerializer.readVarInt(serverdata);
 		x = serverdata.readInt();
 		y = serverdata.readInt();

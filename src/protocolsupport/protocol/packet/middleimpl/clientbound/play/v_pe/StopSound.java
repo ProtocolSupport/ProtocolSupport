@@ -19,10 +19,10 @@ public class StopSound extends MiddleStopSound {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(create(connection.getVersion(), name, stopAll));
+		return RecyclableSingletonList.create(create(connection.getVersion()));
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, String name, boolean stopAll) {
+	public static ClientBoundPacketData create(ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.STOP_SOUND);
 		StringSerializer.writeString(serializer, version, "");
 		serializer.writeBoolean(true);
