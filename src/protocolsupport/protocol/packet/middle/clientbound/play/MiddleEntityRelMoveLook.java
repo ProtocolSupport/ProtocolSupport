@@ -9,11 +9,11 @@ public abstract class MiddleEntityRelMoveLook extends MiddleEntity {
 		super(connection);
 	}
 
-	protected int relX;
-	protected int relY;
-	protected int relZ;
-	protected int yaw;
-	protected int pitch;
+	protected short relX;
+	protected short relY;
+	protected short relZ;
+	protected byte yaw;
+	protected byte pitch;
 	protected boolean onGround;
 
 	@Override

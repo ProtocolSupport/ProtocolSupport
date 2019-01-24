@@ -6,13 +6,13 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleMoveVehicle;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerBoat;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityTeleport;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData.Offset;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
-import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -31,14 +31,14 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 	public void readFromClientData(ByteBuf clientdata) {
 		vehicleId = (int) VarNumberSerializer.readVarLong(clientdata);
 		byte flag = clientdata.readByte();
-		onGround = (flag & 128) == 128;
-		teleported = (flag & 64) == 64;
+		onGround = (flag & EntityTeleport.FLAG_ONGROUND) != 0;
+		teleported = (flag & EntityTeleport.FLAG_TELEPORTED) != 0;
 		x = clientdata.readFloatLE();
 		y = clientdata.readFloatLE();
 		z = clientdata.readFloatLE();
 		pitch = clientdata.readByte();
-		headYaw = clientdata.readByte();
 		yaw = clientdata.readByte();
+		headYaw = clientdata.readByte();
 	}
 
 	@Override
@@ -53,19 +53,17 @@ public class MoveVehicle extends ServerBoundMiddlePacket {
 				);
 			}
 			PEEntityData typeData = PEDataValues.getEntityData(vehicle.getType());
-			if ((typeData != null) && (typeData.getOffset() != null)) {
+			if (typeData != null && typeData.getOffset() != null) {
 				Offset offset = typeData.getOffset();
 				x -= offset.getX();
 				y -= offset.getY();
 				z -= offset.getZ();
-				pitch = (byte) Utils.shortDegree(pitch - offset.getPitch(), 256);
-				yaw = (byte) Utils.shortDegree(yaw - offset.getYaw(), 256);
+				pitch -= offset.getPitch();
+				yaw -= offset.getYaw();
 			}
 		}
 		cache.getAttributesCache().setPELastVehicleYaw(yaw);
-		float realPitch = (360f / 256f) * pitch;
-		float realYaw = (360f / 256f) * yaw;
-		packets.add(MiddleMoveVehicle.create(x, y, z, realYaw, realPitch));
+		packets.add(MiddleMoveVehicle.create(x, y, z, yaw * 360f / 256f, pitch * 360f / 256f));
 		return packets;
 	}
 

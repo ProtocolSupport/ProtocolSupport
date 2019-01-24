@@ -9,8 +9,8 @@ public abstract class MiddleEntityLook extends MiddleEntity {
 		super(connection);
 	}
 
-	protected int yaw;
-	protected int pitch;
+	protected byte yaw;
+	protected byte pitch;
 	protected boolean onGround;
 
 	@Override

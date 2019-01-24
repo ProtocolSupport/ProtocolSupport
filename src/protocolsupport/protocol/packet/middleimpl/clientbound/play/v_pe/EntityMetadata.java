@@ -263,8 +263,8 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int FUSE_LENGTH = takeNextMeta();
 		public static final int RIDER_POSITION = takeNextMeta();
 		public static final int RIDER_LOCK = takeNextMeta();
-		public static final int RIDER_MIN_ROTATION = takeNextMeta();
 		public static final int RIDER_MAX_ROTATION = takeNextMeta();
+		public static final int RIDER_MIN_ROTATION = takeNextMeta();
 		public static final int AREA_EFFECT_RADIUS = takeNextMeta(); //60
 		public static final int AREA_EFFECT_WAITING = takeNextMeta();
 		public static final int AREA_EFFECT_PARTICLE = takeNextMeta();

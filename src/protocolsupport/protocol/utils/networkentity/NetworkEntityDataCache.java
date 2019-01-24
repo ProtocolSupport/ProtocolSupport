@@ -9,6 +9,21 @@ public class NetworkEntityDataCache {
 
 	protected byte baseFlags = 0;
 	protected boolean firstMeta = true;
+	protected long peBaseFlags = 0;
+	protected float sizeModifier = 1f;
+	protected int attachedId = -1;
+	protected byte headRotation = 0;
+	protected boolean headRotationSet = false;
+	protected int vehicleId = 0;
+	protected float maxHealth = 20f;
+	protected float posX = 0;
+	protected float posY = 0;
+	protected float posZ = 0;
+	protected byte yaw = 0;
+	protected byte pitch = 0;
+	protected Vector riderPosition = null;
+	protected Float rotationlock = null;
+	protected Equipment equipment = null;
 
 	public byte getBaseFlags() {
 		return baseFlags;
@@ -38,22 +53,6 @@ public class NetworkEntityDataCache {
 	public void setFirstMeta(boolean firstMeta) {
 		this.firstMeta = firstMeta;
 	}
-
-	protected long peBaseFlags = 0;
-	protected float sizeModifier = 1f;
-	protected int attachedId = -1;
-	protected Byte headRotation = null;
-	protected Byte pitch = null;
-	protected int vehicleId = 0;
-	protected Vector riderPosition = null;
-	protected Float rotationlock = null;
-	protected float maxHealth = 20f;
-	protected NetworkItemStack helmet = NetworkItemStack.NULL;
-	protected NetworkItemStack chestplate = NetworkItemStack.NULL;
-	protected NetworkItemStack leggings = NetworkItemStack.NULL;
-	protected NetworkItemStack boots = NetworkItemStack.NULL;
-	protected NetworkItemStack hand = NetworkItemStack.NULL;
-	protected NetworkItemStack offhand = NetworkItemStack.NULL;
 
 	public long getPeBaseFlags() {
 		return peBaseFlags;
@@ -92,74 +91,16 @@ public class NetworkEntityDataCache {
 		this.peBaseFlags = peBaseFlags;
 	}
 
-	public void setHelmet(NetworkItemStack helmet) {
-		this.helmet = helmet;
-	}
-
-	public NetworkItemStack getHelmet() {
-		return this.helmet;
-	}
-
-	public void setChestplate(NetworkItemStack chestplate) {
-		this.chestplate = chestplate;
-	}
-
-	public NetworkItemStack getChestplate() {
-		return this.chestplate;
-	}
-
-	public void setLeggings(NetworkItemStack leggings) {
-		this.leggings = leggings;
-	}
-
-	public NetworkItemStack getLeggings() {
-		return this.leggings;
-	}
-
-	public void setBoots(NetworkItemStack boots) {
-		this.boots = boots;
-	}
-
-	public NetworkItemStack getBoots() {
-		return this.boots;
-	}
-
-	public void setHand(NetworkItemStack hand) {
-		this.hand = hand;
-	}
-
-	public NetworkItemStack getHand() {
-		return this.hand;
-	}
-
-	public void setOffHand(NetworkItemStack offhand) {
-		this.offhand = offhand;
-	}
-
-	public NetworkItemStack getOffhand() {
-		return this.offhand;
-	}
-
 	public void setHeadRotation(byte headRot) {
 		this.headRotation = headRot;
+		this.headRotationSet = true;
 	}
 
 	public byte getHeadRotation(byte normalRotation) {
-		if (headRotation != null) {
+		if (headRotationSet) {
 			return headRotation;
 		}
 		return normalRotation;
-	}
-
-	public void setPitch(byte pitch) {
-		this.pitch = pitch;
-	}
-
-	public byte getPitch(byte normalPitch) {
-		if (pitch != null) {
-			return pitch;
-		}
-		return normalPitch;
 	}
 
 	public int getVehicleId() {
@@ -198,10 +139,107 @@ public class NetworkEntityDataCache {
 		this.maxHealth = maxHealth;
 	}
 
+	public float getPosX() {
+		return posX;
+	}
+
+	public float getPosY() {
+		return posY;
+	}
+
+	public float getPosZ() {
+		return posZ;
+	}
+
+	public void setPos(float x, float y, float z) {
+		this.posX = x;
+		this.posY = y;
+		this.posZ = z;
+	}
+
+	public byte getYaw() {
+		return yaw;
+	}
+
+	public void setYaw(byte yaw) {
+		this.yaw = yaw;
+	}
+
+	public byte getPitch() {
+		return pitch;
+	}
+
+	public void setPitch(byte pitch) {
+		this.pitch = pitch;
+	}
+
+	public Equipment getEquipment() {
+		if (equipment == null) {
+			equipment = new Equipment();
+		}
+		return equipment;
+	}
 
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);
+	}
+
+	public class Equipment {
+		protected NetworkItemStack helmet = NetworkItemStack.NULL;
+		protected NetworkItemStack chestplate = NetworkItemStack.NULL;
+		protected NetworkItemStack leggings = NetworkItemStack.NULL;
+		protected NetworkItemStack boots = NetworkItemStack.NULL;
+		protected NetworkItemStack hand = NetworkItemStack.NULL;
+		protected NetworkItemStack offhand = NetworkItemStack.NULL;
+
+		public void setHelmet(NetworkItemStack helmet) {
+			this.helmet = helmet;
+		}
+
+		public NetworkItemStack getHelmet() {
+			return this.helmet;
+		}
+
+		public void setChestplate(NetworkItemStack chestplate) {
+			this.chestplate = chestplate;
+		}
+
+		public NetworkItemStack getChestplate() {
+			return this.chestplate;
+		}
+
+		public void setLeggings(NetworkItemStack leggings) {
+			this.leggings = leggings;
+		}
+
+		public NetworkItemStack getLeggings() {
+			return this.leggings;
+		}
+
+		public void setBoots(NetworkItemStack boots) {
+			this.boots = boots;
+		}
+
+		public NetworkItemStack getBoots() {
+			return this.boots;
+		}
+
+		public void setHand(NetworkItemStack hand) {
+			this.hand = hand;
+		}
+
+		public NetworkItemStack getHand() {
+			return this.hand;
+		}
+
+		public void setOffHand(NetworkItemStack offhand) {
+			this.offhand = offhand;
+		}
+
+		public NetworkItemStack getOffhand() {
+			return this.offhand;
+		}
 	}
 
 }

@@ -13,15 +13,11 @@ public abstract class NBT {
 	public abstract int hashCode();
 
 	@Override
+	public abstract NBT clone();
+
+	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);
-	}
-
-	public static abstract class Cloneable extends NBT {
-
-		@Override
-		public abstract Cloneable clone();
-
 	}
 
 }

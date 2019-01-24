@@ -9,9 +9,9 @@ public abstract class MiddleEntityRelMove extends MiddleEntity {
 		super(connection);
 	}
 
-	protected int relX;
-	protected int relY;
-	protected int relZ;
+	protected short relX;
+	protected short relY;
+	protected short relZ;
 	protected boolean onGround;
 
 	@Override

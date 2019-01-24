@@ -28,7 +28,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		serializer.writeInt((int) (z * 32));
 		serializer.writeByte(yaw);
 		serializer.writeByte(pitch);
-		serializer.writeByte(headPitch);
+		serializer.writeByte(headYaw);
 		serializer.writeShort(motX);
 		serializer.writeShort(motY);
 		serializer.writeShort(motZ);

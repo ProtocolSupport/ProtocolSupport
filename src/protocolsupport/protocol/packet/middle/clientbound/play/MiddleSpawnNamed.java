@@ -22,8 +22,8 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 	protected double x;
 	protected double y;
 	protected double z;
-	protected int yaw;
-	protected int pitch;
+	protected byte yaw;
+	protected byte pitch;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
@@ -33,8 +33,8 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();
 		z = serverdata.readDouble();
-		yaw = serverdata.readUnsignedByte();
-		pitch = serverdata.readUnsignedByte();
+		yaw = serverdata.readByte();
+		pitch = serverdata.readByte();
 		entityRemapper.readEntityWithMetadata(cache.getAttributesCache().getLocale(), entity, serverdata);
 	}
 

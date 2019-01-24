@@ -39,9 +39,9 @@ public class PEFakeVillager {
 		return SpawnLiving.createSimple(version,
 			cache.getAttributesCache().getLocale(),
 			villager,
-			cache.getMovementCache().getPEClientX(),
-			cache.getMovementCache().getPEClientY() - 2,
-			cache.getMovementCache().getPEClientZ()
+			(float) cache.getMovementCache().getPEClientX(),
+			(float) cache.getMovementCache().getPEClientY() - 2,
+			(float) cache.getMovementCache().getPEClientZ()
 		);
 	}
 

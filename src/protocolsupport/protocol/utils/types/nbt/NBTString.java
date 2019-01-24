@@ -34,4 +34,9 @@ public class NBTString extends NBT {
 		return tag != null ? tag.getValue() : defaultVal;
 	}
 
+	@Override
+	public NBTString clone() {
+		return this;
+	}
+
 }

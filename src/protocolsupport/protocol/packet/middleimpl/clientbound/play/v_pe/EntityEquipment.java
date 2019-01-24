@@ -30,32 +30,33 @@ public class EntityEquipment extends MiddleEntityEquipment {
 			return RecyclableEmptyList.get();
 		}
 		NetworkEntityDataCache dataCache = entity.getDataCache();
+		NetworkEntityDataCache.Equipment equipment = dataCache.getEquipment();
 		if (slot > 1) {
 			// Armor update
 			switch (slot) {
 				case 2: {
-					dataCache.setBoots(itemstack);
+					equipment.setBoots(itemstack);
 					break;
 				}
 				case 3: {
-					dataCache.setLeggings(itemstack);
+					equipment.setLeggings(itemstack);
 					break;
 				}
 				case 4: {
-					dataCache.setChestplate(itemstack);
+					equipment.setChestplate(itemstack);
 					break;
 				}
 				case 5: {
-					dataCache.setHelmet(itemstack);
+					equipment.setHelmet(itemstack);
 					break;
 				}
 			}
-			return RecyclableSingletonList.create(create(version, locale, entityId, dataCache.getHelmet(), dataCache.getChestplate(), dataCache.getLeggings(), dataCache.getBoots()));
+			return RecyclableSingletonList.create(create(version, locale, entityId, equipment.getHelmet(), equipment.getChestplate(), equipment.getLeggings(), equipment.getBoots()));
 		}
 		if (slot == 1) {
-			dataCache.setHand(itemstack);
+			equipment.setHand(itemstack);
 		} else {
-			dataCache.setOffHand(itemstack);
+			equipment.setOffHand(itemstack);
 		}
 		return RecyclableSingletonList.create(createUpdateHand(version, locale, entityId, itemstack, cache.getWatchedEntityCache().isSelf(entityId) ? cache.getPEInventoryCache().getSelectedSlot() : 0, slot == 1));
 	}

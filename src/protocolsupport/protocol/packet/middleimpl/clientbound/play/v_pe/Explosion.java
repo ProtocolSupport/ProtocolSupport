@@ -22,7 +22,7 @@ public class Explosion extends MiddleExplosion {
 		ProtocolVersion version = connection.getVersion();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		packets.add(create(x, y, z, radius, blocks));
-		packets.add(EntityVelocity.create(version, cache.getWatchedEntityCache().getSelfPlayerEntityId(), pMotX, pMotY, pMotZ));
+		packets.add(EntityVelocity.create(cache.getWatchedEntityCache().getSelfPlayerEntityId(), pMotX, pMotY, pMotZ));
 		packets.add(WorldParticle.create(PELevelEvent.PARTICLE_HUGE_EXPLOSION_SEED, x, y, z));
 		return packets;
 	}

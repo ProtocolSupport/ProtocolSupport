@@ -367,6 +367,9 @@ public class PEDataValues {
 
 	private static void initEntityStatusRemaps() {
 		registerEntityStatusRemap(2, 2); // HURT_ANIMATION
+		registerEntityStatusRemap(33, 2); // ENTITY_HURT_THORNS
+		registerEntityStatusRemap(36, 2); // ENTITY_HURT_DROWN
+		registerEntityStatusRemap(37, 2); // ENTITY_HURT_BURN
 		registerEntityStatusRemap(3, -1, NetworkEntityType.SNOWBALL); // SNOWBALL_POOF
 		registerEntityStatusRemap(3, -1, NetworkEntityType.EGG); // EGG_ICONCRACK
 		registerEntityStatusRemap(3, 3); // DEATH_ANIMATION
@@ -375,6 +378,7 @@ public class PEDataValues {
 		registerEntityStatusRemap(8, 8); // SHAKE_WET
 		registerEntityStatusRemap(9, 9); // USE_ITEM
 		registerEntityStatusRemap(10, 10, NetworkEntityType.SHEEP); // EAT_GRASS_ANIMATION
+		registerEntityStatusRemap(10, 10, NetworkEntityType.COMMON_HORSE); // EAT_GRASS_ANIMATION
 		registerEntityStatusRemap(10, 10, NetworkEntityType.MINECART_TNT); // MINECART_TNT_PRIME_FUSE
 		registerEntityStatusRemap(11, 19); // IRON_GOLEM_OFFER_FLOWER
 		registerEntityStatusRemap(15, 24); // WITCH_SPELL_PARTICLES
@@ -409,9 +413,6 @@ public class PEDataValues {
 		SHIELD_BLOCK = 29;
 		SHIELD_BREAK = 30;
 		ARMOR_STAND_HIT = 32;
-		ENTITY_HURT_THORNS = 33;
-		ENTITY_HURT_DROWN = 36;
-		ENTITY_HURT_BURN = 37;
 
 		TODO: List of known PE entity status codes that are never sent. Presumably,
 		some PE functionality is missing because of this.
@@ -428,7 +429,6 @@ public class PEDataValues {
 		ENDER_DRAGON_DEATH = 37;
 		DUST_PARTICLES = 38;
 		ARROW_SHAKE = 39;
-		EATING_ITEM = 57;
 		BABY_ANIMAL_FEED = 60;
 		DEATH_SMOKE_CLOUD = 61;
 		COMPLETE_TRADE = 62;
@@ -437,6 +437,11 @@ public class PEDataValues {
 		DRAGON_PUKE = 68;
 		ITEM_ENTITY_MERGE = 69;
 		*/
+
+		/*
+		sent elsewhere
+		EATING_ITEM = 57; sent in Animation
+		 */
 	}
 
 	static {

@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class NBTCompound extends NBT.Cloneable {
+public class NBTCompound extends NBT {
 
 	@Override
 	public NBTType<NBTCompound> getType() {
@@ -85,12 +85,9 @@ public class NBTCompound extends NBT.Cloneable {
 
 	@Override
 	public NBTCompound clone() {
-		// TODO Improve?
-		NBTCompound clone = new NBTCompound();
-		tags.forEach((k, v) -> {
-			clone.setTag(k, v instanceof NBT.Cloneable ? ((NBT.Cloneable) v).clone() : v); 
-		});
-		return clone;
+		NBTCompound newCompound = new NBTCompound();
+		tags.forEach((k, v) -> newCompound.setTag(k, v.clone()));
+		return newCompound;
 	}
 
 }

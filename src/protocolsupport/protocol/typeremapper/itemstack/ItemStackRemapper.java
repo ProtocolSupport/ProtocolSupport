@@ -1,6 +1,5 @@
 package protocolsupport.protocol.typeremapper.itemstack;
 
-import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapperRegistry;
 import protocolsupport.protocol.typeremapper.pe.PEItems;
@@ -9,7 +8,7 @@ import protocolsupport.protocol.utils.types.NetworkItemStack;
 public class ItemStackRemapper {
 
 	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale,  NetworkItemStack itemstack) {
-		if (version.getProtocolType() != ProtocolType.PE) {
+		if (!version.isPE()) {
 			setComplexlyRemapped(itemstack, false);
 		}
 		itemstack = ItemStackComplexRemapperRegistry.remapToClient(version, locale, itemstack);

@@ -26,14 +26,14 @@ public class EntityStatus extends MiddleEntityStatus {
 		NetworkEntityType entityType = cache.getWatchedEntityCache().getWatchedEntity(entityId).getType();
 		int peStatus = PEDataValues.getEntityStatusRemap(status, entityType);
 		if (peStatus != -1) {
-			return RecyclableSingletonList.create(create(entityId, peStatus, connection.getVersion()));
+			return RecyclableSingletonList.create(create(entityId, peStatus));
 		} else {
 			//System.out.println(MessageFormat.format("Entity status {0} ignored", status));
 		}
 		return RecyclableEmptyList.get();
 	}
 
-	public static ClientBoundPacketData create(int entityId, int status, ProtocolVersion version) {
+	public static ClientBoundPacketData create(int entityId, int status) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_EVENT);
 		VarNumberSerializer.writeVarLong(serializer, entityId);
 		serializer.writeByte((byte) status);

@@ -15,7 +15,7 @@ public class SpawnExpOrb extends MiddleSpawnExpOrb {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		// TODO: When metadata is implemented, set the exp count in the exp orb metadata!
-		return RecyclableSingletonList.create(SpawnLiving.createSimple(connection.getVersion(), cache.getAttributesCache().getLocale(), entity, x, y, z));
+		return RecyclableSingletonList.create(SpawnLiving.createSimple(connection.getVersion(), cache.getAttributesCache().getLocale(), entity, (float) x, (float) y, (float) z));
 	}
 
 }
