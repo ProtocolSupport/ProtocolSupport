@@ -1,5 +1,6 @@
 package protocolsupport.protocol.storage.netcache;
 
+import protocolsupport.protocol.typeremapper.packet.PEDimensionSwitchConfirmationPacketQueue;
 import protocolsupport.utils.Utils;
 
 public class NetworkDataCache {
@@ -34,6 +35,17 @@ public class NetworkDataCache {
 		return attrscache;
 	}
 
+	protected final CustomPayloadChannelsCache cpccache = new CustomPayloadChannelsCache();
+	public CustomPayloadChannelsCache getChannelsCache() {
+		return cpccache;
+	}
+
+	protected final TileDataCache tilecache = new TileDataCache();
+	public TileDataCache getTileCache() {
+		return tilecache;
+	}
+
+
 	protected final PEChunkMapCache pechunkmapcache = new PEChunkMapCache();
 	public PEChunkMapCache getPEChunkMapCache() {
 		return pechunkmapcache;
@@ -54,14 +66,9 @@ public class NetworkDataCache {
 		return inventorycache;
 	}
 
-	protected final CustomPayloadChannelsCache cpccache = new CustomPayloadChannelsCache();
-	public CustomPayloadChannelsCache getChannelsCache() {
-		return cpccache;
-	}
-
-	protected final TileDataCache tilecache = new TileDataCache();
-	public TileDataCache getTileCache() {
-		return tilecache;
+	protected final PEDimensionSwitchConfirmationPacketQueue pepqueue = new PEDimensionSwitchConfirmationPacketQueue();
+	public PEDimensionSwitchConfirmationPacketQueue getPEPacketQueue() {
+		return pepqueue;
 	}
 
 	@Override

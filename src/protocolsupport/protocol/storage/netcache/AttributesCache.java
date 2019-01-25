@@ -50,16 +50,6 @@ public class AttributesCache {
 	}
 
 
-
-	protected boolean peFakeSetPositionSwitch = true;
-
-	public double getPEFakeSetPositionY() {
-		peFakeSetPositionSwitch = !peFakeSetPositionSwitch;
-		return peFakeSetPositionSwitch ? 20.0 : 30.0;
-	}
-
-
-
 	protected GameMode peGameMode = GameMode.SURVIVAL;
 	protected boolean peCanFly = false;
 	protected boolean peIsFlying = false;

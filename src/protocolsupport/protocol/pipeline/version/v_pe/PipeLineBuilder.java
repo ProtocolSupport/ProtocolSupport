@@ -5,7 +5,6 @@ import io.netty.channel.ChannelPipeline;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPipeLineBuilder;
-import protocolsupport.protocol.typeremapper.packet.PEDimensionSwitchMovementConfirmationPacketQueue;
 
 public class PipeLineBuilder implements IPipeLineBuilder {
 
@@ -17,9 +16,8 @@ public class PipeLineBuilder implements IPipeLineBuilder {
 	@Override
 	public void buildCodec(Channel channel, ConnectionImpl connection) {
 		ChannelPipeline pipeline = channel.pipeline();
-		PEDimensionSwitchMovementConfirmationPacketQueue dimswitchq = new PEDimensionSwitchMovementConfirmationPacketQueue(connection);
-		pipeline.addAfter(ChannelHandlers.RAW_CAPTURE_RECEIVE, ChannelHandlers.DECODER_TRANSFORMER, new PEPacketDecoder(connection, dimswitchq));
-		pipeline.addAfter(ChannelHandlers.RAW_CAPTURE_SEND, ChannelHandlers.ENCODER_TRANSFORMER, new PEPacketEncoder(connection, dimswitchq));
+		pipeline.addAfter(ChannelHandlers.RAW_CAPTURE_RECEIVE, ChannelHandlers.DECODER_TRANSFORMER, new PEPacketDecoder(connection));
+		pipeline.addAfter(ChannelHandlers.RAW_CAPTURE_SEND, ChannelHandlers.ENCODER_TRANSFORMER, new PEPacketEncoder(connection));
 	}
 
 }

@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityRelMove;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -14,7 +13,6 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-//will only see relmove packets if you set -Dprotocolsupport.no-alt-tracker=true
 public class EntityRelMove extends MiddleEntityRelMove {
 
 	private static final float REL_TO_FLOAT = 1f / (128f * 32f);

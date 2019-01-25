@@ -352,7 +352,7 @@ public class PEDataValues {
 		}
 	};
 
-	private static EnumMap<NetworkEntityType, Int2IntOpenHashMap> entityStatusRemaps = new EnumMap<>(NetworkEntityType.class);
+	private static final EnumMap<NetworkEntityType, Int2IntOpenHashMap> entityStatusRemaps = new EnumMap<>(NetworkEntityType.class);
 
 	private static void registerEntityStatusRemap(int pcStatus, int peStatus, NetworkEntityType... entityTypes) {
 		for (NetworkEntityType entityType : entityTypes) {
@@ -456,8 +456,8 @@ public class PEDataValues {
 		return entityStatusRemaps.get(entityType).getOrDefault(pcStatus, -1);
 	}
 
-	private final static Map<NetworkEntityType, PEEntityData> entityData = new EnumMap<NetworkEntityType, PEEntityData>(NetworkEntityType.class);
-	private final static Map<NetworkEntityType, PEEntityInventoryData> entityInventoryData = new EnumMap<NetworkEntityType, PEEntityInventoryData>(NetworkEntityType.class);
+	private final static Map<NetworkEntityType, PEEntityData> entityData = new EnumMap<>(NetworkEntityType.class);
+	private final static Map<NetworkEntityType, PEEntityInventoryData> entityInventoryData = new EnumMap<>(NetworkEntityType.class);
 
 	static {
 		getFileObject("entitydata.json").entrySet().forEach(entry -> {

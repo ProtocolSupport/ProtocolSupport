@@ -117,4 +117,7 @@ public class PEPacketIDs {
 	public static final int LEVEL_SOUND_EVENT_PACKET_V2 = 120;
 	public static final int NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET = 121;
 	public static final int BIOME_DEFINITION_LIST_PACKET = 122;
+
+	public static final int SPECIAL_LOCAL_PLAYER_INITIALIZED = -100;
+
 }
