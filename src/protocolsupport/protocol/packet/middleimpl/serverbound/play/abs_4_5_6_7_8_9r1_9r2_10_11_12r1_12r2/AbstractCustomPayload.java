@@ -64,7 +64,7 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 	protected RecyclableCollection<ServerBoundPacketData> transformBookEdit() {
 		String locale = connection.getCache().getAttributesCache().getLocale();
 		NetworkItemStack book = ItemStackSerializer.readItemStack(data, connection.getVersion(), locale);
-		book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITTEN_BOOK));
+		book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
 		if (!book.isNull()) {
 			return RecyclableSingletonList.create(MiddleEditBook.create(book, false, UsedHand.MAIN));
 		} else {
@@ -77,7 +77,7 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 		String locale = connection.getCache().getAttributesCache().getLocale();
 		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version, locale);
 		if (!book.isNull()) {
-			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITTEN_BOOK));
+			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
 			if (connection.getVersion() == ProtocolVersion.MINECRAFT_1_8) {
 				NBTCompound rootTag = book.getNBT();
 				if (rootTag != null) {
