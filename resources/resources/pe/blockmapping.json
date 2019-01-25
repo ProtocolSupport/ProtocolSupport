@@ -1877,7 +1877,7 @@
   },
   "minecraft:jukebox[has_record=true]":{
     "pename":"minecraft:jukebox",
-    "pedata":1
+    "pedata":0
   },
   "minecraft:jukebox[has_record=false]":{
     "pename":"minecraft:jukebox",

@@ -73,10 +73,10 @@ public class WorldEvent extends MiddleWorldEvent {
 		switch (effectId) { // SPECIAL CASES
 			case 1010: { // Records
 				// To make the code a bit simplier, we are going to just get the event ID from the record ID
-				// first record ID: 2256 (13)
+				// first record ID: 774 (13)
 				// first sound level event ID: 101 (13)
-				// diff = 2155
-				int soundLevelId = data - 2155;
+				// diff = 673
+				int soundLevelId = data - 673;
 				// If the soundLevelId != any Minecraft record, the song will stop
 				if (data != 0) { // The vanilla server uses 0 as the "please stop this song" data
 					return RecyclableSingletonList.create(PESoundLevelEvent.createPacket(soundLevelId, position));
