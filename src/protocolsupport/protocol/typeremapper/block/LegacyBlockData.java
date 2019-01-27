@@ -144,6 +144,21 @@ public class LegacyBlockData {
 
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(
+					Material.BRAIN_CORAL, Material.BUBBLE_CORAL, Material.FIRE_CORAL, Material.HORN_CORAL, Material.TUBE_CORAL,
+					Material.CONDUIT, Material.TNT
+				),
+				o -> o.getMaterial().createBlockData(),
+				ProtocolVersionsHelper.BEFORE_1_13_1
+			);
+
+			this.registerRemapEntryForAllStates(Material.DEAD_BRAIN_CORAL, Material.BRAIN_CORAL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13_1);
+			this.registerRemapEntryForAllStates(Material.DEAD_BUBBLE_CORAL, Material.BUBBLE_CORAL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13_1);
+			this.registerRemapEntryForAllStates(Material.DEAD_FIRE_CORAL, Material.FIRE_CORAL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13_1);
+			this.registerRemapEntryForAllStates(Material.DEAD_HORN_CORAL, Material.HORN_CORAL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13_1);
+			this.registerRemapEntryForAllStates(Material.DEAD_TUBE_CORAL, Material.TUBE_CORAL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13_1);
+
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(
 					Material.ACACIA_LEAVES, Material.DARK_OAK_LEAVES, Material.BIRCH_LEAVES,
 					Material.JUNGLE_LEAVES, Material.SPRUCE_LEAVES, Material.OAK_LEAVES,
 					Material.ACACIA_FENCE, Material.DARK_OAK_FENCE, Material.BIRCH_FENCE,
@@ -379,11 +394,11 @@ public class LegacyBlockData {
 					Material.FIRE_CORAL, Material.FIRE_CORAL_FAN, Material.FIRE_CORAL_WALL_FAN,
 					Material.HORN_CORAL, Material.HORN_CORAL_FAN, Material.HORN_CORAL_WALL_FAN,
 					Material.TUBE_CORAL, Material.TUBE_CORAL_FAN, Material.TUBE_CORAL_WALL_FAN,
-					Material.DEAD_BRAIN_CORAL_FAN, Material.DEAD_BRAIN_CORAL_WALL_FAN,
-					Material.DEAD_BUBBLE_CORAL_FAN, Material.DEAD_BUBBLE_CORAL_WALL_FAN,
-					Material.DEAD_FIRE_CORAL_FAN, Material.DEAD_FIRE_CORAL_WALL_FAN,
-					Material.DEAD_HORN_CORAL_FAN, Material.DEAD_HORN_CORAL_WALL_FAN,
-					Material.DEAD_TUBE_CORAL_FAN, Material.DEAD_TUBE_CORAL_WALL_FAN
+					Material.DEAD_BRAIN_CORAL, Material.DEAD_BRAIN_CORAL_FAN, Material.DEAD_BRAIN_CORAL_WALL_FAN,
+					Material.DEAD_BUBBLE_CORAL, Material.DEAD_BUBBLE_CORAL_FAN, Material.DEAD_BUBBLE_CORAL_WALL_FAN,
+					Material.DEAD_FIRE_CORAL, Material.DEAD_FIRE_CORAL_FAN, Material.DEAD_FIRE_CORAL_WALL_FAN,
+					Material.DEAD_HORN_CORAL, Material.DEAD_HORN_CORAL_FAN, Material.DEAD_HORN_CORAL_WALL_FAN,
+					Material.DEAD_TUBE_CORAL, Material.DEAD_TUBE_CORAL_FAN, Material.DEAD_TUBE_CORAL_WALL_FAN
 				),
 				Material.DANDELION.createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_13

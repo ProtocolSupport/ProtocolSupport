@@ -57,6 +57,7 @@ public class LegacyItemType {
 			registerRemapEntry(Material.SCUTE, Material.LIME_DYE, ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemapEntry(Material.TURTLE_HELMET, Material.CHAINMAIL_HELMET, ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemapEntry(Material.TRIDENT, Material.DIAMOND_HOE, ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemapEntry(Material.DEBUG_STICK, Material.STICK, ProtocolVersionsHelper.BEFORE_1_13);
 
 
 			registerRemapEntry(Material.KNOWLEDGE_BOOK, Material.BOOK, ProtocolVersionsHelper.BEFORE_1_12);
