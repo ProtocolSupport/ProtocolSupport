@@ -1,12 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
+import java.util.concurrent.TimeUnit;
+
 import io.netty.buffer.ByteBuf;
-import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEntityAction;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -15,6 +15,7 @@ import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class PlayerAction extends ServerBoundMiddlePacket {
 
@@ -111,7 +112,11 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 				return RecyclableSingletonList.create(MiddleEntityAction.create(selfId, MiddleEntityAction.Action.START_ELYTRA_FLY, 0));
 			}
 			case DIMENSION_CHANGE_ACK: {
-				return RecyclableSingletonList.create(MiddleCustomPayload.create(InternalPluginMessageRequest.PEUnlockChannel));
+				connection.getNetworkManagerWrapper().getChannel().eventLoop().schedule(() -> {
+					cache.getPEPacketQueue().unlock();
+					connection.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("push_q"));
+				}, 10, TimeUnit.SECONDS);
+				return RecyclableEmptyList.get();
 			}
 			default: {
 				return RecyclableEmptyList.get();

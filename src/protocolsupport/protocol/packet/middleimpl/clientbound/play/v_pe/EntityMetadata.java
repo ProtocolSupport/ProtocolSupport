@@ -63,7 +63,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 			}
 		} else { //player flags
 			if (cache.getWatchedEntityCache().isSelf(entity.getId())) {
-				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_NO_AI, cache.getMovementCache().isClientImmobile());
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_NO_AI, false);
 			}
 			entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_CAN_CLIMB, true);
 		}
@@ -116,17 +116,6 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		DataWatcherSerializer.writePEData(serializer, version, locale, transform(entity, peMetadata, version));
 		return serializer;
-	}
-
-	public static ClientBoundPacketData updatePlayerMobility(ConnectionImpl connection) {
-		NetworkDataCache cache = connection.getCache();
-		ProtocolVersion version = connection.getVersion();
-		ArrayMap<DataWatcherObject<?>> peMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
-		String locale = cache.getAttributesCache().getLocale();
-		NetworkEntity player = cache.getWatchedEntityCache().getSelfPlayer();
-		player.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_NO_AI, cache.getMovementCache().isClientImmobile());
-		peMetadata.put(PeMetaBase.FLAGS, new DataWatcherObjectSVarLong(player.getDataCache().getPeBaseFlags()));
-		return create(player, locale, peMetadata, version);
 	}
 
 	public static class PeMetaBase {

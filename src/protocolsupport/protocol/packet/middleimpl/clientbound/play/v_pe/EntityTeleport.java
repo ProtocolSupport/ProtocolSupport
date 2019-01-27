@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;

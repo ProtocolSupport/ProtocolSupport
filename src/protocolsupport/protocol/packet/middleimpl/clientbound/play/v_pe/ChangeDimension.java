@@ -2,11 +2,10 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import java.text.MessageFormat;
 
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
@@ -35,7 +34,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 			packets.add(InventoryClose.create(connection.getVersion(), cache.getWindowCache().getOpenedWindowId()));
 			cache.getWindowCache().closeWindow();
 		}
-		create(connection.getVersion(), dimension, packets);
+		addChangeDimension(packets, cache.getWatchedEntityCache().getSelfPlayer(), dimension);
 		return packets;
 	}
 
@@ -49,20 +48,12 @@ public class ChangeDimension extends MiddleChangeDimension {
 		return changedim;
 	}
 
-	public static void create(ProtocolVersion version, Environment dimension, RecyclableCollection<ClientBoundPacketData> packets) {
-		packets.add(createRaw(0, 0, 0, getPeDimensionId(dimension)));
-		addFakeChunksAndPos(packets);
-		//Lock client bound packet queue until dim switch or bungee confirm.
-		packets.add(CustomPayload.create(version, InternalPluginMessageRequest.PELockChannel));
-	}
-
-	public static void addFakeChunksAndPos(RecyclableCollection<ClientBoundPacketData> packets) {
-		//TODO: one chunk fine?
-		for (int x = -2; x <= 2; x++) {
-			for (int z = -2; z <= 2; z++) {
-				packets.add(Chunk.createEmptyChunk(new ChunkCoord(x, z)));
-			}
-		}
+	public static void addChangeDimension(RecyclableCollection<ClientBoundPacketData> packets, NetworkEntity player, Environment dimension) {
+		packets.add(createRaw(8, 18, 8, getPeDimensionId(dimension)));
+		packets.add(Chunk.createChunkPublisherUpdate(0, 0, 0));
+		Chunk.addFakeChunks(packets, new ChunkCoord(0, 0));
+		packets.add(SetPosition.create(player, 0, 18, 0, 0, 0, 0, SetPosition.ANIMATION_MODE_ALL));
+		packets.add(LoginSuccess.createPlayStatus(LoginSuccess.PLAYER_SPAWN));
 	}
 
 	public static int getPeDimensionId(Environment dimId) {

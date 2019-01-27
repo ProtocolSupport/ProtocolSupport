@@ -3,24 +3,23 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 import org.bukkit.Bukkit;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleStartGame;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.MovementCache;
 import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
 import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.utils.types.ChunkCoord;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 import protocolsupport.zplatform.impl.pe.PECreativeInventory;
 
 public class StartGame extends MiddleStartGame {
@@ -32,21 +31,16 @@ public class StartGame extends MiddleStartGame {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		MovementCache mcache = cache.getMovementCache();
-		if (!mcache.isFirstLocationSent()) {
-			//delay sending this until we have some rough idea about the spawn location,
-			//this spawn location is important for telling the client which chunks need lighting
-			mcache.setHeldSpawn(this);
-			return RecyclableSingletonList.create(CustomPayload.create(version, InternalPluginMessageRequest.PELockChannel));
-		}
 		NetworkEntity player = cache.getWatchedEntityCache().getSelfPlayer();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+
 		//Send fake resource packet for sounds.
 		ClientBoundPacketData resourcepack = ClientBoundPacketData.create(PEPacketIDs.RESOURCE_PACK);
 		resourcepack.writeBoolean(false); // required
 		resourcepack.writeShortLE(0); //beh packs count
 		resourcepack.writeShortLE(0); //res packs count
 		packets.add(resourcepack);
+
 		//Send fake resource stack for sounds.
 		ClientBoundPacketData resourcestack = ClientBoundPacketData.create(PEPacketIDs.RESOURCE_STACK);
 		resourcestack.writeBoolean(false); // required
@@ -56,18 +50,19 @@ public class StartGame extends MiddleStartGame {
 			resourcestack.writeBoolean(false); //is experimental
 		}
 		packets.add(resourcestack);
+
 		//Send actual start game information.
 		ClientBoundPacketData startgame = ClientBoundPacketData.create(PEPacketIDs.START_GAME);
 		VarNumberSerializer.writeSVarLong(startgame, playerEntityId); //player eid
 		VarNumberSerializer.writeVarLong(startgame, playerEntityId); //player eid
 		VarNumberSerializer.writeSVarInt(startgame, gamemode.getId()); //player gamemode
-		startgame.writeFloatLE((float) mcache.getPEClientX()); //player x
-		startgame.writeFloatLE((float) mcache.getPEClientY()); //player y
-		startgame.writeFloatLE((float) mcache.getPEClientZ()); //player z
+		startgame.writeFloatLE(8); //player x
+		startgame.writeFloatLE(18); //player y
+		startgame.writeFloatLE(8); //player z
 		startgame.writeFloatLE(0); //player pitch
 		startgame.writeFloatLE(0); //player yaw
 		VarNumberSerializer.writeSVarInt(startgame, 0); //seed
-		VarNumberSerializer.writeSVarInt(startgame, ChangeDimension.getPeDimensionId(dimension)); //world dimension
+		VarNumberSerializer.writeSVarInt(startgame, ChangeDimension.getPeDimensionId(dimension));
 		VarNumberSerializer.writeSVarInt(startgame, 1); //world type (1 - infinite)
 		VarNumberSerializer.writeSVarInt(startgame, GameMode.SURVIVAL.getId()); //world gamemode
 		VarNumberSerializer.writeSVarInt(startgame, difficulty.getId()); //world difficulty
@@ -112,27 +107,37 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeBytes(PEBlocks.getPocketRuntimeDefinition());
 		StringSerializer.writeString(startgame, version, ""); //Multiplayer correlation id.
 		packets.add(startgame);
+
 		//Player metadata and settings update, so it won't behave strangely until metadata update is sent by server
 		packets.add(PEAdventureSettings.createPacket(cache));
 		packets.add(EntityMetadata.createFaux(player, cache.getAttributesCache().getLocale(), version));
+
 		//Send chunk radius update without waiting for request, works anyway
 		//PE uses circle to calculate visible chunks, so the view distance should cover all chunks that are sent by server (pc square should fit into pe circle)
 		ClientBoundPacketData chunkradius = ClientBoundPacketData.create(PEPacketIDs.CHUNK_RADIUS);
 		VarNumberSerializer.writeSVarInt(chunkradius, (int) Math.ceil((Bukkit.getViewDistance() + 1) * Math.sqrt(2)));
 		packets.add(chunkradius);
-		//Send all creative items (from PE json)
+
+		packets.add(Chunk.createChunkPublisherUpdate(0, 0, 0));
+		Chunk.addFakeChunks(packets, new ChunkCoord(0, 0));
+
 		PECreativeInventory peInv = PECreativeInventory.getInstance();
 		ClientBoundPacketData creativeInventoryPacket = ClientBoundPacketData.create(PEPacketIDs.INVENTORY_CONTENT);
 		VarNumberSerializer.writeVarInt(creativeInventoryPacket, PESource.POCKET_CREATIVE_INVENTORY);
 		VarNumberSerializer.writeVarInt(creativeInventoryPacket, peInv.getItemCount());
 		creativeInventoryPacket.writeBytes(peInv.getCreativeItems());
 		packets.add(creativeInventoryPacket);
-		//Set PE gamemode.
-		cache.getAttributesCache().setPEGameMode(gamemode);
-		//Disable player mobility for right now
-		mcache.setClientImmobile(true);
-		packets.add(EntityMetadata.updatePlayerMobility(connection));
+
+		packets.add(LoginSuccess.createPlayStatus(LoginSuccess.PLAYER_SPAWN));
+
 		return packets;
+	}
+
+	@Override
+	public boolean postFromServerRead() {
+		super.postFromServerRead();
+		cache.getAttributesCache().setPEGameMode(gamemode);
+		return true;
 	}
 
 }

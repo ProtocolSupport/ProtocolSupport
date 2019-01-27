@@ -124,10 +124,6 @@ public class Utils {
 	    IntStream.range(0, count).forEach(i -> action.run());
 	}
 
-	public static boolean isJavaPropertyTrue(String property) {
-		return Utils.getJavaPropertyValue(property, false, Boolean::parseBoolean);
-	}
-
 	public static <T> T getJavaPropertyValue(String property, T defaultValue, Function<String, T> converter) {
 		return getRawJavaPropertyValue("protocolsupport."+property, defaultValue, converter);
 	}
