@@ -5172,32 +5172,32 @@
   {
     "blockdata": "minecraft:acacia_wood[axis=y]",
     "legacyid": 162,
-    "legacydata": 0
+    "legacydata": 12
   },
   {
     "blockdata": "minecraft:dark_oak_wood[axis=y]",
     "legacyid": 162,
-    "legacydata": 1
+    "legacydata": 13
   },
   {
     "blockdata": "minecraft:acacia_wood[axis=x]",
     "legacyid": 162,
-    "legacydata": 4
+    "legacydata": 12
   },
   {
     "blockdata": "minecraft:dark_oak_wood[axis=x]",
     "legacyid": 162,
-    "legacydata": 5
+    "legacydata": 13
   },
   {
     "blockdata": "minecraft:acacia_wood[axis=z]",
     "legacyid": 162,
-    "legacydata": 8
+    "legacydata": 12
   },
   {
     "blockdata": "minecraft:dark_oak_wood[axis=z]",
     "legacyid": 162,
-    "legacydata": 9
+    "legacydata": 13
   },
   {
     "blockdata": "minecraft:acacia_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]",
