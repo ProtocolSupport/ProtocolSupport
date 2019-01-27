@@ -26,6 +26,7 @@ public class LegacyItemType {
 		}
 		public void applyDefaultRemaps() {
 
+			//TODO: actually adapt the legacyblocktype registry instead of extracting data from it
 			Arrays.stream(Material.values())
 			.filter(m -> m.isItem() && m.isBlock())
 			.forEach(materialFrom -> {
@@ -44,6 +45,12 @@ public class LegacyItemType {
 			registerRemapEntry(Material.TRAPPED_CHEST, Material.TRAPPED_CHEST, ProtocolVersionsHelper.ALL_PC);
 
 
+			registerRemapEntry(Arrays.asList(Material.ACACIA_WOOD, Material.STRIPPED_ACACIA_WOOD), Material.ACACIA_LOG, ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemapEntry(Arrays.asList(Material.DARK_OAK_WOOD, Material.STRIPPED_DARK_OAK_WOOD), Material.DARK_OAK_LOG, ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemapEntry(Arrays.asList(Material.BIRCH_WOOD, Material.STRIPPED_BIRCH_WOOD), Material.BIRCH_LOG, ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemapEntry(Arrays.asList(Material.JUNGLE_WOOD, Material.STRIPPED_JUNGLE_WOOD), Material.JUNGLE_LOG, ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemapEntry(Arrays.asList(Material.SPRUCE_WOOD, Material.STRIPPED_SPRUCE_WOOD), Material.SPRUCE_LOG, ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemapEntry(Arrays.asList(Material.OAK_WOOD, Material.STRIPPED_OAK_WOOD), Material.OAK_LOG, ProtocolVersionsHelper.BEFORE_1_13);			
 			registerRemapEntry(Material.KELP, Material.GRASS, ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemapEntry(Material.DRIED_KELP, Material.POTATO, ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemapEntry(
@@ -103,6 +110,14 @@ public class LegacyItemType {
 			registerRemapEntry(Material.RABBIT_HIDE, Material.STONE, ProtocolVersionsHelper.BEFORE_1_8);
 			registerRemapEntry(Material.ARMOR_STAND, Material.STONE, ProtocolVersionsHelper.BEFORE_1_8);
 
+			registerRemapEntry(
+				Arrays.asList(
+					Material.ACACIA_WOOD, Material.STRIPPED_ACACIA_WOOD,
+					Material.DARK_OAK_WOOD, Material.STRIPPED_DARK_OAK_WOOD
+				),
+				Material.OAK_LOG,
+				ProtocolVersionsHelper.BEFORE_1_7
+			);
 
 			registerRemapEntry(Material.IRON_HORSE_ARMOR, Material.LEATHER_CHESTPLATE, ProtocolVersionsHelper.BEFORE_1_6);
 			registerRemapEntry(Material.GOLDEN_HORSE_ARMOR, Material.LEATHER_CHESTPLATE, ProtocolVersionsHelper.BEFORE_1_6);
