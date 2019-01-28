@@ -12,7 +12,7 @@ import protocolsupport.protocol.pipeline.common.RawPacketDataCaptureSend;
 import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
 import protocolsupport.protocol.pipeline.initial.InitialPacketDecoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.JavaSystemProperty;
 import protocolsupport.utils.netty.ChannelInitializer;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
@@ -25,7 +25,7 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotServerConnectionChannel extends ChannelInitializer {
 
-	private static final boolean replaceDecoderEncoder = Utils.getJavaPropertyValue("replaceencoderdecoder", false, Boolean::parseBoolean);
+	private static final boolean replaceDecoderEncoder = JavaSystemProperty.getValue("replaceencoderdecoder", false, Boolean::parseBoolean);
 
 	@Override
 	protected void initChannel(Channel channel) {

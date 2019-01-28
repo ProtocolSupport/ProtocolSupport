@@ -4,7 +4,9 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class LegacyEffect {
 
 	private static final IdRemappingRegistry<HashMapBasedIdRemappingTable> effect = new IdRemappingRegistry<HashMapBasedIdRemappingTable>() {

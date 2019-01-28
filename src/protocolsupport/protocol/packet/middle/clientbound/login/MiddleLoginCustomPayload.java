@@ -6,7 +6,6 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleLoginCustomPayload extends ClientBoundMiddlePacket {
 
@@ -21,7 +20,7 @@ public abstract class MiddleLoginCustomPayload extends ClientBoundMiddlePacket {
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		id = VarNumberSerializer.readVarInt(serverdata);
-		tag = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC);
+		tag = StringSerializer.readVarIntUTF8String(serverdata);
 		data = MiscSerializer.readAllBytesSlice(serverdata);
 	}
 

@@ -6,7 +6,9 @@ import java.util.Arrays;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class ProtocolVersionsHelper {
 
 	public static final ProtocolVersion LATEST_PC = ProtocolVersion.getLatest(ProtocolType.PC);
@@ -48,6 +50,8 @@ public class ProtocolVersionsHelper {
 	public static final ProtocolVersion[] BEFORE_1_13 = ProtocolVersion.getAllBeforeE(ProtocolVersion.MINECRAFT_1_13);
 
 	public static final ProtocolVersion[] ALL = ProtocolVersion.getAllSupported();
+
+	public static final ProtocolVersion[] BEFORE_1_13_1 = ProtocolVersion.getAllBeforeE(ProtocolVersion.MINECRAFT_1_13_1);
 
 	public static final ProtocolVersion[] ALL_PC = ProtocolVersion.getAllBetween(ProtocolVersion.getOldest(ProtocolType.PC), LATEST_PC);
 
@@ -119,6 +123,7 @@ public class ProtocolVersionsHelper {
 	protected static final Int2ObjectOpenHashMap<ProtocolVersion> byOldProtocolId = new Int2ObjectOpenHashMap<>();
 	protected static final Int2ObjectOpenHashMap<ProtocolVersion> byNewProtocolId = new Int2ObjectOpenHashMap<>();
 	protected static final Int2ObjectOpenHashMap<ProtocolVersion> byPEProtocolId = new Int2ObjectOpenHashMap<>();
+
 
 	static {
 		Arrays.stream(ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_6_4)).forEach(version -> byOldProtocolId.put(version.getId(), version));

@@ -8,9 +8,6 @@ import protocolsupport.protocol.utils.types.NetworkItemStack;
 public class ItemStackRemapper {
 
 	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale,  NetworkItemStack itemstack) {
-		if (!version.isPE()) {
-			setComplexlyRemapped(itemstack, false);
-		}
 		itemstack = ItemStackComplexRemapperRegistry.remapToClient(version, locale, itemstack);
 		itemstack.setTypeId(LegacyItemType.REGISTRY.getTable(version).getRemap(itemstack.getTypeId()));
 		if (version.isPE()) {
@@ -46,12 +43,8 @@ public class ItemStackRemapper {
 		return ItemStackComplexRemapperRegistry.remapFromClient(version, locale, itemstack);
 	}
 
-	public static void setComplexlyRemapped(NetworkItemStack itemstack, boolean remapped) {
-		itemstack.setLegacyData(remapped ? 0 : -1);
-	}
-
 	public static boolean isComplexlyRemapped(NetworkItemStack itemstack) {
-		return itemstack.getLegacyData() != -1;
+		return itemstack.getLegacyData() != NetworkItemStack.DEFAULT_LEGACY_DATA;
 	}
 
 }

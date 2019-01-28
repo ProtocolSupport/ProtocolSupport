@@ -43,7 +43,7 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 			for (int i = 0; i < ingredients.length; i++) {
 				writeIngredient(ingredients[i], serializer, version);
 			}
-			ItemStackSerializer.writeItemStack(serializer, version, I18NData.DEFAULT_LOCALE, shapelessRecipe.getResult(), true);
+			ItemStackSerializer.writeItemStack(serializer, version, I18NData.DEFAULT_LOCALE, shapelessRecipe.getResult());
 		}
 
 		if (recipe instanceof ShapedRecipe) {
@@ -55,14 +55,14 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 			for (int i = 0; i < ingredients.length; i++) {
 				writeIngredient(ingredients[i], serializer, version);
 			}
-			ItemStackSerializer.writeItemStack(serializer, version, I18NData.DEFAULT_LOCALE, shapedRecipe.getResult(), true);
+			ItemStackSerializer.writeItemStack(serializer, version, I18NData.DEFAULT_LOCALE, shapedRecipe.getResult());
 		}
 
 		if (recipe instanceof SmeltingRecipe) {
 			SmeltingRecipe smeltingRecipe = (SmeltingRecipe) recipe;
 			StringSerializer.writeString(serializer, version, smeltingRecipe.getGroup());
 			writeIngredient(smeltingRecipe.getIngredient(), serializer, version);
-			ItemStackSerializer.writeItemStack(serializer, version, I18NData.DEFAULT_LOCALE, smeltingRecipe.getResult(), true);
+			ItemStackSerializer.writeItemStack(serializer, version, I18NData.DEFAULT_LOCALE, smeltingRecipe.getResult());
 			serializer.writeFloat(smeltingRecipe.getExp());
 			VarNumberSerializer.writeVarInt(serializer, smeltingRecipe.getTime());
 		}
@@ -72,7 +72,8 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 		NetworkItemStack[] possibleStacks = ingredient.getPossibleStacks();
 		VarNumberSerializer.writeVarInt(serializer, possibleStacks.length);
 		for (int i = 0; i < possibleStacks.length; i++) {
-			ItemStackSerializer.writeItemStack(serializer, version, I18NData.DEFAULT_LOCALE, possibleStacks[i], true);
+			ItemStackSerializer.writeItemStack(serializer, version, I18NData.DEFAULT_LOCALE, possibleStacks[i]);
 		}
 	}
+
 }

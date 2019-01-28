@@ -7,7 +7,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.zplatform.ServerPlatform;
 
@@ -26,8 +25,8 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		windowId = serverdata.readUnsignedByte();
-		type = WindowType.getById(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 32));
-		title = ChatAPI.fromJSON(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
+		type = WindowType.getById(StringSerializer.readVarIntUTF8String(serverdata));
+		title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
 		slots = serverdata.readUnsignedByte();
 		if (type == WindowType.HORSE) {
 			horseId = serverdata.readInt();

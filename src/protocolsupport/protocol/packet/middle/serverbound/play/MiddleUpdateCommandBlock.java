@@ -8,7 +8,6 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -28,7 +27,7 @@ public abstract class MiddleUpdateCommandBlock extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_UPDATE_COMMAND_BLOCK);
 		PositionSerializer.writePosition(creator, position);
-		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, command);
+		StringSerializer.writeVarIntUTF8String(creator, command);
 		MiscSerializer.writeVarIntEnum(creator, mode);
 		creator.writeByte(flags);
 		return RecyclableSingletonList.create(creator);

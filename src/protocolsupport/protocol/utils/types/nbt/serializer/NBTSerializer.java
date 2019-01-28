@@ -1,11 +1,10 @@
 package protocolsupport.protocol.utils.types.nbt.serializer;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.netty.handler.codec.DecoderException;
-import io.netty.handler.codec.EncoderException;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -55,68 +54,68 @@ public class NBTSerializer<IN, OUT> {
 		typeWriters.put(type, typeWriter);
 	}
 
-	protected NBTType<?> readTagType(IN from) throws Exception {
+	protected NBTType<?> readTagType(IN from) throws IOException {
 		int id = idReader.readId(from);
 		NBTType<?> type = idToType.get(id);
 		if (type == null) {
-			throw new DecoderException(MessageFormat.format("Unknown nbt type id {0}", id));
+			throw new IOException(MessageFormat.format("Unknown nbt type id {0}", id));
 		}
 		return type;
 	}
 
-	protected String readTagName(IN from) throws Exception {
+	protected String readTagName(IN from) throws IOException {
 		return nameReader.readName(from);
 	}
 
-	protected NBT readTag(IN from, NBTType<?> type) throws Exception {
+	protected NBT readTag(IN from, NBTType<?> type) throws IOException {
 		TagReader<IN, ? extends NBT> f = typeReaders.get(type);
 		if (f == null) {
-			throw new DecoderException(MessageFormat.format("No reader registered for nbt type {0}", type));
+			throw new IOException(MessageFormat.format("No reader registered for nbt type {0}", type));
 		}
 		return f.readTag(from);
 	}
 
-	protected void writeTagType(OUT stream, NBTType<?> type) throws Exception {
+	protected void writeTagType(OUT stream, NBTType<?> type) throws IOException {
 		int id = typeToId.getInt(type);
 		if (id == typeToId.defaultReturnValue()) {
-			throw new EncoderException(MessageFormat.format("Unknown nbt type {0}", type));
+			throw new IOException(MessageFormat.format("Unknown nbt type {0}", type));
 		}
 		idWriter.writeId(stream, id);
 	}
 
-	protected void writeTagName(OUT stream, String name) throws Exception {
+	protected void writeTagName(OUT stream, String name) throws IOException {
 		nameWriter.writeName(stream, name);
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void writeTag(OUT stream, NBT tag) throws Exception {
+	protected void writeTag(OUT stream, NBT tag) throws IOException {
 		TagWriter<OUT, NBT> f = (TagWriter<OUT, NBT>) typeWriters.get(tag.getType());
 		if (f == null) {
-			throw new EncoderException(MessageFormat.format("No writer registered for nbt type {0}", tag.getType()));
+			throw new IOException(MessageFormat.format("No writer registered for nbt type {0}", tag.getType()));
 		}
 		f.writeTag(stream, tag);
 	}
 
-	public NBTCompound deserializeTag(IN from) throws Exception {
+	public NBTCompound deserializeTag(IN from) throws IOException {
 		NBTType<?> type = readTagType(from);
 		if (type == NBTType.END) {
 			return null;
 		}
 		if (type != NBTType.COMPOUND) {
-			throw new DecoderException(MessageFormat.format("Root tag must be compound, got: {0}", type));
+			throw new IOException(MessageFormat.format("Root tag must be compound, got: {0}", type));
 		}
 		readTagName(from);
 		return (NBTCompound) readTag(from, type);
 	}
 
-	public void serializeTag(OUT to, NBT tag) throws Exception {
+	public void serializeTag(OUT to, NBT tag) throws IOException {
 		NBTType<?> type = tag.getType();
 		writeTagType(to, type);
 		if (tag.getType() == NBTType.END) {
 			return;
 		}
 		if (type != NBTType.COMPOUND) {
-			throw new IllegalArgumentException(MessageFormat.format("Root tag must be compound, got: {0}", type));
+			throw new IOException(MessageFormat.format("Root tag must be compound, got: {0}", type));
 		}
 		writeTagName(to, "");
 		writeTag(to, tag);
@@ -125,32 +124,32 @@ public class NBTSerializer<IN, OUT> {
 
 	@FunctionalInterface
 	public static interface IdReader<T> {
-		public int readId(T from) throws Exception;
+		public int readId(T from) throws IOException;
 	}
 
 	@FunctionalInterface
 	public static interface IdWriter<T> {
-		public void writeId(T to, int id) throws Exception;
+		public void writeId(T to, int id) throws IOException;
 	}
 
 	@FunctionalInterface
 	public static interface NameReader<T> {
-		public String readName(T from) throws Exception;
+		public String readName(T from) throws IOException;
 	}
 
 	@FunctionalInterface
 	public static interface NameWriter<T> {
-		public void writeName(T to, String name) throws Exception;
+		public void writeName(T to, String name) throws IOException;
 	}
 
 	@FunctionalInterface
 	public static interface TagReader<IN, T extends NBT> {
-		public T readTag(IN from) throws Exception;
+		public T readTag(IN from) throws IOException;
 	}
 
 	@FunctionalInterface
 	public static interface TagWriter<OUT, T extends NBT> {
-		public void writeTag(OUT to, T tag) throws Exception;
+		public void writeTag(OUT to, T tag) throws IOException;
 	}
 
 }

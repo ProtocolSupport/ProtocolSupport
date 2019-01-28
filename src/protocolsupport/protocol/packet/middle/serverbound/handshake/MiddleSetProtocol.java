@@ -24,7 +24,7 @@ public abstract class MiddleSetProtocol extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.HANDSHAKE_START);
 		VarNumberSerializer.writeVarInt(creator, ProtocolVersionsHelper.LATEST_PC.getId());
-		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, hostname);
+		StringSerializer.writeVarIntUTF8String(creator, hostname);
 		creator.writeShort(port);
 		VarNumberSerializer.writeVarInt(creator, nextState);
 		return RecyclableSingletonList.create(creator);

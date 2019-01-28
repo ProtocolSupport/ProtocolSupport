@@ -14,6 +14,7 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPaylo
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEditBook;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleNameItem;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePickItem;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSelectTrade;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSetBeaconEffect;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -62,10 +63,10 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 
 	protected RecyclableCollection<ServerBoundPacketData> transformBookEdit() {
 		String locale = connection.getCache().getAttributesCache().getLocale();
-		NetworkItemStack book = ItemStackSerializer.readItemStack(data, connection.getVersion(), locale, true);
-		book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITTEN_BOOK));
+		NetworkItemStack book = ItemStackSerializer.readItemStack(data, connection.getVersion(), locale);
+		book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
 		if (!book.isNull()) {
-			return RecyclableSingletonList.create(MiddleEditBook.create(locale, book, false, UsedHand.MAIN));
+			return RecyclableSingletonList.create(MiddleEditBook.create(book, false, UsedHand.MAIN));
 		} else {
 			return RecyclableEmptyList.get();
 		}
@@ -74,9 +75,9 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 	protected RecyclableCollection<ServerBoundPacketData> transformBookSign() {
 		ProtocolVersion version = connection.getVersion();
 		String locale = connection.getCache().getAttributesCache().getLocale();
-		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version, locale, true);
+		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version, locale);
 		if (!book.isNull()) {
-			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITTEN_BOOK));
+			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
 			if (connection.getVersion() == ProtocolVersion.MINECRAFT_1_8) {
 				NBTCompound rootTag = book.getNBT();
 				if (rootTag != null) {
@@ -91,7 +92,7 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 					}
 				}
 			}
-			return RecyclableSingletonList.create(MiddleEditBook.create(locale, book, true, UsedHand.MAIN));
+			return RecyclableSingletonList.create(MiddleEditBook.create(book, true, UsedHand.MAIN));
 		} else {
 			return RecyclableEmptyList.get();
 		}
@@ -138,6 +139,11 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 	protected RecyclableCollection<ServerBoundPacketData> transformPickItem() {
 		int slot = VarNumberSerializer.readVarInt(data);
 		return RecyclableSingletonList.create(MiddlePickItem.create(slot));
+	}
+
+	protected RecyclableCollection<ServerBoundPacketData> transformTradeSelect() {
+		int slot = data.readInt();
+		return RecyclableSingletonList.create(MiddleSelectTrade.create(slot));
 	}
 
 	protected RecyclableCollection<ServerBoundPacketData> transformCustomPayload() {

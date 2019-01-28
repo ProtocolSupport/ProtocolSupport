@@ -17,10 +17,8 @@ public class DataWatcherObjectVector3f extends ReadableDataWatcherObject<Vector>
 	}
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
-		value.setX(from.readFloat());
-		value.setY(from.readFloat());
-		value.setZ(from.readFloat());
+	public void readFromStream(ByteBuf from) {
+		value = new Vector(from.readFloat(), from.readFloat(), from.readFloat());
 	}
 
 	@Override

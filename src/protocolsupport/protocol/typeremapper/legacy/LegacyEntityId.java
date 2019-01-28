@@ -3,7 +3,9 @@ package protocolsupport.protocol.typeremapper.legacy;
 import java.util.EnumMap;
 
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class LegacyEntityId {
 
 	private static final EnumMap<NetworkEntityType, String> legacyNames = new EnumMap<>(NetworkEntityType.class);

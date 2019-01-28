@@ -6,8 +6,8 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySetItems;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.typeremapper.basic.WindowSlotsRemappingHelper;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -20,18 +20,34 @@ public class InventorySetItems extends MiddleInventorySetItems {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && ((cache.getWindowCache().getOpenedWindow() == WindowType.PLAYER) || (windowId == 0))) {
-			itemstacks.remove(itemstacks.size() - 1);
-		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (cache.getWindowCache().getOpenedWindow() == WindowType.BREWING)) {
-			itemstacks.remove(4);
-		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (cache.getWindowCache().getOpenedWindow() == WindowType.ENCHANT)) {
-			itemstacks.remove(1);
+		switch (WindowSlotsRemappingHelper.getOpenedWindowType(connection, windowId)) {
+			case PLAYER: {
+				if (!WindowSlotsRemappingHelper.hasPlayerOffhandSlot(version)) {
+					itemstacks.remove(WindowSlotsRemappingHelper.PLAYER_OFF_HAND_SLOT);
+				}
+				break;
+			}
+			case BREWING: {
+				if (!WindowSlotsRemappingHelper.hasBrewingBlazePowderSlot(version)) {
+					itemstacks.remove(WindowSlotsRemappingHelper.BREWING_BLAZE_POWDER_SLOT);
+				}
+				break;
+			}
+			case ENCHANT: {
+				if (!WindowSlotsRemappingHelper.hasEnchantLapisSlot(version)) {
+					itemstacks.remove(WindowSlotsRemappingHelper.ENCHANT_LAPIS_SLOT);
+				}
+				break;
+			}
+			default: {
+				break;
+			}
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID);
 		serializer.writeByte(windowId);
 		serializer.writeShort(itemstacks.size());
 		for (NetworkItemStack itemstack : itemstacks) {
-			ItemStackSerializer.writeItemStack(serializer, version, cache.getAttributesCache().getLocale(), itemstack, true);
+			ItemStackSerializer.writeItemStack(serializer, version, cache.getAttributesCache().getLocale(), itemstack);
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

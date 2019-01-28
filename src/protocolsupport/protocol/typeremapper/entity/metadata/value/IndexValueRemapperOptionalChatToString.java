@@ -1,10 +1,10 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.value;
 
+import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
-import protocolsupport.utils.Utils;
 
 public class IndexValueRemapperOptionalChatToString extends IndexValueRemapper<DataWatcherObjectOptionalChat> {
 
@@ -18,7 +18,7 @@ public class IndexValueRemapperOptionalChatToString extends IndexValueRemapper<D
 	@Override
 	public DataWatcherObject<?> remapValue(DataWatcherObjectOptionalChat object) {
 		//TODO: pass locale
-		return new DataWatcherObjectString(object.getValue() != null ? Utils.clampString(object.getValue().toLegacyText(), limit) : "");
+		return new DataWatcherObjectString(object.getValue() != null ? LegacyChat.clampLegacyText(object.getValue().toLegacyText(), limit) : "");
 	}
 
 }

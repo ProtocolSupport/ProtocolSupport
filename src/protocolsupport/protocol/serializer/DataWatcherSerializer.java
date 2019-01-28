@@ -58,7 +58,7 @@ public class DataWatcherSerializer {
 		registry[DataWatcherObjectIdRegistry.getTypeId(supplier.get().getClass(), ProtocolVersionsHelper.LATEST_PC)] = supplier;
 	}
 
-	public static void readDataTo(ByteBuf from, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> to) {
+	public static void readDataTo(ByteBuf from, ArrayMap<DataWatcherObject<?>> to) {
 		do {
 			int key = from.readUnsignedByte();
 			if (key == 0xFF) {
@@ -67,7 +67,7 @@ public class DataWatcherSerializer {
 			int type = from.readUnsignedByte();
 			try {
 				ReadableDataWatcherObject<?> object = registry[type].get();
-				object.readFromStream(from, version, locale);
+				object.readFromStream(from);
 				to.put(key, object);
 			} catch (Exception e) {
 				throw new DecoderException(MessageFormat.format("Unable to decode datawatcher object (type: {0}, index: {1})", type, key), e);

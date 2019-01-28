@@ -6,7 +6,6 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleMap extends ClientBoundMiddlePacket {
 
@@ -36,7 +35,7 @@ public abstract class MiddleMap extends ClientBoundMiddlePacket {
 				from.readUnsignedByte(),
 				from.readUnsignedByte(),
 				from.readByte(),
-				from.readBoolean() ? StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC) : null
+				from.readBoolean() ? StringSerializer.readVarIntUTF8String(serverdata) : null
 			)
 		);
 		columns = serverdata.readUnsignedByte();

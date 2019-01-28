@@ -3,7 +3,9 @@ package protocolsupport.protocol.typeremapper.legacy;
 import org.bukkit.enchantments.Enchantment;
 
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class LegacyEnchantmentId {
 
 	private static final Object2ShortOpenHashMap<Enchantment> toLegacyId = new Object2ShortOpenHashMap<>();

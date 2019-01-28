@@ -5,7 +5,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public abstract class MiddleEntityEquipment extends ClientBoundMiddlePacket {
@@ -22,7 +21,7 @@ public abstract class MiddleEntityEquipment extends ClientBoundMiddlePacket {
 	public void readFromServerData(ByteBuf serverdata) {
 		entityId = VarNumberSerializer.readVarInt(serverdata);
 		slot = VarNumberSerializer.readVarInt(serverdata);
-		itemstack = ItemStackSerializer.readItemStack(serverdata, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale(), false);
+		itemstack = ItemStackSerializer.readItemStack(serverdata);
 	}
 
 }

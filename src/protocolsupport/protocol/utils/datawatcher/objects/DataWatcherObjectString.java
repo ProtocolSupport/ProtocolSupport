@@ -15,8 +15,8 @@ public class DataWatcherObjectString extends ReadableDataWatcherObject<String> {
 	}
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
-		value = StringSerializer.readString(from, version);
+	public void readFromStream(ByteBuf from) {
+		value = StringSerializer.readVarIntUTF8String(from);
 	}
 
 	@Override

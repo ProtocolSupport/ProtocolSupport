@@ -5,14 +5,16 @@ import com.google.gson.JsonObject;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.utils.JsonUtils;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ResourceUtils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class SoundData {
 
 	private static final Int2ObjectOpenHashMap<String> idToName = new Int2ObjectOpenHashMap<>();
 
 	static {
-		for (JsonElement element : Utils.iterateJsonArrayResource(MinecraftData.getResourcePath("sounds.json"))) {
+		for (JsonElement element : ResourceUtils.getAsIterableJson(MinecraftData.getResourcePath("sounds.json"))) {
 			JsonObject object = element.getAsJsonObject();
 			idToName.put(JsonUtils.getInt(object, "id"), JsonUtils.getString(object, "name"));
 		}

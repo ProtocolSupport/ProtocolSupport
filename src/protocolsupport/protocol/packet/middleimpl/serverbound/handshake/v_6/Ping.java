@@ -38,7 +38,7 @@ public class Ping extends ServerBoundMiddlePacket {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		ServerBoundPacketData hsscreator = ServerBoundPacketData.create(ServerBoundPacket.HANDSHAKE_START);
 		VarNumberSerializer.writeVarInt(hsscreator, ProtocolVersionsHelper.LATEST_PC.getId());
-		StringSerializer.writeString(hsscreator, ProtocolVersionsHelper.LATEST_PC, hostname);
+		StringSerializer.writeVarIntUTF8String(hsscreator, hostname);
 		hsscreator.writeShort(port);
 		VarNumberSerializer.writeVarInt(hsscreator, 1);
 		packets.add(hsscreator);

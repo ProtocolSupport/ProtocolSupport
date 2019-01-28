@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardT
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.utils.Utils;
+import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -25,9 +25,9 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 		serializer.writeByte(mode);
 		if ((mode == 0) || (mode == 2)) {
 			String locale = cache.getAttributesCache().getLocale();
-			StringSerializer.writeString(serializer, version, Utils.clampString(displayName.toLegacyText(locale), 32));
-			StringSerializer.writeString(serializer, version, Utils.clampString(prefix.toLegacyText(locale), 16));
-			StringSerializer.writeString(serializer, version, Utils.clampString(suffix.toLegacyText(locale), 16));
+			StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(displayName.toLegacyText(locale), 32));
+			StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(prefix.toLegacyText(locale), 16));
+			StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(suffix.toLegacyText(locale), 16));
 			serializer.writeByte(friendlyFire);
 			StringSerializer.writeString(serializer, version, nameTagVisibility);
 			StringSerializer.writeString(serializer, version, collisionRule);

@@ -16,8 +16,10 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.JsonUtils;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ResourceUtils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class FlatteningBlockId {
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> REGISTRY = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
@@ -28,7 +30,7 @@ public class FlatteningBlockId {
 	};
 
 	protected static void load(ProtocolVersion version) {
-		JsonObject blocksData = Utils.getResourceJson(MappingsData.getFlatteningResoucePath(version, "blocks.json"));
+		JsonObject blocksData = ResourceUtils.getAsJson(MappingsData.getFlatteningResoucePath(version, "blocks.json"));
 		if (blocksData != null) {
 			ArrayBasedIdRemappingTable table = REGISTRY.getTable(version);
 			for (Entry<String, JsonElement> entry : blocksData.entrySet()) {

@@ -8,7 +8,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.Utils;
 
 public abstract class MiddleEntitySetAttributes extends MiddleEntity {
@@ -26,7 +25,7 @@ public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 		int attributesCount = serverdata.readInt();
 		for (int i = 0; i < attributesCount; i++) {
 			Attribute attribute = new Attribute();
-			attribute.key = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 64);
+			attribute.key = StringSerializer.readVarIntUTF8String(serverdata);
 			attribute.value = serverdata.readDouble();
 			attribute.modifiers = new Modifier[VarNumberSerializer.readVarInt(serverdata)];
 			for (int j = 0; j < attribute.modifiers.length; j++) {

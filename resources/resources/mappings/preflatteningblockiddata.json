@@ -4325,31 +4325,6 @@
     "legacydata": 13
   },
   {
-    "blockdata": "minecraft:skeleton_skull[rotation=0]",
-    "legacyid": 144,
-    "legacydata": 1
-  },
-  {
-    "blockdata": "minecraft:skeleton_wall_skull[facing=north]",
-    "legacyid": 144,
-    "legacydata": 2
-  },
-  {
-    "blockdata": "minecraft:skeleton_wall_skull[facing=south]",
-    "legacyid": 144,
-    "legacydata": 3
-  },
-  {
-    "blockdata": "minecraft:skeleton_wall_skull[facing=east]",
-    "legacyid": 144,
-    "legacydata": 4
-  },
-  {
-    "blockdata": "minecraft:skeleton_wall_skull[facing=west]",
-    "legacyid": 144,
-    "legacydata": 5
-  },
-  {
     "blockdata": "minecraft:anvil[facing=south]",
     "legacyid": 145,
     "legacydata": 0
@@ -5197,32 +5172,32 @@
   {
     "blockdata": "minecraft:acacia_wood[axis=y]",
     "legacyid": 162,
-    "legacydata": 0
+    "legacydata": 12
   },
   {
     "blockdata": "minecraft:dark_oak_wood[axis=y]",
     "legacyid": 162,
-    "legacydata": 1
+    "legacydata": 13
   },
   {
     "blockdata": "minecraft:acacia_wood[axis=x]",
     "legacyid": 162,
-    "legacydata": 4
+    "legacydata": 12
   },
   {
     "blockdata": "minecraft:dark_oak_wood[axis=x]",
     "legacyid": 162,
-    "legacydata": 5
+    "legacydata": 13
   },
   {
     "blockdata": "minecraft:acacia_wood[axis=z]",
     "legacyid": 162,
-    "legacydata": 8
+    "legacydata": 12
   },
   {
     "blockdata": "minecraft:dark_oak_wood[axis=z]",
     "legacyid": 162,
-    "legacydata": 9
+    "legacydata": 13
   },
   {
     "blockdata": "minecraft:acacia_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]",
@@ -5583,106 +5558,6 @@
     "blockdata": "minecraft:peony[half=upper]",
     "legacyid": 175,
     "legacydata": 8
-  },
-  {
-    "blockdata": "minecraft:white_banner[rotation=0]",
-    "legacyid": 176,
-    "legacydata": 0
-  },
-  {
-    "blockdata": "minecraft:white_banner[rotation=1]",
-    "legacyid": 176,
-    "legacydata": 1
-  },
-  {
-    "blockdata": "minecraft:white_banner[rotation=2]",
-    "legacyid": 176,
-    "legacydata": 2
-  },
-  {
-    "blockdata": "minecraft:white_banner[rotation=3]",
-    "legacyid": 176,
-    "legacydata": 3
-  },
-  {
-    "blockdata": "minecraft:white_banner[rotation=4]",
-    "legacyid": 176,
-    "legacydata": 4
-  },
-  {
-    "blockdata": "minecraft:white_banner[rotation=5]",
-    "legacyid": 176,
-    "legacydata": 5
-  },
-  {
-    "blockdata": "minecraft:white_banner[rotation=6]",
-    "legacyid": 176,
-    "legacydata": 6
-  },
-  {
-    "blockdata": "minecraft:white_banner[rotation=7]",
-    "legacyid": 176,
-    "legacydata": 7
-  },
-  {
-    "blockdata": "minecraft:white_banner[rotation=8]",
-    "legacyid": 176,
-    "legacydata": 8
-  },
-  {
-    "blockdata": "minecraft:white_banner[rotation=9]",
-    "legacyid": 176,
-    "legacydata": 9
-  },
-  {
-    "blockdata": "minecraft:white_banner[rotation=10]",
-    "legacyid": 176,
-    "legacydata": 10
-  },
-  {
-    "blockdata": "minecraft:white_banner[rotation=11]",
-    "legacyid": 176,
-    "legacydata": 11
-  },
-  {
-    "blockdata": "minecraft:white_banner[rotation=12]",
-    "legacyid": 176,
-    "legacydata": 12
-  },
-  {
-    "blockdata": "minecraft:white_banner[rotation=13]",
-    "legacyid": 176,
-    "legacydata": 13
-  },
-  {
-    "blockdata": "minecraft:white_banner[rotation=14]",
-    "legacyid": 176,
-    "legacydata": 14
-  },
-  {
-    "blockdata": "minecraft:white_banner[rotation=15]",
-    "legacyid": 176,
-    "legacydata": 15
-  },
-  {
-    "blockdata": "minecraft:white_wall_banner[facing=north]",
-    "legacyid": 177,
-    "legacydata": 2
-  },
-  {
-    "blockdata": "minecraft:white_wall_banner[facing=south]",
-    "legacyid": 177,
-    "legacydata": 3
-  },
-  {
-    "blockdata": "minecraft:white_wall_banner[facing=west]",
-    "legacyid": 177,
-    "legacydata": 4
-  },
-  {
-    "blockdata": "minecraft:white_wall_banner[facing=east]",
-    "legacyid": 177,
-    "legacydata": 5
   },
   {
     "blockdata": "minecraft:daylight_detector[inverted=true,power=0]",

@@ -10,8 +10,10 @@ import org.bukkit.entity.EntityType;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupportbuildprocessor.Preload;
 
 @SuppressWarnings("deprecation")
+@Preload
 public enum NetworkEntityType {
 
 	NONE(EType.NONE, -1),

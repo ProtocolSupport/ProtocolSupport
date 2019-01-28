@@ -14,7 +14,7 @@ public class DataWatcherObjectByte extends ReadableDataWatcherObject<Byte> {
 	}
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
+	public void readFromStream(ByteBuf from) {
 		value = from.readByte();
 	}
 

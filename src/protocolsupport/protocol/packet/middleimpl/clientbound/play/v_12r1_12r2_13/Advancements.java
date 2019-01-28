@@ -58,7 +58,7 @@ public class Advancements extends MiddleAdvancements {
 	protected static void writeAdvancementDisplay(ByteBuf to, ProtocolVersion version, String locale, AdvancementDisplay display) {
 		StringSerializer.writeString(to, version, ChatAPI.toJSON(LegacyChatJson.convert(version, locale, display.title)));
 		StringSerializer.writeString(to, version, ChatAPI.toJSON(LegacyChatJson.convert(version, locale, display.description)));
-		ItemStackSerializer.writeItemStack(to, version, locale, display.icon, false);
+		ItemStackSerializer.writeItemStack(to, version, locale, display.icon);
 		MiscSerializer.writeVarIntEnum(to, display.frametype);
 		to.writeInt(display.flags);
 		if ((display.flags & AdvancementDisplay.flagHasBackgroundOffset) != 0) {
