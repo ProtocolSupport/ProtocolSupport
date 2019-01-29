@@ -7,7 +7,9 @@ import org.bukkit.Material;
 
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class PEInventory {
 
 	private static List<Material> clickUpdateMaterials = new ArrayList<Material>(9);

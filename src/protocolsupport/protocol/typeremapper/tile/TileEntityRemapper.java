@@ -14,7 +14,6 @@ import java.util.stream.IntStream;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Piston;
 

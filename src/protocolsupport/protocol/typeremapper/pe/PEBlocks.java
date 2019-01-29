@@ -23,9 +23,11 @@ import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.JsonUtils;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ResourceUtils;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class PEBlocks {
 
 	private static final byte[] peBlockDef;
@@ -38,9 +40,9 @@ public class PEBlocks {
 
 	static {
 		final ArrayList<PEBlock> peBlocks = new ArrayList<>();
-		final JsonObject peMappings = Utils.getResourceJson(PEDataValues.getResourcePath("blockmapping.json"));
+		final JsonObject peMappings = ResourceUtils.getAsJson(PEDataValues.getResourcePath("blockmapping.json"));
 		//Load in PE blockdefinitions (used for login definition list and mapping name+data -> runtimeid)
-		for (JsonElement element : Utils.iterateJsonArrayResource(PEDataValues.getResourcePath("blockdefinition.json"))) {
+		for (JsonElement element : ResourceUtils.getAsIterableJson(PEDataValues.getResourcePath("blockdefinition.json"))) {
 			JsonObject object = element.getAsJsonObject();
 			peBlocks.add(new PEBlock(JsonUtils.getString(object, "name"), (short) JsonUtils.getInt(object, "data")));
 		}

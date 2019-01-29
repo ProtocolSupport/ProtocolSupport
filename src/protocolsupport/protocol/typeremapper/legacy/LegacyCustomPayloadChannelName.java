@@ -29,7 +29,6 @@ public class LegacyCustomPayloadChannelName {
 	public static final String LEGACY_STRUCTURE_BLOCK = "MC|Struct";
 	public static final String LEGACY_TRADE_SELECT = "MC|TrSel";
 	public static final String LEGACY_TRADE_LIST = "MC|TrList";
-	public static final String LEGACY_TRADE_SELECT = "MC|TrSel";
 
 	public static String toPre13(String modernName) {
 		switch (modernName) {

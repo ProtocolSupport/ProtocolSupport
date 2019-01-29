@@ -11,7 +11,7 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ResourceUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -40,7 +40,7 @@ public class PECreativeInventory {
 	}
 
 	public void generateCreativeInventoryItems() {
-		JsonArray array = new JsonParser().parse(Utils.getResourceBuffered("pe/creativeitems.json")).getAsJsonArray();
+		JsonArray array = new JsonParser().parse(ResourceUtils.getAsBufferedReader("pe/creativeitems.json")).getAsJsonArray();
 		AtomicInteger itemcount = new AtomicInteger();
 		ByteBuf itembuf = Unpooled.buffer();
 		Set<Integer> foundNBTItems = new HashSet<Integer>();

@@ -23,13 +23,13 @@ import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.pingresponse.PingResponse;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.JavaSystemProperty;
 import raknetserver.pipeline.raknet.RakNetPacketConnectionEstablishHandler.PingHandler;
 
 public class PEProxyServerInfoHandler implements PingHandler {
 
-	private static final int statusThreads = Utils.getJavaPropertyValue("pestatusthreads", 2, Integer::parseInt);
-	private static final int statusThreadKeepAlive = Utils.getJavaPropertyValue("pestatusthreadskeepalive", 60, Integer::parseInt);
+	private static final int statusThreads = JavaSystemProperty.getValue("pestatusthreads", 2, Integer::parseInt);
+	private static final int statusThreadKeepAlive = JavaSystemProperty.getValue("pestatusthreadskeepalive", 60, Integer::parseInt);
 
 	static {
 		ProtocolSupport.logInfo(MessageFormat.format("PE status threads max count: {0}, keep alive time: {1}", statusThreads, statusThreadKeepAlive));
@@ -48,7 +48,7 @@ public class PEProxyServerInfoHandler implements PingHandler {
 
 	@Override
 	public String getServerInfo(Channel channel) {
-		if (Utils.isTrue(channel.attr(SENT_INFO_KEY).getAndSet(Boolean.TRUE))) {
+		if (Boolean.TRUE.equals(channel.attr(SENT_INFO_KEY).getAndSet(Boolean.TRUE))) {
 			return "";
 		}
 		try {

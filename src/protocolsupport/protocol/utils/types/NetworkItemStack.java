@@ -143,9 +143,4 @@ public class NetworkItemStack {
 
 	};
 
-	@Override
-	public String toString() {
-		return Utils.toStringAllFields(this);
-	}
-
 }

@@ -31,7 +31,6 @@ import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
 import protocolsupport.protocol.utils.types.nbt.serializer.DefaultNBTSerializer;
 import protocolsupport.protocol.utils.types.nbt.serializer.PENBTSerializer;
-import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class ItemStackSerializer {
@@ -60,13 +59,14 @@ public class ItemStackSerializer {
 	 * @return itemstack
 	 */
 	public static NetworkItemStack readItemStack(ByteBuf from, ProtocolVersion version, String locale) {
-		int type = 0;
+		int type;
 		if (version.isPE()) {
 			type = VarNumberSerializer.readSVarInt(from);
 		} else if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
-			boolean exist = from.readBoolean();
-			if (!exist) {
-				return NetworkItemStack.NULL;
+			if (!from.readBoolean()) {
+				type = -1;
+			} else {
+				type = VarNumberSerializer.readVarInt(from);
 			}
 		} else {
 			type = from.readShort();
@@ -106,7 +106,7 @@ public class ItemStackSerializer {
 		} else {
 			itemstack.setNBT(readTag(from, version));
 		}
-		itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack.cloneItemStack());
+		itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack);
 		return itemstack;
 	}
 
@@ -127,6 +127,23 @@ public class ItemStackSerializer {
 	}
 
 	/**
+	 * Writes PE itemstack (latest protocol version format)
+	 * @param to buffer to write to
+	 * @param itemstack itemstack
+	 */
+	public static void writePEItemStack(ByteBuf to, NetworkItemStack itemstack) {
+		if (itemstack == null || itemstack.isNull()) {
+			VarNumberSerializer.writeVarInt(to, 0);
+		} else {
+			VarNumberSerializer.writeSVarInt(to, itemstack.getTypeId());
+			VarNumberSerializer.writeSVarInt(to, ((itemstack.getLegacyData() & 0x7FFF) << 8) | itemstack.getAmount());
+			writeTag(to, false, ProtocolVersionsHelper.LATEST_PE, itemstack.getNBT());
+			VarNumberSerializer.writeSVarInt(to, 0); //TODO: CanPlaceOn PE
+			VarNumberSerializer.writeSVarInt(to, 0); //TODO: CanDestroy PE
+		}
+	}
+
+	/**
 	 * Writes client itemstack (provided protocol version format)
 	 * @param to buffer to write to
 	 * @param version protocol version
@@ -134,7 +151,7 @@ public class ItemStackSerializer {
 	 * @param itemstack itemstack
 	 */
 	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		if (itemstack.isNull()) {
+		if (itemstack == null || itemstack.isNull()) {
 			if (version.isPE()) {
 				VarNumberSerializer.writeVarInt(to, 0);
 			} else if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
@@ -144,14 +161,14 @@ public class ItemStackSerializer {
 			}
 			return;
 		}
-
+		itemstack = remapItemToClient(version, locale, itemstack.cloneItemStack());
 		if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
 			ItemStack bukkitStack = ServerPlatform.get().getMiscUtils().createItemStackFromNetwork(itemstack);
 			ItemStackWriteEvent event = new ItemStackWriteEvent(version, locale, bukkitStack);
 			Bukkit.getPluginManager().callEvent(event);
 			List<String> additionalLore = event.getAdditionalLore();
 			BaseComponent forcedDisplayName = event.getForcedDisplayName();
-			if ((forcedDisplayName != null) || !additionalLore.isEmpty()) {
+			if (forcedDisplayName != null || !additionalLore.isEmpty()) {
 				NBTCompound nbt = itemstack.getNBT();
 				if (nbt == null) {
 					nbt = new NBTCompound();
@@ -176,15 +193,8 @@ public class ItemStackSerializer {
 				itemstack.setNBT(nbt);
 			}
 		}
-
-		itemstack = ItemStackRemapper.remapToClient(version, locale, itemstack);
-
 		if (version.isPE()) {
-			VarNumberSerializer.writeSVarInt(to, itemstack.getTypeId());
-			VarNumberSerializer.writeSVarInt(to, ((itemstack.getLegacyData() & 0x7FFF) << 8) | itemstack.getAmount());
-			writeTag(to, false, version, itemstack.getNBT());
-			VarNumberSerializer.writeSVarInt(to, 0); //TODO: CanPlaceOn PE
-			VarNumberSerializer.writeSVarInt(to, 0); //TODO: CanDestroy PE
+			writePEItemStack(to, itemstack);
 		} else {
 			if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
 				to.writeBoolean(true);

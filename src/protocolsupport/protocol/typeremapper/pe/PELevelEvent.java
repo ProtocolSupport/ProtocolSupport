@@ -3,7 +3,9 @@ package protocolsupport.protocol.typeremapper.pe;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.types.Position;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class PELevelEvent {
 
 	public static final int SOUND_CLICK = 1000;

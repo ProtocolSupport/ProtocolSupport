@@ -163,7 +163,7 @@ public class PETransactionRemapper {
 		if ((transaction.getSourceId() != GodPacket.SOURCE_CREATIVE) && !transaction.isCursor()) {
 			//Creative transaction use -1 not for cursor but throwing items, cursoritems are actually deleted serverside.
 			int slot = transaction.getSlot() == InvTransaction.DROP ? InvTransaction.CURSOR : transaction.getSlot();
-			packets.add(MiddleCreativeSetSlot.create(cache.getAttributesCache().getLocale(), slot, transaction.getNewItem()));
+			packets.add(MiddleCreativeSetSlot.create(slot, transaction.getNewItem()));
 			if (slot == cache.getPEInventoryCache().getSelectedSlot()) {
 				cache.getPEInventoryCache().setItemInHand(transaction.getNewItem());
 			}
@@ -194,7 +194,7 @@ public class PETransactionRemapper {
 		public void on(int slot, NetworkItemStack item, NetworkDataCache cache, RecyclableArrayList<ServerBoundPacketData> packets) {
 			bug("CLICK " + toString() + " on: " + slot + " with: " + item.toString());
 			int actionNumber = cache.getPEInventoryCache().getActionNumber();
-			packets.add(MiddleInventoryClick.create(cache.getAttributesCache().getLocale(), cache.getWindowCache().getOpenedWindowId(), slot, button, actionNumber, mode, item));
+			packets.add(MiddleInventoryClick.create(cache.getWindowCache().getOpenedWindowId(), slot, button, actionNumber, mode, item));
 			if (!item.isNull() && item.getNBT() != null) {
 				packets.add(MiddleInventoryTransaction.create(cache.getWindowCache().getOpenedWindowId(), actionNumber, false));
 			}

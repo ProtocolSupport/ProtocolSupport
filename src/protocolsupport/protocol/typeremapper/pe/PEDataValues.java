@@ -25,8 +25,11 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.utils.ResourceUtils;
 import protocolsupport.utils.Utils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class PEDataValues {
 
 	public static String getResourcePath(String name) {
@@ -34,7 +37,7 @@ public class PEDataValues {
 	}
 
 	public static BufferedReader getResource(String name) {
-		return Utils.getResourceBuffered(getResourcePath(name));
+		return ResourceUtils.getAsBufferedReader(getResourcePath(name));
 	}
 
 	private static JsonObject getFileObject(String name) {

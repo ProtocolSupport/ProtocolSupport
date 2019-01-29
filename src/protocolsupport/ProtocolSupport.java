@@ -19,7 +19,6 @@ import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.pe.PECreativeInventory;
 import protocolsupport.zplatform.impl.pe.PEProxyServer;
-import protocolsupport.zplatform.impl.pe.PEProxyServerInfoHandler;
 
 public class ProtocolSupport extends JavaPlugin {
 

@@ -46,7 +46,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.INVENTORY_SLOT);
 		VarNumberSerializer.writeVarInt(serializer, windowId);
 		VarNumberSerializer.writeVarInt(serializer, slot);
-		ItemStackSerializer.writeItemStack(serializer, version, locale, itemstack, true);
+		ItemStackSerializer.writeItemStack(serializer, version, locale, itemstack);
 		return serializer;
 	}
 

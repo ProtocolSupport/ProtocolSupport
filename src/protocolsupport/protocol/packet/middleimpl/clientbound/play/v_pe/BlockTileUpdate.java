@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockTileUp
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.typeremapper.basic.TileEntityRemapper;
+import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.TileEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;

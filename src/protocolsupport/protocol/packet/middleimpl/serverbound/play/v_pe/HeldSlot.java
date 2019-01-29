@@ -17,7 +17,7 @@ public class HeldSlot extends MiddleHeldSlot {
 	public void readFromClientData(ByteBuf clientdata) {
 		PEInventoryCache invCache = cache.getPEInventoryCache();
 		VarNumberSerializer.readVarLong(clientdata);
-		invCache.setItemInHand(ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getAttributesCache().getLocale(), true));
+		invCache.setItemInHand(ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getAttributesCache().getLocale()));
 		clientdata.readByte();
 		invCache.setSelectedSlot(slot = clientdata.readByte());
 		clientdata.readByte();

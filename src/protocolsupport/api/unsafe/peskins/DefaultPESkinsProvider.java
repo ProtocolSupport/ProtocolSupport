@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
 
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ResourceUtils;
 
 public class DefaultPESkinsProvider extends PESkinsProvider {
 
@@ -16,7 +16,7 @@ public class DefaultPESkinsProvider extends PESkinsProvider {
 		@Override
 		public byte[] call() {
 			try {
-				return toData(ImageIO.read(Utils.getResource("pe/steve_skin.png")));
+				return toData(ImageIO.read(ResourceUtils.getAsStream("pe/steve_skin.png")));
 			} catch (IOException e) {
 				return new byte[0];
 			}
