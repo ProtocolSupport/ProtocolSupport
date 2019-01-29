@@ -61,6 +61,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnObj
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.StartGame;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.StopSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.TimeUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Title;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.UnloadChunk;
@@ -132,6 +133,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_EXPLOSION_ID, Explosion::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_SOUND_ID, WorldSound::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID, WorldCustomSound::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_STOP_SOUND, StopSound::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_BREAK_ANIMATION_ID, BlockBreakAnimation::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map::new);
