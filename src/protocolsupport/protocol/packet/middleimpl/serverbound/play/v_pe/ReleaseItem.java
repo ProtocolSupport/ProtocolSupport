@@ -27,7 +27,7 @@ public class ReleaseItem extends ServerBoundMiddlePacket {
 	public void readFromClientData(ByteBuf clientdata) {
 		subTypeId = VarNumberSerializer.readVarInt(clientdata);
 		slot = VarNumberSerializer.readSVarInt(clientdata);
-		itemstack = ItemStackSerializer.readItemStack(clientdata);
+		itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getAttributesCache().getLocale());
 		clientdata.readFloatLE();
 		clientdata.readFloatLE();
 		clientdata.readFloatLE();
