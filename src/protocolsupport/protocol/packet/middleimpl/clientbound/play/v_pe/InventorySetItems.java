@@ -34,7 +34,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 		VarNumberSerializer.writeVarInt(serializer, itemstacks.length);
 		//Also get the nulls for remapped slots in between.
 		for (int i = 0; i < itemstacks.length; i++) {
-			ItemStackSerializer.writeItemStack(serializer, version, locale, itemstacks[i]);
+			ItemStackSerializer.writeItemStack(serializer, version, locale, itemstacks[i] == null ? NetworkItemStack.NULL : itemstacks[i]);
 		}
 		return serializer;
 	}

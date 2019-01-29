@@ -132,7 +132,7 @@ public class ItemStackSerializer {
 	 * @param itemstack itemstack
 	 */
 	public static void writePEItemStack(ByteBuf to, NetworkItemStack itemstack) {
-		if (itemstack == null || itemstack.isNull()) {
+		if (itemstack.isNull()) {
 			VarNumberSerializer.writeVarInt(to, 0);
 		} else {
 			VarNumberSerializer.writeSVarInt(to, itemstack.getTypeId());
@@ -151,7 +151,7 @@ public class ItemStackSerializer {
 	 * @param itemstack itemstack
 	 */
 	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		if (itemstack == null || itemstack.isNull()) {
+		if (itemstack.isNull()) {
 			if (version.isPE()) {
 				VarNumberSerializer.writeVarInt(to, 0);
 			} else if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
@@ -161,7 +161,6 @@ public class ItemStackSerializer {
 			}
 			return;
 		}
-		itemstack = remapItemToClient(version, locale, itemstack.cloneItemStack());
 		if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
 			ItemStack bukkitStack = ServerPlatform.get().getMiscUtils().createItemStackFromNetwork(itemstack);
 			ItemStackWriteEvent event = new ItemStackWriteEvent(version, locale, bukkitStack);
@@ -193,6 +192,7 @@ public class ItemStackSerializer {
 				itemstack.setNBT(nbt);
 			}
 		}
+		itemstack = remapItemToClient(version, locale, itemstack.cloneItemStack());
 		if (version.isPE()) {
 			writePEItemStack(to, itemstack);
 		} else {

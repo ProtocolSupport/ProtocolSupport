@@ -63,7 +63,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 				wildStack.setTypeId(firstType.getTypeId());
 				wildStack.setLegacyData(-1); //wildcard stack
 				wildStack.setAmount(1);
-				possibleStacks = new NetworkItemStack[]{wildStack};
+				possibleStacks = new NetworkItemStack[]{ wildStack };
 			}
 		}
 		for (NetworkItemStack item : possibleStacks) {
