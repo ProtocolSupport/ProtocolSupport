@@ -12,13 +12,17 @@ public class MinecraftData {
 		return ("data/" + name);
 	}
 
+	@SuppressWarnings("deprecation")
 	public static final int ITEM_COUNT =
 		(int) Arrays.stream(Material.values())
+		.filter(mat -> !mat.isLegacy())
 		.filter(Material::isItem)
 		.count();
 
+	@SuppressWarnings("deprecation")
 	public static final int BLOCKDATA_COUNT =
 		Arrays.stream(Material.values())
+		.filter(mat -> !mat.isLegacy())
 		.filter(Material::isBlock)
 		.mapToInt(material -> MaterialAPI.getBlockDataList(material).size())
 		.sum();

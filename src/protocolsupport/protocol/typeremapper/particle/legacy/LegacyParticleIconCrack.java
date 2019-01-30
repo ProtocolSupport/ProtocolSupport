@@ -1,18 +1,16 @@
 package protocolsupport.protocol.typeremapper.particle.legacy;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public class LegacyParticleIconCrack extends LegacyParticle {
 
 	protected NetworkItemStack item;
 
-	public LegacyParticleIconCrack(int id, String name, ProtocolVersion version, String locale, NetworkItemStack item) {
-		super(id, name);
-		this.item = ItemStackRemapper.remapToClient(version, locale, item);
+	public LegacyParticleIconCrack(int id, String name, float offsetX, float offsetY, float offsetZ, float data, int count, NetworkItemStack item) {
+		super(id, name, offsetX, offsetY, offsetZ, data, count);
+		this.item = item;
 		this.name += "_" + item.getTypeId() + "_" + item.getLegacyData();
 	}
 
@@ -29,7 +27,7 @@ public class LegacyParticleIconCrack extends LegacyParticle {
 
 	@Override
 	public int getSecondParameter() {
-		return item.getAmount();
+		return item.getLegacyData();
 	}
 
 }

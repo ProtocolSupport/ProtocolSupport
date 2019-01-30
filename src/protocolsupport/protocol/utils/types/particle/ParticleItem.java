@@ -8,7 +8,7 @@ import protocolsupport.protocol.utils.types.NetworkItemStack;
 public class ParticleItem extends Particle {
 
 	public ParticleItem(int pId) {
-		super(pId, "minecraft:item");
+		super(pId);
 	}
 
 	protected ProtocolVersion version;
@@ -28,7 +28,8 @@ public class ParticleItem extends Particle {
 	}
 
 	@Override
-	public void readData(ByteBuf buf) {
+	public void read(ByteBuf buf) {
+		super.read(buf);
 		itemstack = ItemStackSerializer.readItemStack(buf);
 	}
 

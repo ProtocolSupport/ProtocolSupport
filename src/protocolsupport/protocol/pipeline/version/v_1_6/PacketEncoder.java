@@ -27,11 +27,11 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopTitl
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopUnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopVehicleMove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldBorder;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.EntityAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockAction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockBreakAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.ChangeDimension;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.EntityAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.EntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Explosion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.GameStateChange;
