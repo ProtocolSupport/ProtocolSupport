@@ -115,7 +115,15 @@ public class ParticleRemapper {
 			registerSimpleLegacyRemap(ParticleFlame.class, new Any<>(26, "flame"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerSimpleLegacyRemap(ParticleLava.class, new Any<>(27, "lava"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerSimpleLegacyRemap(ParticleCloud.class, new Any<>(29, "cloud"), ProtocolVersionsHelper.BEFORE_1_13);
-			registerSimpleLegacyRemap(ParticleDust.class, new Any<>(30, "reddust"), ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemap(
+				ParticleDust.class,
+				original -> new LegacyParticle(30,
+					"reddust",
+					original.getRed(), original.getGreen(), original.getBlue(),
+					1, 0
+				),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
 			registerSimpleLegacyRemap(ParticleItemSnowball.class, new Any<>(31, "snowballpoof"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerSimpleLegacyRemap(ParticleItemSlime.class, new Any<>(33, "slime"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerSimpleLegacyRemap(ParticleHeart.class, new Any<>(34, "heart"), ProtocolVersionsHelper.BEFORE_1_13);

@@ -34,10 +34,10 @@ public class WorldParticle extends MiddleWorldParticle {
 		LegacyParticle legacyParticle = (LegacyParticle) particle;
 		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_PARTICLES_ID);
-		//TODO: migrate to remapper
-//		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) && (count == 0)) {
-//			count = 1;
-//		}
+		int count = legacyParticle.getCount();
+		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) && (count == 0)) {
+			count = 1;
+		}
 		StringSerializer.writeString(serializer, version, legacyParticle.getName());
 		serializer.writeFloat(x);
 		serializer.writeFloat(y);
@@ -46,7 +46,7 @@ public class WorldParticle extends MiddleWorldParticle {
 		serializer.writeFloat(legacyParticle.getOffsetY());
 		serializer.writeFloat(legacyParticle.getOffsetZ());
 		serializer.writeFloat(legacyParticle.getData());
-		serializer.writeInt(legacyParticle.getCount());
+		serializer.writeInt(count);
 		return RecyclableSingletonList.create(serializer);
 	}
 
