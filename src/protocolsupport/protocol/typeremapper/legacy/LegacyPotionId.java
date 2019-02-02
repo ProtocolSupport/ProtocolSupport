@@ -12,6 +12,10 @@ public class LegacyPotionId {
 	private static final Object2IntOpenHashMap<String> toLegacyId = new Object2IntOpenHashMap<>();
 	private static final Int2ObjectOpenHashMap<String> fromLegacyId = new Int2ObjectOpenHashMap<>();
 	static {
+		register("water", 0);
+		register("awkward", 16);
+		register("thick", 32);
+		register("mundane", 64);
 		register("night_vision", 8230);
 		register("long_night_vision", 8262);
         register("invisibility", 8238);
@@ -65,26 +69,6 @@ public class LegacyPotionId {
 			legacyId -= 8192;
 		}
 		return fromLegacyId.get(legacyId);
-	}
-
-	public static String getBasicTypeName(String nbttag) {
-		switch (nbttag) {
-			case "mundane":
-			case "minecraft:mundane": {
-				return "potion.effect.mundane";
-			}
-			case "thick":
-			case "minecraft:thick": {
-				return "potion.effect.thick";
-			}
-			case "awkward":
-			case "minecraft:awkward": {
-				return "potion.effect.awkward";
-			}
-			default: {
-				return null;
-			}
-		}
 	}
 
 }

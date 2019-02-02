@@ -1,12 +1,8 @@
 package protocolsupport.protocol.typeremapper.itemstack.complex.toclient;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.TranslationAPI;
-import protocolsupport.api.chat.ChatAPI;
-import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotionId;
-import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.minecraftdata.PotionData;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
@@ -16,7 +12,7 @@ import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class PotionToLegacyIdComplexRemapper implements ItemStackComplexRemapper {
 
-	private final boolean isThrowablePotion;
+	protected final boolean isThrowablePotion;
 	public PotionToLegacyIdComplexRemapper(boolean isThrowablePotion) {
 		this.isThrowablePotion = isThrowablePotion;
 	}
@@ -34,11 +30,6 @@ public class PotionToLegacyIdComplexRemapper implements ItemStackComplexRemapper
 		}
 		if (potion != null) {
 			itemstack.setLegacyData(LegacyPotionId.toLegacyId(potion, isThrowablePotion));
-			String basicTypeName = LegacyPotionId.getBasicTypeName(potion);
-			if (basicTypeName != null) {
-				NBTCompound display = CommonNBT.getOrCreateDisplayTag(tag);
-				display.setTag(CommonNBT.DISPLAY_NAME, new NBTString(ChatAPI.toJSON(new TextComponent(TranslationAPI.translate(locale, basicTypeName)))));
-			}
 		}
 		return itemstack;
 	}
