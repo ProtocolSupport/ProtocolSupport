@@ -1,6 +1,7 @@
 package protocolsupport.protocol.utils.minecraftdata;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import org.bukkit.Material;
 
@@ -12,12 +13,7 @@ public class MinecraftData {
 		return ("data/" + name);
 	}
 
-	@SuppressWarnings("deprecation")
-	public static final int ITEM_COUNT =
-		(int) Arrays.stream(Material.values())
-		.filter(mat -> !mat.isLegacy())
-		.filter(Material::isItem)
-		.count();
+	public static final int ITEM_COUNT = (int) getItems().count();
 
 	@SuppressWarnings("deprecation")
 	public static final int BLOCKDATA_COUNT =
@@ -26,5 +22,13 @@ public class MinecraftData {
 		.filter(Material::isBlock)
 		.mapToInt(material -> MaterialAPI.getBlockDataList(material).size())
 		.sum();
+
+	@SuppressWarnings("deprecation")
+	public static Stream<Material> getItems() {
+		return
+			Arrays.stream(Material.values())
+			.filter(mat -> !mat.isLegacy())
+			.filter(Material::isItem);
+	}
 
 }
