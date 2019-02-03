@@ -56,10 +56,12 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 				return LegacyCustomPayloadData.transformStructureBlock(connection.getVersion(), data);
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_RIGHT_NAME:
-			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_TYPO_NAME:
-			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_BLOCK_NAME: {
+			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_TYPO_NAME: {
 				//TODO: implement
 				return RecyclableEmptyList.get();
+			}
+			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_BLOCK_NAME: {
+				return LegacyCustomPayloadData.transformAutoCommandBlockEdit(connection.getVersion(), data);
 			}
 			default: {
 				return LegacyCustomPayloadData.transformCustomPayload(tag, data);

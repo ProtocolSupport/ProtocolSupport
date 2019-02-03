@@ -25,17 +25,21 @@ public abstract class MiddleUpdateCommandBlock extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_UPDATE_COMMAND_BLOCK);
-		PositionSerializer.writePosition(creator, position);
-		StringSerializer.writeVarIntUTF8String(creator, command);
-		MiscSerializer.writeVarIntEnum(creator, mode);
-		creator.writeByte(flags);
-		return RecyclableSingletonList.create(creator);
+		return RecyclableSingletonList.create(create(position, command, mode, flags));
 	}
 
 	public static enum Mode {
 		SEQUENCE, AUTO, REDSTONE;
 		public static final EnumConstantLookup<Mode> CONSTANT_LOOKUP = new EnumConstantLookup<>(Mode.class);
+	}
+
+	public static ServerBoundPacketData create(Position position, String command, Mode mode, int flags) {
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_UPDATE_COMMAND_BLOCK);
+		PositionSerializer.writePosition(creator, position);
+		StringSerializer.writeVarIntUTF8String(creator, command);
+		MiscSerializer.writeVarIntEnum(creator, mode);
+		creator.writeByte(flags);
+		return creator;
 	}
 
 }

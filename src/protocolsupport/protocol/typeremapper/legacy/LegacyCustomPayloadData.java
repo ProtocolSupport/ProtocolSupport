@@ -14,6 +14,7 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleNameItem;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePickItem;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSelectTrade;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSetBeaconEffect;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateCommandBlock;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
@@ -140,6 +141,33 @@ public class LegacyCustomPayloadData {
 	public static RecyclableCollection<ServerBoundPacketData> transformCustomPayload(String tag, ByteBuf data) {
 		String modernName = LegacyCustomPayloadChannelName.fromPre13(tag);
 		return RecyclableSingletonList.create(MiddleCustomPayload.create(modernName, data));
+	}
+
+	public static RecyclableCollection<ServerBoundPacketData> transformAutoCommandBlockEdit(ProtocolVersion version, ByteBuf data) {
+		Position position = PositionSerializer.readLegacyPositionI(data);
+		String command = StringSerializer.readString(data, version);
+		boolean trackOutput = data.readBoolean();
+		MiddleUpdateCommandBlock.Mode mode = null;
+		switch (StringSerializer.readString(data, version)) {
+			case "SEQUENCE": {
+				mode = MiddleUpdateCommandBlock.Mode.SEQUENCE;
+				break;
+			}
+			case "AUTO": {
+				mode = MiddleUpdateCommandBlock.Mode.AUTO;
+				break;
+			}
+			case "REDSTONE": {
+				mode = MiddleUpdateCommandBlock.Mode.REDSTONE;
+				break;
+			}
+		}
+		boolean conditional = data.readBoolean();
+		boolean auto = data.readBoolean();
+		return RecyclableSingletonList.create(MiddleUpdateCommandBlock.create(
+			position, command, mode,
+			(trackOutput ? 0x1 : 0) | (conditional ? 0x2 : 0) | (auto ? 0x4 : 0)
+		));
 	}
 
 }
