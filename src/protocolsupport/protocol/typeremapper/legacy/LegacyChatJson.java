@@ -1,9 +1,11 @@
 package protocolsupport.protocol.typeremapper.legacy;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,7 +19,9 @@ import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class LegacyChatJson {
 
 	public static BaseComponent convert(ProtocolVersion version, String locale, BaseComponent message) {
@@ -38,11 +42,18 @@ public class LegacyChatJson {
 		return message;
 	}
 
-	private static final EnumMap<ProtocolVersion, List<ComponentConverter>> registry = new EnumMap<>(ProtocolVersion.class);
+	protected static final Map<ProtocolVersion, List<ComponentConverter>> registry = new EnumMap<>(ProtocolVersion.class);
+	static {
+		for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
+			registry.put(version, new ArrayList<>());
+		}
+	}
 
-	private static void register(ComponentConverter r, ProtocolVersion... versions) {
+	protected static void register(ComponentConverter r, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
-			registry.computeIfAbsent(version, k -> new ArrayList<>()).add(r);
+			registry.computeIfAbsent(version, k -> {
+				throw new IllegalArgumentException(MessageFormat.format("Missing remapping table for version {0}", k));
+			}).add(r);
 		}
 	}
 
@@ -108,7 +119,7 @@ public class LegacyChatJson {
 		}, ProtocolVersion.getAllSupported());
 	}
 
-	private static BaseComponent cloneComponentAuxData(BaseComponent from, BaseComponent to) {
+	protected static BaseComponent cloneComponentAuxData(BaseComponent from, BaseComponent to) {
 		to.addSiblings(from.getSiblings());
 		to.setClickAction(from.getClickAction());
 		to.setHoverAction(from.getHoverAction());
@@ -117,7 +128,7 @@ public class LegacyChatJson {
 		return to;
 	}
 
-	private static List<BaseComponent> convertComponents(List<BaseComponent> oldlist, ProtocolVersion version, String locale) {
+	protected static List<BaseComponent> convertComponents(List<BaseComponent> oldlist, ProtocolVersion version, String locale) {
 		List<BaseComponent> newlist = new ArrayList<>();
 		for (BaseComponent old : oldlist) {
 			newlist.add(convert(version, locale, old));
@@ -126,7 +137,7 @@ public class LegacyChatJson {
 	}
 
 	@FunctionalInterface
-	private static interface ComponentConverter {
+	protected static interface ComponentConverter {
 		public BaseComponent convert(ProtocolVersion version, String locale, BaseComponent from);
 	}
 

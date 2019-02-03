@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 public class ParticleDust extends Particle {
 
 	public ParticleDust(int pId) {
-		super(pId, "minecraft:dust");
+		super(pId);
 	}
 
 	protected float red;
@@ -17,32 +17,16 @@ public class ParticleDust extends Particle {
 		return red;
 	}
 
-	public void setRed(float red) {
-		this.red = red;
-	}
-
 	public float getGreen() {
 		return green;
-	}
-
-	public void setGreen(float green) {
-		this.green = green;
 	}
 
 	public float getBlue() {
 		return blue;
 	}
 
-	public void setBlue(float blue) {
-		this.blue = blue;
-	}
-
 	public float getScale() {
 		return scale;
-	}
-
-	public void setScale(float scale) {
-		this.scale = scale;
 	}
 
 	@Override

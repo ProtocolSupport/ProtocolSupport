@@ -237,7 +237,7 @@ public class TileEntityRemapper {
 				if (spawndata != null) {
 					NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(NBTString.getValueOrNull(spawndata.getTagOfType("id", NBTType.STRING)));
 					if (type != NetworkEntityType.NONE) {
-						spawndata.setTag("id", new NBTString(LegacyEntityId.getLegacyName(type)));
+						spawndata.setTag("id", new NBTString(LegacyEntityId.getStringId(type)));
 					}
 				}
 			},

@@ -50,7 +50,7 @@ public class LegacyItemType {
 			registerRemapEntry(Arrays.asList(Material.BIRCH_WOOD, Material.STRIPPED_BIRCH_WOOD), Material.BIRCH_LOG, ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemapEntry(Arrays.asList(Material.JUNGLE_WOOD, Material.STRIPPED_JUNGLE_WOOD), Material.JUNGLE_LOG, ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemapEntry(Arrays.asList(Material.SPRUCE_WOOD, Material.STRIPPED_SPRUCE_WOOD), Material.SPRUCE_LOG, ProtocolVersionsHelper.BEFORE_1_13);
-			registerRemapEntry(Arrays.asList(Material.OAK_WOOD, Material.STRIPPED_OAK_WOOD), Material.OAK_LOG, ProtocolVersionsHelper.BEFORE_1_13);			
+			registerRemapEntry(Arrays.asList(Material.OAK_WOOD, Material.STRIPPED_OAK_WOOD), Material.OAK_LOG, ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemapEntry(Material.KELP, Material.GRASS, ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemapEntry(Material.DRIED_KELP, Material.POTATO, ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemapEntry(

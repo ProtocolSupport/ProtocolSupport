@@ -8,7 +8,7 @@ import protocolsupport.protocol.utils.types.NetworkItemStack;
 public class ParticleItem extends Particle {
 
 	public ParticleItem(int pId) {
-		super(pId, "minecraft:item");
+		super(pId);
 	}
 
 	protected ProtocolVersion version;

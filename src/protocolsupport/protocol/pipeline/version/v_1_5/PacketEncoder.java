@@ -35,11 +35,11 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.PlayerA
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.SetPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.VehiclePassengers;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.EntityAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockAction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockBreakAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.ChangeDimension;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.EntityAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.EntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Explosion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.GameStateChange;

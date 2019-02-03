@@ -18,6 +18,8 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.MapFro
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.PotionFromLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.PotionFromPEIdRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.NBTUnStashRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.SpawnEggFromIntIdComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.SpawnEggFromStringIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.BookPagesToLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.BookPagesToPESpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DisplayNameToLegacyTextComplexRemapper;
@@ -34,8 +36,14 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHe
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PotionToLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PotionToPEIdSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.NBTStashRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.SpawnEggToIntIdComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.SpawnEggToStringIdComplexRemapper;
+import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
+import protocolsupport.protocol.utils.ItemSpawnEggData;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupportbuildprocessor.Preload;
 
@@ -66,13 +74,17 @@ public class ItemStackComplexRemapperRegistry {
 
 	static {
 		registerToClient(Material.FILLED_MAP, new MapToLegacyIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
+
 		registerToClient(Material.DRAGON_HEAD, new DragonHeadToDragonPlayerHeadComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
 		registerToClient(Material.PLAYER_HEAD, new PlayerHeadToLegacyOwnerComplexRemapper(), ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5));
+
 		registerToClient(Material.POTION, new PotionToLegacyIdComplexRemapper(false), ProtocolVersionsHelper.BEFORE_1_9);
 		registerToClient(Material.SPLASH_POTION, new PotionToLegacyIdComplexRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
 		registerToClient(Material.LINGERING_POTION, new PotionToLegacyIdComplexRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
+
 		registerToClient(Material.WRITABLE_BOOK, new EmptyBookPageAdderComplexRemapper(), ProtocolVersionsHelper.ALL_PC);
 		registerToClient(Material.WRITTEN_BOOK, new BookPagesToLegacyTextComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_8);
+
 		ItemStackComplexRemapper durabilitymapper 	= new ItemDurabilityToLegacyDataComplexRemapper();
 		ItemStackComplexRemapper enchantfilter 		= new EnchantFilterNBTComplexRemapper();
 		ItemStackComplexRemapper enchanttolegacyid 	= new EnchantToLegacyIdComplexRemapper();
@@ -82,8 +94,16 @@ public class ItemStackComplexRemapperRegistry {
 		PotionToPEIdSpecificRemapper pepotion 		= new PotionToPEIdSpecificRemapper();
 		BookPagesToPESpecificRemapper pebook 		= new BookPagesToPESpecificRemapper();
 		LeatherArmorToPESpecificRemapper peleatherarmor = new LeatherArmorToPESpecificRemapper();
-		Arrays.stream(Material.values())
-		.filter(Material::isItem)
+
+		ItemSpawnEggData.getSpawnEggs()
+		.forEach(m -> {
+			NetworkEntityType spawnedType = ItemSpawnEggData.getSpawnedType(ItemMaterialLookup.getRuntimeId(m));
+			registerToClient(m, new SpawnEggToStringIdComplexRemapper(spawnedType.getKey()), ProtocolVersionsHelper.RANGE__1_11__1_12_2);
+			registerToClient(m, new SpawnEggToStringIdComplexRemapper(LegacyEntityId.getStringId(spawnedType)), ProtocolVersionsHelper.RANGE__1_9__1_10);
+			registerToClient(m, new SpawnEggToIntIdComplexRemapper(LegacyEntityId.getIntId(spawnedType)), ProtocolVersionsHelper.BEFORE_1_9);
+		});
+
+		MinecraftData.getItems()
 		.forEach(material -> {
 			registerToClient(material, pestashremapper, ProtocolVersionsHelper.ALL_PE);
 			if (material.getMaxDurability() > 0) {
@@ -124,8 +144,7 @@ public class ItemStackComplexRemapperRegistry {
 		BookPagesFromPERemapper frompebook 				= new BookPagesFromPERemapper();
 		PotionFromPEIdRemapper frompepotion 			= new PotionFromPEIdRemapper();
 		LeatherArmorFromPERemapper frompeleatherarmor 	= new LeatherArmorFromPERemapper();
-		Arrays.stream(Material.values())
-		.filter(Material::isItem)
+		MinecraftData.getItems()
 		.forEach(material -> {
 			//TODO: do we need these anymore? backwards mapping done with stashed NBT now
 			registerFromClient(material, dnamefromlegacytext, ProtocolVersionsHelper.BEFORE_1_13);
@@ -154,6 +173,17 @@ public class ItemStackComplexRemapperRegistry {
 		.filter(Material::isItem)
 		.forEach(material -> {
 			registerFromClient(material, pestashremapper, ProtocolVersionsHelper.ALL_PE);
+		});
+
+		registerFromClient(Material.FILLED_MAP, new MapFromLegacyIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
+
+		registerFromClient(Material.POTION, new PotionFromLegacyIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
+
+		ItemSpawnEggData.getSpawnEggs()
+		.forEach(m -> {
+			registerFromClient(m, new SpawnEggFromStringIdComplexRemapper(false), ProtocolVersionsHelper.RANGE__1_11__1_12_2);
+			registerFromClient(m, new SpawnEggFromStringIdComplexRemapper(true), ProtocolVersionsHelper.RANGE__1_9__1_10);
+			registerFromClient(m, new SpawnEggFromIntIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
 		});
 	}
 

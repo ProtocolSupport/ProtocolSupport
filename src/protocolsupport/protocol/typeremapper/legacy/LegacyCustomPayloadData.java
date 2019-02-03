@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.serverbound.play.abs_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2;
+package protocolsupport.protocol.typeremapper.legacy;
 
 import java.nio.charset.StandardCharsets;
 import java.util.StringJoiner;
@@ -8,14 +8,13 @@ import org.bukkit.Material;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
-import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEditBook;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleNameItem;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePickItem;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSelectTrade;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSetBeaconEffect;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateCommandBlock;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
@@ -23,7 +22,6 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.CustomPayloadChannelsCache;
-import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.Position;
@@ -36,17 +34,9 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
+public class LegacyCustomPayloadData {
 
-	public AbstractCustomPayload(ConnectionImpl connection) {
-		super(connection);
-	}
-
-	protected String tag;
-	protected ByteBuf data;
-
-	protected RecyclableCollection<ServerBoundPacketData> transformRegisterUnregister(boolean register) {
-		CustomPayloadChannelsCache ccache = connection.getCache().getChannelsCache();
+	public static RecyclableCollection<ServerBoundPacketData> transformRegisterUnregister(CustomPayloadChannelsCache ccache, String tag, ByteBuf data, boolean register) {
 		String modernTag = LegacyCustomPayloadChannelName.fromPre13(tag);
 		StringJoiner payloadModernTagJoiner = new StringJoiner("\u0000");
 		for (String payloadLegacyTag : data.toString(StandardCharsets.UTF_8).split("\u0000")) {
@@ -61,9 +51,8 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 		return RecyclableSingletonList.create(MiddleCustomPayload.create(modernTag, payloadModernTagJoiner.toString().getBytes(StandardCharsets.UTF_8)));
 	}
 
-	protected RecyclableCollection<ServerBoundPacketData> transformBookEdit() {
-		String locale = connection.getCache().getAttributesCache().getLocale();
-		NetworkItemStack book = ItemStackSerializer.readItemStack(data, connection.getVersion(), locale);
+	public static RecyclableCollection<ServerBoundPacketData> transformBookEdit(ProtocolVersion version, String locale, ByteBuf data) {
+		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version, locale);
 		book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
 		if (!book.isNull()) {
 			return RecyclableSingletonList.create(MiddleEditBook.create(book, false, UsedHand.MAIN));
@@ -72,13 +61,11 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 		}
 	}
 
-	protected RecyclableCollection<ServerBoundPacketData> transformBookSign() {
-		ProtocolVersion version = connection.getVersion();
-		String locale = connection.getCache().getAttributesCache().getLocale();
+	public static RecyclableCollection<ServerBoundPacketData> transformBookSign(ProtocolVersion version, String locale, ByteBuf data) {
 		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version, locale);
 		if (!book.isNull()) {
 			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
-			if (connection.getVersion() == ProtocolVersion.MINECRAFT_1_8) {
+			if (version == ProtocolVersion.MINECRAFT_1_8) {
 				NBTCompound rootTag = book.getNBT();
 				if (rootTag != null) {
 					NBTList<NBTString> pages = rootTag.getTagListOfType("pages", NBTType.STRING);
@@ -98,20 +85,20 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 		}
 	}
 
-	protected RecyclableCollection<ServerBoundPacketData> transformStructureBlock() {
+	public static RecyclableCollection<ServerBoundPacketData> transformStructureBlock(ProtocolVersion version, ByteBuf data) {
 		Position position = PositionSerializer.readLegacyPositionI(data);
 		MiddleUpdateStructureBlock.Action action = MiddleUpdateStructureBlock.Action.CONSTANT_LOOKUP.getByOrdinal(data.readByte() - 1);
-		MiddleUpdateStructureBlock.Mode mode = MiddleUpdateStructureBlock.Mode.valueOf(StringSerializer.readString(data, connection.getVersion()));
-		String name = StringSerializer.readString(data, connection.getVersion());
+		MiddleUpdateStructureBlock.Mode mode = MiddleUpdateStructureBlock.Mode.valueOf(StringSerializer.readString(data, version));
+		String name = StringSerializer.readString(data, version);
 		byte offsetX = (byte) data.readInt();
 		byte offsetY = (byte) data.readInt();
 		byte offsetZ = (byte) data.readInt();
 		byte sizeX = (byte) data.readInt();
 		byte sizeY = (byte) data.readInt();
 		byte sizeZ = (byte) data.readInt();
-		MiddleUpdateStructureBlock.Mirror mirror = MiddleUpdateStructureBlock.Mirror.valueOf(StringSerializer.readString(data, connection.getVersion()));
-		MiddleUpdateStructureBlock.Rotation rotation = MiddleUpdateStructureBlock.Rotation.valueOf(StringSerializer.readString(data, connection.getVersion()));
-		String metadata = StringSerializer.readString(data, connection.getVersion());
+		MiddleUpdateStructureBlock.Mirror mirror = MiddleUpdateStructureBlock.Mirror.valueOf(StringSerializer.readString(data, version));
+		MiddleUpdateStructureBlock.Rotation rotation = MiddleUpdateStructureBlock.Rotation.valueOf(StringSerializer.readString(data, version));
+		String metadata = StringSerializer.readString(data, version);
 		int ignoreEntities = data.readBoolean() ? 0x01 : 0;
 		int showAir = data.readBoolean() ? 0x02 : 0;
 		int showBoundingBox = data.readBoolean() ? 0x04 : 0;
@@ -125,30 +112,62 @@ public abstract class AbstractCustomPayload extends ServerBoundMiddlePacket {
 		));
 	}
 
-	protected RecyclableCollection<ServerBoundPacketData> transformSetBeaconEffect() {
+	public static RecyclableCollection<ServerBoundPacketData> transformSetBeaconEffect(ByteBuf data) {
 		int primary = data.readInt();
 		int secondary = data.readInt();
 		return RecyclableSingletonList.create(MiddleSetBeaconEffect.create(primary, secondary));
 	}
 
-	protected RecyclableCollection<ServerBoundPacketData> transformNameItem() {
-		String name = StringSerializer.readString(data, connection.getVersion());
+	public static RecyclableCollection<ServerBoundPacketData> transformNameItemSString(ProtocolVersion version, ByteBuf data) {
+		String name = StringSerializer.readString(data, version);
 		return RecyclableSingletonList.create(MiddleNameItem.create(name));
 	}
 
-	protected RecyclableCollection<ServerBoundPacketData> transformPickItem() {
+	public static RecyclableCollection<ServerBoundPacketData> transformNameItemDString(ByteBuf data) {
+		String name = data.toString(StandardCharsets.UTF_8);
+		return RecyclableSingletonList.create(MiddleNameItem.create(name));
+	}
+
+	public static RecyclableCollection<ServerBoundPacketData> transformPickItem(ByteBuf data) {
 		int slot = VarNumberSerializer.readVarInt(data);
 		return RecyclableSingletonList.create(MiddlePickItem.create(slot));
 	}
 
-	protected RecyclableCollection<ServerBoundPacketData> transformTradeSelect() {
+	public static RecyclableCollection<ServerBoundPacketData> transformTradeSelect(ByteBuf data) {
 		int slot = data.readInt();
 		return RecyclableSingletonList.create(MiddleSelectTrade.create(slot));
 	}
 
-	protected RecyclableCollection<ServerBoundPacketData> transformCustomPayload() {
+	public static RecyclableCollection<ServerBoundPacketData> transformCustomPayload(String tag, ByteBuf data) {
 		String modernName = LegacyCustomPayloadChannelName.fromPre13(tag);
 		return RecyclableSingletonList.create(MiddleCustomPayload.create(modernName, data));
+	}
+
+	public static RecyclableCollection<ServerBoundPacketData> transformAutoCommandBlockEdit(ProtocolVersion version, ByteBuf data) {
+		Position position = PositionSerializer.readLegacyPositionI(data);
+		String command = StringSerializer.readString(data, version);
+		boolean trackOutput = data.readBoolean();
+		MiddleUpdateCommandBlock.Mode mode = null;
+		switch (StringSerializer.readString(data, version)) {
+			case "SEQUENCE": {
+				mode = MiddleUpdateCommandBlock.Mode.SEQUENCE;
+				break;
+			}
+			case "AUTO": {
+				mode = MiddleUpdateCommandBlock.Mode.AUTO;
+				break;
+			}
+			case "REDSTONE": {
+				mode = MiddleUpdateCommandBlock.Mode.REDSTONE;
+				break;
+			}
+		}
+		boolean conditional = data.readBoolean();
+		boolean auto = data.readBoolean();
+		return RecyclableSingletonList.create(MiddleUpdateCommandBlock.create(
+			position, command, mode,
+			(trackOutput ? 0x1 : 0) | (conditional ? 0x2 : 0) | (auto ? 0x4 : 0)
+		));
 	}
 
 }

@@ -6,27 +6,23 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 public class ParticleFallingDust extends Particle {
 
 	public ParticleFallingDust(int pId) {
-		super(pId, "minecraft:falling_dust");
+		super(pId);
 	}
 
-	protected int blockstate;
+	protected int blockdata;
 
-	public int getBlockstate() {
-		return blockstate;
-	}
-
-	public void setBlockstate(int blockstate) {
-		this.blockstate = blockstate;
+	public int getBlockData() {
+		return blockdata;
 	}
 
 	@Override
 	public void readData(ByteBuf buf) {
-		blockstate = VarNumberSerializer.readVarInt(buf);
+		blockdata = VarNumberSerializer.readVarInt(buf);
 	}
 
 	@Override
 	public void writeData(ByteBuf buf) {
-		VarNumberSerializer.writeVarInt(buf, blockstate);
+		VarNumberSerializer.writeVarInt(buf, blockdata);
 	}
 
 }

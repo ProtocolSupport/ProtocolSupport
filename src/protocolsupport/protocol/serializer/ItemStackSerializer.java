@@ -167,12 +167,9 @@ public class ItemStackSerializer {
 			Bukkit.getPluginManager().callEvent(event);
 			List<String> additionalLore = event.getAdditionalLore();
 			BaseComponent forcedDisplayName = event.getForcedDisplayName();
-			if (forcedDisplayName != null || !additionalLore.isEmpty()) {
-				NBTCompound nbt = itemstack.getNBT();
-				if (nbt == null) {
-					nbt = new NBTCompound();
-				}
-				NBTCompound displayNBT = CommonNBT.getOrCreateDisplayTag(nbt);
+			if ((forcedDisplayName != null) || !additionalLore.isEmpty()) {
+				NBTCompound rootTag = CommonNBT.getOrCreateRootTag(itemstack);
+				NBTCompound displayNBT = CommonNBT.getOrCreateDisplayTag(rootTag);
 
 				if (forcedDisplayName != null) {
 					displayNBT.setTag(CommonNBT.DISPLAY_NAME, new NBTString(ChatAPI.toJSON(forcedDisplayName)));
@@ -188,8 +185,6 @@ public class ItemStackSerializer {
 					}
 					displayNBT.setTag(CommonNBT.DISPLAY_LORE, loreNBT);
 				}
-
-				itemstack.setNBT(nbt);
 			}
 		}
 		itemstack = remapItemToClient(version, locale, itemstack.cloneItemStack());

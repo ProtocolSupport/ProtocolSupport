@@ -1347,7 +1347,7 @@
   {
     "blockdata": "minecraft:torch",
     "legacyid": 50,
-    "legacydata": 0
+    "legacydata": 5
   },
   {
     "blockdata": "minecraft:wall_torch[facing=east]",

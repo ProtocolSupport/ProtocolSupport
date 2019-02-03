@@ -3,6 +3,7 @@ package protocolsupport.protocol.utils.networkentity;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
@@ -162,11 +163,11 @@ public enum NetworkEntityType {
 		NONE, OBJECT, MOB, GLOBAL
 	}
 
-	private static final ArrayMap<NetworkEntityType> OBJECT_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.OBJECT), (w -> w.typeId));
-	private static final ArrayMap<NetworkEntityType> MOB_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.MOB), (w -> w.typeId));
-	private static final ArrayMap<NetworkEntityType> GLOBAL_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.GLOBAL), (w -> w.typeId));
-	private static final ArrayMap<NetworkEntityType> BY_R_INT_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()), (w -> w.bukkitType.getTypeId()));
-	private static final HashMap<String, NetworkEntityType> BY_R_STRING_ID = new HashMap<>();
+	protected static final ArrayMap<NetworkEntityType> OBJECT_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.OBJECT), (w -> w.typeId));
+	protected static final ArrayMap<NetworkEntityType> MOB_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.MOB), (w -> w.typeId));
+	protected static final ArrayMap<NetworkEntityType> GLOBAL_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.GLOBAL), (w -> w.typeId));
+	protected static final Map<EntityType, NetworkEntityType> BY_B_TYPE = CollectionsUtils.makeEnumMappingEnumMap(NetworkEntityType.class, EntityType.class, NetworkEntityType::getBukkitType);
+	protected static final Map<String, NetworkEntityType> BY_R_STRING_ID = new HashMap<>();
 	static {
 		Arrays.stream(NetworkEntityType.values())
 		.forEach(w -> {
@@ -221,9 +222,8 @@ public enum NetworkEntityType {
 		return BY_R_STRING_ID.getOrDefault(name, NONE);
 	}
 
-	public static NetworkEntityType getByRegistryITypeId(int typeId) {
-		NetworkEntityType type = BY_R_INT_ID.get(typeId);
-		return type != null ? type : NONE;
+	public static NetworkEntityType getByBukkitType(EntityType btype) {
+		return BY_B_TYPE.getOrDefault(btype, NONE);
 	}
 
 	NetworkEntityType(EType etype, int typeId, EntityType bukkitType, NetworkEntityType superType) {
