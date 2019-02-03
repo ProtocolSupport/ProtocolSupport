@@ -16,8 +16,7 @@ public class ParticleFallingDust extends Particle {
 	}
 
 	@Override
-	public void read(ByteBuf buf) {
-		super.read(buf);
+	public void readData(ByteBuf buf) {
 		blockdata = VarNumberSerializer.readVarInt(buf);
 	}
 

@@ -13,7 +13,7 @@ public class DataWatcherObjectParticle extends ReadableDataWatcherObject<Particl
 	@Override
 	public void readFromStream(ByteBuf from) {
 		value = ParticleRegistry.fromId(VarNumberSerializer.readVarInt(from));
-		value.read(from);
+		value.readData(from);
 	}
 
 	@Override

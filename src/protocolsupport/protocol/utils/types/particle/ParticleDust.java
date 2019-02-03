@@ -30,8 +30,7 @@ public class ParticleDust extends Particle {
 	}
 
 	@Override
-	public void read(ByteBuf buf) {
-		super.read(buf);
+	public void readData(ByteBuf buf) {
 		red = buf.readFloat();
 		green = buf.readFloat();
 		blue = buf.readFloat();

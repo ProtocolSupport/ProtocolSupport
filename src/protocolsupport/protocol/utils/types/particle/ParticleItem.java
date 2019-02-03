@@ -28,8 +28,7 @@ public class ParticleItem extends Particle {
 	}
 
 	@Override
-	public void read(ByteBuf buf) {
-		super.read(buf);
+	public void readData(ByteBuf buf) {
 		itemstack = ItemStackSerializer.readItemStack(buf);
 	}
 

@@ -26,6 +26,10 @@ public class Particle {
 		offsetZ = buf.readFloat();
 		data = buf.readFloat();
 		count = buf.readInt();
+		readData(buf);
+	}
+
+	public void readData(ByteBuf from) {
 	}
 
 	public float getOffsetX() {
