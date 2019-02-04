@@ -23,14 +23,6 @@ public class MinecraftData {
 		.mapToInt(material -> MaterialAPI.getBlockDataList(material).size())
 		.sum();
 
-	public static int getBlockStateFromObjData(int objectdata) {
-		return ((objectdata & 0xFFF) << 4) | (objectdata >> 12);
-	}
-
-	public static int getObjDataFromBlockState(int blockstate) {
-		return (blockstate >> 4) | ((blockstate & 0xF) << 12);
-	}
-
 	@SuppressWarnings("deprecation")
 	public static Stream<Material> getItems() {
 		return
