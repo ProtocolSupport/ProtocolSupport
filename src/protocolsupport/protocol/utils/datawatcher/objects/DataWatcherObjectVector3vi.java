@@ -17,7 +17,7 @@ public class DataWatcherObjectVector3vi extends ReadableDataWatcherObject<Positi
 	}
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
+	public void readFromStream(ByteBuf from) {
 		PositionSerializer.readPEPositionTo(from, value);
 	}
 

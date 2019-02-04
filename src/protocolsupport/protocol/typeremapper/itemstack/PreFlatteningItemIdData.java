@@ -11,8 +11,10 @@ import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.JsonUtils;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ResourceUtils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class PreFlatteningItemIdData {
 
 	protected static final int combinedLegacyStoneId = formLegacyCombinedId(1, 0);
@@ -26,7 +28,7 @@ public class PreFlatteningItemIdData {
 	}
 	static {
 		Arrays.fill(toLegacyId, combinedLegacyStoneId);
-		for (JsonElement element : Utils.iterateJsonArrayResource(MappingsData.getResourcePath("preflatteningitemiddata.json"))) {
+		for (JsonElement element : ResourceUtils.getAsIterableJson(MappingsData.getResourcePath("preflatteningitemiddata.json"))) {
 			JsonObject object = element.getAsJsonObject();
 			register(JsonUtils.getString(object, "itemkey"), JsonUtils.getInt(object, "legacyid"), JsonUtils.getInt(object, "legacydata"));
 		}

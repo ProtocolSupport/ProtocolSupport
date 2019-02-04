@@ -9,8 +9,8 @@ import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 public class DataWatcherObjectNBTTagCompound extends ReadableDataWatcherObject<NBTCompound> {
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
-		value = ItemStackSerializer.readTag(from, version);
+	public void readFromStream(ByteBuf from) {
+		value = ItemStackSerializer.readTag(from);
 	}
 
 	@Override

@@ -6,7 +6,9 @@ import com.google.gson.JsonParser;
 
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.Utils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class PESkinModel {
 
 	private static final PESkinModel normal = loadSkinModel("normal_model.json");

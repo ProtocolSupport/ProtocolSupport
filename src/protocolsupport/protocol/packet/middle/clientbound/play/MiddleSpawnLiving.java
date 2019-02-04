@@ -45,7 +45,7 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 		motX = serverdata.readShort();
 		motY = serverdata.readShort();
 		motZ = serverdata.readShort();
-		entityRemapper.readEntityWithMetadata(cache.getAttributesCache().getLocale(), entity, serverdata);
+		entityRemapper.readEntityWithMetadata(entity, serverdata);
 	}
 
 	@Override

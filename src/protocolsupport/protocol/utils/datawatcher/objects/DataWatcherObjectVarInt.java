@@ -15,7 +15,7 @@ public class DataWatcherObjectVarInt extends ReadableDataWatcherObject<Integer> 
 	}
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
+	public void readFromStream(ByteBuf from) {
 		value = VarNumberSerializer.readVarInt(from);
 	}
 

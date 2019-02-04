@@ -166,13 +166,13 @@ public class BookEdit extends ServerBoundMiddlePacket {
 
 	private static ServerBoundPacketData editBook(NetworkItemStack book) {
 		ByteBuf payload = Unpooled.buffer();
-		ItemStackSerializer.writeItemStack(payload, ProtocolVersionsHelper.LATEST_PC, I18NData.DEFAULT_LOCALE, book, false);
+		ItemStackSerializer.writeItemStack(payload, book);
 		return MiddleCustomPayload.create("minecraft:BEdit", MiscSerializer.readAllBytes(payload));
 	}
 
 	private static ServerBoundPacketData signBook(NetworkItemStack book) {
 		ByteBuf payload = Unpooled.buffer();
-		ItemStackSerializer.writeItemStack(payload, ProtocolVersionsHelper.LATEST_PC, I18NData.DEFAULT_LOCALE, book, false);
+		ItemStackSerializer.writeItemStack(payload, book);
 		return MiddleCustomPayload.create("minecraft:BSign", MiscSerializer.readAllBytes(payload));
 	}
 

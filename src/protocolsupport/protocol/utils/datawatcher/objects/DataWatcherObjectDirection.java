@@ -9,7 +9,7 @@ import protocolsupport.protocol.utils.types.BlockDirection;
 public class DataWatcherObjectDirection extends ReadableDataWatcherObject<BlockDirection> {
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
+	public void readFromStream(ByteBuf from) {
 		value = MiscSerializer.readVarIntEnum(from, BlockDirection.CONSTANT_LOOKUP);
 	}
 

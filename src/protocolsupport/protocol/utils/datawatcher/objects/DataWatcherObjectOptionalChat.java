@@ -10,9 +10,9 @@ import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
 public class DataWatcherObjectOptionalChat extends ReadableDataWatcherObject<BaseComponent> {
 
 	@Override
-	public void readFromStream(ByteBuf from, ProtocolVersion version, String locale) {
+	public void readFromStream(ByteBuf from) {
 		if (from.readBoolean()) {
-			value = ChatAPI.fromJSON(StringSerializer.readString(from, version));
+			value = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(from));
 		}
 	}
 

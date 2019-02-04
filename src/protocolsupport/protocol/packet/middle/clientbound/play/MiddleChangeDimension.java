@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.Difficulty;
 import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.protocol.utils.types.GameMode;
@@ -25,7 +24,7 @@ public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
 		dimension = Environment.getById(serverdata.readInt());
 		difficulty = Difficulty.getById(serverdata.readByte());
 		gamemode = GameMode.getById(serverdata.readByte());
-		leveltype = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 16);
+		leveltype = StringSerializer.readVarIntUTF8String(serverdata);
 	}
 
 	@Override

@@ -17,23 +17,19 @@ import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public class MerchantDataSerializer {
 
-	public static MerchantData readMerchantData(ByteBuf from, ProtocolVersion version, String locale) {
+	public static MerchantData readMerchantData(ByteBuf from) {
 		MerchantData merchdata = new MerchantData(from.readInt());
 		int count = from.readUnsignedByte();
 		for (int i = 0; i < count; i++) {
-			NetworkItemStack itemstack1 = ItemStackSerializer.readItemStack(from, version, locale, false);
-			NetworkItemStack result = ItemStackSerializer.readItemStack(from, version, locale, false);
+			NetworkItemStack itemstack1 = ItemStackSerializer.readItemStack(from);
+			NetworkItemStack result = ItemStackSerializer.readItemStack(from);
 			NetworkItemStack itemstack2 = NetworkItemStack.NULL;
 			if (from.readBoolean()) {
-				itemstack2 = ItemStackSerializer.readItemStack(from, version, locale, false);
+				itemstack2 = ItemStackSerializer.readItemStack(from);
 			}
 			boolean disabled = from.readBoolean();
-			int uses = 0;
-			int maxuses = 7;
-			if (isUsingUsesCount(version)) {
-				uses = from.readInt();
-				maxuses = from.readInt();
-			}
+			int uses = from.readInt();
+			int maxuses = from.readInt();
 			merchdata.addOffer(new TradeOffer(itemstack1, itemstack2, result, disabled ? maxuses : uses, maxuses));
 		}
 		return merchdata;
@@ -43,11 +39,11 @@ public class MerchantDataSerializer {
 		to.writeInt(merchdata.getWindowId());
 		to.writeByte(merchdata.getOffers().size());
 		for (TradeOffer offer : merchdata.getOffers()) {
-			ItemStackSerializer.writeItemStack(to, version, locale, offer.getItemStack1(), true);
-			ItemStackSerializer.writeItemStack(to, version, locale, offer.getResult(), true);
+			ItemStackSerializer.writeItemStack(to, version, locale, offer.getItemStack1());
+			ItemStackSerializer.writeItemStack(to, version, locale, offer.getResult());
 			to.writeBoolean(offer.hasItemStack2());
 			if (offer.hasItemStack2()) {
-				ItemStackSerializer.writeItemStack(to, version,locale, offer.getItemStack2(), true);
+				ItemStackSerializer.writeItemStack(to, version,locale, offer.getItemStack2());
 			}
 			to.writeBoolean(offer.isDisabled());
 			if (isUsingUsesCount(version)) {

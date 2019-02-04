@@ -26,7 +26,9 @@ import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTInt;
 import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class PEFakeContainer {
 
 	public static final int SMALLCONTAINERSLOTS = 27;

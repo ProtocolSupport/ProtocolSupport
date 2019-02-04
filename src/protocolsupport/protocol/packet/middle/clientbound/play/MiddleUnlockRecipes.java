@@ -6,7 +6,6 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookups;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleUnlockRecipes extends ClientBoundMiddlePacket {
 
@@ -29,9 +28,9 @@ public abstract class MiddleUnlockRecipes extends ClientBoundMiddlePacket {
 		craftRecipeBookFiltering = serverdata.readBoolean();
 		smeltingRecipeBookOpen = serverdata.readBoolean();
 		smeltingRecipeBookFiltering = serverdata.readBoolean();
-		recipes1 = ArraySerializer.readVarIntStringArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
+		recipes1 = ArraySerializer.readVarIntVarIntUTF8StringArray(serverdata);
 		if (action == Action.INIT) {
-			recipes2 = ArraySerializer.readVarIntStringArray(serverdata, ProtocolVersionsHelper.LATEST_PC);
+			recipes2 = ArraySerializer.readVarIntVarIntUTF8StringArray(serverdata);
 		}
 	}
 

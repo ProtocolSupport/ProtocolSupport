@@ -11,7 +11,9 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopCraf
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDeclareCommands;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDeclareRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDeclareTags;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopLookAt;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopStatistics;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopStopSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopUnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12r1_12r2_13.EntityEffectAdd;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12r1_12r2_13.WorldCustomSound;
@@ -31,8 +33,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.TimeUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8_9r1_9r2_10_11_12r1_12r2_13.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.TabComplete;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13.EntityAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13.ChangeDimension;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13.EntityAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13.Explosion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13.GameStateChange;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13.HeldSlot;
@@ -281,6 +283,8 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_COMMANDS, NoopDeclareCommands::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_RECIPES, NoopDeclareRecipes::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_TAGS, NoopDeclareTags::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_STOP_SOUND, NoopStopSound::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_LOOK_AT, NoopLookAt::new);
 	}
 
 	public PacketEncoder(ConnectionImpl connection) {

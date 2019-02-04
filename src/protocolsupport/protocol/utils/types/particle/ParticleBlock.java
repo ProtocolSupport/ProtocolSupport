@@ -1,20 +1,22 @@
 package protocolsupport.protocol.utils.types.particle;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
-import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 
 public class ParticleBlock extends Particle {
 
-	public ParticleBlock(int pId) {
-		super(pId, "minecraft:block");
+	public ParticleBlock(int id) {
+		super(id);
 	}
 
-	public ParticleBlock(int pId, ProtocolVersion version, int blockdata) {
-		this(pId);
-		this.blockdata = FlatteningBlockId.REGISTRY.getTable(version).getRemap(LegacyBlockData.REGISTRY.getTable(version).getRemap(blockdata));
+	public ParticleBlock(int id, float offsetX, float offsetY, float offsetZ, float speed, int count, int blockdata) {
+		this(id);
+		this.offsetX = offsetX;
+		this.offsetY = offsetY;
+		this.offsetZ = offsetZ;
+		this.data = speed;
+		this.count = count;
+		this.blockdata = blockdata;
 	}
 
 	protected int blockdata;

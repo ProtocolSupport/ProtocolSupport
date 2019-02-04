@@ -2,7 +2,9 @@ package protocolsupport.protocol.typeremapper.pe;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class PEPotion {
 
 	protected static final Object2IntOpenHashMap<String> nameToPeId = new Object2IntOpenHashMap<String>();

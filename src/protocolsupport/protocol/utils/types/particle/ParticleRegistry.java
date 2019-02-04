@@ -4,20 +4,14 @@ import java.util.function.IntFunction;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 
 public class ParticleRegistry {
 
-	public static final int ID_SKIP = -1;
-
 	private static final Int2ObjectMap<IntFunction<Particle>> idToParticle = new Int2ObjectArrayMap<>(50);
-	private static final Object2IntMap<Class<?extends Particle>> particleToId = new Object2IntArrayMap<>(50);
 	private static int nextParticleId = 0;
 
 	private static void register(IntFunction<Particle> particle) {
 		idToParticle.put(nextParticleId, particle);
-		particleToId.put(particle.apply(nextParticleId).getClass(), nextParticleId);
 		nextParticleId++;
 	}
 
@@ -72,15 +66,10 @@ public class ParticleRegistry {
 		register(ParticleBubbleColumnUp::new);
 		register(ParticleNautilus::new);
 		register(ParticleDolphin::new);
-		register(pId -> new ParticleSkip());
 	}
 
 	public static Particle fromId(int id) {
 		return idToParticle.getOrDefault(id, pId -> null).apply(id);
-	}
-
-	public static int toId(Class<? extends Particle> particle) {
-		return particleToId.getOrDefault(particle, -1);
 	}
 
 }

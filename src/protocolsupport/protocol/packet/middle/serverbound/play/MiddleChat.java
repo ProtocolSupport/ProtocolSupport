@@ -5,7 +5,6 @@ import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -24,7 +23,7 @@ public abstract class MiddleChat extends ServerBoundMiddlePacket {
 
 	public static ServerBoundPacketData create(String message) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CHAT);
-		StringSerializer.writeString(creator, ProtocolVersionsHelper.LATEST_PC, message);
+		StringSerializer.writeVarIntUTF8String(creator, message);
 		return creator;
 	}
 

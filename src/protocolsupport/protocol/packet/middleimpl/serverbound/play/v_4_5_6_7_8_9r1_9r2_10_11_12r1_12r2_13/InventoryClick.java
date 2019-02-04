@@ -30,7 +30,7 @@ public class InventoryClick extends MiddleInventoryClick {
 		button = clientdata.readUnsignedByte();
 		actionNumber = clientdata.readShort();
 		mode = clientdata.readUnsignedByte();
-		itemstack = ItemStackSerializer.readItemStack(clientdata, version, cache.getAttributesCache().getLocale(), true);
+		itemstack = ItemStackSerializer.readItemStack(clientdata, version, cache.getAttributesCache().getLocale());
 	}
 
 }

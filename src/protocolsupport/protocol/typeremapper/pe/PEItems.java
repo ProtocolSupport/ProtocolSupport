@@ -8,8 +8,10 @@ import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.JsonUtils;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ResourceUtils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class PEItems {
 
 	protected static final int combinedPEStoneId = formLegacyCombinedId(1, 0);
@@ -34,7 +36,7 @@ public class PEItems {
 	}
 
 	static {
-		for (JsonElement element : Utils.iterateJsonArrayResource(PEDataValues.getResourcePath("itemmapping.json"))) {
+		for (JsonElement element : ResourceUtils.getAsIterableJson(PEDataValues.getResourcePath("itemmapping.json"))) {
 			JsonObject object = element.getAsJsonObject();
 			register(JsonUtils.getString(object, "itemkey"), JsonUtils.getInt(object, "peid"), JsonUtils.getInt(object, "pedata"));
 		}

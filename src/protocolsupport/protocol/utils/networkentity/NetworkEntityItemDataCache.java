@@ -50,7 +50,7 @@ public class NetworkEntityItemDataCache extends NetworkEntityDataCache {
 			ClientBoundPacketData spawn = ClientBoundPacketData.create(PEPacketIDs.ADD_ITEM_ENTITY);
 			VarNumberSerializer.writeSVarLong(spawn, entityId);
 			VarNumberSerializer.writeVarLong(spawn, entityId);
-			ItemStackSerializer.writeItemStack(spawn, version, I18NData.DEFAULT_LOCALE, itemstack, true);
+			ItemStackSerializer.writeItemStack(spawn, version, I18NData.DEFAULT_LOCALE, itemstack);
 			spawn.writeFloatLE((float) x);
 			spawn.writeFloatLE((float) y);
 			spawn.writeFloatLE((float) z);

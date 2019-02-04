@@ -1,5 +1,6 @@
 package protocolsupport.protocol.utils;
 
+import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
@@ -12,6 +13,15 @@ public class CommonNBT {
 	public static final String DAMAGE = "Damage";
 	public static final String NBT_STASH = "PS_NBT_STASH";
 	public static final String ID_STASH = "PS_ID_STASH";
+
+	public static NBTCompound getOrCreateRootTag(NetworkItemStack itemstack) {
+		NBTCompound tag = itemstack.getNBT();
+		if (tag == null) {
+			tag = new NBTCompound();
+			itemstack.setNBT(tag);
+		}
+		return tag;
+	}
 
 	public static NBTCompound getOrCreateDisplayTag(NBTCompound rootTag) {
 		NBTCompound display = rootTag.getTagOfType(DISPLAY, NBTType.COMPOUND);

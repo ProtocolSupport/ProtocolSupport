@@ -7,8 +7,8 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOp
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdRemapper;
+import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -24,7 +24,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID);
 		serializer.writeByte(windowId);
 		serializer.writeByte(GenericIdRemapper.INVENTORY.getTable(version).getRemap(type).toLegacyId());
-		StringSerializer.writeString(serializer, version, Utils.clampString(title.toLegacyText(cache.getAttributesCache().getLocale()), 32));
+		StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(title.toLegacyText(cache.getAttributesCache().getLocale()), 32));
 		serializer.writeByte(slots);
 		serializer.writeBoolean(true);
 		if (type == WindowType.HORSE) {

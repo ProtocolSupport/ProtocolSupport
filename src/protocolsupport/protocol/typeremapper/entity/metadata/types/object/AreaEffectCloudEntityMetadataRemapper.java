@@ -6,6 +6,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEnti
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNumberToFloatLe;
 import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
+import protocolsupport.protocol.typeremapper.particle.ParticleRemapper.ParticleRemappingTable;
 import protocolsupport.protocol.typeremapper.particle.legacy.LegacyParticle;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
@@ -31,10 +32,11 @@ public class AreaEffectCloudEntityMetadataRemapper extends BaseEntityMetadataRem
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.AreaEffectCloud.SINGLE_POINT, 7), ProtocolVersionsHelper.ALL_1_9);
 		addRemapPerVersion(
 			version -> new DataWatcherObjectRemapper() {
+				ParticleRemappingTable particleRemapper = ParticleRemapper.REGISTRY.getTable(version);
 				@Override
 				public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
 					DataWatcherObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent(particleObject -> {
-						Particle particle = ParticleRemapper.remap(version, particleObject.getValue());
+						Particle particle = particleRemapper.getRemap(particleObject.getValue().getClass()).apply(particleObject.getValue());
 						remapped.put(9, new DataWatcherObjectVarInt(particle.getId()));
 						if (particle instanceof LegacyParticle) {
 							LegacyParticle lParticle = (LegacyParticle) particle;

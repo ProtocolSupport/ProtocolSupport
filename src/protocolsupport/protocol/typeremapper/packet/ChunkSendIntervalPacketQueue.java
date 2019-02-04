@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.JavaSystemProperty;
 import protocolsupport.utils.recyclable.Recyclable;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -27,7 +27,7 @@ public class ChunkSendIntervalPacketQueue {
 	protected static boolean shouldLock(ClientBoundPacketData packet) {
 		return packet.getPacketId() == ClientBoundPacket.PLAY_CHUNK_SINGLE_ID;
 	}
-	protected static final long chunkSendInterval = TimeUnit.MILLISECONDS.toNanos(Utils.getJavaPropertyValue("chunksend18interval", 5L, Long::parseLong));
+	protected static final long chunkSendInterval = TimeUnit.MILLISECONDS.toNanos(JavaSystemProperty.getValue("chunksend18interval", 5L, Long::parseLong));
 
 	protected State state = State.UNLOCKED;
 	protected final ArrayDeque<ClientBoundPacketData> queue = new ArrayDeque<>(1024);

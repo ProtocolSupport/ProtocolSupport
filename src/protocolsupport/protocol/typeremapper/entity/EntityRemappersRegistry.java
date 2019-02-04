@@ -81,7 +81,9 @@ import protocolsupport.protocol.typeremapper.utils.RemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class EntityRemappersRegistry {
 
 	public static class EntityRemappingTable extends RemappingTable {

@@ -6,7 +6,6 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleKickDisconnect extends ClientBoundMiddlePacket {
 
@@ -18,7 +17,7 @@ public abstract class MiddleKickDisconnect extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		message = ChatAPI.fromJSON(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
+		message = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
 	}
 
 }

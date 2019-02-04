@@ -4,8 +4,20 @@ import protocolsupport.protocol.utils.types.particle.Particle;
 
 public class LegacyParticle extends Particle {
 
-	public LegacyParticle(int id, String name) {
-		super(id, name);
+	protected String name;
+
+	public LegacyParticle(int id, String name, float offsetX, float offsetY, float offsetZ, float data, int count) {
+		super(id);
+		this.offsetX = offsetX;
+		this.offsetY = offsetY;
+		this.offsetZ = offsetZ;
+		this.data = data;
+		this.count = count;
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public int getFirstParameter() {

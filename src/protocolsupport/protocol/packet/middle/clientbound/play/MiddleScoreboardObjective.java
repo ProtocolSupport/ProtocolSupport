@@ -8,7 +8,6 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleScoreboardObjective extends ClientBoundMiddlePacket {
 
@@ -23,10 +22,10 @@ public abstract class MiddleScoreboardObjective extends ClientBoundMiddlePacket 
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		name = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 16);
+		name = StringSerializer.readVarIntUTF8String(serverdata);
 		mode = MiscSerializer.readByteEnum(serverdata, Mode.CONSTANT_LOOKUP);
 		if (mode != Mode.REMOVE) {
-			value = ChatAPI.fromJSON(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
+			value = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
 			type = MiscSerializer.readVarIntEnum(serverdata, Type.CONSTANT_LOOKUP);
 		}
 	}

@@ -13,7 +13,9 @@ import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkipping
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class GenericIdSkipper {
 
 	public static final EnumSkippingRegistry<NetworkEntityType, EnumSkippingTable<NetworkEntityType>> ENTITY = new EnumSkippingRegistry<NetworkEntityType, EnumSkippingTable<NetworkEntityType>>() {

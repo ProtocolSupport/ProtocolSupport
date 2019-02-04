@@ -6,7 +6,6 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleTabComplete extends ClientBoundMiddlePacket {
 
@@ -25,13 +24,13 @@ public abstract class MiddleTabComplete extends ClientBoundMiddlePacket {
 		start = VarNumberSerializer.readVarInt(serverdata);
 		length = VarNumberSerializer.readVarInt(serverdata);
 		matches = ArraySerializer.readVarIntTArray(serverdata, CommandMatch.class, data -> {
-			String match = StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC, 32767);
-			String tooltip = serverdata.readBoolean() ? StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC) : null;
+			String match = StringSerializer.readVarIntUTF8String(serverdata);
+			String tooltip = serverdata.readBoolean() ? StringSerializer.readVarIntUTF8String(serverdata) : null;
 			return new CommandMatch(match, tooltip);
 		});
 	}
 
-	public class CommandMatch {
+	public static class CommandMatch {
 
 		protected final String match;
 		protected final String tooltip;

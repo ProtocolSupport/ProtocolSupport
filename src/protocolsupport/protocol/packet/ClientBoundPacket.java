@@ -1,7 +1,9 @@
 package protocolsupport.protocol.packet;
 
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class ClientBoundPacket {
 
 	public static final int LOGIN_DISCONNECT_ID = ServerPlatform.get().getPacketFactory().getOutLoginDisconnectPacketId();

@@ -8,16 +8,13 @@ import protocolsupport.protocol.utils.types.NetworkItemStack;
 public class ItemStackRemapper {
 
 	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale,  NetworkItemStack itemstack) {
-		if (!version.isPE()) {
-			setComplexlyRemapped(itemstack, false);
-		}
 		itemstack = ItemStackComplexRemapperRegistry.remapToClient(version, locale, itemstack);
 		itemstack.setTypeId(LegacyItemType.REGISTRY.getTable(version).getRemap(itemstack.getTypeId()));
 		if (version.isPE()) {
 			int peCombinedId = PEItems.getPECombinedIdByModernId(itemstack.getTypeId());
 			int peData = PEItems.getDataFromPECombinedId(peCombinedId);
 			itemstack.setTypeId(PEItems.getIdFromPECombinedId(peCombinedId));
-			if (itemstack.getLegacyData() == 0) { //preserve legacy durability data
+			if (!isComplexlyRemapped(itemstack)) { //preserve legacy durability data
 				itemstack.setLegacyData(peData);
 			}
 		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
@@ -36,7 +33,7 @@ public class ItemStackRemapper {
 		if (version.isPE()) {
 			int modernId = PEItems.getModernIdByPEIdData(itemstack.getTypeId(), itemstack.getLegacyData());
 			itemstack.setTypeId(modernId);
-			itemstack.setLegacyData(0);
+			itemstack.setLegacyData(NetworkItemStack.DEFAULT_LEGACY_DATA);
 		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			int legacyCombinedId = PreFlatteningItemIdData.formLegacyCombinedId(itemstack.getTypeId(), itemstack.getLegacyData());
 			itemstack.setTypeId(PreFlatteningItemIdData.getModernIdByLegacyCombinedId(legacyCombinedId));
@@ -46,12 +43,8 @@ public class ItemStackRemapper {
 		return ItemStackComplexRemapperRegistry.remapFromClient(version, locale, itemstack);
 	}
 
-	public static void setComplexlyRemapped(NetworkItemStack itemstack, boolean remapped) {
-		itemstack.setLegacyData(remapped ? 0 : -1);
-	}
-
 	public static boolean isComplexlyRemapped(NetworkItemStack itemstack) {
-		return itemstack.getLegacyData() != -1;
+		return itemstack.getLegacyData() != NetworkItemStack.DEFAULT_LEGACY_DATA;
 	}
 
 }

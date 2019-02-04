@@ -3,7 +3,7 @@ package protocolsupport.protocol.utils.types.particle;
 public class ParticleSweepAttack extends Particle {
 
 	public ParticleSweepAttack(int pId) {
-		super(pId, "minecraft:sweep_attack");
+		super(pId);
 	}
 
 }

@@ -42,7 +42,9 @@ import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemapping
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class LegacyBlockData {
 
 	public static final BlockIdRemappingRegistry REGISTRY = new BlockIdRemappingRegistry();
@@ -142,6 +144,15 @@ public class LegacyBlockData {
 
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(
+					Material.BRAIN_CORAL, Material.BUBBLE_CORAL, Material.FIRE_CORAL, Material.HORN_CORAL, Material.TUBE_CORAL,
+					Material.CONDUIT, Material.TNT
+				),
+			o -> o.getMaterial().createBlockData(),
+				ProtocolVersionsHelper.BEFORE_1_13_1
+			);
+
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(
 					Material.WHITE_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.MAGENTA_SHULKER_BOX,
 					Material.LIGHT_BLUE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.LIME_SHULKER_BOX,
 					Material.PINK_SHULKER_BOX, Material.GRAY_SHULKER_BOX, Material.LIGHT_GRAY_SHULKER_BOX,
@@ -187,6 +198,12 @@ public class LegacyBlockData {
 				ProtocolVersionsHelper.ALL_PE
 			);
 
+			this.registerRemapEntryForAllStates(Material.DEAD_BRAIN_CORAL, Material.BRAIN_CORAL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13_1);
+			this.registerRemapEntryForAllStates(Material.DEAD_BUBBLE_CORAL, Material.BUBBLE_CORAL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13_1);
+			this.registerRemapEntryForAllStates(Material.DEAD_FIRE_CORAL, Material.FIRE_CORAL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13_1);
+			this.registerRemapEntryForAllStates(Material.DEAD_HORN_CORAL, Material.HORN_CORAL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13_1);
+			this.registerRemapEntryForAllStates(Material.DEAD_TUBE_CORAL, Material.TUBE_CORAL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_13_1);
+
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(
 					Material.ACACIA_LEAVES, Material.DARK_OAK_LEAVES, Material.BIRCH_LEAVES,
@@ -205,6 +222,7 @@ public class LegacyBlockData {
 				o -> o.getMaterial().createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
+
 			this.registerRemapEntryForAllStates(
 				Arrays.asList(
 					Material.SKELETON_SKULL,
@@ -215,8 +233,9 @@ public class LegacyBlockData {
 					Material.ZOMBIE_HEAD
 				),
 				Material.SKELETON_SKULL.createBlockData(),
-				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+				ProtocolVersionsHelper.ALL_PE
 			);
+
 			this.<Directional>registerRemapEntryForAllStates(
 				Arrays.asList(
 					Material.SKELETON_WALL_SKULL,
@@ -387,6 +406,7 @@ public class LegacyBlockData {
 				},
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
 			);
+
 			this.<Rotatable>registerRemapEntryForAllStates(
 				Arrays.asList(
 					Material.BLACK_BANNER, Material.BLUE_BANNER, Material.BROWN_BANNER, Material.CYAN_BANNER,
@@ -395,7 +415,7 @@ public class LegacyBlockData {
 					Material.PURPLE_BANNER, Material.RED_BANNER, Material.WHITE_BANNER, Material.YELLOW_BANNER
 				),
 				o -> cloneRotatable(o, (Rotatable) Material.WHITE_BANNER.createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+				ProtocolVersionsHelper.ALL_PE
 			);
 			this.<Directional>registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -405,8 +425,9 @@ public class LegacyBlockData {
 					Material.PURPLE_WALL_BANNER, Material.RED_WALL_BANNER, Material.WHITE_WALL_BANNER, Material.YELLOW_WALL_BANNER
 				),
 				o -> cloneDirectional(o, (Directional) Material.WHITE_WALL_BANNER.createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+				ProtocolVersionsHelper.ALL_PE
 			);
+
 			this.<Directional>registerRemapEntryForAllStates(
 				Arrays.asList(Material.LADDER, Material.ENDER_CHEST),
 				o -> cloneDirectional(o, (Directional) o.getMaterial().createBlockData()),
@@ -503,11 +524,11 @@ public class LegacyBlockData {
 					Material.FIRE_CORAL, Material.FIRE_CORAL_FAN, Material.FIRE_CORAL_WALL_FAN,
 					Material.HORN_CORAL, Material.HORN_CORAL_FAN, Material.HORN_CORAL_WALL_FAN,
 					Material.TUBE_CORAL, Material.TUBE_CORAL_FAN, Material.TUBE_CORAL_WALL_FAN,
-					Material.DEAD_BRAIN_CORAL_FAN, Material.DEAD_BRAIN_CORAL_WALL_FAN,
-					Material.DEAD_BUBBLE_CORAL_FAN, Material.DEAD_BUBBLE_CORAL_WALL_FAN,
-					Material.DEAD_FIRE_CORAL_FAN, Material.DEAD_FIRE_CORAL_WALL_FAN,
-					Material.DEAD_HORN_CORAL_FAN, Material.DEAD_HORN_CORAL_WALL_FAN,
-					Material.DEAD_TUBE_CORAL_FAN, Material.DEAD_TUBE_CORAL_WALL_FAN
+					Material.DEAD_BRAIN_CORAL, Material.DEAD_BRAIN_CORAL_FAN, Material.DEAD_BRAIN_CORAL_WALL_FAN,
+					Material.DEAD_BUBBLE_CORAL, Material.DEAD_BUBBLE_CORAL_FAN, Material.DEAD_BUBBLE_CORAL_WALL_FAN,
+					Material.DEAD_FIRE_CORAL, Material.DEAD_FIRE_CORAL_FAN, Material.DEAD_FIRE_CORAL_WALL_FAN,
+					Material.DEAD_HORN_CORAL, Material.DEAD_HORN_CORAL_FAN, Material.DEAD_HORN_CORAL_WALL_FAN,
+					Material.DEAD_TUBE_CORAL, Material.DEAD_TUBE_CORAL_FAN, Material.DEAD_TUBE_CORAL_WALL_FAN
 				),
 				Material.DANDELION.createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_13
@@ -709,6 +730,8 @@ public class LegacyBlockData {
 			this.registerRemapEntryForAllStates(Material.SLIME_BLOCK, Material.EMERALD_BLOCK.createBlockData(), ProtocolVersionsHelper.BEFORE_1_8);
 			this.registerRemapEntryForAllStates(Material.BARRIER, Material.GLASS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_8);
 			this.registerRemapEntryForAllStates(Material.PRISMARINE, Material.MOSSY_COBBLESTONE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_8);
+			this.registerRemapEntryForAllStates(Material.DARK_PRISMARINE, Material.MOSSY_COBBLESTONE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_8);
+			this.registerRemapEntryForAllStates(Material.PRISMARINE_BRICKS, Material.MOSSY_STONE_BRICKS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_8);
 			this.registerRemapEntryForAllStates(Material.SEA_LANTERN, Material.GLOWSTONE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_8);
 			this.registerRemapEntryForAllStates(Material.DAYLIGHT_DETECTOR, Material.DAYLIGHT_DETECTOR.createBlockData(), ProtocolVersionsHelper.BEFORE_1_8);
 			this.<TrapDoor>registerRemapEntryForAllStates(//not the best remap, but we have no choice
@@ -860,6 +883,7 @@ public class LegacyBlockData {
 
 
 			this.registerRemapEntryForAllStates(Material.QUARTZ_BLOCK, Material.STONE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_5);
+			this.registerRemapEntryForAllStates(Material.QUARTZ_PILLAR, Material.STONE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_5);
 			this.registerRemapEntryForAllStates(Material.NETHER_QUARTZ_ORE, Material.COAL_ORE.createBlockData(), ProtocolVersionsHelper.BEFORE_1_5);
 			this.registerRemapEntryForAllStates(Material.DAYLIGHT_DETECTOR, Material.COBBLESTONE_SLAB.createBlockData(), ProtocolVersionsHelper.BEFORE_1_5);
 			this.registerRemapEntryForAllStates(Material.REDSTONE_BLOCK, Material.EMERALD_BLOCK.createBlockData(), ProtocolVersionsHelper.BEFORE_1_5);

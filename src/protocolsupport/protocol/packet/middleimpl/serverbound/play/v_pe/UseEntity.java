@@ -34,7 +34,7 @@ public class UseEntity extends ServerBoundMiddlePacket {
 		targetId = (int) VarNumberSerializer.readVarLong(clientdata);
 		subTypeId = VarNumberSerializer.readVarInt(clientdata);
 		slot = VarNumberSerializer.readSVarInt(clientdata);
-		itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getAttributesCache().getLocale(), true);
+		itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getAttributesCache().getLocale());
 		fromX = clientdata.readFloatLE();
 		fromY = clientdata.readFloatLE();
 		fromZ = clientdata.readFloatLE();

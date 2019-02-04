@@ -35,7 +35,7 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 		z = serverdata.readDouble();
 		yaw = serverdata.readByte();
 		pitch = serverdata.readByte();
-		entityRemapper.readEntityWithMetadata(cache.getAttributesCache().getLocale(), entity, serverdata);
+		entityRemapper.readEntityWithMetadata(entity, serverdata);
 	}
 
 	@Override

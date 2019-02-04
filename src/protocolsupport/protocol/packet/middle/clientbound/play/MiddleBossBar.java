@@ -11,7 +11,6 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookups;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 
@@ -33,7 +32,7 @@ public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		switch (action) {
 			case ADD: {
-				title = ChatAPI.fromJSON(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
+				title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
 				percent = serverdata.readFloat();
 				color = VarNumberSerializer.readVarInt(serverdata);
 				divider = VarNumberSerializer.readVarInt(serverdata);
@@ -48,7 +47,7 @@ public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 				break;
 			}
 			case UPDATE_TITLE: {
-				title = ChatAPI.fromJSON(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC));
+				title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
 				break;
 			}
 			case UPDATE_STYLE: {

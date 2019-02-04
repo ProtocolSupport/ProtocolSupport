@@ -40,7 +40,7 @@ public class UseItem extends ServerBoundMiddlePacket {
 		PositionSerializer.readPEPositionTo(clientdata, position);
 		face = VarNumberSerializer.readSVarInt(clientdata);
 		slot = VarNumberSerializer.readSVarInt(clientdata);
-		itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getAttributesCache().getLocale(), true);
+		itemstack = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getAttributesCache().getLocale());
 		fromX = clientdata.readFloatLE();
 		fromY = clientdata.readFloatLE();
 		fromZ = clientdata.readFloatLE();

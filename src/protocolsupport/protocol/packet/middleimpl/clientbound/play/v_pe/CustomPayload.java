@@ -25,8 +25,8 @@ public class CustomPayload extends MiddleCustomPayload {
 		if (tag.equals(LegacyCustomPayloadChannelName.MODERN_TRADER_LIST)) {
 			return RecyclableSingletonList.create(cache.getPEInventoryCache().getFakeVillager().updateTrade(
 				cache, connection.getVersion(),
-				MerchantDataSerializer.readMerchantData(data, ProtocolVersionsHelper.LATEST_PC, cache.getAttributesCache().getLocale()))
-			);
+				MerchantDataSerializer.readMerchantData(data)
+			));
 		} else if (tag.equals(InternalPluginMessageRequest.PESkinUpdateChannel)) {
 			//we do this using the normal ClientBoundPacketData stream so the queue can cache these on login
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.PLAYER_INFO);

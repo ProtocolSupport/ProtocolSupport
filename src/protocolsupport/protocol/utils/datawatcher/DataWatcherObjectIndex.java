@@ -20,7 +20,9 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectStrin
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 
 	protected int index;

@@ -14,8 +14,10 @@ import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.JsonUtils;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ResourceUtils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class FlatteningItemId {
 
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> REGISTRY_TO_CLIENT = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
@@ -33,7 +35,7 @@ public class FlatteningItemId {
 	};
 
 	protected static void load(ProtocolVersion version) {
-		JsonObject itemsData = Utils.getResourceJson(MappingsData.getFlatteningResoucePath(version, "items.json"));
+		JsonObject itemsData = ResourceUtils.getAsJson(MappingsData.getFlatteningResoucePath(version, "items.json"));
 		if (itemsData != null) {
 			ArrayBasedIdRemappingTable tableToClient = REGISTRY_TO_CLIENT.getTable(version);
 			ArrayBasedIdRemappingTable tableFromClient = REGISTRY_FROM_CLIENT.getTable(version);

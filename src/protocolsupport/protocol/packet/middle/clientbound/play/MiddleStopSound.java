@@ -5,7 +5,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleStopSound extends ClientBoundMiddlePacket {
 
@@ -23,7 +22,7 @@ public abstract class MiddleStopSound extends ClientBoundMiddlePacket {
 	public void readFromServerData(ByteBuf serverdata) {
 		int flags = serverdata.readByte();
 		source = (flags & FLAG_SOURCE) == FLAG_SOURCE ? VarNumberSerializer.readVarInt(serverdata) : -1;
-		name = (flags & FLAG_NAME) == FLAG_NAME ? StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC) : null;
+		name = (flags & FLAG_NAME) == FLAG_NAME ? StringSerializer.readVarIntUTF8String(serverdata) : null;
 	}
 
 }

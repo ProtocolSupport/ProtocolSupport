@@ -9,7 +9,9 @@ import org.apache.commons.lang3.Validate;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.utils.Utils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public enum ProtocolVersion {
 
 	MINECRAFT_FUTURE(-1, new OrderId(ProtocolType.PC, 23)),

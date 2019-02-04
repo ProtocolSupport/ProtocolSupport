@@ -23,14 +23,16 @@ import protocolsupport.api.Connection;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.JavaSystemProperty;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public abstract class AbstractStatusListener {
 
-	private static final int statusThreads = Utils.getJavaPropertyValue("statusthreads", 2, Integer::parseInt);
-	private static final int statusThreadKeepAlive = Utils.getJavaPropertyValue("statusthreadskeepalive", 60, Integer::parseInt);
+	private static final int statusThreads = JavaSystemProperty.getValue("statusthreads", 2, Integer::parseInt);
+	private static final int statusThreadKeepAlive = JavaSystemProperty.getValue("statusthreadskeepalive", 60, Integer::parseInt);
 
 	static {
 		ProtocolSupport.logInfo(MessageFormat.format("Status threads max count: {0}, keep alive time: {1}", statusThreads, statusThreadKeepAlive));

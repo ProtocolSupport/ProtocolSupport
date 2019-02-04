@@ -161,8 +161,8 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				}
 			}
 			transaction.slot = VarNumberSerializer.readVarInt(from);
-			transaction.oldItem = ItemStackSerializer.readItemStack(from, version, locale, true);
-			transaction.newItem = ItemStackSerializer.readItemStack(from, version, locale, true);
+			transaction.oldItem = ItemStackSerializer.readItemStack(from, version, locale);
+			transaction.newItem = ItemStackSerializer.readItemStack(from, version, locale);
 			PETransactionRemapper.bug("Inv transaction read:"
 				+ " sId: " + transaction.sourceId
 				+ " wId: " + transaction.inventoryId
