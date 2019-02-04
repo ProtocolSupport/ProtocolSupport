@@ -572,7 +572,11 @@ public class LegacyBlockData {
 			this.registerRemapEntryForAllStates(Material.BEETROOTS, Material.POTATOES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_9);
 			this.<CommandBlock>registerRemapEntryForAllStates(
 				Arrays.asList(Material.COMMAND_BLOCK, Material.CHAIN_COMMAND_BLOCK, Material.REPEATING_COMMAND_BLOCK),
-				o -> Material.COMMAND_BLOCK.createBlockData(),
+				o -> {
+					CommandBlock data = (CommandBlock) Material.COMMAND_BLOCK.createBlockData();
+					data.setFacing(BlockFace.DOWN);
+					return data;
+				},
 				ProtocolVersionsHelper.BEFORE_1_9
 			);
 			this.registerRemapEntryForAllStates(

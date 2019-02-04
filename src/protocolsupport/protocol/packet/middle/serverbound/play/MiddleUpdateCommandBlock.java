@@ -14,6 +14,10 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleUpdateCommandBlock extends ServerBoundMiddlePacket {
 
+	public static final int FLAG_TRACK_OUTPUT = 0x1;
+	public static final int FLAG_CONDITIONAL = 0x2;
+	public static final int FLAG_AUTO = 0x4;
+
 	public MiddleUpdateCommandBlock(ConnectionImpl connection) {
 		super(connection);
 	}

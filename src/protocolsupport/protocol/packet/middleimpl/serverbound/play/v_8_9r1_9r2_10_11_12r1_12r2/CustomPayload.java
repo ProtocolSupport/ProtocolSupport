@@ -10,7 +10,6 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class CustomPayload extends ServerBoundMiddlePacket {
 
@@ -57,8 +56,7 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_RIGHT_NAME:
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_TYPO_NAME: {
-				//TODO: implement
-				return RecyclableEmptyList.get();
+				return LegacyCustomPayloadData.transformAdvancedCommandBlockEdit(connection.getVersion(), data, true);
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_BLOCK_NAME: {
 				return LegacyCustomPayloadData.transformAutoCommandBlockEdit(connection.getVersion(), data);
