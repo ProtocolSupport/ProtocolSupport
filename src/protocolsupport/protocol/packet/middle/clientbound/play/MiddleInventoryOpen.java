@@ -7,10 +7,13 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
+import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
+
+	protected final EnumSkippingTable<WindowType> typeSkipper = GenericIdSkipper.INVENTORY.getTable(connection.getVersion());
 
 	public MiddleInventoryOpen(ConnectionImpl connection) {
 		super(connection);
@@ -36,11 +39,12 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 	@Override
 	public boolean postFromServerRead() {
 		cache.getWindowCache().setOpenedWindow(type);
-		if (GenericIdSkipper.INVENTORY.getTable(connection.getVersion()).shouldSkip(type)) {
+		if (typeSkipper.shouldSkip(type)) {
 			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryClosePacket());
 			return false;
 		} else {
 			return true;
 		}
 	}
+
 }
