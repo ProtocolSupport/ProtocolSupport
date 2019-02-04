@@ -22,11 +22,6 @@ public class TranslateComponent extends BaseComponent {
 	private final String translationKey;
 	private final List<BaseComponent> args = new ArrayList<>();
 
-	@Deprecated
-	public TranslateComponent(String translationKey, Object... values) {
-		this(translationKey, Lists.transform(Arrays.asList(values), v -> v instanceof BaseComponent ? (BaseComponent) v : new TextComponent(v.toString())));
-	}
-
 	public TranslateComponent(String translationKey, BaseComponent... values) {
 		this(translationKey, Arrays.asList(values));
 	}
@@ -38,11 +33,6 @@ public class TranslateComponent extends BaseComponent {
 
 	public String getTranslationKey() {
 		return translationKey;
-	}
-
-	@Deprecated
-	public List<Object> getArgs() {
-		return Collections.unmodifiableList(args);
 	}
 
 	public List<BaseComponent> getTranslationArgs() {
