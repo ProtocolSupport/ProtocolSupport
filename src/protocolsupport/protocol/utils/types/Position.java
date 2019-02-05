@@ -50,22 +50,6 @@ public class Position {
 		z += cnt;
 	}
 
-	public int getLocalCoord() {
-		return ((x & 0xF) << 12) | ((z & 0xF) << 8) | y;
-	}
-
-	public ChunkCoord getChunkCoord() {
-		return new ChunkCoord(x >> 4, z >> 4);
-	}
-
-	public static Position fromLocal(ChunkCoord chunkCoord, int localCoord) {
-		return new Position(
-			(chunkCoord.getX() << 4) + ((localCoord >> 12) & 0xF),
-			(localCoord & 0xFF),
-			(chunkCoord.getZ() << 4) + ((localCoord >>  8) & 0xF)
-		);
-	}
-
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);

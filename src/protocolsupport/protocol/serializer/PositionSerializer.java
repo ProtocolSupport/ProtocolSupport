@@ -77,12 +77,4 @@ public class PositionSerializer {
 		to.writeInt(chunk.getZ());
 	}
 
-	public static int readLocalCoord(ByteBuf from) {
-		return from.readUnsignedShort();
-	}
-
-	public static void writeLocalCoord(ByteBuf to, int coord) {
-		to.writeShort(coord);
-	}
-
 }

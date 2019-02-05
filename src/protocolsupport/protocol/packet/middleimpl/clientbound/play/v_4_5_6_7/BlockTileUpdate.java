@@ -9,6 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.storage.netcache.TileDataCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.utils.CommonNBT;
@@ -27,9 +28,9 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(create(
-			connection, tileremapper.remap(tile, cache.getTileCache().getBlockData(position))
-		));
+		return RecyclableSingletonList.create(create(connection, tileremapper.remap(tile, cache.getTileCache().getBlockData(
+			TileDataCache.getChunkCoordsFromPosition(position), TileDataCache.getLocalCoordFromPosition(position)
+		))));
 	}
 
 	public static ClientBoundPacketData create(ConnectionImpl connection, TileEntity tile) {

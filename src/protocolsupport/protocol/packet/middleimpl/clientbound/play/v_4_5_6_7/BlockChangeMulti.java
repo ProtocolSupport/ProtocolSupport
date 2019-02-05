@@ -7,11 +7,11 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChange
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
 import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.storage.netcache.TileDataCache;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -27,26 +27,33 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		Int2IntMap tilestates = cache.getTileCache().getChunk(chunk);
+
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID);
 		PositionSerializer.writeChunkCoord(serializer, chunk);
 		serializer.writeShort(records.length);
 		serializer.writeInt(records.length * 4);
 		for (Record record : records) {
-			PositionSerializer.writeLocalCoord(serializer, record.localCoord);
-			serializer.writeShort(BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, record.id));
+			int localcoord = TileDataCache.createLocalPositionFromMultiChangeBlock(record.coord);
 			if (tileRemapper.tileThatNeedsBlockData(record.id)) {
-				tilestates.put(record.localCoord, record.id);
+				tilestates.put(localcoord, record.id);
 			} else {
-				tilestates.remove(record.localCoord);
+				tilestates.remove(localcoord);
 			}
+
+			serializer.writeShort(record.coord);
+			serializer.writeShort(BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, record.id));
+
 			if (tileRemapper.usedToBeTile(record.id)) {
 				packets.add(BlockTileUpdate.create(
-					connection, tileRemapper.getLegacyTileFromBlock(Position.fromLocal(chunk, record.localCoord), record.id)
+					connection, tileRemapper.getLegacyTileFromBlock(getGlobalPosition(chunk, record.coord), record.id)
 				));
 			}
 		}
+
 		packets.add(0, serializer);
+
 		return packets;
 	}
 

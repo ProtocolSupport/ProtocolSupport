@@ -60,29 +60,26 @@ public abstract class ChunkTransformer {
 	public TileEntity[] remapAndGetTiles() {
 		return
 			tilesNBTData.stream()
-			.map(tile -> tileRemapper.remap(tile, tilesBlockData.get(tile.getPosition().getLocalCoord())))
+			.map(tile -> tileRemapper.remap(tile, tilesBlockData.get(TileDataCache.getLocalCoordFromPosition(tile.getPosition()))))
 			.toArray(TileEntity[]::new);
 	}
 
 	protected void processBlockData(int section, int blockindex, int blockdata) {
+		int localcoord = TileDataCache.createLocalPositionFromChunkBlock(section, blockindex);
 		if (tileRemapper.tileThatNeedsBlockData(blockdata)) {
-			tilesBlockData.put(getLocalPositionFromSectionIndex(section, blockindex), blockdata);
+			tilesBlockData.put(localcoord, blockdata);
 		} else {
-			tilesBlockData.remove(getLocalPositionFromSectionIndex(section, blockindex));
+			tilesBlockData.remove(localcoord);
 		}
 		if (tileRemapper.usedToBeTile(blockdata)) {
-			TileEntity tile = tileRemapper.getLegacyTileFromBlock(getGlobalPositionFromSectionIndex(section, blockindex), blockdata);
+			TileEntity tile = tileRemapper.getLegacyTileFromBlock(getGlobalPosition(section, blockindex), blockdata);
 			if (tile != null) {
 				tilesNBTData.add(tile);
 			}
 		}
 	}
 
-	protected int getLocalPositionFromSectionIndex(int section, int blockindex) {
-		return ((blockindex & 0xF) << 12) | (((blockindex >> 4) & 0xF) << 8) | ((section * 16) + ((blockindex >> 8) & 0xF));
-	}
-
-	protected Position getGlobalPositionFromSectionIndex(int section, int blockindex) {
+	protected Position getGlobalPosition(int section, int blockindex) {
 		return new Position(
 			(chunk.getX() << 4) + (blockindex & 0xF),
 			(section * 16) + ((blockindex >> 8) & 0xF),
