@@ -1,8 +1,18 @@
 package protocolsupport.protocol.typeremapper.block;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.utils.BlockBlockDataLookup;
 
-public class BlockIdRemappingHelper {
+public class BlockRemappingHelper {
+
+	public static int remapBlockId(ArrayBasedIdRemappingTable blockIdRemapper, int blockId) {
+		return PreFlatteningBlockIdData.getIdFromCombinedId(remapBlockDataNormal(blockIdRemapper, BlockBlockDataLookup.getBlockDataId(blockId)));
+	}
+
+	public static int remapBlockDataNormal(ArrayBasedIdRemappingTable blockIdRemapper, int blockdata) {
+		return PreFlatteningBlockIdData.getCombinedId(blockIdRemapper.getRemap(blockdata));
+	}
 
 	public static int remapToCombinedIdNormal(ProtocolVersion version, int blockdata) {
 		return PreFlatteningBlockIdData.getCombinedId(LegacyBlockData.REGISTRY.getTable(version).getRemap(blockdata));

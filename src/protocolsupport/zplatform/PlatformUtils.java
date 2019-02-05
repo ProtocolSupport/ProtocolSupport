@@ -42,7 +42,11 @@ public interface PlatformUtils {
 
 	public int getBlockDataNetworkId(BlockData blockdata);
 
+	public int getBlockNetworkId(Material material);
+
 	public BlockData getBlockDataByNetworkId(int id);
+
+	public Material getBlockByNetworkId(int id);
 
 	public List<BlockData> getBlockDataList(Material material);
 

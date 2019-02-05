@@ -1,19 +1,15 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockAction;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
-import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BlockAction extends MiddleBlockAction {
-
-	protected final ArrayBasedIdRemappingTable blockIdRemapper = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
 
 	public BlockAction(ConnectionImpl connection) {
 		super(connection);
@@ -21,11 +17,12 @@ public class BlockAction extends MiddleBlockAction {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		//TODO: remap flattening blockid
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_ACTION_ID);
-		PositionSerializer.writeLegacyPositionS(serializer, position);
+		PositionSerializer.writePosition(serializer, position);
 		serializer.writeByte(actionId);
 		serializer.writeByte(actionParam);
-		serializer.writeShort(BlockRemappingHelper.remapBlockId(blockIdRemapper, blockId));
+		VarNumberSerializer.writeVarInt(serializer, blockId);
 		return RecyclableSingletonList.create(serializer);
 	}
 

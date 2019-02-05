@@ -1,7 +1,7 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.object.minecart;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.block.BlockIdRemappingHelper;
+import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperBooleanToByte;
@@ -33,7 +33,7 @@ public class MinecartEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 			version -> new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Minecart.BLOCK, 9) {
 				@Override
 				public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
-					return new DataWatcherObjectVarInt(BlockIdRemappingHelper.remapToCombinedIdM12(version, object.getValue()));
+					return new DataWatcherObjectVarInt(BlockRemappingHelper.remapToCombinedIdM12(version, object.getValue()));
 				}
 			},
 			ProtocolVersionsHelper.RANGE__1_10__1_12_2
@@ -42,7 +42,7 @@ public class MinecartEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 			version -> new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Minecart.BLOCK, 8) {
 				@Override
 				public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
-					return new DataWatcherObjectVarInt(BlockIdRemappingHelper.remapToCombinedIdM12(version, object.getValue()));
+					return new DataWatcherObjectVarInt(BlockRemappingHelper.remapToCombinedIdM12(version, object.getValue()));
 				}
 			},
 			ProtocolVersionsHelper.ALL_1_9
@@ -50,14 +50,14 @@ public class MinecartEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 		addRemap(new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Minecart.BLOCK, 20) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
-				return new DataWatcherObjectInt(BlockIdRemappingHelper.remapToCombinedIdM12(ProtocolVersion.MINECRAFT_1_8, object.getValue()));
+				return new DataWatcherObjectInt(BlockRemappingHelper.remapToCombinedIdM12(ProtocolVersion.MINECRAFT_1_8, object.getValue()));
 			}
 		}, ProtocolVersion.MINECRAFT_1_8);
 		addRemapPerVersion(
 			version -> new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Minecart.BLOCK, 20) {
 				@Override
 				public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
-					return new DataWatcherObjectInt(BlockIdRemappingHelper.remapToCombinedIdM16(version, object.getValue()));
+					return new DataWatcherObjectInt(BlockRemappingHelper.remapToCombinedIdM16(version, object.getValue()));
 				}
 			},
 			ProtocolVersionsHelper.BEFORE_1_8
