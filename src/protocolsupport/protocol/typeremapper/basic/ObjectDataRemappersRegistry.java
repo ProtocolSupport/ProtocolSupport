@@ -7,8 +7,10 @@ import java.util.function.IntUnaryOperator;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.BlockDirection;
@@ -25,18 +27,24 @@ public class ObjectDataRemappersRegistry {
 				version
 			));
 			Arrays.stream(ProtocolVersionsHelper.RANGE__1_8__1_12_2)
-			.forEach(version -> registerRemapEntry(
-				NetworkEntityType.FALLING_OBJECT,
-				blockdata -> BlockRemappingHelper.remapToCombinedIdM12(version, blockdata),
-				version
-			));
+			.forEach(version -> {
+				ArrayBasedIdRemappingTable blockIdRemapper = LegacyBlockData.REGISTRY.getTable(version);
+				registerRemapEntry(
+					NetworkEntityType.FALLING_OBJECT,
+					blockdata -> BlockRemappingHelper.remapBlockDataM12(blockIdRemapper, blockdata),
+					version
+				);
+			});
 			registerRemapEntry(NetworkEntityType.ARROW, entityId -> entityId - 1, ProtocolVersionsHelper.BEFORE_1_9);
 			Arrays.stream(ProtocolVersionsHelper.BEFORE_1_8)
-			.forEach(version -> registerRemapEntry(
-				NetworkEntityType.FALLING_OBJECT,
-				blockdata -> BlockRemappingHelper.remapToCombinedIdM16(version, blockdata),
-				version
-			));
+			.forEach(version -> {
+				ArrayBasedIdRemappingTable blockIdRemapper = LegacyBlockData.REGISTRY.getTable(version);
+				registerRemapEntry(
+					NetworkEntityType.FALLING_OBJECT,
+					blockdata -> BlockRemappingHelper.remapBlockDataM16(blockIdRemapper, blockdata),
+					version
+				);
+			});
 		}
 		protected void registerRemapEntry(NetworkEntityType type, IntUnaryOperator operator, ProtocolVersion... versions) {
 			Arrays.stream(versions).forEach(version -> getTable(version).setRemap(type, operator));
