@@ -64,20 +64,18 @@ public abstract class ChunkTransformer {
 			.toArray(TileEntity[]::new);
 	}
 
-	protected int getBlockState(int section, BlockStorageReader blockstorage, int blockindex) {
-		int blockstate = blockstorage.getBlockState(blockindex);
-		if (tileRemapper.tileThatNeedsBlockData(blockstate)) {
-			tilesBlockData.put(getLocalPositionFromSectionIndex(section, blockindex), blockstate);
+	protected void processBlockData(int section, int blockindex, int blockdata) {
+		if (tileRemapper.tileThatNeedsBlockData(blockdata)) {
+			tilesBlockData.put(getLocalPositionFromSectionIndex(section, blockindex), blockdata);
 		} else {
 			tilesBlockData.remove(getLocalPositionFromSectionIndex(section, blockindex));
 		}
-		if (tileRemapper.usedToBeTile(blockstate)) {
-			TileEntity tile = tileRemapper.getLegacyTileFromBlock(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);
+		if (tileRemapper.usedToBeTile(blockdata)) {
+			TileEntity tile = tileRemapper.getLegacyTileFromBlock(getGlobalPositionFromSectionIndex(section, blockindex), blockdata);
 			if (tile != null) {
 				tilesNBTData.add(tile);
 			}
 		}
-		return blockstate;
 	}
 
 	protected int getLocalPositionFromSectionIndex(int section, int blockindex) {

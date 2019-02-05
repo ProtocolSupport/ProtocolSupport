@@ -22,12 +22,14 @@ public class ChunkTransformerVaries extends ChunkTransformerBB {
 			ChunkSection section = sections[i];
 			if (section != null) {
 				BlockStorageReader storage = section.blockdata;
+
 				int bitsPerBlock = storage.getBitsPerBlock();
 				if (bitsPerBlock > 8) {
 					buffer.writeByte(globalPaletteBitsPerBlock);
 					BlockStorageWriter blockstorage = new BlockStorageWriter(globalPaletteBitsPerBlock, blocksInSection);
 					for (int blockIndex = 0; blockIndex < blocksInSection; blockIndex++) {
-						blockstorage.setBlockState(blockIndex, blockFlatteningIdRemappingTable.getRemap(blockDataRemappingTable.getRemap(getBlockState(i, storage, blockIndex))));
+						int blockdata = storage.getBlockData(blockIndex);
+						blockstorage.setBlockState(blockIndex, blockFlatteningIdRemappingTable.getRemap(blockDataRemappingTable.getRemap(blockdata)));
 					}
 					ArraySerializer.writeVarIntLongArray(buffer, blockstorage.getBlockData());
 				} else {
@@ -35,17 +37,20 @@ public class ChunkTransformerVaries extends ChunkTransformerBB {
 					BlockPalette palette = new BlockPalette();
 					BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock, blocksInSection);
 					for (int blockIndex = 0; blockIndex < blocksInSection; blockIndex++) {
-						blockstorage.setBlockState(blockIndex, palette.getRuntimeId(blockFlatteningIdRemappingTable.getRemap(blockDataRemappingTable.getRemap(getBlockState(i, storage, blockIndex)))));
+						int blockdata = storage.getBlockData(blockIndex);
+						blockstorage.setBlockState(blockIndex, palette.getRuntimeId(blockFlatteningIdRemappingTable.getRemap(blockDataRemappingTable.getRemap(blockdata))));
 					}
 					ArraySerializer.writeVarIntVarIntArray(buffer, palette.getBlockStates());
 					ArraySerializer.writeVarIntLongArray(buffer, blockstorage.getBlockData());
 				}
+
 				buffer.writeBytes(section.blocklight);
 				if (hasSkyLight) {
 					buffer.writeBytes(section.skylight);
 				}
 			}
 		}
+
 		if (hasBiomeData) {
 			for (int i = 0; i < biomeData.length; i++) {
 				buffer.writeInt(biomeData[i]);
