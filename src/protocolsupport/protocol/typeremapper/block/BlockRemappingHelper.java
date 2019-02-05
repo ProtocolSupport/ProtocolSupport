@@ -14,7 +14,7 @@ public class BlockRemappingHelper {
 		return PreFlatteningBlockIdData.getCombinedId(blockIdRemapper.getRemap(blockdata));
 	}
 
-	public static int remapToCombinedIdNormal(ProtocolVersion version, int blockdata) {
+	protected static int remapToCombinedIdNormal(ProtocolVersion version, int blockdata) {
 		return PreFlatteningBlockIdData.getCombinedId(LegacyBlockData.REGISTRY.getTable(version).getRemap(blockdata));
 	}
 
