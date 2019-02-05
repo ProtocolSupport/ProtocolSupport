@@ -23,9 +23,9 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		super(connection);
 	}
 
-	protected final ArrayBasedIdRemappingTable blockTypeRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
+	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
 	protected final ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable = FlatteningBlockId.REGISTRY.getTable(connection.getVersion());
-	protected final TileEntityRemapper tileremapper = TileEntityRemapper.getRemapper(connection.getVersion());
+	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(connection.getVersion());
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -35,15 +35,15 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		PositionSerializer.writeChunkCoord(serializer, chunk);
 		ArraySerializer.writeVarIntTArray(serializer, records, (to, record) -> {
 			PositionSerializer.writeLocalCoord(serializer, record.localCoord);
-			VarNumberSerializer.writeVarInt(to, blockFlatteningIdRemappingTable.getRemap(blockTypeRemappingTable.getRemap(record.id)));
-			if (tileremapper.tileThatNeedsBlockData(record.id)) {
+			VarNumberSerializer.writeVarInt(to, blockFlatteningIdRemappingTable.getRemap(blockDataRemappingTable.getRemap(record.id)));
+			if (tileRemapper.tileThatNeedsBlockData(record.id)) {
 				tilestates.put(record.localCoord, record.id);
 			} else {
 				tilestates.remove(record.localCoord);
 			}
-			if (tileremapper.usedToBeTile(record.id)) {
+			if (tileRemapper.usedToBeTile(record.id)) {
 				packets.add(BlockTileUpdate.create(
-					connection, tileremapper.getLegacyTileFromBlock(Position.fromLocal(chunk, record.localCoord), record.id)
+					connection, tileRemapper.getLegacyTileFromBlock(Position.fromLocal(chunk, record.localCoord), record.id)
 				));
 			}
 		});

@@ -27,13 +27,13 @@ public abstract class ChunkTransformer {
 	protected List<TileEntity> tilesNBTData;
 	protected Int2IntMap tilesBlockData;
 
-	protected final ArrayBasedIdRemappingTable blockTypeRemappingTable;
-	protected final TileDataCache tilecache;
-	protected final TileEntityRemapper tileremapper;
+	protected final ArrayBasedIdRemappingTable blockDataRemappingTable;
+	protected final TileDataCache tileCache;
+	protected final TileEntityRemapper tileRemapper;
 	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable, TileEntityRemapper tileremapper, TileDataCache tilecache) {
-		this.blockTypeRemappingTable = blockRemappingTable;
-		this.tileremapper = tileremapper;
-		this.tilecache = tilecache;
+		this.blockDataRemappingTable = blockRemappingTable;
+		this.tileRemapper = tileremapper;
+		this.tileCache = tilecache;
 	}
 
 	public void loadData(ChunkCoord chunk, ByteBuf chunkdata, int bitmap, boolean hasSkyLight, boolean hasBiomeData, TileEntity[] tiles) {
@@ -54,25 +54,25 @@ public abstract class ChunkTransformer {
 			}
 		}
 		this.tilesNBTData = new ArrayList<>(Arrays.asList(tiles));
-		this.tilesBlockData = tilecache.getOrCreateChunk(chunk);
+		this.tilesBlockData = tileCache.getOrCreateChunk(chunk);
 	}
 
 	public TileEntity[] remapAndGetTiles() {
 		return
 			tilesNBTData.stream()
-			.map(tile -> tileremapper.remap(tile, tilesBlockData.get(tile.getPosition().getLocalCoord())))
+			.map(tile -> tileRemapper.remap(tile, tilesBlockData.get(tile.getPosition().getLocalCoord())))
 			.toArray(TileEntity[]::new);
 	}
 
 	protected int getBlockState(int section, BlockStorageReader blockstorage, int blockindex) {
 		int blockstate = blockstorage.getBlockState(blockindex);
-		if (tileremapper.tileThatNeedsBlockData(blockstate)) {
+		if (tileRemapper.tileThatNeedsBlockData(blockstate)) {
 			tilesBlockData.put(getLocalPositionFromSectionIndex(section, blockindex), blockstate);
 		} else {
 			tilesBlockData.remove(getLocalPositionFromSectionIndex(section, blockindex));
 		}
-		if (tileremapper.usedToBeTile(blockstate)) {
-			TileEntity tile = tileremapper.getLegacyTileFromBlock(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);
+		if (tileRemapper.usedToBeTile(blockstate)) {
+			TileEntity tile = tileRemapper.getLegacyTileFromBlock(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);
 			if (tile != null) {
 				tilesNBTData.add(tile);
 			}

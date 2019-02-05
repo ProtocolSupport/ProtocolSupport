@@ -17,7 +17,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class WorldEvent extends MiddleWorldEvent {
 
 	protected final HashMapBasedIdRemappingTable legacyEffectId = LegacyEffect.REGISTRY.getTable(connection.getVersion());
-	protected final ArrayBasedIdRemappingTable blockIdRemapper = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
+	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
 
 	public WorldEvent(ConnectionImpl connection) {
 		super(connection);
@@ -27,7 +27,7 @@ public class WorldEvent extends MiddleWorldEvent {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
 		if (effectId == 2001) {
-			data = blockIdRemapper.getRemap(data);
+			data = blockDataRemappingTable.getRemap(data);
 			if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 				data = PreFlatteningBlockIdData.convertCombinedIdToM12(PreFlatteningBlockIdData.getCombinedId(data));
 			}

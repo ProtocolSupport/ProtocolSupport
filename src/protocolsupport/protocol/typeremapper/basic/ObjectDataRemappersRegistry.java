@@ -28,20 +28,20 @@ public class ObjectDataRemappersRegistry {
 			));
 			Arrays.stream(ProtocolVersionsHelper.RANGE__1_8__1_12_2)
 			.forEach(version -> {
-				ArrayBasedIdRemappingTable blockIdRemapper = LegacyBlockData.REGISTRY.getTable(version);
+				ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 				registerRemapEntry(
 					NetworkEntityType.FALLING_OBJECT,
-					blockdata -> BlockRemappingHelper.remapBlockDataM12(blockIdRemapper, blockdata),
+					blockdata -> BlockRemappingHelper.remapBlockDataM12(blockDataRemappingTable, blockdata),
 					version
 				);
 			});
 			registerRemapEntry(NetworkEntityType.ARROW, entityId -> entityId - 1, ProtocolVersionsHelper.BEFORE_1_9);
 			Arrays.stream(ProtocolVersionsHelper.BEFORE_1_8)
 			.forEach(version -> {
-				ArrayBasedIdRemappingTable blockIdRemapper = LegacyBlockData.REGISTRY.getTable(version);
+				ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 				registerRemapEntry(
 					NetworkEntityType.FALLING_OBJECT,
-					blockdata -> BlockRemappingHelper.remapBlockDataM16(blockIdRemapper, blockdata),
+					blockdata -> BlockRemappingHelper.remapBlockDataM16(blockDataRemappingTable, blockdata),
 					version
 				);
 			});

@@ -17,7 +17,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class WorldEvent extends MiddleWorldEvent {
 
 	protected final HashMapBasedIdRemappingTable legacyEffectId = LegacyEffect.REGISTRY.getTable(connection.getVersion());
-	protected final ArrayBasedIdRemappingTable blockIdRemapper = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
+	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
 
 	public WorldEvent(ConnectionImpl connection) {
 		super(connection);
@@ -26,7 +26,7 @@ public class WorldEvent extends MiddleWorldEvent {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		if (effectId == 2001) {
-			data = PreFlatteningBlockIdData.getIdFromCombinedId(BlockRemappingHelper.remapBlockDataNormal(blockIdRemapper, data));
+			data = PreFlatteningBlockIdData.getIdFromCombinedId(BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, data));
 		}
 		effectId = legacyEffectId.getRemap(effectId);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_EVENT_ID);

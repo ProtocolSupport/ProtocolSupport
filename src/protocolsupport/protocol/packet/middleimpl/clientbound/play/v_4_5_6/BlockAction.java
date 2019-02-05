@@ -13,7 +13,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BlockAction extends MiddleBlockAction {
 
-	protected final ArrayBasedIdRemappingTable blockIdRemapper = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
+	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
 
 	public BlockAction(ConnectionImpl connection) {
 		super(connection);
@@ -25,7 +25,7 @@ public class BlockAction extends MiddleBlockAction {
 		PositionSerializer.writeLegacyPositionS(serializer, position);
 		serializer.writeByte(actionId);
 		serializer.writeByte(actionParam);
-		serializer.writeShort(BlockRemappingHelper.remapBlockId(blockIdRemapper, blockId));
+		serializer.writeShort(BlockRemappingHelper.remapBlockId(blockDataRemappingTable, blockId));
 		return RecyclableSingletonList.create(serializer);
 	}
 

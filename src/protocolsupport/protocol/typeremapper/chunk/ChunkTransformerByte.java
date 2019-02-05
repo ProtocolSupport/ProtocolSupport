@@ -7,8 +7,8 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 
 public class ChunkTransformerByte extends ChunkTransformerBA {
 
-	public ChunkTransformerByte(ArrayBasedIdRemappingTable blockRemappingTable, TileEntityRemapper tileremapper, TileDataCache tilecache) {
-		super(blockRemappingTable, tileremapper, tilecache);
+	public ChunkTransformerByte(ArrayBasedIdRemappingTable blockDataRemappingTable, TileEntityRemapper tileRemapper, TileDataCache tileCache) {
+		super(blockDataRemappingTable, tileRemapper, tileCache);
 	}
 
 	@Override
@@ -24,7 +24,7 @@ public class ChunkTransformerByte extends ChunkTransformerBA {
 				BlockStorageReader storage = section.blockdata;
 				int blockdataacc = 0;
 				for (int block = 0; block < blocksInSection; block++) {
-					int blockstate = PreFlatteningBlockIdData.getCombinedId(blockTypeRemappingTable.getRemap(getBlockState(i, storage, block)));
+					int blockstate = PreFlatteningBlockIdData.getCombinedId(blockDataRemappingTable.getRemap(getBlockState(i, storage, block)));
 					data[blockIdIndex + block] = (byte) PreFlatteningBlockIdData.getIdFromCombinedId(blockstate);
 					byte blockdata = (byte) PreFlatteningBlockIdData.getDataFromCombinedId(blockstate);
 					if ((block & 1) == 0) {

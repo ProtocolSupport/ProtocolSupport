@@ -9,8 +9,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.utils.types.Position;
@@ -34,7 +34,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		PositionSerializer.writeChunkCoord(serializer, chunk);
 		ArraySerializer.writeVarIntTArray(serializer, records, (to, record) -> {
 			PositionSerializer.writeLocalCoord(serializer, record.localCoord);
-			VarNumberSerializer.writeVarInt(to, PreFlatteningBlockIdData.getCombinedId(blockRemappingTable.getRemap(record.id)));
+			VarNumberSerializer.writeVarInt(to, BlockRemappingHelper.remapBlockDataNormal(blockRemappingTable, record.id));
 			if (tileremapper.tileThatNeedsBlockData(record.id)) {
 				tilestates.put(record.localCoord, record.id);
 			} else {

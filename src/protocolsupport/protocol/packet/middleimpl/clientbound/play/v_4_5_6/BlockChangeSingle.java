@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChange
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
 import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
@@ -19,24 +20,24 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 		super(connection);
 	}
 
-	protected final ArrayBasedIdRemappingTable blockRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
-	protected final TileEntityRemapper tileremapper = TileEntityRemapper.getRemapper(connection.getVersion());
+	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
+	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(connection.getVersion());
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID);
 		PositionSerializer.writeLegacyPositionB(serializer, position);
-		int lId = PreFlatteningBlockIdData.getCombinedId(blockRemappingTable.getRemap(id));
+		int lId = BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, id);
 		serializer.writeShort(PreFlatteningBlockIdData.getIdFromCombinedId(lId));
 		serializer.writeByte(PreFlatteningBlockIdData.getDataFromCombinedId(lId));
-		if (tileremapper.tileThatNeedsBlockData(id)) {
+		if (tileRemapper.tileThatNeedsBlockData(id)) {
 			cache.getTileCache().setBlockData(position, id);
 		} else {
 			cache.getTileCache().removeBlockData(position);
 		}
-		if (tileremapper.usedToBeTile(id)) {
-			packets.add(BlockTileUpdate.create(connection, tileremapper.getLegacyTileFromBlock(position, id)));
+		if (tileRemapper.usedToBeTile(id)) {
+			packets.add(BlockTileUpdate.create(connection, tileRemapper.getLegacyTileFromBlock(position, id)));
 		}
 		packets.add(0, serializer);
 		return packets;

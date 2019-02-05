@@ -28,7 +28,7 @@ public class ChunkTransformerVariesLegacy extends ChunkTransformerBB {
 					VarNumberSerializer.writeVarInt(buffer, 0);
 					BlockStorageWriter blockstorage = new BlockStorageWriter(globalPaletteBitsPerBlock, blocksInSection);
 					for (int blockIndex = 0; blockIndex < blocksInSection; blockIndex++) {
-						blockstorage.setBlockState(blockIndex, PreFlatteningBlockIdData.getCombinedId(blockTypeRemappingTable.getRemap(getBlockState(i, storage, blockIndex))));
+						blockstorage.setBlockState(blockIndex, PreFlatteningBlockIdData.getCombinedId(blockDataRemappingTable.getRemap(getBlockState(i, storage, blockIndex))));
 					}
 					ArraySerializer.writeVarIntLongArray(buffer, blockstorage.getBlockData());
 				} else {
@@ -36,7 +36,7 @@ public class ChunkTransformerVariesLegacy extends ChunkTransformerBB {
 					BlockPalette palette = new BlockPalette();
 					BlockStorageWriter blockstorage = new BlockStorageWriter(bitsPerBlock, blocksInSection);
 					for (int blockIndex = 0; blockIndex < blocksInSection; blockIndex++) {
-						blockstorage.setBlockState(blockIndex, palette.getRuntimeId(PreFlatteningBlockIdData.getCombinedId(blockTypeRemappingTable.getRemap(getBlockState(i, storage, blockIndex)))));
+						blockstorage.setBlockState(blockIndex, palette.getRuntimeId(PreFlatteningBlockIdData.getCombinedId(blockDataRemappingTable.getRemap(getBlockState(i, storage, blockIndex)))));
 					}
 					ArraySerializer.writeVarIntVarIntArray(buffer, palette.getBlockStates());
 					ArraySerializer.writeVarIntLongArray(buffer, blockstorage.getBlockData());
