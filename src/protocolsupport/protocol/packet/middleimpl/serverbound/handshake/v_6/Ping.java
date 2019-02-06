@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_6;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -23,7 +22,6 @@ public class Ping extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		ProtocolVersion version = connection.getVersion();
 		clientdata.readUnsignedByte();
 		clientdata.readUnsignedByte();
 		StringSerializer.readString(clientdata, version);

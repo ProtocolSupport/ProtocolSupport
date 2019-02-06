@@ -13,7 +13,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BlockAction extends MiddleBlockAction {
 
-	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
+	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	public BlockAction(ConnectionImpl connection) {
 		super(connection);

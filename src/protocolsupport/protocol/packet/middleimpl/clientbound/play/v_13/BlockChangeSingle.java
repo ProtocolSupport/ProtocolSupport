@@ -18,8 +18,8 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 		super(connection);
 	}
 
-	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
-	protected final ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable = FlatteningBlockId.REGISTRY.getTable(connection.getVersion());
+	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+	protected final ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable = FlatteningBlockId.REGISTRY.getTable(version);
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {

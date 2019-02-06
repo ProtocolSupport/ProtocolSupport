@@ -5,14 +5,18 @@ import protocolsupport.utils.Utils;
 
 public class WindowCache {
 
-	private WindowType windowType = WindowType.PLAYER;
+	protected WindowType windowType = WindowType.PLAYER;
 
 	public void setOpenedWindow(WindowType windowType) {
 		this.windowType = windowType;
 	}
 
-	public WindowType getOpenedWindow() {
-		return this.windowType;
+	public WindowType getOpenedWindow(int windowId) {
+		if (windowId == 0) {
+			return WindowType.PLAYER;
+		} else {
+			return windowType;
+		}
 	}
 
 	public void closeWindow() {

@@ -24,23 +24,25 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		super(connection);
 	}
 
-	protected final TileEntityRemapper tileremapper = TileEntityRemapper.getRemapper(connection.getVersion());
+	protected final TileEntityRemapper tileremapper = TileEntityRemapper.getRemapper(version);
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(create(connection, tileremapper.remap(tile, cache.getTileCache().getBlockData(
-			TileDataCache.getChunkCoordsFromPosition(position), TileDataCache.getLocalCoordFromPosition(position)
-		))));
+		return RecyclableSingletonList.create(create(
+			version, cache.getAttributesCache().getLocale(),
+			tileremapper.remap(tile, cache.getTileCache().getBlockData(
+				TileDataCache.getChunkCoordsFromPosition(position), TileDataCache.getLocalCoordFromPosition(position)
+			))
+		));
 	}
 
-	public static ClientBoundPacketData create(ConnectionImpl connection, TileEntity tile) {
-		ProtocolVersion version = connection.getVersion();
+	public static ClientBoundPacketData create(ProtocolVersion version, String locale, TileEntity tile) {
 		TileEntityType type = tile.getType();
 		if (type == TileEntityType.SIGN) {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID);
 			PositionSerializer.writeLegacyPositionS(serializer, tile.getPosition());
 			for (String line : CommonNBT.getSignLines(tile.getNBT())) {
-				StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(ChatAPI.fromJSON(line).toLegacyText(connection.getCache().getAttributesCache().getLocale()), 15));
+				StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(ChatAPI.fromJSON(line).toLegacyText(locale), 15));
 			}
 			return serializer;
 		} else {

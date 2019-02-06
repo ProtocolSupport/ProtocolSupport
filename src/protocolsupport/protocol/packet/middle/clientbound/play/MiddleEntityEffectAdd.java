@@ -27,7 +27,7 @@ public abstract class MiddleEntityEffectAdd extends MiddleEntity {
 
 	@Override
 	public boolean postFromServerRead() {
-		return !GenericIdSkipper.EFFECT.getTable(connection.getVersion()).shouldSkip(effectId);
+		return !GenericIdSkipper.EFFECT.getTable(version).shouldSkip(effectId);
 	}
 
 }

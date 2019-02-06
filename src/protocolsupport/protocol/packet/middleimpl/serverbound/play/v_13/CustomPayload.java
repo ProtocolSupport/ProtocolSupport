@@ -14,7 +14,7 @@ public class CustomPayload extends MiddleCustomPayload {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		tag = StringSerializer.readString(clientdata, connection.getVersion());
+		tag = StringSerializer.readString(clientdata, version);
 		data = MiscSerializer.readAllBytesSlice(clientdata);
 	}
 

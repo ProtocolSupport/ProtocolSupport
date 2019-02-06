@@ -15,8 +15,8 @@ import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 
 public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 
-	protected final EntityRemapper entityRemapper = new EntityRemapper(connection.getVersion());
-	protected final ObjectDataRemappingTable entityObjectDataRemappingTable = ObjectDataRemappersRegistry.REGISTRY.getTable(connection.getVersion());
+	protected final EntityRemapper entityRemapper = new EntityRemapper(version);
+	protected final ObjectDataRemappingTable entityObjectDataRemappingTable = ObjectDataRemappersRegistry.REGISTRY.getTable(version);
 
 	public MiddleSpawnObject(ConnectionImpl connection) {
 		super(connection);
@@ -53,7 +53,7 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		if (!GenericIdSkipper.ENTITY.getTable(connection.getVersion()).shouldSkip(entity.getType())) {
+		if (!GenericIdSkipper.ENTITY.getTable(version).shouldSkip(entity.getType())) {
 			cache.getWatchedEntityCache().addWatchedEntity(entity);
 			entityRemapper.remap(false);
 			return true;

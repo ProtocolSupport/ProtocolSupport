@@ -18,7 +18,7 @@ public class TabComplete extends MiddleTabComplete {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TAB_COMPLETE_ID);
-		ArraySerializer.writeVarIntTArray(serializer, matches, (to, match) -> StringSerializer.writeString(to, connection.getVersion(), (start == 0 ? "/" : "") + match.getMatch()));
+		ArraySerializer.writeVarIntTArray(serializer, matches, (to, match) -> StringSerializer.writeString(to, version, (start == 0 ? "/" : "") + match.getMatch()));
 		return RecyclableSingletonList.create(serializer);
 	}
 

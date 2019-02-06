@@ -22,7 +22,7 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	protected final ChunkTransformerBA transformer = new ChunkTransformerShort(LegacyBlockData.REGISTRY.getTable(connection.getVersion()), TileEntityRemapper.getRemapper(connection.getVersion()), cache.getTileCache());
+	protected final ChunkTransformerBA transformer = new ChunkTransformerShort(LegacyBlockData.REGISTRY.getTable(version), TileEntityRemapper.getRemapper(version), cache.getTileCache());
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -41,7 +41,7 @@ public class Chunk extends MiddleChunk {
 		}
 		packets.add(chunkdata);
 		for (TileEntity tile : transformer.remapAndGetTiles()) {
-			packets.add(BlockTileUpdate.create(connection, tile));
+			packets.add(BlockTileUpdate.create(version, tile));
 		}
 		return packets;
 	}

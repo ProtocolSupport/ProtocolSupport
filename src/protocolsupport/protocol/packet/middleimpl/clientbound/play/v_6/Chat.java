@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6;
 
 import com.google.gson.JsonObject;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChat;
@@ -20,7 +19,6 @@ public class Chat extends MiddleChat {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHAT_ID);
 		StringSerializer.writeString(serializer, version, encode(message.toLegacyText(cache.getAttributesCache().getLocale())));
 		return RecyclableSingletonList.create(serializer);

@@ -22,17 +22,16 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		super(connection);
 	}
 
-	protected final TileEntityRemapper tileremapper = TileEntityRemapper.getRemapper(connection.getVersion());
+	protected final TileEntityRemapper tileremapper = TileEntityRemapper.getRemapper(version);
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(create(connection, tileremapper.remap(tile, cache.getTileCache().getBlockData(
+		return RecyclableSingletonList.create(create(version, tileremapper.remap(tile, cache.getTileCache().getBlockData(
 			TileDataCache.getChunkCoordsFromPosition(position), TileDataCache.getLocalCoordFromPosition(position)
 		))));
 	}
 
-	public static ClientBoundPacketData create(ConnectionImpl connection, TileEntity tile) {
-		ProtocolVersion version = connection.getVersion();
+	public static ClientBoundPacketData create(ProtocolVersion version, TileEntity tile) {
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9_4) && (tile.getType() == TileEntityType.SIGN)) {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID);
 			PositionSerializer.writePosition(serializer, tile.getPosition());

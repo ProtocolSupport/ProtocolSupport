@@ -23,7 +23,6 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
 		String locale = cache.getAttributesCache().getLocale();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		switch (action) {

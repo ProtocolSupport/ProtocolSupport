@@ -7,7 +7,7 @@ import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 
 public abstract class MiddleEntityMetadata extends MiddleEntity {
 
-	protected EntityRemapper entityRemapper = new EntityRemapper(connection.getVersion());
+	protected EntityRemapper entityRemapper = new EntityRemapper(version);
 
 	public MiddleEntityMetadata(ConnectionImpl connection) {
 		super(connection);

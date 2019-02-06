@@ -20,9 +20,9 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		super(connection);
 	}
 
-	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
-	protected final ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable = FlatteningBlockId.REGISTRY.getTable(connection.getVersion());
-	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(connection.getVersion());
+	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+	protected final ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable = FlatteningBlockId.REGISTRY.getTable(version);
+	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {

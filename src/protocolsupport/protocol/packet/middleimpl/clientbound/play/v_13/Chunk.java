@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
@@ -24,16 +23,15 @@ public class Chunk extends MiddleChunk {
 	}
 
 	protected final ChunkTransformerBB transformer = new ChunkTransformerVaries(
-		LegacyBlockData.REGISTRY.getTable(connection.getVersion()),
-		FlatteningBlockId.REGISTRY.getTable(connection.getVersion()),
-		TileEntityRemapper.getRemapper(connection.getVersion()),
+		LegacyBlockData.REGISTRY.getTable(version),
+		FlatteningBlockId.REGISTRY.getTable(version),
+		TileEntityRemapper.getRemapper(version),
 		cache.getTileCache()
 	);
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		transformer.loadData(chunk, data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full, tiles);
-		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
 		PositionSerializer.writeChunkCoord(serializer, chunk);
 		serializer.writeBoolean(full);

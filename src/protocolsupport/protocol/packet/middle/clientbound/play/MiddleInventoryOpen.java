@@ -13,7 +13,7 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 
-	protected final EnumSkippingTable<WindowType> typeSkipper = GenericIdSkipper.INVENTORY.getTable(connection.getVersion());
+	protected final EnumSkippingTable<WindowType> typeSkipper = GenericIdSkipper.INVENTORY.getTable(version);
 
 	public MiddleInventoryOpen(ConnectionImpl connection) {
 		super(connection);

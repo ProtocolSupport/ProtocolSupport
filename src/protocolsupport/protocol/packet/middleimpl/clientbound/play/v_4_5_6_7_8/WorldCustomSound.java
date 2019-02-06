@@ -19,7 +19,6 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID);
 		id = SoundRemapper.getSoundName(version, id);
 		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)) {

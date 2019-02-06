@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_5_6_7;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
@@ -15,7 +14,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class InventoryOpen extends MiddleInventoryOpen {
 
-	protected final EnumRemappingTable<WindowType> typeRemapper = GenericIdRemapper.INVENTORY.getTable(connection.getVersion());
+	protected final EnumRemappingTable<WindowType> typeRemapper = GenericIdRemapper.INVENTORY.getTable(version);
 
 	public InventoryOpen(ConnectionImpl connection) {
 		super(connection);
@@ -23,7 +22,6 @@ public class InventoryOpen extends MiddleInventoryOpen {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID);
 		serializer.writeByte(windowId);
 		serializer.writeByte(typeRemapper.getRemap(type).toLegacyId());

@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.protocol.ConnectionImpl;
@@ -16,7 +15,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class InventoryOpen extends MiddleInventoryOpen {
 
-	protected final EnumRemappingTable<WindowType> typeRemapper = GenericIdRemapper.INVENTORY.getTable(connection.getVersion());
+	protected final EnumRemappingTable<WindowType> typeRemapper = GenericIdRemapper.INVENTORY.getTable(version);
 
 	public InventoryOpen(ConnectionImpl connection) {
 		super(connection);
@@ -24,7 +23,6 @@ public class InventoryOpen extends MiddleInventoryOpen {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
 		String locale = cache.getAttributesCache().getLocale();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID);
 		serializer.writeByte(windowId);

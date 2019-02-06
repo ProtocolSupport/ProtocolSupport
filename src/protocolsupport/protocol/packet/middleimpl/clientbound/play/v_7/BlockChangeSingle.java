@@ -23,8 +23,8 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 		super(connection);
 	}
 
-	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
-	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(connection.getVersion());
+	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -46,7 +46,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 		packets.add(serializer);
 
 		if (tileRemapper.usedToBeTile(id)) {
-			packets.add(BlockTileUpdate.create(connection, tileRemapper.getLegacyTileFromBlock(position, id)));
+			packets.add(BlockTileUpdate.create(version, tileRemapper.getLegacyTileFromBlock(position, id)));
 		}
 
 		return packets;

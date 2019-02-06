@@ -20,7 +20,6 @@ public class WorldSound extends MiddleWorldSound {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
 		String soundname = SoundRemapper.getSoundName(version, id);
 		if (soundname == null) {
 			return RecyclableEmptyList.get();

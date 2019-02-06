@@ -26,7 +26,7 @@ public class EntityAction extends MiddleEntityAction {
 		entityId = VarNumberSerializer.readVarInt(clientdata);
 		int actionId = VarNumberSerializer.readVarInt(clientdata);
 		jumpBoost = VarNumberSerializer.readVarInt(clientdata);
-		if (connection.getVersion() == ProtocolVersion.MINECRAFT_1_8) {
+		if (version == ProtocolVersion.MINECRAFT_1_8) {
 			action = actionById8.get(actionId);
 		} else {
 			action = Action.CONSTANT_LOOKUP.getByOrdinal(actionId);

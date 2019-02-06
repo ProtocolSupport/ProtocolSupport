@@ -21,8 +21,8 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		super(connection);
 	}
 
-	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
-	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(connection.getVersion());
+	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
@@ -47,7 +47,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 
 			if (tileRemapper.usedToBeTile(record.id)) {
 				packets.add(BlockTileUpdate.create(
-					connection, tileRemapper.getLegacyTileFromBlock(getGlobalPosition(chunk, record.coord), record.id)
+					version, tileRemapper.getLegacyTileFromBlock(getGlobalPosition(chunk, record.coord), record.id)
 				));
 			}
 		}
