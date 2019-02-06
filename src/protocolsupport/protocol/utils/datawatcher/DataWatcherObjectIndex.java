@@ -3,7 +3,7 @@ package protocolsupport.protocol.utils.datawatcher;
 import java.util.HashMap;
 import java.util.Optional;
 
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockData;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectChat;
@@ -147,7 +147,7 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 	}
 
 	public static class Enderman extends Insentient {
-		public static final DataWatcherObjectIndex<DataWatcherObjectBlockState> CARRIED_BLOCK = takeNextIndex(DataWatcherObjectBlockState.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectBlockData> CARRIED_BLOCK = takeNextIndex(DataWatcherObjectBlockData.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> SCREAMING = takeNextIndex(DataWatcherObjectBoolean.class);
 	}
 

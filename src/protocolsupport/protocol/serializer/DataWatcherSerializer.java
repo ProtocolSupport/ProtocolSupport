@@ -10,7 +10,7 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
 import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockState;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockData;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectChat;
@@ -49,7 +49,7 @@ public class DataWatcherSerializer {
 		register(DataWatcherObjectOptionalPosition::new);
 		register(DataWatcherObjectDirection::new);
 		register(DataWatcherObjectOptionalUUID::new);
-		register(DataWatcherObjectBlockState::new);
+		register(DataWatcherObjectBlockData::new);
 		register(DataWatcherObjectNBTTagCompound::new);
 		register(DataWatcherObjectParticle::new);
 	}

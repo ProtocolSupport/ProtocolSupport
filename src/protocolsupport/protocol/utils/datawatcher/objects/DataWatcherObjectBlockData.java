@@ -5,7 +5,14 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
 
-public class DataWatcherObjectBlockState extends ReadableDataWatcherObject<Integer> {
+public class DataWatcherObjectBlockData extends ReadableDataWatcherObject<Integer> {
+
+	public DataWatcherObjectBlockData() {
+	}
+
+	public DataWatcherObjectBlockData(int blockdata) {
+		this.value = blockdata;
+	}
 
 	@Override
 	public void readFromStream(ByteBuf from) {

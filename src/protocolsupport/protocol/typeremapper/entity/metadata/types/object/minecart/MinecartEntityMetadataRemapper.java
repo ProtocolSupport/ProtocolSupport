@@ -33,7 +33,7 @@ public class MinecartEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Minecart.BLOCK, 9), ProtocolVersionsHelper.UP_1_13);
 		addRemapPerVersion(
 			version -> new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Minecart.BLOCK, 9) {
-				ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+				final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 				@Override
 				public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
 					return new DataWatcherObjectVarInt(BlockRemappingHelper.remapBlockDataM12(blockDataRemappingTable, object.getValue()));

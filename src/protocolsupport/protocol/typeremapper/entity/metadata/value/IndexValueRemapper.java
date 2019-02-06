@@ -8,8 +8,8 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public abstract class IndexValueRemapper<T extends DataWatcherObject<?>> extends DataWatcherObjectRemapper {
 
-	private final DataWatcherObjectIndex<T> fromIndex;
-	private final int toIndex;
+	protected final DataWatcherObjectIndex<T> fromIndex;
+	protected final int toIndex;
 	public IndexValueRemapper(DataWatcherObjectIndex<T> fromIndex, int toIndex) {
 		this.fromIndex = fromIndex;
 		this.toIndex = toIndex;
