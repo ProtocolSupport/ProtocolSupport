@@ -38,7 +38,13 @@ public class StartGame extends MiddleStartGame {
 		ClientBoundPacketData resourcepack = ClientBoundPacketData.create(PEPacketIDs.RESOURCE_PACK);
 		resourcepack.writeBoolean(false); // required
 		resourcepack.writeShortLE(0); //beh packs count
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_9)) {
+			resourcepack.writeBoolean(false); // ???
+		}
 		resourcepack.writeShortLE(0); //res packs count
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_9)) {
+			resourcepack.writeBoolean(false); // ???
+		}
 		packets.add(resourcepack);
 
 		//Send fake resource stack for sounds.
@@ -46,9 +52,8 @@ public class StartGame extends MiddleStartGame {
 		resourcestack.writeBoolean(false); // required
 		VarNumberSerializer.writeVarInt(resourcestack, 0); //beh packs count
 		VarNumberSerializer.writeVarInt(resourcestack, 0); //res packs count
-		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_8)) {
-			resourcestack.writeBoolean(false); //is experimental
-		}
+		VarNumberSerializer.writeVarInt(resourcestack, 0); //?
+		VarNumberSerializer.writeVarInt(resourcestack, 0); //?
 		packets.add(resourcestack);
 
 		//Send actual start game information.
@@ -62,7 +67,7 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeFloatLE(0); //player pitch
 		startgame.writeFloatLE(0); //player yaw
 		VarNumberSerializer.writeSVarInt(startgame, 0); //seed
-		VarNumberSerializer.writeSVarInt(startgame, ChangeDimension.getPeDimensionId(dimension));
+		VarNumberSerializer.writeSVarInt(startgame, ChangeDimension.getPeDimensionId(dimension)); //world dimension
 		VarNumberSerializer.writeSVarInt(startgame, 1); //world type (1 - infinite)
 		VarNumberSerializer.writeSVarInt(startgame, GameMode.SURVIVAL.getId()); //world gamemode
 		VarNumberSerializer.writeSVarInt(startgame, difficulty.getId()); //world difficulty
@@ -73,9 +78,17 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeBoolean(false); //edu features
 		startgame.writeFloatLE(0); //rain level
 		startgame.writeFloatLE(0); //lighting level
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_9)) {
+			startgame.writeBoolean(false); //???
+		}
 		startgame.writeBoolean(true); //is multiplayer
 		startgame.writeBoolean(false); //broadcast to lan
-		startgame.writeBoolean(false); //broadcast to xbl
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_9)) {
+			VarNumberSerializer.writeSVarInt(startgame, 3); //xbox live broadcast, 3 = friends of friends
+			VarNumberSerializer.writeSVarInt(startgame, 3); //platform broadcast
+		} else {
+			startgame.writeBoolean(true); //broadcast to xbl
+		}
 		startgame.writeBoolean(true); //commands enabled
 		startgame.writeBoolean(false); //needs texture pack
 		VarNumberSerializer.writeVarInt(startgame, 0); //game rules
@@ -83,21 +96,25 @@ public class StartGame extends MiddleStartGame {
 		//VarNumberSerializer.writeVarInt(startgame, 1); //bool gamerule
 		startgame.writeBoolean(false); //bonus chest
 		startgame.writeBoolean(false); //player map enabled
-		startgame.writeBoolean(false); //trust players
+		if (version.isBefore(ProtocolVersion.MINECRAFT_PE_1_9)) {
+			startgame.writeBoolean(false); //trust players
+		}
 		VarNumberSerializer.writeSVarInt(startgame, PEAdventureSettings.GROUP_NORMAL); //permission level
-		VarNumberSerializer.writeSVarInt(startgame, 4); //game publish setting
+		if (version.isBefore(ProtocolVersion.MINECRAFT_PE_1_9)) {
+			VarNumberSerializer.writeSVarInt(startgame, 4); //game publish setting
+		}
 		startgame.writeIntLE((int) Math.ceil((Bukkit.getViewDistance() + 1) * Math.sqrt(2))); //Server chunk tick radius..
-		startgame.writeBoolean(false); //Platformbroadcast
-		VarNumberSerializer.writeVarInt(startgame, 0); //Broadcast mode
-		startgame.writeBoolean(false); //Broadcast intent
+		if (version.isBefore(ProtocolVersion.MINECRAFT_PE_1_9)) {
+			startgame.writeBoolean(false); //Platformbroadcast
+			VarNumberSerializer.writeSVarInt(startgame, 0); //Broadcast mode
+			startgame.writeBoolean(false); //Broadcast intent
+		}
 		startgame.writeBoolean(false); //hasLockedRes pack
 		startgame.writeBoolean(false); //hasLockedBeh pack
 		startgame.writeBoolean(false); //hasLocked world template.
 		startgame.writeBoolean(false); //Microsoft GamerTags only. Hell no!
-		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_8)) {
-			startgame.writeBoolean(false); //is from world template
-			startgame.writeBoolean(false); //is world template option locked
-		}
+		startgame.writeBoolean(false); //is from world template
+		startgame.writeBoolean(false); //is world template option locked
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //level ID (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //world name (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //premium world template id (empty string)

@@ -76,11 +76,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		VarNumberSerializer.writeSVarLong(serializer, entity.getId());
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		NetworkEntityType entityType = EntityRemappersRegistry.REGISTRY.getTable(version).getRemap(entity.getType()).getLeft();
-		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_8)) {
-			StringSerializer.writeString(serializer, version, PEDataValues.getEntityKey(entityType));
-		} else {
-			VarNumberSerializer.writeVarInt(serializer, PEDataValues.getEntityNetworkId(entityType));
-		}
+		StringSerializer.writeString(serializer, version, PEDataValues.getEntityKey(entityType));
 		serializer.writeFloatLE(x);
 		serializer.writeFloatLE(y);
 		serializer.writeFloatLE(z);

@@ -243,8 +243,15 @@ public class ItemStackSerializer {
 			} else if (isUsingPENBT(version)) {
 				if (!varint) { // VarInts NBTs doesn't have length
 					final short length = from.readShortLE();
-					if (length <= 0) {
+					if (length == 0) {
 						return null;
+					} else if (length == -1) {
+						final int numNBT = from.readByte(); //TODO: wtf, why multiple NBT?
+						NBTCompound out = null;
+						for (int i = 0 ; i < numNBT ; i++) {
+							out = PENBTSerializer.VI_INSTANCE.deserializeTag(from);
+						}
+						return out;
 					}
 					return PENBTSerializer.LE_INSTANCE.deserializeTag(from);
 				}

@@ -26,7 +26,8 @@ public class EntityEquipment extends MiddleEntityEquipment {
 		ProtocolVersion version = connection.getVersion();
 		String locale = cache.getAttributesCache().getLocale();
 		NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
-		if (entity == null) {
+		//TODO: this crashes 1.9. why?
+		if (entity == null || version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_9)) {
 			return RecyclableEmptyList.get();
 		}
 		NetworkEntityDataCache dataCache = entity.getDataCache();
