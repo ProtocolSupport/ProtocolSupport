@@ -1,6 +1,7 @@
 package protocolsupport.protocol.utils;
 
 import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTByte;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
@@ -41,6 +42,28 @@ public class CommonNBT {
 			lines[i] = NBTString.getValueOrDefault(tag.getTagOfType("Text" + (i + 1), NBTType.STRING), "");
 		}
 		return lines;
+	}
+
+	public static NetworkItemStack deserializeItemStackFromNBT(NBTCompound compound) {
+		NetworkItemStack stack = new NetworkItemStack();
+		stack.setTypeId(ItemMaterialLookup.getRuntimeId(ItemMaterialLookup.getByKey(compound.getTagOfType("id", NBTType.STRING).getValue())));
+		stack.setAmount(compound.getNumberTag("Count").getAsByte());
+		NBTCompound itemstacknbt = compound.getTagOfType("tag", NBTType.COMPOUND);
+		if (itemstacknbt != null) {
+			stack.setNBT(itemstacknbt);
+		}
+		return stack;
+	}
+
+	public static NBTCompound serializeItemStackToNBT(NetworkItemStack itemstack) {
+		NBTCompound compound = new NBTCompound();
+		compound.setTag("id", new NBTString(ItemMaterialLookup.getByRuntimeId(itemstack.getTypeId()).getKey().toString()));
+		compound.setTag("Count", new NBTByte((byte) itemstack.getAmount()));
+		NBTCompound itemstacknbt = itemstack.getNBT();
+		if (itemstacknbt != null) {
+			compound.setTag("tag", itemstacknbt);
+		}
+		return compound;
 	}
 
 }

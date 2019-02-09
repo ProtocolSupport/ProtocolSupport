@@ -2,7 +2,6 @@ package protocolsupport.zplatform.impl.spigot;
 
 import java.security.KeyPair;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
@@ -49,8 +48,6 @@ import net.minecraft.server.v1_13_R2.NBTCompressedStreamTools;
 import net.minecraft.server.v1_13_R2.NBTReadLimiter;
 import net.minecraft.server.v1_13_R2.NBTTagCompound;
 import net.minecraft.server.v1_13_R2.WorldServer;
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.chat.modifiers.HoverAction.EntityInfo;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
@@ -58,9 +55,6 @@ import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.protocol.pipeline.common.PacketDecrypter;
 import protocolsupport.protocol.pipeline.common.PacketEncrypter;
-import protocolsupport.protocol.typeremapper.itemstack.LegacyItemType;
-import protocolsupport.protocol.typeremapper.itemstack.PreFlatteningItemIdData;
-import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
@@ -192,7 +186,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 				throw new RuntimeException(e);
 			}
 		}
-		return CraftItemStack.asBukkitCopy(nmsitemstack);
+		return CraftItemStack.asCraftMirror(nmsitemstack);
 	}
 
 	@Override
@@ -210,40 +204,6 @@ public class SpigotMiscUtils implements PlatformUtils {
 		NBTTagCompound compound = new NBTTagCompound();
 		nmsitemstack.save(compound);
 		return compound.toString();
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public EntityInfo parseEntityInfo(String json) {
-		try {
-			NBTTagCompound compound = MojangsonParser.parse(json);
-			return new EntityInfo(
-				EntityType.fromName(compound.getString("type")),
-				UUID.fromString(compound.getString("id")),
-				compound.getString("name")
-			);
-		} catch (CommandSyntaxException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public String fixHoverShowItem(ProtocolVersion version, String locale, String json) {
-		try {
-			NBTTagCompound compound = MojangsonParser.parse(json);
-			Material material = ItemMaterialLookup.getByKey(compound.getString("id"));
-			if (material != null) {
-				int materialRuntimeId = LegacyItemType.REGISTRY.getTable(version).getRemap(ItemMaterialLookup.getRuntimeId(material));
-				if (version.isBefore(ProtocolVersion.MINECRAFT_1_8)) {
-					compound.setInt("id", PreFlatteningItemIdData.getIdFromLegacyCombinedId(PreFlatteningItemIdData.getLegacyCombinedIdByModernId(materialRuntimeId)));
-				} else {
-					compound.setString("id", ItemMaterialLookup.getByRuntimeId(materialRuntimeId).getKey().toString());
-				}
-			}
-			return compound.toString();
-		} catch (CommandSyntaxException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	@Override

@@ -48,25 +48,12 @@ public class NetworkItemStack {
 		this.legacyData = legacyData;
 	}
 
-	public NetworkItemStack cloneItemStack() {
-		NetworkItemStack stack = new NetworkItemStack();
-		stack.setTypeId(getTypeId());
-		stack.setAmount(getAmount());
-		stack.setNBT(getNBT());
-		return stack;
-	}
-
 
 	public static final NetworkItemStack NULL = new NetworkItemStack() {
 
 		@Override
 		public boolean isNull() {
 			return true;
-		}
-
-		@Override
-		public NetworkItemStack cloneItemStack() {
-			return NetworkItemStack.NULL;
 		}
 
 		private UnsupportedOperationException reject() {

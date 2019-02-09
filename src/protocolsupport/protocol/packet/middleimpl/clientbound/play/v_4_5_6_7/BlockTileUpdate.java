@@ -10,7 +10,7 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.storage.netcache.TileDataCache;
-import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
+import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.types.TileEntity;

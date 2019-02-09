@@ -11,7 +11,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.typeremapper.legacy.LegacyChatJson;
+import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 

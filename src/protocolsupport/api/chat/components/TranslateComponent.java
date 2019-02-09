@@ -9,7 +9,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import protocolsupport.api.TranslationAPI;
-import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
+import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
 
 /**
  * Chat component that displays translated key and arguments into the current client language <br>
