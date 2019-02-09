@@ -6,10 +6,11 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
-import protocolsupport.protocol.typeremapper.itemstack.PreFlatteningItemIdData;
-import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapperRegistry;
+import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.utils.CommonNBT;
+import protocolsupport.protocol.utils.ItemMaterialLookup;
+import protocolsupport.protocol.utils.ItemStackWriteEventHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
@@ -44,16 +45,19 @@ public class LegacyChatJsonLegacyHoverComponentConverter extends LegacyChatJsonC
 	}
 
 	protected static NBTCompound remapShowItem(ProtocolVersion version, String locale, NBTCompound compound) {
-		NetworkItemStack itemstack = ItemStackComplexRemapperRegistry.remapToClient(version, locale, CommonNBT.deserializeItemStackFromNBT(compound));
+		NetworkItemStack itemstack = CommonNBT.deserializeItemStackFromNBT(compound);
+		ItemStackWriteEventHelper.callEvent(version, locale, itemstack);
+		itemstack = ItemStackRemapper.remapToClient(version, locale, itemstack);
 		compound = CommonNBT.serializeItemStackToNBT(itemstack);
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
-			int combinedId = PreFlatteningItemIdData.getLegacyCombinedIdByModernId(itemstack.getTypeId());
 			if (version.isBefore(ProtocolVersion.MINECRAFT_1_8)) {
-				compound.setTag("id", new NBTShort((short) PreFlatteningItemIdData.getIdFromLegacyCombinedId(combinedId)));
+				compound.setTag("id", new NBTShort((short) itemstack.getTypeId()));
 			} else {
-				compound.setTag("id", new NBTString(String.valueOf(PreFlatteningItemIdData.getIdFromLegacyCombinedId(combinedId))));
+				compound.setTag("id", new NBTString(String.valueOf(itemstack.getTypeId())));
 			}
-			compound.setTag("Damage", new NBTShort((short) PreFlatteningItemIdData.getDataFromLegacyCombinedId(combinedId)));
+			compound.setTag("Damage", new NBTShort((short) itemstack.getLegacyData()));
+		} else {
+			compound.setTag("id", new NBTString(ItemMaterialLookup.getByRuntimeId(itemstack.getTypeId()).getKey().toString()));
 		}
 		return compound;
 	}
