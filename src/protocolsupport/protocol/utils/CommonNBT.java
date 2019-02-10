@@ -1,6 +1,10 @@
 package protocolsupport.protocol.utils;
 
+import java.util.Map.Entry;
+import java.util.StringJoiner;
+
 import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBT;
 import protocolsupport.protocol.utils.types.nbt.NBTByte;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTString;
@@ -64,6 +68,23 @@ public class CommonNBT {
 			compound.setTag("tag", itemstacknbt);
 		}
 		return compound;
+	}
+
+	public static String deserializeBlockDataFromNBT(NBTCompound compound) {
+		String name = compound.getTagOfType("Name", NBTType.STRING).getValue();
+		NBTCompound properties = compound.getTagOfType("Properties", NBTType.COMPOUND);
+		if (properties == null) {
+			return name;
+		} else {
+			StringJoiner joiner = new StringJoiner(",", name + "[", "]");
+			for (Entry<String, NBT> entry : properties.getTags().entrySet()) {
+				NBT value = entry.getValue();
+				if (value instanceof NBTString) {
+					joiner.add(entry.getKey() + "=" + ((NBTString) value).getValue());
+				}
+			}
+			return joiner.toString();
+		}
 	}
 
 }
