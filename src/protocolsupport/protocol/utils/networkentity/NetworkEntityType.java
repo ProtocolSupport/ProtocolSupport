@@ -174,8 +174,8 @@ public enum NetworkEntityType {
 		.forEach(w -> {
 			String rName = w.bukkitType.getName();
 			if (rName != null) {
-				BY_R_STRING_ID.put(w.bukkitType.getName(), w);
-				BY_R_STRING_ID.put(NamespacedKey.minecraft(w.bukkitType.getName()).toString(), w);
+				BY_R_STRING_ID.put(rName, w);
+				BY_R_STRING_ID.put(NamespacedKey.minecraft(rName).toString(), w);
 			}
 		});
 	}

@@ -18,9 +18,12 @@ import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
+import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHeadToDragonPlayerHeadComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
+import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
@@ -53,6 +56,12 @@ public class TileEntityRemapper {
 			tileEntityRemappers.get(version).tileToTile
 			.computeIfAbsent(type, k -> new ArrayList<>())
 			.add((tile, blockdata) -> transformer.accept(tile));
+		}
+	}
+
+	protected static void registerPerVersion(TileEntityType type, Function<ProtocolVersion, Consumer<TileEntity>> transformer, ProtocolVersion... versions) {
+		for (ProtocolVersion version : versions) {
+			register(type, transformer.apply(version), version);
 		}
 	}
 
@@ -97,15 +106,23 @@ public class TileEntityRemapper {
 
 
 	static {
-		register(
+		registerPerVersion(
 			TileEntityType.MOB_SPAWNER,
-			tile -> {
-				NBTCompound nbt = tile.getNBT();
-				if (nbt.getTagOfType("SpawnData", NBTType.COMPOUND) == null) {
-					NBTCompound spawndata = new NBTCompound();
-					spawndata.setTag("id", new NBTString(NetworkEntityType.PIG.getKey()));
-					nbt.setTag("SpawnData", spawndata);
-				}
+			version -> {
+				EntityRemappingTable entityRemapTable = EntityRemappersRegistry.REGISTRY.getTable(version);
+				return tile -> {
+					NBTCompound nbt = tile.getNBT();
+					NBTCompound spawndataTag = nbt.getTagOfType(CommonNBT.MOB_SPAWNER_SPAWNDATA, NBTType.COMPOUND);
+					NetworkEntityType type = null;
+					if (spawndataTag == null) {
+						spawndataTag = new NBTCompound();
+						nbt.setTag(CommonNBT.MOB_SPAWNER_SPAWNDATA, spawndataTag);
+						type = NetworkEntityType.PIG;
+					} else {
+						type = CommonNBT.getSpawnedMobType(spawndataTag);
+					}
+					spawndataTag.setTag("id", new NBTString(entityRemapTable.getRemap(type).getLeft().getKey()));
+				};
 			},
 			ProtocolVersionsHelper.ALL_PC
 		);
@@ -128,22 +145,28 @@ public class TileEntityRemapper {
 		register(
 			TileEntityType.MOB_SPAWNER,
 			tile -> {
-				NBTCompound spawndata = tile.getNBT().getTagOfType("SpawnData", NBTType.COMPOUND);
+				NBTCompound spawndata = tile.getNBT().getTagOfType(CommonNBT.MOB_SPAWNER_SPAWNDATA, NBTType.COMPOUND);
 				if (spawndata != null) {
-					NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(NBTString.getValueOrNull(spawndata.getTagOfType("id", NBTType.STRING)));
+					NetworkEntityType type = CommonNBT.getSpawnedMobType(spawndata);
 					if (type != NetworkEntityType.NONE) {
 						spawndata.setTag("id", new NBTString(LegacyEntityId.getStringId(type)));
 					}
 				}
 			},
-			ProtocolVersionsHelper.BEFORE_1_11
+			ProtocolVersionsHelper.RANGE__1_9__1_10
 		);
 		register(
 			TileEntityType.MOB_SPAWNER,
 			tile -> {
 				NBTCompound nbt = tile.getNBT();
-				if (nbt.removeTag("SpawnData") != null) {
+				NBTCompound spawndata = tile.getNBT().getTagOfType(CommonNBT.MOB_SPAWNER_SPAWNDATA, NBTType.COMPOUND);
+				if (spawndata != null) {
+					nbt.removeTag(CommonNBT.MOB_SPAWNER_SPAWNDATA);
 					nbt.removeTag("SpawnPotentials");
+					NetworkEntityType type = CommonNBT.getSpawnedMobType(spawndata);
+					if (type != NetworkEntityType.NONE) {
+						nbt.setTag("EntityId", new NBTString(LegacyEntityId.getStringId(type)));
+					}
 				}
 			},
 			ProtocolVersionsHelper.BEFORE_1_9

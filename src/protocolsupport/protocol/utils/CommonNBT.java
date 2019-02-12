@@ -3,6 +3,7 @@ package protocolsupport.protocol.utils;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
 
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.nbt.NBT;
 import protocolsupport.protocol.utils.types.nbt.NBTByte;
@@ -39,6 +40,12 @@ public class CommonNBT {
 	public static final String MODERN_ENCHANTMENTS = "Enchantments";
 
 	public static final String LEGACY_ENCHANTMENTS = "ench";
+
+	public static final String MOB_SPAWNER_SPAWNDATA = "SpawnData";
+
+	public static NetworkEntityType getSpawnedMobType(NBTCompound spawndataTag) {
+		return NetworkEntityType.getByRegistrySTypeId(NBTString.getValueOrNull(spawndataTag.getTagOfType("id", NBTType.STRING)));
+	}
 
 	public static String[] getSignLines(NBTCompound tag) {
 		String[] lines = new String[4];
