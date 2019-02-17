@@ -137,19 +137,19 @@ public class LegacyChat {
 		}
 
 		protected void writeAllFormatCodes(Modifier modifier) {
-			if (modifier.isBold() == Boolean.TRUE) {
+			if (modifier.isBold().equals(Boolean.TRUE)) {
 				out.append(ChatColor.BOLD);
 			}
-			if (modifier.isItalic() == Boolean.TRUE) {
+			if (modifier.isItalic().equals(Boolean.TRUE)) {
 				out.append(ChatColor.ITALIC);
 			}
-			if (modifier.isUnderlined() == Boolean.TRUE) {
+			if (modifier.isUnderlined().equals(Boolean.TRUE)) {
 				out.append(ChatColor.UNDERLINE);
 			}
-			if (modifier.isStrikethrough() == Boolean.TRUE) {
+			if (modifier.isStrikethrough().equals(Boolean.TRUE)) {
 				out.append(ChatColor.STRIKETHROUGH);
 			}
-			if (modifier.isRandom() == Boolean.TRUE) {
+			if (modifier.isRandom().equals(Boolean.TRUE)) {
 				out.append(ChatColor.MAGIC);
 			}
 		}
