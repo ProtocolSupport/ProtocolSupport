@@ -6,7 +6,9 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChange
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
+import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockData;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -19,13 +21,13 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 	}
 
 	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
-	protected final ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable = FlatteningBlockId.REGISTRY.getTable(version);
+	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID);
 		PositionSerializer.writePosition(serializer, position);
-		VarNumberSerializer.writeVarInt(serializer, blockFlatteningIdRemappingTable.getRemap(blockDataRemappingTable.getRemap(id)));
+		VarNumberSerializer.writeVarInt(serializer, BlockRemappingHelper.remapFBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, id));
 		return RecyclableSingletonList.create(serializer);
 	}
 

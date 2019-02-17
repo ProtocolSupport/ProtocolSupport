@@ -8,7 +8,8 @@ import java.util.function.Function;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
-import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockData;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.particle.legacy.LegacyParticle;
@@ -75,12 +76,12 @@ public class ParticleRemapper {
 			Arrays.stream(ProtocolVersionsHelper.UP_1_13)
 			.forEach(version -> {
 				ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
-				ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable = FlatteningBlockId.REGISTRY.getTable(version);
+				FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 				registerRemap(ParticleBlock.class, original -> new ParticleBlock(
 					original.getId(),
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
 					original.getData(), original.getCount(),
-					blockFlatteningIdRemappingTable.getRemap(blockDataRemappingTable.getRemap(original.getBlockData()))
+					BlockRemappingHelper.remapFBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, original.getBlockData())
 				), version);
 				registerRemap(ParticleItem.class, original -> new ParticleItem(original.getId(), version, I18NData.DEFAULT_LOCALE, original.getItemStack()), version);
 			});

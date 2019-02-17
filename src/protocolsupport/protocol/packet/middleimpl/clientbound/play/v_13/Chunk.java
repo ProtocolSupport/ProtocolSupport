@@ -8,7 +8,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockData;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerVaries;
@@ -24,7 +24,7 @@ public class Chunk extends MiddleChunk {
 
 	protected final ChunkTransformerBB transformer = new ChunkTransformerVaries(
 		LegacyBlockData.REGISTRY.getTable(version),
-		FlatteningBlockId.REGISTRY.getTable(version),
+		FlatteningBlockData.REGISTRY.getTable(version),
 		TileEntityRemapper.getRemapper(version),
 		cache.getTileCache()
 	);

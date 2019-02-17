@@ -7,7 +7,9 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
+import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockData;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
@@ -21,7 +23,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 	}
 
 	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
-	protected final ArrayBasedIdRemappingTable blockFlatteningIdRemappingTable = FlatteningBlockId.REGISTRY.getTable(version);
+	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
 	@Override
@@ -31,7 +33,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		PositionSerializer.writeChunkCoord(serializer, chunk);
 		ArraySerializer.writeVarIntTArray(serializer, records, (to, record) -> {
 			serializer.writeShort(record.coord);
-			VarNumberSerializer.writeVarInt(to, blockFlatteningIdRemappingTable.getRemap(blockDataRemappingTable.getRemap(record.id)));
+			VarNumberSerializer.writeVarInt(to, BlockRemappingHelper.remapFBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, record.id));
 		});
 		packets.add(0, serializer);
 		return packets;
