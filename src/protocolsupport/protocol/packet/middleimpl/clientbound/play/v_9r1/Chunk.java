@@ -27,16 +27,20 @@ public class Chunk extends MiddleChunk {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		transformer.loadData(chunk, data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full, tiles);
+
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
 		PositionSerializer.writeChunkCoord(chunkdata, chunk);
 		chunkdata.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(chunkdata, bitmask);
 		ArraySerializer.writeVarIntByteArray(chunkdata, transformer::writeLegacyData);
 		packets.add(chunkdata);
+
 		for (TileEntity tile : transformer.remapAndGetTiles()) {
 			packets.add(BlockTileUpdate.create(version, tile));
 		}
+
 		return packets;
 	}
 
