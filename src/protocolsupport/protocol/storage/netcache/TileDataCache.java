@@ -60,7 +60,7 @@ public class TileDataCache {
 	}
 
 	public void setBlockData(ChunkCoord chunkCoord, int localCoord, int blockdata) {
-		getOrCreateChunk(chunkCoord).put(localCoord, blockdata);
+		getChunk(chunkCoord).put(localCoord, blockdata);
 	}
 
 	public void removeBlockData(ChunkCoord chunkCoord, int localCoord) {
