@@ -118,10 +118,10 @@ public class LegacyChat {
 		 * We need to write additional format code is we encounter combinations 2, 8
 		 */
 		protected boolean writeAdditionalFormatCode(Boolean oldModifierValue, Boolean newModifierValue, ChatColor newFormatCode) throws NeedsFormatResetSignal {
-			if ((oldModifierValue == Boolean.TRUE) && (newModifierValue != Boolean.TRUE)) {
+			if (Boolean.TRUE.equals(oldModifierValue) && !Boolean.TRUE.equals(newModifierValue)) {
 				throw NeedsFormatResetSignal.INSTANCE;
 			}
-			if ((oldModifierValue != Boolean.TRUE) && (newModifierValue == Boolean.TRUE)) {
+			if (!Boolean.TRUE.equals(oldModifierValue) && Boolean.TRUE.equals(newModifierValue)) {
 				out.append(newFormatCode);
 			}
 			return true;
