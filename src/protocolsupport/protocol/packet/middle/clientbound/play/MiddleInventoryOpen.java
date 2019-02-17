@@ -38,7 +38,7 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		cache.getWindowCache().setOpenedWindow(type);
+		cache.getWindowCache().setOpenedWindow(windowId, type);
 		if (typeSkipper.shouldSkip(type)) {
 			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryClosePacket());
 			return false;

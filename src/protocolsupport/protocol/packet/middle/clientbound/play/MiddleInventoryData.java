@@ -21,4 +21,9 @@ public abstract class MiddleInventoryData extends ClientBoundMiddlePacket {
 		value = serverdata.readShort();
 	}
 
+	@Override
+	public boolean postFromServerRead() {
+		return cache.getWindowCache().isValidWindowId(windowId);
+	}
+
 }
