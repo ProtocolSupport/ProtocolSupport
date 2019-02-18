@@ -62,9 +62,16 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 				}
 				return true;
 			}
+			case REMOVE: {
+				if (!teams.remove(name)) {
+					ProtocolSupport.logWarning("Skipping removing unexisting scoreboard team " + name);
+					return false;
+				}
+				return true;
+			}
 			default: {
 				if (!teams.contains(name)) {
-					ProtocolSupport.logWarning("Skipping changing/removing unexisting scoreboard team " + name);
+					ProtocolSupport.logWarning("Skipping changing unexisting scoreboard team " + name);
 					return false;
 				}
 				return true;

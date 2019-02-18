@@ -46,9 +46,16 @@ public abstract class MiddleScoreboardObjective extends ClientBoundMiddlePacket 
 				}
 				return true;
 			}
+			case REMOVE: {
+				if (!objectives.remove(name)) {
+					ProtocolSupport.logWarning("Skipping removing unexisting scoreboard objective " + name);
+					return false;
+				}
+				return true;
+			}
 			default: {
 				if (!objectives.contains(name)) {
-					ProtocolSupport.logWarning("Skipping changing/removing unexisting scoreboard objective " + name);
+					ProtocolSupport.logWarning("Skipping changing unexisting scoreboard objective " + name);
 					return false;
 				}
 				return true;
