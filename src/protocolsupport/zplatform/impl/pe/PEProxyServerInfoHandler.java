@@ -86,11 +86,13 @@ public class PEProxyServerInfoHandler implements PingHandler {
 		@Override
 		public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
 			try {
-				ByteBuf serverdata = (ByteBuf) msg;
-				if (PEPacketDecoder.sReadPacketId(serverdata) != PACKET_ID) {
-					throw new EncoderException("Unknown packet sent by server while handling internal pe ping passthrough");
+				if (msg instanceof ByteBuf) {
+					ByteBuf serverdata = (ByteBuf) msg;
+					if (PEPacketDecoder.sReadPacketId(serverdata) != PACKET_ID) {
+						throw new EncoderException("Unknown packet sent by server while handling internal pe ping passthrough");
+					}
+					response.put(PingResponse.fromJson(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC)));
 				}
-				response.put(PingResponse.fromJson(StringSerializer.readString(serverdata, ProtocolVersionsHelper.LATEST_PC)));
 			} finally {
 				ReferenceCountUtil.release(msg);
 			}
