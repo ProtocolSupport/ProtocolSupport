@@ -222,13 +222,14 @@ public class TileEntityRemapper {
 		register(TileEntityType.SIGN, new TileEntityToLegacyTypeNameRemapper("Sign"), ProtocolVersionsHelper.BEFORE_1_11_AND_PE);
 
 		//TODO implement these from legacy/block types.
-//		register(TileEntityType.MOB_SPAWNER, new TileEntityToLegacyTypeNameRemapper("MobSpawner"), ProtocolVersionsHelper.ALL_PE);
-//		register(TileEntityType.ENCHANTING_TABLE, new TileEntityToLegacyTypeNameRemapper("EnchantTable"), ProtocolVersionsHelper.ALL_PE);
-//		register(TileEntityType.BREWING_STAND, new TileEntityToLegacyTypeNameRemapper("BrewingStand"), ProtocolVersionsHelper.ALL_PE);
-//		register(TileEntityType.DAYLIGHT_DETECTOR, new TileEntityToLegacyTypeNameRemapper("DaylightDetector"), ProtocolVersionsHelper.ALL_PE);
-//		register(TileEntityType.NOTE_BLOCK, new TileEntityToLegacyTypeNameRemapper("Music"), ProtocolVersionsHelper.ALL_PE);
-//		register(TileEntityType.SHULKER_BOX, new TileEntityToLegacyTypeNameRemapper("ShulkerBox"), ProtocolVersionsHelper.ALL_PE);
-//		register(TileEntityType.BANNER, new TileEntityToLegacyTypeNameRemapper("Banner"), ProtocolVersionsHelper.ALL_PE);
+		register(TileEntityType.MOB_SPAWNER, new TileEntityToLegacyTypeNameRemapper("MobSpawner"), ProtocolVersionsHelper.ALL_PE);
+		register(TileEntityType.ENCHANTING_TABLE, new TileEntityToLegacyTypeNameRemapper("EnchantTable"), ProtocolVersionsHelper.ALL_PE);
+	    register(TileEntityType.BREWING_STAND, new TileEntityToLegacyTypeNameRemapper("BrewingStand"), ProtocolVersionsHelper.ALL_PE);
+	    register(TileEntityType.DAYLIGHT_DETECTOR, new TileEntityToLegacyTypeNameRemapper("DaylightDetector"), ProtocolVersionsHelper.ALL_PE);
+	    register(TileEntityType.NOTE_BLOCK, new TileEntityToLegacyTypeNameRemapper("Music"), ProtocolVersionsHelper.ALL_PE);
+	    register(TileEntityType.SHULKER_BOX, new TileEntityToLegacyTypeNameRemapper("ShulkerBox"), ProtocolVersionsHelper.ALL_PE);
+     	register(TileEntityType.BANNER, new TileEntityToLegacyTypeNameRemapper("Banner"), ProtocolVersionsHelper.ALL_PE);
+    	register(TileEntityType.ENDER_CHEST, new TileEntityToLegacyTypeNameRemapper("EnderChest"), ProtocolVersionsHelper.ALL_PE);
 
 		register(
 			TileEntityType.MOB_SPAWNER,
