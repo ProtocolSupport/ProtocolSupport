@@ -246,12 +246,11 @@ public class ItemStackSerializer {
 					if (length == 0) {
 						return null;
 					} else if (length == -1) {
-						final int numNBT = from.readByte(); //TODO: wtf, why multiple NBT?
-						NBTCompound out = null;
-						for (int i = 0 ; i < numNBT ; i++) {
-							out = PENBTSerializer.VI_INSTANCE.deserializeTag(from);
+						final int numNBT = from.readByte(); //TODO: why multiple NBT?
+						if (numNBT != 1) {
+							throw new DecoderException("Unexpected number of NBT fragments: " + numNBT);
 						}
-						return out;
+						return PENBTSerializer.VI_INSTANCE.deserializeTag(from);
 					}
 					return PENBTSerializer.LE_INSTANCE.deserializeTag(from);
 				}
