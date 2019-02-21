@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.legacy;
+package protocolsupport.protocol.typeremapper.legacy.chat;
 
 import org.bukkit.ChatColor;
 
@@ -118,10 +118,10 @@ public class LegacyChat {
 		 * We need to write additional format code is we encounter combinations 2, 8
 		 */
 		protected boolean writeAdditionalFormatCode(Boolean oldModifierValue, Boolean newModifierValue, ChatColor newFormatCode) throws NeedsFormatResetSignal {
-			if ((oldModifierValue == Boolean.TRUE) && (newModifierValue != Boolean.TRUE)) {
+			if (Boolean.TRUE.equals(oldModifierValue) && !Boolean.TRUE.equals(newModifierValue)) {
 				throw NeedsFormatResetSignal.INSTANCE;
 			}
-			if ((oldModifierValue != Boolean.TRUE) && (newModifierValue == Boolean.TRUE)) {
+			if (!Boolean.TRUE.equals(oldModifierValue) && Boolean.TRUE.equals(newModifierValue)) {
 				out.append(newFormatCode);
 			}
 			return true;
@@ -137,19 +137,19 @@ public class LegacyChat {
 		}
 
 		protected void writeAllFormatCodes(Modifier modifier) {
-			if (modifier.isBold() == Boolean.TRUE) {
+			if (Boolean.TRUE.equals(modifier.isBold())) {
 				out.append(ChatColor.BOLD);
 			}
-			if (modifier.isItalic() == Boolean.TRUE) {
+			if (Boolean.TRUE.equals(modifier.isItalic())) {
 				out.append(ChatColor.ITALIC);
 			}
-			if (modifier.isUnderlined() == Boolean.TRUE) {
+			if (Boolean.TRUE.equals(modifier.isUnderlined())) {
 				out.append(ChatColor.UNDERLINE);
 			}
-			if (modifier.isStrikethrough() == Boolean.TRUE) {
+			if (Boolean.TRUE.equals(modifier.isStrikethrough())) {
 				out.append(ChatColor.STRIKETHROUGH);
 			}
-			if (modifier.isRandom() == Boolean.TRUE) {
+			if (Boolean.TRUE.equals(modifier.isRandom())) {
 				out.append(ChatColor.MAGIC);
 			}
 		}

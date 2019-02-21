@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 
-//TODO: Find out how and when it is used
 public abstract class MiddleVehicleMove extends ClientBoundMiddlePacket {
 
 	public MiddleVehicleMove(ConnectionImpl connection) {

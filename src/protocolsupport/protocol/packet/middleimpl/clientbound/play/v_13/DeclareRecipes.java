@@ -23,7 +23,6 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_DECLARE_RECIPES);
-		ProtocolVersion version = connection.getVersion();
 		VarNumberSerializer.writeVarInt(serializer, recipes.length);
 		for (Recipe r : recipes) {
 			writeRecipe(r, serializer, version);

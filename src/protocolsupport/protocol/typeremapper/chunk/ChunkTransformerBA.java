@@ -6,8 +6,8 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 
 public abstract class ChunkTransformerBA extends ChunkTransformer {
 
-	public ChunkTransformerBA(ArrayBasedIdRemappingTable blockRemappingTable, TileEntityRemapper tileremapper, TileDataCache tilecache) {
-		super(blockRemappingTable, tileremapper, tilecache);
+	public ChunkTransformerBA(ArrayBasedIdRemappingTable blockDataRemappingTable, TileEntityRemapper tileRemapper, TileDataCache tileCache) {
+		super(blockDataRemappingTable, tileRemapper, tileCache);
 	}
 
 	public abstract byte[] toLegacyData();

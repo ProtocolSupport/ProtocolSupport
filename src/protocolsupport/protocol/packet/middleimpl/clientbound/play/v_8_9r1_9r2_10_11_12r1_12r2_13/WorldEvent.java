@@ -9,10 +9,15 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEffect;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class WorldEvent extends MiddleWorldEvent {
+
+	protected final HashMapBasedIdRemappingTable legacyEffectId = LegacyEffect.REGISTRY.getTable(version);
+	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	public WorldEvent(ConnectionImpl connection) {
 		super(connection);
@@ -20,16 +25,13 @@ public class WorldEvent extends MiddleWorldEvent {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9)) {
-			effectId = LegacyEffect.getLegacyId(version, effectId);
-		}
 		if (effectId == 2001) {
-			data = LegacyBlockData.REGISTRY.getTable(version).getRemap(data);
+			data = blockDataRemappingTable.getRemap(data);
 			if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 				data = PreFlatteningBlockIdData.convertCombinedIdToM12(PreFlatteningBlockIdData.getCombinedId(data));
 			}
 		}
+		effectId = legacyEffectId.getRemap(effectId);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_EVENT_ID);
 		serializer.writeInt(effectId);
 		PositionSerializer.writePosition(serializer, position);

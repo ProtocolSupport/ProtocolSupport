@@ -28,7 +28,9 @@ public class ItemStackWriteEvent extends Event {
 
 	/**
 	 * Returns the original itemstack (before remapping) <br>
-	 * Modifying this itemstack has no effect
+	 * This itemstack is immutable and throws exception on modify attempt <br>
+	 * All get methods except {@link ItemStack#getType()} and {@link ItemStack#getAmount()}} are slow due to internal itemstack to bukkit itemstack conversion <br>
+	 * To get a bukkit itemstack copy call {@link ItemStack#clone()}
 	 * @return original itemstack
 	 */
 	public ItemStack getOriginal() {

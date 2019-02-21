@@ -13,7 +13,7 @@ public class Chat extends MiddleChat {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		message = StringSerializer.readString(clientdata, connection.getVersion());
+		message = StringSerializer.readString(clientdata, version);
 	}
 
 }

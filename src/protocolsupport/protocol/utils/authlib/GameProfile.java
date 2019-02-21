@@ -1,10 +1,11 @@
 package protocolsupport.protocol.utils.authlib;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import protocolsupport.api.utils.Profile;
 import protocolsupport.api.utils.ProfileProperty;
@@ -47,17 +48,12 @@ public class GameProfile extends Profile {
 		return properties;
 	}
 
-	public void setProperties(Map<String, Set<ProfileProperty>> propertiesMap) {
-		properties.clear();
-		properties.putAll(propertiesMap);
-	}
-
 	public void clearProperties() {
 		properties.clear();
 	}
 
 	public void addProperty(ProfileProperty profileProperty) {
-		properties.computeIfAbsent(profileProperty.getName(), k -> new HashSet<>()).add(profileProperty);
+		properties.computeIfAbsent(profileProperty.getName(), k -> Collections.newSetFromMap(new ConcurrentHashMap<>())).add(profileProperty);
 	}
 
 	@Override

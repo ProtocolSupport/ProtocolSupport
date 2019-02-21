@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.status.v_5_6;
 
 import java.util.StringJoiner;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.status.MiddleServerInfo;
@@ -19,7 +18,6 @@ public class ServerInfo extends MiddleServerInfo {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.STATUS_SERVER_INFO_ID);
 		String response = new StringJoiner("\u0000")
 		.add("§1")

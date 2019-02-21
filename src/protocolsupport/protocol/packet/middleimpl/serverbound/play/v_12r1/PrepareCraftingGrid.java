@@ -28,7 +28,7 @@ public class PrepareCraftingGrid extends ServerBoundMiddlePacket {
 		clientdata.readByte();
 		clientdata.readShort();
 		Function<ByteBuf, Void> elementReader = from -> {
-			ItemStackSerializer.readItemStack(from, connection.getVersion(), I18NData.DEFAULT_LOCALE);
+			ItemStackSerializer.readItemStack(from, version, I18NData.DEFAULT_LOCALE);
 			from.readByte();
 			from.readByte();
 			return null;

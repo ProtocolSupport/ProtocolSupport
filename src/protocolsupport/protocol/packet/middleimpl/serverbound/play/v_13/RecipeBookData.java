@@ -17,7 +17,7 @@ public class RecipeBookData extends MiddleRecipeBookData {
 		type = MiscSerializer.readVarIntEnum(clientdata, Type.CONSTANT_LOOKUP);
 		switch (type) {
 			case DISPLAYED_RECIPE: {
-				recipeId = StringSerializer.readString(clientdata, connection.getVersion());
+				recipeId = StringSerializer.readString(clientdata, version);
 				break;
 			}
 			case RECIPE_BOOK_STATUS: {

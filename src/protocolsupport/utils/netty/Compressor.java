@@ -72,6 +72,4 @@ public class Compressor {
 		}
 	}
 
-	//TODO: compressStaticTo
-
 }

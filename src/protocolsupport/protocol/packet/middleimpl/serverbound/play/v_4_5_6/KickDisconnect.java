@@ -16,7 +16,7 @@ public class KickDisconnect extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		StringSerializer.readString(clientdata, connection.getVersion());
+		StringSerializer.readString(clientdata, version);
 	}
 
 	@Override

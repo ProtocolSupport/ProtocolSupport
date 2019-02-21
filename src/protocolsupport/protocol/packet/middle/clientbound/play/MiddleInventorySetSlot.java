@@ -23,4 +23,9 @@ public abstract class MiddleInventorySetSlot extends ClientBoundMiddlePacket {
 		itemstack = ItemStackSerializer.readItemStack(serverdata);
 	}
 
+	@Override
+	public boolean postFromServerRead() {
+		return cache.getWindowCache().isValidWindowId(windowId);
+	}
+
 }

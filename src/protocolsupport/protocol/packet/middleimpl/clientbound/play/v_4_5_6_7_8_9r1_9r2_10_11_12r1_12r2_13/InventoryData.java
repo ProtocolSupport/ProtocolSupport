@@ -20,8 +20,7 @@ public class InventoryData extends MiddleInventoryData {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
-		if ((version == ProtocolVersion.MINECRAFT_1_8) && (cache.getWindowCache().getOpenedWindow() == WindowType.ENCHANT)) {
+		if ((version == ProtocolVersion.MINECRAFT_1_8) && (cache.getWindowCache().getOpenedWindow(windowId) == WindowType.ENCHANT)) {
 			enchTypeVal[type] = value;
 			if ((type >= 7) && (type <= 9)) {
 				ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_DATA_ID);
@@ -36,7 +35,7 @@ public class InventoryData extends MiddleInventoryData {
 				serializer.writeShort(((enchTypeVal[type + 3]) << 8) | value);
 				return RecyclableSingletonList.create(serializer);
 			}
-		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (cache.getWindowCache().getOpenedWindow() == WindowType.FURNACE)) {
+		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (cache.getWindowCache().getOpenedWindow(windowId) == WindowType.FURNACE)) {
 			if (type < furTypeTr.length) {
 				type = furTypeTr[type];
 			}

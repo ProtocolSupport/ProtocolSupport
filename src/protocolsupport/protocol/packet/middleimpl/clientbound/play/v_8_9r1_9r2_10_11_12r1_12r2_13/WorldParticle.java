@@ -12,7 +12,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class WorldParticle extends MiddleWorldParticle {
 
-	protected final ParticleRemappingTable remapper = ParticleRemapper.REGISTRY.getTable(connection.getVersion());
+	protected final ParticleRemappingTable remapper = ParticleRemapper.REGISTRY.getTable(version);
 
 	public WorldParticle(ConnectionImpl connection) {
 		super(connection);

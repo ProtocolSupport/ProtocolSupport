@@ -13,7 +13,7 @@ import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
-import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
+import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -25,7 +25,6 @@ public class SpawnNamed extends MiddleSpawnNamed {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_NAMED_ID);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		UUID uuid = entity.getUUID();

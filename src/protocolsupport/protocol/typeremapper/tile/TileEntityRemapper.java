@@ -28,6 +28,12 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHe
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
+import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
+import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHeadToDragonPlayerHeadComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
+import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
+import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.Position;
@@ -41,7 +47,6 @@ import protocolsupport.protocol.utils.types.nbt.NBTNumber;
 import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
-import protocolsupport.utils.CollectionsUtils.ArrayMap.Entry;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -63,6 +68,12 @@ public class TileEntityRemapper {
 			tileEntityRemappers.get(version).tileToTile
 			.computeIfAbsent(type, k -> new ArrayList<>())
 			.add((tile, blockdata) -> transformer.accept(tile));
+		}
+	}
+
+	protected static void registerPerVersion(TileEntityType type, Function<ProtocolVersion, Consumer<TileEntity>> transformer, ProtocolVersion... versions) {
+		for (ProtocolVersion version : versions) {
+			register(type, transformer.apply(version), version);
 		}
 	}
 
@@ -200,18 +211,27 @@ public class TileEntityRemapper {
 	}
 
 	static {
-		register(
+		registerPerVersion(
 			TileEntityType.MOB_SPAWNER,
-			tile -> {
-				NBTCompound nbt = tile.getNBT();
-				if (nbt.getTagOfType("SpawnData", NBTType.COMPOUND) == null) {
-					NBTCompound spawndata = new NBTCompound();
-					spawndata.setTag("id", new NBTString(NetworkEntityType.PIG.getKey()));
-					nbt.setTag("SpawnData", spawndata);
-				}
+			version -> {
+				EntityRemappingTable entityRemapTable = EntityRemappersRegistry.REGISTRY.getTable(version);
+				return tile -> {
+					NBTCompound nbt = tile.getNBT();
+					NBTCompound spawndataTag = nbt.getTagOfType(CommonNBT.MOB_SPAWNER_SPAWNDATA, NBTType.COMPOUND);
+					NetworkEntityType type = null;
+					if (spawndataTag == null) {
+						spawndataTag = new NBTCompound();
+						nbt.setTag(CommonNBT.MOB_SPAWNER_SPAWNDATA, spawndataTag);
+						type = NetworkEntityType.PIG;
+					} else {
+						type = CommonNBT.getSpawnedMobType(spawndataTag);
+					}
+					spawndataTag.setTag("id", new NBTString(entityRemapTable.getRemap(type).getLeft().getKey()));
+				};
 			},
 			ProtocolVersionsHelper.ALL_PC
 		);
+
 		register(TileEntityType.MOB_SPAWNER, new TileEntityToLegacyTypeNameRemapper("MobSpawner"), ProtocolVersionsHelper.BEFORE_1_11_AND_PE);
 		register(TileEntityType.COMMAND_BLOCK, new TileEntityToLegacyTypeNameRemapper("Control"), ProtocolVersionsHelper.BEFORE_1_11_AND_PE);
 		register(TileEntityType.BEACON, new TileEntityToLegacyTypeNameRemapper("Beacon"), ProtocolVersionsHelper.BEFORE_1_11_AND_PE);
@@ -220,6 +240,7 @@ public class TileEntityRemapper {
 		register(TileEntityType.STRUCTURE, new TileEntityToLegacyTypeNameRemapper("Structure"), ProtocolVersionsHelper.BEFORE_1_11_AND_PE);
 		register(TileEntityType.END_GATEWAY, new TileEntityToLegacyTypeNameRemapper("Airportal"), ProtocolVersionsHelper.BEFORE_1_11_AND_PE);
 		register(TileEntityType.SIGN, new TileEntityToLegacyTypeNameRemapper("Sign"), ProtocolVersionsHelper.BEFORE_1_11_AND_PE);
+		register(TileEntityType.PISTON, new TileEntityToLegacyTypeNameRemapper("Piston"), ProtocolVersionsHelper.BEFORE_1_11_AND_PE);
 
 		//TODO implement these from legacy/block types.
 		register(TileEntityType.ENCHANTING_TABLE, new TileEntityToLegacyTypeNameRemapper("EnchantTable"), ProtocolVersionsHelper.ALL_PE);
@@ -229,25 +250,35 @@ public class TileEntityRemapper {
 	    register(TileEntityType.SHULKER_BOX, new TileEntityToLegacyTypeNameRemapper("ShulkerBox"), ProtocolVersionsHelper.ALL_PE);
     	register(TileEntityType.ENDER_CHEST, new TileEntityToLegacyTypeNameRemapper("EnderChest"), ProtocolVersionsHelper.ALL_PE);
 
+		register(TileEntityType.PISTON, new TileEntityPistonRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
+		register(TileEntityType.BANNER, new TileEntityBannerRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
+		register(TileEntityType.SKULL, new TileEntitySkullRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
+
 		register(
 			TileEntityType.MOB_SPAWNER,
 			tile -> {
-				NBTCompound spawndata = tile.getNBT().getTagOfType("SpawnData", NBTType.COMPOUND);
+				NBTCompound spawndata = tile.getNBT().getTagOfType(CommonNBT.MOB_SPAWNER_SPAWNDATA, NBTType.COMPOUND);
 				if (spawndata != null) {
-					NetworkEntityType type = NetworkEntityType.getByRegistrySTypeId(NBTString.getValueOrNull(spawndata.getTagOfType("id", NBTType.STRING)));
+					NetworkEntityType type = CommonNBT.getSpawnedMobType(spawndata);
 					if (type != NetworkEntityType.NONE) {
 						spawndata.setTag("id", new NBTString(LegacyEntityId.getStringId(type)));
 					}
 				}
 			},
-			ProtocolVersionsHelper.BEFORE_1_11
+			ProtocolVersionsHelper.RANGE__1_9__1_10
 		);
 		register(
 			TileEntityType.MOB_SPAWNER,
 			tile -> {
 				NBTCompound nbt = tile.getNBT();
-				if (nbt.removeTag("SpawnData") != null) {
+				NBTCompound spawndata = tile.getNBT().getTagOfType(CommonNBT.MOB_SPAWNER_SPAWNDATA, NBTType.COMPOUND);
+				if (spawndata != null) {
+					nbt.removeTag(CommonNBT.MOB_SPAWNER_SPAWNDATA);
 					nbt.removeTag("SpawnPotentials");
+					NetworkEntityType type = CommonNBT.getSpawnedMobType(spawndata);
+					if (type != NetworkEntityType.NONE) {
+						nbt.setTag("EntityId", new NBTString(LegacyEntityId.getStringId(type)));
+					}
 				}
 			},
 			ProtocolVersionsHelper.BEFORE_1_9
@@ -281,13 +312,13 @@ public class TileEntityRemapper {
 
 		register(TileEntityType.BED, new TileEntityToLegacyTypeNameRemapper("Bed"), ProtocolVersionsHelper.ALL_PE);
 		register(TileEntityType.BED, new TileEntityWithBlockDataNBTRemapper() {
-			protected void register(List<Entry<Consumer<NBTCompound>>> list, Material bed, int color) {
+			protected void register(List<ArrayMap.Entry<Consumer<NBTCompound>>> list, Material bed, int color) {
 				for (BlockData blockdata : MaterialAPI.getBlockDataList(bed)) {
 					list.add(new ArrayMap.Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> nbt.setTag("color", new NBTByte((byte) color))));
 				}
 			}
 			@Override
-			protected void init(List<Entry<Consumer<NBTCompound>>> list) {
+			protected void init(List<ArrayMap.Entry<Consumer<NBTCompound>>> list) {
 				register(list, Material.WHITE_BED, 0);
 				register(list, Material.ORANGE_BED, 1);
 				register(list, Material.MAGENTA_BED, 2);
@@ -309,7 +340,7 @@ public class TileEntityRemapper {
 
 		register(TileEntityType.SHULKER_BOX, new TileEntityToLegacyTypeNameRemapper("ShulkerBox"), ProtocolVersionsHelper.ALL_PE);
 		register(TileEntityType.SHULKER_BOX, new TileEntityWithBlockDataNBTRemapper() {
-			protected void register(List<Entry<Consumer<NBTCompound>>> list, Material shulker, boolean undyed) {
+			protected void register(List<ArrayMap.Entry<Consumer<NBTCompound>>> list, Material shulker, boolean undyed) {
 				for (BlockData blockdata : MaterialAPI.getBlockDataList(shulker)) {
 					byte facing = 1;
 					if (blockdata instanceof Directional) {
@@ -332,7 +363,7 @@ public class TileEntityRemapper {
 				}
 			}
 			@Override
-			protected void init(List<Entry<Consumer<NBTCompound>>> list) {
+			protected void init(List<ArrayMap.Entry<Consumer<NBTCompound>>> list) {
 				register(list, Material.SHULKER_BOX, true);
 				register(list, Material.WHITE_SHULKER_BOX, false);
 				register(list, Material.ORANGE_SHULKER_BOX, false);
@@ -354,52 +385,6 @@ public class TileEntityRemapper {
 			}
 		}, ProtocolVersionsHelper.ALL_PE);
 
-		register(
-			TileEntityType.BANNER, new TileEntityWithBlockDataNBTRemapper() {
-				protected void register(List<Entry<Consumer<NBTCompound>>> list, Material banner, int color) {
-					for (BlockData blockdata : MaterialAPI.getBlockDataList(banner)) {
-						list.add(new ArrayMap.Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> nbt.setTag("Base", new NBTInt(color))));
-					}
-				}
-				@Override
-				protected void init(List<Entry<Consumer<NBTCompound>>> list) {
-					register(list, Material.WHITE_BANNER, 15);
-					register(list, Material.ORANGE_BANNER, 14);
-					register(list, Material.MAGENTA_BANNER, 13);
-					register(list, Material.LIGHT_BLUE_BANNER, 12);
-					register(list, Material.YELLOW_BANNER, 11);
-					register(list, Material.LIME_BANNER, 10);
-					register(list, Material.PINK_BANNER, 9);
-					register(list, Material.GRAY_BANNER, 8);
-					register(list, Material.LIGHT_GRAY_BANNER, 7);
-					register(list, Material.CYAN_BANNER, 6);
-					register(list, Material.PURPLE_BANNER, 5);
-					register(list, Material.BLUE_BANNER, 4);
-					register(list, Material.BROWN_BANNER, 3);
-					register(list, Material.GREEN_BANNER, 2);
-					register(list, Material.RED_BANNER, 1);
-					register(list, Material.BLACK_BANNER, 0);
-					register(list, Material.WHITE_WALL_BANNER, 15);
-					register(list, Material.ORANGE_WALL_BANNER, 14);
-					register(list, Material.MAGENTA_WALL_BANNER, 13);
-					register(list, Material.LIGHT_BLUE_WALL_BANNER, 12);
-					register(list, Material.YELLOW_WALL_BANNER, 11);
-					register(list, Material.LIME_WALL_BANNER, 10);
-					register(list, Material.PINK_WALL_BANNER, 9);
-					register(list, Material.GRAY_WALL_BANNER, 8);
-					register(list, Material.LIGHT_GRAY_WALL_BANNER, 7);
-					register(list, Material.CYAN_WALL_BANNER, 6);
-					register(list, Material.PURPLE_WALL_BANNER, 5);
-					register(list, Material.BLUE_WALL_BANNER, 4);
-					register(list, Material.BROWN_WALL_BANNER, 3);
-					register(list, Material.GREEN_WALL_BANNER, 2);
-					register(list, Material.RED_WALL_BANNER, 1);
-					register(list, Material.BLACK_WALL_BANNER, 0);
-				}
-			},
-			ProtocolVersionsHelper.BEFORE_1_13
-		);
-		register(TileEntityType.SKULL, new TileEntitySkullRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
 		register(
 			TileEntityType.SKULL,
 			tile -> {

@@ -1,11 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.typeremapper.basic.WindowSlotsRemappingHelper;
 
 public class InventoryClick extends MiddleInventoryClick {
 
@@ -17,14 +16,21 @@ public class InventoryClick extends MiddleInventoryClick {
 	public void readFromClientData(ByteBuf clientdata) {
 		windowId = clientdata.readUnsignedByte();
 		slot = clientdata.readShort();
-		ProtocolVersion version = connection.getVersion();
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9) && (cache.getWindowCache().getOpenedWindow() == WindowType.BREWING)) {
-			if (slot > 3) {
-				slot++;
+		switch (cache.getWindowCache().getOpenedWindow(windowId)) {
+			case BREWING: {
+				if (!WindowSlotsRemappingHelper.hasBrewingBlazePowderSlot(version) && (slot >= WindowSlotsRemappingHelper.BREWING_BLAZE_POWDER_SLOT)) {
+					slot++;
+				}
+				break;
 			}
-		} else if (version.isBefore(ProtocolVersion.MINECRAFT_1_8) && (cache.getWindowCache().getOpenedWindow() == WindowType.ENCHANT)) {
-			if (slot > 0) {
-				slot++;
+			case ENCHANT: {
+				if (!WindowSlotsRemappingHelper.hasEnchantLapisSlot(version) && (slot >= WindowSlotsRemappingHelper.ENCHANT_LAPIS_SLOT)) {
+					slot++;
+				}
+				break;
+			}
+			default: {
+				break;
 			}
 		}
 		button = clientdata.readUnsignedByte();

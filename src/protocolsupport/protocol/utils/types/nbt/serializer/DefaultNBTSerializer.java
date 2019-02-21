@@ -21,7 +21,9 @@ import protocolsupport.protocol.utils.types.nbt.NBTLongArray;
 import protocolsupport.protocol.utils.types.nbt.NBTShort;
 import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class DefaultNBTSerializer extends NBTSerializer<DataInput, DataOutput> {
 
 	public static final DefaultNBTSerializer INSTANCE = new DefaultNBTSerializer();

@@ -27,13 +27,13 @@ public abstract class ChunkTransformer {
 	protected List<TileEntity> tilesNBTData;
 	protected Int2IntMap tilesBlockData;
 
-	protected final ArrayBasedIdRemappingTable blockTypeRemappingTable;
-	protected final TileDataCache tilecache;
-	protected final TileEntityRemapper tileremapper;
+	protected final ArrayBasedIdRemappingTable blockDataRemappingTable;
+	protected final TileDataCache tileCache;
+	protected final TileEntityRemapper tileRemapper;
 	public ChunkTransformer(ArrayBasedIdRemappingTable blockRemappingTable, TileEntityRemapper tileremapper, TileDataCache tilecache) {
-		this.blockTypeRemappingTable = blockRemappingTable;
-		this.tileremapper = tileremapper;
-		this.tilecache = tilecache;
+		this.blockDataRemappingTable = blockRemappingTable;
+		this.tileRemapper = tileremapper;
+		this.tileCache = tilecache;
 	}
 
 	public void loadData(ChunkCoord chunk, ByteBuf chunkdata, int bitmap, boolean hasSkyLight, boolean hasBiomeData, TileEntity[] tiles) {
@@ -54,37 +54,32 @@ public abstract class ChunkTransformer {
 			}
 		}
 		this.tilesNBTData = new ArrayList<>(Arrays.asList(tiles));
-		this.tilesBlockData = tilecache.getOrCreateChunk(chunk);
+		this.tilesBlockData = tileCache.getOrCreateChunk(chunk);
 	}
 
 	public TileEntity[] remapAndGetTiles() {
 		return
 			tilesNBTData.stream()
-			.map(tile -> tileremapper.remap(tile, tilesBlockData.get(tile.getPosition().getLocalCoord())))
+			.map(tile -> tileRemapper.remap(tile, tilesBlockData.get(TileDataCache.getLocalCoordFromPosition(tile.getPosition()))))
 			.toArray(TileEntity[]::new);
 	}
 
-	protected int getBlockState(int section, BlockStorageReader blockstorage, int blockindex) {
-		int blockstate = blockstorage.getBlockState(blockindex);
-		if (tileremapper.tileThatNeedsBlockData(blockstate)) {
-			tilesBlockData.put(getLocalPositionFromSectionIndex(section, blockindex), blockstate);
+	protected void processBlockData(int section, int blockindex, int blockdata) {
+		int localcoord = TileDataCache.createLocalPositionFromChunkBlock(section, blockindex);
+		if (tileRemapper.tileThatNeedsBlockData(blockdata)) {
+			tilesBlockData.put(localcoord, blockdata);
 		} else {
-			tilesBlockData.remove(getLocalPositionFromSectionIndex(section, blockindex));
+			tilesBlockData.remove(localcoord);
 		}
-		if (tileremapper.usedToBeTile(blockstate)) {
-			TileEntity tile = tileremapper.getLegacyTileFromBlock(getGlobalPositionFromSectionIndex(section, blockindex), blockstate);
+		if (tileRemapper.usedToBeTile(blockdata)) {
+			TileEntity tile = tileRemapper.getLegacyTileFromBlock(getGlobalPosition(section, blockindex), blockdata);
 			if (tile != null) {
 				tilesNBTData.add(tile);
 			}
 		}
-		return blockstate;
 	}
 
-	protected int getLocalPositionFromSectionIndex(int section, int blockindex) {
-		return ((blockindex & 0xF) << 12) | (((blockindex >> 4) & 0xF) << 8) | ((section * 16) + ((blockindex >> 8) & 0xF));
-	}
-
-	protected Position getGlobalPositionFromSectionIndex(int section, int blockindex) {
+	protected Position getGlobalPosition(int section, int blockindex) {
 		return new Position(
 			(chunk.getX() << 4) + (blockindex & 0xF),
 			(section * 16) + ((blockindex >> 8) & 0xF),

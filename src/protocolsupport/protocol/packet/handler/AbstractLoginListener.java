@@ -241,7 +241,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 		if (event.getForcedUUID() != null) {
 			profile.setUUID(event.getForcedUUID());
 		}
-		profile.setProperties(event.getProperties());
+		event.getProperties().values().forEach(c -> c.forEach(profile::addProperty));
 
 		//bukkit async prelogin event, no uuid and name modifications sohuld be done after it, so this event must be always fired after profile complete
 		AsyncPlayerPreLoginEvent asyncEvent = new AsyncPlayerPreLoginEvent(profile.getName(), address, profile.getUUID());

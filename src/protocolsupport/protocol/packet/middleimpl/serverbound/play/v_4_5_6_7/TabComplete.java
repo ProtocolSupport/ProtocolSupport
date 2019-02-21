@@ -14,7 +14,7 @@ public class TabComplete extends MiddleTabComplete {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		id = 0;
-		string = StringSerializer.readString(clientdata, connection.getVersion(), 256);
+		string = StringSerializer.readString(clientdata, version, 256);
 		if (string.startsWith("/")) {
 			string = string.substring(1);
 		}

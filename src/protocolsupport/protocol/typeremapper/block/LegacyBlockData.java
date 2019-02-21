@@ -686,7 +686,7 @@ public class LegacyBlockData {
 			this.registerRemapEntryForAllStates(Material.NETHER_WART_BLOCK, Material.RED_WOOL.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
 			this.registerRemapEntryForAllStates(Material.RED_NETHER_BRICKS, Material.NETHER_BRICKS.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
 			this.registerRemapEntryForAllStates(Material.MAGMA_BLOCK, Material.NETHERRACK.createBlockData(), ProtocolVersionsHelper.BEFORE_1_10);
-			this.registerRemapEntryForAllStates(Material.BONE_BLOCK, (o) -> {
+			this.registerRemapEntryForAllStates(Material.BONE_BLOCK, o -> {
 				Slab slab = (Slab) Material.STONE_SLAB.createBlockData();
 				slab.setType(Slab.Type.DOUBLE);
 				return slab;
@@ -702,7 +702,11 @@ public class LegacyBlockData {
 			this.registerRemapEntryForAllStates(Material.BEETROOTS, Material.POTATOES.createBlockData(), ProtocolVersionsHelper.BEFORE_1_9);
 			this.<CommandBlock>registerRemapEntryForAllStates(
 				Arrays.asList(Material.COMMAND_BLOCK, Material.CHAIN_COMMAND_BLOCK, Material.REPEATING_COMMAND_BLOCK),
-				o -> Material.COMMAND_BLOCK.createBlockData(),
+				o -> {
+					CommandBlock data = (CommandBlock) Material.COMMAND_BLOCK.createBlockData();
+					data.setFacing(BlockFace.DOWN);
+					return data;
+				},
 				ProtocolVersionsHelper.BEFORE_1_9
 			);
 			this.registerRemapEntryForAllStates(

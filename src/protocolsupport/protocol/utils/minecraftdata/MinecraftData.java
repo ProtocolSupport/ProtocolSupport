@@ -15,13 +15,20 @@ public class MinecraftData {
 
 	public static final int ITEM_COUNT = (int) getItems().count();
 
-	@SuppressWarnings("deprecation")
+	public static final int BLOCK_COUNT = (int) getBlocks().count();
+
 	public static final int BLOCKDATA_COUNT =
-		Arrays.stream(Material.values())
-		.filter(mat -> !mat.isLegacy())
-		.filter(Material::isBlock)
+		getBlocks()
 		.mapToInt(material -> MaterialAPI.getBlockDataList(material).size())
 		.sum();
+
+	@SuppressWarnings("deprecation")
+	public static Stream<Material> getBlocks() {
+		return
+			Arrays.stream(Material.values())
+			.filter(mat -> !mat.isLegacy())
+			.filter(Material::isBlock);
+	}
 
 	@SuppressWarnings("deprecation")
 	public static Stream<Material> getItems() {

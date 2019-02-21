@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.utils.Utils;
 import protocolsupportbuildprocessor.Preload;
 
@@ -63,11 +62,6 @@ public enum ProtocolVersion {
 	.filter(ProtocolVersion::isSupported)
 	.collect(Collectors.toList())
 	.toArray(new ProtocolVersion[0]);
-
-	private static final Int2ObjectOpenHashMap<ProtocolVersion> byProtocolId = new Int2ObjectOpenHashMap<>();
-	static {
-		Arrays.stream(ProtocolVersion.getAllSupported()).forEach(version -> byProtocolId.put(version.id, version));
-	}
 
 	private static final EnumMap<ProtocolType, ProtocolVersion[]> byOrderId = new EnumMap<>(ProtocolType.class);
 	static {
@@ -183,18 +177,6 @@ public enum ProtocolVersion {
 	 */
 	public boolean isBetween(ProtocolVersion one, ProtocolVersion another) {
 		return (isAfterOrEq(one) && isBeforeOrEq(another)) || (isBeforeOrEq(one) && isAfterOrEq(another));
-	}
-
-	/**
-	 * Returns protocol version by network game id
-	 * @param id network version id
-	 * @return Returns protocol version by network game id or {@link ProtocolVersion#UNKNOWN} if not found
-	 * @deprecated network version ids may be the same for different protocol versions
-	 */
-	@Deprecated
-	public static ProtocolVersion fromId(int id) {
-		ProtocolVersion version = byProtocolId.get(id);
-		return version != null ? version : UNKNOWN;
 	}
 
 	/**
@@ -339,49 +321,6 @@ public enum ProtocolVersion {
 		return allSupported.clone();
 	}
 
-	/**
-	 * Returns all protocol versions that are after specified one (inclusive)
-	 * @param version protocol version
-	 * @return all protocol versions that are after specified one  (inclusive)
-	 * @throws IllegalArgumentException if {@link ProtocolVersion#getAllBetween(ProtocolVersion, ProtocolVersion)} throws one
-	 * @deprecated non intuitive behavior
-	 */
-	@Deprecated
-	public static ProtocolVersion[] getAllAfter(ProtocolVersion version) {
-		return getAllAfterI(version);
-	}
-
-	/**
-	 * Returns all protocol versions that are before specified one (inclusive)
-	 * @param version protocol version
-	 * @return all protocol versions that are before specified one
-	 * @throws IllegalArgumentException if {@link ProtocolVersion#getAllBetween(ProtocolVersion, ProtocolVersion)} throws one
-	 * @deprecated non intuitive behavior
-	 */
-	@Deprecated
-	public static ProtocolVersion[] getAllBefore(ProtocolVersion version) {
-		return getAllBeforeI(version);
-	}
-
-	/**
-	 * Returns latest supported protocol version for {@link ProtocolType#PC}
-	 * @return latest supported protocol version for {@link ProtocolType#PC}
-	 * @deprecated use {@link ProtocolVersion#getLatest(ProtocolType)} instead
-	 */
-	@Deprecated
-	public static ProtocolVersion getLatest() {
-		return getLatest(ProtocolType.PC);
-	}
-
-	/**
-	 * Returns oldest supported protocol version for {@link ProtocolType#PC}
-	 * @return oldest supported protocol version for {@link ProtocolType#PC}
-	 * @deprecated use {@link ProtocolVersion#getOldest(ProtocolType)} instead
-	 */
-	@Deprecated
-	public static ProtocolVersion getOldest() {
-		return getOldest(ProtocolType.PC);
-	}
 
 	private static class OrderId implements Comparable<OrderId> {
 

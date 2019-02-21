@@ -1,6 +1,6 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.value;
 
-import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
+import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalChat;

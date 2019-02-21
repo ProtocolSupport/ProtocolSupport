@@ -26,11 +26,11 @@ public class BlockStorageReader {
 		}
 	}
 
-	public int getBlockState(int blockindex) {
+	public int getBlockData(int blockindex) {
 		return palette[getPaletteIndex(blockindex)];
 	}
 
-	private int getPaletteIndex(int blockIndex) {
+	protected int getPaletteIndex(int blockIndex) {
 		int bitStartIndex = blockIndex * bitsPerBlock;
 		int arrStartIndex = bitStartIndex >> 6;
 		int arrEndIndex = ((bitStartIndex + bitsPerBlock) - 1) >> 6;
