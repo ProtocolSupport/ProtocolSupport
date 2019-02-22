@@ -27,6 +27,10 @@ public class WindowCache {
 		}
 	}
 
+	public WindowType getOpenedWindow() {
+		return windowType;
+	}
+
 	public boolean isValidWindowId(int windowId) {
 		return windowId == WINDOW_ID_PLAYER || windowId == this.windowId;
 	}

@@ -59,6 +59,10 @@ public class TileDataCache {
 		return -1;
 	}
 
+	public int getBlockData(Position position) {
+		return getBlockData(position.getChunkCoord(), position.getLocalCoord());
+	}
+
 	public void setBlockData(ChunkCoord chunkCoord, int localCoord, int blockdata) {
 		getChunk(chunkCoord).put(localCoord, blockdata);
 	}

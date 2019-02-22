@@ -22,7 +22,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		Int2IntMap tilestates = cache.getTileCache().getChunk(chunk);
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		for (Record record : records) {
-			BlockChangeSingle.create(connection.getVersion(), Position.fromLocal(chunk, record.localCoord), tileremapper, tilestates, record.id, packets);
+			BlockChangeSingle.create(connection.getVersion(), Position.fromLocal(chunk, record.coord), tileremapper, tilestates, record.id, packets);
 		}
 		return packets;
 	}

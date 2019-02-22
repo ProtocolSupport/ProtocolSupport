@@ -35,7 +35,7 @@ public class ChunkTransformerPE extends ChunkTransformerBB {
 				int blockIndex = 0;
 				for (int x = 0; x < 16; x++) { for (int z = 0; z < 16; z++) { for (int y = 0; y < 16; y++) {
 					if (PEBlocks.isPCBlockWaterlogged(getBlockState(i, storage, x, y, z))) { waterstorage.setBlockState(blockIndex, 1); }
-					blockstorage.setBlockState(blockIndex++, palette.getRuntimeId(PEBlocks.getPocketRuntimeId(blockTypeRemappingTable.getRemap(getBlockState(i, storage, x, y, z)))));
+					blockstorage.setBlockState(blockIndex++, palette.getRuntimeId(PEBlocks.getPocketRuntimeId(blockDataRemappingTable.getRemap(getBlockState(i, storage, x, y, z)))));
 				}}}
 				for (int word : blockstorage.getBlockData()) {
 					chunkdata.writeIntLE(word);
