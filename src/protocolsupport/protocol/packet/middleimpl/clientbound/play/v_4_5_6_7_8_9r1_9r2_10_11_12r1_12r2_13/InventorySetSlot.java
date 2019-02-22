@@ -18,39 +18,41 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		switch (cache.getWindowCache().getOpenedWindow(windowId)) {
-			case PLAYER: {
-				if (!WindowSlotsRemappingHelper.hasPlayerOffhandSlot(version)) {
-					if (slot == WindowSlotsRemappingHelper.PLAYER_OFF_HAND_SLOT) {
-						return RecyclableEmptyList.get();
+		if (windowId != WINDOW_ID_PLAYER_HOTBAR && windowId != WINDOW_ID_PLAYER_CURSOR && windowId != WINDOW_ID_PLAYER_INVENTORY) {
+			switch (cache.getWindowCache().getOpenedWindow()) {
+				case PLAYER: {
+					if (!WindowSlotsRemappingHelper.hasPlayerOffhandSlot(version)) {
+						if (slot == WindowSlotsRemappingHelper.PLAYER_OFF_HAND_SLOT) {
+							return RecyclableEmptyList.get();
+						}
 					}
+					break;
 				}
-				break;
-			}
-			case BREWING: {
-				if (!WindowSlotsRemappingHelper.hasBrewingBlazePowderSlot(version)) {
-					if (slot == WindowSlotsRemappingHelper.BREWING_BLAZE_POWDER_SLOT) {
-						return RecyclableEmptyList.get();
+				case BREWING: {
+					if (!WindowSlotsRemappingHelper.hasBrewingBlazePowderSlot(version)) {
+						if (slot == WindowSlotsRemappingHelper.BREWING_BLAZE_POWDER_SLOT) {
+							return RecyclableEmptyList.get();
+						}
+						if (slot > WindowSlotsRemappingHelper.BREWING_BLAZE_POWDER_SLOT) {
+							slot--;
+						}
 					}
-					if (slot > WindowSlotsRemappingHelper.BREWING_BLAZE_POWDER_SLOT) {
-						slot--;
-					}
+					break;
 				}
-				break;
-			}
-			case ENCHANT: {
-				if (!WindowSlotsRemappingHelper.hasEnchantLapisSlot(version)) {
-					if (slot == WindowSlotsRemappingHelper.ENCHANT_LAPIS_SLOT) {
-						return RecyclableEmptyList.get();
+				case ENCHANT: {
+					if (!WindowSlotsRemappingHelper.hasEnchantLapisSlot(version)) {
+						if (slot == WindowSlotsRemappingHelper.ENCHANT_LAPIS_SLOT) {
+							return RecyclableEmptyList.get();
+						}
+						if (slot > WindowSlotsRemappingHelper.ENCHANT_LAPIS_SLOT) {
+							slot--;
+						}
 					}
-					if (slot > WindowSlotsRemappingHelper.ENCHANT_LAPIS_SLOT) {
-						slot--;
-					}
+					break;
 				}
-				break;
-			}
-			default: {
-				break;
+				default: {
+					break;
+				}
 			}
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID);
