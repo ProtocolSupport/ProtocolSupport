@@ -66,7 +66,8 @@ task updateRuntimeLibraries(type: UpdateLibrariesTask) {
 task updateShadeLibraries(type: UpdateLibrariesTask) {
 	directory = librariesShadeDirectory
 	libraries = [
-		[name: 'raknetserver-9.jar', url: 'https://build.true-games.org/job/RakNetServer/30/artifact/target/RakNetServer.jar']
+		[name: 'raknetserver-30.jar', url: 'https://build.true-games.org/job/RakNetServer/30/artifact/target/RakNetServer.jar'],
+		[name: 'udpserver-11.jar', url: 'https://build.true-games.org/job/UdpServerSocketChannel/11/artifact/target/UdpServerSocketChannel.jar']
 	]
 }
 
