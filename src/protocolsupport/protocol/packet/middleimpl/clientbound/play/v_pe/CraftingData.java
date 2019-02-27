@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+//TODO: add repair recipes for all types that can take damade
 public class CraftingData extends MiddleDeclareRecipes {
 
 	public static final int PE_RECIPE_TYPE_SHAPELESS = 0;

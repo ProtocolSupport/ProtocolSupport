@@ -1,5 +1,6 @@
 package protocolsupport.api.chat.modifiers;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import org.bukkit.entity.Entity;
@@ -8,6 +9,11 @@ import org.bukkit.inventory.ItemStack;
 
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
+import protocolsupport.protocol.utils.types.nbt.mojangson.MojangsonParser;
+import protocolsupport.protocol.utils.types.nbt.mojangson.MojangsonSerializer;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 
@@ -38,8 +44,20 @@ public class HoverAction {
 
 	public HoverAction(EntityInfo entityinfo) {
 		this.type = Type.SHOW_ENTITY;
-		//TODO: use nbt compound after implementing our own mojangson serializer
-		this.value = "{type:\"" + entityinfo.getType().getName() + "\", id:\"" + entityinfo.getUUID().toString() + "\", name:\"" +  entityinfo.getName() + "\"}";
+		NBTCompound compound = new NBTCompound();
+		EntityType etype = entityinfo.getType();
+		UUID euuid = entityinfo.getUUID();
+		String ename = entityinfo.getName();
+		if (etype != null) {
+			compound.setTag("type", new NBTString(etype.getName()));
+		}
+		if (euuid != null) {
+			compound.setTag("id", new NBTString(euuid.toString()));
+		}
+		if (ename != null) {
+			compound.setTag("name", new NBTString(ename));
+		}
+		this.value = MojangsonSerializer.serialize(compound);
 	}
 
 	public Type getType() {
@@ -62,8 +80,18 @@ public class HoverAction {
 
 	public EntityInfo getEntity() {
 		validateAction(type, Type.SHOW_ENTITY);
-		//TODO: use nbt compound after implementing our own mojangson serializer
-		return ServerPlatform.get().getMiscUtils().parseEntityInfo(value);
+		try {
+			NBTCompound compound = MojangsonParser.parse(value);
+			NBTString etype = compound.getTagOfType("type", NBTType.STRING);
+			NBTString euuid = compound.getTagOfType("id", NBTType.STRING);
+			return new EntityInfo(
+				etype != null ? EntityType.fromName(etype.getValue()) : null,
+				euuid != null ? UUID.fromString(euuid.getValue()) : null,
+				NBTString.getValueOrNull(compound.getTagOfType("name", NBTType.STRING))
+			);
+		} catch (IOException e) {
+			throw new RuntimeException("Unable to parse value", e);
+		}
 	}
 
 	static void validateAction(Type current, Type expected) {

@@ -19,12 +19,12 @@ public class CustomPayload extends MiddleCustomPayload {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID);
-		StringSerializer.writeString(serializer, connection.getVersion(), tag);
+		StringSerializer.writeString(serializer, version, tag);
 		switch (tag) {
 			case (LegacyCustomPayloadChannelName.MODERN_TRADER_LIST): {
 				String locale = cache.getAttributesCache().getLocale();
 				MerchantDataSerializer.writeMerchantData(
-					serializer, connection.getVersion(), locale,
+					serializer, version, locale,
 					MerchantDataSerializer.readMerchantData(data)
 				);
 				break;

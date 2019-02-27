@@ -54,7 +54,7 @@ task updateSpigot(type: BuildLibraryTask) {
 	targetLibraryName = "spigot-1.13.2-3.jar"
 	builderUrl = "https://papermc.io/ci/job/Paper-1.13/488/artifact/paperclip-488.jar"
 	buildCommand = "java -Dpaperclip.patchonly=true -jar {BUILDER}"
-	builtLibraryName = "cache/patched_1.13.2.jar"
+	builtLibraryName = ["cache", "patched_1.13.2.jar"]
 }
 
 task updateRuntimeLibraries(type: UpdateLibrariesTask) {
@@ -66,8 +66,8 @@ task updateRuntimeLibraries(type: UpdateLibrariesTask) {
 task updateShadeLibraries(type: UpdateLibrariesTask) {
 	directory = librariesShadeDirectory
 	libraries = [
-		[name: 'raknetserver-8.jar', url: 'https://build.true-games.org/job/RakNetServer/29/artifact/target/RakNetServer.jar'],
-		[name: 'udpserver-2.jar', url: 'https://build.true-games.org/job/UdpServerSocketChannel/11/artifact/target/UdpServerSocketChannel.jar']
+		[name: 'raknetserver-30.jar', url: 'https://build.true-games.org/job/RakNetServer/30/artifact/target/RakNetServer.jar'],
+		[name: 'udpserver-11.jar', url: 'https://build.true-games.org/job/UdpServerSocketChannel/11/artifact/target/UdpServerSocketChannel.jar']
 	]
 }
 
@@ -111,7 +111,7 @@ dependencies {
 compileJava {
 	options.encoding = 'UTF-8'
 	options.incremental = false
-	options.compilerArgs << ("-Aprotocolsupportbuildprocessor.generatedresourcesdirectory=" + new File(generatedResourcesDirectory, resourcesDirectoryName + "/preload").getAbsolutePath())
+	options.compilerArgs << ("-Aprotocolsupportbuildprocessor.generatedresourcesdirectory=" + newFile(generatedResourcesDirectory, resourcesDirectoryName, "preload").getAbsolutePath())
 }
 
 test {
@@ -120,12 +120,12 @@ test {
 
 
 task generateLocaleList(type: DefaultTask) {doLast{
-	File langsListFile = new File(generatedResourcesDirectory, resourcesDirectoryName + "/i18n/languages")
+	File langsListFile = newFile(generatedResourcesDirectory, resourcesDirectoryName, "i18n", "languages")
 	langsListFile.getParentFile().mkdirs()
 	langsListFile.createNewFile()
 	new PrintWriter(langsListFile).withCloseable({
 		writer ->
-			new File(sourceSets.main.resources.srcDirs.iterator().next(), resourcesDirectoryName + "/i18n").list()
+			newFile(sourceSets.main.resources.srcDirs.iterator().next(), resourcesDirectoryName, "i18n").list()
 			.each({
 				String[] split = it.split("[.]");
 				if (split.length == 2 && split[1].equals("json")) {
@@ -140,7 +140,7 @@ task generateInfo(type: DefaultTask) {doLast{
 	properties.setProperty("buildtime", new Date().format("yyyy.MM.dd 'at' HH:mm:ss z"))
 	properties.setProperty("buildhost", System.getProperty("protocolsupport.buildhost", "unknown"))
 	properties.setProperty("buildnumber", System.getProperty("protocolsupport.buildnumber", "unknown"))
-	File buildInfoFile = new File(generatedResourcesDirectory, resourcesDirectoryName + "/buildinfo")
+	File buildInfoFile = newFile(generatedResourcesDirectory, resourcesDirectoryName, "buildinfo")
 	buildInfoFile.getParentFile().mkdirs()
 	buildInfoFile.createNewFile()
 	new FileOutputStream(buildInfoFile).withCloseable({ properties.store(it, "Build info") })
@@ -172,8 +172,8 @@ shadowJar {
 
 task copyFinalJarToTarget(type: DefaultTask) {doLast{
 	java.nio.file.Files.copy(
-		new File(jar.archivePath.getPath()).toPath(),
-		new File(targetJarDirectory, jar.baseName + '.jar').toPath(),
+		jar.archivePath.getAbsoluteFile().toPath(),
+		new File(targetJarDirectory, jar.baseName + '.jar').getAbsoluteFile().toPath(),
 		java.nio.file.StandardCopyOption.REPLACE_EXISTING
 	)
 }}

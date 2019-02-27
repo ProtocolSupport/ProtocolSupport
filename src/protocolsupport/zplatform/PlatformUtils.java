@@ -17,8 +17,6 @@ import org.bukkit.util.CachedServerIcon;
 
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.chat.modifiers.HoverAction.EntityInfo;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
@@ -33,21 +31,17 @@ public interface PlatformUtils {
 
 	public String serializeItemStackToNBTJson(ItemStack itemstack);
 
-	public EntityInfo parseEntityInfo(String json);
-
-	public String fixHoverShowItem(ProtocolVersion version, String locale, String json);
-
 	public int getMobTypeNetworkId(EntityType type);
 
 	public int getItemNetworkId(Material material);
 
 	public int getBlockDataNetworkId(BlockData blockdata);
 
+	public int getBlockNetworkId(Material material);
+
 	public BlockData getBlockDataByNetworkId(int id);
 
-	public int getBlockDataNetworkTypeId(BlockData blockdata);
-
-	public BlockData getBlockDataByNetworkTypeId(int id);
+	public Material getBlockByNetworkId(int id);
 
 	public List<BlockData> getBlockDataList(Material material);
 

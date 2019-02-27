@@ -1,14 +1,13 @@
 package protocolsupport.api.utils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-
-import com.google.common.base.Charsets;
 
 import protocolsupport.api.events.PlayerProfileCompleteEvent;
 
@@ -24,17 +23,17 @@ public abstract class Profile {
 	 * @return offline mode uuid
 	 */
 	public static UUID generateOfflineModeUUID(String name) {
-		return UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8));
+		return UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(StandardCharsets.UTF_8));
 	}
 
-	protected boolean onlineMode;
+	protected volatile boolean onlineMode;
 
-	protected String originalname;
-	protected UUID originaluuid;
+	protected volatile String originalname;
+	protected volatile UUID originaluuid;
 
-	protected String name;
-	protected UUID uuid;
-	protected final Map<String, Set<ProfileProperty>> properties = new HashMap<>();
+	protected volatile String name;
+	protected volatile UUID uuid;
+	protected final Map<String, Set<ProfileProperty>> properties = new ConcurrentHashMap<>();
 
 	/**
 	 * Returns true if this player logged in using online-mode

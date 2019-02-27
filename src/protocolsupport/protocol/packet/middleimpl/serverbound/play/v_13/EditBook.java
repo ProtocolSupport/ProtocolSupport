@@ -15,7 +15,7 @@ public class EditBook extends MiddleEditBook {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		book = ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), cache.getAttributesCache().getLocale());
+		book = ItemStackSerializer.readItemStack(clientdata, version, cache.getAttributesCache().getLocale());
 		signing = clientdata.readBoolean();
 		hand = MiscSerializer.readVarIntEnum(clientdata, UsedHand.CONSTANT_LOOKUP);
 	}

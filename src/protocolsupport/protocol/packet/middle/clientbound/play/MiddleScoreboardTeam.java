@@ -1,6 +1,10 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import io.netty.buffer.ByteBuf;
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.ConnectionImpl;
@@ -43,6 +47,35 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 		}
 		if ((mode == Mode.CREATE) || (mode == Mode.PLAYERS_ADD) || (mode == Mode.PLAYERS_REMOVE)) {
 			players = ArraySerializer.readVarIntVarIntUTF8StringArray(serverdata);
+		}
+	}
+
+	protected final Set<String> teams = new HashSet<>();
+
+	@Override
+	public boolean postFromServerRead() {
+		switch (mode) {
+			case CREATE: {
+				if (!teams.add(name)) {
+					ProtocolSupport.logWarning("Skipping creating duplicate scoreboard team " + name);
+					return false;
+				}
+				return true;
+			}
+			case REMOVE: {
+				if (!teams.remove(name)) {
+					ProtocolSupport.logWarning("Skipping removing unexisting scoreboard team " + name);
+					return false;
+				}
+				return true;
+			}
+			default: {
+				if (!teams.contains(name)) {
+					ProtocolSupport.logWarning("Skipping changing unexisting scoreboard team " + name);
+					return false;
+				}
+				return true;
+			}
 		}
 	}
 

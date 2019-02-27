@@ -7,9 +7,10 @@ import java.util.function.Function;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.Any;
-import protocolsupport.protocol.typeremapper.block.FlatteningBlockId;
+import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockData;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.particle.legacy.LegacyParticle;
 import protocolsupport.protocol.typeremapper.particle.legacy.LegacyParticleBlockCrack;
@@ -74,13 +75,13 @@ public class ParticleRemapper {
 		{
 			Arrays.stream(ProtocolVersionsHelper.UP_1_13)
 			.forEach(version -> {
-				ArrayBasedIdRemappingTable blockRemapTable = LegacyBlockData.REGISTRY.getTable(version);
-				ArrayBasedIdRemappingTable flatteningIdTable = FlatteningBlockId.REGISTRY.getTable(version);
+				ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+				FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 				registerRemap(ParticleBlock.class, original -> new ParticleBlock(
 					original.getId(),
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
 					original.getData(), original.getCount(),
-					flatteningIdTable.getRemap(blockRemapTable.getRemap(original.getBlockData()))
+					BlockRemappingHelper.remapFBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, original.getBlockData())
 				), version);
 				registerRemap(ParticleItem.class, original -> new ParticleItem(original.getId(), version, I18NData.DEFAULT_LOCALE, original.getItemStack()), version);
 			});
@@ -130,7 +131,7 @@ public class ParticleRemapper {
 			registerSimpleLegacyRemap(ParticleBarrier.class, new Any<>(35, "barrier"), ProtocolVersionsHelper.RANGE__1_8__1_12_2);
 			Arrays.stream(ProtocolVersionsHelper.BEFORE_1_13)
 			.forEach(version -> {
-				ArrayBasedIdRemappingTable blockRemapTable = LegacyBlockData.REGISTRY.getTable(version);
+				ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 				registerRemap(
 					ParticleItem.class,
 					original -> new LegacyParticleIconCrack(
@@ -147,7 +148,7 @@ public class ParticleRemapper {
 						37, "blockcrack",
 						original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
 						original.getData(), original.getCount(),
-						PreFlatteningBlockIdData.getCombinedId(blockRemapTable.getRemap(original.getBlockData()))
+						BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, original.getBlockData())
 					),
 					version
 				);
@@ -160,28 +161,28 @@ public class ParticleRemapper {
 			registerSimpleLegacyRemap(ParticleSweepAttack.class, new Any<>(45, "sweepAttack"), ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 			Arrays.stream(ProtocolVersionsHelper.RANGE__1_10__1_12_2)
 			.forEach(version -> {
-				ArrayBasedIdRemappingTable blockRemapTable = LegacyBlockData.REGISTRY.getTable(version);
+				ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 				registerRemap(
 					ParticleFallingDust.class,
 					original -> new LegacyParticleFallingDust(
 						46, "fallingdust",
 						original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
 						original.getData(), original.getCount(),
-						PreFlatteningBlockIdData.getCombinedId(blockRemapTable.getRemap(original.getBlockData()))
+						BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, original.getBlockData())
 					),
 					version
 				);
 			});
 			Arrays.stream(ProtocolVersionsHelper.BEFORE_1_10)
 			.forEach(version -> {
-				ArrayBasedIdRemappingTable blockRemapTable = LegacyBlockData.REGISTRY.getTable(version);
+				ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 				registerRemap(
 					ParticleFallingDust.class,
 					original -> new LegacyParticleBlockCrack(
 						37, "blockcrack",
 						original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
 						original.getData(), original.getCount(),
-						PreFlatteningBlockIdData.getCombinedId(blockRemapTable.getRemap(original.getBlockData()))
+						BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, original.getBlockData())
 					),
 					version
 				);

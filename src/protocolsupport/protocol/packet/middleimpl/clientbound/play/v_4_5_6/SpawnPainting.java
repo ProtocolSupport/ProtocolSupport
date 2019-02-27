@@ -38,7 +38,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_PAINTING_ID);
 		serializer.writeInt(entity.getId());
-		StringSerializer.writeString(serializer, connection.getVersion(), LegacyPainting.getName(type));
+		StringSerializer.writeString(serializer, version, LegacyPainting.getName(type));
 		PositionSerializer.writeLegacyPositionI(serializer, position);
 		serializer.writeInt(direction);
 		return RecyclableSingletonList.create(serializer);

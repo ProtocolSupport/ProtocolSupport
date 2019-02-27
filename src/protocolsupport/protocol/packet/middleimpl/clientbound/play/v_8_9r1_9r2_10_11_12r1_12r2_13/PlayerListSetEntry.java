@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.Any;
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
@@ -26,7 +25,6 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID);
 		VarNumberSerializer.writeVarInt(serializer, action.ordinal());
 		VarNumberSerializer.writeVarInt(serializer, infos.size());

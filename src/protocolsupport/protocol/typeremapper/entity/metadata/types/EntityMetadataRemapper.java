@@ -28,8 +28,8 @@ public class EntityMetadataRemapper {
 		Arrays.stream(versions).forEach(version -> getRemaps(version).add(objectremapper));
 	}
 
-	public void addRemapPerVersion(Function<ProtocolVersion, DataWatcherObjectRemapper> objectremapperProvider, ProtocolVersion... versions) {
-		Arrays.stream(versions).forEach(version -> getRemaps(version).add(objectremapperProvider.apply(version)));
+	public void addRemapPerVersion(Function<ProtocolVersion, DataWatcherObjectRemapper> objectRemapperProvider, ProtocolVersion... versions) {
+		Arrays.stream(versions).forEach(version -> getRemaps(version).add(objectRemapperProvider.apply(version)));
 	}
 
 	@Override

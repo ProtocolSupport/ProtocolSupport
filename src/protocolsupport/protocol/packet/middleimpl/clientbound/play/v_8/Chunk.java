@@ -22,27 +22,31 @@ public class Chunk extends MiddleChunk {
 		super(connection);
 	}
 
-	protected final ChunkTransformerBA transformer = new ChunkTransformerShort(LegacyBlockData.REGISTRY.getTable(connection.getVersion()), TileEntityRemapper.getRemapper(connection.getVersion()), cache.getTileCache());
+	protected final ChunkTransformerBA transformer = new ChunkTransformerShort(LegacyBlockData.REGISTRY.getTable(version), TileEntityRemapper.getRemapper(version), cache.getTileCache());
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
+		transformer.loadData(chunk, data, bitmask, hasSkyLight, full, tiles);
+
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
 		PositionSerializer.writeChunkCoord(chunkdata, chunk);
 		chunkdata.writeBoolean(full);
-		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 		if ((bitmask == 0) && full) {
 			chunkdata.writeShort(1);
 			ArraySerializer.writeVarIntByteArray(chunkdata, EmptyChunk.get18ChunkData(hasSkyLight));
 		} else {
-			transformer.loadData(chunk, data, bitmask, hasSkyLight, full, tiles);
 			chunkdata.writeShort(bitmask);
 			ArraySerializer.writeVarIntByteArray(chunkdata, transformer.toLegacyData());
 		}
 		packets.add(chunkdata);
+
 		for (TileEntity tile : transformer.remapAndGetTiles()) {
-			packets.add(BlockTileUpdate.create(connection, tile));
+			packets.add(BlockTileUpdate.create(version, tile));
 		}
+
 		return packets;
 	}
 

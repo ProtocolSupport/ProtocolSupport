@@ -19,7 +19,7 @@ public class LoginCustomPayload extends MiddleLoginCustomPayload {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LOGIN_CUSTOM_PAYLOAD);
 		VarNumberSerializer.writeVarInt(serializer, id);
-		StringSerializer.writeString(serializer, connection.getVersion(), tag);
+		StringSerializer.writeString(serializer, version, tag);
 		serializer.writeBytes(data);
 		return RecyclableSingletonList.create(serializer);
 	}

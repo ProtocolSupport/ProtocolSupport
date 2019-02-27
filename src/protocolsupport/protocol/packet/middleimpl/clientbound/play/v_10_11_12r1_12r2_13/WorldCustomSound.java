@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12r1_12r2_13;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldCustomSound;
@@ -19,7 +18,6 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_CUSTOM_SOUND_ID);
 		StringSerializer.writeString(serializer, version, SoundRemapper.getSoundName(version, id));
 		VarNumberSerializer.writeVarInt(serializer, category);

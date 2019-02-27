@@ -15,6 +15,32 @@ import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class NBTSerializer<IN, OUT> {
 
+	public NBTCompound deserializeTag(IN from) throws IOException {
+		NBTType<?> type = readTagType(from);
+		if (type == NBTType.END) {
+			return null;
+		}
+		if (type != NBTType.COMPOUND) {
+			throw new IOException(MessageFormat.format("Root tag must be compound, got: {0}", type));
+		}
+		readTagName(from);
+		return (NBTCompound) readTag(from, type);
+	}
+
+	public void serializeTag(OUT to, NBT tag) throws IOException {
+		NBTType<?> type = tag.getType();
+		writeTagType(to, type);
+		if (tag.getType() == NBTType.END) {
+			return;
+		}
+		if (type != NBTType.COMPOUND) {
+			throw new IOException(MessageFormat.format("Root tag must be compound, got: {0}", type));
+		}
+		writeTagName(to, "");
+		writeTag(to, tag);
+	}
+
+
 	protected final IdReader<IN> idReader;
 	protected final IdWriter<OUT> idWriter;
 	protected final NameReader<IN> nameReader;
@@ -96,54 +122,28 @@ public class NBTSerializer<IN, OUT> {
 		f.writeTag(stream, tag);
 	}
 
-	public NBTCompound deserializeTag(IN from) throws IOException {
-		NBTType<?> type = readTagType(from);
-		if (type == NBTType.END) {
-			return null;
-		}
-		if (type != NBTType.COMPOUND) {
-			throw new IOException(MessageFormat.format("Root tag must be compound, got: {0}", type));
-		}
-		readTagName(from);
-		return (NBTCompound) readTag(from, type);
-	}
-
-	public void serializeTag(OUT to, NBT tag) throws IOException {
-		NBTType<?> type = tag.getType();
-		writeTagType(to, type);
-		if (tag.getType() == NBTType.END) {
-			return;
-		}
-		if (type != NBTType.COMPOUND) {
-			throw new IOException(MessageFormat.format("Root tag must be compound, got: {0}", type));
-		}
-		writeTagName(to, "");
-		writeTag(to, tag);
-	}
-
-
 	@FunctionalInterface
-	public static interface IdReader<T> {
+	protected static interface IdReader<T> {
 		public int readId(T from) throws IOException;
 	}
 
 	@FunctionalInterface
-	public static interface IdWriter<T> {
+	protected static interface IdWriter<T> {
 		public void writeId(T to, int id) throws IOException;
 	}
 
 	@FunctionalInterface
-	public static interface NameReader<T> {
+	protected static interface NameReader<T> {
 		public String readName(T from) throws IOException;
 	}
 
 	@FunctionalInterface
-	public static interface NameWriter<T> {
+	protected static interface NameWriter<T> {
 		public void writeName(T to, String name) throws IOException;
 	}
 
 	@FunctionalInterface
-	public static interface TagReader<IN, T extends NBT> {
+	protected static interface TagReader<IN, T extends NBT> {
 		public T readTag(IN from) throws IOException;
 	}
 

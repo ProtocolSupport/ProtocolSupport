@@ -19,7 +19,7 @@ public class BlockPlace extends MiddleBlockPlace {
 		PositionSerializer.readPositionTo(clientdata, position);
 		face = clientdata.readByte();
 		hand = UsedHand.MAIN;
-		ItemStackSerializer.readItemStack(clientdata, connection.getVersion(), I18NData.DEFAULT_LOCALE);
+		ItemStackSerializer.readItemStack(clientdata, version, I18NData.DEFAULT_LOCALE);
 		cX = clientdata.readUnsignedByte() / 16.0F;
 		cY = clientdata.readUnsignedByte() / 16.0F;
 		cZ = clientdata.readUnsignedByte() / 16.0F;

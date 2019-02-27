@@ -30,12 +30,12 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 		reset = serverdata.readBoolean();
 		advancementsMapping = ArraySerializer.readVarIntTArray(
 			serverdata, Any.class,
-			buf -> new Any<String, Advancement>(StringSerializer.readVarIntUTF8String(buf), Advancement.read(buf))
+			buf -> new Any<>(StringSerializer.readVarIntUTF8String(buf), Advancement.read(buf))
 		);
 		removeAdvancements = ArraySerializer.readVarIntVarIntUTF8StringArray(serverdata);
 		advancementsProgress = ArraySerializer.readVarIntTArray(
 			serverdata, Any.class,
-			buf -> new Any<String, AdvancementProgress>(StringSerializer.readVarIntUTF8String(buf), AdvancementProgress.read(buf))
+			buf -> new Any<>(StringSerializer.readVarIntUTF8String(buf), AdvancementProgress.read(buf))
 		);
 	}
 
@@ -108,7 +108,7 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 		protected static AdvancementProgress read(ByteBuf from) {
 			return new AdvancementProgress(ArraySerializer.readVarIntTArray(
 				from, Any.class,
-				buf -> new Any<String, Long>(StringSerializer.readVarIntUTF8String(from), buf.readBoolean() ? buf.readLong() : null)
+				buf -> new Any<>(StringSerializer.readVarIntUTF8String(from), buf.readBoolean() ? buf.readLong() : null)
 			));
 		}
 

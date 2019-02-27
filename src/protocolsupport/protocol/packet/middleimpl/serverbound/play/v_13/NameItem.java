@@ -13,7 +13,7 @@ public class NameItem extends MiddleNameItem {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		name = StringSerializer.readString(clientdata, connection.getVersion());
+		name = StringSerializer.readString(clientdata, version);
 	}
 
 }

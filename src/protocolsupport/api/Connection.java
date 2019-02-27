@@ -18,7 +18,7 @@ import protocolsupport.protocol.utils.authlib.GameProfile;
 public abstract class Connection {
 
 	protected volatile ProtocolVersion version = ProtocolVersion.UNKNOWN;
-	protected Profile profile = new GameProfile();
+	protected final Profile profile = new GameProfile();
 
 	/**
 	 * Returns native network manager object <br>

@@ -13,7 +13,7 @@ public class LoginStart extends MiddleLoginStart {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		name = StringSerializer.readString(clientdata, connection.getVersion(), 16);
+		name = StringSerializer.readString(clientdata, version, 16);
 	}
 
 }

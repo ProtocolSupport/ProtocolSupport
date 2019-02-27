@@ -15,7 +15,7 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class WorldParticle extends MiddleWorldParticle {
 
-	protected final ParticleRemappingTable remapper = ParticleRemapper.REGISTRY.getTable(connection.getVersion());
+	protected final ParticleRemappingTable remapper = ParticleRemapper.REGISTRY.getTable(version);
 
 	public WorldParticle(ConnectionImpl connection) {
 		super(connection);
@@ -28,11 +28,9 @@ public class WorldParticle extends MiddleWorldParticle {
 			return RecyclableEmptyList.get();
 		}
 		if (!(particle instanceof LegacyParticle)) {
-			//TODO: log invalid/missing remap while in debug mode?
 			return RecyclableEmptyList.get();
 		}
 		LegacyParticle legacyParticle = (LegacyParticle) particle;
-		ProtocolVersion version = connection.getVersion();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_PARTICLES_ID);
 		int count = legacyParticle.getCount();
 		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) && (count == 0)) {

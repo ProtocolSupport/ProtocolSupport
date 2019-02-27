@@ -86,9 +86,9 @@ public class LegacyEntityId {
 		register(NetworkEntityType.DONKEY, "Donkey");
 		register(NetworkEntityType.LEASH_KNOT, "LeashKnot");
 		register(NetworkEntityType.SKELETON, "Skeleton");
-		register(NetworkEntityType.COMMON_HORSE, "Horse");
-		register(NetworkEntityType.SKELETON_HORSE, "Horse");
-		register(NetworkEntityType.ZOMBIE_HORSE, "Horse");
+		register(NetworkEntityType.COMMON_HORSE, "EntityHorse");
+		register(NetworkEntityType.SKELETON_HORSE, "EntityHorse");
+		register(NetworkEntityType.ZOMBIE_HORSE, "EntityHorse");
 		register(NetworkEntityType.MINECART_MOB_SPAWNER, "MinecartSpawner");
 		register(NetworkEntityType.MINECART, "MinecartRideable");
 		register(NetworkEntityType.MINECART_CHEST, "MinecartChest");

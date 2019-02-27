@@ -15,6 +15,7 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePickItem;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSelectTrade;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSetBeaconEffect;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateCommandBlock;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateCommandMinecart;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
@@ -143,6 +144,40 @@ public class LegacyCustomPayloadData {
 		return RecyclableSingletonList.create(MiddleCustomPayload.create(modernName, data));
 	}
 
+	public static RecyclableCollection<ServerBoundPacketData> transformBasicCommandBlockEdit(ProtocolVersion version, ByteBuf data) {
+		Position position = PositionSerializer.readLegacyPositionI(data);
+		String command = StringSerializer.readString(data, version);
+		return RecyclableSingletonList.create(MiddleUpdateCommandBlock.create(
+			position, command, MiddleUpdateCommandBlock.Mode.REDSTONE, 0
+		));
+	}
+
+	public static RecyclableCollection<ServerBoundPacketData> transformAdvancedCommandBlockEdit(ProtocolVersion version, ByteBuf data, boolean useTrackOutput) {
+		int type = data.readByte();
+		switch (type) {
+			case 0: {
+				Position position = PositionSerializer.readLegacyPositionI(data);
+				String command = StringSerializer.readString(data, version);
+				boolean trackOutput = useTrackOutput ? data.readBoolean() : false;
+				return RecyclableSingletonList.create(MiddleUpdateCommandBlock.create(
+					position, command, MiddleUpdateCommandBlock.Mode.REDSTONE,
+					(trackOutput ? MiddleUpdateCommandBlock.FLAG_TRACK_OUTPUT : 0)
+				));
+			}
+			case 1: {
+				int entityId = data.readInt();
+				String command = StringSerializer.readString(data, version);
+				boolean trackOutput = useTrackOutput ? data.readBoolean() : false;
+				return RecyclableSingletonList.create(MiddleUpdateCommandMinecart.create(
+					entityId, command, trackOutput
+				));
+			}
+			default: {
+				return RecyclableEmptyList.get();
+			}
+		}
+	}
+
 	public static RecyclableCollection<ServerBoundPacketData> transformAutoCommandBlockEdit(ProtocolVersion version, ByteBuf data) {
 		Position position = PositionSerializer.readLegacyPositionI(data);
 		String command = StringSerializer.readString(data, version);
@@ -166,7 +201,9 @@ public class LegacyCustomPayloadData {
 		boolean auto = data.readBoolean();
 		return RecyclableSingletonList.create(MiddleUpdateCommandBlock.create(
 			position, command, mode,
-			(trackOutput ? 0x1 : 0) | (conditional ? 0x2 : 0) | (auto ? 0x4 : 0)
+			(trackOutput ? MiddleUpdateCommandBlock.FLAG_TRACK_OUTPUT : 0) |
+			(conditional ? MiddleUpdateCommandBlock.FLAG_CONDITIONAL : 0) |
+			(auto ? MiddleUpdateCommandBlock.FLAG_AUTO : 0)
 		));
 	}
 

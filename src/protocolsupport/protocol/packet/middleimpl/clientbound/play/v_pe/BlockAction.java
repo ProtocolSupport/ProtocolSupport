@@ -25,7 +25,7 @@ public class BlockAction extends MiddleBlockAction {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		int eventType = -1;
 		int eventData = 0;
-		Material material = MaterialAPI.getBlockDataByNetworkTypeId(type).getMaterial();
+		Material material = MaterialAPI.getBlockDataByNetworkId(blockId).getMaterial();
 		switch (material) {
 			//Shulkerboxes
 			case BLACK_SHULKER_BOX:
@@ -50,11 +50,11 @@ public class BlockAction extends MiddleBlockAction {
 			case TRAPPED_CHEST:
 			case CHEST: {
 				eventType = EVENT_CHEST;
-				eventData = info2 > 0 ? 2 : 0; //Open or close?
+				eventData = actionParam > 0 ? 2 : 0; //Open or close?
 				break;
 			}
 			default: {
-				System.out.println("CATCH 22 TILEEVENT: " + material + ": " + info1 + ", " + info2);
+				System.out.println("CATCH 22 TILEEVENT: " + material + ": " + actionId + ", " + actionParam);
 				break;
 			}
 		}

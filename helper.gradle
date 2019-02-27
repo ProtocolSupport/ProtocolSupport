@@ -1,5 +1,14 @@
 import java.text.MessageFormat
 
+
+ext.newFile = {File parent, String... childs ->
+	for (String child : childs) {
+		parent = new File(parent, child);
+	}
+	return parent;
+}
+
+
 class UpdateLibrariesTask extends DefaultTask {
 	File directory
 	List<Map> libraries
@@ -44,7 +53,7 @@ class BuildLibraryTask extends DefaultTask {
 	String targetLibraryName
 	String builderUrl
 	String buildCommand
-	String builtLibraryName
+	String[] builtLibraryName
 	String builderName = "library_builder"
 
 	@TaskAction
@@ -60,7 +69,10 @@ class BuildLibraryTask extends DefaultTask {
 				workingDir = buildDirectory
 				commandLine = buildCommand.replace("{BUILDER}", builderName).split("\\s+")
 			}
-			java.nio.file.Files.copy(new File(buildDirectory, builtLibraryName).toPath(), libraryFile.toPath())
+			java.nio.file.Files.copy(
+				getProject().newFile(buildDirectory, builtLibraryName).getAbsoluteFile().toPath(),
+				libraryFile.getAbsoluteFile().toPath()
+			)
 		} else {
 			logger.lifecycle(MessageFormat.format("Skipping building of library {0} because it already exists", targetLibraryName))
 		}

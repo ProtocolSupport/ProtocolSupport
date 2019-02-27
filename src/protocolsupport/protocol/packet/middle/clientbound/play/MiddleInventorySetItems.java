@@ -27,4 +27,9 @@ public abstract class MiddleInventorySetItems extends ClientBoundMiddlePacket {
 		}
 	}
 
+	@Override
+	public boolean postFromServerRead() {
+		return cache.getWindowCache().isValidWindowId(windowId);
+	}
+
 }

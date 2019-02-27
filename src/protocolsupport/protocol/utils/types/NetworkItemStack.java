@@ -97,11 +97,6 @@ public class NetworkItemStack {
 			return true;
 		}
 
-		@Override
-		public NetworkItemStack cloneItemStack() {
-			return NetworkItemStack.NULL;
-		}
-
 		private UnsupportedOperationException reject() {
 			return new UnsupportedOperationException("Null itemstack");
 		}

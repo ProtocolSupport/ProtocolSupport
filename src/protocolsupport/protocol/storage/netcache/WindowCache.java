@@ -5,8 +5,10 @@ import protocolsupport.utils.Utils;
 
 public class WindowCache {
 
+	protected static final int WINDOW_ID_PLAYER = 0;
+
 	private WindowType windowType = WindowType.PLAYER;
-	private int windowId = 0;
+	private int windowId = WINDOW_ID_PLAYER;
 	private int windowSlots = 46;
 	private int horseId = -1;
 
@@ -17,8 +19,20 @@ public class WindowCache {
 		this.horseId = horseId;
 	}
 
+	public WindowType getOpenedWindow(int windowId) {
+		if (windowId == WINDOW_ID_PLAYER) {
+			return WindowType.PLAYER;
+		} else {
+			return windowType;
+		}
+	}
+
 	public WindowType getOpenedWindow() {
-		return this.windowType;
+		return windowType;
+	}
+
+	public boolean isValidWindowId(int windowId) {
+		return windowId == WINDOW_ID_PLAYER || windowId == this.windowId;
 	}
 
 	public int getOpenedWindowId() {
@@ -34,6 +48,7 @@ public class WindowCache {
 	}
 
 	public void closeWindow() {
+		this.windowId = WINDOW_ID_PLAYER;
 		this.windowType = WindowType.PLAYER;
 		this.windowId = 0;
 		this.windowSlots = 46;
