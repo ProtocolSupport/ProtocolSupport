@@ -20,13 +20,7 @@ import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloatLe;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalChat;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarLong;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectShortLe;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3fLe;
+import protocolsupport.protocol.utils.datawatcher.objects.*;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityDataCache;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
@@ -45,17 +39,25 @@ public class BaseEntityMetadataRemapper extends EntityMetadataRemapper {
 				//Leashing is set in Entity Leash.
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_LEASHED, data.getAttachedId() != -1);
 				remapped.put(PeMetaBase.LEADHOLDER, new DataWatcherObjectSVarLong(data.getAttachedId()));
+
 				// = PE Nametag =
 				Optional<DataWatcherObjectOptionalChat> nameTagWatcher = DataWatcherObjectIndex.Entity.NAMETAG.getValue(original);
-				//Doing this for players makes nametags behave weird or only when close.
-				boolean doNameTag = ((nameTagWatcher.isPresent()));/* && (entity.getType() != NetworkEntityType.PLAYER));*/ // works as intended
-				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, doNameTag);
-				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, doNameTag); // does nothing?
-				if (doNameTag) {
+				Optional<DataWatcherObjectBoolean> nameTagVisibilityWatcher = DataWatcherObjectIndex.Entity.NAMETAG_VISIBLE.getValue(original);
+
+				boolean hasCustomNameTagMetaValue = nameTagWatcher.isPresent();
+				boolean hasNameTagPersistentMetaValue = nameTagVisibilityWatcher.isPresent();
+
+				if (hasCustomNameTagMetaValue) {
 					BaseComponent nameTag = nameTagWatcher.get().getValue();
 					remapped.put(PeMetaBase.NAMETAG, new DataWatcherObjectString(nameTag != null ? nameTag.toLegacyText() : ""));
-					remapped.put(PeMetaBase.ALWAYS_SHOW_NAMETAG, new DataWatcherObjectByte((byte)1)); // 1 for always display, 0 for display when look
 				}
+
+				if (hasNameTagPersistentMetaValue) {
+					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, nameTagVisibilityWatcher.get().getValue());
+					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, nameTagVisibilityWatcher.get().getValue()); // used by armor stands (holograms)
+					remapped.put(PeMetaBase.ALWAYS_SHOW_NAMETAG, new DataWatcherObjectByte((byte) (nameTagVisibilityWatcher.get().getValue() ? 1 : 0))); // 1 = always display, 0 = display when looking at the entity
+				}
+
 				// = PE Riding =
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_COLLIDE, !data.isRiding());
 				if (data.isRiding()) {

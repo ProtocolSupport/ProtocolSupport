@@ -1,9 +1,21 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.special;
 
+import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata;
+import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.LivingEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalChat;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
+import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.utils.CollectionsUtils;
+
+import java.util.Optional;
 
 public class ArmorStandEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 
