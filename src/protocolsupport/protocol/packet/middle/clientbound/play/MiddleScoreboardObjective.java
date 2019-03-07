@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.ProtocolSupport;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.ConnectionImpl;
@@ -40,25 +39,13 @@ public abstract class MiddleScoreboardObjective extends ClientBoundMiddlePacket 
 	public boolean postFromServerRead() {
 		switch (mode) {
 			case CREATE: {
-				if (!objectives.add(name)) {
-					ProtocolSupport.logWarning("Skipping creating duplicate scoreboard objective " + name);
-					return false;
-				}
-				return true;
+				return objectives.add(name);
 			}
 			case REMOVE: {
-				if (!objectives.remove(name)) {
-					ProtocolSupport.logWarning("Skipping removing unexisting scoreboard objective " + name);
-					return false;
-				}
-				return true;
+				return objectives.remove(name);
 			}
 			default: {
-				if (!objectives.contains(name)) {
-					ProtocolSupport.logWarning("Skipping changing unexisting scoreboard objective " + name);
-					return false;
-				}
-				return true;
+				return objectives.contains(name);
 			}
 		}
 	}
