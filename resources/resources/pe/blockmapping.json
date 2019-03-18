@@ -5779,6 +5779,10 @@
     "pename":"minecraft:shulker_box",
     "pedata":10
   },
+  "minecraft:blue_shulker_box[facing=up]":{
+    "pename":"minecraft:shulker_box",
+    "pedata":11
+  },
   "minecraft:brown_shulker_box[facing=up]":{
     "pename":"minecraft:shulker_box",
     "pedata":12
@@ -6633,19 +6637,19 @@
   },
   "minecraft:end_rod[facing=north]":{
     "pename":"minecraft:end_rod",
-    "pedata":2
+    "pedata":3
   },
   "minecraft:end_rod[facing=east]":{
     "pename":"minecraft:end_rod",
-    "pedata":5
+    "pedata":4
   },
   "minecraft:end_rod[facing=south]":{
     "pename":"minecraft:end_rod",
-    "pedata":3
+    "pedata":2
   },
   "minecraft:end_rod[facing=west]":{
     "pename":"minecraft:end_rod",
-    "pedata":4
+    "pedata":5
   },
   "minecraft:end_rod[facing=up]":{
     "pename":"minecraft:end_rod",
@@ -7238,5 +7242,125 @@
   "minecraft:horn_coral_wall_fan[facing=east,waterlogged=false]":{
   "pename":"minecraft:coral_fan_hang3",
   "pedata":4
+  },
+  "minecraft:skeleton_skull[rotation=0]":{
+    "pename":"minecraft:skull",
+    "pedata":1
+  },
+  "minecraft:skeleton_wall_skull[facing=north]":{
+    "pename":"minecraft:skull",
+    "pedata":2
+  },
+  "minecraft:skeleton_wall_skull[facing=south]":{
+    "pename":"minecraft:skull",
+    "pedata":3
+  },
+  "minecraft:skeleton_wall_skull[facing=west]":{
+    "pename":"minecraft:skull",
+    "pedata":4
+  },
+  "minecraft:skeleton_wall_skull[facing=east]":{
+    "pename":"minecraft:skull",
+    "pedata":5
+  },
+  "minecraft:wither_skeleton_skull[rotation=0]":{
+    "pename":"minecraft:skull",
+    "pedata":1
+  },
+  "minecraft:wither_skeleton_wall_skull[facing=north]":{
+    "pename":"minecraft:skull",
+    "pedata":2
+  },
+  "minecraft:wither_skeleton_wall_skull[facing=south]":{
+    "pename":"minecraft:skull",
+    "pedata":3
+  },
+  "minecraft:wither_skeleton_wall_skull[facing=west]":{
+    "pename":"minecraft:skull",
+    "pedata":4
+  },
+  "minecraft:wither_skeleton_wall_skull[facing=east]":{
+    "pename":"minecraft:skull",
+    "pedata":5
+  },
+  "minecraft:zombie_head[rotation=0]":{
+    "pename":"minecraft:skull",
+    "pedata":1
+  },
+  "minecraft:zombie_wall_head[facing=north]":{
+    "pename":"minecraft:skull",
+    "pedata":2
+  },
+  "minecraft:zombie_wall_head[facing=south]":{
+    "pename":"minecraft:skull",
+    "pedata":3
+  },
+  "minecraft:zombie_wall_head[facing=west]":{
+    "pename":"minecraft:skull",
+    "pedata":4
+  },
+  "minecraft:zombie_wall_head[facing=east]":{
+    "pename":"minecraft:skull",
+    "pedata":5
+  },
+  "minecraft:player_head[rotation=0]":{
+    "pename":"minecraft:skull",
+    "pedata":1
+  },
+  "minecraft:player_wall_head[facing=north]":{
+    "pename":"minecraft:skull",
+    "pedata":2
+  },
+  "minecraft:player_wall_head[facing=south]":{
+    "pename":"minecraft:skull",
+    "pedata":3
+  },
+  "minecraft:player_wall_head[facing=west]":{
+    "pename":"minecraft:skull",
+    "pedata":4
+  },
+  "minecraft:player_wall_head[facing=east]":{
+    "pename":"minecraft:skull",
+    "pedata":5
+  },
+  "minecraft:creeper_head[rotation=0]":{
+    "pename":"minecraft:skull",
+    "pedata":1
+  },
+  "minecraft:creeper_wall_head[facing=north]":{
+    "pename":"minecraft:skull",
+    "pedata":2
+  },
+  "minecraft:creeper_wall_head[facing=south]":{
+    "pename":"minecraft:skull",
+    "pedata":3
+  },
+  "minecraft:creeper_wall_head[facing=west]":{
+    "pename":"minecraft:skull",
+    "pedata":4
+  },
+  "minecraft:creeper_wall_head[facing=east]":{
+    "pename":"minecraft:skull",
+    "pedata":5
+  },
+  "minecraft:dragon_head[rotation=0]":{
+    "pename":"minecraft:skull",
+    "pedata":1
+  },
+  "minecraft:dragon_wall_head[facing=north]":{
+    "pename":"minecraft:skull",
+    "pedata":2
+  },
+  "minecraft:dragon_wall_head[facing=south]":{
+    "pename":"minecraft:skull",
+    "pedata":3
+  },
+  "minecraft:dragon_wall_head[facing=west]":{
+    "pename":"minecraft:skull",
+    "pedata":4
+  },
+  "minecraft:dragon_wall_head[facing=east]":{
+    "pename":"minecraft:skull",
+    "pedata":5
   }
 }
