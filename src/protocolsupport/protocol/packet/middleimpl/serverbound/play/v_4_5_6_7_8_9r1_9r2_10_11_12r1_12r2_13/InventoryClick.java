@@ -16,7 +16,7 @@ public class InventoryClick extends MiddleInventoryClick {
 	public void readFromClientData(ByteBuf clientdata) {
 		windowId = clientdata.readUnsignedByte();
 		slot = clientdata.readShort();
-		switch (cache.getWindowCache().getOpenedWindow(windowId)) {
+		switch (cache.getWindowCache().getOpenedWindow()) {
 			case BREWING: {
 				if (!WindowSlotsRemappingHelper.hasBrewingBlazePowderSlot(version) && (slot >= WindowSlotsRemappingHelper.BREWING_BLAZE_POWDER_SLOT)) {
 					slot++;
