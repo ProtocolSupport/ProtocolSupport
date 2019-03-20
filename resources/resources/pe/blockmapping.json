@@ -1932,7 +1932,7 @@
     "pedata":0
   },
   "minecraft:carved_pumpkin[facing=north]":{
-    "pename":"minecraft:carved_pumpkin  ",
+    "pename":"minecraft:carved_pumpkin",
     "pedata":2
   },
   "minecraft:carved_pumpkin[facing=east]":{
