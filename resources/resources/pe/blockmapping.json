@@ -6539,99 +6539,99 @@
   "pename":"minecraft:barrier",
   "pedata": 0
   },
-  "minecraft:minecraft:prismarine_stairs[facing=north,half=top,shape=straight,waterlogged=false]":{
+  "minecraft:prismarine_stairs[facing=north,half=top,shape=straight,waterlogged=false]":{
     "pename":"minecraft:prismarine_stairs",
     "pedata":7
   },
-  "minecraft:minecraft:prismarine_stairs[facing=north,half=bottom,shape=straight,waterlogged=false]":{
+  "minecraft:prismarine_stairs[facing=north,half=bottom,shape=straight,waterlogged=false]":{
     "pename":"minecraft:prismarine_stairs",
     "pedata":3
   },
-  "minecraft:minecraft:prismarine_stairs[facing=south,half=top,shape=straight,waterlogged=false]":{
+  "minecraft:prismarine_stairs[facing=south,half=top,shape=straight,waterlogged=false]":{
     "pename":"minecraft:prismarine_stairs",
     "pedata":6
   },
-  "minecraft:minecraft:prismarine_stairs[facing=south,half=bottom,shape=straight,waterlogged=false]":{
+  "minecraft:prismarine_stairs[facing=south,half=bottom,shape=straight,waterlogged=false]":{
     "pename":"minecraft:prismarine_stairs",
     "pedata":2
   },
-  "minecraft:minecraft:prismarine_stairs[facing=west,half=top,shape=straight,waterlogged=false]":{
+  "minecraft:prismarine_stairs[facing=west,half=top,shape=straight,waterlogged=false]":{
     "pename":"minecraft:prismarine_stairs",
     "pedata":5
   },
-  "minecraft:minecraft:prismarine_stairs[facing=west,half=bottom,shape=straight,waterlogged=false]":{
+  "minecraft:prismarine_stairs[facing=west,half=bottom,shape=straight,waterlogged=false]":{
     "pename":"minecraft:prismarine_stairs",
     "pedata":1
   },
-  "minecraft:minecraft:prismarine_stairs[facing=east,half=top,shape=straight,waterlogged=false]":{
+  "minecraft:prismarine_stairs[facing=east,half=top,shape=straight,waterlogged=false]":{
     "pename":"minecraft:prismarine_stairs",
     "pedata":4
   },
-  "minecraft:minecraft:prismarine_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]":{
+  "minecraft:prismarine_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]":{
     "pename":"minecraft:prismarine_stairs",
     "pedata":0
   },
-  "minecraft:minecraft:prismarine_brick_stairs[facing=north,half=top,shape=straight,waterlogged=false]":{
-    "pename":"minecraft:prismarine_brick_stairs",
+  "minecraft:prismarine_brick_stairs[facing=north,half=top,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_bricks_stairs",
     "pedata":7
   },
-  "minecraft:minecraft:prismarine_brick_stairs[facing=north,half=bottom,shape=straight,waterlogged=false]":{
-    "pename":"minecraft:prismarine_brick_stairs",
+  "minecraft:prismarine_brick_stairs[facing=north,half=bottom,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_bricks_stairs",
     "pedata":3
   },
-  "minecraft:minecraft:prismarine_brick_stairs[facing=south,half=top,shape=straight,waterlogged=false]":{
-    "pename":"minecraft:prismarine_brick_stairs",
+  "minecraft:prismarine_brick_stairs[facing=south,half=top,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_bricks_stairs",
     "pedata":6
   },
-  "minecraft:minecraft:prismarine_brick_stairs[facing=south,half=bottom,shape=straight,waterlogged=false]":{
-    "pename":"minecraft:prismarine_brick_stairs",
+  "minecraft:prismarine_brick_stairs[facing=south,half=bottom,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_bricks_stairs",
     "pedata":2
   },
-  "minecraft:minecraft:prismarine_brick_stairs[facing=west,half=top,shape=straight,waterlogged=false]":{
-    "pename":"minecraft:prismarine_brick_stairs",
+  "minecraft:prismarine_brick_stairs[facing=west,half=top,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_bricks_stairs",
     "pedata":5
   },
-  "minecraft:minecraft:prismarine_brick_stairs[facing=west,half=bottom,shape=straight,waterlogged=false]":{
-    "pename":"minecraft:prismarine_brick_stairs",
+  "minecraft:prismarine_brick_stairs[facing=west,half=bottom,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_bricks_stairs",
     "pedata":1
   },
-  "minecraft:minecraft:prismarine_brick_stairs[facing=east,half=top,shape=straight,waterlogged=false]":{
-    "pename":"minecraft:prismarine_brick_stairs",
+  "minecraft:prismarine_brick_stairs[facing=east,half=top,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_bricks_stairs",
     "pedata":4
   },
-  "minecraft:minecraft:prismarine_brick_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]":{
-    "pename":"minecraft:prismarine_brick_stairs",
+  "minecraft:prismarine_brick_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]":{
+    "pename":"minecraft:prismarine_bricks_stairs",
     "pedata":0
   },
-  "minecraft:minecraft:dark_prismarine_stairs[facing=north,half=top,shape=straight,waterlogged=false]":{
+  "minecraft:dark_prismarine_stairs[facing=north,half=top,shape=straight,waterlogged=false]":{
     "pename":"minecraft:dark_prismarine_stairs",
     "pedata":7
   },
-  "minecraft:minecraft:dark_prismarine_stairs[facing=north,half=bottom,shape=straight,waterlogged=false]":{
+  "minecraft:dark_prismarine_stairs[facing=north,half=bottom,shape=straight,waterlogged=false]":{
     "pename":"minecraft:dark_prismarine_stairs",
     "pedata":3
   },
-  "minecraft:minecraft:dark_prismarine_stairs[facing=south,half=top,shape=straight,waterlogged=false]":{
+  "minecraft:dark_prismarine_stairs[facing=south,half=top,shape=straight,waterlogged=false]":{
     "pename":"minecraft:dark_prismarine_stairs",
     "pedata":6
   },
-  "minecraft:minecraft:dark_prismarine_stairs[facing=south,half=bottom,shape=straight,waterlogged=false]":{
+  "minecraft:dark_prismarine_stairs[facing=south,half=bottom,shape=straight,waterlogged=false]":{
     "pename":"minecraft:dark_prismarine_stairs",
     "pedata":2
   },
-  "minecraft:minecraft:dark_prismarine_stairs[facing=west,half=top,shape=straight,waterlogged=false]":{
+  "minecraft:dark_prismarine_stairs[facing=west,half=top,shape=straight,waterlogged=false]":{
     "pename":"minecraft:dark_prismarine_stairs",
     "pedata":5
   },
-  "minecraft:minecraft:dark_prismarine_stairs[facing=west,half=bottom,shape=straight,waterlogged=false]":{
+  "minecraft:dark_prismarine_stairs[facing=west,half=bottom,shape=straight,waterlogged=false]":{
     "pename":"minecraft:dark_prismarine_stairs",
     "pedata":1
   },
-  "minecraft:minecraft:dark_prismarine_stairs[facing=east,half=top,shape=straight,waterlogged=false]":{
+  "minecraft:dark_prismarine_stairs[facing=east,half=top,shape=straight,waterlogged=false]":{
     "pename":"minecraft:dark_prismarine_stairs",
     "pedata":4
   },
-  "minecraft:minecraft:dark_prismarine_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]":{
+  "minecraft:dark_prismarine_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]":{
     "pename":"minecraft:dark_prismarine_stairs",
     "pedata":0
   },
@@ -6943,51 +6943,51 @@
   "pename":"minecraft:kelp",
   "pedata":15
   },
-  "minecraft:minecraft:turtle_egg[eggs=1,hatch=0]":{
+  "minecraft:turtle_egg[eggs=1,hatch=0]":{
   "pename":"minecraft:turtle_egg",
   "pedata":0
   },
-  "minecraft:minecraft:turtle_egg[eggs=2,hatch=0]":{
+  "minecraft:turtle_egg[eggs=2,hatch=0]":{
   "pename":"minecraft:turtle_egg",
   "pedata":1
   },
-  "minecraft:minecraft:turtle_egg[eggs=3,hatch=0]":{
+  "minecraft:turtle_egg[eggs=3,hatch=0]":{
   "pename":"minecraft:turtle_egg",
   "pedata":2
   },
-  "minecraft:minecraft:turtle_egg[eggs=4,hatch=0]":{
+  "minecraft:turtle_egg[eggs=4,hatch=0]":{
   "pename":"minecraft:turtle_egg",
   "pedata":3
   },
-  "minecraft:minecraft:turtle_egg[eggs=1,hatch=1]":{
+  "minecraft:turtle_egg[eggs=1,hatch=1]":{
   "pename":"minecraft:turtle_egg",
   "pedata":4
   },
-  "minecraft:minecraft:turtle_egg[eggs=2,hatch=1]":{
+  "minecraft:turtle_egg[eggs=2,hatch=1]":{
   "pename":"minecraft:turtle_egg",
   "pedata":5
   },
-  "minecraft:minecraft:turtle_egg[eggs=3,hatch=1]":{
+  "minecraft:turtle_egg[eggs=3,hatch=1]":{
   "pename":"minecraft:turtle_egg",
   "pedata":6
   },
-  "minecraft:minecraft:turtle_egg[eggs=4,hatch=1]":{
+  "minecraft:turtle_egg[eggs=4,hatch=1]":{
   "pename":"minecraft:turtle_egg",
   "pedata":7
   },
-  "minecraft:minecraft:turtle_egg[eggs=1,hatch=2]":{
+  "minecraft:turtle_egg[eggs=1,hatch=2]":{
   "pename":"minecraft:turtle_egg",
   "pedata":12
   },
-  "minecraft:minecraft:turtle_egg[eggs=2,hatch=2]":{
+  "minecraft:turtle_egg[eggs=2,hatch=2]":{
   "pename":"minecraft:turtle_egg",
   "pedata":13
   },
-  "minecraft:minecraft:turtle_egg[eggs=3,hatch=2]":{
+  "minecraft:turtle_egg[eggs=3,hatch=2]":{
   "pename":"minecraft:turtle_egg",
   "pedata":14
   },
-  "minecraft:minecraft:turtle_egg[eggs=4,hatch=2]":{
+  "minecraft:turtle_egg[eggs=4,hatch=2]":{
   "pename":"minecraft:turtle_egg",
   "pedata":15
   },
