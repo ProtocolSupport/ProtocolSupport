@@ -20,10 +20,10 @@ public class WolfEntityMetadataRemapper extends TameableEntityMetadataRemapper {
 		addRemap(new IndexValueRemapper<DataWatcherObjectVarInt>(DataWatcherObjectIndex.Wolf.COLLAR_COLOR, PeMetaBase.COLOR) {
 			@Override
 			public DataWatcherObject<?> remapValue(DataWatcherObjectVarInt object) {
-				return new DataWatcherObjectByte((byte) (15 - object.getValue()));
+				return new DataWatcherObjectByte(object.getValue().byteValue());
 			}
 		}, ProtocolVersionsHelper.ALL_PE);
-		
+
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.DAMAGE_TAKEN, 15), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.DAMAGE_TAKEN, 14), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.DAMAGE_TAKEN, 18), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1));
