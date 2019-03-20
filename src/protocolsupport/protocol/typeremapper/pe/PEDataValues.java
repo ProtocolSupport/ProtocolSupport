@@ -91,7 +91,7 @@ public class PEDataValues {
 		registerEntity(NetworkEntityType.SILVERFISH, 39, "minecraft:silverfish");
 		registerEntity(NetworkEntityType.ENDERMITE, 55, "minecraft:endermite");
 		registerEntity(NetworkEntityType.ENDER_DRAGON, 53, "minecraft:ender_dragon");
-		//registerEntity(NetworkEntityType.SNOWMAN, 21, null);
+		registerEntity(NetworkEntityType.SNOWMAN, 21, "minecraft:snow_golem");
 		registerEntity(NetworkEntityType.ZOMBIE, 32, "minecraft:zombie");
 		registerEntity(NetworkEntityType.ZOMBIE_VILLAGER, 44, "minecraft:zombie_villager");
 		registerEntity(NetworkEntityType.HUSK, 47, "minecraft:husk");
@@ -130,8 +130,8 @@ public class PEDataValues {
 		registerEntity(NetworkEntityType.TNT, null, "minecraft:tnt");
 		registerEntity(NetworkEntityType.SNOWBALL, null, "minecraft:snowball");
 		registerEntity(NetworkEntityType.EGG, null, "minecraft:egg");
-		registerEntity(NetworkEntityType.FIREBALL, null, "minecraft:small_fireball");
-		//registerEntity(NetworkEntityType.FIRECHARGE, null, null);
+		registerEntity(NetworkEntityType.FIREBALL, 85, "minecraft:fireball");
+		registerEntity(NetworkEntityType.FIRECHARGE, 64, "minecraft:small_fireball");
 		registerEntity(NetworkEntityType.ENDERPEARL, null, "minecraft:ender_pearl");
 		registerEntity(NetworkEntityType.WITHER_SKULL, null, "minecraft:wither_skull");
 		registerEntity(NetworkEntityType.FALLING_OBJECT, null, "minecraft:falling_block");
@@ -164,7 +164,6 @@ public class PEDataValues {
 		//registerEntity(NetworkEntityType.NPC, null, "minecraft:npc");
 		//registerEntity(NetworkEntityType.PANDA, null, "minecraft:panda");
 		//registerEntity(NetworkEntityType.BALLOON, null, "minecraft:balloon");
-		//registerEntity(NetworkEntityType.SNOW_GOLEM, null, "minecraft:snow_golem");
 		//registerEntity(NetworkEntityType.WITHER_SKULL_DANGEROUS, null, "minecraft:wither_skull_dangerous");
 		//registerEntity(NetworkEntityType.LIGHTNING_BOLT, null, "minecraft:lightning_bolt");
 		//registerEntity(NetworkEntityType.LINGERING_POTION, null, "minecraft:lingering_potion");
