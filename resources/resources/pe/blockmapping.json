@@ -447,6 +447,10 @@
     "pename":"minecraft:sandstone",
     "pedata":2
   },
+  "minecraft:smooth_sandstone":{
+    "pename":"minecraft:sandstone",
+    "pedata":3
+  },
   "minecraft:note_block[instrument=harp,note=0,powered=false]":{
     "pename":"minecraft:noteblock",
     "pedata":0
@@ -4207,9 +4211,13 @@
     "pename":"minecraft:quartz_block",
     "pedata":1
   },
-  "minecraft:quartz_pillar[axis=x]":{
+  "minecraft:smooth_quartz":{
     "pename":"minecraft:quartz_block",
     "pedata":3
+  },
+  "minecraft:quartz_pillar[axis=x]":{
+    "pename":"minecraft:quartz_block",
+    "pedata":6
   },
   "minecraft:quartz_pillar[axis=y]":{
     "pename":"minecraft:quartz_block",
@@ -4217,7 +4225,7 @@
   },
   "minecraft:quartz_pillar[axis=z]":{
     "pename":"minecraft:quartz_block",
-    "pedata":4
+    "pedata":10
   },
   "minecraft:quartz_stairs[facing=north,half=top,shape=straight,waterlogged=false]":{
     "pename":"minecraft:quartz_stairs",
@@ -4755,6 +4763,10 @@
     "pename":"minecraft:red_sandstone",
     "pedata":2
   },
+  "minecraft:smooth_red_sandstone":{
+    "pename":"minecraft:red_sandstone",
+    "pedata":3
+  },
   "minecraft:red_sandstone_stairs[facing=north,half=top,shape=straight,waterlogged=false]":{
     "pename":"minecraft:red_sandstone_stairs",
     "pedata":7
@@ -5016,20 +5028,8 @@
     "pedata":3
   },
   "minecraft:smooth_stone":{
-    "pename":"minecraft:double_stone_slab",
-    "pedata":8
-  },
-  "minecraft:smooth_sandstone":{
-    "pename":"minecraft:double_stone_slab",
-    "pedata":9
-  },
-  "minecraft:smooth_quartz":{
-    "pename":"minecraft:double_stone_slab",
-    "pedata":15
-  },
-  "minecraft:smooth_red_sandstone":{
-    "pename":"minecraft:double_stone_slab2",
-    "pedata":8
+    "pename":"minecraft:smooth_stone",
+    "pedata":0
   },
   "minecraft:spruce_fence_gate[facing=north,in_wall=false,open=true,powered=true]":{
     "pename":"minecraft:spruce_fence_gate",
