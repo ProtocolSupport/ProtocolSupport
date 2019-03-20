@@ -7043,6 +7043,26 @@
   "pename":"minecraft:coral_block",
   "pedata":4
   },
+  "minecraft:tube_coral[waterlogged=true]":{
+  "pename":"minecraft:coral",
+  "pedata":0
+  },
+  "minecraft:brain_coral[waterlogged=true]":{
+  "pename":"minecraft:coral",
+  "pedata":1
+  },
+  "minecraft:bubble_coral[waterlogged=true]":{
+  "pename":"minecraft:coral",
+  "pedata":2
+  },
+  "minecraft:fire_coral[waterlogged=true]":{
+  "pename":"minecraft:coral",
+  "pedata":3
+  },
+  "minecraft:horn_coral[waterlogged=true]":{
+  "pename":"minecraft:coral",
+  "pedata":4
+  },
   "minecraft:dead_tube_coral_fan[waterlogged=false]":{
   "pename":"minecraft:dead_coral_fan",
   "pedata":0
@@ -7063,23 +7083,23 @@
   "pename":"minecraft:dead_coral_fan",
   "pedata":4
   },
-  "minecraft:tube_coral_fan[waterlogged=false]":{
+  "minecraft:tube_coral_fan[waterlogged=true]":{
   "pename":"minecraft:coral_fan",
   "pedata":0
   },
-  "minecraft:brain_coral_fan[waterlogged=false]":{
+  "minecraft:brain_coral_fan[waterlogged=true]":{
   "pename":"minecraft:coral_fan",
   "pedata":1
   },
-  "minecraft:bubble_coral_fan[waterlogged=false]":{
+  "minecraft:bubble_coral_fan[waterlogged=true]":{
   "pename":"minecraft:coral_fan",
   "pedata":2
   },
-  "minecraft:fire_coral_fan[waterlogged=false]":{
+  "minecraft:fire_coral_fan[waterlogged=true]":{
   "pename":"minecraft:coral_fan",
   "pedata":3
   },
-  "minecraft:horn_coral_fan[waterlogged=false]":{
+  "minecraft:horn_coral_fan[waterlogged=true]":{
   "pename":"minecraft:coral_fan",
   "pedata":4
   },
@@ -7163,83 +7183,83 @@
   "pename":"minecraft:coral_fan_hang3",
   "pedata":6
   },
-  "minecraft:tube_coral_wall_fan[facing=north,waterlogged=false]":{
+  "minecraft:tube_coral_wall_fan[facing=north,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang",
   "pedata":8
   },
-  "minecraft:tube_coral_wall_fan[facing=south,waterlogged=false]":{
+  "minecraft:tube_coral_wall_fan[facing=south,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang",
   "pedata":12
   },
-  "minecraft:tube_coral_wall_fan[facing=west,waterlogged=false]":{
+  "minecraft:tube_coral_wall_fan[facing=west,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang",
   "pedata":0
   },
-  "minecraft:tube_coral_wall_fan[facing=east,waterlogged=false]":{
+  "minecraft:tube_coral_wall_fan[facing=east,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang",
   "pedata":4
   },
-  "minecraft:brain_coral_wall_fan[facing=north,waterlogged=false]":{
+  "minecraft:brain_coral_wall_fan[facing=north,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang",
   "pedata":9
   },
-  "minecraft:brain_coral_wall_fan[facing=south,waterlogged=false]":{
+  "minecraft:brain_coral_wall_fan[facing=south,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang",
   "pedata":13
   },
-  "minecraft:brain_coral_wall_fan[facing=west,waterlogged=false]":{
+  "minecraft:brain_coral_wall_fan[facing=west,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang",
   "pedata":1
   },
-  "minecraft:brain_coral_wall_fan[facing=east,waterlogged=false]":{
+  "minecraft:brain_coral_wall_fan[facing=east,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang",
   "pedata":5
   },
-  "minecraft:bubble_coral_wall_fan[facing=north,waterlogged=false]":{
+  "minecraft:bubble_coral_wall_fan[facing=north,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang2",
   "pedata":8
   },
-  "minecraft:bubble_coral_wall_fan[facing=south,waterlogged=false]":{
+  "minecraft:bubble_coral_wall_fan[facing=south,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang2",
   "pedata":12
   },
-  "minecraft:bubble_coral_wall_fan[facing=west,waterlogged=false]":{
+  "minecraft:bubble_coral_wall_fan[facing=west,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang2",
   "pedata":0
   },
-  "minecraft:bubble_coral_wall_fan[facing=east,waterlogged=false]":{
+  "minecraft:bubble_coral_wall_fan[facing=east,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang2",
   "pedata":4
   },
-  "minecraft:fire_coral_wall_fan[facing=north,waterlogged=false]":{
+  "minecraft:fire_coral_wall_fan[facing=north,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang2",
   "pedata":9
   },
-  "minecraft:fire_coral_wall_fan[facing=south,waterlogged=false]":{
+  "minecraft:fire_coral_wall_fan[facing=south,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang2",
   "pedata":13
   },
-  "minecraft:fire_coral_wall_fan[facing=west,waterlogged=false]":{
+  "minecraft:fire_coral_wall_fan[facing=west,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang2",
   "pedata":1
   },
-  "minecraft:fire_coral_wall_fan[facing=east,waterlogged=false]":{
+  "minecraft:fire_coral_wall_fan[facing=east,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang2",
   "pedata":5
   },
-  "minecraft:horn_coral_wall_fan[facing=north,waterlogged=false]":{
+  "minecraft:horn_coral_wall_fan[facing=north,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang3",
   "pedata":8
   },
-  "minecraft:horn_coral_wall_fan[facing=south,waterlogged=false]":{
+  "minecraft:horn_coral_wall_fan[facing=south,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang3",
   "pedata":12
   },
-  "minecraft:horn_coral_wall_fan[facing=west,waterlogged=false]":{
+  "minecraft:horn_coral_wall_fan[facing=west,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang3",
   "pedata":0
   },
-  "minecraft:horn_coral_wall_fan[facing=east,waterlogged=false]":{
+  "minecraft:horn_coral_wall_fan[facing=east,waterlogged=true]":{
   "pename":"minecraft:coral_fan_hang3",
   "pedata":4
   },
