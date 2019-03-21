@@ -152,6 +152,12 @@ public class LegacyBlockData {
 			);
 
 			this.registerRemapEntryForAllStates(
+				Arrays.asList(Material.TNT),
+				o -> o.getMaterial().createBlockData(),
+				ProtocolVersionsHelper.ALL_PE
+			);
+
+			this.registerRemapEntryForAllStates(
 				Arrays.asList(
 					Material.WHITE_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.MAGENTA_SHULKER_BOX,
 					Material.LIGHT_BLUE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.LIME_SHULKER_BOX,

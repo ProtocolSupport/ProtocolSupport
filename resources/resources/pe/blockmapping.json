@@ -907,7 +907,7 @@
     "pename": "minecraft:brick_block",
     "pedata": 0
   },
-  "minecraft:tnt": {
+  "minecraft:tnt[unstable=false]": {
     "pename": "minecraft:tnt",
     "pedata": 0
   },
