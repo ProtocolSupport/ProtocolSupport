@@ -147,7 +147,7 @@ public class LegacyBlockData {
 					Material.BRAIN_CORAL, Material.BUBBLE_CORAL, Material.FIRE_CORAL, Material.HORN_CORAL, Material.TUBE_CORAL,
 					Material.CONDUIT, Material.TNT
 				),
-			o -> o.getMaterial().createBlockData(),
+				o -> o.getMaterial().createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_13_1
 			);
 
@@ -378,7 +378,16 @@ public class LegacyBlockData {
 					Material.DARK_PRISMARINE_STAIRS
 				),
 				o -> toPre13StairsState(o, (Stairs) Material.STONE_BRICK_STAIRS.createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			this.<Stairs>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.PRISMARINE_BRICK_STAIRS,
+					Material.PRISMARINE_STAIRS,
+					Material.DARK_PRISMARINE_STAIRS
+				),
+				o -> toPre13StairsState(o, (Stairs) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.ALL_PE
 			);
 			this.<TrapDoor>registerRemapEntryForAllStates(
 				Arrays.asList(
