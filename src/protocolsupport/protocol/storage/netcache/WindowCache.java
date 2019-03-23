@@ -24,7 +24,7 @@ public class WindowCache {
 	}
 
 	public void closeWindow() {
-		this.windowId = Integer.MAX_VALUE;
+		this.windowId = WINDOW_ID_PLAYER;
 		this.windowType = WindowType.PLAYER;
 	}
 
