@@ -10,13 +10,24 @@ import protocolsupport.api.MaterialAPI;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper.TileEntityWithBlockDataNBTRemapper;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTInt;
+import protocolsupport.protocol.utils.types.nbt.NBTList;
+import protocolsupport.protocol.utils.types.nbt.NBTType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.CollectionsUtils.ArrayMap.Entry;
 
 public class TileEntityBannerRemapper extends TileEntityWithBlockDataNBTRemapper {
+
 	protected void register(List<Entry<Consumer<NBTCompound>>> list, Material banner, int color) {
 		for (BlockData blockdata : MaterialAPI.getBlockDataList(banner)) {
-			list.add(new ArrayMap.Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> nbt.setTag("Base", new NBTInt(color))));
+			list.add(new ArrayMap.Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> {
+				nbt.setTag("Base", new NBTInt(color));
+				NBTList<NBTCompound> patterns = nbt.getTagListOfType("Patterns", NBTType.COMPOUND);
+				if (patterns != null) {
+					for (NBTCompound pattern : patterns.getTags()) {
+						pattern.setTag("Color", new NBTInt(15 - pattern.getNumberTag("Color").getAsInt()));
+					}
+				}
+			}));
 		}
 	}
 
