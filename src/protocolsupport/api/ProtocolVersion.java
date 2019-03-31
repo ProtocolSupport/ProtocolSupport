@@ -39,7 +39,7 @@ public enum ProtocolVersion {
 	MINECRAFT_LEGACY(-1, new OrderId(ProtocolType.PC, 0)),
 	MINECRAFT_PE_FUTURE(-1, new OrderId(ProtocolType.PE, 5)),
 	MINECRAFT_PE_1_11(354, new OrderId(ProtocolType.PE, 4), "PE-1.11.0"),
-	MINECRAFT_PE_1_10(342, new OrderId(ProtocolType.PE, 3), "PE-1.10.0"),
+	MINECRAFT_PE_1_10(340, new OrderId(ProtocolType.PE, 3), "PE-1.10.0"),
 	MINECRAFT_PE_1_9(332, new OrderId(ProtocolType.PE, 2), "PE-1.9.0"),
 	MINECRAFT_PE_1_8(313, new OrderId(ProtocolType.PE, 1), "PE-1.8.0"),
 	MINECRAFT_PE_LEGACY(-1, new OrderId(ProtocolType.PE, 0)),
