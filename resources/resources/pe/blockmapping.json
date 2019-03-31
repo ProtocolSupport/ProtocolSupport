@@ -907,7 +907,7 @@
     "pename": "minecraft:brick_block",
     "pedata": 0
   },
-  "minecraft:tnt": {
+  "minecraft:tnt[unstable=false]": {
     "pename": "minecraft:tnt",
     "pedata": 0
   },
@@ -1447,19 +1447,19 @@
     "pename": "minecraft:wall_sign",
     "pedata": 5
   },
-  "minecraft:lever[face=floor,facing=north,powered=true]": {
+  "minecraft:lever[face=floor,facing=south,powered=true]": {
     "pename": "minecraft:lever",
     "pedata": 13
   },
-  "minecraft:lever[face=floor,facing=north,powered=false]": {
+  "minecraft:lever[face=floor,facing=south,powered=false]": {
     "pename": "minecraft:lever",
     "pedata": 5
   },
-  "minecraft:lever[face=floor,facing=west,powered=true]": {
+  "minecraft:lever[face=floor,facing=east,powered=true]": {
     "pename": "minecraft:lever",
     "pedata": 14
   },
-  "minecraft:lever[face=floor,facing=west,powered=false]": {
+  "minecraft:lever[face=floor,facing=east,powered=false]": {
     "pename": "minecraft:lever",
     "pedata": 6
   },
@@ -1495,19 +1495,19 @@
     "pename": "minecraft:lever",
     "pedata": 1
   },
-  "minecraft:lever[face=ceiling,facing=north,powered=true]": {
+  "minecraft:lever[face=ceiling,facing=south,powered=true]": {
     "pename": "minecraft:lever",
     "pedata": 15
   },
-  "minecraft:lever[face=ceiling,facing=north,powered=false]": {
+  "minecraft:lever[face=ceiling,facing=south,powered=false]": {
     "pename": "minecraft:lever",
     "pedata": 7
   },
-  "minecraft:lever[face=ceiling,facing=west,powered=true]": {
+  "minecraft:lever[face=ceiling,facing=east,powered=true]": {
     "pename": "minecraft:lever",
     "pedata": 8
   },
-  "minecraft:lever[face=ceiling,facing=west,powered=false]": {
+  "minecraft:lever[face=ceiling,facing=east,powered=false]": {
     "pename": "minecraft:lever",
     "pedata": 0
   },
@@ -5805,15 +5805,15 @@
   },
   "minecraft:white_glazed_terracotta[facing=south]": {
     "pename": "minecraft:white_glazed_terracotta",
-    "pedata": 0
+    "pedata": 3
   },
   "minecraft:white_glazed_terracotta[facing=west]": {
     "pename": "minecraft:white_glazed_terracotta",
-    "pedata": 1
+    "pedata": 4
   },
   "minecraft:white_glazed_terracotta[facing=east]": {
     "pename": "minecraft:white_glazed_terracotta",
-    "pedata": 3
+    "pedata": 5
   },
   "minecraft:orange_glazed_terracotta[facing=north]": {
     "pename": "minecraft:orange_glazed_terracotta",
@@ -5821,15 +5821,15 @@
   },
   "minecraft:orange_glazed_terracotta[facing=south]": {
     "pename": "minecraft:orange_glazed_terracotta",
-    "pedata": 0
+    "pedata": 3
   },
   "minecraft:orange_glazed_terracotta[facing=west]": {
     "pename": "minecraft:orange_glazed_terracotta",
-    "pedata": 1
+    "pedata": 4
   },
   "minecraft:orange_glazed_terracotta[facing=east]": {
     "pename": "minecraft:orange_glazed_terracotta",
-    "pedata": 3
+    "pedata": 5
   },
   "minecraft:magenta_glazed_terracotta[facing=north]": {
     "pename": "minecraft:magenta_glazed_terracotta",
@@ -5837,15 +5837,15 @@
   },
   "minecraft:magenta_glazed_terracotta[facing=south]": {
     "pename": "minecraft:magenta_glazed_terracotta",
-    "pedata": 0
+    "pedata": 3
   },
   "minecraft:magenta_glazed_terracotta[facing=west]": {
     "pename": "minecraft:magenta_glazed_terracotta",
-    "pedata": 1
+    "pedata": 4
   },
   "minecraft:magenta_glazed_terracotta[facing=east]": {
     "pename": "minecraft:magenta_glazed_terracotta",
-    "pedata": 3
+    "pedata": 5
   },
   "minecraft:light_blue_glazed_terracotta[facing=north]": {
     "pename": "minecraft:light_blue_glazed_terracotta",
@@ -5853,15 +5853,15 @@
   },
   "minecraft:light_blue_glazed_terracotta[facing=south]": {
     "pename": "minecraft:light_blue_glazed_terracotta",
-    "pedata": 0
+    "pedata": 3
   },
   "minecraft:light_blue_glazed_terracotta[facing=west]": {
     "pename": "minecraft:light_blue_glazed_terracotta",
-    "pedata": 1
+    "pedata": 4
   },
   "minecraft:light_blue_glazed_terracotta[facing=east]": {
     "pename": "minecraft:light_blue_glazed_terracotta",
-    "pedata": 3
+    "pedata": 5
   },
   "minecraft:yellow_glazed_terracotta[facing=north]": {
     "pename": "minecraft:yellow_glazed_terracotta",
@@ -5869,15 +5869,15 @@
   },
   "minecraft:yellow_glazed_terracotta[facing=south]": {
     "pename": "minecraft:yellow_glazed_terracotta",
-    "pedata": 0
+    "pedata": 3
   },
   "minecraft:yellow_glazed_terracotta[facing=west]": {
     "pename": "minecraft:yellow_glazed_terracotta",
-    "pedata": 1
+    "pedata": 4
   },
   "minecraft:yellow_glazed_terracotta[facing=east]": {
     "pename": "minecraft:yellow_glazed_terracotta",
-    "pedata": 3
+    "pedata": 5
   },
   "minecraft:lime_glazed_terracotta[facing=north]": {
     "pename": "minecraft:lime_glazed_terracotta",
@@ -5885,15 +5885,15 @@
   },
   "minecraft:lime_glazed_terracotta[facing=south]": {
     "pename": "minecraft:lime_glazed_terracotta",
-    "pedata": 0
+    "pedata": 3
   },
   "minecraft:lime_glazed_terracotta[facing=west]": {
     "pename": "minecraft:lime_glazed_terracotta",
-    "pedata": 1
+    "pedata": 4
   },
   "minecraft:lime_glazed_terracotta[facing=east]": {
     "pename": "minecraft:lime_glazed_terracotta",
-    "pedata": 3
+    "pedata": 5
   },
   "minecraft:pink_glazed_terracotta[facing=north]": {
     "pename": "minecraft:pink_glazed_terracotta",
@@ -5901,15 +5901,15 @@
   },
   "minecraft:pink_glazed_terracotta[facing=south]": {
     "pename": "minecraft:pink_glazed_terracotta",
-    "pedata": 0
+    "pedata": 3
   },
   "minecraft:pink_glazed_terracotta[facing=west]": {
     "pename": "minecraft:pink_glazed_terracotta",
-    "pedata": 1
+    "pedata": 4
   },
   "minecraft:pink_glazed_terracotta[facing=east]": {
     "pename": "minecraft:pink_glazed_terracotta",
-    "pedata": 3
+    "pedata": 5
   },
   "minecraft:gray_glazed_terracotta[facing=north]": {
     "pename": "minecraft:gray_glazed_terracotta",
@@ -5917,31 +5917,31 @@
   },
   "minecraft:gray_glazed_terracotta[facing=south]": {
     "pename": "minecraft:gray_glazed_terracotta",
-    "pedata": 0
+    "pedata": 3
   },
   "minecraft:gray_glazed_terracotta[facing=west]": {
     "pename": "minecraft:gray_glazed_terracotta",
-    "pedata": 1
+    "pedata": 4
   },
   "minecraft:gray_glazed_terracotta[facing=east]": {
     "pename": "minecraft:gray_glazed_terracotta",
-    "pedata": 3
+    "pedata": 5
   },
   "minecraft:light_gray_glazed_terracotta[facing=north]": {
-    "pename": "minecraft:light_gray_glazed_terracotta",
+    "pename": "minecraft:silver_glazed_terracotta",
     "pedata": 2
   },
   "minecraft:light_gray_glazed_terracotta[facing=south]": {
-    "pename": "minecraft:light_gray_glazed_terracotta",
-    "pedata": 0
+    "pename": "minecraft:silver_glazed_terracotta",
+    "pedata": 3
   },
   "minecraft:light_gray_glazed_terracotta[facing=west]": {
-    "pename": "minecraft:light_gray_glazed_terracotta",
-    "pedata": 1
+    "pename": "minecraft:silver_glazed_terracotta",
+    "pedata": 4
   },
   "minecraft:light_gray_glazed_terracotta[facing=east]": {
-    "pename": "minecraft:light_gray_glazed_terracotta",
-    "pedata": 3
+    "pename": "minecraft:silver_glazed_terracotta",
+    "pedata": 5
   },
   "minecraft:cyan_glazed_terracotta[facing=north]": {
     "pename": "minecraft:cyan_glazed_terracotta",
@@ -5949,15 +5949,15 @@
   },
   "minecraft:cyan_glazed_terracotta[facing=south]": {
     "pename": "minecraft:cyan_glazed_terracotta",
-    "pedata": 0
+    "pedata": 3
   },
   "minecraft:cyan_glazed_terracotta[facing=west]": {
     "pename": "minecraft:cyan_glazed_terracotta",
-    "pedata": 1
+    "pedata": 4
   },
   "minecraft:cyan_glazed_terracotta[facing=east]": {
     "pename": "minecraft:cyan_glazed_terracotta",
-    "pedata": 3
+    "pedata": 5
   },
   "minecraft:purple_glazed_terracotta[facing=north]": {
     "pename": "minecraft:purple_glazed_terracotta",
@@ -5965,15 +5965,15 @@
   },
   "minecraft:purple_glazed_terracotta[facing=south]": {
     "pename": "minecraft:purple_glazed_terracotta",
-    "pedata": 0
+    "pedata": 3
   },
   "minecraft:purple_glazed_terracotta[facing=west]": {
     "pename": "minecraft:purple_glazed_terracotta",
-    "pedata": 1
+    "pedata": 4
   },
   "minecraft:purple_glazed_terracotta[facing=east]": {
     "pename": "minecraft:purple_glazed_terracotta",
-    "pedata": 3
+    "pedata": 5
   },
   "minecraft:blue_glazed_terracotta[facing=north]": {
     "pename": "minecraft:blue_glazed_terracotta",
@@ -5981,15 +5981,15 @@
   },
   "minecraft:blue_glazed_terracotta[facing=south]": {
     "pename": "minecraft:blue_glazed_terracotta",
-    "pedata": 0
+    "pedata": 3
   },
   "minecraft:blue_glazed_terracotta[facing=west]": {
     "pename": "minecraft:blue_glazed_terracotta",
-    "pedata": 1
+    "pedata": 4
   },
   "minecraft:blue_glazed_terracotta[facing=east]": {
     "pename": "minecraft:blue_glazed_terracotta",
-    "pedata": 3
+    "pedata": 5
   },
   "minecraft:brown_glazed_terracotta[facing=north]": {
     "pename": "minecraft:brown_glazed_terracotta",
@@ -5997,15 +5997,15 @@
   },
   "minecraft:brown_glazed_terracotta[facing=south]": {
     "pename": "minecraft:brown_glazed_terracotta",
-    "pedata": 0
+    "pedata": 3
   },
   "minecraft:brown_glazed_terracotta[facing=west]": {
     "pename": "minecraft:brown_glazed_terracotta",
-    "pedata": 1
+    "pedata": 4
   },
   "minecraft:brown_glazed_terracotta[facing=east]": {
     "pename": "minecraft:brown_glazed_terracotta",
-    "pedata": 3
+    "pedata": 5
   },
   "minecraft:green_glazed_terracotta[facing=north]": {
     "pename": "minecraft:green_glazed_terracotta",
@@ -6013,15 +6013,15 @@
   },
   "minecraft:green_glazed_terracotta[facing=south]": {
     "pename": "minecraft:green_glazed_terracotta",
-    "pedata": 0
+    "pedata": 3
   },
   "minecraft:green_glazed_terracotta[facing=west]": {
     "pename": "minecraft:green_glazed_terracotta",
-    "pedata": 1
+    "pedata": 4
   },
   "minecraft:green_glazed_terracotta[facing=east]": {
     "pename": "minecraft:green_glazed_terracotta",
-    "pedata": 3
+    "pedata": 5
   },
   "minecraft:red_glazed_terracotta[facing=north]": {
     "pename": "minecraft:red_glazed_terracotta",
@@ -6029,15 +6029,15 @@
   },
   "minecraft:red_glazed_terracotta[facing=south]": {
     "pename": "minecraft:red_glazed_terracotta",
-    "pedata": 0
+    "pedata": 3
   },
   "minecraft:red_glazed_terracotta[facing=west]": {
     "pename": "minecraft:red_glazed_terracotta",
-    "pedata": 1
+    "pedata": 4
   },
   "minecraft:red_glazed_terracotta[facing=east]": {
     "pename": "minecraft:red_glazed_terracotta",
-    "pedata": 3
+    "pedata": 5
   },
   "minecraft:black_glazed_terracotta[facing=north]": {
     "pename": "minecraft:black_glazed_terracotta",
@@ -6045,15 +6045,15 @@
   },
   "minecraft:black_glazed_terracotta[facing=south]": {
     "pename": "minecraft:black_glazed_terracotta",
-    "pedata": 0
+    "pedata": 3
   },
   "minecraft:black_glazed_terracotta[facing=west]": {
     "pename": "minecraft:black_glazed_terracotta",
-    "pedata": 1
+    "pedata": 4
   },
   "minecraft:black_glazed_terracotta[facing=east]": {
     "pename": "minecraft:black_glazed_terracotta",
-    "pedata": 3
+    "pedata": 5
   },
   "minecraft:white_concrete": {
     "pename": "minecraft:concrete",

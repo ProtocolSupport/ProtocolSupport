@@ -74,6 +74,21 @@ public class LegacyBlockData {
 			return to;
 		}
 
+		protected Switch toPre13LeverState(Switch from, Switch to) {
+			to.setFace(from.getFace());
+			to.setFacing(from.getFacing());
+			if ((from.getFace() == Face.CEILING) || (from.getFace() == Face.FLOOR)) {
+				// PE levers can only be oriented towards south or east (when off)
+				if (from.getFacing() == BlockFace.NORTH) {
+					to.setFacing(BlockFace.SOUTH);
+				} else if (from.getFacing() == BlockFace.WEST) {
+					to.setFacing(BlockFace.EAST);
+				}
+			}
+			to.setPowered(from.isPowered());
+			return to;
+		}
+
 		protected Door toPre13DoorState(Door from, Door to) {
 			if (from.getHalf() == Half.TOP) {
 				to.setHalf(Half.TOP);
@@ -149,6 +164,12 @@ public class LegacyBlockData {
 				),
 				o -> o.getMaterial().createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_13_1
+			);
+
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(Material.TNT),
+				o -> o.getMaterial().createBlockData(),
+				ProtocolVersionsHelper.ALL_PE
 			);
 
 			this.registerRemapEntryForAllStates(
@@ -286,11 +307,20 @@ public class LegacyBlockData {
 			this.<Switch>registerRemapEntryForAllStates(
 				Arrays.asList(
 					Material.STONE_BUTTON,
-					Material.LEVER,
 					Material.OAK_BUTTON
 				),
 				o -> toPre13ButtonState(o, (Switch) o.getMaterial().createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+			);
+			this.<Switch>registerRemapEntryForAllStates(
+				Arrays.asList(Material.LEVER),
+				o -> toPre13ButtonState(o, (Switch) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			this.<Switch>registerRemapEntryForAllStates(
+				Arrays.asList(Material.LEVER),
+				o -> toPre13LeverState(o, (Switch) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.ALL_PE
 			);
 			this.<Switch>registerRemapEntryForAllStates(
 				Arrays.asList(
