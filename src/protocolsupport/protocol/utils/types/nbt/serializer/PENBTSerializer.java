@@ -35,7 +35,6 @@ public class PENBTSerializer extends NBTSerializer<ByteBuf, ByteBuf> {
 		registerType(NBTType.BYTE, 1, stream -> new NBTByte(stream.readByte()), (stream, tag) -> stream.writeByte(tag.getAsByte()));
 		registerType(NBTType.SHORT, 2, stream -> new NBTShort(stream.readShortLE()), (stream, tag) -> stream.writeShortLE(tag.getAsShort()));
 		registerType(NBTType.FLOAT, 5, stream -> new NBTFloat(stream.readFloatLE()), (stream, tag) -> stream.writeFloatLE(tag.getAsFloat()));
-		registerType(NBTType.LONG, 4, stream -> new NBTLong(stream.readLongLE()), (stream, tag) -> stream.writeLongLE(tag.getAsLong()));
 		registerType(NBTType.DOUBLE, 6, stream -> new NBTDouble(stream.readDoubleLE()), (stream, tag) -> stream.writeDoubleLE(tag.getAsDouble()));
 		registerType(
 			NBTType.COMPOUND, 10,
@@ -60,6 +59,7 @@ public class PENBTSerializer extends NBTSerializer<ByteBuf, ByteBuf> {
 		// Pe has two similar but different formats.
 		if (varint) {
 			registerType(NBTType.INT, 3, stream -> new NBTInt(VarNumberSerializer.readSVarInt(stream)), (stream, tag) -> VarNumberSerializer.writeSVarInt(stream, tag.getAsInt()));
+			registerType(NBTType.LONG, 4, stream -> new NBTLong(VarNumberSerializer.readSVarLong(stream)), (stream, tag) -> VarNumberSerializer.writeSVarLong(stream, tag.getAsLong()));
 			registerType(
 				NBTType.STRING, 8,
 				stream -> {
@@ -126,6 +126,7 @@ public class PENBTSerializer extends NBTSerializer<ByteBuf, ByteBuf> {
 			);
 		} else {
 			registerType(NBTType.INT, 3, stream -> new NBTInt(stream.readIntLE()), (stream, tag) -> stream.writeIntLE(tag.getAsInt()));
+			registerType(NBTType.LONG, 4, stream -> new NBTLong(stream.readLongLE()), (stream, tag) -> stream.writeLongLE(tag.getAsLong()));
 			registerType(
 				NBTType.STRING, 8,
 				stream -> {

@@ -74,6 +74,21 @@ public class LegacyBlockData {
 			return to;
 		}
 
+		protected Switch toPre13LeverState(Switch from, Switch to) {
+			to.setFace(from.getFace());
+			to.setFacing(from.getFacing());
+			if ((from.getFace() == Face.CEILING) || (from.getFace() == Face.FLOOR)) {
+				// PE levers can only be oriented towards south or east (when off)
+				if (from.getFacing() == BlockFace.NORTH) {
+					to.setFacing(BlockFace.SOUTH);
+				} else if (from.getFacing() == BlockFace.WEST) {
+					to.setFacing(BlockFace.EAST);
+				}
+			}
+			to.setPowered(from.isPowered());
+			return to;
+		}
+
 		protected Door toPre13DoorState(Door from, Door to) {
 			if (from.getHalf() == Half.TOP) {
 				to.setHalf(Half.TOP);
@@ -147,8 +162,14 @@ public class LegacyBlockData {
 					Material.BRAIN_CORAL, Material.BUBBLE_CORAL, Material.FIRE_CORAL, Material.HORN_CORAL, Material.TUBE_CORAL,
 					Material.CONDUIT, Material.TNT
 				),
-			o -> o.getMaterial().createBlockData(),
+				o -> o.getMaterial().createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_13_1
+			);
+
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(Material.TNT),
+				o -> o.getMaterial().createBlockData(),
+				ProtocolVersionsHelper.ALL_PE
 			);
 
 			this.registerRemapEntryForAllStates(
@@ -232,7 +253,20 @@ public class LegacyBlockData {
 					Material.PLAYER_HEAD,
 					Material.ZOMBIE_HEAD
 				),
-				Material.SKELETON_SKULL.createBlockData(),
+				o -> o.getMaterial().createBlockData(),
+				ProtocolVersionsHelper.ALL_PE
+			);
+
+			this.<Directional>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.SKELETON_WALL_SKULL,
+					Material.WITHER_SKELETON_WALL_SKULL,
+					Material.CREEPER_WALL_HEAD,
+					Material.DRAGON_WALL_HEAD,
+					Material.PLAYER_WALL_HEAD,
+					Material.ZOMBIE_WALL_HEAD
+				),
+				o -> cloneDirectional(o, (Directional) o.getMaterial().createBlockData()),
 				ProtocolVersionsHelper.ALL_PE
 			);
 
@@ -246,7 +280,7 @@ public class LegacyBlockData {
 					Material.ZOMBIE_WALL_HEAD
 				),
 				o -> cloneDirectional(o, (Directional) Material.SKELETON_WALL_SKULL.createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+				ProtocolVersionsHelper.BEFORE_1_13
 			);
 			this.<MultipleFacing>registerRemapEntryForAllStates(
 				Arrays.asList(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL),
@@ -273,11 +307,20 @@ public class LegacyBlockData {
 			this.<Switch>registerRemapEntryForAllStates(
 				Arrays.asList(
 					Material.STONE_BUTTON,
-					Material.LEVER,
 					Material.OAK_BUTTON
 				),
 				o -> toPre13ButtonState(o, (Switch) o.getMaterial().createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+			);
+			this.<Switch>registerRemapEntryForAllStates(
+				Arrays.asList(Material.LEVER),
+				o -> toPre13ButtonState(o, (Switch) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			this.<Switch>registerRemapEntryForAllStates(
+				Arrays.asList(Material.LEVER),
+				o -> toPre13LeverState(o, (Switch) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.ALL_PE
 			);
 			this.<Switch>registerRemapEntryForAllStates(
 				Arrays.asList(
@@ -365,7 +408,16 @@ public class LegacyBlockData {
 					Material.DARK_PRISMARINE_STAIRS
 				),
 				o -> toPre13StairsState(o, (Stairs) Material.STONE_BRICK_STAIRS.createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13_AND_PE
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			this.<Stairs>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.PRISMARINE_BRICK_STAIRS,
+					Material.PRISMARINE_STAIRS,
+					Material.DARK_PRISMARINE_STAIRS
+				),
+				o -> toPre13StairsState(o, (Stairs) o.getMaterial().createBlockData()),
+				ProtocolVersionsHelper.ALL_PE
 			);
 			this.<TrapDoor>registerRemapEntryForAllStates(
 				Arrays.asList(
