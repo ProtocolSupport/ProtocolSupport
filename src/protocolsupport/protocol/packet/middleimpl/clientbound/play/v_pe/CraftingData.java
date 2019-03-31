@@ -2,11 +2,13 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleDeclareRecipes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEItems;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -27,6 +29,8 @@ public class CraftingData extends MiddleDeclareRecipes {
 	public static final int PE_RECIPE_TYPE_SHAPED = 1;
 	public static final int PE_RECIPE_TYPE_FURNACE = 2;
 	public static final int PE_RECIPE_TYPE_FURNACE_META = 3;
+
+	public static final String TAG_CRAFTING_TABLE = "crafting_table";
 
 	protected int recipesWritten;
 
@@ -135,6 +139,9 @@ public class CraftingData extends MiddleDeclareRecipes {
 		VarNumberSerializer.writeVarInt(to, 1); // result item count
 		ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output);
 		MiscSerializer.writePEUUID(to, UUID.nameUUIDFromBytes(to.array()));
+		if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_11)) {
+			StringSerializer.writeString(to, connection.getVersion(), TAG_CRAFTING_TABLE);
+		}
 		recipesWritten++;
 	}
 
