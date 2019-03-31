@@ -2,8 +2,11 @@ package protocolsupport.protocol.typeremapper.entity.metadata.types.base;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import protocolsupport.ProtocolSupport;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
@@ -35,66 +38,89 @@ public class BaseEntityMetadataRemapper extends EntityMetadataRemapper {
 
 	public static final BaseEntityMetadataRemapper INSTANCE = new BaseEntityMetadataRemapper();
 
-	public BaseEntityMetadataRemapper() {
-		addRemap(new DataWatcherObjectRemapper() {
-			@Override
-			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
-				NetworkEntityDataCache data = entity.getDataCache();
-				float entitySize = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType()) * data.getSizeModifier();
-				// = PE Lead =
-				//Leashing is set in Entity Leash.
-				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_LEASHED, data.getAttachedId() != -1);
-				remapped.put(PeMetaBase.LEADHOLDER, new DataWatcherObjectSVarLong(data.getAttachedId()));
-				// = PE Nametag =
-				Optional<DataWatcherObjectOptionalChat> nameTagWatcher = DataWatcherObjectIndex.Entity.NAMETAG.getValue(original);
-				//Doing this for players makes nametags behave weird or only when close.
-				boolean doNameTag = ((nameTagWatcher.isPresent()));/* && (entity.getType() != NetworkEntityType.PLAYER));*/ // works as intended
-				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, doNameTag);
-				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, doNameTag); // does nothing?
-				if (doNameTag) {
-					BaseComponent nameTag = nameTagWatcher.get().getValue();
-					remapped.put(PeMetaBase.NAMETAG, new DataWatcherObjectString(nameTag != null ? nameTag.toLegacyText() : ""));
-					remapped.put(PeMetaBase.ALWAYS_SHOW_NAMETAG, new DataWatcherObjectByte((byte)1)); // 1 for always display, 0 for display when look
+	class PEDataWatcherRemapper extends DataWatcherObjectRemapper {
+		final Function<Integer, Integer> idMap;
+		final ProtocolVersion version;
+
+		PEDataWatcherRemapper(ProtocolVersion version) {
+			this.version = version;
+			this.idMap = id -> {
+				if (id >= 53 && id < 80 && version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_11)) {
+					return id + 1;
 				}
-				// = PE Riding =
-				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_COLLIDE, !data.isRiding());
-				if (data.isRiding()) {
-					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, true);
-					remapped.put(PeMetaBase.RIDER_POSITION, new DataWatcherObjectVector3fLe(data.getRiderPosition()));
-					remapped.put(PeMetaBase.RIDER_LOCK, new DataWatcherObjectByte((byte) ((data.getRotationLock() != null) ? 1 : 0)));
-					if (data.getRotationLock() != null) {
-						remapped.put(PeMetaBase.RIDER_MAX_ROTATION, new DataWatcherObjectFloatLe(data.getRotationLock()));
-						remapped.put(PeMetaBase.RIDER_MIN_ROTATION, new DataWatcherObjectFloatLe(-data.getRotationLock()));
-					}
-				} else {
-					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, false);
+				return id;
+			};
+		}
+
+		@Override
+		public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+			final BiConsumer<Integer, DataWatcherObject<?>> mapPut = (k, v) -> remapped.put(idMap.apply(k), v);
+
+			NetworkEntityDataCache data = entity.getDataCache();
+			float entitySize = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType()) * data.getSizeModifier();
+			// = PE Lead =
+			//Leashing is set in Entity Leash.
+			entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_LEASHED, data.getAttachedId() != -1);
+			mapPut.accept(PeMetaBase.LEADHOLDER, new DataWatcherObjectSVarLong(data.getAttachedId()));
+			// = PE Nametag =
+			Optional<DataWatcherObjectOptionalChat> nameTagWatcher = DataWatcherObjectIndex.Entity.NAMETAG.getValue(original);
+			//Doing this for players makes nametags behave weird or only when close.
+			boolean doNameTag = ((nameTagWatcher.isPresent()));/* && (entity.getType() != NetworkEntityType.PLAYER));*/ // works as intended
+			entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, doNameTag);
+			entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, doNameTag); // does nothing?
+			if (doNameTag) {
+				BaseComponent nameTag = nameTagWatcher.get().getValue();
+				mapPut.accept(PeMetaBase.NAMETAG, new DataWatcherObjectString(nameTag != null ? nameTag.toLegacyText() : ""));
+				mapPut.accept(PeMetaBase.ALWAYS_SHOW_NAMETAG, new DataWatcherObjectByte((byte)1)); // 1 for always display, 0 for display when look
+			}
+			// = PE Riding =
+			entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_COLLIDE, !data.isRiding());
+			if (data.isRiding()) {
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, true);
+				mapPut.accept(PeMetaBase.RIDER_POSITION, new DataWatcherObjectVector3fLe(data.getRiderPosition()));
+				mapPut.accept(PeMetaBase.RIDER_LOCK, new DataWatcherObjectByte((byte) ((data.getRotationLock() != null) ? 1 : 0)));
+				if (data.getRotationLock() != null) {
+					mapPut.accept(PeMetaBase.RIDER_MAX_ROTATION, new DataWatcherObjectFloatLe(data.getRotationLock()));
+					mapPut.accept(PeMetaBase.RIDER_MIN_ROTATION, new DataWatcherObjectFloatLe(-data.getRotationLock()));
 				}
-				// = PE Air =
-				AtomicInteger air = new AtomicInteger(0);
-				DataWatcherObjectIndex.Entity.AIR.getValue(original).ifPresent(airWatcher -> {
-					air.set(airWatcher.getValue() >= 300 ? 0 : airWatcher.getValue());
-				});
-				remapped.put(PeMetaBase.AIR, new DataWatcherObjectShortLe(air.get()));
-				remapped.put(PeMetaBase.MAX_AIR, new DataWatcherObjectShortLe(300));
-				// = PE Bounding Box =
-				PEEntityData pocketdata = PEDataValues.getEntityData(entity.getType());
-				if (pocketdata == null) {
-					ProtocolSupport.logWarning("PE BoundingBox missing for entity: " + entity.getType());
-				} else {
-					if (pocketdata.getBoundingBox() != null) {
-						remapped.put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getWidth() * entitySize));
-						remapped.put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));
-					}
-				}
-				// = PE Size =
-				remapped.put(PeMetaBase.SCALE, new DataWatcherObjectFloatLe(entitySize));
-				// = PE Interaction =
-				String interactText = PEMetaProviderSPI.getProvider().getUseText(entity.getUUID(), entity.getId(), entity.getType().getBukkitType());
-				if (interactText != null) {
-					remapped.put(PeMetaBase.BUTTON_TEXT, new DataWatcherObjectString(interactText));
+			} else {
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_RIDING, false);
+			}
+			// = PE Air =
+			AtomicInteger air = new AtomicInteger(0);
+			DataWatcherObjectIndex.Entity.AIR.getValue(original).ifPresent(airWatcher -> {
+				air.set(airWatcher.getValue() >= 300 ? 0 : airWatcher.getValue());
+			});
+			mapPut.accept(PeMetaBase.AIR, new DataWatcherObjectShortLe(air.get()));
+			mapPut.accept(PeMetaBase.MAX_AIR, new DataWatcherObjectShortLe(300));
+			// = PE Bounding Box =
+			PEEntityData pocketdata = PEDataValues.getEntityData(entity.getType());
+			if (pocketdata == null) {
+				ProtocolSupport.logWarning("PE BoundingBox missing for entity: " + entity.getType());
+			} else {
+				if (pocketdata.getBoundingBox() != null) {
+					mapPut.accept(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getWidth() * entitySize));
+					mapPut.accept(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));
 				}
 			}
-		}, ProtocolVersionsHelper.ALL_PE);
+			// = PE Size =
+			mapPut.accept(PeMetaBase.SCALE, new DataWatcherObjectFloatLe(entitySize));
+			// = PE Interaction =
+			String interactText = PEMetaProviderSPI.getProvider().getUseText(entity.getUUID(), entity.getId(), entity.getType().getBukkitType());
+			if (interactText != null) {
+				if (version.isBefore(ProtocolVersion.MINECRAFT_PE_1_10)) {
+					mapPut.accept(PeMetaBase.BUTTON_TEXT_V1, new DataWatcherObjectString(interactText));
+				} else {
+					mapPut.accept(PeMetaBase.BUTTON_TEXT_V2, new DataWatcherObjectString(interactText));
+				}
+			}
+		}
+	}
+
+	public BaseEntityMetadataRemapper() {
+		for (ProtocolVersion version : ProtocolVersionsHelper.ALL_PE) {
+			addRemap(new PEDataWatcherRemapper(version), version);
+		}
 		addRemap(new PeSimpleFlagAdder(new int[] {PeMetaBase.FLAG_GRAVITY}, new boolean[] {true}), ProtocolVersionsHelper.ALL_PE);
 		addRemap(new PeFlagRemapper(DataWatcherObjectIndex.Entity.FLAGS,
 			new int[] {1, 2, 4, 6, 8}, new int[] {PeMetaBase.FLAG_ON_FIRE, PeMetaBase.FLAG_SNEAKING, PeMetaBase.FLAG_SPRINTING, PeMetaBase.FLAG_INVISIBLE, PeMetaBase.FLAG_GLIDING}

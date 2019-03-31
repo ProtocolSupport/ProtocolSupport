@@ -233,7 +233,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int POTION_AUX = takeNextMeta();
 		public static final int LEADHOLDER = takeNextMeta();
 		public static final int SCALE = takeNextMeta();
-		public static final int BUTTON_TEXT = takeNextMeta();
+		public static final int BUTTON_TEXT_V1 = takeNextMeta();
 		public static final int NPC_SKIN = takeNextMeta(); //40
 		public static final int BUTTON_URL = takeNextMeta();
 		public static final int MAX_AIR = takeNextMeta();
@@ -274,12 +274,26 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int LIMITED_LIFE = takeNextMeta();
 		public static final int ARMOUR_STAND_POSE = takeNextMeta();
 		public static final int END_CRYSTAL_TIME = takeNextMeta();
-		public static final int ALWAYS_SHOW_NAMETAG = takeNextMeta();
+		public static final int ALWAYS_SHOW_NAMETAG = takeNextMeta(); //80
 		public static final int COLOR_2 = takeNextMeta();
 		public static final int UNKNOWN_11 = takeNextMeta();
 		public static final int SCORE = takeNextMeta();
 		public static final int BALLOON_ATTACHED = takeNextMeta();
 		public static final int PUFFERFISH_SIZE = takeNextMeta();
+		public static final int UNKNOWN_12 = takeNextMeta();
+		public static final int UNKNOWN_13 = takeNextMeta();
+		public static final int UNKNOWN_14 = takeNextMeta();
+		public static final int UNKNOWN_15 = takeNextMeta();
+		public static final int UNKNOWN_16 = takeNextMeta(); //90
+		public static final int UNKNOWN_17 = takeNextMeta();
+		public static final int UNKNOWN_18 = takeNextMeta();
+		public static final int UNKNOWN_19 = takeNextMeta();
+		public static final int UNKNOWN_20 = takeNextMeta();
+		public static final int UNKNOWN_21 = takeNextMeta();
+		public static final int UNKNOWN_22 = takeNextMeta();
+		public static final int UNKNOWN_23 = takeNextMeta();
+		public static final int UNKNOWN_24 = takeNextMeta();
+		public static final int BUTTON_TEXT_V2 = takeNextMeta(); //99
 
 	}
 

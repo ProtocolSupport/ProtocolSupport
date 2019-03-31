@@ -1,6 +1,7 @@
 package protocolsupport.protocol.typeremapper.pe;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.mojangson.MojangsonParser;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupport.utils.Utils;
 import protocolsupportbuildprocessor.Preload;
@@ -577,9 +579,11 @@ public class PEDataValues {
 			private transient NBTCompound filterNBT = null;
 
 			protected void init() {
-				System.out.println("Skipping inventory filter because NBT code still needs to be formatted: " + Filter);
-				//TODO GET THIS???
-				//filterNBT = new createNBTCompoundFromJson(Filter.replaceAll("\'", "\""));
+				try {
+					filterNBT = MojangsonParser.parse(Filter.replaceAll("'", "\""));
+				} catch (IOException e) {
+					throw new RuntimeException("Failed to parse NBT JSON: " + Filter, e);
+				}
 			}
 
 			public NBTCompound getFilter() {
