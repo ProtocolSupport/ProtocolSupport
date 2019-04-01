@@ -31,6 +31,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 	public static final int PE_RECIPE_TYPE_FURNACE_META = 3;
 
 	public static final String TAG_CRAFTING_TABLE = "crafting_table";
+	public static final String TAG_FURNACE = "furnace";
 
 	protected int recipesWritten;
 
@@ -126,6 +127,9 @@ public class CraftingData extends MiddleDeclareRecipes {
 		VarNumberSerializer.writeVarInt(to, 1); // result item count
 		ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output);
 		MiscSerializer.writePEUUID(to, UUID.nameUUIDFromBytes(to.array()));
+		if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_11)) {
+			StringSerializer.writeString(to, connection.getVersion(), TAG_CRAFTING_TABLE);
+		}
 		recipesWritten++;
 	}
 
@@ -150,12 +154,14 @@ public class CraftingData extends MiddleDeclareRecipes {
 		if (input.getLegacyData() == 0) {
 			VarNumberSerializer.writeSVarInt(to, PE_RECIPE_TYPE_FURNACE); //recipe type
 			VarNumberSerializer.writeSVarInt(to, input.getTypeId());
-			ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output);
 		} else { //meta recipe
 			VarNumberSerializer.writeSVarInt(to, PE_RECIPE_TYPE_FURNACE_META); //recipe type, with data
 			VarNumberSerializer.writeSVarInt(to, input.getTypeId());
 			VarNumberSerializer.writeSVarInt(to, input.getLegacyData());
-			ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output);
+		}
+		ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output);
+		if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_11)) {
+			StringSerializer.writeString(to, connection.getVersion(), TAG_FURNACE);
 		}
 		recipesWritten++;
 	}
