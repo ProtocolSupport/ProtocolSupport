@@ -5,6 +5,7 @@ import org.bukkit.util.NumberConversions;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPosition;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.MovementCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -28,7 +29,6 @@ public class SetPosition extends MiddleSetPosition {
 		//Server doesn't accept such movements and will send a set position, but we ignore it unless it is above leniency
 		if (movecache.isPEPositionAboveLeniency()) {
 			ChunkCoord chunk = new ChunkCoord(NumberConversions.floor(x) >> 4, NumberConversions.floor(z) >> 4);
-//			packets.add(Chunk.createChunkPublisherUpdate((int) x, (int) y, (int) z));
 			if (!cache.getPEChunkMapCache().isMarkedAsSent(chunk)) {
 				Chunk.addFakeChunks(packets, chunk);
 			}
@@ -39,6 +39,8 @@ public class SetPosition extends MiddleSetPosition {
 			));
 		}
 		movecache.setPEClientPosition(x, y, z);
+		//TODO: add needsSpawn to cache
+		packets.add(LoginSuccess.createPlayStatus(LoginSuccess.PLAYER_SPAWN));
 		return packets;
 	}
 

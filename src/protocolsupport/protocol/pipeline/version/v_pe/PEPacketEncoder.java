@@ -73,7 +73,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldSou
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_pe.ServerInfo;
 import protocolsupport.protocol.pipeline.version.util.encoder.AbstractPacketEncoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.packet.PEDimensionSwitchConfirmationPacketQueue;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
@@ -149,16 +148,8 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_RECIPES, CraftingData::new);
 	}
 
-	protected final PEDimensionSwitchConfirmationPacketQueue dimswitchq;
-
 	public PEPacketEncoder(ConnectionImpl connection) {
 		super(connection);
-		this.dimswitchq = connection.getCache().getPEPacketQueue();
-	}
-
-	@Override
-	protected RecyclableCollection<ClientBoundPacketData> processPackets(Channel channel, RecyclableCollection<ClientBoundPacketData> packets) {
-		return dimswitchq.processClientBoundPackets(packets);
 	}
 
 	@Override

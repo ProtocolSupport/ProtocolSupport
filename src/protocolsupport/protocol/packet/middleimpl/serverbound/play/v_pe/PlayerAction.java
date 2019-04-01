@@ -7,6 +7,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleClientCommand;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEntityAction;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -67,7 +68,7 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 			case RESPAWN1:
 			case DIMENSION_CHANGE: {
 				ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacket.PLAY_CLIENT_COMMAND);
-				VarNumberSerializer.writeSVarInt(serializer, 0);
+				VarNumberSerializer.writeSVarInt(serializer, MiddleClientCommand.Command.REQUEST_RESPAWN.ordinal());
 				return RecyclableSingletonList.create(serializer);
 			}
 			case START_BREAK: {
@@ -111,13 +112,7 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 			case START_GLIDE: {
 				return RecyclableSingletonList.create(MiddleEntityAction.create(selfId, MiddleEntityAction.Action.START_ELYTRA_FLY, 0));
 			}
-			case DIMENSION_CHANGE_ACK: {
-				connection.getNetworkManagerWrapper().getChannel().eventLoop().schedule(() -> {
-					cache.getPEPacketQueue().unlock();
-					connection.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("push_q"));
-				}, 10, TimeUnit.SECONDS);
-				return RecyclableEmptyList.get();
-			}
+			case DIMENSION_CHANGE_ACK:
 			default: {
 				return RecyclableEmptyList.get();
 			}

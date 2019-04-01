@@ -6,7 +6,6 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleStartGame;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -15,7 +14,6 @@ import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.types.ChunkCoord;
 import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -61,9 +59,9 @@ public class StartGame extends MiddleStartGame {
 		VarNumberSerializer.writeSVarLong(startgame, playerEntityId); //player eid
 		VarNumberSerializer.writeVarLong(startgame, playerEntityId); //player eid
 		VarNumberSerializer.writeSVarInt(startgame, gamemode.getId()); //player gamemode
-		startgame.writeFloatLE(8); //player x
-		startgame.writeFloatLE(18); //player y
-		startgame.writeFloatLE(8); //player z
+		startgame.writeFloatLE(0); //player x
+		startgame.writeFloatLE(0); //player y
+		startgame.writeFloatLE(0); //player z
 		startgame.writeFloatLE(0); //player pitch
 		startgame.writeFloatLE(0); //player yaw
 		VarNumberSerializer.writeSVarInt(startgame, 0); //seed
@@ -135,17 +133,12 @@ public class StartGame extends MiddleStartGame {
 		VarNumberSerializer.writeSVarInt(chunkradius, (int) Math.ceil((Bukkit.getViewDistance() + 1) * Math.sqrt(2)));
 		packets.add(chunkradius);
 
-		packets.add(Chunk.createChunkPublisherUpdate(0, 0, 0));
-		Chunk.addFakeChunks(packets, new ChunkCoord(0, 0));
-
 		PECreativeInventory peInv = PECreativeInventory.getInstance();
 		ClientBoundPacketData creativeInventoryPacket = ClientBoundPacketData.create(PEPacketIDs.INVENTORY_CONTENT);
 		VarNumberSerializer.writeVarInt(creativeInventoryPacket, PESource.POCKET_CREATIVE_INVENTORY);
 		VarNumberSerializer.writeVarInt(creativeInventoryPacket, peInv.getItemCount());
 		creativeInventoryPacket.writeBytes(peInv.getCreativeItems());
 		packets.add(creativeInventoryPacket);
-
-		packets.add(LoginSuccess.createPlayStatus(LoginSuccess.PLAYER_SPAWN));
 
 		return packets;
 	}

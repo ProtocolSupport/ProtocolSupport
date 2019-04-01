@@ -22,8 +22,6 @@ public class LocalPlayerInitialized extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		cache.getPEPacketQueue().unlock();
-		connection.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("push_q"));
 		return RecyclableEmptyList.get();
 	}
 
