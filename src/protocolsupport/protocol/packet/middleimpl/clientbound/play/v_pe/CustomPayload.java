@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.ConnectionImpl;
@@ -10,7 +11,6 @@ import protocolsupport.protocol.serializer.MerchantDataSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
