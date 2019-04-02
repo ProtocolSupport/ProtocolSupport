@@ -8,6 +8,10 @@ import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public abstract class MiddleInventorySetSlot extends ClientBoundMiddlePacket {
 
+	protected static final int WINDOW_ID_PLAYER_HOTBAR = 0;
+	protected static final int WINDOW_ID_PLAYER_CURSOR = 255;
+	protected static final int WINDOW_ID_PLAYER_INVENTORY = 254;
+
 	public MiddleInventorySetSlot(ConnectionImpl connection) {
 		super(connection);
 	}
@@ -21,11 +25,6 @@ public abstract class MiddleInventorySetSlot extends ClientBoundMiddlePacket {
 		windowId = serverdata.readUnsignedByte();
 		slot = serverdata.readShort();
 		itemstack = ItemStackSerializer.readItemStack(serverdata);
-	}
-
-	@Override
-	public boolean postFromServerRead() {
-		return cache.getWindowCache().isValidWindowId(windowId);
 	}
 
 }

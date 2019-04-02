@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.typeremapper.basic.WindowSlotsRemappingHelper;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -18,7 +19,8 @@ public class InventorySetItems extends MiddleInventorySetItems {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		switch (cache.getWindowCache().getOpenedWindow(windowId)) {
+		WindowType window = windowId == WINDOW_ID_PLAYER_INVENTORY ? WindowType.PLAYER : cache.getWindowCache().getOpenedWindow();
+		switch (window) {
 			case PLAYER: {
 				if (!WindowSlotsRemappingHelper.hasPlayerOffhandSlot(version)) {
 					itemstacks.remove(WindowSlotsRemappingHelper.PLAYER_OFF_HAND_SLOT);

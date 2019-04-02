@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -34,6 +35,10 @@ public class Map extends MiddleMap {
 
 		VarNumberSerializer.writeVarInt(serializer, flags);
 		serializer.writeByte(ChangeDimension.getPeDimensionId(cache.getAttributesCache().getDimension())); //Dimension
+
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_11)) {
+			serializer.writeBoolean(false); //is locked
+		}
 
 		//Implementation
 		if ((flags & (FLAG_DECORATION_UPDATE | FLAG_TEXTURE_UPDATE)) != 0) {

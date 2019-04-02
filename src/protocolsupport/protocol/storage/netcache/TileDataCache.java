@@ -29,7 +29,7 @@ public class TileDataCache {
 		int x = position.getX() & 0xF;
 		int y = position.getY() & 0xFF;
 		int z = position.getZ() & 0xF;
-		return ((y & 0xF) << 16) | (z << 8) | (x << 4) | (y >> 4);
+		return ((y & 0xF) << 12) | (z << 8) | (x << 4) | (y >> 4);
 	}
 
 

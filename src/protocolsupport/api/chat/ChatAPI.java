@@ -19,7 +19,9 @@ import protocolsupport.protocol.utils.chat.ComponentSerializer;
 import protocolsupport.protocol.utils.chat.HoverActionSerializer;
 import protocolsupport.protocol.utils.chat.ModifierSerializer;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class ChatAPI {
 
 	private static final Gson gson = new GsonBuilder()

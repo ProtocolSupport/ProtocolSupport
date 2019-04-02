@@ -10,6 +10,8 @@ import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public abstract class MiddleInventorySetItems extends ClientBoundMiddlePacket {
 
+	protected static final int WINDOW_ID_PLAYER_INVENTORY = 0;
+
 	public MiddleInventorySetItems(ConnectionImpl connection) {
 		super(connection);
 	}
@@ -29,7 +31,7 @@ public abstract class MiddleInventorySetItems extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		return cache.getWindowCache().isValidWindowId(windowId);
+		return cache.getWindowCache().isValidWindowId(windowId) || windowId == WINDOW_ID_PLAYER_INVENTORY;
 	}
 
 }
