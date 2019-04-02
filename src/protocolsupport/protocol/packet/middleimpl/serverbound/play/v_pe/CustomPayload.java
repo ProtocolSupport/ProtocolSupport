@@ -1,12 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
+
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 
-//TODO: this really shouldnt need to extend the legacy key name fix version...
-public class CustomPayload extends protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2.CustomPayload {
+public class CustomPayload extends MiddleCustomPayload {
 
 	public CustomPayload(ConnectionImpl connection) {
 		super(connection);
@@ -14,7 +15,7 @@ public class CustomPayload extends protocolsupport.protocol.packet.middleimpl.se
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		tag = StringSerializer.readString(clientdata, connection.getVersion());
+		tag = StringSerializer.readString(clientdata, connection.getVersion(), 20);
 		data = MiscSerializer.readAllBytesSlice(clientdata);
 	}
 
