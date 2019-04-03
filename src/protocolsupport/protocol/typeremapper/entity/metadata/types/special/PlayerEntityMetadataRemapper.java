@@ -36,16 +36,13 @@ public class PlayerEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 					if (nameTag != null) // If the nametag
 						remapped.put(PeMetaBase.NAMETAG, new DataWatcherObjectString(nameTag.toLegacyText()));
 					else
-						remapped.put(PeMetaBase.NAMETAG, null); // Remove old tag (set by the BaseEntityMetadataRemapper class)
+						remapped.put(PeMetaBase.NAMETAG, null);
 				}
 				if (hasNameTagPersistentMetaValue) {
-					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, true); // ALWAYS show nametag if the meta value is set (no matter if it is true or false)
-					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, true);
 					remapped.put(PeMetaBase.ALWAYS_SHOW_NAMETAG, new DataWatcherObjectByte((byte) 1)); // 1 = always visible
-				} else { // If the name tag persistent meta value ISN'T SET, it means that the name tag should be hidden (Citizens does that to hide nameplates)
-					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, false); // ALWAYS show nametag if the meta value is set (no matter if it is true or false)
-					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, false);
 				}
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, hasNameTagPersistentMetaValue);
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, true);
 			}
 		}, ProtocolVersionsHelper.ALL_PE);
 
