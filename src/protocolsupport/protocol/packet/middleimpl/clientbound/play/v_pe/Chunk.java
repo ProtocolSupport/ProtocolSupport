@@ -12,7 +12,11 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
-import protocolsupport.protocol.serializer.*;
+import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
@@ -95,7 +99,7 @@ public class Chunk extends MiddleChunk {
 		VarNumberSerializer.writeVarInt(out, y);
 		VarNumberSerializer.writeSVarInt(out, z);
 		// TODO: client view distance
-		VarNumberSerializer.writeVarInt(out, Bukkit.getViewDistance() * 16);
+		VarNumberSerializer.writeVarInt(out, (Bukkit.getViewDistance() + 1) * 16);
 	}
 
 	public static ClientBoundPacketData createChunkPublisherUpdate(int x, int y, int z) {

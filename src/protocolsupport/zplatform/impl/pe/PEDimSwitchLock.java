@@ -5,18 +5,19 @@ import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 
+import protocolsupport.ProtocolSupport;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 
 import java.util.ArrayList;
 
-// ... this evil fucking class
+//lock outbound packet stream until we get a dim switch ack
 public class PEDimSwitchLock extends ChannelDuplexHandler {
 
 	public static final String AWAIT_DIM_ACK_MESSAGE = "ps:dimlock";
 
+	protected final ArrayList<ByteBuf> queue = new ArrayList<>(128);
 	protected boolean isLocked = false;
-	protected ArrayList<ByteBuf> queue = new ArrayList<>(32);
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -40,6 +41,10 @@ public class PEDimSwitchLock extends ChannelDuplexHandler {
 			if (isLocked) {
 				queue.add((ByteBuf) msg);
 				promise.trySuccess();
+				if (queue.size() > 4096) {
+					ProtocolSupport.logWarning("PEDimSwitchLock: queue got too large, closing connection.");
+					ctx.channel().close();
+				}
 				return;
 			} else if (CustomPayload.isTag((ByteBuf) msg, AWAIT_DIM_ACK_MESSAGE)) {
 				isLocked = true;

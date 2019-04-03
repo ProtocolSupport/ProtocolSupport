@@ -48,7 +48,7 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 			final ByteBuf copy = data.duplicate();
 			PEPacketDecoder.sReadPacketId(copy);
 			VarNumberSerializer.readVarLong(copy); // entity id
-			return VarNumberSerializer.readSVarInt(copy) == PlayerAction.DIMENSION_CHANGE_ACK;
+			return VarNumberSerializer.readSVarInt(copy) == DIMENSION_CHANGE_ACK;
 		}
 		return false;
 	}

@@ -1,15 +1,27 @@
 package protocolsupport.protocol.storage.netcache;
 
+import protocolsupport.protocol.utils.types.Environment;
+import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.Utils;
 
 public class MovementCache {
 
 	protected static final double acceptableError = 0.1;
+	protected static final int peIncreasedLeniencyMillis = 1000;
 
 	protected double x;
 	protected double y;
 	protected double z;
 	protected int teleportConfirmId;
+	protected double peClientX;
+	protected double peClientY;
+	protected double peClientZ;
+	protected long pePositionLeniencyIncreaseTimestamp;
+	protected double pePositionLeniency = 0.5;
+	protected boolean peLeftPaddleTurning = false;
+	protected boolean peRightPaddleTurning = false;
+	protected volatile Position chunkPublisherPosition;
+	protected volatile Environment chunkPublisherDimension;
 
 	public double getX() {
 		return x;
@@ -49,16 +61,6 @@ public class MovementCache {
 		this.z = z;
 		this.teleportConfirmId = teleportConfirmId;
 	}
-
-
-	private static final int peIncreasedLeniencyMillis = 1000;
-	private double peClientX;
-	private double peClientY;
-	private double peClientZ;
-	private long pePositionLeniencyIncreaseTimestamp;
-	private double pePositionLeniency = 0.5;
-	private boolean peLeftPaddleTurning = false;
-	private boolean peRightPaddleTurning = false;
 
 	public void setPEClientPosition(double x, double y, double z) {
 		this.peClientX = x;
@@ -105,6 +107,22 @@ public class MovementCache {
 
 	public void setPERightPaddleTurning(boolean peRightPaddleTurning) {
 		this.peRightPaddleTurning = peRightPaddleTurning;
+	}
+
+	public Position getChunkPublisherPosition() {
+		return chunkPublisherPosition;
+	}
+
+	public void setChunkPublisherPosition(Position chunkPublisherPosition) {
+		this.chunkPublisherPosition = chunkPublisherPosition;
+	}
+
+	public Environment getChunkPublisherDimension() {
+		return chunkPublisherDimension;
+	}
+
+	public void setChunkPublisherDimension(Environment chunkPublisherDimension) {
+		this.chunkPublisherDimension = chunkPublisherDimension;
 	}
 
 	@Override

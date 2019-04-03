@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
@@ -9,9 +8,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.pipeline.version.v_pe.PEPacketDecoder;
-import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
 import protocolsupport.protocol.serializer.MerchantDataSerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
@@ -52,13 +49,6 @@ public class CustomPayload extends MiddleCustomPayload {
 		StringSerializer.writeString(serializer, version, tag);
 		serializer.writeBytes(data);
 		return serializer;
-	}
-
-	public static byte[] createRawTag(ProtocolVersion version, String tag) {
-		final ByteBuf out = Unpooled.buffer();
-		PEPacketEncoder.sWritePacketId(out, PEPacketIDs.CUSTOM_EVENT);
-		StringSerializer.writeString(out, version, tag);
-		return MiscSerializer.readAllBytes(out);
 	}
 
 	public static boolean isTag(ByteBuf data, String tag) {
