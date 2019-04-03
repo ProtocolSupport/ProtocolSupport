@@ -92,6 +92,14 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		return sReadPacketId(from);
 	}
 
+	public static int sPeakPacketId(ByteBuf from) {
+		try {
+			return sReadPacketId(from.markReaderIndex());
+		} finally {
+			from.resetReaderIndex();
+		}
+	}
+
 	public static int sReadPacketId(ByteBuf from) {
 		return VarNumberSerializer.readVarInt(from);
 	}

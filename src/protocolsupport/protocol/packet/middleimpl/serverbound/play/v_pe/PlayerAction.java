@@ -1,8 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
-import java.util.concurrent.TimeUnit;
-
 import io.netty.buffer.ByteBuf;
+
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ServerBoundPacket;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -10,23 +9,58 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleClientCommand;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEntityAction;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.pipeline.version.v_pe.PEPacketDecoder;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
-import protocolsupport.zplatform.ServerPlatform;
 
 public class PlayerAction extends ServerBoundMiddlePacket {
+
+	public static final int START_BREAK = 0;
+	public static final int ABORT_BREAK = 1;
+	public static final int STOP_BREAK = 2;
+	public static final int RELEASE_ITEM = 4;
+	public static final int STOP_SLEEPING = 6;
+	public static final int RESPAWN1 = 7;
+	public static final int START_SPRINT = 9;
+	public static final int STOP_SPRINT = 10;
+	public static final int START_SNEAK = 11;
+	public static final int STOP_SNEAK = 12;
+	public static final int DIMENSION_CHANGE = 13;
+	public static final int DIMENSION_CHANGE_ACK = 14;
+	public static final int START_GLIDE = 15;
+	public static final int STOP_GLIDE = 16;
+	public static final int BUILD_DENIED = 17;
+	public static final int CONTINUE_BREAK = 18;
+
+	public static final int SET_ENCHANTMENT_SEED = 20;
+	public static final int START_SWIMMING = 21;
+	public static final int STOP_SWIMMING = 22;
+	public static final int START_SPIN_ATTACK = 23;
+	public static final int STOP_SPIN_ATTACK = 24;
+
+	public static boolean isDimSwitchAck(ByteBuf data) {
+		if (PEPacketDecoder.sPeakPacketId(data) == PEPacketIDs.PLAYER_ACTION) {
+			final ByteBuf copy = data.duplicate();
+			PEPacketDecoder.sReadPacketId(copy);
+			VarNumberSerializer.readVarLong(copy); // entity id
+			return VarNumberSerializer.readSVarInt(copy) == PlayerAction.DIMENSION_CHANGE_ACK;
+		}
+		return false;
+	}
 
 	public PlayerAction(ConnectionImpl connection) {
 		super(connection);
 	}
 
 	protected int action;
-	protected Position blockPosition = new Position(0, 0, 0);
 	protected int face;
+	protected Position blockPosition = new Position(0, 0, 0);
+	protected Position breakPosition = null;
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
@@ -35,31 +69,6 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 		PositionSerializer.readPEPositionTo(clientdata, blockPosition);
 		face = VarNumberSerializer.readSVarInt(clientdata);
 	}
-
-	protected Position breakPosition = null;
-
-	protected static final int START_BREAK = 0;
-	protected static final int ABORT_BREAK = 1;
-	protected static final int STOP_BREAK = 2;
-	protected static final int RELEASE_ITEM = 4;
-	protected static final int STOP_SLEEPING = 6;
-	protected static final int RESPAWN1 = 7;
-	protected static final int START_SPRINT = 9;
-	protected static final int STOP_SPRINT = 10;
-	protected static final int START_SNEAK = 11;
-	protected static final int STOP_SNEAK = 12;
-	protected static final int DIMENSION_CHANGE = 13;
-	protected static final int DIMENSION_CHANGE_ACK = 14;
-	protected static final int START_GLIDE = 15;
-	protected static final int STOP_GLIDE = 16;
-	protected static final int BUILD_DENIED = 17;
-	protected static final int CONTINUE_BREAK = 18;
-
-	protected static final int SET_ENCHANTMENT_SEED = 20;
-	protected static final int START_SWIMMING = 21;
-	protected static final int STOP_SWIMMING = 22;
-	protected static final int START_SPIN_ATTACK = 23;
-	protected static final int STOP_SPIN_ATTACK = 24;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {

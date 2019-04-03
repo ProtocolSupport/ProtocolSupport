@@ -1,6 +1,8 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+
 import org.bukkit.Bukkit;
 
 import protocolsupport.api.ProtocolVersion;
@@ -9,10 +11,8 @@ import protocolsupport.listeners.internal.ChunkUpdateRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
+import protocolsupport.protocol.serializer.*;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBB;
@@ -71,10 +71,22 @@ public class Chunk extends MiddleChunk {
 		}
 	}
 
+	public static void writeEmptyChunk(ByteBuf out, ChunkCoord chunk) {
+		PositionSerializer.writePEChunkCoord(out, chunk);
+		out.writeBytes(EmptyChunk.getPEChunkData());
+	}
+
+	public static byte[] createRawEmptyChunk(int x, int z) {
+		final ByteBuf out = Unpooled.buffer();
+		PEPacketEncoder.sWritePacketId(out, PEPacketIDs.CHUNK_DATA);
+		Chunk.writeEmptyChunk(out, new ChunkCoord(x, z));
+		return MiscSerializer.readAllBytes(out);
+	}
+
+
 	public static ClientBoundPacketData createEmptyChunk(ChunkCoord chunk) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA);
-		PositionSerializer.writePEChunkCoord(serializer, chunk);
-		serializer.writeBytes(EmptyChunk.getPEChunkData());
+		writeEmptyChunk(serializer, chunk);
 		return serializer;
 	}
 
