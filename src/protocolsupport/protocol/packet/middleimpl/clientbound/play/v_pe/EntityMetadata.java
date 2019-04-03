@@ -10,7 +10,6 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntitySetAttributes.AttributeInfo;
 import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
@@ -91,30 +90,39 @@ public class EntityMetadata extends MiddleEntityMetadata {
 				));
 			});
 		}
-		packets.add(create(entity, locale, entityRemapper.getRemappedMetadata(), version));
+		packets.add(createWithBaseFlags(version, locale, entity, entityRemapper.getRemappedMetadata()));
 		return packets;
 	}
 
-	public static ClientBoundPacketData createFaux(NetworkEntity entity, String locale, ArrayMap<DataWatcherObject<?>> fauxMeta, ProtocolVersion version) {
-		return create(entity, locale, transform(entity, fauxMeta, version), version);
+	private static ClientBoundPacketData createFromMetadata(ProtocolVersion version, String locale, NetworkEntity entity, ArrayMap<DataWatcherObject<?>> peMetadata) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ENTITY_DATA);
+		VarNumberSerializer.writeVarLong(serializer, entity.getId());
+		DataWatcherSerializer.writePEData(serializer, version, locale, peMetadata);
+		return serializer;
 	}
 
-	public static ClientBoundPacketData createFaux(NetworkEntity entity, String locale, ProtocolVersion version) {
-		EntityRemapper faux = new EntityRemapper(version);
-		faux.readEntity(entity);
-		faux.remap(true);
-		return create(entity, locale, transform(entity, faux.getRemappedMetadata(), version), version);
-	}
-
-	public static ArrayMap<DataWatcherObject<?>> transform(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> peMetadata, ProtocolVersion version) {
-		peMetadata.put(0, new DataWatcherObjectSVarLong(entity.getDataCache().getPeBaseFlags()));
+	public static ArrayMap<DataWatcherObject<?>> includeBaseFlags(ProtocolVersion version, ArrayMap<DataWatcherObject<?>> peMetadata, NetworkEntity entity) {
+		peMetadata.put(PeMetaBase.FLAGS, new DataWatcherObjectSVarLong(entity.getDataCache().getPeBaseFlags()));
 		return peMetadata;
 	}
 
-	public static ClientBoundPacketData create(NetworkEntity entity, String locale, ArrayMap<DataWatcherObject<?>> peMetadata, ProtocolVersion version) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ENTITY_DATA);
-		VarNumberSerializer.writeVarLong(serializer, entity.getId());
-		DataWatcherSerializer.writePEData(serializer, version, locale, transform(entity, peMetadata, version));
+	private static ClientBoundPacketData createWithBaseFlags(ProtocolVersion version, String locale, NetworkEntity entity, ArrayMap<DataWatcherObject<?>> peMetadata) {
+		ClientBoundPacketData serializer = createFromMetadata(version, locale, entity, includeBaseFlags(version, peMetadata, entity));
+		return serializer;
+	}
+
+	public static ClientBoundPacketData createFaux(ProtocolVersion version, String locale, NetworkEntity entity) {
+		EntityRemapper faux = new EntityRemapper(version);
+		faux.readEntity(entity);
+		faux.remap(true);
+		return createWithBaseFlags(version, locale, entity, includeBaseFlags(version, faux.getRemappedMetadata(), entity));
+	}
+
+	public static ClientBoundPacketData createFromAttribute(ProtocolVersion version, String locale, NetworkEntity entity, int key, DataWatcherObject<?> value) {
+		ArrayMap<DataWatcherObject<?>> peMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
+		peMetadata.put(key, value);
+
+		ClientBoundPacketData serializer = createFromMetadata(version, locale, entity, peMetadata);
 		return serializer;
 	}
 
@@ -188,6 +196,12 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int FLAG_PREGNANT = takeNextFlag();
 		public static final int FLAG_LAYING_EGG = takeNextFlag();
 
+		// Player flags (not same as base flags)
+		public static final byte PLAYER_FLAG_UNKNOWN = 1;
+		public static final byte PLAYER_FLAG_SLEEP = 2;
+		public static final byte PLAYER_FLAG_DEAD = 4;
+
+		// Meta keys
 		protected static int metaId = 0;
 
 		protected static int takeNextMeta() {
@@ -222,7 +236,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		public static final int UNKNOWN_6 = takeNextMeta();
 		public static final int PLAYER_FLAGS = takeNextMeta();
 		public static final int PLAYER_INDEX = takeNextMeta();
-		public static final int COMPASS_LOCATION = takeNextMeta();
+		public static final int BED_POSTION = takeNextMeta();
 		public static final int FIREBALL_X = takeNextMeta();
 		public static final int FIREBALL_Y = takeNextMeta(); //30
 		public static final int FIREBALL_Z = takeNextMeta();

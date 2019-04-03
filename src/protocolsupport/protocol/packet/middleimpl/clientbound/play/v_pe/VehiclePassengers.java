@@ -63,7 +63,7 @@ public class VehiclePassengers extends MiddleVehiclePassengers {
 						data.setRotationLock(rideInfo.getRotationLock());
 						data.setVehicleId(vehicleId);
 					}
-					packets.add(EntityMetadata.createFaux(passenger, cache.getAttributesCache().getLocale(), version));
+					packets.add(EntityMetadata.createFaux(version, cache.getAttributesCache().getLocale(), passenger));
 					packets.add(create(version, vehicleId, passengerId, LINK));
 				}
 			}
@@ -74,7 +74,7 @@ public class VehiclePassengers extends MiddleVehiclePassengers {
 					NetworkEntity passenger = wecache.getWatchedEntity(passengerId);
 					if (passenger != null) {
 						passenger.getDataCache().setVehicleId(0);
-						packets.add(EntityMetadata.createFaux(passenger, cache.getAttributesCache().getLocale(), version));
+						packets.add(EntityMetadata.createFaux(version, cache.getAttributesCache().getLocale(), passenger));
 						packets.add(create(version, vehicleId, passengerId, UNLINK));
 					}
 				}
