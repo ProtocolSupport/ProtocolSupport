@@ -91,7 +91,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 		}
 	}
 
-	public static EnumProtocol netStateToProtocol(NetworkState state)  {
+	public static EnumProtocol netStateToProtocol(NetworkState state) {
 		switch (state) {
 			case HANDSHAKING: {
 				return EnumProtocol.HANDSHAKING;

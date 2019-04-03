@@ -16,8 +16,6 @@ public class AttributesCache {
 		return dimension == Environment.OVERWORLD;
 	}
 
-
-
 	protected float maxHealth = 20.0F;
 
 	public void setMaxHealth(float maxHealth) {
@@ -28,8 +26,6 @@ public class AttributesCache {
 		return maxHealth;
 	}
 
-
-
 	protected String locale = I18NData.DEFAULT_LOCALE;
 
 	public void setLocale(String locale) {
@@ -39,8 +35,6 @@ public class AttributesCache {
 	public String getLocale() {
 		return locale;
 	}
-
-
 
 	@Override
 	public String toString() {

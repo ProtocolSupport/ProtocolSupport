@@ -27,7 +27,7 @@ public class ReflectionUtils {
 				}
 			}
 		} while ((clazz = clazz.getSuperclass()) != null);
-		throw new RuntimeException("Can't find field "+name);
+		throw new RuntimeException("Can't find field " + name);
 	}
 
 	public static Method getMethod(Class<?> clazz, String name, int paramlength) {
@@ -38,7 +38,7 @@ public class ReflectionUtils {
 				}
 			}
 		} while ((clazz = clazz.getSuperclass()) != null);
-		throw new RuntimeException("Can't find method "+name+" with params length "+paramlength);
+		throw new RuntimeException("Can't find method " + name + " with params length " + paramlength);
 	}
 
 }
