@@ -28,11 +28,19 @@ public class PEAdventureSettings {
 	public static final int PERMISSIONS_OP = 0x20;
 	public static final int PERMISSIONS_TELEPORT = 0x40;
 	public static final int PERMISSIONS_ALLOW_ALL = 0x1FF;
-	//Permission groups? ^^
+
+	//Permission groups
 	public static final int GROUP_VISITOR = 0;
 	public static final int GROUP_NORMAL = 1;
 	public static final int GROUP_OP = 2;
 	public static final int GROUP_CUSTOM = 3;
+
+	// command permissions
+	public static final int COMMAND_PERMISSION_NORMAL = 0;
+	public static final int COMMAND_PERMISSION_OPERATOR = 1;
+	public static final int COMMAND_PERMISSION_HOST = 2;
+	public static final int COMMAND_PERMISSION_AUTOMATION = 3;
+	public static final int COMMAND_PERMISSION_ADMIN = 4;
 
 	public static int getGameModeFlags(GameMode gamemode) {
 		switch (gamemode) {
@@ -51,9 +59,11 @@ public class PEAdventureSettings {
 	public static ClientBoundPacketData createPacket(int entityId, int... flags) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ADVENTURE_SETTINGS);
 		VarNumberSerializer.writeVarInt(serializer, Arrays.stream(flags).reduce(0, (left, right) -> left | right));
-		VarNumberSerializer.writeVarInt(serializer, 0); //?
-		VarNumberSerializer.writeVarInt(serializer, PERMISSIONS_ALLOW_ALL);
-		VarNumberSerializer.writeVarInt(serializer, GROUP_NORMAL);
+        // Command permissions need anything but NORMAL to show the command shortcut menu
+		VarNumberSerializer.writeVarInt(serializer, COMMAND_PERMISSION_OPERATOR); // command permission
+        // We fake it and set all possible flags in the second part of the flag field
+		VarNumberSerializer.writeVarInt(serializer, PERMISSIONS_ALLOW_ALL); // flags, part 2
+		VarNumberSerializer.writeVarInt(serializer, GROUP_NORMAL); // player permission group
 		VarNumberSerializer.writeVarInt(serializer, 0); //? (custom flags)
 		serializer.writeLongLE(entityId); //FFS mojang, be consistant.
 		return serializer;
