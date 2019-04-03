@@ -80,14 +80,6 @@ public class Chunk extends MiddleChunk {
 		out.writeBytes(EmptyChunk.getPEChunkData());
 	}
 
-	public static byte[] createRawEmptyChunk(int x, int z) {
-		final ByteBuf out = Unpooled.buffer();
-		PEPacketEncoder.sWritePacketId(out, PEPacketIDs.CHUNK_DATA);
-		Chunk.writeEmptyChunk(out, new ChunkCoord(x, z));
-		return MiscSerializer.readAllBytes(out);
-	}
-
-
 	public static ClientBoundPacketData createEmptyChunk(ChunkCoord chunk) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA);
 		writeEmptyChunk(serializer, chunk);

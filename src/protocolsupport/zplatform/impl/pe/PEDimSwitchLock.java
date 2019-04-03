@@ -14,6 +14,7 @@ import java.util.ArrayList;
 //lock outbound packet stream until we get a dim switch ack
 public class PEDimSwitchLock extends ChannelDuplexHandler {
 
+	public static final String NAME = "peproxy-dimlock";
 	public static final String AWAIT_DIM_ACK_MESSAGE = "ps:dimlock";
 
 	protected final ArrayList<ByteBuf> queue = new ArrayList<>(128);
