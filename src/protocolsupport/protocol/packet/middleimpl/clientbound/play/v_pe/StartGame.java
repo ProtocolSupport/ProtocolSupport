@@ -127,7 +127,7 @@ public class StartGame extends MiddleStartGame {
 
 		//Player metadata and settings update, so it won't behave strangely until metadata update is sent by server
 		packets.add(PEAdventureSettings.createPacket(cache));
-		packets.add(EntityMetadata.createFaux(player, cache.getAttributesCache().getLocale(), version));
+		packets.add(EntityMetadata.createFaux(version, cache.getAttributesCache().getLocale(), player));
 
 		//Send chunk radius update without waiting for request, works anyway
 		//PE uses circle to calculate visible chunks, so the view distance should cover all chunks that are sent by server (pc square should fit into pe circle)

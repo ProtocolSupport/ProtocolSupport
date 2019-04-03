@@ -90,7 +90,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		if (metadata == null) {
 			VarNumberSerializer.writeVarInt(serializer, 0);
 		} else {
-			DataWatcherSerializer.writePEData(serializer, version, locale, EntityMetadata.transform(entity, metadata, version));
+			DataWatcherSerializer.writePEData(serializer, version, locale, EntityMetadata.includeBaseFlags(version, metadata, entity));
 		}
 		VarNumberSerializer.writeVarInt(serializer, 0); //links, sent in separate packet
 		return serializer;
