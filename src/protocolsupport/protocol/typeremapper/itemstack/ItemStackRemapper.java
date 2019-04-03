@@ -6,7 +6,7 @@ import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public class ItemStackRemapper {
 
-	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale,  NetworkItemStack itemstack) {
+	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		itemstack = ItemStackComplexRemapperRegistry.remapToClient(version, locale, itemstack);
 		itemstack.setTypeId(LegacyItemType.REGISTRY.getTable(version).getRemap(itemstack.getTypeId()));
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {

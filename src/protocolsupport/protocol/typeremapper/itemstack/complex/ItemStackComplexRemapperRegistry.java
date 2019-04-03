@@ -136,7 +136,7 @@ public class ItemStackComplexRemapperRegistry {
 		return itemstack;
 	}
 
-	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale,  NetworkItemStack itemstack) {
+	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		return remapComplex(toClientRemapper, version, locale, itemstack);
 	}
 

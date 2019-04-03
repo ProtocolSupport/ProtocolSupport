@@ -31,7 +31,7 @@ public class ResourceUtils {
 
 	public static Iterable<JsonElement> getAsIterableJson(String name) {
 		BufferedReader reader = getAsBufferedReader(name);
-		return reader != null ?  Utils.GSON.fromJson(reader, JsonArray.class) : null;
+		return reader != null ? Utils.GSON.fromJson(reader, JsonArray.class) : null;
 	}
 
 }

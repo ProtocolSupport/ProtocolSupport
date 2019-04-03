@@ -25,13 +25,13 @@ public class MoveLook extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		 x = clientdata.readDouble();
-		 y = clientdata.readDouble();
-		 clientdata.readDouble();
-		 z = clientdata.readDouble();
-		 yaw = clientdata.readFloat();
-		 pitch = clientdata.readFloat();
-		 onGround = clientdata.readBoolean();
+		x = clientdata.readDouble();
+		y = clientdata.readDouble();
+		clientdata.readDouble();
+		z = clientdata.readDouble();
+		yaw = clientdata.readFloat();
+		pitch = clientdata.readFloat();
+		onGround = clientdata.readBoolean();
 	}
 
 	@Override
