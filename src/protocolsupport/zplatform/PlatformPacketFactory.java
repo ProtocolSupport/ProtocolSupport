@@ -15,6 +15,8 @@ public interface PlatformPacketFactory {
 
 	public Object createInboundInventoryClosePacket();
 
+	public Object createInboundKeepAlivePacket(long keepAliveId);
+
 	public Object createOutboundChatPacket(String message, int position);
 
 	public Object createTabHeaderFooterPacket(BaseComponent header, BaseComponent footer);

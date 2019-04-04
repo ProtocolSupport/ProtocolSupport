@@ -7,35 +7,16 @@ ProtocolSupport
 
 Support 1.13, 1.12, 1.11, 1.10, 1.9, 1.8, 1.7, 1.6, 1.5, 1.4.7 clients on Spigot 1.13.2
 
-Important notes:
-* Only latest version of this plugin is supported
-* This plugin can't be reloaded or loaded not at server startup
-* This plugin doesn't work with netty native transport
+This branch also supports minecraft beta 1.7.3<br>
+The support for minecraft beta 1.7.3 was a 1st april joke (that i couldn't complete in time so it was actually released later)<br>
+Which means this version is not supported<br>
 
-Known issues:
-* [Anything that is not latest] Items in creative mode may not work as expected, or may not work at all
+Also minecraft beta 1.7.3 limitations:
+* Online mode not supported (auth servers were stopped long time ago)
+* End dimension ot supported (will be sent as nether dimension)
+* 128 blocks height chunks (blocks above that height wont be sent)
+* No move speed change support
+* Held slot id is controlled by client (but synched to server before any actionn).
 
-
-Known wontfix issues:
-* [1.12 and earlier] Chests are seen as enderchests. (Intentional to prevent rendering glitches!)  
-[Check this plugin if you want different behaviour](https://www.spigotmc.org/resources/protocolsupportchestfix.59314/)
-* [1.8 and earlier] Thrown potion texture is invalid
-* [1.8 and earlier] Can't control vehicle
-* [1.6 and earlier] Stats are not sent
-* [1.4.7] Server shows up as "incompatible" in the server list, impossible to fix due to the lack of an way to verify the client version during server list ping
-
----
-
-Website: http://protocolsupport.true-games.org/
-
-Spigot: http://www.spigotmc.org/resources/protocolsupport.7201/
-
-BukkitDev: https://dev.bukkit.org/projects/protocolsupport/
-
-MC Market: http://www.mc-market.org/resources/4607/
-
-Jenkins: http://build.true-games.org/job/ProtocolSupport/
-
----
 
 Licensed under the terms of GNU AGPLv3

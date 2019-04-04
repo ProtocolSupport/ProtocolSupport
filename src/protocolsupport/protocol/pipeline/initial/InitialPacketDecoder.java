@@ -76,6 +76,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_5_2, builder15);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_5_1, builder15);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_4_7, new protocolsupport.protocol.pipeline.version.v_1_4.PipeLineBuilder());
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_BETA_1_7_3, new protocolsupport.protocol.pipeline.version.v_beta.PipeLineBuilder());
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_LEGACY, new protocolsupport.protocol.pipeline.version.v_l.PipeLineBuilder());
 	}
 

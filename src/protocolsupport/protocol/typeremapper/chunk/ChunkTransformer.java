@@ -19,6 +19,7 @@ import protocolsupport.protocol.utils.types.TileEntity;
 public abstract class ChunkTransformer {
 
 	protected ChunkCoord chunk;
+	protected int bitmap;
 	protected int columnsCount;
 	protected boolean hasSkyLight;
 	protected boolean hasBiomeData;
@@ -38,6 +39,7 @@ public abstract class ChunkTransformer {
 
 	public void loadData(ChunkCoord chunk, ByteBuf chunkdata, int bitmap, boolean hasSkyLight, boolean hasBiomeData, TileEntity[] tiles) {
 		this.chunk = chunk;
+		this.bitmap = bitmap;
 		this.columnsCount = Integer.bitCount(bitmap);
 		this.hasSkyLight = hasSkyLight;
 		this.hasBiomeData = hasBiomeData;

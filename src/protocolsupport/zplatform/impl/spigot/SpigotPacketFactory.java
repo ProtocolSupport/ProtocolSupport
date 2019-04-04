@@ -45,6 +45,18 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
+	public Object createInboundKeepAlivePacket(long keepAliveId) {
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
+		serializer.writeLong(keepAliveId);
+		PacketPlayInKeepAlive packet = new PacketPlayInKeepAlive();
+		try {
+			packet.a(serializer);
+		} catch (IOException e) {
+		}
+		return packet;
+	}
+
+	@Override
 	public Object createOutboundChatPacket(String message, int position) {
 		return new PacketPlayOutChat(ChatSerializer.a(message), ChatMessageType.a((byte) position));
 	}

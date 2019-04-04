@@ -26,9 +26,17 @@ public class ProtocolUtils {
 	}
 
 	protected static ProtocolVersion readOldHandshake(ByteBuf data) {
-		//pre 1.3.1 doesn't send a protocol version
-		//but we assume first byte as protocol versions anyway because the chance of string length first byte being a valid protocol versions number is too small
-		return ProtocolVersionsHelper.getOldProtocolVersion(data.readUnsignedByte());
+		//<1.3.1 sends username first, and protocol version only after that
+		//the username is limited to 16 symbols, and string length is a bing endian short
+		//so it the first byte is not 0 - it's a >= 1.3.1 handshake, if 0, it's < 1.3.1 one
+		//in case of < 1.3.1 versions we have no knowledge of which version was that until later
+		//so we just return one of the old versions for now, and switch to another one later
+		int versionByte = data.readUnsignedByte();
+		if (versionByte != 0) {
+			return ProtocolVersionsHelper.getOldProtocolVersion(versionByte);
+		} else {
+			return ProtocolVersion.MINECRAFT_BETA_1_7_3;
+		}
 	}
 
 	protected static ProtocolVersion readNewHandshake(ByteBuf data) {

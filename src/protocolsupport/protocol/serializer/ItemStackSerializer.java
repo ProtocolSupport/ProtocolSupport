@@ -67,7 +67,9 @@ public class ItemStackSerializer {
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			itemstack.setLegacyData(from.readUnsignedShort());
 		}
-		itemstack.setNBT(readTag(from, version));
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_4_7)) {
+			itemstack.setNBT(readTag(from, version));
+		}
 		itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack);
 		return itemstack;
 	}
@@ -119,7 +121,9 @@ public class ItemStackSerializer {
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			to.writeShort(itemstack.getLegacyData());
 		}
-		writeTag(to, version, itemstack.getNBT());
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_4_7)) {
+			writeTag(to, version, itemstack.getNBT());
+		}
 	}
 
 	/**

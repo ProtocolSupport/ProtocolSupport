@@ -134,6 +134,18 @@ public class LegacyBlockData {
 			return to;
 		}
 
+		protected Ageable cloneAgeable(Ageable from, Ageable to) {
+			int age = from.getAge();
+			int maxAgeFrom = from.getMaximumAge();
+			int maxAgeTo = to.getMaximumAge();
+			if (maxAgeFrom == maxAgeTo) {
+				to.setAge(age);
+			} else {
+				to.setAge(age * maxAgeTo / maxAgeFrom);
+			}
+			return to;
+		}
+
 		protected MultipleFacing clearMutipleFacing(MultipleFacing mfacing) {
 			mfacing.getAllowedFaces().forEach(face -> mfacing.setFace(face, false));
 			return mfacing;
@@ -798,6 +810,95 @@ public class LegacyBlockData {
 				Arrays.asList(Material.DROPPER, Material.HOPPER),
 				o -> cloneDirectional(o, (Directional) Material.FURNACE.createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_5
+			);
+
+			this.registerRemapEntryForAllStates(Material.INFESTED_STONE, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.INFESTED_COBBLESTONE, Material.COBBLESTONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.INFESTED_STONE_BRICKS, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.INFESTED_MOSSY_STONE_BRICKS, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.INFESTED_CRACKED_STONE_BRICKS, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.INFESTED_CHISELED_STONE_BRICKS, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.STONE_BRICKS, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.MOSSY_STONE_BRICKS, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.CRACKED_STONE_BRICKS, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.CHISELED_STONE_BRICKS, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.BROWN_MUSHROOM_BLOCK, Material.COBBLESTONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.RED_MUSHROOM_BLOCK, Material.COBBLESTONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.IRON_BARS, Material.IRON_BLOCK.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.GLASS_PANE, Material.GLASS.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.MELON, Material.PUMPKIN.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.<Ageable>registerRemapEntryForAllStates(
+				Arrays.asList(Material.PUMPKIN_STEM, Material.MELON_STEM, Material.CARROTS, Material.POTATOES, Material.COCOA),
+				o -> cloneAgeable(o, (Ageable) Material.WHEAT.createBlockData()),
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
+			);
+			this.registerRemapEntryForAllStates(Material.VINE, Material.SUGAR_CANE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.ACACIA_FENCE_GATE, Material.BIRCH_FENCE_GATE, Material.DARK_OAK_FENCE_GATE,
+					Material.JUNGLE_FENCE_GATE, Material.OAK_FENCE_GATE, Material.SPRUCE_FENCE_GATE,
+					Material.NETHER_BRICK_FENCE
+				),
+				Material.OAK_FENCE.createBlockData(),
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
+			);
+			this.<Stairs>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.SANDSTONE_STAIRS, Material.RED_SANDSTONE_STAIRS, Material.STONE_BRICK_STAIRS, Material.STONE_BRICK_STAIRS,
+					Material.PRISMARINE_BRICK_STAIRS, Material.PRISMARINE_STAIRS, Material.DARK_PRISMARINE_STAIRS, Material.NETHER_BRICK_STAIRS
+				),
+				o -> toPre13StairsState(o, (Stairs) Material.COBBLESTONE_STAIRS.createBlockData()),
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
+			);
+			this.<Stairs>registerRemapEntryForAllStates(
+				Arrays.asList(Material.SPRUCE_STAIRS, Material.BIRCH_STAIRS, Material.JUNGLE_STAIRS),
+				o -> toPre13StairsState(o, (Stairs) Material.OAK_STAIRS.createBlockData()),
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
+			);
+			this.registerRemapEntryForAllStates(Material.MYCELIUM, Material.GRASS_BLOCK.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.LILY_PAD, Material.OAK_PRESSURE_PLATE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+//			112 Nether Brick
+//			115 Nether Wart
+			this.registerRemapEntryForAllStates(Material.ENCHANTING_TABLE, Material.OBSIDIAN.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(Material.BREWING_STAND, Material.CAULDRON, Material.ANVIL),
+				Material.COBBLESTONE.createBlockData(),
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
+			);
+//			119 End Portal
+//			120 End Portal Frame
+//			121 End Stone
+//			122 Dragon Egg
+			this.registerRemapEntryForAllStates(Material.REDSTONE_LAMP, Material.TORCH.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.<Slab>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.ACACIA_SLAB, Material.DARK_OAK_SLAB, Material.BIRCH_SLAB,
+					Material.JUNGLE_SLAB, Material.OAK_SLAB, Material.SPRUCE_SLAB
+				),
+				o -> toPre13SlabState(o, (Slab) Material.PETRIFIED_OAK_SLAB.createBlockData()),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+//			129 Emerald Ore
+//			130 Ender Chest
+//			131 Tripwire Hook
+//			132 Tripwire
+//			133 Emerald Block
+//			137 Command Block
+//			138 Beacon Block
+//			139 Cobblestone Wall
+//			140 Flower Pot
+//			143 Wooden Button
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.CREEPER_HEAD, Material.CREEPER_WALL_HEAD,
+					Material.ZOMBIE_HEAD, Material.ZOMBIE_WALL_HEAD,
+					Material.SKELETON_SKULL, Material.SKELETON_WALL_SKULL,
+					Material.WITHER_SKELETON_SKULL, Material.WITHER_SKELETON_WALL_SKULL,
+					Material.PLAYER_HEAD, Material.PLAYER_WALL_HEAD,
+					Material.DRAGON_HEAD, Material.DRAGON_WALL_HEAD
+				),
+				Material.JACK_O_LANTERN.createBlockData(),
+				ProtocolVersionsHelper.BEFORE_1_13
 			);
 		}
 
