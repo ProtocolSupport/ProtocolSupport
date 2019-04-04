@@ -17,8 +17,10 @@ import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.utils.ItemStackWriteEventHelper;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTByte;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTEnd;
+import protocolsupport.protocol.utils.types.nbt.NBTShort;
 import protocolsupport.protocol.utils.types.nbt.serializer.DefaultNBTSerializer;
 import protocolsupport.protocol.utils.types.nbt.serializer.PENBTSerializer;
 
@@ -283,6 +285,18 @@ public class ItemStackSerializer {
 	public static NetworkItemStack remapItemToClient(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		ItemStackWriteEventHelper.callEvent(version, locale, itemstack);
 		return ItemStackRemapper.remapToClient(version, locale, itemstack);
+	}
+
+	public static NBTCompound itemStackToPENBT(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
+		NBTCompound item = new NBTCompound();
+		itemstack = remapItemToClient(version, locale, itemstack.cloneItemStack());
+		item.setTag("Count", new NBTByte((byte) itemstack.getAmount()));
+		item.setTag("Damage", new NBTShort((short) itemstack.getLegacyData()));
+		item.setTag("id", new NBTShort((short) itemstack.getTypeId()));
+		if ((itemstack.getNBT() != null)) {
+			item.setTag("tag", itemstack.getNBT());
+		}
+		return item;
 	}
 
 	private static final boolean isUsingShortLengthNBT(ProtocolVersion version) {
