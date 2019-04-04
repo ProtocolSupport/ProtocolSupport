@@ -138,11 +138,11 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectByte> FLAGS = takeNextIndex(DataWatcherObjectByte.class);
 	}
 
-	public static class PolarBear extends Ageable  {
+	public static class PolarBear extends Ageable {
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> STANDING_UP = takeNextIndex(DataWatcherObjectBoolean.class);
 	}
 
-	public static class Villager extends Ageable  {
+	public static class Villager extends Ageable {
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> PROFESSION = takeNextIndex(DataWatcherObjectVarInt.class);
 	}
 
@@ -200,7 +200,7 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> DRINKING_POTION = takeNextIndex(DataWatcherObjectBoolean.class);
 	}
 
-	public static class IronGolem extends Insentient{
+	public static class IronGolem extends Insentient {
 		public static final DataWatcherObjectIndex<DataWatcherObjectByte> PLAYER_CREATED = takeNextIndex(DataWatcherObjectByte.class);
 	}
 

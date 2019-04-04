@@ -133,7 +133,7 @@ public class LegacyItemType {
 			registerRemapEntry(Material.TRAPPED_CHEST, Material.CHEST, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 
-		protected void registerRemapEntry(List<Material> from, Material to, ProtocolVersion...versions) {
+		protected void registerRemapEntry(List<Material> from, Material to, ProtocolVersion... versions) {
 			from.forEach(material -> registerRemapEntry(material, to, versions));
 		}
 
