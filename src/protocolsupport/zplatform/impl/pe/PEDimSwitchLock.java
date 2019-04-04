@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
+import io.netty.util.ReferenceCountUtil;
 
 import protocolsupport.ProtocolSupport;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CustomPayload;
@@ -19,6 +20,13 @@ public class PEDimSwitchLock extends ChannelDuplexHandler {
 
 	protected final ArrayList<ByteBuf> queue = new ArrayList<>(128);
 	protected boolean isLocked = false;
+
+	@Override
+	public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+		super.channelUnregistered(ctx);
+		queue.forEach(ReferenceCountUtil::safeRelease);
+		queue.clear();
+	}
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
