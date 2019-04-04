@@ -736,7 +736,7 @@ public class LegacyBlockData {
 				Arrays.asList(
 					Material.BLUE_ORCHID, Material.ALLIUM, Material.AZURE_BLUET, Material.RED_TULIP,
 					Material.ORANGE_TULIP, Material.WHITE_TULIP, Material.PINK_TULIP, Material.OXEYE_DAISY,
-					Material.SUNFLOWER, Material.LILAC, Material.ROSE_BUSH, Material.PEONY
+					Material.SUNFLOWER, Material.LILAC, Material.ROSE_BUSH, Material.PEONY, Material.LARGE_FERN
 				),
 				Material.DANDELION.createBlockData(),
 				ProtocolVersionsHelper.BEFORE_1_7

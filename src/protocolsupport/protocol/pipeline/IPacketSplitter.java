@@ -7,6 +7,6 @@ import io.netty.channel.ChannelHandlerContext;
 
 public interface IPacketSplitter {
 
-	public void split(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) ;
+	public void split(ChannelHandlerContext ctx, ByteBuf input, List<Object> list);
 
 }
