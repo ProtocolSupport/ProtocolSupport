@@ -7,12 +7,10 @@ import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.pipeline.version.v_pe.PEPacketDecoder;
 import protocolsupport.protocol.serializer.MerchantDataSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -49,16 +47,6 @@ public class CustomPayload extends MiddleCustomPayload {
 		StringSerializer.writeString(serializer, version, tag);
 		serializer.writeBytes(data);
 		return serializer;
-	}
-
-	public static boolean isTag(ByteBuf data, String tag) {
-		if (PEPacketDecoder.sPeekPacketId(data) == PEPacketIDs.CUSTOM_EVENT) {
-			final ByteBuf copy = data.duplicate();
-			PEPacketDecoder.sReadPacketId(copy);
-			final String thisTag = StringSerializer.readString(copy, ProtocolVersionsHelper.LATEST_PE);
-			return tag.equals(thisTag);
-		}
-		return false;
 	}
 
 }

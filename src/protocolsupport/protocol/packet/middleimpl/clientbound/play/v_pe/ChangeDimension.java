@@ -7,7 +7,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_pe.LoginSuccess;
+import protocolsupport.protocol.pipeline.version.v_pe.PEPacketDecoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.ChunkCoord;
@@ -16,7 +16,6 @@ import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.impl.pe.PEDimSwitchLock;
 
 public class ChangeDimension extends MiddleChangeDimension {
 
@@ -38,16 +37,16 @@ public class ChangeDimension extends MiddleChangeDimension {
 			packets.add(InventoryClose.create(connection.getVersion(), cache.getWindowCache().getOpenedWindowId()));
 			cache.getWindowCache().closeWindow();
 		}
+		//pattern must match PEDimSwitchLock
 		packets.add(createRaw(0, 0, 0, getPeDimensionId(dimension)));
-		if (dimension != cache.getMovementCache().getChunkPublisherDimension()) { //fake dim switch
-			packets.add(Chunk.createChunkPublisherUpdate(0, 0, 0));
-			Chunk.addFakeChunks(packets, new ChunkCoord(0, 0));
-			packets.add(LoginSuccess.createPlayStatus(LoginSuccess.LOGIN_SUCCESS));
-			packets.add(CustomPayload.create(version, PEDimSwitchLock.AWAIT_DIM_ACK_MESSAGE));
-		} else { //real dim switch
+		packets.add(Chunk.createChunkPublisherUpdate(0, 0, 0));
+		Chunk.addFakeChunks(packets, new ChunkCoord(0, 0));
+		if (dimension == cache.getMovementCache().getChunkPublisherDimension()) {
+			//real dim switch requires correct publisher update before real chunks start
 			final Position pos = cache.getMovementCache().getChunkPublisherPosition();
 			packets.add(Chunk.createChunkPublisherUpdate(pos.getX(), pos.getY(), pos.getZ()));
 		}
+		cache.getMovementCache().setPeNeedsPlayerSpawn(true);
 		return packets;
 	}
 
@@ -80,6 +79,10 @@ public class ChangeDimension extends MiddleChangeDimension {
 				throw new IllegalArgumentException(MessageFormat.format("Uknown dim id {0}", dimId));
 			}
 		}
+	}
+
+	public static boolean isChangeDimension(ByteBuf data) {
+		return PEPacketDecoder.sPeekPacketId(data) == PEPacketIDs.CHANGE_DIMENSION;
 	}
 
 }

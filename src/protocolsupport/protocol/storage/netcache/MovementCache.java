@@ -52,6 +52,8 @@ public class MovementCache {
 		this.teleportConfirmId = teleportConfirmId;
 	}
 
+	// PE Stuff
+
 	protected static final int peIncreasedLeniencyMillis = 1000;
 
 	protected double peClientX;
@@ -61,6 +63,7 @@ public class MovementCache {
 	protected double pePositionLeniency = 0.5;
 	protected boolean peLeftPaddleTurning = false;
 	protected boolean peRightPaddleTurning = false;
+	protected boolean peNeedsPlayerSpawn = true;
 	protected volatile Position chunkPublisherPosition;
 	protected volatile Environment chunkPublisherDimension;
 
@@ -109,6 +112,14 @@ public class MovementCache {
 
 	public void setPERightPaddleTurning(boolean peRightPaddleTurning) {
 		this.peRightPaddleTurning = peRightPaddleTurning;
+	}
+
+	public boolean peNeedsPlayerSpawn() {
+		return peNeedsPlayerSpawn;
+	}
+
+	public void setPeNeedsPlayerSpawn(boolean peNeedsPlayerSpawn) {
+		this.peNeedsPlayerSpawn = peNeedsPlayerSpawn;
 	}
 
 	public Position getChunkPublisherPosition() {

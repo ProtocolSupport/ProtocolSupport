@@ -7,7 +7,8 @@ import io.netty.channel.ChannelPromise;
 import io.netty.util.ReferenceCountUtil;
 
 import protocolsupport.ProtocolSupport;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.CustomPayload;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.ChangeDimension;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chunk;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 
 import java.util.ArrayList;
@@ -16,10 +17,13 @@ import java.util.ArrayList;
 public class PEDimSwitchLock extends ChannelDuplexHandler {
 
 	public static final String NAME = "peproxy-dimlock";
-	public static final String AWAIT_DIM_ACK_MESSAGE = "ps:dimlock";
+
+	protected static int MAX_QUEUE_SIZE = 4096;
+	protected static int LOCK_AFTER_N_CHUNKS = 9;
 
 	protected final ArrayList<ByteBuf> queue = new ArrayList<>(128);
-	protected boolean isLocked = false;
+	protected State state = State.IDLE;
+	protected int nChunks = 0;
 
 	@Override
 	public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
@@ -30,16 +34,15 @@ public class PEDimSwitchLock extends ChannelDuplexHandler {
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		if (msg instanceof ByteBuf) {
-			if(isLocked && PlayerAction.isDimSwitchAck((ByteBuf) msg)) {
-				final ArrayList<ByteBuf> qCopy = new ArrayList(queue);
-				queue.clear();
-				queue.trimToSize();
-				isLocked = false;
-				qCopy.stream().forEach(ctx::write);
-				ctx.flush();
+		if (msg instanceof ByteBuf && state == State.LOCKED && PlayerAction.isDimSwitchAck((ByteBuf) msg)) {
+			final ArrayList<ByteBuf> qCopy = new ArrayList(queue);
+			queue.clear();
+			queue.trimToSize();
+			state = State.IDLE;
+			for (ByteBuf data : qCopy) {
+				write(ctx, data, ctx.voidPromise());
 			}
-
+			ctx.flush();
 		}
 		super.channelRead(ctx, msg);
 	}
@@ -47,19 +50,56 @@ public class PEDimSwitchLock extends ChannelDuplexHandler {
 	@Override
 	public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
 		if (msg instanceof ByteBuf) {
-			if (isLocked) {
-				queue.add((ByteBuf) msg);
-				promise.trySuccess();
-				if (queue.size() > 4096) {
-					ProtocolSupport.logWarning("PEDimSwitchLock: queue got too large, closing connection.");
-					ctx.channel().close();
+			final ByteBuf buf = (ByteBuf) msg;
+			//lock after observing the pattern: dimchange -> pubupdate -> n chunks
+			switch (state) {
+				case IDLE: {
+					if (ChangeDimension.isChangeDimension(buf)) {
+						state = State.DIM_CHANGE;
+					}
+					break;
 				}
-				return;
-			} else if (CustomPayload.isTag((ByteBuf) msg, AWAIT_DIM_ACK_MESSAGE)) {
-				isLocked = true;
+				case DIM_CHANGE: {
+					if (Chunk.isChunkPublisherUpdate(buf)) {
+						state = State.CHUNKS;
+						nChunks = 0;
+					} else {
+						warn("unexpected packet sequence.");
+						state = State.IDLE;
+					}
+					break;
+				}
+				case CHUNKS: {
+					if (!Chunk.isChunk(buf)) {
+						warn("unexpected packet sequence.");
+						state = State.IDLE;
+					} else if (++nChunks >= LOCK_AFTER_N_CHUNKS) {
+						state = State.LOCKED;
+					}
+					break;
+				}
+				case LOCKED: {
+					queue.add(buf);
+					promise.trySuccess();
+					if (queue.size() > MAX_QUEUE_SIZE) {
+						warn("queue got too large, closing connection.");
+						ctx.channel().close();
+					}
+					return;
+				}
+				default:
+					throw new RuntimeException("unknown PEDimSwitchLock state " + state);
 			}
 		}
 		super.write(ctx, msg, promise);
+	}
+
+	protected void warn(String msg) {
+		ProtocolSupport.logWarning("PEDimSwitchLock: " + msg);
+	}
+
+	enum State {
+			IDLE, DIM_CHANGE, CHUNKS, LOCKED
 	}
 
 }

@@ -1,9 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-
-import org.bukkit.Bukkit;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
@@ -11,10 +8,9 @@ import protocolsupport.listeners.internal.ChunkUpdateRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
+import protocolsupport.protocol.pipeline.version.v_pe.PEPacketDecoder;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
@@ -90,14 +86,21 @@ public class Chunk extends MiddleChunk {
 		VarNumberSerializer.writeSVarInt(out, x);
 		VarNumberSerializer.writeVarInt(out, y);
 		VarNumberSerializer.writeSVarInt(out, z);
-		// TODO: client view distance
-		VarNumberSerializer.writeVarInt(out, (Bukkit.getViewDistance() + 1) * 16);
+		VarNumberSerializer.writeVarInt(out, 512); //radius, gets clamped by client
 	}
 
 	public static ClientBoundPacketData createChunkPublisherUpdate(int x, int y, int z) {
 		ClientBoundPacketData networkChunkUpdate = ClientBoundPacketData.create(PEPacketIDs.NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET);
 		writeChunkPublisherUpdate(networkChunkUpdate, x, y, z);
 		return networkChunkUpdate;
+	}
+
+	public static boolean isChunk(ByteBuf data) {
+		return PEPacketDecoder.sPeekPacketId(data) == PEPacketIDs.CHUNK_DATA;
+	}
+
+	public static boolean isChunkPublisherUpdate(ByteBuf data) {
+		return PEPacketDecoder.sPeekPacketId(data) == PEPacketIDs.NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET;
 	}
 
 }

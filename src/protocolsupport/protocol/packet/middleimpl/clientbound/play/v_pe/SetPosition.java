@@ -39,8 +39,10 @@ public class SetPosition extends MiddleSetPosition {
 			));
 		}
 		movecache.setPEClientPosition(x, y, z);
-		//TODO: add needsSpawn to cache
-		packets.add(LoginSuccess.createPlayStatus(LoginSuccess.PLAYER_SPAWN));
+		if (movecache.peNeedsPlayerSpawn()) {
+			packets.add(LoginSuccess.createPlayStatus(LoginSuccess.PLAYER_SPAWN));
+			movecache.setPeNeedsPlayerSpawn(false);
+		}
 		return packets;
 	}
 
