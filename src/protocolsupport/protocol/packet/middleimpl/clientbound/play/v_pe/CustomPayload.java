@@ -52,7 +52,7 @@ public class CustomPayload extends MiddleCustomPayload {
 	}
 
 	public static boolean isTag(ByteBuf data, String tag) {
-		if (PEPacketDecoder.sPeakPacketId(data) == PEPacketIDs.CUSTOM_EVENT) {
+		if (PEPacketDecoder.sPeekPacketId(data) == PEPacketIDs.CUSTOM_EVENT) {
 			final ByteBuf copy = data.duplicate();
 			PEPacketDecoder.sReadPacketId(copy);
 			final String thisTag = StringSerializer.readString(copy, ProtocolVersionsHelper.LATEST_PE);

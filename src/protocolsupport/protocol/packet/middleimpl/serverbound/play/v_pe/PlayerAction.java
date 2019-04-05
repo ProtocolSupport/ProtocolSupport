@@ -44,7 +44,7 @@ public class PlayerAction extends ServerBoundMiddlePacket {
 	public static final int STOP_SPIN_ATTACK = 24;
 
 	public static boolean isDimSwitchAck(ByteBuf data) {
-		if (PEPacketDecoder.sPeakPacketId(data) == PEPacketIDs.PLAYER_ACTION) {
+		if (PEPacketDecoder.sPeekPacketId(data) == PEPacketIDs.PLAYER_ACTION) {
 			final ByteBuf copy = data.duplicate();
 			PEPacketDecoder.sReadPacketId(copy);
 			VarNumberSerializer.readVarLong(copy); // entity id

@@ -7,21 +7,11 @@ import protocolsupport.utils.Utils;
 public class MovementCache {
 
 	protected static final double acceptableError = 0.1;
-	protected static final int peIncreasedLeniencyMillis = 1000;
 
 	protected double x;
 	protected double y;
 	protected double z;
 	protected int teleportConfirmId;
-	protected double peClientX;
-	protected double peClientY;
-	protected double peClientZ;
-	protected long pePositionLeniencyIncreaseTimestamp;
-	protected double pePositionLeniency = 0.5;
-	protected boolean peLeftPaddleTurning = false;
-	protected boolean peRightPaddleTurning = false;
-	protected volatile Position chunkPublisherPosition;
-	protected volatile Environment chunkPublisherDimension;
 
 	public double getX() {
 		return x;
@@ -61,6 +51,18 @@ public class MovementCache {
 		this.z = z;
 		this.teleportConfirmId = teleportConfirmId;
 	}
+
+	protected static final int peIncreasedLeniencyMillis = 1000;
+
+	protected double peClientX;
+	protected double peClientY;
+	protected double peClientZ;
+	protected long pePositionLeniencyIncreaseTimestamp;
+	protected double pePositionLeniency = 0.5;
+	protected boolean peLeftPaddleTurning = false;
+	protected boolean peRightPaddleTurning = false;
+	protected volatile Position chunkPublisherPosition;
+	protected volatile Environment chunkPublisherDimension;
 
 	public void setPEClientPosition(double x, double y, double z) {
 		this.peClientX = x;

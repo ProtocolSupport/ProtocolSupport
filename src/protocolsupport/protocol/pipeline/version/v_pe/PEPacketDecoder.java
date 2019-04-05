@@ -92,7 +92,7 @@ public class PEPacketDecoder extends AbstractPacketDecoder {
 		return sReadPacketId(from);
 	}
 
-	public static int sPeakPacketId(ByteBuf from) {
+	public static int sPeekPacketId(ByteBuf from) {
 		try {
 			return sReadPacketId(from.markReaderIndex());
 		} finally {
