@@ -99,6 +99,11 @@ public class GenericIdSkipper {
 		{
 			registerSkipEntry(WindowType.HORSE, ProtocolVersionsHelper.BEFORE_1_6);
 			registerSkipEntry(WindowType.HOPPER, ProtocolVersionsHelper.BEFORE_1_5);
+			registerSkipEntry(WindowType.ENCHANT, ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			registerSkipEntry(WindowType.BREWING, ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			registerSkipEntry(WindowType.VILLAGER, ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			registerSkipEntry(WindowType.BEACON, ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			registerSkipEntry(WindowType.ANVIL, ProtocolVersion.MINECRAFT_BETA_1_7_3);
 		}
 		@Override
 		protected EnumSkippingTable<WindowType> createTable() {

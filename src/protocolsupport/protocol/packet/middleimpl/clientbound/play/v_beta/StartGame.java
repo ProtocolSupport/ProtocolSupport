@@ -20,7 +20,7 @@ public class StartGame extends MiddleStartGame {
 		serializer.writeInt(playerEntityId);
 		StringSerializer.writeString(serializer, version, ""); //unused
 		serializer.writeLong(0); //seed
-		serializer.writeByte(dimension.getId());
+		serializer.writeByte(ChangeDimension.remapDimension(dimension).getId());
 		return RecyclableSingletonList.create(serializer);
 	}
 

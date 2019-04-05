@@ -17,6 +17,7 @@ import org.bukkit.block.data.Powerable;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Chest;
+import org.bukkit.block.data.type.Chest.Type;
 import org.bukkit.block.data.type.CommandBlock;
 import org.bukkit.block.data.type.Comparator;
 import org.bukkit.block.data.type.Door;
@@ -867,7 +868,11 @@ public class LegacyBlockData {
 			);
 //			119 End Portal
 //			120 End Portal Frame
-//			121 End Stone
+			this.registerRemapEntryForAllStates(
+				Material.END_STONE,
+				Material.SANDSTONE.createBlockData(),
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
+			);
 //			122 Dragon Egg
 			this.registerRemapEntryForAllStates(Material.REDSTONE_LAMP, Material.TORCH.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
 			this.<Slab>registerRemapEntryForAllStates(
@@ -876,10 +881,9 @@ public class LegacyBlockData {
 					Material.JUNGLE_SLAB, Material.OAK_SLAB, Material.SPRUCE_SLAB
 				),
 				o -> toPre13SlabState(o, (Slab) Material.PETRIFIED_OAK_SLAB.createBlockData()),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
 			);
 //			129 Emerald Ore
-//			130 Ender Chest
 //			131 Tripwire Hook
 //			132 Tripwire
 //			133 Emerald Block
@@ -898,7 +902,19 @@ public class LegacyBlockData {
 					Material.DRAGON_HEAD, Material.DRAGON_WALL_HEAD
 				),
 				Material.JACK_O_LANTERN.createBlockData(),
-				ProtocolVersionsHelper.BEFORE_1_13
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
+			);
+
+			this.<Directional>registerRemapEntryForAllStates(
+				Arrays.asList(Material.CHEST, Material.TRAPPED_CHEST, Material.ENDER_CHEST),
+				o -> {
+					Chest chest = (Chest) Material.CHEST.createBlockData();
+					chest.setWaterlogged(false);
+					chest.setFacing(o.getFacing());
+					chest.setType(Type.SINGLE);
+					return chest;
+				},
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
 			);
 		}
 
