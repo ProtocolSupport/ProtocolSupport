@@ -53,6 +53,7 @@ public class LegacyCustomPayloadChannelName {
 		}
 	}
 
+	protected static final Pattern valid_pattern = Pattern.compile("[a-z0-9._-]+\\:[a-z0-9._-]+");
 	protected static final Pattern invalid_pattern = Pattern.compile("[^a-z0-9._-]+");
 	public static String fromPre13(String legacyName) {
 		switch (legacyName) {
@@ -69,7 +70,11 @@ public class LegacyCustomPayloadChannelName {
 				return MODERN_BUNGEE;
 			}
 			default: {
-				return NamespacedKeyUtils.combine("l", invalid_pattern.matcher(legacyName.toLowerCase()).replaceAll(""));
+				if (valid_pattern.matcher(legacyName).matches()) {
+					return legacyName;
+				} else {
+					return NamespacedKeyUtils.combine("l", invalid_pattern.matcher(legacyName.toLowerCase()).replaceAll(""));
+				}
 			}
 		}
 	}
