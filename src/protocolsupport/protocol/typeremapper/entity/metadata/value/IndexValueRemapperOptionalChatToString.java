@@ -1,5 +1,7 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.value;
 
+import org.bukkit.ChatColor;
+
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
@@ -18,7 +20,12 @@ public class IndexValueRemapperOptionalChatToString extends IndexValueRemapper<D
 	@Override
 	public DataWatcherObject<?> remapValue(DataWatcherObjectOptionalChat object) {
 		//TODO: pass locale
-		return new DataWatcherObjectString(object.getValue() != null ? LegacyChat.clampLegacyText(object.getValue().toLegacyText(), limit) : "");
+		if (object.getValue() != null) {
+			String text = LegacyChat.clampLegacyText(object.getValue().toLegacyText(), limit);
+			return new DataWatcherObjectString(!text.isEmpty() ? text : ChatColor.BLACK.toString());
+		} else {
+			return new DataWatcherObjectString("");
+		}
 	}
 
 }
