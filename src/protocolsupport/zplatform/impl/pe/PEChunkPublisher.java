@@ -33,12 +33,12 @@ public class PEChunkPublisher implements Listener {
 	protected final Map<Player, Long> lastChunkUpdate = new WeakHashMap<>();
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	void onPlayerJoin(PlayerJoinEvent event) {
+	public void onPlayerJoin(PlayerJoinEvent event) {
 		sendChunkPublisherUpdate(event.getPlayer(), event.getPlayer().getLocation());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	void onPlayerTeleport(PlayerTeleportEvent event) {
+	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		sendChunkPublisherUpdate(event.getPlayer(), event.getTo());
 	}
 
@@ -52,7 +52,7 @@ public class PEChunkPublisher implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	void onPlayerQuit(PlayerQuitEvent event) {
+	public void onPlayerQuit(PlayerQuitEvent event) {
 		lastChunkUpdate.remove(event.getPlayer());
 	}
 
