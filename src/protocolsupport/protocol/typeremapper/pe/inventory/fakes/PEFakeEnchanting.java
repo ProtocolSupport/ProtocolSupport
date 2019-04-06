@@ -55,6 +55,9 @@ public class PEFakeEnchanting {
 		NetworkItemStack[] contents = new NetworkItemStack[5];
 		contents[0] = inputOutputSlot;
 		contents[1] = lapisSlot;
+		if (inputOutputSlot.isNull()) {
+			return contents;
+		}
 		for (int i = 0; i < 3; i++) {
 			//Create option item & nbt
 			if (optionEnch[i] < 0) {
@@ -101,7 +104,7 @@ public class PEFakeEnchanting {
 	public boolean handleInventoryClick(NetworkDataCache cache, InvTransaction transaction, RecyclableArrayList<ServerBoundPacketData> packets) {
 		if (transaction.getSlot() == 0) {
 			setInputOutputStack(transaction.getNewItem());
-		} else if (transaction.getSlot() == 1 && (transaction.getNewItem().isNull() || MaterialAPI.getItemByNetworkId(transaction.getNewItem().getTypeId()) == Material.INK_SAC)) {
+		} else if (transaction.getSlot() == 1 && (transaction.getNewItem().isNull() || MaterialAPI.getItemByNetworkId(transaction.getNewItem().getTypeId()) == Material.LAPIS_LAZULI)) {
 			setLapisStack(transaction.getNewItem());
 		} else if ((transaction.getSlot() > 1 && transaction.getSlot() <= 4) && (transaction.getInventoryId() != PESource.POCKET_INVENTORY)) {
 			//If and only if on of the three fake hopper option slots are clicked proceed with the enchanting.
