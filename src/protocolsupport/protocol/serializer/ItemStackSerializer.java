@@ -17,8 +17,10 @@ import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.utils.ItemStackWriteEventHelper;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.utils.types.nbt.NBTByte;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTEnd;
+import protocolsupport.protocol.utils.types.nbt.NBTShort;
 import protocolsupport.protocol.utils.types.nbt.serializer.DefaultNBTSerializer;
 import protocolsupport.protocol.utils.types.nbt.serializer.PENBTSerializer;
 

@@ -3,11 +3,14 @@ package protocolsupport.protocol.utils;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
 
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.nbt.NBT;
 import protocolsupport.protocol.utils.types.nbt.NBTByte;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTShort;
 import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
 
@@ -78,6 +81,18 @@ public class CommonNBT {
 			compound.setTag("tag", itemstacknbt);
 		}
 		return compound;
+	}
+
+	public static NBTCompound serializeItemStackToPENBT(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
+		NBTCompound item = new NBTCompound();
+		itemstack = ItemStackSerializer.remapItemToClient(version, locale, itemstack.cloneItemStack());
+		item.setTag("Count", new NBTByte((byte) itemstack.getAmount()));
+		item.setTag("Damage", new NBTShort((short) itemstack.getLegacyData()));
+		item.setTag("id", new NBTShort((short) itemstack.getTypeId()));
+		if ((itemstack.getNBT() != null)) {
+			item.setTag("tag", itemstack.getNBT());
+		}
+		return item;
 	}
 
 	public static String deserializeBlockDataFromNBT(NBTCompound compound) {
