@@ -20,12 +20,14 @@ public class UseBed extends MiddleUseBed {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		NetworkEntity player = cache.getWatchedEntityCache().getSelfPlayer();
 
-		packets.add(EntityMetadata.createFromAttribute(version, cache.getAttributesCache().getLocale(), player, EntityMetadata.PeMetaBase.BED_POSTION, new DataWatcherObjectVector3vi(bed)));
-		// In theory, we should add the bit corresponding to PLAYER_FLAG_SLEEP to existing player flags.
-		// However, we don't track any other flags, and PE client resets this flag automatically for us.
-		// So we just consider it a value to be sent.
-		packets.add(EntityMetadata.createFromAttribute(version, cache.getAttributesCache().getLocale(), player, EntityMetadata.PeMetaBase.PLAYER_FLAGS, new DataWatcherObjectByte(EntityMetadata.PeMetaBase.PLAYER_FLAG_SLEEP)));
-		packets.add(SpawnPosition.setPlayerSpawn(bed));
+		if (entityId == player.getId()) {
+			packets.add(EntityMetadata.createFromAttribute(version, cache.getAttributesCache().getLocale(), player, EntityMetadata.PeMetaBase.BED_POSTION, new DataWatcherObjectVector3vi(bed)));
+			// In theory, we should add the bit corresponding to PLAYER_FLAG_SLEEP to existing player flags.
+			// However, we don't track any other flags, and PE client resets this flag automatically for us.
+			// So we just consider it a value to be sent.
+			packets.add(EntityMetadata.createFromAttribute(version, cache.getAttributesCache().getLocale(), player, EntityMetadata.PeMetaBase.PLAYER_FLAGS, new DataWatcherObjectByte(EntityMetadata.PeMetaBase.PLAYER_FLAG_SLEEP)));
+			packets.add(SpawnPosition.setPlayerSpawn(bed));
+		}
 
 		return packets;
 	}
