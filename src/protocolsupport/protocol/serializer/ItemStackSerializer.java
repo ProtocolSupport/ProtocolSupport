@@ -287,18 +287,6 @@ public class ItemStackSerializer {
 		return ItemStackRemapper.remapToClient(version, locale, itemstack);
 	}
 
-	public static NBTCompound itemStackToPENBT(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		NBTCompound item = new NBTCompound();
-		itemstack = remapItemToClient(version, locale, itemstack.cloneItemStack());
-		item.setTag("Count", new NBTByte((byte) itemstack.getAmount()));
-		item.setTag("Damage", new NBTShort((short) itemstack.getLegacyData()));
-		item.setTag("id", new NBTShort((short) itemstack.getTypeId()));
-		if ((itemstack.getNBT() != null)) {
-			item.setTag("tag", itemstack.getNBT());
-		}
-		return item;
-	}
-
 	private static final boolean isUsingShortLengthNBT(ProtocolVersion version) {
 		return version.isPC() && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10);
 	}

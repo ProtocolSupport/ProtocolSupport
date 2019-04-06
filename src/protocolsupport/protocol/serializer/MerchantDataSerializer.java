@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
+import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.types.MerchantData;
 import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
@@ -69,10 +70,10 @@ public class MerchantDataSerializer {
 		if (merchdata != null) {
 			for (TradeOffer offer : merchdata.getOffers()) {
 				NBTCompound recipe = new NBTCompound();
-				recipe.setTag("buyA", ItemStackSerializer.itemStackToPENBT(version, locale, offer.getItemStack1()));
-				recipe.setTag("sell", ItemStackSerializer.itemStackToPENBT(version, locale, offer.getResult()));
+				recipe.setTag("buyA", CommonNBT.serializeItemStackToPENBT(version, locale, offer.getItemStack1()));
+				recipe.setTag("sell", CommonNBT.serializeItemStackToPENBT(version, locale, offer.getResult()));
 				if (offer.hasItemStack2()) {
-					recipe.setTag("buyB", ItemStackSerializer.itemStackToPENBT(version, locale, offer.getItemStack2()));
+					recipe.setTag("buyB", CommonNBT.serializeItemStackToPENBT(version, locale, offer.getItemStack2()));
 				}
 				recipe.setTag("uses", new NBTInt(offer.isDisabled() ? offer.getMaxUses() : offer.getUses()));
 				recipe.setTag("maxUses", new NBTInt(offer.getMaxUses()));
