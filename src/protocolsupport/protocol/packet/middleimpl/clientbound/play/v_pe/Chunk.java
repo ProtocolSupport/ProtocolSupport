@@ -8,7 +8,6 @@ import protocolsupport.listeners.internal.ChunkUpdateRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.pipeline.version.v_pe.PEPacketDecoder;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -93,14 +92,6 @@ public class Chunk extends MiddleChunk {
 		ClientBoundPacketData networkChunkUpdate = ClientBoundPacketData.create(PEPacketIDs.NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET);
 		writeChunkPublisherUpdate(networkChunkUpdate, x, y, z);
 		return networkChunkUpdate;
-	}
-
-	public static boolean isChunk(ByteBuf data) {
-		return PEPacketDecoder.sPeekPacketId(data) == PEPacketIDs.CHUNK_DATA;
-	}
-
-	public static boolean isChunkPublisherUpdate(ByteBuf data) {
-		return PEPacketDecoder.sPeekPacketId(data) == PEPacketIDs.NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET;
 	}
 
 }

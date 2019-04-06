@@ -27,7 +27,7 @@ import protocolsupport.protocol.utils.types.Position;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-//manages PE ChunkPublisherUpdate and ChangeDimension packets
+//accurate center used for the ChunkPublisherUpdate packet
 public class PEChunkPublisher implements Listener {
 
 	protected final Map<Player, Long> lastChunkUpdate = new WeakHashMap<>();

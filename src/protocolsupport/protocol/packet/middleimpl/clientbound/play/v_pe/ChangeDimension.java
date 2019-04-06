@@ -7,7 +7,6 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.pipeline.version.v_pe.PEPacketDecoder;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.utils.types.ChunkCoord;
@@ -37,12 +36,13 @@ public class ChangeDimension extends MiddleChangeDimension {
 			packets.add(InventoryClose.create(connection.getVersion(), cache.getWindowCache().getOpenedWindowId()));
 			cache.getWindowCache().closeWindow();
 		}
-		//pattern must match PEDimSwitchLock
 		packets.add(createRaw(0, 0, 0, getPeDimensionId(dimension)));
 		packets.add(Chunk.createChunkPublisherUpdate(0, 0, 0));
+		//needs a few chunks before the dim switch ack can confirm
 		Chunk.addFakeChunks(packets, new ChunkCoord(0, 0));
+		packets.add(ClientBoundPacketData.create(PEPacketIDs.EXT_PS_AWAIT_DIM_SWITCH_ACK));
 		if (dimension == cache.getMovementCache().getChunkPublisherDimension()) {
-			//real dim switch requires correct publisher update before real chunks start
+			//real dim switch requires correct publisher update before real chunks are sent
 			final Position pos = cache.getMovementCache().getChunkPublisherPosition();
 			packets.add(Chunk.createChunkPublisherUpdate(pos.getX(), pos.getY(), pos.getZ()));
 		}
@@ -79,10 +79,6 @@ public class ChangeDimension extends MiddleChangeDimension {
 				throw new IllegalArgumentException(MessageFormat.format("Uknown dim id {0}", dimId));
 			}
 		}
-	}
-
-	public static boolean isChangeDimension(ByteBuf data) {
-		return PEPacketDecoder.sPeekPacketId(data) == PEPacketIDs.CHANGE_DIMENSION;
 	}
 
 }
