@@ -29,7 +29,6 @@ public class PEDimSwitchLock extends ChannelDuplexHandler {
 			queue.clear();
 			queue.trimToSize();
 			isLocked = false;
-			System.out.println("unlock");
 			for (ByteBuf data : qCopy) {
 				write(ctx, data, ctx.voidPromise());
 			}
@@ -50,8 +49,8 @@ public class PEDimSwitchLock extends ChannelDuplexHandler {
 				}
 				return;
 			} else if (PEPacketDecoder.sPeekPacketId((ByteBuf) msg) == PEPacketIDs.EXT_PS_AWAIT_DIM_SWITCH_ACK) {
-				System.out.println("lock");
 				isLocked = true;
+				return;
 			}
 		}
 		super.write(ctx, msg, promise);
