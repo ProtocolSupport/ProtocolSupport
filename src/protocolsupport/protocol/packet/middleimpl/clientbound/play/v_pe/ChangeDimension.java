@@ -41,11 +41,8 @@ public class ChangeDimension extends MiddleChangeDimension {
 		//needs a few chunks before the dim switch ack can confirm
 		Chunk.addFakeChunks(packets, new ChunkCoord(0, 0));
 		packets.add(ClientBoundPacketData.create(PEPacketIDs.EXT_PS_AWAIT_DIM_SWITCH_ACK));
-		if (dimension == cache.getMovementCache().getChunkPublisherDimension()) {
-			//real dim switch requires correct publisher update before real chunks are sent
-			final Position pos = cache.getMovementCache().getChunkPublisherPosition();
-			packets.add(Chunk.createChunkPublisherUpdate(pos.getX(), pos.getY(), pos.getZ()));
-		}
+		final Position pos = cache.getMovementCache().getChunkPublisherPosition();
+		packets.add(Chunk.createChunkPublisherUpdate(pos.getX(), pos.getY(), pos.getZ()));
 		cache.getMovementCache().setPeNeedsPlayerSpawn(true);
 		return packets;
 	}

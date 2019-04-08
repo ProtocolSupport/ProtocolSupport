@@ -65,7 +65,6 @@ public class MovementCache {
 	protected boolean peRightPaddleTurning = false;
 	protected boolean peNeedsPlayerSpawn = true;
 	protected volatile Position chunkPublisherPosition;
-	protected volatile Environment chunkPublisherDimension;
 
 	public void setPEClientPosition(double x, double y, double z) {
 		this.peClientX = x;
@@ -128,14 +127,6 @@ public class MovementCache {
 
 	public void setChunkPublisherPosition(Position chunkPublisherPosition) {
 		this.chunkPublisherPosition = chunkPublisherPosition;
-	}
-
-	public Environment getChunkPublisherDimension() {
-		return chunkPublisherDimension;
-	}
-
-	public void setChunkPublisherDimension(Environment chunkPublisherDimension) {
-		this.chunkPublisherDimension = chunkPublisherDimension;
 	}
 
 	@Override
