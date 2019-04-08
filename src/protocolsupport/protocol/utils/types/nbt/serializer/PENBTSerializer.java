@@ -73,7 +73,7 @@ public class PENBTSerializer extends NBTSerializer<ByteBuf, ByteBuf> {
 			registerType(
 				NBTType.BYTE_ARRAY, 7,
 				stream -> {
-					byte[] array = new byte[VarNumberSerializer.readVarInt(stream)];
+					byte[] array = new byte[VarNumberSerializer.readSVarInt(stream)];
 					for (int i = 0; i < array.length; i++) {
 						array[i] = stream.readByte();
 					}
@@ -81,14 +81,14 @@ public class PENBTSerializer extends NBTSerializer<ByteBuf, ByteBuf> {
 				},
 				(stream, tag) -> {
 					byte[] array = tag.getValue();
-					VarNumberSerializer.writeVarInt(stream, array.length);
+					VarNumberSerializer.writeSVarInt(stream, array.length);
 					stream.writeBytes(array);
 				}
 			);
 			registerType(
 				NBTType.INT_ARRAY, 11,
 				stream -> {
-					int[] array = new int[VarNumberSerializer.readVarInt(stream)];
+					int[] array = new int[VarNumberSerializer.readSVarInt(stream)];
 					for (int i = 0; i < array.length; i++) {
 						array[i] = VarNumberSerializer.readSVarInt(stream);
 					}
@@ -96,7 +96,7 @@ public class PENBTSerializer extends NBTSerializer<ByteBuf, ByteBuf> {
 				},
 				(stream, tag) -> {
 					int[] array = tag.getValue();
-					VarNumberSerializer.writeVarInt(stream, array.length);
+					VarNumberSerializer.writeSVarInt(stream, array.length);
 					for (int i : array) {
 						VarNumberSerializer.writeSVarInt(stream, i);
 					}
