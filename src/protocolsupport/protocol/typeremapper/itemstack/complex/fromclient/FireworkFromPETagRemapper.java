@@ -29,12 +29,10 @@ public class FireworkFromPETagRemapper implements ItemStackComplexRemapper {
 		NBTCompound fireworks = tag.getTagOfType("Fireworks", NBTType.COMPOUND);
 		if (fireworks != null) {
 			NBTList<NBTCompound> explosions = fireworks.getTagListOfType("Explosions", NBTType.COMPOUND);
-			if (explosions != null) {
-				if (!explosions.isEmpty()) {
-					// PE always has Explosions list, even if it is empty. Only remap
-					// if non-empty, otherwise drop tag.
-					fireworks.setTag("Explosions", remapExplosions(explosions));
-				}
+			if (explosions != null && !explosions.isEmpty()) {
+				// PE always has Explosions list, even if it is empty. Only remap
+				// if non-empty, otherwise drop tag.
+				fireworks.setTag("Explosions", remapExplosions(explosions));
 			}
 		}
 		return itemstack;
