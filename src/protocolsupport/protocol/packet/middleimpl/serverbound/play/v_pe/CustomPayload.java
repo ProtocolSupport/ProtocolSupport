@@ -15,8 +15,7 @@ public class CustomPayload extends MiddleCustomPayload {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		//TODO: why are we lowercasing this? cause some plugins suck :(
-		tag = StringSerializer.readString(clientdata, connection.getVersion(), 20).toLowerCase();
+		tag = StringSerializer.readString(clientdata, connection.getVersion(), 20);
 		data = MiscSerializer.readAllBytesSlice(clientdata);
 	}
 
