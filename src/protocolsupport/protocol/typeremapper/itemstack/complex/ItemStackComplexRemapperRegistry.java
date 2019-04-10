@@ -13,6 +13,7 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.BookPa
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.DisplayNameFromLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.EnchantFromLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.EnchantFromPEEnchantRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.FireworkFromPETagRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.LeatherArmorFromPERemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.MapFromLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.PotionFromLegacyIdComplexRemapper;
@@ -28,6 +29,7 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.EmptyBoo
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.EnchantFilterNBTComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.EnchantToLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.EnchantToPEEnchantSpecificRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.FireworkToPETagSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.LeatherArmorToPESpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.MapItemLegacyIdToNbtSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.ItemDurabilityToLegacyDataComplexRemapper;
@@ -94,6 +96,7 @@ public class ItemStackComplexRemapperRegistry {
 		PotionToPEIdSpecificRemapper pepotion 		= new PotionToPEIdSpecificRemapper();
 		BookPagesToPESpecificRemapper pebook 		= new BookPagesToPESpecificRemapper();
 		LeatherArmorToPESpecificRemapper peleatherarmor = new LeatherArmorToPESpecificRemapper();
+		FireworkToPETagSpecificRemapper pefireworks = new FireworkToPETagSpecificRemapper();
 
 		ItemSpawnEggData.getSpawnEggs()
 		.forEach(m -> {
@@ -124,10 +127,8 @@ public class ItemStackComplexRemapperRegistry {
 		registerToClient(Material.WRITTEN_BOOK, pebook, ProtocolVersionsHelper.ALL_PE);
 		//TODO FIX
 		//registerToClient(Material.BOOK_AND_QUILL, pebook, ProtocolVersionsHelper.ALL_PE);
-		//FireworkToPETagSpecificRemapper pefireworks = new FireworkToPETagSpecificRemapper();
-		//TODO FIX
-		//registerToClient(Material.FIREWORK_CHARGE, pefireworks, ProtocolVersionsHelper.ALL_PE);
-		//registerToClient(Material.FIREWORK, pefireworks, ProtocolVersionsHelper.ALL_PE);
+		registerToClient(Material.FIREWORK_STAR, pefireworks, ProtocolVersionsHelper.ALL_PE);
+		registerToClient(Material.FIREWORK_ROCKET, pefireworks, ProtocolVersionsHelper.ALL_PE);
 		registerToClient(Material.LEATHER_HELMET, peleatherarmor, ProtocolVersionsHelper.ALL_PE);
 		registerToClient(Material.LEATHER_CHESTPLATE, peleatherarmor, ProtocolVersionsHelper.ALL_PE);
 		registerToClient(Material.LEATHER_LEGGINGS, peleatherarmor, ProtocolVersionsHelper.ALL_PE);
@@ -144,6 +145,8 @@ public class ItemStackComplexRemapperRegistry {
 		BookPagesFromPERemapper frompebook 				= new BookPagesFromPERemapper();
 		PotionFromPEIdRemapper frompepotion 			= new PotionFromPEIdRemapper();
 		LeatherArmorFromPERemapper frompeleatherarmor 	= new LeatherArmorFromPERemapper();
+		FireworkFromPETagRemapper frompefireworks       = new FireworkFromPETagRemapper();
+
 		MinecraftData.getItems()
 		.forEach(material -> {
 			//TODO: do we need these anymore? backwards mapping done with stashed NBT now
@@ -165,10 +168,8 @@ public class ItemStackComplexRemapperRegistry {
 		registerFromClient(Material.LEATHER_CHESTPLATE, frompeleatherarmor, ProtocolVersionsHelper.ALL_PE);
 		registerFromClient(Material.LEATHER_LEGGINGS, frompeleatherarmor, ProtocolVersionsHelper.ALL_PE);
 		registerFromClient(Material.LEATHER_BOOTS, frompeleatherarmor, ProtocolVersionsHelper.ALL_PE);
-		//TODO FIX
-		//FireworkFromPETagRemapper frompefireworks = new FireworkFromPETagRemapper();
-		//registerFromClient(Material.FIREWORK_CHARGE, frompefireworks, ProtocolVersionsHelper.ALL_PE);
-		//registerFromClient(Material.FIREWORK, frompefireworks, ProtocolVersionsHelper.ALL_PE);
+		registerFromClient(Material.FIREWORK_STAR, frompefireworks, ProtocolVersionsHelper.ALL_PE);
+		registerFromClient(Material.FIREWORK_ROCKET, frompefireworks, ProtocolVersionsHelper.ALL_PE);
 		Arrays.stream(Material.values())
 		.filter(Material::isItem)
 		.forEach(material -> {

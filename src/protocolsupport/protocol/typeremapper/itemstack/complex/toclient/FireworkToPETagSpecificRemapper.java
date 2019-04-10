@@ -18,15 +18,23 @@ public class FireworkToPETagSpecificRemapper implements ItemStackComplexRemapper
 		if (tag == null) {
 			return itemstack;
 		}
+
+		// For firework stars, we have an Explosion top level tag
 		NBTCompound explosion = tag.getTagOfType("Explosion", NBTType.COMPOUND);
 		if (explosion != null) {
 			tag.setTag("Explosion", remapExplosion(explosion));
 		}
+
+		// For firework rockets, we have a Fireworks top level tag
 		NBTCompound fireworks = tag.getTagOfType("Fireworks", NBTType.COMPOUND);
 		if (fireworks != null) {
-			NBTList<NBTCompound> explosions = tag.getTagListOfType("Explosions", NBTType.COMPOUND);
+			NBTList<NBTCompound> explosions = fireworks.getTagListOfType("Explosions", NBTType.COMPOUND);
 			if (explosions != null) {
 				fireworks.setTag("Explosions", remapExplosions(explosions));
+			} else {
+				// PE always need Explosions list, even if it is empty
+				explosions = new NBTList<>(NBTType.COMPOUND);
+				fireworks.setTag("Explosions", explosions);
 			}
 		}
 		return itemstack;
@@ -56,7 +64,7 @@ public class FireworkToPETagSpecificRemapper implements ItemStackComplexRemapper
 		}
 		NBTByte trail = pcExplosion.getTagOfType("Trail", NBTType.BYTE);
 		if (trail != null) {
-			peExplosion.setTag("FireworkTrail", new NBTByte(flicker.getAsByte()));
+			peExplosion.setTag("FireworkTrail", new NBTByte(trail.getAsByte()));
 		}
 		NBTByte type = pcExplosion.getTagOfType("Type", NBTType.BYTE);
 		if (type != null) {
