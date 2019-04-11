@@ -48,7 +48,6 @@ import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupportbuildprocessor.Preload;
-
 import static protocolsupport.protocol.typeremapper.tile.TileEntitySkullRemapper.getLegacyData;
 
 @Preload
