@@ -392,7 +392,6 @@ public class TileEntityRemapper {
 				}
 			}
 
-
 			@Override
 			protected void init(List<ArrayMap.Entry<Consumer<NBTCompound>>> list) {
 				register(list, Material.SHULKER_BOX, true);
