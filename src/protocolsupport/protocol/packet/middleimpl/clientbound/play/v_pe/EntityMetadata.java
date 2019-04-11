@@ -50,17 +50,16 @@ public class EntityMetadata extends MiddleEntityMetadata {
 			});
 		}
 		//Invisible names. Applied after possible size remappers.
-		if (!entity.getType().isOfType(NetworkEntityType.PLAYER)) {
-			//text doesnt display when invisible, so lets restore the java behavior and make it invisible another way
-			boolean hasName = entity.getDataCache().getPeBaseFlag(PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG);
-			boolean isInvisible = entity.getDataCache().getPeBaseFlag(PeMetaBase.FLAG_INVISIBLE);
-			if (isInvisible && hasName) {
-				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_INVISIBLE, false);
-				entityRemapper.getRemappedMetadata().put(PeMetaBase.SCALE, new DataWatcherObjectFloatLe(0));
-				entityRemapper.getRemappedMetadata().put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(0));
-				entityRemapper.getRemappedMetadata().put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(0));
-			}
-		} else { //player flags
+		//text doesnt display when invisible, so lets restore the java behavior and make it invisible another way
+		boolean hasName = entity.getDataCache().getPeBaseFlag(PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG);
+		boolean isInvisible = entity.getDataCache().getPeBaseFlag(PeMetaBase.FLAG_INVISIBLE);
+		if (isInvisible && hasName) {
+			entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_INVISIBLE, false);
+			entityRemapper.getRemappedMetadata().put(PeMetaBase.SCALE, new DataWatcherObjectFloatLe(0));
+			entityRemapper.getRemappedMetadata().put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(0));
+			entityRemapper.getRemappedMetadata().put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(0));
+		}
+		if (entity.getType().isOfType(NetworkEntityType.PLAYER)) {
 			if (cache.getWatchedEntityCache().isSelf(entity.getId())) {
 				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_NO_AI, false);
 			}

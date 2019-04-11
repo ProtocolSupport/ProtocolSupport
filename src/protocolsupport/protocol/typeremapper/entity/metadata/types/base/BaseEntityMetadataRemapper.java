@@ -32,6 +32,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectStrin
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3fLe;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityDataCache;
+import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class BaseEntityMetadataRemapper extends EntityMetadataRemapper {
@@ -64,15 +65,17 @@ public class BaseEntityMetadataRemapper extends EntityMetadataRemapper {
 			entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_LEASHED, data.getAttachedId() != -1);
 			mapPut.accept(PeMetaBase.LEADHOLDER, new DataWatcherObjectSVarLong(data.getAttachedId()));
 			// = PE Nametag =
-			Optional<DataWatcherObjectOptionalChat> nameTagWatcher = DataWatcherObjectIndex.Entity.NAMETAG.getValue(original);
 			//Doing this for players makes nametags behave weird or only when close.
-			boolean doNameTag = ((nameTagWatcher.isPresent()));/* && (entity.getType() != NetworkEntityType.PLAYER));*/ // works as intended
-			entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, doNameTag);
-			entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, doNameTag); // does nothing?
-			if (doNameTag) {
-				BaseComponent nameTag = nameTagWatcher.get().getValue();
-				mapPut.accept(PeMetaBase.NAMETAG, new DataWatcherObjectString(nameTag != null ? nameTag.toLegacyText() : ""));
-				mapPut.accept(PeMetaBase.ALWAYS_SHOW_NAMETAG, new DataWatcherObjectByte((byte)1)); // 1 for always display, 0 for display when look
+			if (entity.getType() != NetworkEntityType.PLAYER) {
+				Optional<DataWatcherObjectOptionalChat> nameTagWatcher = DataWatcherObjectIndex.Entity.NAMETAG.getValue(original);
+				boolean doNameTag = nameTagWatcher.isPresent();
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_SHOW_NAMETAG, doNameTag);
+				entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG, doNameTag); // does nothing?
+				if (doNameTag) {
+					BaseComponent nameTag = nameTagWatcher.get().getValue();
+					mapPut.accept(PeMetaBase.NAMETAG, new DataWatcherObjectString(nameTag != null ? nameTag.toLegacyText() : ""));
+					mapPut.accept(PeMetaBase.ALWAYS_SHOW_NAMETAG, new DataWatcherObjectByte((byte) 1)); // 1 for always display, 0 for display when look
+				}
 			}
 			// = PE Riding =
 			entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_COLLIDE, !data.isRiding());
