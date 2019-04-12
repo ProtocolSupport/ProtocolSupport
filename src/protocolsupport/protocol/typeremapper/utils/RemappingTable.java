@@ -90,6 +90,9 @@ public class RemappingTable {
 			return table.getOrDefault(from, from);
 		}
 
+		public boolean hasRemap(T from) {
+			return table.get(from) != null;
+		}
 	}
 
 }

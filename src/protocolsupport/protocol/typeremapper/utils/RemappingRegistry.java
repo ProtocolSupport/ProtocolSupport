@@ -54,6 +54,9 @@ public abstract class RemappingRegistry<T extends RemappingTable> {
 
 		public void registerRemapEntry(T from, T to, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
+				if (getTable(version).hasRemap(from) && version.isPE()) {
+					System.out.println("DUPLICATE REMAP: " + from + " for version " + version);
+				}
 				getTable(version).setRemap(from, to);
 			}
 		}
