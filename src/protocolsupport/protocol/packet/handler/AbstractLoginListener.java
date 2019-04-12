@@ -24,6 +24,7 @@ import org.bukkit.event.player.PlayerPreLoginEvent;
 
 import io.netty.channel.ChannelPipeline;
 import protocolsupport.ProtocolSupport;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.api.events.PlayerProfileCompleteEvent;
@@ -295,11 +296,11 @@ public abstract class AbstractLoginListener implements IPacketListener {
 	}
 
 	protected static boolean isFullEncryption(ProtocolVersion version) {
-		return version.isPC() && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5);
+		return version.getProtocolType() == ProtocolType.PC && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5);
 	}
 
 	protected static boolean hasCompression(ProtocolVersion version) {
-		return version.isPC() && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+		return version.getProtocolType() == ProtocolType.PC && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
 	}
 
 }

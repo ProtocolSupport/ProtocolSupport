@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.itemstack;
 
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapperRegistry;
 import protocolsupport.protocol.typeremapper.pe.PEItems;
@@ -10,7 +11,7 @@ public class ItemStackRemapper {
 	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale,  NetworkItemStack itemstack) {
 		itemstack = ItemStackComplexRemapperRegistry.remapToClient(version, locale, itemstack);
 		itemstack.setTypeId(LegacyItemType.REGISTRY.getTable(version).getRemap(itemstack.getTypeId()));
-		if (version.isPE()) {
+		if (version.getProtocolType() == ProtocolType.PE) {
 			int peCombinedId = PEItems.getPECombinedIdByModernId(itemstack.getTypeId());
 			int peData = PEItems.getDataFromPECombinedId(peCombinedId);
 			itemstack.setTypeId(PEItems.getIdFromPECombinedId(peCombinedId));
@@ -30,7 +31,7 @@ public class ItemStackRemapper {
 	}
 
 	public static NetworkItemStack remapFromClient(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		if (version.isPE()) {
+		if (version.getProtocolType() == ProtocolType.PE) {
 			int modernId = PEItems.getModernIdByPEIdData(itemstack.getTypeId(), itemstack.getLegacyData());
 			itemstack.setTypeId(modernId);
 			itemstack.setLegacyData(NetworkItemStack.DEFAULT_LEGACY_DATA);
