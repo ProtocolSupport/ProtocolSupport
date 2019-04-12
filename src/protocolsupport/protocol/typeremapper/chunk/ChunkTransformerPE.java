@@ -37,10 +37,11 @@ public class ChunkTransformerPE extends ChunkTransformerBB {
 				for (int x = 0; x < 16; x++) { for (int z = 0; z < 16; z++) { for (int y = 0; y < 16; y++) {
 					int pcIndex = getPcIndex(x, y, z);
 					int blockstate = storage.getBlockData(pcIndex);
-
-					if (PEBlocks.isPCBlockWaterlogged(blockstate)) { waterstorage.setBlockState(peIndex, 1); }
 					// Update tile entity cache
 					processBlockData(i, pcIndex, blockstate);
+
+					// Remap to PE blockstate
+					if (PEBlocks.isPCBlockWaterlogged(blockstate)) { waterstorage.setBlockState(peIndex, 1); }
 					blockstorage.setBlockState(peIndex, palette.getRuntimeId(PEBlocks.getPocketRuntimeId(blockDataRemappingTable.getRemap(blockstate))));
 					peIndex++;
 				}}}
