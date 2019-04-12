@@ -59,9 +59,9 @@ public class PEAdventureSettings {
 	public static ClientBoundPacketData createPacket(int entityId, int... flags) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ADVENTURE_SETTINGS);
 		VarNumberSerializer.writeVarInt(serializer, Arrays.stream(flags).reduce(0, (left, right) -> left | right));
-        // Command permissions need anything but NORMAL to show the command shortcut menu
+		// Command permissions need anything but NORMAL to show the command shortcut menu
 		VarNumberSerializer.writeVarInt(serializer, COMMAND_PERMISSION_OPERATOR); // command permission
-        // We fake it and set all possible flags in the second part of the flag field
+		// We fake it and set all possible flags in the second part of the flag field
 		VarNumberSerializer.writeVarInt(serializer, PERMISSIONS_ALLOW_ALL); // flags, part 2
 		VarNumberSerializer.writeVarInt(serializer, GROUP_NORMAL); // player permission group
 		VarNumberSerializer.writeVarInt(serializer, 0); //? (custom flags)
