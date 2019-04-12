@@ -112,24 +112,6 @@ public enum ProtocolVersion {
 	}
 
 	/**
-	 * Convenience method to check if version is
-	 * a PE version.
-	 * @return true if version is a PE version.
-	 */
-	public boolean isPE() {
-		return getProtocolType() == ProtocolType.PE;
-	}
-
-	/**
-	 * Convenience method to check if version is
-	 * a PC version.
-	 * @return true if version is a PC version.
-	 */
-	public boolean isPC() {
-		return getProtocolType() == ProtocolType.PC;
-	}
-
-	/**
 	 * Returns if the game version used by this protocol released after the game version used by another protocol version
 	 * @param another another protocol version
 	 * @return true if game version is released after the game version used by another protocol version

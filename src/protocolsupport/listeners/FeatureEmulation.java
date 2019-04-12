@@ -34,7 +34,7 @@ public class FeatureEmulation implements Listener {
 				Bukkit.getOnlinePlayers().stream()
 				.filter(player -> {
 					ProtocolVersion version = ProtocolSupportAPI.getProtocolVersion(player);
-					return version.isPC() && version.isBefore(ProtocolVersion.MINECRAFT_1_9);
+					return version.getProtocolType() == ProtocolType.PC && version.isBefore(ProtocolVersion.MINECRAFT_1_9);
 				})
 				.filter(player ->
 					!player.isFlying() &&

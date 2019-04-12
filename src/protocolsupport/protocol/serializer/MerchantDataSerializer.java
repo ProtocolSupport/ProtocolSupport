@@ -1,6 +1,7 @@
 package protocolsupport.protocol.serializer;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
@@ -86,7 +87,7 @@ public class MerchantDataSerializer {
 	}
 
 	private static boolean isUsingUsesCount(ProtocolVersion version) {
-		return version.isPC() && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+		return version.getProtocolType() == ProtocolType.PC && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
 	}
 
 }

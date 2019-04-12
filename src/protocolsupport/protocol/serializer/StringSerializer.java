@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 
 public class StringSerializer {
@@ -50,13 +51,13 @@ public class StringSerializer {
 	}
 
 	private static boolean isUsingUTF16(ProtocolVersion version) {
-		return version.isPC() && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4);
+		return version.getProtocolType() == ProtocolType.PC && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4);
 	}
 
 	private static boolean isUsingUTF8(ProtocolVersion version) {
 		return
-			(version.isPC() && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5)) ||
-			(version.isPE());
+			(version.getProtocolType() == ProtocolType.PC && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5)) ||
+			version.getProtocolType() == ProtocolType.PE;
 	}
 
 }

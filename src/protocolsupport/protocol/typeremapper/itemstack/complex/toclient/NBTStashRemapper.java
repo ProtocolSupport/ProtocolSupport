@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.itemstack.complex.toclient;
 
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEItems;
@@ -14,7 +15,7 @@ public class NBTStashRemapper implements ItemStackComplexRemapper {
 		NBTCompound tag = itemstack.getNBT();
 		NBTCompound newTag = null;
 		boolean needsIDStash = false;
-		if (version.isPE()) {
+		if (version.getProtocolType() == ProtocolType.PE) {
 			int peCombined = PEItems.getPECombinedIdByModernId(itemstack.getTypeId());
 			int reverseModern = PEItems.getModernIdByPECombined(peCombined);
 			needsIDStash = reverseModern != itemstack.getTypeId();

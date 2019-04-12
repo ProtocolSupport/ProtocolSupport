@@ -12,15 +12,14 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.utils.ItemStackWriteEventHelper;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.nbt.NBTByte;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTEnd;
-import protocolsupport.protocol.utils.types.nbt.NBTShort;
 import protocolsupport.protocol.utils.types.nbt.serializer.DefaultNBTSerializer;
 import protocolsupport.protocol.utils.types.nbt.serializer.PENBTSerializer;
 
@@ -51,7 +50,7 @@ public class ItemStackSerializer {
 	 */
 	public static NetworkItemStack readItemStack(ByteBuf from, ProtocolVersion version, String locale) {
 		int type;
-		if (version.isPE()) {
+		if (version.getProtocolType() == ProtocolType.PE) {
 			type = VarNumberSerializer.readSVarInt(from);
 		} else if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
 			if (!from.readBoolean()) {
@@ -63,7 +62,7 @@ public class ItemStackSerializer {
 			type = from.readShort();
 		}
 		// PE can have -1 for new blocks :F
-		if (version.isPE()) {
+		if (version.getProtocolType() == ProtocolType.PE) {
 			if (type == 0) {
 				return NetworkItemStack.NULL;
 			}
@@ -74,17 +73,17 @@ public class ItemStackSerializer {
 		}
 		NetworkItemStack itemstack = new NetworkItemStack();
 		itemstack.setTypeId(type);
-		if (version.isPE()) {
+		if (version.getProtocolType() == ProtocolType.PE) {
 			int amountdata = VarNumberSerializer.readSVarInt(from);
 			itemstack.setAmount(amountdata & 0x7F);
 			itemstack.setLegacyData((amountdata >> 8) & 0x7FFF);
 		} else {
 			itemstack.setAmount(from.readByte());
 		}
-		if (version.isPC() && version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
+		if (version.getProtocolType() == ProtocolType.PC && version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			itemstack.setLegacyData(from.readUnsignedShort());
 		}
-		if (version.isPE()) {
+		if (version.getProtocolType() == ProtocolType.PE) {
 			itemstack.setNBT(readTag(from, false, version));
 			//TODO: CanPlaceOn PE
 			for (int i = 0; i < VarNumberSerializer.readSVarInt(from); i++) {
@@ -143,7 +142,7 @@ public class ItemStackSerializer {
 	 */
 	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		if (itemstack.isNull()) {
-			if (version.isPE()) {
+			if (version.getProtocolType() == ProtocolType.PE) {
 				VarNumberSerializer.writeVarInt(to, 0);
 			} else if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
 				to.writeBoolean(false);
@@ -153,7 +152,7 @@ public class ItemStackSerializer {
 			return;
 		}
 		itemstack = remapItemToClient(version, locale, itemstack.cloneItemStack());
-		if (version.isPE()) {
+		if (version.getProtocolType() == ProtocolType.PE) {
 			writePEItemStack(to, itemstack);
 		} else {
 			if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
@@ -288,15 +287,15 @@ public class ItemStackSerializer {
 	}
 
 	private static final boolean isUsingShortLengthNBT(ProtocolVersion version) {
-		return version.isPC() && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10);
+		return version.getProtocolType() == ProtocolType.PC && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10);
 	}
 
 	private static final boolean isUsingDirectNBT(ProtocolVersion version) {
-		return version.isPC() && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+		return version.getProtocolType() == ProtocolType.PC && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
 	}
 
 	private static final boolean isUsingPENBT(ProtocolVersion version) {
-		return version.isPE();
+		return version.getProtocolType() == ProtocolType.PE;
 	}
 
 }
