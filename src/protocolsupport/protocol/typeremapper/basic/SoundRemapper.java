@@ -859,6 +859,73 @@ public class SoundRemapper {
 			registerRemapEntry("music.credits", "music.game.credits", ProtocolVersionsHelper.ALL_PE);
 			registerRemapEntry("music.dragon", "music.game.endboss", ProtocolVersionsHelper.ALL_PE);
 			registerRemapEntry("ui.toast.challenge_complete", "random.toast", ProtocolVersionsHelper.ALL_PE);
+
+			/*
+
+			NOTE:
+
+			*** The following sounds exist on the PC server, but has no mapping to PE. This mean that no sound will be played
+			    on the PE client for the following.
+
+			ambient.cave, ambient.underwater.enter, ambient.underwater.exit, ambient.underwater.loop,
+			ambient.underwater.loop.additions, ambient.underwater.loop.additions.rare,
+			ambient.underwater.loop.additions.ultra_rare, block.chest.locked, block.coral_block.break,
+			block.coral_block.fall, block.coral_block.hit, block.coral_block.place, block.coral_block.step,
+			block.enchantment_table.use, block.fence_gate.close, block.fence_gate.open, block.iron_trapdoor.close,
+			block.iron_trapdoor.open, block.lily_pad.place, block.note_block.bell, block.note_block.chime,
+			block.note_block.flute, block.note_block.guitar, block.note_block.xylophone, block.pumpkin.carve,
+			block.wooden_trapdoor.close, block.wooden_trapdoor.open, enchant.thorns.hit, entity.bat.loop,
+			entity.boat.paddle_land, entity.boat.paddle_water, entity.ender_eye.death, entity.fish.swim,
+			entity.fishing_bobber.retrieve, entity.generic.death, entity.hostile.big_fall, entity.hostile.death,
+			entity.hostile.hurt, entity.hostile.small_fall, entity.husk.converted_to_zombie, entity.illusioner.ambient,
+			entity.illusioner.cast_spell, entity.illusioner.death, entity.illusioner.hurt,
+			entity.illusioner.mirror_move, entity.illusioner.prepare_blindness, entity.illusioner.prepare_mirror,
+			entity.parrot.imitate.blaze, entity.parrot.imitate.creeper, entity.parrot.imitate.drowned,
+			entity.parrot.imitate.elder_guardian, entity.parrot.imitate.ender_dragon, entity.parrot.imitate.enderman,
+			entity.parrot.imitate.endermite, entity.parrot.imitate.evoker, entity.parrot.imitate.ghast,
+			entity.parrot.imitate.husk, entity.parrot.imitate.illusioner, entity.parrot.imitate.magma_cube,
+			entity.parrot.imitate.phantom, entity.parrot.imitate.polar_bear, entity.parrot.imitate.shulker,
+			entity.parrot.imitate.silverfish, entity.parrot.imitate.skeleton, entity.parrot.imitate.slime,
+			entity.parrot.imitate.spider, entity.parrot.imitate.stray, entity.parrot.imitate.vex,
+			entity.parrot.imitate.vindicator, entity.parrot.imitate.witch, entity.parrot.imitate.wither,
+			entity.parrot.imitate.wither_skeleton, entity.parrot.imitate.wolf, entity.parrot.imitate.zombie,
+			entity.parrot.imitate.zombie_pigman, entity.parrot.imitate.zombie_villager, entity.player.attack.knockback,
+			entity.player.breath, entity.puffer_fish.blow_out, entity.puffer_fish.blow_up, entity.puffer_fish.sting,
+			entity.rabbit.attack, entity.skeleton_horse.step_water, entity.snow_golem.ambient, entity.squid.squirt,
+			entity.zombie.attack_iron_door, entity.zombie.destroy_egg, entity.zombie.infect, item.axe.strip,
+			item.hoe.till, item.shovel.flatten, music.under_water, ui.toast.in, ui.toast.out
+
+			*** The following sounds exists in the PE client, without us having a mapping to them. This either means the
+			    functionality does not exist in PC yet (upcoming 1.14), or possibly that we're missing some remap.
+
+			block.bamboo.break, block.bamboo.fall, block.bamboo.hit, block.bamboo.place, block.bamboo.step,
+			block.bamboo_sapling.break, block.bamboo_sapling.place, block.end_portal.spawn,
+			block.end_portal_frame.fill, block.false_permissions, block.scaffolding.break, block.scaffolding.climb,
+			block.scaffolding.fall, block.scaffolding.hit, block.scaffolding.place, block.scaffolding.step,
+			camera.take_picture, cauldron.adddye, cauldron.cleanarmor, cauldron.cleanbanner, cauldron.dyearmor,
+			cauldron.explode, cauldron.fillpotion, cauldron.fillwater, cauldron.takepotion, cauldron.takewater,
+			crossbow.loading.end, crossbow.loading.middle, crossbow.loading.start, crossbow.quick_charge.end,
+			crossbow.quick_charge.middle, crossbow.quick_charge.start, crossbow.shoot,
+			entity.zombie.converted_to_drowned, fall.egg, item.book.page_turn, item.book.put, item.shield.block,
+			item.trident.hit, item.trident.hit_ground, item.trident.return, item.trident.riptide_1,
+			item.trident.riptide_2, item.trident.riptide_3, item.trident.throw, item.trident.thunder, jump.cloth,
+			jump.grass, jump.gravel, jump.sand, jump.slime, jump.snow, jump.stone, jump.wood, land.cloth, land.grass,
+			land.gravel, land.sand, land.slime, land.snow, land.stone, land.wood, mob.agent.spawn, mob.cat.beg,
+			mob.cat.eat, mob.cat.straymeow, mob.dolphin.blowhole, mob.ocelot.death, mob.ocelot.idle, mob.panda.bite,
+			mob.panda.cant_breed, mob.panda.death, mob.panda.eat, mob.panda.hurt, mob.panda.idle,
+			mob.panda.idle.aggressive, mob.panda.idle.worried, mob.panda.presneeze, mob.panda.sneeze, mob.panda.step,
+			mob.panda_baby.idle, mob.pig.boost, mob.pillager.death, mob.pillager.hurt, mob.pillager.idle, note.bass,
+			random.fuse, random.pop2, random.screenshot, ui.loom.select_pattern, ui.loom.take_result, vr.stutterturn
+
+			*** The following few sounds has the same name in the PC server and PE client, so no mapping is necessary
+			    since a non-map assumes the same value. (This means that all other sounds are remapped.)
+
+			block.end_portal.spawn, block.end_portal_frame.fill, item.shield.block, item.trident.hit,
+			item.trident.hit_ground, item.trident.return, item.trident.riptide_1, item.trident.riptide_2,
+			item.trident.riptide_3, item.trident.throw, item.trident.thunder, entity.zombie.converted_to_drowned
+
+			*/
+
 		}
 
 		@Override
