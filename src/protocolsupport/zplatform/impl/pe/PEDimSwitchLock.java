@@ -10,7 +10,8 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAc
 import protocolsupport.protocol.pipeline.version.v_pe.PEPacketDecoder;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 //lock outbound packet stream until we get a dim switch ack
 public class PEDimSwitchLock extends ChannelDuplexHandler {
@@ -19,18 +20,15 @@ public class PEDimSwitchLock extends ChannelDuplexHandler {
 
 	protected static int MAX_QUEUE_SIZE = 4096;
 
-	protected final ArrayList<ByteBuf> queue = new ArrayList<>(128);
+	protected final Deque<ByteBuf> deque = new ArrayDeque<>(32);
 	protected boolean isLocked = false;
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		if (msg instanceof ByteBuf && isLocked && PlayerAction.isDimSwitchAck((ByteBuf) msg)) {
-			final ArrayList<ByteBuf> qCopy = new ArrayList(queue);
-			queue.clear();
-			queue.trimToSize();
 			isLocked = false;
-			for (ByteBuf data : qCopy) {
-				write(ctx, data, ctx.voidPromise());
+			while (!deque.isEmpty() && !isLocked) {
+				write(ctx, deque.removeFirst(), ctx.voidPromise());
 			}
 			ctx.flush();
 		}
@@ -41,9 +39,9 @@ public class PEDimSwitchLock extends ChannelDuplexHandler {
 	public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
 		if (msg instanceof ByteBuf) {
 			if (isLocked) {
-				queue.add((ByteBuf) msg);
+				deque.addLast((ByteBuf) msg);
 				promise.trySuccess();
-				if (queue.size() > MAX_QUEUE_SIZE) {
+				if (deque.size() > MAX_QUEUE_SIZE) {
 					ProtocolSupport.logWarning("PEDimSwitchLock: queue got too large, closing connection.");
 					ctx.channel().close();
 				}
