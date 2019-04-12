@@ -49,8 +49,6 @@ import protocolsupport.protocol.utils.types.nbt.NBTType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupportbuildprocessor.Preload;
 
-import static protocolsupport.protocol.typeremapper.tile.TileEntitySkullRemapper.getLegacyData;
-
 @Preload
 public class TileEntityRemapper {
 
@@ -344,7 +342,7 @@ public class TileEntityRemapper {
 		register(TileEntityType.SKULL, new TileEntityWithBlockDataNBTRemapper() {
 			protected void register(List<ArrayMap.Entry<Consumer<NBTCompound>>> list, Material skull, int skulltype) {
 				for (BlockData blockdata : MaterialAPI.getBlockDataList(skull)) {
-					float rotation = getLegacyData(blockdata);
+					float rotation = TileEntitySkullRemapper.getLegacyData(blockdata);
 					list.add(new ArrayMap.Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> {
 						nbt.setTag("SkullType", new NBTByte((byte) skulltype));
 						nbt.setTag("Rotation", new NBTFloat((float) (rotation * 22.5)));
@@ -392,7 +390,6 @@ public class TileEntityRemapper {
 					}));
 				}
 			}
-
 
 			@Override
 			protected void init(List<ArrayMap.Entry<Consumer<NBTCompound>>> list) {
