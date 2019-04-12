@@ -16,6 +16,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AgeableE
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.LivingEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.base.TameableEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.BatEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.BlazeEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.CreeperEntityMetadataRemapper;
@@ -184,9 +185,11 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.BAT)
 			.addMapping(NetworkEntityType.BAT, new BatEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.CHICKEN, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.OCELOT)
 			.addMapping(NetworkEntityType.OCELOT, new OcelotEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.WOLF, TameableEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.WOLF)
 			.addMapping(NetworkEntityType.WOLF, new WolfEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
@@ -207,25 +210,31 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.VILLAGER)
 			.addMapping(NetworkEntityType.VILLAGER, new VillagerEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ZOMBIE_PIGMAN, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.ENDERMAN)
 			.addMapping(NetworkEntityType.ENDERMAN, new EndermanEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ZOMBIE, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.GIANT)
 			.addMapping(NetworkEntityType.GIANT, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
 			.register();
 			new Mapping(NetworkEntityType.SILVERFISH)
 			.addMapping(NetworkEntityType.SILVERFISH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.SPIDER, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.ENDERMITE)
 			.addMapping(NetworkEntityType.ENDERMITE, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_8)
 			.addMapping(NetworkEntityType.SILVERFISH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_8)
+			.addMapping(NetworkEntityType.SPIDER, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.ENDER_DRAGON)
 			.addMapping(NetworkEntityType.ENDER_DRAGON, new EnderDragonEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.GHAST, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.SNOWMAN)
 			.addMapping(NetworkEntityType.SNOWMAN, new SnowmanEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ZOMBIE_PIGMAN, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.ZOMBIE)
 			.addMapping(NetworkEntityType.ZOMBIE, ZombieEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
@@ -248,12 +257,14 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.BLAZE)
 			.addMapping(NetworkEntityType.BLAZE, new BlazeEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.SKELETON, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.SPIDER)
 			.addMapping(NetworkEntityType.SPIDER, SpiderEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
 			.register();
 			new Mapping(NetworkEntityType.CAVE_SPIDER)
 			.addMapping(NetworkEntityType.CAVE_SPIDER, SpiderEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.SPIDER, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.CREEPER)
 			.addMapping(NetworkEntityType.CREEPER, new CreeperEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
@@ -266,6 +277,7 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.MAGMA_CUBE)
 			.addMapping(NetworkEntityType.MAGMA_CUBE, SlimeEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.SLIME, SlimeEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.SKELETON)
 			.addMapping(NetworkEntityType.SKELETON, SkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
@@ -280,16 +292,20 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.WITCH)
 			.addMapping(NetworkEntityType.WITCH, new WitchEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.SKELETON, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.IRON_GOLEM)
 			.addMapping(NetworkEntityType.IRON_GOLEM, new IronGolemEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ZOMBIE_PIGMAN, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.SHULKER)
 			.addMapping(NetworkEntityType.SHULKER, new ShulkerEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_9)
 			.addMapping(NetworkEntityType.BLAZE, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
+			.addMapping(NetworkEntityType.SKELETON, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.WITHER)
 			.addMapping(NetworkEntityType.WITHER, new WitherEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.GHAST, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.GUARDIAN)
 			.addMapping(NetworkEntityType.GUARDIAN, GuardianEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_8)
@@ -311,10 +327,12 @@ public class EntityRemappersRegistry {
 			new Mapping(NetworkEntityType.ILLUSIONER)
 			.addMapping(NetworkEntityType.ILLUSIONER, EvokerEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
 			.addMapping(NetworkEntityType.WITCH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
+			.addMapping(NetworkEntityType.SKELETON, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.VEX)
 			.addMapping(NetworkEntityType.VEX, new VexEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_11)
 			.addMapping(NetworkEntityType.BLAZE, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
+			.addMapping(NetworkEntityType.SKELETON, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.PARROT)
 			.addMapping(NetworkEntityType.PARROT, new ParrotEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_12)
@@ -323,6 +341,7 @@ public class EntityRemappersRegistry {
 			new Mapping(NetworkEntityType.PHANTOM)
 			.addMapping(NetworkEntityType.PHANTOM, new PhantomEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_13)
 			.addMapping(NetworkEntityType.BLAZE, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_13)
+			.addMapping(NetworkEntityType.SKELETON, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.DOLPHIN)
 			.addMapping(NetworkEntityType.DOLPHIN, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_13)
@@ -335,18 +354,22 @@ public class EntityRemappersRegistry {
 			new Mapping(NetworkEntityType.COD)
 			.addMapping(NetworkEntityType.COD, FishEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_13)
 			.addMapping(NetworkEntityType.BAT, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_13)
+			.addMapping(NetworkEntityType.CHICKEN, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.SALMON)
 			.addMapping(NetworkEntityType.SALMON, FishEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_13)
 			.addMapping(NetworkEntityType.BAT, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_13)
+			.addMapping(NetworkEntityType.CHICKEN, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.PUFFERFISH)
 			.addMapping(NetworkEntityType.PUFFERFISH, new PufferFishEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_13)
 			.addMapping(NetworkEntityType.BAT, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_13)
+			.addMapping(NetworkEntityType.CHICKEN, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.TROPICAL_FISH)
 			.addMapping(NetworkEntityType.TROPICAL_FISH, new TropicalFishEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_13)
 			.addMapping(NetworkEntityType.BAT, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_13)
+			.addMapping(NetworkEntityType.CHICKEN, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.ARMOR_STAND_MOB)
 			.addMapping(NetworkEntityType.ARMOR_STAND_MOB, ArmorStandEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_8)

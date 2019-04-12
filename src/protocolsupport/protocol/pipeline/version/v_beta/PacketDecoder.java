@@ -19,6 +19,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.KickDi
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.Look;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.Move;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.MoveLook;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.UseEntity;
 import protocolsupport.protocol.pipeline.version.util.decoder.AbstractLegacyPacketDecoder;
 
 public class PacketDecoder extends AbstractLegacyPacketDecoder {
@@ -28,7 +29,7 @@ public class PacketDecoder extends AbstractLegacyPacketDecoder {
 		registry.register(NetworkState.LOGIN, 0x01, LoginStart::new);
 		registry.register(NetworkState.PLAY, 0x00, KeepAlive::new);
 		registry.register(NetworkState.PLAY, 0x03, Chat::new);
-//		registry.register(NetworkState.PLAY, 0x07, UseEntity::new);
+		registry.register(NetworkState.PLAY, 0x07, UseEntity::new);
 		registry.register(NetworkState.PLAY, 0x0A, Flying::new);
 		registry.register(NetworkState.PLAY, 0x0B, Move::new);
 		registry.register(NetworkState.PLAY, 0x0C, Look::new);
