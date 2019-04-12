@@ -1,6 +1,5 @@
 package protocolsupport.protocol.storage.netcache;
 
-import protocolsupport.protocol.typeremapper.packet.PEDimensionSwitchConfirmationPacketQueue;
 import protocolsupport.utils.Utils;
 
 public class NetworkDataCache {
@@ -64,11 +63,6 @@ public class NetworkDataCache {
 	private final PEInventoryCache inventorycache = new PEInventoryCache();
 	public PEInventoryCache getPEInventoryCache() {
 		return inventorycache;
-	}
-
-	protected final PEDimensionSwitchConfirmationPacketQueue pepqueue = new PEDimensionSwitchConfirmationPacketQueue();
-	public PEDimensionSwitchConfirmationPacketQueue getPEPacketQueue() {
-		return pepqueue;
 	}
 
 	@Override
