@@ -70,7 +70,7 @@ public class ChunkTransformerPE extends ChunkTransformerBB {
 		}
 	}
 
-	private int getPcIndex(int x, int y, int z) {
+	protected static int getPcIndex(int x, int y, int z) {
 		return (y << 8) | (z << 4) | (x);
 	}
 
