@@ -32,11 +32,19 @@ public class ChunkTransformerPE extends ChunkTransformerBB {
 				BlockStorageWriterPE blockstorage = new BlockStorageWriterPE(bitsPerBlock, blocksInSection);
 				BlockStorageWriterPE waterstorage = new BlockStorageWriterPE(1, blocksInSection); //Waterlogged -> second storage. Only true/false per block
 				chunkdata.writeByte((bitsPerBlock << 1) | flag_runtime);
-				int blockIndex = 0;
+
+				int peIndex = 0;
 				for (int x = 0; x < 16; x++) { for (int z = 0; z < 16; z++) { for (int y = 0; y < 16; y++) {
-					if (PEBlocks.isPCBlockWaterlogged(getBlockState(i, storage, x, y, z))) { waterstorage.setBlockState(blockIndex, 1); }
-					blockstorage.setBlockState(blockIndex++, palette.getRuntimeId(PEBlocks.getPocketRuntimeId(blockDataRemappingTable.getRemap(getBlockState(i, storage, x, y, z)))));
+					int pcIndex = getPcIndex(x, y, z);
+					int blockstate = storage.getBlockData(pcIndex);
+
+					if (PEBlocks.isPCBlockWaterlogged(blockstate)) { waterstorage.setBlockState(peIndex, 1); }
+					// Update tile entity cache
+					processBlockData(i, pcIndex, blockstate);
+					blockstorage.setBlockState(peIndex, palette.getRuntimeId(PEBlocks.getPocketRuntimeId(blockDataRemappingTable.getRemap(blockstate))));
+					peIndex++;
 				}}}
+
 				for (int word : blockstorage.getBlockData()) {
 					chunkdata.writeIntLE(word);
 				}
@@ -62,8 +70,8 @@ public class ChunkTransformerPE extends ChunkTransformerBB {
 		}
 	}
 
-	protected int getBlockState(int section, BlockStorageReader storage, int x, int y, int z) {
-		return getBlockState(section, storage, (y << 8) | (z << 4) | (x));
+	private int getPcIndex(int x, int y, int z) {
+		return (y << 8) | (z << 4) | (x);
 	}
 
 	protected static int getPocketBitsPerBlock(int pcBitsPerBlock) {
