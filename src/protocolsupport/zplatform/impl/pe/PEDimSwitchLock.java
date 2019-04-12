@@ -5,6 +5,7 @@ import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 
+import io.netty.util.ReferenceCountUtil;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 import protocolsupport.protocol.pipeline.version.v_pe.PEPacketDecoder;
@@ -22,6 +23,13 @@ public class PEDimSwitchLock extends ChannelDuplexHandler {
 
 	protected final Deque<ByteBuf> deque = new ArrayDeque<>(32);
 	protected boolean isLocked = false;
+
+	@Override
+	public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+		super.channelUnregistered(ctx);
+		deque.forEach(ReferenceCountUtil::safeRelease);
+		deque.clear();
+	}
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
