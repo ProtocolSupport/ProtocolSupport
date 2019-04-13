@@ -22,8 +22,6 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-
-
 		return RecyclableSingletonList.create(create(connection.getVersion(), tileremapper.remap(tile, cache.getTileCache().getBlockData(position))));
 	}
 

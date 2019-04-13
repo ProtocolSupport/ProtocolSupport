@@ -20,6 +20,7 @@ public class PEProxyServer {
 				ChannelPipeline pipeline = channel.pipeline();
 				pipeline.addLast(new PECompressor());
 				pipeline.addLast(new PEDecompressor());
+				pipeline.addLast(PEDimSwitchLock.NAME, new PEDimSwitchLock());
 				pipeline.addLast(PEProxyNetworkManager.NAME, new PEProxyNetworkManager());
 			}
 		}, 0xFE

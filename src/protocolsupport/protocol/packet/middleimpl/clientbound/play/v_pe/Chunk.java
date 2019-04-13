@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import io.netty.buffer.ByteBuf;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
@@ -55,9 +54,6 @@ public class Chunk extends MiddleChunk {
 					ItemStackSerializer.writeTag(chunkdata, true, version, tile.getNBT());
 				}
 			});
-			//TODO: find a way to calculate chunk publisher coords from chunk coords
-			Location playerLocation = connection.getPlayer().getLocation();
-			packets.add(Chunk.createChunkPublisherUpdate(playerLocation.getBlockX(), playerLocation.getBlockY(), playerLocation.getBlockZ()));
 			packets.add(chunkpacket);
 			return packets;
 		} else { //Request a full chunk.
@@ -74,20 +70,27 @@ public class Chunk extends MiddleChunk {
 		}
 	}
 
+	public static void writeEmptyChunk(ByteBuf out, ChunkCoord chunk) {
+		PositionSerializer.writePEChunkCoord(out, chunk);
+		out.writeBytes(EmptyChunk.getPEChunkData());
+	}
+
 	public static ClientBoundPacketData createEmptyChunk(ChunkCoord chunk) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA);
-		PositionSerializer.writePEChunkCoord(serializer, chunk);
-		serializer.writeBytes(EmptyChunk.getPEChunkData());
+		writeEmptyChunk(serializer, chunk);
 		return serializer;
+	}
+
+	public static void writeChunkPublisherUpdate(ByteBuf out, int x, int y, int z) {
+		VarNumberSerializer.writeSVarInt(out, x);
+		VarNumberSerializer.writeVarInt(out, y);
+		VarNumberSerializer.writeSVarInt(out, z);
+		VarNumberSerializer.writeVarInt(out, 512); //radius, gets clamped by client
 	}
 
 	public static ClientBoundPacketData createChunkPublisherUpdate(int x, int y, int z) {
 		ClientBoundPacketData networkChunkUpdate = ClientBoundPacketData.create(PEPacketIDs.NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET);
-		VarNumberSerializer.writeSVarInt(networkChunkUpdate, x);
-		VarNumberSerializer.writeVarInt(networkChunkUpdate, y);
-		VarNumberSerializer.writeSVarInt(networkChunkUpdate, z);
-		// TODO: client view distance
-		VarNumberSerializer.writeVarInt(networkChunkUpdate, Bukkit.getViewDistance() * 16);
+		writeChunkPublisherUpdate(networkChunkUpdate, x, y, z);
 		return networkChunkUpdate;
 	}
 

@@ -17,6 +17,7 @@ import protocolsupport.listeners.ReloadCommandBlocker;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.zplatform.impl.pe.PEChunkPublisher;
 import protocolsupport.zplatform.impl.pe.PECreativeInventory;
 import protocolsupport.zplatform.impl.pe.PEProxyServer;
 
@@ -83,6 +84,7 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new FeatureEmulation(), this);
 		getServer().getPluginManager().registerEvents(new ReloadCommandBlocker(), this);
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
+		getServer().getPluginManager().registerEvents(new PEChunkPublisher(), this);
 		getServer().getMessenger().registerIncomingPluginChannel(this, InternalPluginMessageRequest.TAG, new InternalPluginMessageRequest());
 		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
 			PECreativeInventory.getInstance().generateCreativeInventoryItems();

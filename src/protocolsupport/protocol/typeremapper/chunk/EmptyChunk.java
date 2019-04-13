@@ -1,14 +1,14 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
-import java.util.function.Supplier;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.netty.Compressor;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class EmptyChunk {
 
 	private static final byte[] fake18ChunkDataSky = new byte[8192 + 2048 + 2048 + 256];
@@ -23,28 +23,26 @@ public class EmptyChunk {
 		return hasSkyLight ? fakePre18ChunkDataSky : fakePre18ChunkDataNoSky;
 	}
 
-	private static final byte[] fakePEChunkData = new Supplier<byte[]>() {
-		@Override
-		public byte[] get() {
-			ByteBuf serializer = Unpooled.buffer();
-			ArraySerializer.writeVarIntByteArray(serializer, chunkdata -> {
-				chunkdata.writeByte(1); //1 section
-			    chunkdata.writeByte(8); //New subchunk version!
-			    chunkdata.writeByte(1); //Zero blockstorages
-			    chunkdata.writeByte((1 << 1) | 1);  //Runtimeflag and palette id.
-			    chunkdata.writeZero(512);
-			    VarNumberSerializer.writeSVarInt(chunkdata, 1); //Palette size
-			    VarNumberSerializer.writeSVarInt(chunkdata, 0); //Air
-				chunkdata.writeZero(512); //heightmap.
-				chunkdata.writeZero(256); //Biomedata.
-				chunkdata.writeByte(0); //borders
-			});
-			return MiscSerializer.readAllBytes(serializer);
-		}
-	}.get();
-
+	private static final byte[] fakePEChunkData;
 	public static byte[] getPEChunkData() {
 		return fakePEChunkData;
+	}
+
+	static {
+		ByteBuf serializer = Unpooled.buffer();
+		ArraySerializer.writeVarIntByteArray(serializer, chunkdata -> {
+			chunkdata.writeByte(1); //1 section
+			chunkdata.writeByte(8); //New subchunk version!
+			chunkdata.writeByte(1); //Zero blockstorages
+			chunkdata.writeByte((1 << 1) | 1);  //Runtimeflag and palette id.
+			chunkdata.writeZero(512);
+			VarNumberSerializer.writeSVarInt(chunkdata, 1); //Palette size
+			VarNumberSerializer.writeSVarInt(chunkdata, 0); //Air
+			chunkdata.writeZero(512); //heightmap.
+			chunkdata.writeZero(256); //Biomedata.
+			chunkdata.writeByte(0); //borders
+		});
+		fakePEChunkData = MiscSerializer.readAllBytes(serializer);
 	}
 
 }

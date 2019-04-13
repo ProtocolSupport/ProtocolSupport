@@ -251,7 +251,7 @@ public class TileEntityRemapper {
     	register(TileEntityType.ENDER_CHEST, new TileEntityToLegacyTypeNameRemapper("EnderChest"), ProtocolVersionsHelper.ALL_PE);
 
 		register(TileEntityType.PISTON, new TileEntityPistonRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
-		register(TileEntityType.BANNER, new TileEntityBannerRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
+		register(TileEntityType.BANNER, new TileEntityBannerRemapper(), ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
 		register(TileEntityType.SKULL, new TileEntitySkullRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
 
 		register(
