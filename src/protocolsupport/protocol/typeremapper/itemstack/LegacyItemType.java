@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.Material;
 
 import protocolsupport.api.MaterialAPI;
+import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
@@ -24,6 +25,16 @@ public class LegacyItemType {
 		{
 			applyDefaultRemaps();
 		}
+
+		protected boolean noDefaultRemap(Material materialTo, ProtocolVersion version) {
+			if (version.getProtocolType() == ProtocolType.PE) {
+				// Prohibit default item remap from block remap of these items, since we forcefully remap all blocks to
+				// a specific color in LegacyBlockData.
+				return (materialTo == Material.WHITE_BANNER || materialTo == Material.RED_BED);
+			}
+			return false;
+		}
+
 		public void applyDefaultRemaps() {
 
 			//TODO: actually adapt the legacyblocktype registry instead of extracting data from it
@@ -34,7 +45,7 @@ public class LegacyItemType {
 				Arrays.stream(ProtocolVersion.getAllSupported())
 				.forEach(version -> {
 					Material materialTo = MaterialAPI.getBlockDataByNetworkId(LegacyBlockData.REGISTRY.getTable(version).getRemap(networkIdFrom)).getMaterial();
-					if (!materialFrom.equals(materialTo) && !materialTo.equals(Material.AIR) && materialTo.isItem()) {
+					if (!materialFrom.equals(materialTo) && !materialTo.equals(Material.AIR) && materialTo.isItem() && !noDefaultRemap(materialTo, version)) {
 						registerRemapEntry(materialFrom, materialTo, version);
 					}
 				});
