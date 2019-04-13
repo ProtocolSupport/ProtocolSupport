@@ -20,7 +20,7 @@ import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTFloat;
 import protocolsupport.utils.CollectionsUtils.ArrayMap.Entry;
 
-public class TileEntitySkullRemapper<function> extends TileEntityWithBlockDataNBTRemapper {
+public class TileEntitySkullRemapper extends TileEntityWithBlockDataNBTRemapper {
 	protected boolean isPE;
 	public TileEntitySkullRemapper(boolean isPE)
 	{
