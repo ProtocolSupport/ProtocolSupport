@@ -252,7 +252,7 @@ public class TileEntityRemapper {
 
 		register(TileEntityType.PISTON, new TileEntityPistonRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
 		register(TileEntityType.BANNER, new TileEntityBannerRemapper(), ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
-		register(TileEntityType.SKULL, new TileEntitySkullRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
+		register(TileEntityType.SKULL, new TileEntitySkullRemapper(), ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
 
 		register(
 			TileEntityType.MOB_SPAWNER,
@@ -335,34 +335,6 @@ public class TileEntityRemapper {
 				register(list, Material.GREEN_BED, 13);
 				register(list, Material.RED_BED, 14);
 				register(list, Material.BLACK_BED, 15);
-			}
-		}, ProtocolVersionsHelper.ALL_PE);
-
-		register(TileEntityType.SKULL, new TileEntityToLegacyTypeNameRemapper("Skull"), ProtocolVersionsHelper.ALL_PE);
-		register(TileEntityType.SKULL, new TileEntityWithBlockDataNBTRemapper() {
-			protected void register(List<ArrayMap.Entry<Consumer<NBTCompound>>> list, Material skull, int skulltype) {
-				for (BlockData blockdata : MaterialAPI.getBlockDataList(skull)) {
-					float rotation = TileEntitySkullRemapper.getLegacyData(blockdata);
-					list.add(new ArrayMap.Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> {
-						nbt.setTag("SkullType", new NBTByte((byte) skulltype));
-						nbt.setTag("Rotation", new NBTFloat((float) (rotation * 22.5)));
-					}));
-				}
-			}
-			@Override
-			protected void init(List<ArrayMap.Entry<Consumer<NBTCompound>>> list) {
-				register(list, Material.SKELETON_SKULL, 0);
-				register(list, Material.WITHER_SKELETON_SKULL, 1);
-				register(list, Material.ZOMBIE_HEAD, 2);
-				register(list, Material.PLAYER_HEAD, 3);
-				register(list, Material.CREEPER_HEAD, 4);
-				register(list, Material.DRAGON_HEAD, 5);
-				register(list, Material.SKELETON_WALL_SKULL, 0);
-				register(list, Material.WITHER_SKELETON_WALL_SKULL, 1);
-				register(list, Material.ZOMBIE_WALL_HEAD, 2);
-				register(list, Material.PLAYER_WALL_HEAD, 3);
-				register(list, Material.CREEPER_WALL_HEAD, 4);
-				register(list, Material.DRAGON_WALL_HEAD, 5);
 			}
 		}, ProtocolVersionsHelper.ALL_PE);
 

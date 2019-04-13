@@ -12,6 +12,7 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyBlockFace;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper.TileEntityWithBlockDataNBTRemapper;
 import protocolsupport.protocol.utils.types.nbt.NBTByte;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTFloat;
 import protocolsupport.utils.CollectionsUtils.ArrayMap.Entry;
 
 public class TileEntitySkullRemapper extends TileEntityWithBlockDataNBTRemapper {
@@ -25,10 +26,11 @@ public class TileEntitySkullRemapper extends TileEntityWithBlockDataNBTRemapper 
 
 	protected void register(List<Entry<Consumer<NBTCompound>>> list, Material skull, int skulltype) {
 		for (BlockData blockdata : MaterialAPI.getBlockDataList(skull)) {
-			byte rotation = getLegacyData(blockdata);
+			float rotation = getLegacyData(blockdata);
 			list.add(new Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> {
 				nbt.setTag("SkullType", new NBTByte((byte) skulltype));
-				nbt.setTag("Rot", new NBTByte(rotation));
+				nbt.setTag("Rotation", new NBTFloat((float) (rotation * 22.5))); //For PE Clients
+				nbt.setTag("Rot", new NBTByte((byte) rotation)); //For PC Clients
 			}));
 		}
 	}
