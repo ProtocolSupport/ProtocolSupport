@@ -199,6 +199,7 @@ public class TileEntityRemapper {
 		
 	}
 
+
 	protected static class TileEntityToLegacyTypeNameRemapper implements Consumer<TileEntity> {
 		protected final String name;
 		public TileEntityToLegacyTypeNameRemapper(String name) {
@@ -309,7 +310,20 @@ public class TileEntityRemapper {
 			},
 			ProtocolVersionsHelper.ALL_PE
 		);
-
+		register(
+			TileEntityType.SKULL,
+			tile -> {
+				tile.getNBT().removeTag("Rot");
+			},
+			ProtocolVersionsHelper.ALL_PE
+		);
+		register(
+			TileEntityType.SKULL,
+			tile -> {
+				tile.getNBT().removeTag("Rotation");
+			},
+			ProtocolVersionsHelper.BEFORE_1_13
+		);
 		register(TileEntityType.BED, new TileEntityToLegacyTypeNameRemapper("Bed"), ProtocolVersionsHelper.ALL_PE);
 		register(TileEntityType.BED, new TileEntityWithBlockDataNBTRemapper() {
 			protected void register(List<ArrayMap.Entry<Consumer<NBTCompound>>> list, Material bed, int color) {
@@ -385,7 +399,6 @@ public class TileEntityRemapper {
 				
 			}
 		}, ProtocolVersionsHelper.ALL_PE);
-
 		register(
 			TileEntityType.SKULL,
 			tile -> {
