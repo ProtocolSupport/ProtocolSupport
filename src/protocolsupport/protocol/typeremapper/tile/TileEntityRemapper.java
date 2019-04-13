@@ -253,7 +253,9 @@ public class TileEntityRemapper {
 
 		register(TileEntityType.PISTON, new TileEntityPistonRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
 		register(TileEntityType.BANNER, new TileEntityBannerRemapper(), ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
-		register(TileEntityType.SKULL, new TileEntitySkullRemapper(), ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
+		register(TileEntityType.SKULL, new TileEntitySkullRemapper(true), ProtocolVersionsHelper.ALL_PE);
+		register(TileEntityType.SKULL, new TileEntitySkullRemapper(false), ProtocolVersionsHelper.BEFORE_1_13);
+
 
 		register(
 			TileEntityType.MOB_SPAWNER,
@@ -310,20 +312,7 @@ public class TileEntityRemapper {
 			},
 			ProtocolVersionsHelper.ALL_PE
 		);
-		register(
-			TileEntityType.SKULL,
-			tile -> {
-				tile.getNBT().removeTag("Rot");
-			},
-			ProtocolVersionsHelper.ALL_PE
-		);
-		register(
-			TileEntityType.SKULL,
-			tile -> {
-				tile.getNBT().removeTag("Rotation");
-			},
-			ProtocolVersionsHelper.BEFORE_1_13
-		);
+
 		register(TileEntityType.BED, new TileEntityToLegacyTypeNameRemapper("Bed"), ProtocolVersionsHelper.ALL_PE);
 		register(TileEntityType.BED, new TileEntityWithBlockDataNBTRemapper() {
 			protected void register(List<ArrayMap.Entry<Consumer<NBTCompound>>> list, Material bed, int color) {
