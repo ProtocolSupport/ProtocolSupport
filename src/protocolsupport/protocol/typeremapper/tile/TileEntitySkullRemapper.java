@@ -15,7 +15,6 @@ import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBlockFace;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper.TileEntityWithBlockDataNBTRemapper;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.types.nbt.NBTByte;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTFloat;
