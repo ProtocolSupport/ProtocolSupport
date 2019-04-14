@@ -1,8 +1,12 @@
 package protocolsupport.protocol.typeremapper.tile;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Rotatable;
+
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBlockFace;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper.TileEntityWithBlockDataNBTRemapper;
@@ -10,9 +14,6 @@ import protocolsupport.protocol.utils.types.nbt.NBTByte;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTFloat;
 import protocolsupport.utils.CollectionsUtils.ArrayMap.Entry;
-
-import java.util.List;
-import java.util.function.Consumer;
 
 public class TileEntitySkullRemapper extends TileEntityWithBlockDataNBTRemapper {
 	protected final boolean isPE;
