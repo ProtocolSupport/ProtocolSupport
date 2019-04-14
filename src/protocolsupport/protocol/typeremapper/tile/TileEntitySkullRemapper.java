@@ -12,10 +12,14 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyBlockFace;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper.TileEntityWithBlockDataNBTRemapper;
 import protocolsupport.protocol.utils.types.nbt.NBTByte;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.types.nbt.NBTFloat;
 import protocolsupport.utils.CollectionsUtils.ArrayMap.Entry;
 
 public class TileEntitySkullRemapper extends TileEntityWithBlockDataNBTRemapper {
-
+	protected final boolean isPE;
+	public TileEntitySkullRemapper(boolean isPE) {
+		this.isPE  = isPE;
+	}
 	protected static byte getLegacyData(BlockData skull) {
 		if (skull instanceof Rotatable) {
 			return LegacyBlockFace.getLegacyRotatableId(((Rotatable) skull).getRotation());
@@ -28,7 +32,12 @@ public class TileEntitySkullRemapper extends TileEntityWithBlockDataNBTRemapper 
 			byte rotation = getLegacyData(blockdata);
 			list.add(new Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> {
 				nbt.setTag("SkullType", new NBTByte((byte) skulltype));
-				nbt.setTag("Rot", new NBTByte(rotation));
+				if (isPE) {
+					nbt.setTag("Rotation", new NBTFloat(rotation * 22.5F));
+				}
+				else {
+					nbt.setTag("Rot", new NBTByte(rotation));
+				}
 			}));
 		}
 	}
