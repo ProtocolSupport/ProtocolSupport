@@ -17,7 +17,7 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap.Entry;
 
 public class TileEntitySkullRemapper extends TileEntityWithBlockDataNBTRemapper {
 	protected final boolean isPE;
-	public TileEntitySkullRemapper(boolean isPE){
+	public TileEntitySkullRemapper(boolean isPE) {
 		this.isPE  = isPE;
 	}
 	protected static byte getLegacyData(BlockData skull) {
