@@ -22,10 +22,7 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap.Entry;
 
 public class TileEntitySkullRemapper extends TileEntityWithBlockDataNBTRemapper {
 	protected boolean isPE;
-	public TileEntitySkullRemapper(boolean isPE)
-	{
-		this.isPE = isPE;
-	}
+	public TileEntitySkullRemapper(boolean isPE){ this.isPE  = isPE; }
 	protected static byte getLegacyData(BlockData skull) {
 		if (skull instanceof Rotatable) {
 			return LegacyBlockFace.getLegacyRotatableId(((Rotatable) skull).getRotation());
@@ -33,7 +30,7 @@ public class TileEntitySkullRemapper extends TileEntityWithBlockDataNBTRemapper 
 		return 0;
 	}
 
-	protected void register(List<Entry<Consumer<NBTCompound>>> list, Material skull, int skulltype, boolean isPE) {
+	protected void register(List<Entry<Consumer<NBTCompound>>> list, Material skull, int skulltype) {
 		for (BlockData blockdata : MaterialAPI.getBlockDataList(skull)) {
 			byte rotation = getLegacyData(blockdata);
 			list.add(new Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> {
@@ -42,18 +39,6 @@ public class TileEntitySkullRemapper extends TileEntityWithBlockDataNBTRemapper 
 					nbt.setTag("Rotation", new NBTFloat(rotation * 22.5F));
 				else
 					nbt.setTag("Rot", new NBTByte(rotation));
-			}));
-		}
-	}
-
-	protected void register(List<Entry<Consumer<NBTCompound>>> list, Material skull, int skulltype) {
-		boolean isPE;
-		for (BlockData blockdata : MaterialAPI.getBlockDataList(skull)) {
-			byte rotation = getLegacyData(blockdata);
-			list.add(new Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> {
-				nbt.setTag("SkullType", new NBTByte((byte) skulltype));
-				nbt.setTag("Rotation", new NBTFloat(rotation * 22.5F)); //For PE Clients
-				nbt.setTag("Rot", new NBTByte(rotation)); //For PC Clients
 			}));
 		}
 	}
