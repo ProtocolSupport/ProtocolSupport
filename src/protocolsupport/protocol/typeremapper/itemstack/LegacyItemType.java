@@ -6,7 +6,6 @@ import java.util.List;
 import org.bukkit.Material;
 
 import protocolsupport.api.MaterialAPI;
-import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
@@ -26,15 +25,6 @@ public class LegacyItemType {
 			applyDefaultRemaps();
 		}
 
-		protected boolean noDefaultRemap(Material materialTo, ProtocolVersion version) {
-			if (version.getProtocolType() == ProtocolType.PE) {
-				// Prohibit default item remap from block remap of these items, since we forcefully remap all blocks to
-				// a specific color in LegacyBlockData.
-				return (materialTo == Material.WHITE_BANNER || materialTo == Material.RED_BED);
-			}
-			return false;
-		}
-
 		public void applyDefaultRemaps() {
 
 			//TODO: actually adapt the legacyblocktype registry instead of extracting data from it
@@ -45,7 +35,7 @@ public class LegacyItemType {
 				Arrays.stream(ProtocolVersion.getAllSupported())
 				.forEach(version -> {
 					Material materialTo = MaterialAPI.getBlockDataByNetworkId(LegacyBlockData.REGISTRY.getTable(version).getRemap(networkIdFrom)).getMaterial();
-					if (!materialFrom.equals(materialTo) && !materialTo.equals(Material.AIR) && materialTo.isItem() && !noDefaultRemap(materialTo, version)) {
+					if (!materialFrom.equals(materialTo) && !materialTo.equals(Material.AIR) && materialTo.isItem()) {
 						registerRemapEntry(materialFrom, materialTo, version);
 					}
 				});
@@ -142,6 +132,19 @@ public class LegacyItemType {
 			registerRemapEntry(Material.HOPPER_MINECART, Material.MINECART, ProtocolVersionsHelper.BEFORE_1_5);
 			registerRemapEntry(Material.NETHER_BRICK, Material.CLAY_BALL, ProtocolVersionsHelper.BEFORE_1_5);
 			registerRemapEntry(Material.TRAPPED_CHEST, Material.CHEST, ProtocolVersionsHelper.BEFORE_1_5);
+
+			// In LegacyBlockData we map all beds to RED_BED and all banners to WHITE_BANNER for PE.
+			// This is correct for blocks but not items, so restore normal mappings here.
+			Arrays.asList(
+				Material.BLACK_BED, Material.BLUE_BED, Material.BROWN_BED, Material.CYAN_BED,
+				Material.GRAY_BED, Material.GREEN_BED, Material.LIGHT_BLUE_BED, Material.LIGHT_GRAY_BED,
+				Material.LIME_BED, Material.MAGENTA_BED, Material.ORANGE_BED, Material.PINK_BED,
+				Material.PURPLE_BED, Material.RED_BED, Material.WHITE_BED, Material.YELLOW_BED,
+				Material.BLACK_BANNER, Material.BLUE_BANNER, Material.BROWN_BANNER, Material.CYAN_BANNER,
+				Material.GRAY_BANNER, Material.GREEN_BANNER, Material.LIGHT_BLUE_BANNER, Material.LIGHT_GRAY_BANNER,
+				Material.LIME_BANNER, Material.MAGENTA_BANNER, Material.ORANGE_BANNER, Material.PINK_BANNER,
+				Material.PURPLE_BANNER, Material.RED_BANNER, Material.WHITE_BANNER, Material.YELLOW_BANNER)
+			.forEach(material -> registerRemapEntry(material, material, ProtocolVersionsHelper.ALL_PE));
 		}
 
 		protected void registerRemapEntry(List<Material> from, Material to, ProtocolVersion...versions) {
