@@ -1,18 +1,9 @@
 package protocolsupport.protocol.typeremapper.tile;
 
-import java.util.List;
-import java.util.function.Consumer;
-
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Rotatable;
-
-import protocolsupport.ProtocolSupport;
 import protocolsupport.api.MaterialAPI;
-import protocolsupport.api.ProtocolSupportAPI;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBlockFace;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper.TileEntityWithBlockDataNBTRemapper;
 import protocolsupport.protocol.utils.types.nbt.NBTByte;
@@ -20,9 +11,14 @@ import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTFloat;
 import protocolsupport.utils.CollectionsUtils.ArrayMap.Entry;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 public class TileEntitySkullRemapper extends TileEntityWithBlockDataNBTRemapper {
-	protected boolean isPE;
-	public TileEntitySkullRemapper(boolean isPE){ this.isPE  = isPE; }
+	protected final boolean isPE;
+	public TileEntitySkullRemapper(boolean isPE){
+		this.isPE  = isPE;
+	}
 	protected static byte getLegacyData(BlockData skull) {
 		if (skull instanceof Rotatable) {
 			return LegacyBlockFace.getLegacyRotatableId(((Rotatable) skull).getRotation());
@@ -35,10 +31,12 @@ public class TileEntitySkullRemapper extends TileEntityWithBlockDataNBTRemapper 
 			byte rotation = getLegacyData(blockdata);
 			list.add(new Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> {
 				nbt.setTag("SkullType", new NBTByte((byte) skulltype));
-				if(isPE)
+				if (isPE) {
 					nbt.setTag("Rotation", new NBTFloat(rotation * 22.5F));
-				else
+				}
+				else {
 					nbt.setTag("Rot", new NBTByte(rotation));
+				}
 			}));
 		}
 	}
