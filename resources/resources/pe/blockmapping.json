@@ -6763,19 +6763,19 @@
     "pename": "minecraft:chain_command_block",
     "pedata": 0
   },
-  "minecraft:frosted_ice[age=0]]": {
+  "minecraft:frosted_ice[age=0]": {
     "pename": "minecraft:frosted_ice",
     "pedata": 0
   },
-  "minecraft:frosted_ice[age=1]]": {
+  "minecraft:frosted_ice[age=1]": {
     "pename": "minecraft:frosted_ice",
     "pedata": 1
   },
-  "minecraft:frosted_ice[age=2]]": {
+  "minecraft:frosted_ice[age=2]": {
     "pename": "minecraft:frosted_ice",
     "pedata": 2
   },
-  "minecraft:frosted_ice[age=3]]": {
+  "minecraft:frosted_ice[age=3]": {
     "pename": "minecraft:frosted_ice",
     "pedata": 3
   },
