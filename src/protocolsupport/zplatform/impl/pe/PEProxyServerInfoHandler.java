@@ -3,6 +3,7 @@ package protocolsupport.zplatform.impl.pe;
 import java.text.MessageFormat;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -30,6 +31,7 @@ public class PEProxyServerInfoHandler implements PingHandler {
 
 	private static final int statusThreads = JavaSystemProperty.getValue("pestatusthreads", 2, Integer::parseInt);
 	private static final int statusThreadKeepAlive = JavaSystemProperty.getValue("pestatusthreadskeepalive", 60, Integer::parseInt);
+	private static final String randomId = String.valueOf(ThreadLocalRandom.current().nextInt());
 
 	static {
 		ProtocolSupport.logInfo(MessageFormat.format("PE status threads max count: {0}, keep alive time: {1}", statusThreads, statusThreadKeepAlive));
@@ -64,7 +66,7 @@ public class PEProxyServerInfoHandler implements PingHandler {
 				String.valueOf(ping.getProtocolData().getVersion()), ProtocolVersionsHelper.LATEST_PE.getName().replaceFirst("PE-", ""),
 				String.valueOf(ping.getPlayers().getOnline()),
 				String.valueOf(ping.getPlayers().getMax()),
-				"1337", //TODO: find out how it is used, apprently that is some sort of id
+				randomId, // Needs to be unique per server (on a LAN?)
 				"ProtocolSupportPE",
 				"Survival"
 			);
