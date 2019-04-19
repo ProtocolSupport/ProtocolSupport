@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class DeclareCommands extends MiddleDeclareCommands {
 
@@ -62,6 +63,14 @@ public class DeclareCommands extends MiddleDeclareCommands {
 
 	public static final int ARG_FLAG_VALID = 0x100000;
 	public static final int ARG_FLAG_LITERAL = 0x200000;
+
+	private static Map<String, Consumer<ByteBuf>> argTypeReaders = new HashMap<>();
+	private static Map<String, Integer> peArgTypeRemaps = new HashMap<>();
+
+	static {
+		registerArgTypeReaders();
+		registerPEArgTypeRemaps();
+	}
 
 	private CommandNode[] allNodes;
 	private CommandNode[] topLevelNodes; // A subset of allNodes containing the starting "command" nodes
@@ -213,7 +222,7 @@ public class DeclareCommands extends MiddleDeclareCommands {
 		}
 	}
 
-	private CommandNode readCommandNode(ByteBuf from) {
+	private static CommandNode readCommandNode(ByteBuf from) {
 		byte flags = from.readByte();
 		boolean isPathEnd;
 		int redirect;
@@ -253,16 +262,12 @@ public class DeclareCommands extends MiddleDeclareCommands {
 		return new CommandNode(name, argType, suggestion, children, redirect, isPathEnd);
 	}
 
-	private String readArgType(ByteBuf from) {
-		String argType = StringSerializer.readVarIntUTF8String(from);
-		// Depending on argType, there might be additional data.
-		// At this point, we're just throwing this away, but we need at least
-		// skip over it in the buffer.
-
-		if (argType.equals("brigadier:string")) {
+	private static void registerArgTypeReaders() {
+		argTypeReaders.put("brigadier:string", from -> {
 			// Determine kind of string, any of STRING_IS_*...
 			int stringType = VarNumberSerializer.readVarInt(from);
-		} else if (argType.equals("brigadier:integer")) {
+		});
+		argTypeReaders.put("brigadier:integer", from -> {
 			byte flag = from.readByte();
 			if ((flag & FLAG_HAS_MIN_VALUE) != 0) {
 				int min = from.readInt();
@@ -270,7 +275,8 @@ public class DeclareCommands extends MiddleDeclareCommands {
 			if ((flag & FLAG_HAS_MAX_VALUE) != 0) {
 				int max = from.readInt();
 			}
-		} else if (argType.equals("brigadier:float")) {
+		});
+		argTypeReaders.put("brigadier:float", from -> {
 			byte flag = from.readByte();
 			if ((flag & FLAG_HAS_MIN_VALUE) != 0) {
 				float min = from.readFloat();
@@ -278,7 +284,8 @@ public class DeclareCommands extends MiddleDeclareCommands {
 			if ((flag & FLAG_HAS_MAX_VALUE) != 0) {
 				float max = from.readFloat();
 			}
-		} else if (argType.equals("brigadier:double")) {
+		});
+		argTypeReaders.put("brigadier:double", from -> {
 			byte flag = from.readByte();
 			if ((flag & FLAG_HAS_MIN_VALUE) != 0) {
 				double min = from.readDouble();
@@ -286,16 +293,28 @@ public class DeclareCommands extends MiddleDeclareCommands {
 			if ((flag & FLAG_HAS_MAX_VALUE) != 0) {
 				double max = from.readDouble();
 			}
-		} else if (argType.equals("minecraft:entity")) {
+		});
+		argTypeReaders.put("minecraft:entity", from -> {
 			// The flag determines the amount (single or double) and type (players or entities)
 			// See FLAG_ENTITY_AMOUNT_IS_SINGLE and FLAG_ENTITY_TYPE_IS_PLAYER.
 			byte flag = from.readByte();
-		} else if (argType.equals("minecraft:score_holder")) {
+		});
+		argTypeReaders.put("minecraft:score_holder", from -> {
 			// The "multiple" boolean is true if multiple, false if single.
 			byte multiple = from.readByte();
-		} else {
-			// For all other types, there are no additional data. This might change in future versions of Minecraft.
-		}
+		});
+	}
+
+	private static String readArgType(ByteBuf from) {
+		String argType = StringSerializer.readVarIntUTF8String(from);
+
+		// Depending on argType, there might be additional data.
+		// At this point, we're just throwing this away, but we need at least
+		// skip over it in the buffer.
+		// If we have no registered remap, there is no additional data.
+		// Note that this might need updating in future versions of Minecraft.
+		argTypeReaders.getOrDefault(argType, o -> {}).accept(from);
+
 		return argType;
 	}
 
@@ -303,7 +322,7 @@ public class DeclareCommands extends MiddleDeclareCommands {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		PECommandsStructure struct = buildPEStructure();
 
-		return RecyclableSingletonList.create(create(struct));
+		return RecyclableSingletonList.create(createPacket(struct));
 	}
 
 	private PECommandsStructure buildPEStructure() {
@@ -338,7 +357,7 @@ public class DeclareCommands extends MiddleDeclareCommands {
 		}
 	}
 
-	public ClientBoundPacketData create(PECommandsStructure peStruct) {
+	public ClientBoundPacketData createPacket(PECommandsStructure peStruct) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.AVAILABLE_COMMANDS);
 
 		// Write all literals (a way to number strings)
@@ -384,7 +403,7 @@ public class DeclareCommands extends MiddleDeclareCommands {
 		return serializer;
 	}
 
-	private void writeLiterals(ClientBoundPacketData serializer, String[] literals) {
+	private static void writeLiterals(ClientBoundPacketData serializer, String[] literals) {
 		// First write the size
 		VarNumberSerializer.writeVarInt(serializer, literals.length);
 		// Then one string per index
@@ -393,7 +412,7 @@ public class DeclareCommands extends MiddleDeclareCommands {
 		}
 	}
 
-	private void writeLiteralGroups(ClientBoundPacketData serializer, String[] literals) {
+	private static void writeLiteralGroups(ClientBoundPacketData serializer, String[] literals) {
 		// We create a literal group with a single member per literal, ordered so each group has
 		// has the same index as the corresponding literal.
 
@@ -408,7 +427,7 @@ public class DeclareCommands extends MiddleDeclareCommands {
 		}
 	}
 
-	private void writeSingleLiteral(ClientBoundPacketData serializer, int value, int maxValue) {
+	private static void writeSingleLiteral(ClientBoundPacketData serializer, int value, int maxValue) {
 		// Serialize literal index by using minimal data type
 		if (maxValue < 256) {
 			serializer.writeByte(value);
@@ -419,7 +438,7 @@ public class DeclareCommands extends MiddleDeclareCommands {
 		}
 	}
 
-	private void writeArgumentNode(ClientBoundPacketData serializer, PEArgumentNode argumentNode) {
+	private static void writeArgumentNode(ClientBoundPacketData serializer, PEArgumentNode argumentNode) {
 		int flag;
 
 		if (argumentNode.getArgType() != null) {
@@ -445,31 +464,27 @@ public class DeclareCommands extends MiddleDeclareCommands {
 		serializer.writeByte(0); // Flags? Always 0.
 	}
 
-	private int getPEArgTypeCode(String pcArgType) {
-		if (pcArgType.equals("brigadier:bool")) {
-			return ARG_TYPE_STRING;
-		} else if (pcArgType.equals("brigadier:float")) {
-			return ARG_TYPE_FLOAT;
-		} else if (pcArgType.equals("brigadier:double")) {
-			return ARG_TYPE_FLOAT;
-		} else if (pcArgType.equals("brigadier:integer")) {
-			return ARG_TYPE_INT;
-		} else if (pcArgType.equals("brigadier:string")) {
-			return ARG_TYPE_STRING;
-		} else if (pcArgType.equals("minecraft:int_range")) {
-			return ARG_TYPE_INT;
-		} else if (pcArgType.equals("minecraft:float_range")) {
-			return ARG_TYPE_FLOAT;
-		} else if (pcArgType.equals("minecraft:vec3")) {
-			return ARG_TYPE_POSITION;
-		} else if (pcArgType.equals("minecraft:entity")) {
-			return ARG_TYPE_TARGET;
-		} else if (pcArgType.equals("minecraft:message")) {
-			return ARG_TYPE_MESSAGE;
-		} else {
+	private static void registerPEArgTypeRemaps() {
+		peArgTypeRemaps.put("brigadier:bool", ARG_TYPE_STRING);
+		peArgTypeRemaps.put("brigadier:float", ARG_TYPE_FLOAT);
+		peArgTypeRemaps.put("brigadier:double", ARG_TYPE_FLOAT);
+		peArgTypeRemaps.put("brigadier:integer", ARG_TYPE_INT);
+		peArgTypeRemaps.put("brigadier:string", ARG_TYPE_STRING);
+		peArgTypeRemaps.put("minecraft:int_range", ARG_TYPE_INT);
+		peArgTypeRemaps.put("minecraft:float_range", ARG_TYPE_FLOAT);
+		peArgTypeRemaps.put("minecraft:vec3", ARG_TYPE_POSITION);
+		peArgTypeRemaps.put("minecraft:entity", ARG_TYPE_TARGET);
+		peArgTypeRemaps.put("minecraft:message", ARG_TYPE_MESSAGE);
+	}
+
+	private static int getPEArgTypeCode(String pcArgType) {
+		Integer peCode = peArgTypeRemaps.get(pcArgType);
+		if (peCode == null) {
 			// We have a specialized type in PC which has no correspondance in PE. Sucks!
 			// Tried ARG_TYPE_RAWTEXT before, but that "swallows" everything to the end of the line
 			return ARG_TYPE_STRING;
 		}
+
+		return peCode;
 	}
 }
