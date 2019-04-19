@@ -14,8 +14,10 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class DeclareCommands extends MiddleDeclareCommands {
@@ -147,8 +149,7 @@ public class DeclareCommands extends MiddleDeclareCommands {
 
 	private static class PECommandsStructure {
 		private Map<CommandNode, List<List<PEArgumentNode>>> overloadsRegistry = new HashMap<>();
-		private Map<String, Integer> literalRegistry = new HashMap<>();
-		private String[] literalArray;
+		private LinkedHashMap<String, Integer> literalRegistry = new LinkedHashMap<>();
 
 		/**
 		 * Register a list of overloads for a top-level node.
@@ -162,35 +163,23 @@ public class DeclareCommands extends MiddleDeclareCommands {
 		}
 
 		/**
-		 * Register a literal in the internal literal array if it was new, and return it's index value.
+		 * Register a literal in the internal literal registry if it was new, and return its index value.
 		 */
 		public int registerLiteral(String literal) {
-			if (literalArray != null) {
-				throw new IllegalStateException("Cannot register literals after getLiteralArray() is called");
+			Integer nextValue = literalRegistry.size();
+			Integer existingValue = literalRegistry.putIfAbsent(literal, nextValue);
+			if (existingValue != null) {
+				return existingValue;
+			} else {
+				return nextValue;
 			}
-
-			Integer index = literalRegistry.get(literal);
-			if (index == null) {
-				index = literalRegistry.size();
-				literalRegistry.put(literal, index);
-			}
-			return index;
 		}
 
 		/**
-		 * Return an array of all registered literals. All strings in the array are unique.
+		 * Return an ordered set of all registered literals.
 		 */
-		public String[] getLiteralArray() {
-			// Not thread safe...
-			if (literalArray == null) {
-				// Convert literalRegistry to proper array using assigned indices
-				literalArray = new String[literalRegistry.size()];
-				for (Map.Entry<String, Integer> entry : literalRegistry.entrySet()) {
-					literalArray[entry.getValue()] = entry.getKey();
-				}
-			}
-
-			return literalArray;
+		public Set<String> getLiteralArray() {
+			return literalRegistry.keySet();
 		}
 	}
 
@@ -403,27 +392,27 @@ public class DeclareCommands extends MiddleDeclareCommands {
 		return serializer;
 	}
 
-	private static void writeLiterals(ClientBoundPacketData serializer, String[] literals) {
+	private static void writeLiterals(ClientBoundPacketData serializer, Set<String> literals) {
 		// First write the size
-		VarNumberSerializer.writeVarInt(serializer, literals.length);
+		VarNumberSerializer.writeVarInt(serializer, literals.size());
 		// Then one string per index
 		for (String s : literals) {
 			StringSerializer.writeVarIntUTF8String(serializer, s);
 		}
 	}
 
-	private static void writeLiteralGroups(ClientBoundPacketData serializer, String[] literals) {
+	private static void writeLiteralGroups(ClientBoundPacketData serializer, Set<String> literals) {
 		// We create a literal group with a single member per literal, ordered so each group has
 		// has the same index as the corresponding literal.
 
 		// First write number of literal groups
-		VarNumberSerializer.writeVarInt(serializer, literals.length);
-		for (int i = 0; i < literals.length; i++) {
+		VarNumberSerializer.writeVarInt(serializer, literals.size());
+		for (int i = 0; i < literals.size(); i++) {
 			// Literal groups have a "name". It is never used, but needs to be unique.
 			StringSerializer.writeVarIntUTF8String(serializer, "e" + i);
 			// Number of literals in group, always just 1.
 			VarNumberSerializer.writeVarInt(serializer, 1);
-			writeSingleLiteral(serializer, i, literals.length);
+			writeSingleLiteral(serializer, i, literals.size());
 		}
 	}
 
