@@ -166,13 +166,7 @@ public class DeclareCommands extends MiddleDeclareCommands {
 		 * Register a literal in the internal literal registry if it was new, and return its index value.
 		 */
 		public int registerLiteral(String literal) {
-			Integer nextValue = literalRegistry.size();
-			Integer existingValue = literalRegistry.putIfAbsent(literal, nextValue);
-			if (existingValue != null) {
-				return existingValue;
-			} else {
-				return nextValue;
-			}
+			return literalRegistry.computeIfAbsent(literal, k -> literalRegistry.size() );
 		}
 
 		/**
