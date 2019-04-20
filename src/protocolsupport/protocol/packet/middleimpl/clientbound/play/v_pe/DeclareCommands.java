@@ -284,7 +284,7 @@ public class DeclareCommands extends MiddleDeclareCommands {
 		});
 		argTypeReaders.put("minecraft:score_holder", from -> {
 			// The "multiple" boolean is true if multiple, false if single.
-			byte multiple = from.readByte();
+			boolean multiple = from.readBoolean();
 		});
 	}
 
@@ -443,7 +443,7 @@ public class DeclareCommands extends MiddleDeclareCommands {
 
 		// The "flag" design is really... odd. Bedrock Edition engineers. Don't ask.
 		serializer.writeIntLE(flag);
-		serializer.writeByte(0); // Boolean IS_OPTIONAL (1 = true). For now, call everything compulsory.
+		serializer.writeBoolean(false); // Boolean IS_OPTIONAL. For now, call everything compulsory.
 		serializer.writeByte(0); // Flags? Always 0.
 	}
 
