@@ -392,24 +392,30 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.FIRECHARGE)
 			.addMapping(NetworkEntityType.FIRECHARGE, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.FIREBALL, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.ENDERPEARL)
 			.addMapping(NetworkEntityType.ENDERPEARL, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.EGG, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.WITHER_SKULL)
 			.addMapping(NetworkEntityType.WITHER_SKULL, new WitherSkullEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.FIREBALL, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.FALLING_OBJECT)
 			.addMapping(NetworkEntityType.FALLING_OBJECT, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
 			.register();
 			new Mapping(NetworkEntityType.ENDEREYE)
 			.addMapping(NetworkEntityType.ENDEREYE, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.EGG, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.POTION)
 			.addMapping(NetworkEntityType.POTION, new PotionEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.EGG, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.EXP_BOTTLE)
 			.addMapping(NetworkEntityType.EXP_BOTTLE, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			
 			.register();
 			new Mapping(NetworkEntityType.LEASH_KNOT)
 			.addMapping(NetworkEntityType.LEASH_KNOT, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_6)
@@ -420,6 +426,7 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.ITEM)
 			.addMapping(NetworkEntityType.ITEM, new ItemEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ITEM, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.ARROW)
 			.addMapping(NetworkEntityType.ARROW, ArrowEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
@@ -438,9 +445,11 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.FIREWORK)
 			.addMapping(NetworkEntityType.FIREWORK, new FireworkEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ARROW, ArrowEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_13)
 			.register();
 			new Mapping(NetworkEntityType.ITEM_FRAME)
 			.addMapping(NetworkEntityType.ITEM_FRAME, new ItemFrameEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.ITEM_FRAME, EntityMetadataRemapper.NOOP, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.ENDER_CRYSTAL)
 			.addMapping(NetworkEntityType.ENDER_CRYSTAL, new EnderCrystalEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
@@ -452,6 +461,7 @@ public class EntityRemappersRegistry {
 			new Mapping(NetworkEntityType.SHULKER_BULLET)
 			.addMapping(NetworkEntityType.SHULKER_BULLET, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_9)
 			.addMapping(NetworkEntityType.FIRECHARGE, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
+			.addMapping(NetworkEntityType.FIREBALL, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.LAMA_SPIT)
 			.addMapping(NetworkEntityType.LAMA_SPIT, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
@@ -460,10 +470,12 @@ public class EntityRemappersRegistry {
 			new Mapping(NetworkEntityType.DRAGON_FIREBALL)
 			.addMapping(NetworkEntityType.DRAGON_FIREBALL, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_9)
 			.addMapping(NetworkEntityType.FIRECHARGE, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
+			.addMapping(NetworkEntityType.FIREBALL, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.EVOCATOR_FANGS)
 			.addMapping(NetworkEntityType.EVOCATOR_FANGS, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
 			.addMapping(NetworkEntityType.FIRECHARGE, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
+			.addMapping(NetworkEntityType.FIREBALL, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.ARMOR_STAND_OBJECT)
 			.addMapping(NetworkEntityType.ARMOR_STAND_OBJECT, ArmorStandEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_8)
@@ -480,15 +492,19 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.MINECART_TNT)
 			.addMapping(NetworkEntityType.MINECART_TNT, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.MINECART, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.MINECART_MOB_SPAWNER)
 			.addMapping(NetworkEntityType.MINECART_MOB_SPAWNER, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.MINECART, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.MINECART_HOPPER)
 			.addMapping(NetworkEntityType.MINECART_HOPPER, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.MINECART, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.MINECART_COMMAND)
 			.addMapping(NetworkEntityType.MINECART_COMMAND, new MinecartCommandEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.MINECART, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 		}
 	};

@@ -101,5 +101,6 @@ public class ClientBoundPacket {
 	public static final int PLAY_LOOK_AT = ServerPlatform.get().getPacketFactory().getOutPlayLookAtPacketId();
 
 	public static final int LEGACY_PLAY_UPDATE_SIGN_ID = 100;
+	public static final int LEGACY_PLAY_SPAWN_ITEM = 101;
 
 }
