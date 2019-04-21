@@ -26,6 +26,10 @@ public class SpawnObject extends MiddleSpawnObject {
 			((NetworkEntityItemDataCache) entity.getDataCache()).setSpawnCoords(x, y, z);
 			return RecyclableEmptyList.get();
 		}
+		if (entity.getType() == NetworkEntityType.ENDER_CRYSTAL) {
+			//TODO: spawn falling block with some item instead?
+			return RecyclableEmptyList.get();
+		}
 		NetworkEntityType type = entityRemapper.getRemappedEntityType();
 		objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
 		x *= 32;
