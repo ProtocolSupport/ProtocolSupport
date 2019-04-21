@@ -11,12 +11,4 @@ This branch also supports minecraft beta 1.7.3<br>
 The support for minecraft beta 1.7.3 was a 1st april joke (that i couldn't complete in time so it was actually released later)<br>
 Which means this version is not supported<br>
 
-Also minecraft beta 1.7.3 limitations:
-* Online mode not supported (auth servers were stopped long time ago)
-* End dimension ot supported (will be sent as nether dimension)
-* 128 blocks height chunks (blocks above that height wont be sent)
-* No move speed change support
-* Held slot id is controlled by client (but synched to server before any actionn).
-
-
 Licensed under the terms of GNU AGPLv3
