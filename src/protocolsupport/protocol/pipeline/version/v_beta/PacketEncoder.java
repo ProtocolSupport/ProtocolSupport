@@ -74,6 +74,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.KickDi
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.SetPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.SpawnExpOrb;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.SpawnGlobal;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.SpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.SpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.SpawnObject;
@@ -127,7 +128,7 @@ public class PacketEncoder extends AbstractLegacyPacketEncoder {
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_EXPLOSION_ID, 0x3C);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_EVENT_ID, 0x3D);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID, 0x46);
-//		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_WEATHER_ID, 0x47);
+		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_WEATHER_ID, 0x47);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_OPEN_ID, 0x64);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_CLOSE_ID, 0x65);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, 0x67);
@@ -182,7 +183,7 @@ public class PacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_EXPLOSION_ID, Explosion::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_EVENT_ID, WorldEvent::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID, GameStateChange::new);
-//		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_WEATHER_ID, SpawnGlobal::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_WEATHER_ID, SpawnGlobal::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_OPEN_ID, InventoryOpen::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_CLOSE_ID, InventoryClose::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, InventorySetSlot::new);
