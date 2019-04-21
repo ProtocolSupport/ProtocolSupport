@@ -15,12 +15,16 @@ public class EntityVelocity extends MiddleEntityVelocity {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		return RecyclableSingletonList.create(create(entityId, motX, motY, motZ));
+	}
+
+	public static ClientBoundPacketData create(int entityId, int motX, int motY, int motZ) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_VELOCITY_ID);
 		serializer.writeInt(entityId);
 		serializer.writeShort(motX);
 		serializer.writeShort(motY);
 		serializer.writeShort(motZ);
-		return RecyclableSingletonList.create(serializer);
+		return serializer;
 	}
 
 }

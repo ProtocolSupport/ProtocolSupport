@@ -8,6 +8,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.Animat
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.BlockDig;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.BlockPlace;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.Chat;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.ClientCommand;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.EntityAction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.Flying;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.HeldSlot;
@@ -30,6 +31,7 @@ public class PacketDecoder extends AbstractLegacyPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x00, KeepAlive::new);
 		registry.register(NetworkState.PLAY, 0x03, Chat::new);
 		registry.register(NetworkState.PLAY, 0x07, UseEntity::new);
+		registry.register(NetworkState.PLAY, 0x09, ClientCommand::new);
 		registry.register(NetworkState.PLAY, 0x0A, Flying::new);
 		registry.register(NetworkState.PLAY, 0x0B, Move::new);
 		registry.register(NetworkState.PLAY, 0x0C, Look::new);
