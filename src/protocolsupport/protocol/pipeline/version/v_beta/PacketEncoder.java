@@ -87,6 +87,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.StartG
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.TimeUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.UnloadChunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.UseBed;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.VehiclePassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.WorldEvent;
 import protocolsupport.protocol.pipeline.version.util.encoder.AbstractLegacyPacketEncoder;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
@@ -122,6 +123,7 @@ public class PacketEncoder extends AbstractLegacyPacketEncoder {
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_REL_MOVE_LOOK_ID, 0x21);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID, 0x22);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_STATUS_ID, 0x26);
+		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_LEASH_ID, 0x27);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_METADATA_ID, 0x28);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID, 0x32);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, 0x33);
@@ -196,7 +198,7 @@ public class PacketEncoder extends AbstractLegacyPacketEncoder {
 //		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map::new);
 //		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, KickDisconnect::new);
-//		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS_ID, VehiclePassengers::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS_ID, VehiclePassengers::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID, UnloadChunk::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_ADD_ID, NoopEntityEffectAdd::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID, NoopEntityEffectRemove::new);
