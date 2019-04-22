@@ -10,7 +10,6 @@ import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
 import protocolsupport.protocol.utils.networkentity.NetworkEntity;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityDataCache;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -27,11 +26,9 @@ public class EntityEquipment extends MiddleEntityEquipment {
 		ProtocolVersion version = connection.getVersion();
 		String locale = cache.getAttributesCache().getLocale();
 		NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
-		boolean up19 = version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_9);
-		if (entity == null || (entity.getType().equals(NetworkEntityType.ARMOR_STAND_OBJECT) && up19)) {
+		if (entity == null) {
 			return RecyclableEmptyList.get();
 		}
-		boolean isPlayer = entity.getType().equals(NetworkEntityType.PLAYER);
 		NetworkEntityDataCache dataCache = entity.getDataCache();
 		NetworkEntityDataCache.Equipment equipment = dataCache.getEquipment();
 		if (slot > 1) {
@@ -55,10 +52,6 @@ public class EntityEquipment extends MiddleEntityEquipment {
 				}
 			}
 			return RecyclableSingletonList.create(create(version, locale, entityId, equipment.getHelmet(), equipment.getChestplate(), equipment.getLeggings(), equipment.getBoots()));
-		}
-		//TODO: hand and offhand on mobs crashes 1.9. why?
-		if (up19 && !isPlayer) {
-			return RecyclableEmptyList.get();
 		}
 		if (slot == 1) {
 			equipment.setHand(itemstack);
