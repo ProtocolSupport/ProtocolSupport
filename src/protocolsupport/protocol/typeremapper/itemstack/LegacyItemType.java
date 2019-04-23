@@ -131,6 +131,280 @@ public class LegacyItemType {
 			registerRemapEntry(Material.HOPPER_MINECART, Material.MINECART, ProtocolVersionsHelper.BEFORE_1_5);
 			registerRemapEntry(Material.NETHER_BRICK, Material.CLAY_BALL, ProtocolVersionsHelper.BEFORE_1_5);
 			registerRemapEntry(Material.TRAPPED_CHEST, Material.CHEST, ProtocolVersionsHelper.BEFORE_1_5);
+
+			registerRemapEntry(Material.MAP, Material.FILLED_MAP, ProtocolVersionsHelper.BEFORE_1_5);
+//			360 	
+//			Melon
+//		(minecraft:melon)
+//		361 	
+//			Pumpkin Seeds
+//		(minecraft:pumpkin_seeds)
+//		362 	
+//			Melon Seeds
+//		(minecraft:melon_seeds)
+//		363 	
+//			Raw Beef
+//		(minecraft:beef)
+//		364 	
+//			Steak
+//		(minecraft:cooked_beef)
+//		365 	
+//			Raw Chicken
+//		(minecraft:chicken)
+//		366 	
+//			Cooked Chicken
+//		(minecraft:cooked_chicken)
+//		367 	
+//			Rotten Flesh
+//		(minecraft:rotten_flesh)
+//		368 	
+//			Ender Pearl
+//		(minecraft:ender_pearl)
+//		369 	
+//			Blaze Rod
+//		(minecraft:blaze_rod)
+//		370 	
+//			Ghast Tear
+//		(minecraft:ghast_tear)
+//		371 	
+//			Gold Nugget
+//		(minecraft:gold_nugget)
+//		372 	
+//			Nether Wart
+//		(minecraft:nether_wart)
+//		373 	
+//			Potion
+//		(minecraft:potion)
+//		374 	
+//			Glass Bottle
+//		(minecraft:glass_bottle)
+//		375 	
+//			Spider Eye
+//		(minecraft:spider_eye)
+//		376 	
+//			Fermented Spider Eye
+//		(minecraft:fermented_spider_eye)
+//		377 	
+//			Blaze Powder
+//		(minecraft:blaze_powder)
+//		378 	
+//			Magma Cream
+//		(minecraft:magma_cream)
+//		379 	
+//			Brewing Stand
+//		(minecraft:brewing_stand)
+//		380 	
+//			Cauldron
+//		(minecraft:cauldron)
+//		381 	
+//			Eye of Ender
+//		(minecraft:ender_eye)
+//		382 	
+//			Glistering Melon
+//		(minecraft:speckled_melon)
+//		383:4 	
+//			Spawn Elder Guardian
+//		(minecraft:spawn_egg)
+//		383:5 	
+//			Spawn Wither Skeleton
+//		(minecraft:spawn_egg)
+//		383:6 	
+//			Spawn Stray
+//		(minecraft:spawn_egg)
+//		383:23 	
+//			Spawn Husk
+//		(minecraft:spawn_egg)
+//		383:27 	
+//			Spawn Zombie Villager
+//		(minecraft:spawn_egg)
+//		383:28 	
+//			Spawn Skeleton Horse
+//		(minecraft:spawn_egg)
+//		383:29 	
+//			Spawn Zombie Horse
+//		(minecraft:spawn_egg)
+//		383:31 	
+//			Spawn Donkey
+//		(minecraft:spawn_egg)
+//		383:32 	
+//			Spawn Mule
+//		(minecraft:spawn_egg)
+//		383:34 	
+//			Spawn Evoker
+//		(minecraft:spawn_egg)
+//		383:35 	
+//			Spawn Vex
+//		(minecraft:spawn_egg)
+//		383:36 	
+//			Spawn Vindicator
+//		(minecraft:spawn_egg)
+//		383:50 	
+//			Spawn Creeper
+//		(minecraft:spawn_egg)
+//		383:51 	
+//			Spawn Skeleton
+//		(minecraft:spawn_egg)
+//		383:52 	
+//			Spawn Spider
+//		(minecraft:spawn_egg)
+//		383:54 	
+//			Spawn Zombie
+//		(minecraft:spawn_egg)
+//		383:55 	
+//			Spawn Slime
+//		(minecraft:spawn_egg)
+//		383:56 	
+//			Spawn Ghast
+//		(minecraft:spawn_egg)
+//		383:57 	
+//			Spawn Zombie Pigman
+//		(minecraft:spawn_egg)
+//		383:58 	
+//			Spawn Enderman
+//		(minecraft:spawn_egg)
+//		383:59 	
+//			Spawn Cave Spider
+//		(minecraft:spawn_egg)
+//		383:60 	
+//			Spawn Silverfish
+//		(minecraft:spawn_egg)
+//		383:61 	
+//			Spawn Blaze
+//		(minecraft:spawn_egg)
+//		383:62 	
+//			Spawn Magma Cube
+//		(minecraft:spawn_egg)
+//		383:65 	
+//			Spawn Bat
+//		(minecraft:spawn_egg)
+//		383:66 	
+//			Spawn Witch
+//		(minecraft:spawn_egg)
+//		383:67 	
+//			Spawn Endermite
+//		(minecraft:spawn_egg)
+//		383:68 	
+//			Spawn Guardian
+//		(minecraft:spawn_egg)
+//		383:69 	
+//			Spawn Shulker
+//		(minecraft:spawn_egg)
+//		383:90 	
+//			Spawn Pig
+//		(minecraft:spawn_egg)
+//		383:91 	
+//			Spawn Sheep
+//		(minecraft:spawn_egg)
+//		383:92 	
+//			Spawn Cow
+//		(minecraft:spawn_egg)
+//		383:93 	
+//			Spawn Chicken
+//		(minecraft:spawn_egg)
+//		383:94 	
+//			Spawn Squid
+//		(minecraft:spawn_egg)
+//		383:95 	
+//			Spawn Wolf
+//		(minecraft:spawn_egg)
+//		383:96 	
+//			Spawn Mooshroom
+//		(minecraft:spawn_egg)
+//		383:98 	
+//			Spawn Ocelot
+//		(minecraft:spawn_egg)
+//		383:100 	
+//			Spawn Horse
+//		(minecraft:spawn_egg)
+//		383:101 	
+//			Spawn Rabbit
+//		(minecraft:spawn_egg)
+//		383:102 	
+//			Spawn Polar Bear
+//		(minecraft:spawn_egg)
+//		383:103 	
+//			Spawn Llama
+//		(minecraft:spawn_egg)
+//		383:105 	
+//			Spawn Parrot
+//		(minecraft:spawn_egg)
+//		383:120 	
+//			Spawn Villager
+//		(minecraft:spawn_egg)
+//		384 	
+//			Bottle o' Enchanting
+//		(minecraft:experience_bottle)
+//		385 	
+//			Fire Charge
+//		(minecraft:fire_charge)
+//		386 	
+//			Book and Quill
+//		(minecraft:writable_book)
+//		387 	
+//			Written Book
+//		(minecraft:written_book)
+//		388 	
+//			Emerald
+//		(minecraft:emerald)
+//		389 	
+//			Item Frame
+//		(minecraft:item_frame)
+//		390 	
+//			Flower Pot
+//		(minecraft:flower_pot)
+//		391 	
+//			Carrot
+//		(minecraft:carrot)
+//		392 	
+//			Potato
+//		(minecraft:potato)
+//		393 	
+//			Baked Potato
+//		(minecraft:baked_potato)
+//		394 	
+//			Poisonous Potato
+//		(minecraft:poisonous_potato)
+//		395 	
+//			Empty Map
+//		(minecraft:map)
+//		396 	
+//			Golden Carrot
+//		(minecraft:golden_carrot)
+//		397 	
+//			Mob Head (Skeleton)
+//		(minecraft:skull)
+//		397:1 	
+//			Mob Head (Wither Skeleton)
+//		(minecraft:skull)
+//		397:2 	
+//			Mob Head (Zombie)
+//		(minecraft:skull)
+//		397:3 	
+//			Mob Head (Human)
+//		(minecraft:skull)
+//		397:4 	
+//			Mob Head (Creeper)
+//		(minecraft:skull)
+//		397:5 	
+//			Mob Head (Dragon)
+//		(minecraft:skull)
+//		398 	
+//			Carrot on a Stick
+//		(minecraft:carrot_on_a_stick)
+//		399 	
+//			Nether Star
+//		(minecraft:nether_star)
+//		400 	
+//			Pumpkin Pie
+//		(minecraft:pumpkin_pie)
+//		401 	
+//			Firework Rocket
+//		(minecraft:fireworks)
+//		402 	
+//			Firework Star
+//		(minecraft:firework_charge)
+//		403 	
+//			Enchanted Book
 		}
 
 		protected void registerRemapEntry(List<Material> from, Material to, ProtocolVersion... versions) {

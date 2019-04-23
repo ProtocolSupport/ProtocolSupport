@@ -74,6 +74,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.Invent
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.InventorySetSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.KeepAlive;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.KickDisconnect;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.Map;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.SetPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.SpawnExpOrb;
@@ -141,7 +142,7 @@ public class PacketEncoder extends AbstractLegacyPacketEncoder {
 //		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_DATA_ID, 0x69);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_TRANSACTION_ID, 0x6A);
 //		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID, 0x82);
-//		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, 0x83);
+		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, 0x83);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, 0xFF);
 	}
 
@@ -195,7 +196,7 @@ public class PacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID, InventorySetItems::new);
 //		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_DATA_ID, InventoryData::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_TRANSACTION_ID, InventoryConfirmTransaction::new);
-//		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map::new);
 //		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, KickDisconnect::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS_ID, VehiclePassengers::new);
