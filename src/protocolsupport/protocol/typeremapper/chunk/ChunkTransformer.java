@@ -43,7 +43,7 @@ public abstract class ChunkTransformer {
 		this.hasBiomeData = hasBiomeData;
 		for (int i = 0; i < sections.length; i++) {
 			if ((bitmap & (1 << i)) != 0) {
-				sections[i] = new ChunkSection(chunkdata, hasSkyLight);
+				sections[i] = new ChunkSection(chunkdata);
 			} else {
 				sections[i] = null;
 			}
@@ -99,11 +99,11 @@ public abstract class ChunkTransformer {
 			}
 		}
 
+		protected short blockCount;
 		protected final BlockStorageReader blockdata;
-		protected final byte[] blocklight = new byte[2048];
-		protected final byte[] skylight = new byte[2048];
 
-		public ChunkSection(ByteBuf datastream, boolean hasSkyLight) {
+		public ChunkSection(ByteBuf datastream) {
+			blockCount = datastream.readShort();
 			byte bitsPerBlock = datastream.readByte();
 			int[] palette = globalPaletteData;
 			if (bitsPerBlock != globalPaletteBitsPerBlock) {
@@ -111,10 +111,6 @@ public abstract class ChunkTransformer {
 			}
 			this.blockdata = new BlockStorageReader(palette, bitsPerBlock, VarNumberSerializer.readVarInt(datastream));
 			this.blockdata.readFromStream(datastream);
-			datastream.readBytes(blocklight);
-			if (hasSkyLight) {
-				datastream.readBytes(skylight);
-			}
 		}
 
 	}

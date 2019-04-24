@@ -1730,82 +1730,82 @@
     "legacydata": 5
   },
   {
-    "blockdata": "minecraft:sign[rotation=0,waterlogged=false]",
+    "blockdata": "minecraft:oak_sign[rotation=0,waterlogged=false]",
     "legacyid": 63,
     "legacydata": 0
   },
   {
-    "blockdata": "minecraft:sign[rotation=1,waterlogged=false]",
+    "blockdata": "minecraft:oak_sign[rotation=1,waterlogged=false]",
     "legacyid": 63,
     "legacydata": 1
   },
   {
-    "blockdata": "minecraft:sign[rotation=2,waterlogged=false]",
+    "blockdata": "minecraft:oak_sign[rotation=2,waterlogged=false]",
     "legacyid": 63,
     "legacydata": 2
   },
   {
-    "blockdata": "minecraft:sign[rotation=3,waterlogged=false]",
+    "blockdata": "minecraft:oak_sign[rotation=3,waterlogged=false]",
     "legacyid": 63,
     "legacydata": 3
   },
   {
-    "blockdata": "minecraft:sign[rotation=4,waterlogged=false]",
+    "blockdata": "minecraft:oak_sign[rotation=4,waterlogged=false]",
     "legacyid": 63,
     "legacydata": 4
   },
   {
-    "blockdata": "minecraft:sign[rotation=5,waterlogged=false]",
+    "blockdata": "minecraft:oak_sign[rotation=5,waterlogged=false]",
     "legacyid": 63,
     "legacydata": 5
   },
   {
-    "blockdata": "minecraft:sign[rotation=6,waterlogged=false]",
+    "blockdata": "minecraft:oak_sign[rotation=6,waterlogged=false]",
     "legacyid": 63,
     "legacydata": 6
   },
   {
-    "blockdata": "minecraft:sign[rotation=7,waterlogged=false]",
+    "blockdata": "minecraft:oak_sign[rotation=7,waterlogged=false]",
     "legacyid": 63,
     "legacydata": 7
   },
   {
-    "blockdata": "minecraft:sign[rotation=8,waterlogged=false]",
+    "blockdata": "minecraft:oak_sign[rotation=8,waterlogged=false]",
     "legacyid": 63,
     "legacydata": 8
   },
   {
-    "blockdata": "minecraft:sign[rotation=9,waterlogged=false]",
+    "blockdata": "minecraft:oak_sign[rotation=9,waterlogged=false]",
     "legacyid": 63,
     "legacydata": 9
   },
   {
-    "blockdata": "minecraft:sign[rotation=10,waterlogged=false]",
+    "blockdata": "minecraft:oak_sign[rotation=10,waterlogged=false]",
     "legacyid": 63,
     "legacydata": 10
   },
   {
-    "blockdata": "minecraft:sign[rotation=11,waterlogged=false]",
+    "blockdata": "minecraft:oak_sign[rotation=11,waterlogged=false]",
     "legacyid": 63,
     "legacydata": 11
   },
   {
-    "blockdata": "minecraft:sign[rotation=12,waterlogged=false]",
+    "blockdata": "minecraft:oak_sign[rotation=12,waterlogged=false]",
     "legacyid": 63,
     "legacydata": 12
   },
   {
-    "blockdata": "minecraft:sign[rotation=13,waterlogged=false]",
+    "blockdata": "minecraft:oak_sign[rotation=13,waterlogged=false]",
     "legacyid": 63,
     "legacydata": 13
   },
   {
-    "blockdata": "minecraft:sign[rotation=14,waterlogged=false]",
+    "blockdata": "minecraft:oak_sign[rotation=14,waterlogged=false]",
     "legacyid": 63,
     "legacydata": 14
   },
   {
-    "blockdata": "minecraft:sign[rotation=15,waterlogged=false]",
+    "blockdata": "minecraft:oak_sign[rotation=15,waterlogged=false]",
     "legacyid": 63,
     "legacydata": 15
   },
@@ -1980,22 +1980,22 @@
     "legacydata": 7
   },
   {
-    "blockdata": "minecraft:wall_sign[facing=north,waterlogged=false]",
+    "blockdata": "minecraft:oak_wall_sign[facing=north,waterlogged=false]",
     "legacyid": 68,
     "legacydata": 2
   },
   {
-    "blockdata": "minecraft:wall_sign[facing=south,waterlogged=false]",
+    "blockdata": "minecraft:oak_wall_sign[facing=south,waterlogged=false]",
     "legacyid": 68,
     "legacydata": 3
   },
   {
-    "blockdata": "minecraft:wall_sign[facing=west,waterlogged=false]",
+    "blockdata": "minecraft:oak_wall_sign[facing=west,waterlogged=false]",
     "legacyid": 68,
     "legacydata": 4
   },
   {
-    "blockdata": "minecraft:wall_sign[facing=east,waterlogged=false]",
+    "blockdata": "minecraft:oak_wall_sign[facing=east,waterlogged=false]",
     "legacyid": 68,
     "legacydata": 5
   },

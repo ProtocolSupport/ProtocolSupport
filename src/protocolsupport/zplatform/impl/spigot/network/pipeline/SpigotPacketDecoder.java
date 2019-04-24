@@ -7,11 +7,11 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.DecoderException;
-import net.minecraft.server.v1_13_R2.EnumProtocol;
-import net.minecraft.server.v1_13_R2.EnumProtocolDirection;
-import net.minecraft.server.v1_13_R2.NetworkManager;
-import net.minecraft.server.v1_13_R2.Packet;
-import net.minecraft.server.v1_13_R2.PacketDataSerializer;
+import net.minecraft.server.v1_14_R1.EnumProtocol;
+import net.minecraft.server.v1_14_R1.EnumProtocolDirection;
+import net.minecraft.server.v1_14_R1.NetworkManager;
+import net.minecraft.server.v1_14_R1.Packet;
+import net.minecraft.server.v1_14_R1.PacketDataSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.netty.WrappingBuffer;
 

@@ -6,12 +6,12 @@ import javax.crypto.SecretKey;
 
 import org.bukkit.Bukkit;
 
-import net.minecraft.server.v1_13_R2.IChatBaseComponent;
-import net.minecraft.server.v1_13_R2.ITickable;
-import net.minecraft.server.v1_13_R2.PacketLoginInCustomPayload;
-import net.minecraft.server.v1_13_R2.PacketLoginInEncryptionBegin;
-import net.minecraft.server.v1_13_R2.PacketLoginInListener;
-import net.minecraft.server.v1_13_R2.PacketLoginInStart;
+import net.minecraft.server.v1_14_R1.IChatBaseComponent;
+import net.minecraft.server.v1_14_R1.ITickable;
+import net.minecraft.server.v1_14_R1.PacketLoginInCustomPayload;
+import net.minecraft.server.v1_14_R1.PacketLoginInEncryptionBegin;
+import net.minecraft.server.v1_14_R1.PacketLoginInListener;
+import net.minecraft.server.v1_14_R1.PacketLoginInStart;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 

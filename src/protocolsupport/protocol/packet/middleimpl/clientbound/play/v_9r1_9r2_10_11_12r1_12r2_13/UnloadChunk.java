@@ -23,7 +23,7 @@ public class UnloadChunk extends MiddleUnloadChunk {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID);
-		PositionSerializer.writeChunkCoord(serializer, chunk);
+		PositionSerializer.writeIntChunkCoord(serializer, chunk);
 		return RecyclableSingletonList.create(serializer);
 	}
 

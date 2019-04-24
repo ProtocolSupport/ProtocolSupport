@@ -18,7 +18,7 @@ public class ChunkTransformerByte extends ChunkTransformerBA {
 
 		int blockIdIndex = 0;
 		int blockDataIndex = 4096 * columnsCount;
-		int blockLightIndex = 6144 * columnsCount;
+		//TODO: just calculate biome index
 		int skyLightIndex = 8192 * columnsCount;
 
 		for (int i = 0; i < sections.length; i++) {
@@ -44,10 +44,7 @@ public class ChunkTransformerByte extends ChunkTransformerBA {
 				blockIdIndex += 4096;
 				blockDataIndex += 2048;
 
-				System.arraycopy(section.blocklight, 0, data, blockLightIndex, 2048);
-				blockLightIndex += 2048;
 				if (hasSkyLight) {
-					System.arraycopy(section.skylight, 0, data, skyLightIndex, 2048);
 					skyLightIndex += 2048;
 				}
 			}

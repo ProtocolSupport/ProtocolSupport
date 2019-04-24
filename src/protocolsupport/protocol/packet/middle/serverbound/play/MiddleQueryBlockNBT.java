@@ -23,7 +23,7 @@ public abstract class MiddleQueryBlockNBT extends ServerBoundMiddlePacket {
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_QUERY_BLOCK_NBT);
 		VarNumberSerializer.writeVarInt(creator, id);
-		PositionSerializer.writePosition(creator, position);
+		PositionSerializer.writeLegacyPositionL(creator, position);
 		return RecyclableSingletonList.create(creator);
 	}
 

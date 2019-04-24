@@ -7,10 +7,14 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.entity.FlatteningEntityId;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SpawnLiving extends MiddleSpawnLiving {
+
+	protected final ArrayBasedIdRemappingTable flatteningEntityIdTable = FlatteningEntityId.REGISTRY.getTable(version);
 
 	public SpawnLiving(ConnectionImpl connection) {
 		super(connection);
@@ -21,7 +25,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_LIVING_ID);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		MiscSerializer.writeUUID(serializer, entity.getUUID());
-		VarNumberSerializer.writeVarInt(serializer, entityRemapper.getRemappedEntityType().getNetworkTypeId());
+		VarNumberSerializer.writeVarInt(serializer, flatteningEntityIdTable.getRemap(entityRemapper.getRemappedEntityType().getNetworkTypeId()));
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);
 		serializer.writeDouble(z);

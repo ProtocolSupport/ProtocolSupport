@@ -620,7 +620,7 @@ public class LegacyBlockData {
 					Material.LIME_BANNER, Material.MAGENTA_BANNER, Material.ORANGE_BANNER, Material.PINK_BANNER,
 					Material.PURPLE_BANNER, Material.RED_BANNER, Material.WHITE_BANNER, Material.YELLOW_BANNER
 				),
-				o -> cloneRotatable(o, (Rotatable) Material.SIGN.createBlockData()),
+				o -> cloneRotatable(o, (Rotatable) Material.OAK_SIGN.createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_8
 			);
 			this.<Directional>registerRemapEntryForAllStates(
@@ -630,7 +630,7 @@ public class LegacyBlockData {
 					Material.LIME_WALL_BANNER, Material.MAGENTA_WALL_BANNER, Material.ORANGE_WALL_BANNER, Material.PINK_WALL_BANNER,
 					Material.PURPLE_WALL_BANNER, Material.RED_WALL_BANNER, Material.WHITE_WALL_BANNER, Material.YELLOW_WALL_BANNER
 				),
-				o -> cloneDirectional(o, (Directional) Material.WALL_SIGN.createBlockData()),
+				o -> cloneDirectional(o, (Directional) Material.OAK_WALL_SIGN.createBlockData()),
 				ProtocolVersionsHelper.BEFORE_1_8
 			);
 			this.<Slab>registerRemapEntryForAllStates(

@@ -31,7 +31,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID);
-		PositionSerializer.writeChunkCoord(serializer, chunk);
+		PositionSerializer.writeIntChunkCoord(serializer, chunk);
 		serializer.writeShort(records.length);
 		serializer.writeInt(records.length * 4);
 		for (Record record : records) {

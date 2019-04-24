@@ -7,9 +7,12 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
@@ -27,10 +30,22 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 	protected final String hostname;
 	protected final ConnectionImpl connection;
 
+	protected final BukkitTask tickTask;
+
 	protected AbstractLoginListenerPlay(NetworkManagerWrapper networkmanager, String hostname) {
 		this.networkManager = networkmanager;
 		this.connection = ConnectionImpl.getFromChannel(networkmanager.getChannel());
 		this.hostname = hostname;
+		this.tickTask = new BukkitRunnable() {
+			@Override
+			public void run() {
+				if (networkmanager.isConnected()) {
+					loginTick();
+				} else {
+					cancel();
+				}
+			}
+		}.runTaskTimer(ProtocolSupport.getInstance(), 1, 1);
 	}
 
 	public void finishLogin() {
@@ -73,7 +88,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 
 	protected int keepAliveTicks = 1;
 
-	public void loginTick() {
+	protected void loginTick() {
 		if (!ServerPlatform.get().getMiscUtils().isRunning()) {
 			disconnect(org.spigotmc.SpigotConfig.restartMessage);
 			return;
@@ -86,9 +101,10 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 		}
 	}
 
-	private void tryJoin() {
+	protected void tryJoin() {
 		//no longer attempt to join
 		ready = false;
+		tickTask.cancel();
 
 		//kick players with same uuid
 		Bukkit.getOnlinePlayers().stream()

@@ -31,7 +31,7 @@ public class Chunk extends MiddleChunk {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
-		PositionSerializer.writeChunkCoord(chunkdata, chunk);
+		PositionSerializer.writeIntChunkCoord(chunkdata, chunk);
 		chunkdata.writeBoolean(full);
 		if ((bitmask == 0) && full) {
 			byte[] compressed = EmptyChunk.getPre18ChunkData(hasSkyLight);

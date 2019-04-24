@@ -12,10 +12,12 @@ public abstract class MiddleServerDifficulty extends ClientBoundMiddlePacket {
 	}
 
 	protected Difficulty difficulty;
+	protected boolean locked;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		difficulty = Difficulty.getById(serverdata.readByte());
+		locked = serverdata.readBoolean();
 	}
 
 }

@@ -86,8 +86,6 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayHeldSlotPacketId();
 
-	public int getOutPlayBedPacketId();
-
 	public int getOutPlayAnimationPacketId();
 
 	public int getOutPlaySpawnNamedPacketId();
@@ -237,6 +235,10 @@ public interface PlatformPacketFactory {
 	public int getOutPlayStopSoundPacketId();
 
 	public int getOutPlayLookAtPacketId();
+
+	public int getOutPlayChunkLightPacketId();
+
+	public int getOutPlaySetViewCenterPacketId();
 
 
 	public int getInHandshakeStartPacketId();

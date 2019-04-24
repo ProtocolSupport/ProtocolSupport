@@ -19,7 +19,7 @@ public class ChunkSendIntervalPacketQueue {
 		ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID, ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID,
 		ClientBoundPacket.PLAY_BLOCK_ACTION_ID, ClientBoundPacket.PLAY_BLOCK_BREAK_ANIMATION_ID,
 		ClientBoundPacket.PLAY_UPDATE_TILE_ID, ClientBoundPacket.LEGACY_PLAY_UPDATE_SIGN_ID,
-		ClientBoundPacket.PLAY_BED_ID
+		ClientBoundPacket.LEGACY_PLAY_USE_BED_ID
 	});
 	protected static boolean shouldQueue(ClientBoundPacketData packet) {
 		return queuedPacketTypes.contains(packet.getPacketId());

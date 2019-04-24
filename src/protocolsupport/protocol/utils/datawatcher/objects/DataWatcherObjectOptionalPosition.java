@@ -19,7 +19,7 @@ public class DataWatcherObjectOptionalPosition extends ReadableDataWatcherObject
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
 		to.writeBoolean(value != null);
 		if (value != null) {
-			PositionSerializer.writePosition(to, value);
+			PositionSerializer.writeLegacyPositionL(to, value);
 		}
 	}
 

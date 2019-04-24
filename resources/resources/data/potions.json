@@ -1,122 +1,130 @@
 [
   {
-    "id": 1,
-    "name": "speed"
+    "name": "speed",
+    "id": 1
   },
   {
-    "id": 2,
-    "name": "slowness"
+    "name": "slowness",
+    "id": 2
   },
   {
-    "id": 3,
-    "name": "haste"
+    "name": "haste",
+    "id": 3
   },
   {
-    "id": 4,
-    "name": "mining_fatigue"
+    "name": "mining_fatigue",
+    "id": 4
   },
   {
-    "id": 5,
-    "name": "strength"
+    "name": "strength",
+    "id": 5
   },
   {
-    "id": 6,
-    "name": "instant_health"
+    "name": "instant_health",
+    "id": 6
   },
   {
-    "id": 7,
-    "name": "instant_damage"
+    "name": "instant_damage",
+    "id": 7
   },
   {
-    "id": 8,
-    "name": "jump_boost"
+    "name": "jump_boost",
+    "id": 8
   },
   {
-    "id": 9,
-    "name": "nausea"
+    "name": "nausea",
+    "id": 9
   },
   {
-    "id": 10,
-    "name": "regeneration"
+    "name": "regeneration",
+    "id": 10
   },
   {
-    "id": 11,
-    "name": "resistance"
+    "name": "resistance",
+    "id": 11
   },
   {
-    "id": 12,
-    "name": "fire_resistance"
+    "name": "fire_resistance",
+    "id": 12
   },
   {
-    "id": 13,
-    "name": "water_breathing"
+    "name": "water_breathing",
+    "id": 13
   },
   {
-    "id": 14,
-    "name": "invisibility"
+    "name": "invisibility",
+    "id": 14
   },
   {
-    "id": 15,
-    "name": "blindness"
+    "name": "blindness",
+    "id": 15
   },
   {
-    "id": 16,
-    "name": "night_vision"
+    "name": "night_vision",
+    "id": 16
   },
   {
-    "id": 17,
-    "name": "hunger"
+    "name": "hunger",
+    "id": 17
   },
   {
-    "id": 18,
-    "name": "weakness"
+    "name": "weakness",
+    "id": 18
   },
   {
-    "id": 19,
-    "name": "poison"
+    "name": "poison",
+    "id": 19
   },
   {
-    "id": 20,
-    "name": "wither"
+    "name": "wither",
+    "id": 20
   },
   {
-    "id": 21,
-    "name": "health_boost"
+    "name": "health_boost",
+    "id": 21
   },
   {
-    "id": 22,
-    "name": "absorption"
+    "name": "absorption",
+    "id": 22
   },
   {
-    "id": 23,
-    "name": "saturation"
+    "name": "saturation",
+    "id": 23
   },
   {
-    "id": 24,
-    "name": "glowing"
+    "name": "glowing",
+    "id": 24
   },
   {
-    "id": 25,
-    "name": "levitation"
+    "name": "levitation",
+    "id": 25
   },
   {
-    "id": 26,
-    "name": "luck"
+    "name": "luck",
+    "id": 26
   },
   {
-    "id": 27,
-    "name": "unluck"
+    "name": "unluck",
+    "id": 27
   },
   {
-    "id": 28,
-    "name": "slow_falling"
+    "name": "slow_falling",
+    "id": 28
   },
   {
-    "id": 29,
-    "name": "conduit_power"
+    "name": "conduit_power",
+    "id": 29
   },
   {
-    "id": 30,
-    "name": "dolphins_grace"
+    "name": "dolphins_grace",
+    "id": 30
+  },
+  {
+    "name": "bad_omen",
+    "id": 31
+  },
+  {
+    "name": "hero_of_the_village",
+    "id": 32
   }
 ]

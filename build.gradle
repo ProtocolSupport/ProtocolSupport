@@ -49,10 +49,10 @@ task setupFolders(type: DefaultTask) {doLast{
 
 task updateSpigot(type: BuildLibraryTask) {
 	targetDirectory = librariesRuntimeDirectory
-	targetLibraryName = "spigot-1.13.2-3.jar"
-	builderUrl = "https://papermc.io/ci/job/Paper-1.13/488/artifact/paperclip-488.jar"
-	buildCommand = "java -Dpaperclip.patchonly=true -jar {BUILDER}"
-	builtLibraryName = ["cache", "patched_1.13.2.jar"]
+	targetLibraryName = "spigot-1.14-1.jar"
+	builderUrl = "https://hub.spigotmc.org/jenkins/job/BuildTools/100/artifact/target/BuildTools.jar"
+	buildCommand = "java -jar {BUILDER} --rev 1.14-pre5"
+	builtLibraryName = ["spigot-1.14-pre5.jar"]
 }
 
 task updateRuntimeLibraries(type: UpdateLibrariesTask) {

@@ -166,9 +166,8 @@ public class ItemStackSerializer {
 			if (tag == null) {
 				to.writeShort(-1);
 			} else {
-				MiscSerializer.writeLengthPrefixedBytes(
+				ArraySerializer.writeShortByteArray(
 					to,
-					(lTo, length) -> lTo.writeShort(length),
 					lTo -> {
 						try (DataOutputStream outputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(lTo)))) {
 							DefaultNBTSerializer.INSTANCE.serializeTag(outputstream, tag);

@@ -2250,7 +2250,7 @@
     "legacydata": 1
   },
   {
-    "itemkey": "sign",
+    "itemkey": "oak_sign",
     "legacyid": 323,
     "legacydata": 0
   },
@@ -2415,12 +2415,12 @@
     "legacydata": 0
   },
   {
-    "itemkey": "rose_red",
+    "itemkey": "red_dye",
     "legacyid": 351,
     "legacydata": 1
   },
   {
-    "itemkey": "cactus_green",
+    "itemkey": "green_dye",
     "legacyid": 351,
     "legacydata": 2
   },
@@ -2465,7 +2465,7 @@
     "legacydata": 10
   },
   {
-    "itemkey": "dandelion_yellow",
+    "itemkey": "yellow_dye",
     "legacyid": 351,
     "legacydata": 11
   },

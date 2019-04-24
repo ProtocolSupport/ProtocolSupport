@@ -16,7 +16,7 @@ public class BlockPlace extends MiddleBlockPlace {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		PositionSerializer.readPositionTo(clientdata, position);
+		PositionSerializer.readLegacyPositionLTo(clientdata, position);
 		face = clientdata.readByte();
 		hand = UsedHand.MAIN;
 		ItemStackSerializer.readItemStack(clientdata, version, I18NData.DEFAULT_LOCALE);

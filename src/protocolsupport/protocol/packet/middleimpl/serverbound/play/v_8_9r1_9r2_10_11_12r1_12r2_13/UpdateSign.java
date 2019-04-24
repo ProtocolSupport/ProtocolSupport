@@ -16,7 +16,7 @@ public class UpdateSign extends MiddleUpdateSign {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		PositionSerializer.readPositionTo(clientdata, position);
+		PositionSerializer.readLegacyPositionLTo(clientdata, position);
 		for (int i = 0; i < lines.length; i++) {
 			String rawline = StringSerializer.readString(clientdata, version);
 			lines[i] = version.isAfter(ProtocolVersion.MINECRAFT_1_8) ? rawline : ChatAPI.fromJSON(rawline).toLegacyText(cache.getAttributesCache().getLocale());

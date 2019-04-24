@@ -108,7 +108,8 @@ public class LegacyEntityId {
 
 	@SuppressWarnings("deprecation")
 	public static int getIntId(NetworkEntityType type) {
-		return type.getBukkitType().getTypeId();
+		EntityType btype = type.getBukkitType();
+		return btype != null ? btype.getTypeId() : -1;
 	}
 
 	public static NetworkEntityType getTypeByStringId(String stringId) {

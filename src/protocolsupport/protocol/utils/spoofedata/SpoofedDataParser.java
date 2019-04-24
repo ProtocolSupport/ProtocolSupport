@@ -4,16 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import com.destroystokyo.paper.event.player.PlayerHandshakeEvent;
-
+//TODO: restore paper parser when paper updates
 public class SpoofedDataParser {
 
 	private static final List<Function<String, SpoofedData>> parsers = new ArrayList<>();
 
 	static {
-		if (isPaperHandshakeEvent()) {
-			parsers.add(new PaperSpoofedDataParser());
-		}
+//		if (isPaperHandshakeEvent()) {
+//			parsers.add(new PaperSpoofedDataParser());
+//		}
 		parsers.add(new BungeeCordSpoofedDataParser());
 	}
 
@@ -30,13 +29,13 @@ public class SpoofedDataParser {
 		return null;
 	}
 
-	private static boolean isPaperHandshakeEvent() {
-		try {
-			Class.forName(PlayerHandshakeEvent.class.getName());
-			return true;
-		} catch (Throwable e) {
-			return false;
-		}
-	}
+//	private static boolean isPaperHandshakeEvent() {
+//		try {
+//			Class.forName(PlayerHandshakeEvent.class.getName());
+//			return true;
+//		} catch (Throwable e) {
+//			return false;
+//		}
+//	}
 
 }
