@@ -69,7 +69,12 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 						int blockdata = reader.getBlockData(blockIndex);
 						section.setBlockData(blockIndex, (short) blockdata);
 						if (tileRemapper.usedToBeTile(blockIndex)) {
-							//TODO:
+							Position position = new Position(
+								(coord.getX() << 4) + (blockIndex & 0xF),
+								(sectionNumber << 4) + ((blockIndex >> 8) & 0xF),
+								(coord.getZ() << 4) + ((blockIndex >> 4) & 0xF)
+							);
+							tiles.put(position, tileRemapper.getLegacyTileFromBlock(position, blockdata));
 						}
 					}
 

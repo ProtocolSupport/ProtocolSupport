@@ -38,9 +38,9 @@ public class Chunk extends MiddleChunk {
 		VarNumberSerializer.writeVarInt(serializer, blockMask);
 		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 		ArraySerializer.writeVarIntByteArray(serializer, to -> {
-			for (int i = 0; i < ChunkConstants.SECTION_COUNT_BLOCKS; i++) {
-				if (Utils.isBitSet(blockMask, i)) {
-					ChunkWriterVariesWithLight.writeSectionData(to, blockDataRemappingTable, flatteningBlockDataTable, cachedChunk, hasSkyLight, i);
+			for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
+				if (Utils.isBitSet(blockMask, sectionNumber)) {
+					ChunkWriterVariesWithLight.writeSectionData(to, blockDataRemappingTable, flatteningBlockDataTable, cachedChunk, hasSkyLight, sectionNumber);
 				}
 			}
 			if (full) {

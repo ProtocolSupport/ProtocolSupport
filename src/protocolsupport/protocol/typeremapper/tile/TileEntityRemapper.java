@@ -232,11 +232,6 @@ public class TileEntityRemapper {
 		return tileNeedsBlockData.contains(type);
 	}
 
-	//TODO: remove
-	public boolean tileThatNeedsBlockData(int blockdata) {
-		return false;
-	}
-
 	public boolean usedToBeTile(int blockdata) {
 		return blockdataToTile.containsKey(blockdata);
 	}
