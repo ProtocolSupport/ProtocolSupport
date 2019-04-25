@@ -1,5 +1,7 @@
 package protocolsupport.zplatform.impl.spigot.injector;
 
+import net.minecraft.server.v1_14_R1.WorldServer;
+import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldInitEvent;
@@ -8,7 +10,7 @@ public class SpigotEntityTrackerInjector implements Listener {
 
 	@EventHandler
 	public void onWorldInit(WorldInitEvent event) {
-		//WorldServer wserver = ((CraftWorld) event.getWorld()).getHandle();
+		WorldServer wserver = ((CraftWorld) event.getWorld()).getHandle();
 		//wserver.tracker = new SpigotEntityTracker(wserver);
 		//wserver.addIWorldAccess(new SpigotEntityTrackerBlock(wserver));
 //TODO: restore after implementing

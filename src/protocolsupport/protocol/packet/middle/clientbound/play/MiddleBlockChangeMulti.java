@@ -21,7 +21,7 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		chunk = PositionSerializer.readIntChunkCoord(serverdata);
+		chunk = PositionSerializer.readChunkCoord(serverdata);
 		records = ArraySerializer.readVarIntTArray(
 			serverdata,
 			Record.class,

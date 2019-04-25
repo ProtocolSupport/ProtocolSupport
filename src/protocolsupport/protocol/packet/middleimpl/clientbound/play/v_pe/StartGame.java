@@ -68,7 +68,7 @@ public class StartGame extends MiddleStartGame {
 		VarNumberSerializer.writeSVarInt(startgame, ChangeDimension.getPeDimensionId(dimension)); //world dimension
 		VarNumberSerializer.writeSVarInt(startgame, 1); //world type (1 - infinite)
 		VarNumberSerializer.writeSVarInt(startgame, GameMode.SURVIVAL.getId()); //world gamemode
-		VarNumberSerializer.writeSVarInt(startgame, difficulty.getId()); //world difficulty
+		VarNumberSerializer.writeSVarInt(startgame, 1); //world difficulty //TODO: set PE difficulty using... packet?
 		PositionSerializer.writePEPosition(startgame, new Position(0, 0, 0)); //spawn position
 		startgame.writeBoolean(false); //disable achievements
 		VarNumberSerializer.writeSVarInt(startgame, 0); //time

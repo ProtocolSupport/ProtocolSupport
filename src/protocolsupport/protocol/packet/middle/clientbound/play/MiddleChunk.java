@@ -26,7 +26,7 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		chunk = PositionSerializer.readIntChunkCoord(serverdata);
+		chunk = PositionSerializer.readChunkCoord(serverdata);
 		full = serverdata.readBoolean();
 		bitmask = VarNumberSerializer.readVarInt(serverdata);
 		heightmaps = ItemStackSerializer.readTag(serverdata);
