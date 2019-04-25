@@ -2550,7 +2550,7 @@
     "pedata": 0
   },
   {
-    "itemkey": "sign",
+    "itemkey": "oak_sign",
     "peid": 323,
     "pedata": 0
   },
@@ -2740,12 +2740,12 @@
     "pedata": 0
   },
   {
-    "itemkey": "rose_red",
+    "itemkey": "red_dye",
     "peid": 351,
     "pedata": 1
   },
   {
-    "itemkey": "cactus_green",
+    "itemkey": "green_dye",
     "peid": 351,
     "pedata": 2
   },
@@ -2790,7 +2790,7 @@
     "pedata": 10
   },
   {
-    "itemkey": "dandelion_yellow",
+    "itemkey": "yellow_dye",
     "peid": 351,
     "pedata": 11
   },
