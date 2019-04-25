@@ -15,12 +15,6 @@ public class UnloadChunk extends MiddleUnloadChunk {
 	}
 
 	@Override
-	public boolean postFromServerRead() {
-		cache.getTileCache().removeChunk(chunk);
-		return super.postFromServerRead();
-	}
-
-	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID);
 		PositionSerializer.writeIntChunkCoord(serializer, chunk);

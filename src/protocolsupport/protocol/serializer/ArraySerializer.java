@@ -1,6 +1,7 @@
 package protocolsupport.protocol.serializer;
 
 import java.lang.reflect.Array;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -101,6 +102,13 @@ public class ArraySerializer {
 
 	public static <T> void writeVarIntTArray(ByteBuf to, T[] array, BiConsumer<ByteBuf, T> elementWriter) {
 		VarNumberSerializer.writeVarInt(to, array.length);
+		for (T element : array) {
+			elementWriter.accept(to, element);
+		}
+	}
+
+	public static <T> void writeVarIntTArray(ByteBuf to, List<T> array, BiConsumer<ByteBuf, T> elementWriter) {
+		VarNumberSerializer.writeVarInt(to, array.size());
 		for (T element : array) {
 			elementWriter.accept(to, element);
 		}

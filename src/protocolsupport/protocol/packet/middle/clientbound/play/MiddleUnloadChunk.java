@@ -4,9 +4,12 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.storage.netcache.ChunkCache;
 import protocolsupport.protocol.utils.types.ChunkCoord;
 
 public abstract class MiddleUnloadChunk extends ClientBoundMiddlePacket {
+
+	protected final ChunkCache chunkCache = cache.getChunkCache();
 
 	public MiddleUnloadChunk(ConnectionImpl connection) {
 		super(connection);
@@ -17,6 +20,7 @@ public abstract class MiddleUnloadChunk extends ClientBoundMiddlePacket {
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		chunk = PositionSerializer.readIntChunkCoord(serverdata);
+		chunkCache.remove(chunk);
 	}
 
 }

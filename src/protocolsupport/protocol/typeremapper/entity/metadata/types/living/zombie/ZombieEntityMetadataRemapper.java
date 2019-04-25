@@ -1,6 +1,5 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.living.zombie;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperBooleanToByte;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;

@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.chunk;
+package protocolsupport.protocol.typeremapper.chunknew;
 
 import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
 

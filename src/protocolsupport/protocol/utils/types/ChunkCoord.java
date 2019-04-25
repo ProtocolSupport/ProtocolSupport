@@ -1,6 +1,12 @@
 package protocolsupport.protocol.utils.types;
 
+import protocolsupport.utils.Utils;
+
 public class ChunkCoord {
+
+	public static ChunkCoord fromGlobal(int x, int z) {
+		return new ChunkCoord(x >> 4, z >> 4);
+	}
 
 	private final int x;
 	private final int z;
@@ -30,6 +36,11 @@ public class ChunkCoord {
 	@Override
 	public int hashCode() {
 		return (x * 31) + z;
+	}
+
+	@Override
+	public String toString() {
+		return Utils.toStringAllFields(this);
 	}
 
 }

@@ -1,21 +1,20 @@
 package protocolsupport.protocol.typeremapper.tile;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.ObjIntConsumer;
-import java.util.stream.IntStream;
 
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.ints.IntSet;
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
@@ -68,9 +67,7 @@ public class TileEntityRemapper {
 	protected static void register(TileEntityType type, TileEntityWithBlockDataNBTRemapper transformer, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
 			TileEntityRemapper remapper = tileEntityRemappers.get(version);
-			IntStream.rangeClosed(transformer.remappers.getMinKey(), transformer.remappers.getMaxKey())
-			.filter(i -> transformer.remappers.get(i) != null)
-			.forEach(remapper.tileNeedsBlockData::add);
+			remapper.tileNeedsBlockData.add(type);
 			remapper.tileToTile
 			.computeIfAbsent(type, k -> new ArrayList<>())
 			.add(transformer);
@@ -209,7 +206,7 @@ public class TileEntityRemapper {
 	}
 
 	protected final Map<TileEntityType, List<ObjIntConsumer<TileEntity>>> tileToTile = new EnumMap<>(TileEntityType.class);
-	protected final IntSet tileNeedsBlockData = new IntOpenHashSet();
+	protected final Set<TileEntityType> tileNeedsBlockData = Collections.newSetFromMap(new EnumMap<>(TileEntityType.class));
 
 	protected final Int2ObjectMap<Function<Position, TileEntity>> blockdataToTile = new Int2ObjectOpenHashMap<>();
 
@@ -231,8 +228,13 @@ public class TileEntityRemapper {
 		return null;
 	}
 
+	public boolean tileThatNeedsBlockData(TileEntityType type) {
+		return tileNeedsBlockData.contains(type);
+	}
+
+	//TODO: remove
 	public boolean tileThatNeedsBlockData(int blockdata) {
-		return tileNeedsBlockData.contains(blockdata);
+		return false;
 	}
 
 	public boolean usedToBeTile(int blockdata) {

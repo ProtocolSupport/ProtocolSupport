@@ -8,6 +8,7 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoole
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectDirection;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectEntityPose;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTagCompound;
@@ -16,7 +17,6 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptio
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectParticle;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectEntityPose;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;

@@ -9,9 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.storage.netcache.TileDataCache;
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
-import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.types.TileEntity;
 import protocolsupport.protocol.utils.types.TileEntityType;
@@ -24,16 +22,9 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		super(connection);
 	}
 
-	protected final TileEntityRemapper tileremapper = TileEntityRemapper.getRemapper(version);
-
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(create(
-			version, cache.getAttributesCache().getLocale(),
-			tileremapper.remap(tile, cache.getTileCache().getBlockData(
-				TileDataCache.getChunkCoordsFromPosition(position), TileDataCache.getLocalCoordFromPosition(position)
-			))
-		));
+		return RecyclableSingletonList.create(create(version, cache.getAttributesCache().getLocale(), tile));
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, String locale, TileEntity tile) {

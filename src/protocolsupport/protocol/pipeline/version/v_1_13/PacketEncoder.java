@@ -3,8 +3,6 @@ package protocolsupport.protocol.pipeline.version.v_1_13;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunkLight;
-import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_13.LoginCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13.LoginSuccess;
@@ -22,6 +20,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BlockAct
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.Chunk;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.ChunkLight;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.CraftRecipeConfirm;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.DeclareCommands;
@@ -100,8 +99,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2_13.ServerInfo;
 import protocolsupport.protocol.pipeline.version.util.encoder.AbstractModernPacketEncoder;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class PacketEncoder extends AbstractModernPacketEncoder {
 
@@ -300,14 +297,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_QUERY_NBT_RESPONSE, QueryNBTResponse::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_STOP_SOUND, StopSound::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_LOOK_AT, LookAt::new);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_LIGHT, connectionImpl -> {
-			return new MiddleChunkLight(connectionImpl) {
-				@Override
-				public RecyclableCollection<ClientBoundPacketData> toData() {
-					return RecyclableEmptyList.get();
-				}
-			};
-		});
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_LIGHT, ChunkLight::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_VIEW_CENTER, NoopSetViewCenter::new);
 	}
 

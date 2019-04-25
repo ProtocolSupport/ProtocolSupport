@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.chunk;
+package protocolsupport.protocol.utils.chunk;
 
 import io.netty.buffer.ByteBuf;
 
@@ -24,6 +24,10 @@ public class BlockStorageReader {
 		for (int i = 0; i < blockdata.length; i++) {
 			blockdata[i] = stream.readLong();
 		}
+	}
+
+	public long[] getBlockData() {
+		return blockdata;
 	}
 
 	public int getBlockData(int blockindex) {

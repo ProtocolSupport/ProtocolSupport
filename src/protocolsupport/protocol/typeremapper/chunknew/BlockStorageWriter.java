@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.chunk;
+package protocolsupport.protocol.typeremapper.chunknew;
 
 import protocolsupport.utils.Utils;
 
