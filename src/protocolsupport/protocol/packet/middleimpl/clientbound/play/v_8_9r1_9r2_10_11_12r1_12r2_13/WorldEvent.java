@@ -34,7 +34,7 @@ public class WorldEvent extends MiddleWorldEvent {
 		effectId = legacyEffectId.getRemap(effectId);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_EVENT_ID);
 		serializer.writeInt(effectId);
-		PositionSerializer.writePosition(serializer, position);
+		PositionSerializer.writeLegacyPositionL(serializer, position);
 		serializer.writeInt(data);
 		serializer.writeBoolean(disableRelative);
 		return RecyclableSingletonList.create(serializer);

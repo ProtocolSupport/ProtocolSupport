@@ -33,7 +33,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID);
-		PositionSerializer.writeChunkCoord(serializer, chunk);
+		PositionSerializer.writeIntChunkCoord(serializer, chunk);
 		ArraySerializer.writeVarIntTArray(serializer, records, (to, record) -> {
 			int localcoord = TileDataCache.createLocalPositionFromMultiChangeBlock(record.coord);
 			if (tileRemapper.tileThatNeedsBlockData(record.id)) {

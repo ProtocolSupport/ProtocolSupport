@@ -11,24 +11,24 @@ import java.util.UUID;
 import io.netty.buffer.ByteBuf;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_13_R2.CraftChunk;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_14_R1.CraftChunk;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.spigotmc.SpigotConfig;
 
 import com.google.common.collect.BiMap;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_13_R2.*;
-import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_13_R2.PacketPlayInFlying.PacketPlayInLook;
-import net.minecraft.server.v1_13_R2.PacketPlayInFlying.PacketPlayInPosition;
-import net.minecraft.server.v1_13_R2.PacketPlayInFlying.PacketPlayInPositionLook;
-import net.minecraft.server.v1_13_R2.PacketPlayOutEntity.PacketPlayOutEntityLook;
-import net.minecraft.server.v1_13_R2.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
-import net.minecraft.server.v1_13_R2.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
-import net.minecraft.server.v1_13_R2.PacketPlayOutTitle.EnumTitleAction;
-import net.minecraft.server.v1_13_R2.ServerPing.ServerData;
-import net.minecraft.server.v1_13_R2.ServerPing.ServerPingPlayerSample;
+import net.minecraft.server.v1_14_R1.*;
+import net.minecraft.server.v1_14_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_14_R1.PacketPlayInFlying.PacketPlayInLook;
+import net.minecraft.server.v1_14_R1.PacketPlayInFlying.PacketPlayInPosition;
+import net.minecraft.server.v1_14_R1.PacketPlayInFlying.PacketPlayInPositionLook;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntity.PacketPlayOutEntityLook;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
+import net.minecraft.server.v1_14_R1.PacketPlayOutTitle.EnumTitleAction;
+import net.minecraft.server.v1_14_R1.ServerPing.ServerData;
+import net.minecraft.server.v1_14_R1.ServerPing.ServerPingPlayerSample;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
@@ -229,7 +229,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public Object createFakeJoinGamePacket() {
-		return new PacketPlayOutLogin(0, EnumGamemode.SURVIVAL, false, DimensionManager.OVERWORLD, EnumDifficulty.EASY, 60, WorldType.NORMAL, false);
+		return new PacketPlayOutLogin(0, EnumGamemode.SURVIVAL, false, DimensionManager.OVERWORLD, 60, WorldType.NORMAL, 4, false);
 	}
 
 	@Override
@@ -339,11 +339,6 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getOutPlayHeldSlotPacketId() {
 		return getOutId(PacketPlayOutHeldItemSlot.class);
-	}
-
-	@Override
-	public int getOutPlayBedPacketId() {
-		return getOutId(PacketPlayOutBed.class);
 	}
 
 	@Override
@@ -721,6 +716,16 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		return getOutId(PacketPlayOutLookAt.class);
 	}
 
+	@Override
+	public int getOutPlayChunkLightPacketId() {
+		return getOutId(PacketPlayOutLightUpdate.class);
+	}
+
+	@Override
+	public int getOutPlaySetViewCenterPacketId() {
+		return getOutId(PacketPlayOutViewCentre.class);
+	}
+
 
 	@Override
 	public int getInHandshakeStartPacketId() {
@@ -969,7 +974,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 
 
 	@SuppressWarnings("unchecked")
-	private static Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>> getPacketIdMap(Class<?> packetClass) {
+	protected static Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>> getPacketIdMap(Class<?> packetClass) {
 		Map<Class<? extends Packet<?>>, EnumProtocol> protocolMap = null;
 		try {
 			protocolMap = (Map<Class<? extends Packet<?>>, EnumProtocol>) ReflectionUtils.setAccessible(EnumProtocol.class.getDeclaredField("f")).get(null);
@@ -984,11 +989,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		}
 	}
 
-	private static final int getOutId(Class<?> packetClass) {
+	protected static final int getOutId(Class<?> packetClass) {
 		return getPacketIdMap(packetClass).get(EnumProtocolDirection.CLIENTBOUND).inverse().get(packetClass);
 	}
 
-	private static final int getInId(Class<?> packetClass) {
+	protected static final int getInId(Class<?> packetClass) {
 		return getPacketIdMap(packetClass).get(EnumProtocolDirection.SERVERBOUND).inverse().get(packetClass);
 	}
 

@@ -7,11 +7,13 @@ import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleDeclareRecipes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class DeclareRecipes extends MiddleDeclareRecipes {
@@ -22,12 +24,15 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_DECLARE_RECIPES);
-		VarNumberSerializer.writeVarInt(serializer, recipes.length);
-		for (Recipe r : recipes) {
-			writeRecipe(r, serializer, version);
-		}
-		return RecyclableSingletonList.create(serializer);
+		return RecyclableEmptyList.get();
+//TODO: update
+//		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_DECLARE_RECIPES);
+//		MiscSerializer.writeLengthPrefixedBytes(serializer, null, null);
+//		VarNumberSerializer.writeVarInt(serializer, recipes.length);
+//		for (Recipe r : recipes) {
+//			writeRecipe(r, serializer, version);
+//		}
+//		return RecyclableSingletonList.create(serializer);
 	}
 
 	private void writeRecipe(Recipe recipe, ByteBuf serializer, ProtocolVersion version) {

@@ -449,7 +449,7 @@
   "minecraft:furnace": {
     "protocol_id": 149
   },
-  "minecraft:sign": {
+  "minecraft:oak_sign": {
     "protocol_id": 150
   },
   "minecraft:oak_door": {
@@ -464,7 +464,7 @@
   "minecraft:cobblestone_stairs": {
     "protocol_id": 154
   },
-  "minecraft:wall_sign": {
+  "minecraft:oak_wall_sign": {
     "protocol_id": 155
   },
   "minecraft:lever": {

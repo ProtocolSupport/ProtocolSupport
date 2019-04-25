@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.itemstack;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
 
 import com.google.gson.JsonElement;
@@ -22,6 +23,9 @@ public class PreFlatteningItemIdData {
 	protected static final Int2IntMap fromLegacyId = new Int2IntOpenHashMap();
 	protected static void register(String modernKey, int legacyMainId, int legacyData) {
 		int modernId = ItemMaterialLookup.getRuntimeId(ItemMaterialLookup.getByKey(modernKey));
+		if (modernId == -1) {
+			throw new IllegalStateException(MessageFormat.format("Item material {0} doesn''t exist", modernKey));
+		}
 		int combinedLegacyId = formLegacyCombinedId(legacyMainId, legacyData);
 		toLegacyId[modernId] = combinedLegacyId;
 		fromLegacyId.put(combinedLegacyId, modernId);

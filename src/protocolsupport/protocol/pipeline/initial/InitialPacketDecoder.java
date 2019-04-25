@@ -43,8 +43,8 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	protected static final int pingLegacyDelay = JavaSystemProperty.getValue("pinglegacydelay", 200, Integer::parseInt);
 
 	static {
-		ProtocolSupport.logInfo("Assume 1.5.2 ping delay: "+ping152delay);
-		ProtocolSupport.logInfo("Assume legacy ping delay: "+pingLegacyDelay);
+		ProtocolSupport.logInfo("Assume 1.5.2 ping delay: " + ping152delay);
+		ProtocolSupport.logInfo("Assume legacy ping delay: " + pingLegacyDelay);
 	}
 
 	protected static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<>(ProtocolVersion.class);

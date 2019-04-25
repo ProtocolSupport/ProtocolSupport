@@ -1607,7 +1607,7 @@
   "minecraft:enchanted_golden_apple": {
     "protocol_id": 535
   },
-  "minecraft:sign": {
+  "minecraft:oak_sign": {
     "protocol_id": 536
   },
   "minecraft:bucket": {
@@ -1718,10 +1718,10 @@
   "minecraft:ink_sac": {
     "protocol_id": 572
   },
-  "minecraft:rose_red": {
+  "minecraft:red_dye": {
     "protocol_id": 573
   },
-  "minecraft:cactus_green": {
+  "minecraft:green_dye": {
     "protocol_id": 574
   },
   "minecraft:cocoa_beans": {
@@ -1748,7 +1748,7 @@
   "minecraft:lime_dye": {
     "protocol_id": 582
   },
-  "minecraft:dandelion_yellow": {
+  "minecraft:yellow_dye": {
     "protocol_id": 583
   },
   "minecraft:light_blue_dye": {

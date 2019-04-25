@@ -2,7 +2,7 @@ package protocolsupport.zplatform.impl.spigot.injector.network;
 
 import java.util.List;
 
-import net.minecraft.server.v1_13_R2.NetworkManager;
+import net.minecraft.server.v1_14_R1.NetworkManager;
 
 public class SpigotNetworkManagerList {
 

@@ -29643,7 +29643,7 @@
       }
     ]
   },
-  "minecraft:sign": {
+  "minecraft:oak_sign": {
     "properties": {
       "rotation": [
         "0",
@@ -31465,7 +31465,7 @@
       }
     ]
   },
-  "minecraft:wall_sign": {
+  "minecraft:oak_wall_sign": {
     "properties": {
       "facing": [
         "north",

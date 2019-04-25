@@ -12,7 +12,7 @@ public class VarIntFrameDecoder implements IPacketSplitter {
 	private int packetLength = -1;
 
 	@Override
-	public void split(ChannelHandlerContext ctx, ByteBuf input, List<Object> list)  {
+	public void split(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) {
 		if (packetLength == -1) {
 			input.markReaderIndex();
 			int tmpPacketLength = 0;

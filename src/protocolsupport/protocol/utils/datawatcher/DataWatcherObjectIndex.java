@@ -14,11 +14,14 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTa
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectParticle;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectEntityPose;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVillagerData;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupportbuildprocessor.Preload;
 
@@ -47,6 +50,7 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> NAMETAG_VISIBLE = takeNextIndex(DataWatcherObjectBoolean.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> SILENT = takeNextIndex(DataWatcherObjectBoolean.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> NO_GRAVITY = takeNextIndex(DataWatcherObjectBoolean.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectEntityPose> POSE = takeNextIndex(DataWatcherObjectEntityPose.class);
 	}
 
 	public static class EntityLiving extends Entity {
@@ -55,6 +59,7 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> POTION_COLOR = takeNextIndex(DataWatcherObjectVarInt.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> POTION_AMBIENT = takeNextIndex(DataWatcherObjectBoolean.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> ARROWS_IN = takeNextIndex(DataWatcherObjectVarInt.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectOptionalPosition> BED_LOCATION = takeNextIndex(DataWatcherObjectOptionalPosition.class);
 	}
 
 	public static class Insentient extends EntityLiving {
@@ -93,7 +98,6 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 
 	public static class BaseHorse extends Ageable {
 		public static final DataWatcherObjectIndex<DataWatcherObjectByte> FLAGS = takeNextIndex(DataWatcherObjectByte.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectOptionalUUID> OWNER = takeNextIndex(DataWatcherObjectOptionalUUID.class);
 	}
 
 	public static class BattleHorse extends BaseHorse {
@@ -115,14 +119,14 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectByte> HANGING = takeNextIndex(DataWatcherObjectByte.class);
 	}
 
-	public static class Ocelot extends Tameable {
-		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> VARIANT = takeNextIndex(DataWatcherObjectVarInt.class);
-	}
-
 	public static class Wolf extends Tameable {
 		public static final DataWatcherObjectIndex<DataWatcherObjectFloat> DAMAGE_TAKEN = takeNextIndex(DataWatcherObjectFloat.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> BEGGING = takeNextIndex(DataWatcherObjectBoolean.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> COLLAR_COLOR = takeNextIndex(DataWatcherObjectVarInt.class);
+	}
+
+	public static class Ocelot extends Ageable {
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> TRUSTING = takeNextIndex(DataWatcherObjectBoolean.class);
 	}
 
 	public static class Pig extends Ageable {
@@ -138,12 +142,12 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectByte> FLAGS = takeNextIndex(DataWatcherObjectByte.class);
 	}
 
-	public static class PolarBear extends Ageable  {
+	public static class PolarBear extends Ageable {
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> STANDING_UP = takeNextIndex(DataWatcherObjectBoolean.class);
 	}
 
-	public static class Villager extends Ageable  {
-		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> PROFESSION = takeNextIndex(DataWatcherObjectVarInt.class);
+	public static class Villager extends Ageable {
+		public static final DataWatcherObjectIndex<DataWatcherObjectVillagerData> VDATA = takeNextIndex(DataWatcherObjectVillagerData.class);
 	}
 
 	public static class Enderman extends Insentient {
@@ -162,12 +166,12 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 	public static class Zombie extends Insentient {
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> BABY = takeNextIndex(DataWatcherObjectBoolean.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> UNUSED = takeNextIndex(DataWatcherObjectVarInt.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> HANDS_UP = takeNextIndex(DataWatcherObjectBoolean.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> DROWNING = takeNextIndex(DataWatcherObjectBoolean.class);
 	}
 
 	public static class ZombieVillager extends Zombie {
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> CONVERTING = takeNextIndex(DataWatcherObjectBoolean.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> PROFESSION = takeNextIndex(DataWatcherObjectVarInt.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectVillagerData> VDATA = takeNextIndex(DataWatcherObjectVillagerData.class);
 	}
 
 	public static class Blaze extends Insentient {
@@ -192,15 +196,15 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> SIZE = takeNextIndex(DataWatcherObjectVarInt.class);
 	}
 
-	public static class Skeleton extends Insentient {
-		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> SWINGING_HANDS = takeNextIndex(DataWatcherObjectBoolean.class);
+	public static class RaidParticipant extends Insentient {
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> CELEBRATING = takeNextIndex(DataWatcherObjectBoolean.class);
 	}
 
-	public static class Witch extends Insentient {
+	public static class Witch extends RaidParticipant {
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> DRINKING_POTION = takeNextIndex(DataWatcherObjectBoolean.class);
 	}
 
-	public static class IronGolem extends Insentient{
+	public static class IronGolem extends Insentient {
 		public static final DataWatcherObjectIndex<DataWatcherObjectByte> PLAYER_CREATED = takeNextIndex(DataWatcherObjectByte.class);
 	}
 
@@ -223,11 +227,11 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> TARGET_ID = takeNextIndex(DataWatcherObjectVarInt.class);
 	}
 
-	public static class Vindicator extends Insentient {
+	public static class Vindicator extends RaidParticipant {
 		public static final DataWatcherObjectIndex<DataWatcherObjectByte> HAS_TARGET = takeNextIndex(DataWatcherObjectByte.class);
 	}
 
-	public static class Evoker extends Insentient {
+	public static class Evoker extends RaidParticipant {
 		public static final DataWatcherObjectIndex<DataWatcherObjectByte> SPELL = takeNextIndex(DataWatcherObjectByte.class);
 	}
 
@@ -318,6 +322,8 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 
 	public static class Arrow extends Entity {
 		public static final DataWatcherObjectIndex<DataWatcherObjectByte> CIRTICAL = takeNextIndex(DataWatcherObjectByte.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectOptionalUUID> SHOOTER = takeNextIndex(DataWatcherObjectOptionalUUID.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectByte> PIERCING_LEVEL = takeNextIndex(DataWatcherObjectByte.class);
 	}
 
 	public static class TippedArrow extends Arrow {
@@ -330,7 +336,8 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 
 	public static class Firework extends Entity {
 		public static final DataWatcherObjectIndex<DataWatcherObjectItemStack> ITEM = takeNextIndex(DataWatcherObjectItemStack.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> USER = takeNextIndex(DataWatcherObjectVarInt.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectOptionalVarInt> USER = takeNextIndex(DataWatcherObjectOptionalVarInt.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> SHOT_AT_ANGLE = takeNextIndex(DataWatcherObjectBoolean.class);
 	}
 
 	public static class ItemFrame extends Entity {

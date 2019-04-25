@@ -81,7 +81,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SpawnObje
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SpawnPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.StartGame;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.UseBed;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8.SpawnExpOrb;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8.SpawnGlobal;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8.SpawnLiving;
@@ -116,7 +115,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_RESPAWN_ID, 0x07);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_POSITION_ID, 0x08);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_HELD_SLOT_ID, 0x09);
-		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BED_ID, 0x0A);
+		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.LEGACY_PLAY_USE_BED_ID, 0x0A);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ANIMATION_ID, 0x0B);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_NAMED_ID, 0x0C);
 		packetIdRegistry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_COLLECT_EFFECT_ID, 0x0D);
@@ -194,7 +193,6 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_RESPAWN_ID, ChangeDimension::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_POSITION_ID, SetPosition::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_HELD_SLOT_ID, HeldSlot::new);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BED_ID, UseBed::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ANIMATION_ID, EntityAnimation::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_NAMED_ID, SpawnNamed::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_COLLECT_EFFECT_ID, CollectEffect::new);

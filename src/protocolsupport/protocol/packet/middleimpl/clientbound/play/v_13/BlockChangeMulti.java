@@ -30,7 +30,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_MULTI_ID);
-		PositionSerializer.writeChunkCoord(serializer, chunk);
+		PositionSerializer.writeIntChunkCoord(serializer, chunk);
 		ArraySerializer.writeVarIntTArray(serializer, records, (to, record) -> {
 			serializer.writeShort(record.coord);
 			VarNumberSerializer.writeVarInt(to, BlockRemappingHelper.remapFBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, record.id));

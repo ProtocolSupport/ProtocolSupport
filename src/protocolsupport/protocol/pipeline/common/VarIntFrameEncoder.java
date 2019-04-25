@@ -8,7 +8,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 public class VarIntFrameEncoder implements IPacketPrepender {
 
 	@Override
-	public void prepend(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output)  {
+	public void prepend(ChannelHandlerContext ctx, ByteBuf input, ByteBuf output) {
 		VarNumberSerializer.writeVarInt(output, input.readableBytes());
 		output.writeBytes(input);
 	}

@@ -8,77 +8,74 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.spigotmc.SpigotConfig;
 
-import net.minecraft.server.v1_13_R2.DimensionManager;
-import net.minecraft.server.v1_13_R2.EntityPlayer;
-import net.minecraft.server.v1_13_R2.ExpirableListEntry;
-import net.minecraft.server.v1_13_R2.GameProfileBanEntry;
-import net.minecraft.server.v1_13_R2.IChatBaseComponent;
-import net.minecraft.server.v1_13_R2.ITickable;
-import net.minecraft.server.v1_13_R2.IpBanEntry;
-import net.minecraft.server.v1_13_R2.MinecraftServer;
-import net.minecraft.server.v1_13_R2.NetworkManager;
-import net.minecraft.server.v1_13_R2.PacketListenerPlayIn;
-import net.minecraft.server.v1_13_R2.PacketLoginInCustomPayload;
-import net.minecraft.server.v1_13_R2.PacketLoginInEncryptionBegin;
-import net.minecraft.server.v1_13_R2.PacketLoginInListener;
-import net.minecraft.server.v1_13_R2.PacketLoginInStart;
-import net.minecraft.server.v1_13_R2.PacketPlayInAbilities;
-import net.minecraft.server.v1_13_R2.PacketPlayInAdvancements;
-import net.minecraft.server.v1_13_R2.PacketPlayInArmAnimation;
-import net.minecraft.server.v1_13_R2.PacketPlayInAutoRecipe;
-import net.minecraft.server.v1_13_R2.PacketPlayInBEdit;
-import net.minecraft.server.v1_13_R2.PacketPlayInBeacon;
-import net.minecraft.server.v1_13_R2.PacketPlayInBlockDig;
-import net.minecraft.server.v1_13_R2.PacketPlayInBlockPlace;
-import net.minecraft.server.v1_13_R2.PacketPlayInBoatMove;
-import net.minecraft.server.v1_13_R2.PacketPlayInChat;
-import net.minecraft.server.v1_13_R2.PacketPlayInClientCommand;
-import net.minecraft.server.v1_13_R2.PacketPlayInCloseWindow;
-import net.minecraft.server.v1_13_R2.PacketPlayInCustomPayload;
-import net.minecraft.server.v1_13_R2.PacketPlayInEnchantItem;
-import net.minecraft.server.v1_13_R2.PacketPlayInEntityAction;
-import net.minecraft.server.v1_13_R2.PacketPlayInEntityNBTQuery;
-import net.minecraft.server.v1_13_R2.PacketPlayInFlying;
-import net.minecraft.server.v1_13_R2.PacketPlayInHeldItemSlot;
-import net.minecraft.server.v1_13_R2.PacketPlayInItemName;
-import net.minecraft.server.v1_13_R2.PacketPlayInKeepAlive;
-import net.minecraft.server.v1_13_R2.PacketPlayInPickItem;
-import net.minecraft.server.v1_13_R2.PacketPlayInRecipeDisplayed;
-import net.minecraft.server.v1_13_R2.PacketPlayInResourcePackStatus;
-import net.minecraft.server.v1_13_R2.PacketPlayInSetCommandBlock;
-import net.minecraft.server.v1_13_R2.PacketPlayInSetCommandMinecart;
-import net.minecraft.server.v1_13_R2.PacketPlayInSetCreativeSlot;
-import net.minecraft.server.v1_13_R2.PacketPlayInSettings;
-import net.minecraft.server.v1_13_R2.PacketPlayInSpectate;
-import net.minecraft.server.v1_13_R2.PacketPlayInSteerVehicle;
-import net.minecraft.server.v1_13_R2.PacketPlayInStruct;
-import net.minecraft.server.v1_13_R2.PacketPlayInTabComplete;
-import net.minecraft.server.v1_13_R2.PacketPlayInTeleportAccept;
-import net.minecraft.server.v1_13_R2.PacketPlayInTileNBTQuery;
-import net.minecraft.server.v1_13_R2.PacketPlayInTrSel;
-import net.minecraft.server.v1_13_R2.PacketPlayInTransaction;
-import net.minecraft.server.v1_13_R2.PacketPlayInUpdateSign;
-import net.minecraft.server.v1_13_R2.PacketPlayInUseEntity;
-import net.minecraft.server.v1_13_R2.PacketPlayInUseItem;
-import net.minecraft.server.v1_13_R2.PacketPlayInVehicleMove;
-import net.minecraft.server.v1_13_R2.PacketPlayInWindowClick;
-import net.minecraft.server.v1_13_R2.PlayerInteractManager;
-import net.minecraft.server.v1_13_R2.PlayerList;
+import net.minecraft.server.v1_14_R1.DimensionManager;
+import net.minecraft.server.v1_14_R1.EntityPlayer;
+import net.minecraft.server.v1_14_R1.ExpirableListEntry;
+import net.minecraft.server.v1_14_R1.GameProfileBanEntry;
+import net.minecraft.server.v1_14_R1.IChatBaseComponent;
+import net.minecraft.server.v1_14_R1.IpBanEntry;
+import net.minecraft.server.v1_14_R1.MinecraftServer;
+import net.minecraft.server.v1_14_R1.NetworkManager;
+import net.minecraft.server.v1_14_R1.PacketListenerPlayIn;
+import net.minecraft.server.v1_14_R1.PacketLoginInCustomPayload;
+import net.minecraft.server.v1_14_R1.PacketLoginInEncryptionBegin;
+import net.minecraft.server.v1_14_R1.PacketLoginInListener;
+import net.minecraft.server.v1_14_R1.PacketLoginInStart;
+import net.minecraft.server.v1_14_R1.PacketPlayInAbilities;
+import net.minecraft.server.v1_14_R1.PacketPlayInAdvancements;
+import net.minecraft.server.v1_14_R1.PacketPlayInArmAnimation;
+import net.minecraft.server.v1_14_R1.PacketPlayInAutoRecipe;
+import net.minecraft.server.v1_14_R1.PacketPlayInBEdit;
+import net.minecraft.server.v1_14_R1.PacketPlayInBeacon;
+import net.minecraft.server.v1_14_R1.PacketPlayInBlockDig;
+import net.minecraft.server.v1_14_R1.PacketPlayInBlockPlace;
+import net.minecraft.server.v1_14_R1.PacketPlayInBoatMove;
+import net.minecraft.server.v1_14_R1.PacketPlayInChat;
+import net.minecraft.server.v1_14_R1.PacketPlayInClientCommand;
+import net.minecraft.server.v1_14_R1.PacketPlayInCloseWindow;
+import net.minecraft.server.v1_14_R1.PacketPlayInCustomPayload;
+import net.minecraft.server.v1_14_R1.PacketPlayInDifficultyChange;
+import net.minecraft.server.v1_14_R1.PacketPlayInDifficultyLock;
+import net.minecraft.server.v1_14_R1.PacketPlayInEnchantItem;
+import net.minecraft.server.v1_14_R1.PacketPlayInEntityAction;
+import net.minecraft.server.v1_14_R1.PacketPlayInEntityNBTQuery;
+import net.minecraft.server.v1_14_R1.PacketPlayInFlying;
+import net.minecraft.server.v1_14_R1.PacketPlayInHeldItemSlot;
+import net.minecraft.server.v1_14_R1.PacketPlayInItemName;
+import net.minecraft.server.v1_14_R1.PacketPlayInKeepAlive;
+import net.minecraft.server.v1_14_R1.PacketPlayInPickItem;
+import net.minecraft.server.v1_14_R1.PacketPlayInRecipeDisplayed;
+import net.minecraft.server.v1_14_R1.PacketPlayInResourcePackStatus;
+import net.minecraft.server.v1_14_R1.PacketPlayInSetCommandBlock;
+import net.minecraft.server.v1_14_R1.PacketPlayInSetCommandMinecart;
+import net.minecraft.server.v1_14_R1.PacketPlayInSetCreativeSlot;
+import net.minecraft.server.v1_14_R1.PacketPlayInSetJigsaw;
+import net.minecraft.server.v1_14_R1.PacketPlayInSettings;
+import net.minecraft.server.v1_14_R1.PacketPlayInSpectate;
+import net.minecraft.server.v1_14_R1.PacketPlayInSteerVehicle;
+import net.minecraft.server.v1_14_R1.PacketPlayInStruct;
+import net.minecraft.server.v1_14_R1.PacketPlayInTabComplete;
+import net.minecraft.server.v1_14_R1.PacketPlayInTeleportAccept;
+import net.minecraft.server.v1_14_R1.PacketPlayInTileNBTQuery;
+import net.minecraft.server.v1_14_R1.PacketPlayInTrSel;
+import net.minecraft.server.v1_14_R1.PacketPlayInTransaction;
+import net.minecraft.server.v1_14_R1.PacketPlayInUpdateSign;
+import net.minecraft.server.v1_14_R1.PacketPlayInUseEntity;
+import net.minecraft.server.v1_14_R1.PacketPlayInUseItem;
+import net.minecraft.server.v1_14_R1.PacketPlayInVehicleMove;
+import net.minecraft.server.v1_14_R1.PacketPlayInWindowClick;
+import net.minecraft.server.v1_14_R1.PlayerInteractManager;
+import net.minecraft.server.v1_14_R1.PlayerList;
 import protocolsupport.protocol.packet.handler.AbstractLoginListenerPlay;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn, ITickable {
+public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn {
 
 	protected static final MinecraftServer server = SpigotMiscUtils.getServer();
 
 	public SpigotLoginListenerPlay(NetworkManagerWrapper networkmanager, String hostname) {
 		super(networkmanager, hostname);
-	}
-
-	@Override
-	public void tick() {
-		loginTick();
 	}
 
 	@Override
@@ -141,16 +138,16 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 	}
 
 	@Override
-	public void a(final IChatBaseComponent ichatbasecomponent) {
+	public void a(IChatBaseComponent ichatbasecomponent) {
 		Bukkit.getLogger().info(getConnectionRepr() + " lost connection: " + ichatbasecomponent.getText());
 	}
 
 	@Override
-	public void a(final PacketLoginInStart packetlogininstart) {
+	public void a(PacketLoginInStart packetlogininstart) {
 	}
 
 	@Override
-	public void a(final PacketLoginInEncryptionBegin packetlogininencryptionbegin) {
+	public void a(PacketLoginInEncryptionBegin packetlogininencryptionbegin) {
 	}
 
 	@Override
@@ -315,6 +312,18 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 
 	@Override
 	public void a(PacketLoginInCustomPayload var1) {
+	}
+
+	@Override
+	public void a(PacketPlayInSetJigsaw arg0) {
+	}
+
+	@Override
+	public void a(PacketPlayInDifficultyChange arg0) {
+	}
+
+	@Override
+	public void a(PacketPlayInDifficultyLock arg0) {
 	}
 
 }

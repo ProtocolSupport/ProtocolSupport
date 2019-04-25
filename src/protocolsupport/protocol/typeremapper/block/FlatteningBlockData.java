@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.block;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -37,7 +38,11 @@ public class FlatteningBlockData {
 			FlatteningBlockDataTable table = REGISTRY.getTable(version);
 			for (Entry<String, JsonElement> entry : blockdataidJson.entrySet()) {
 				String name = entry.getKey();
-				int blockId = blockidJson.get(name).getAsJsonObject().get("protocol_id").getAsInt();
+				JsonElement blockIdObject = blockidJson.get(name);
+				if (blockIdObject == null) {
+					throw new IllegalStateException(MessageFormat.format("Missing blockdata {0} block id mapping", name));
+				}
+				int blockId = JsonUtils.getInt(blockIdObject.getAsJsonObject(), "protocol_id");
 				for (JsonElement blockdataElement : JsonUtils.getJsonArray(entry.getValue().getAsJsonObject(), "states")) {
 					JsonObject blockdataObject = blockdataElement.getAsJsonObject();
 					String blockdata = name;

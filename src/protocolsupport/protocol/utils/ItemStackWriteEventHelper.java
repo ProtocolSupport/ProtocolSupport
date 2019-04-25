@@ -6,7 +6,6 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
@@ -120,31 +119,6 @@ public class ItemStackWriteEventHelper {
 		}
 
 		@Override
-		public void setLore(List<String> lore) {
-			throw reject();
-		}
-
-		@Override
-		public ItemStack add() {
-			throw reject();
-		}
-
-		@Override
-		public ItemStack add(int qty) {
-			throw reject();
-		}
-
-		@Override
-		public ItemStack subtract() {
-			throw reject();
-		}
-
-		@Override
-		public ItemStack subtract(int qty) {
-			throw reject();
-		}
-
-		@Override
 		public void addEnchantment(Enchantment ench, int level) {
 			throw reject();
 		}
@@ -164,15 +138,41 @@ public class ItemStackWriteEventHelper {
 			throw reject();
 		}
 
-		@Override
-		public void addItemFlags(ItemFlag... itemFlags) {
-			throw reject();
-		}
-
-		@Override
-		public ItemStack ensureServerConversions() {
-			throw reject();
-		}
+//TODO: restore after paper update
+//		@Override
+//		public void setLore(List<String> lore) {
+//			throw reject();
+//		}
+//
+//		@Override
+//		public ItemStack add() {
+//			throw reject();
+//		}
+//
+//		@Override
+//		public ItemStack add(int qty) {
+//			throw reject();
+//		}
+//
+//		@Override
+//		public ItemStack subtract() {
+//			throw reject();
+//		}
+//
+//		@Override
+//		public ItemStack subtract(int qty) {
+//			throw reject();
+//		}
+//
+//		@Override
+//		public void addItemFlags(ItemFlag... itemFlags) {
+//			throw reject();
+//		}
+//
+//		@Override
+//		public ItemStack ensureServerConversions() {
+//			throw reject();
+//		}
 
 	}
 

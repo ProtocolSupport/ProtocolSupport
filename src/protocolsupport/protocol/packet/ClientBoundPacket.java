@@ -23,7 +23,6 @@ public class ClientBoundPacket {
 	public static final int PLAY_RESPAWN_ID = ServerPlatform.get().getPacketFactory().getOutPlayRespawnPacketId();
 	public static final int PLAY_POSITION_ID = ServerPlatform.get().getPacketFactory().getOutPlayPositionPacketId();
 	public static final int PLAY_HELD_SLOT_ID = ServerPlatform.get().getPacketFactory().getOutPlayHeldSlotPacketId();
-	public static final int PLAY_BED_ID = ServerPlatform.get().getPacketFactory().getOutPlayBedPacketId();
 	public static final int PLAY_ANIMATION_ID = ServerPlatform.get().getPacketFactory().getOutPlayAnimationPacketId();
 	public static final int PLAY_SPAWN_NAMED_ID = ServerPlatform.get().getPacketFactory().getOutPlaySpawnNamedPacketId();
 	public static final int PLAY_COLLECT_EFFECT_ID = ServerPlatform.get().getPacketFactory().getOutPlayCollectEffectPacketId();
@@ -99,7 +98,10 @@ public class ClientBoundPacket {
 	public static final int PLAY_QUERY_NBT_RESPONSE = ServerPlatform.get().getPacketFactory().getOutPlayQueryNBTResponsePacketId();
 	public static final int PLAY_STOP_SOUND = ServerPlatform.get().getPacketFactory().getOutPlayStopSoundPacketId();
 	public static final int PLAY_LOOK_AT = ServerPlatform.get().getPacketFactory().getOutPlayLookAtPacketId();
+	public static final int PLAY_CHUNK_LIGHT = ServerPlatform.get().getPacketFactory().getOutPlayChunkLightPacketId();
+	public static final int PLAY_SET_VIEW_CENTER = ServerPlatform.get().getPacketFactory().getOutPlaySetViewCenterPacketId();
 
 	public static final int LEGACY_PLAY_UPDATE_SIGN_ID = 100;
+	public static final int LEGACY_PLAY_USE_BED_ID = 101;
 
 }

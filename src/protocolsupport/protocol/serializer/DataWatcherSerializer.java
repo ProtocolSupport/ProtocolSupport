@@ -15,17 +15,20 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoole
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectDirection;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectEntityPose;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTagCompound;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalChat;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectParticle;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
+import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVillagerData;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class DataWatcherSerializer {
@@ -34,7 +37,7 @@ public class DataWatcherSerializer {
 	public static final int MAX_USED_META_INDEX = 100;
 
 	@SuppressWarnings("unchecked")
-	private static final Supplier<? extends ReadableDataWatcherObject<?>>[] registry = new Supplier[256];
+	protected static final Supplier<? extends ReadableDataWatcherObject<?>>[] registry = new Supplier[256];
 	static {
 		register(DataWatcherObjectByte::new);
 		register(DataWatcherObjectVarInt::new);
@@ -52,9 +55,12 @@ public class DataWatcherSerializer {
 		register(DataWatcherObjectBlockData::new);
 		register(DataWatcherObjectNBTTagCompound::new);
 		register(DataWatcherObjectParticle::new);
+		register(DataWatcherObjectVillagerData::new);
+		register(DataWatcherObjectOptionalVarInt::new);
+		register(DataWatcherObjectEntityPose::new);
 	}
 
-	private static void register(Supplier<? extends ReadableDataWatcherObject<?>> supplier) {
+	protected static void register(Supplier<? extends ReadableDataWatcherObject<?>> supplier) {
 		registry[DataWatcherObjectIdRegistry.getTypeId(supplier.get().getClass(), ProtocolVersionsHelper.LATEST_PC)] = supplier;
 	}
 

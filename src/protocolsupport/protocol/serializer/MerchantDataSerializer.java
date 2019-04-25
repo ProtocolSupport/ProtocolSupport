@@ -43,7 +43,7 @@ public class MerchantDataSerializer {
 			ItemStackSerializer.writeItemStack(to, version, locale, offer.getResult());
 			to.writeBoolean(offer.hasItemStack2());
 			if (offer.hasItemStack2()) {
-				ItemStackSerializer.writeItemStack(to, version,locale, offer.getItemStack2());
+				ItemStackSerializer.writeItemStack(to, version, locale, offer.getItemStack2());
 			}
 			to.writeBoolean(offer.isDisabled());
 			if (isUsingUsesCount(version)) {

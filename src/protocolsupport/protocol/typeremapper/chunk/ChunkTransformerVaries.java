@@ -46,9 +46,9 @@ public class ChunkTransformerVaries extends ChunkTransformerBB {
 					ArraySerializer.writeVarIntLongArray(buffer, blockstorage.getBlockData());
 				}
 
-				buffer.writeBytes(section.blocklight);
+				buffer.writeZero(2048); //blocklight
 				if (hasSkyLight) {
-					buffer.writeBytes(section.skylight);
+					buffer.writeZero(2048);
 				}
 			}
 		}

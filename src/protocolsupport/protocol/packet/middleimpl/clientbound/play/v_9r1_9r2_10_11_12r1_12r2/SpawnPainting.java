@@ -24,7 +24,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		MiscSerializer.writeUUID(serializer, entity.getUUID());
 		StringSerializer.writeString(serializer, version, LegacyPainting.getName(type));
-		PositionSerializer.writePosition(serializer, position);
+		PositionSerializer.writeLegacyPositionL(serializer, position);
 		serializer.writeByte(direction);
 		return RecyclableSingletonList.create(serializer);
 	}

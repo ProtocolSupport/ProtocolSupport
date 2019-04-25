@@ -10,10 +10,10 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.Epoll;
-import net.minecraft.server.v1_13_R2.ChatComponentText;
-import net.minecraft.server.v1_13_R2.MinecraftServer;
-import net.minecraft.server.v1_13_R2.NetworkManager;
-import net.minecraft.server.v1_13_R2.ServerConnection;
+import net.minecraft.server.v1_14_R1.ChatComponentText;
+import net.minecraft.server.v1_14_R1.MinecraftServer;
+import net.minecraft.server.v1_14_R1.NetworkManager;
+import net.minecraft.server.v1_14_R1.ServerConnection;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 
@@ -38,7 +38,7 @@ public class SpigotNettyInjector {
 	public static EventLoopGroup getServerEventLoop() {
 		try {
 			//TODO Shevfix
-			if (MinecraftServer.getServer().getPropertyManager().getBoolean("use-native-transport", false) && Epoll.isAvailable()) {
+			if (/*MinecraftServer.getServer().getPropertyManager().getBoolean("use-native-transport", false) && */Epoll.isAvailable()) {
 			//if (ReflectionUtils.setAccessible(ReflectionUtils.getField(LazyInitVar.class, "b")).getBoolean(ServerConnection.b)) {
 				return ServerConnection.b.a();
 			} else {

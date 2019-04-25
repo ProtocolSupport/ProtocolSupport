@@ -147,7 +147,7 @@ public class LegacyItemType {
 			.forEach(material -> registerRemapEntry(material, material, ProtocolVersionsHelper.ALL_PE));
 		}
 
-		protected void registerRemapEntry(List<Material> from, Material to, ProtocolVersion...versions) {
+		protected void registerRemapEntry(List<Material> from, Material to, ProtocolVersion... versions) {
 			from.forEach(material -> registerRemapEntry(material, to, versions));
 		}
 

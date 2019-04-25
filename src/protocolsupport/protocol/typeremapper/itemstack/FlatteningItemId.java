@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.itemstack;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Map.Entry;
 
@@ -40,10 +41,13 @@ public class FlatteningItemId {
 			ArrayBasedIdRemappingTable tableToClient = REGISTRY_TO_CLIENT.getTable(version);
 			ArrayBasedIdRemappingTable tableFromClient = REGISTRY_FROM_CLIENT.getTable(version);
 			for (Entry<String, JsonElement> entry : itemsData.entrySet()) {
-				int currentId = MaterialAPI.getItemNetworkId(ItemMaterialLookup.getByKey(entry.getKey()));
+				int modernId = MaterialAPI.getItemNetworkId(ItemMaterialLookup.getByKey(entry.getKey()));
+				if (modernId == -1) {
+					throw new IllegalStateException(MessageFormat.format("Item material {0} doesn''t exist", entry.getKey()));
+				}
 				int legacyId = JsonUtils.getInt(entry.getValue().getAsJsonObject(), "protocol_id");
-				tableToClient.setRemap(currentId, legacyId);
-				tableFromClient.setRemap(legacyId, currentId);
+				tableToClient.setRemap(modernId, legacyId);
+				tableFromClient.setRemap(legacyId, modernId);
 			}
 		}
 	}

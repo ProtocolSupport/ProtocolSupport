@@ -37,7 +37,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_CHANGE_SINGLE_ID);
-		PositionSerializer.writePosition(serializer, position);
+		PositionSerializer.writeLegacyPositionL(serializer, position);
 		VarNumberSerializer.writeVarInt(serializer, BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, id));
 		if (tileRemapper.usedToBeTile(id)) {
 			packets.add(BlockTileUpdate.create(version, tileRemapper.getLegacyTileFromBlock(position, id)));

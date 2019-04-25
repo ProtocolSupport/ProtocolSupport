@@ -1,7 +1,7 @@
 package protocolsupport.zplatform.impl.spigot.block;
 
-import net.minecraft.server.v1_13_R2.Block;
-import net.minecraft.server.v1_13_R2.BlockWaterLily;
+import net.minecraft.server.v1_14_R1.Block;
+import net.minecraft.server.v1_14_R1.BlockWaterLily;
 import protocolsupport.utils.ReflectionUtils;
 
 public class SpigotBlockWaterLilyBoundsFixer {

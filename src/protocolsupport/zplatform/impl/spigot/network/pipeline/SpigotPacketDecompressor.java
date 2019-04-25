@@ -10,7 +10,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.netty.Decompressor;
 import protocolsupport.utils.netty.ReusableReadHeapBuffer;
 
-public class SpigotPacketDecompressor extends net.minecraft.server.v1_13_R2.PacketDecompressor {
+public class SpigotPacketDecompressor extends net.minecraft.server.v1_14_R1.PacketDecompressor {
 
 	protected static final int maxPacketLength = 2 << 20;
 
