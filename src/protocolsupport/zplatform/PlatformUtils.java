@@ -30,7 +30,7 @@ public interface PlatformUtils {
 
 	public String serializeItemStackToNBTJson(ItemStack itemstack);
 
-	public int getMobTypeNetworkId(EntityType type);
+	public int getEntityTypeNetworkId(EntityType type);
 
 	public int getItemNetworkId(Material material);
 

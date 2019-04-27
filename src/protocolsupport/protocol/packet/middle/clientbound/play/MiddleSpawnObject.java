@@ -47,7 +47,7 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 		motX = serverdata.readShort();
 		motY = serverdata.readShort();
 		motZ = serverdata.readShort();
-		entity = NetworkEntity.createObject(uuid, entityId, typeId, objectdata);
+		entity = NetworkEntity.createObject(uuid, entityId, typeId);
 		entityRemapper.readEntity(entity);
 	}
 

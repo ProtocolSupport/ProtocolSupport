@@ -136,7 +136,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public int getMobTypeNetworkId(EntityType type) {
+	public int getEntityTypeNetworkId(EntityType type) {
 		return IRegistry.ENTITY_TYPE.a(EntityTypes.a(type.getName()).get());
 	}
 

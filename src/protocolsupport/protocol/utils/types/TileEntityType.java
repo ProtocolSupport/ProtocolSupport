@@ -22,6 +22,8 @@ public enum TileEntityType {
 	SIGN(9, "sign"),
 	SHULKER_BOX(10, "shulker_box"),
 	BED(11, "bed"),
+	JIGSAW(12, "jigsaw"),
+	CAMPFIRE(13, "campfire"),
 	FURNACE(-1, "furnace"),
 	CHEST(-1, "chest"),
 	TRAPPED_CHEST(-1, "trapped_chest"),
@@ -37,7 +39,12 @@ public enum TileEntityType {
 	DAYLIGHT_DETECTOR(-1, "daylight_detector"),
 	HOPPER(-1, "hopper"),
 	COMPARATOR(-1, "comparator"),
-	STRUCTURE_BLOCK(-1, "structure_block");
+	STRUCTURE_BLOCK(-1, "structure_block"),
+	BARREL(-1, "barrel"),
+	SMOKER(-1, "smoker"),
+	BLAST_FURNACE(-1, "blast_furnace"),
+	LECTERN(-1, "lectern"),
+	BELL(-1, "bell");
 
 	private static final HashMap<String, TileEntityType> by_r_id = new HashMap<>();
 	private static final ArrayMap<TileEntityType> by_n_id = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(values()).filter(v -> v.networkId > 0), (v -> v.networkId));

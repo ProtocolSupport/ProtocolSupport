@@ -10,8 +10,8 @@ public class NetworkEntity {
 		return new NetworkEntity(uuid, id, NetworkEntityType.getMobByNetworkTypeId(typeId));
 	}
 
-	public static NetworkEntity createObject(UUID uuid, int id, int typeId, int objectData) {
-		return new NetworkEntity(uuid, id, NetworkEntityType.getObjectByNetworkTypeIdAndData(typeId, objectData));
+	public static NetworkEntity createObject(UUID uuid, int id, int typeId) {
+		return new NetworkEntity(uuid, id, NetworkEntityType.getObjectByNetworkTypeId(typeId));
 	}
 
 	public static NetworkEntity createGlobal(int id, int typeId) {
