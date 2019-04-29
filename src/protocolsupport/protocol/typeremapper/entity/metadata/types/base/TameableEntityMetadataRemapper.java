@@ -7,6 +7,7 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 public class TameableEntityMetadataRemapper extends AgeableEntityMetadataRemapper {
 
 	public TameableEntityMetadataRemapper() {
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 15), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 12), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Tameable.TAME_FLAGS, 16), ProtocolVersionsHelper.BEFORE_1_9);

@@ -25,6 +25,8 @@ public class BaseEntityMetadataRemapper extends EntityMetadataRemapper {
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Entity.SILENT, 4), ProtocolVersionsHelper.RANGE__1_9__1_13_2);
 
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Entity.NO_GRAVITY, 5), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
+
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Entity.POSE, 6), ProtocolVersionsHelper.UP_1_14);
 	}
 
 }

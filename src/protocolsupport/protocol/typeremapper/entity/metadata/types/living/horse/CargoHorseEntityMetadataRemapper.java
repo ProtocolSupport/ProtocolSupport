@@ -9,6 +9,7 @@ public class CargoHorseEntityMetadataRemapper extends BaseHorseEntityMetadataRem
 	public static final CargoHorseEntityMetadataRemapper INSTANCE = new CargoHorseEntityMetadataRemapper();
 
 	public CargoHorseEntityMetadataRemapper() {
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.CargoHorse.HAS_CHEST, 17), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.CargoHorse.HAS_CHEST, 15), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 	}
 

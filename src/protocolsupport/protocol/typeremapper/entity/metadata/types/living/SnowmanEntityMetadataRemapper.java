@@ -8,6 +8,7 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 public class SnowmanEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
 	public SnowmanEntityMetadataRemapper() {
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Snowman.NO_HAT, 14), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Snowman.NO_HAT, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Snowman.NO_HAT, 11), ProtocolVersionsHelper.ALL_1_9);
 	}

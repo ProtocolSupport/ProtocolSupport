@@ -14,10 +14,13 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarIn
 public class ItemFrameEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 
 	public ItemFrameEntityMetadataRemapper() {
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ItemFrame.ITEM, 7), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ItemFrame.ITEM, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ItemFrame.ITEM, 5), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ItemFrame.ITEM, 8), ProtocolVersion.MINECRAFT_1_8);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ItemFrame.ITEM, 2), ProtocolVersionsHelper.BEFORE_1_8);
+
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ItemFrame.ROTATION, 8), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ItemFrame.ROTATION, 7), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.ItemFrame.ROTATION, 6), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.ItemFrame.ROTATION, 9), ProtocolVersion.MINECRAFT_1_8);

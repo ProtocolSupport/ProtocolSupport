@@ -5,11 +5,10 @@ import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRem
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 
-public class VindicatorEntityMetadataRemapper extends RaidParticipantEntityMetadataRemapper {
+public class PillagerEntityMetadataRemapper extends RaidParticipantEntityMetadataRemapper {
 
-	public VindicatorEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Vindicator.HAS_TARGET, 14), ProtocolVersionsHelper.UP_1_14);
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Vindicator.HAS_TARGET, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
+	public PillagerEntityMetadataRemapper() {
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Pillager.USING_CROSSBOW, 15), ProtocolVersionsHelper.UP_1_14);
 	}
 
 }

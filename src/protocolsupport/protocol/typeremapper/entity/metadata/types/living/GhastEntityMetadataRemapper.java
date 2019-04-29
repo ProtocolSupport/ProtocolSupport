@@ -9,6 +9,7 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 public class GhastEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
 	public GhastEntityMetadataRemapper() {
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ghast.ATTACKING, 14), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ghast.ATTACKING, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Ghast.ATTACKING, 11), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Ghast.ATTACKING, 16), ProtocolVersionsHelper.BEFORE_1_9);

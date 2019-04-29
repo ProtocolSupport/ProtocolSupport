@@ -10,7 +10,8 @@ public class FishEntityMetadataRemapper extends InsentientEntityMetadataRemapper
 	public static final FishEntityMetadataRemapper INSTANCE = new FishEntityMetadataRemapper();
 
 	public FishEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BaseFish.FROM_BUCKET, 12), ProtocolVersionsHelper.UP_1_13);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BaseFish.FROM_BUCKET, 14), ProtocolVersionsHelper.UP_1_14);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BaseFish.FROM_BUCKET, 12), ProtocolVersionsHelper.ALL_1_13);
 	}
 
 }

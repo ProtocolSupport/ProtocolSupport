@@ -1,8 +1,10 @@
 package protocolsupport.protocol.utils.datawatcher;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Optional;
 
+import protocolsupport.ProtocolSupport;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockData;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
@@ -23,22 +25,34 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarIn
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
 import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVillagerData;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
 public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 
-	protected int index;
-	protected Class<T> expectedDWObjectType;
-	protected DataWatcherObjectIndex(int index, Class<T> expectedType) {
+	protected final Class<?> entityClass;
+	protected final int index;
+	protected final Class<T> expectedDWObjectType;
+	protected DataWatcherObjectIndex(Class<?> entityClass, int index, Class<T> expectedType) {
+		this.entityClass = entityClass;
 		this.index = index;
 		this.expectedDWObjectType = expectedType;
 	}
 
 	public Optional<T> getValue(ArrayMap<DataWatcherObject<?>> metadata) {
 		DataWatcherObject<?> object = metadata.get(index);
+		if (object == null) {
+			return Optional.empty();
+		}
 		if (expectedDWObjectType.isInstance(object)) {
 			return Optional.of(expectedDWObjectType.cast(object));
+		}
+		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
+			ProtocolSupport.logWarning(MessageFormat.format(
+				"Wrong metadata type for entity type {0} index {1}, expected {2}, got {3}",
+				entityClass.getSimpleName(), index, expectedDWObjectType.getName(), object.getClass().getName()
+			));
 		}
 		return Optional.empty();
 	}
@@ -78,7 +92,11 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 	public static class Ageable extends Insentient {
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> IS_BABY = takeNextIndex(DataWatcherObjectBoolean.class);
 		//age - special hack for hologram plugins that want to set int age
-		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> AGE_HACK = new DataWatcherObjectIndex<>(30, DataWatcherObjectVarInt.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> AGE_HACK = new DataWatcherObjectIndex<>(Ageable.class, 30, DataWatcherObjectVarInt.class);
+	}
+
+	public static class RaidParticipant extends Insentient {
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> CELEBRATING = takeNextIndex(DataWatcherObjectBoolean.class);
 	}
 
 	public static class Tameable extends Ageable {
@@ -98,6 +116,7 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 
 	public static class BaseHorse extends Ageable {
 		public static final DataWatcherObjectIndex<DataWatcherObjectByte> FLAGS = takeNextIndex(DataWatcherObjectByte.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectOptionalUUID> OWNER = takeNextIndex(DataWatcherObjectOptionalUUID.class);
 	}
 
 	public static class BattleHorse extends BaseHorse {
@@ -125,6 +144,13 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> COLLAR_COLOR = takeNextIndex(DataWatcherObjectVarInt.class);
 	}
 
+	public static class Cat extends Tameable {
+		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> VARIANT = takeNextIndex(DataWatcherObjectVarInt.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> UNKNOWN_1 = takeNextIndex(DataWatcherObjectBoolean.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> UNKNOWN_2 = takeNextIndex(DataWatcherObjectBoolean.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> COLLAR_COLOR = takeNextIndex(DataWatcherObjectVarInt.class);
+	}
+
 	public static class Ocelot extends Ageable {
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> TRUSTING = takeNextIndex(DataWatcherObjectBoolean.class);
 	}
@@ -148,6 +174,22 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 
 	public static class Villager extends Ageable {
 		public static final DataWatcherObjectIndex<DataWatcherObjectVillagerData> VDATA = takeNextIndex(DataWatcherObjectVillagerData.class);
+	}
+
+	public static class Fox extends Ageable {
+		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> VARIANT = takeNextIndex(DataWatcherObjectVarInt.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectByte> FLAGS = takeNextIndex(DataWatcherObjectByte.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectOptionalUUID> UNKNOWN_1 = takeNextIndex(DataWatcherObjectOptionalUUID.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectOptionalUUID> UNKNOWN_2 = takeNextIndex(DataWatcherObjectOptionalUUID.class);
+	}
+
+	public static class Turtle extends Ageable {
+		public static final DataWatcherObjectIndex<DataWatcherObjectPosition> HOME_POS = takeNextIndex(DataWatcherObjectPosition.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> HAS_EGG = takeNextIndex(DataWatcherObjectBoolean.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> LAYING_EGG = takeNextIndex(DataWatcherObjectBoolean.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectPosition> TRAVEL_POS = takeNextIndex(DataWatcherObjectPosition.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> GOING_HOME = takeNextIndex(DataWatcherObjectBoolean.class);
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> TRAVELING = takeNextIndex(DataWatcherObjectBoolean.class);
 	}
 
 	public static class Enderman extends Insentient {
@@ -196,14 +238,6 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> SIZE = takeNextIndex(DataWatcherObjectVarInt.class);
 	}
 
-	public static class RaidParticipant extends Insentient {
-		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> CELEBRATING = takeNextIndex(DataWatcherObjectBoolean.class);
-	}
-
-	public static class Witch extends RaidParticipant {
-		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> DRINKING_POTION = takeNextIndex(DataWatcherObjectBoolean.class);
-	}
-
 	public static class IronGolem extends Insentient {
 		public static final DataWatcherObjectIndex<DataWatcherObjectByte> PLAYER_CREATED = takeNextIndex(DataWatcherObjectByte.class);
 	}
@@ -225,14 +259,6 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 	public static class Guardian extends Insentient {
 		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> SPIKES = takeNextIndex(DataWatcherObjectBoolean.class);
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> TARGET_ID = takeNextIndex(DataWatcherObjectVarInt.class);
-	}
-
-	public static class Vindicator extends RaidParticipant {
-		public static final DataWatcherObjectIndex<DataWatcherObjectByte> HAS_TARGET = takeNextIndex(DataWatcherObjectByte.class);
-	}
-
-	public static class Evoker extends RaidParticipant {
-		public static final DataWatcherObjectIndex<DataWatcherObjectByte> SPELL = takeNextIndex(DataWatcherObjectByte.class);
 	}
 
 	public static class Vex extends Insentient {
@@ -259,17 +285,20 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 		public static final DataWatcherObjectIndex<DataWatcherObjectVarInt> VARIANT = takeNextIndex(DataWatcherObjectVarInt.class);
 	}
 
-	public static class Turtle extends Ageable {
-		public static final DataWatcherObjectIndex<DataWatcherObjectPosition> HOME_POS = takeNextIndex(DataWatcherObjectPosition.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> HAS_EGG = takeNextIndex(DataWatcherObjectBoolean.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> LAYING_EGG = takeNextIndex(DataWatcherObjectBoolean.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectPosition> TRAVEL_POS = takeNextIndex(DataWatcherObjectPosition.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> GOING_HOME = takeNextIndex(DataWatcherObjectBoolean.class);
-		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> TRAVELING = takeNextIndex(DataWatcherObjectBoolean.class);
+	public static class Witch extends RaidParticipant {
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> DRINKING_POTION = takeNextIndex(DataWatcherObjectBoolean.class);
 	}
 
-	public static class Drowned extends Zombie {
-		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> HAS_TARGET = takeNextIndex(DataWatcherObjectBoolean.class);
+	public static class Vindicator extends RaidParticipant {
+		public static final DataWatcherObjectIndex<DataWatcherObjectByte> HAS_TARGET = takeNextIndex(DataWatcherObjectByte.class);
+	}
+
+	public static class Evoker extends RaidParticipant {
+		public static final DataWatcherObjectIndex<DataWatcherObjectByte> SPELL = takeNextIndex(DataWatcherObjectByte.class);
+	}
+
+	public static class Pillager extends RaidParticipant {
+		public static final DataWatcherObjectIndex<DataWatcherObjectBoolean> USING_CROSSBOW = takeNextIndex(DataWatcherObjectBoolean.class);
 	}
 
 	public static class Boat extends Entity {
@@ -369,7 +398,7 @@ public class DataWatcherObjectIndex<T extends DataWatcherObject<?>> {
 				newIndex = superclass == Object.class ? 0 : lastTakenId.get(superclass) + 1;
 			}
 			lastTakenId.put(caller, newIndex);
-			return new DataWatcherObjectIndex<>(newIndex, expectedType);
+			return new DataWatcherObjectIndex<>(caller, newIndex, expectedType);
 		} catch (Exception e) {
 			throw new RuntimeException("Exception occured while computing datawatcherobjectindex", e);
 		}

@@ -1,8 +1,8 @@
-package protocolsupport.protocol.typeremapper.entity.metadata.types.living.tameable;
+package protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable;
 
-import protocolsupport.protocol.typeremapper.entity.metadata.types.base.TameableEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AgeableEntityMetadataRemapper;
 
-public class OcelotEntityMetadataRemapper extends TameableEntityMetadataRemapper {
+public class OcelotEntityMetadataRemapper extends AgeableEntityMetadataRemapper {
 
 	public OcelotEntityMetadataRemapper() {
 //TODO: find out what is trusting does and if it can be converted to variant

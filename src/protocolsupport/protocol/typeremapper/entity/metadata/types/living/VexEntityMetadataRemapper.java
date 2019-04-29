@@ -8,6 +8,7 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 public class VexEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
 	public VexEntityMetadataRemapper() {
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Vex.ATTACK_MODE, 14), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Vex.ATTACK_MODE, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 	}
 

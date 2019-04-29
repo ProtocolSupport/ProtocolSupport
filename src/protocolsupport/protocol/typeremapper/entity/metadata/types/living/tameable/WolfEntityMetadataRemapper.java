@@ -16,13 +16,20 @@ import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarIn
 public class WolfEntityMetadataRemapper extends TameableEntityMetadataRemapper {
 
 	public WolfEntityMetadataRemapper() {
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.DAMAGE_TAKEN, 17), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.DAMAGE_TAKEN, 15), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.DAMAGE_TAKEN, 14), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.DAMAGE_TAKEN, 18), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_6_1));
 		addRemap(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.Wolf.DAMAGE_TAKEN, 18), ProtocolVersionsHelper.BEFORE_1_6);
+
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.BEGGING, 18), ProtocolVersionsHelper.UP_1_14);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.BEGGING, 16), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.BEGGING, 16), ProtocolVersion.MINECRAFT_1_10);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.BEGGING, 15), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Wolf.BEGGING, 19), ProtocolVersionsHelper.BEFORE_1_9);
+
+		//TODO: mojang changed color indexes twice, so this needs checking and updating
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.COLLAR_COLOR, 19), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.COLLAR_COLOR, 17), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Wolf.COLLAR_COLOR, 16), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNumberToByte(DataWatcherObjectIndex.Wolf.COLLAR_COLOR, 20), ProtocolVersion.MINECRAFT_1_8);

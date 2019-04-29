@@ -9,9 +9,12 @@ import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 public abstract class BaseHorseEntityMetadataRemapper extends AgeableEntityMetadataRemapper {
 
 	public BaseHorseEntityMetadataRemapper() {
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BaseHorse.FLAGS, 15), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BaseHorse.FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BaseHorse.FLAGS, 12), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNumberToInt(DataWatcherObjectIndex.BaseHorse.FLAGS, 16), ProtocolVersionsHelper.BEFORE_1_9);
+
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.BaseHorse.OWNER, 16), ProtocolVersionsHelper.UP_1_14);
 	}
 
 }

@@ -2,8 +2,10 @@ package protocolsupport.protocol.typeremapper.entity.metadata.types.living;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockData;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapper;
@@ -22,7 +24,15 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 public class EndermanEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
 	public EndermanEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 12), ProtocolVersionsHelper.UP_1_13);
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 14), ProtocolVersionsHelper.UP_1_14);
+		addRemapPerVersion(version -> new IndexValueRemapper<DataWatcherObjectBlockData>(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 12) {
+			final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+			final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
+			@Override
+			public DataWatcherObject<?> remapValue(DataWatcherObjectBlockData object) {
+				return new DataWatcherObjectBlockData(BlockRemappingHelper.remapFBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, object.getValue()));
+			}
+		}, ProtocolVersionsHelper.ALL_1_13);
 		addRemapPerVersion(version -> new IndexValueRemapper<DataWatcherObjectBlockData>(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 12) {
 			final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 			@Override
@@ -56,6 +66,7 @@ public class EndermanEntityMetadataRemapper extends InsentientEntityMetadataRema
 			}
 		}, ProtocolVersionsHelper.BEFORE_1_8);
 
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.SCREAMING, 15), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.SCREAMING, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.SCREAMING, 12), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperBooleanToByte(DataWatcherObjectIndex.Enderman.SCREAMING, 18), ProtocolVersionsHelper.BEFORE_1_9);

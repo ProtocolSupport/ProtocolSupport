@@ -10,6 +10,7 @@ public class InsentientEntityMetadataRemapper extends LivingEntityMetadataRemapp
 	public static final InsentientEntityMetadataRemapper INSTANCE = new InsentientEntityMetadataRemapper();
 
 	public InsentientEntityMetadataRemapper() {
+		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Insentient.FLAGS, 13), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Insentient.FLAGS, 11), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Insentient.FLAGS, 10), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Insentient.FLAGS, 15), ProtocolVersion.MINECRAFT_1_8);
