@@ -12,6 +12,7 @@ public class BlockPlace extends MiddleBlockPlace {
 
 	public BlockPlace(ConnectionImpl connection) {
 		super(connection);
+		insideblock = false;
 	}
 
 	@Override
