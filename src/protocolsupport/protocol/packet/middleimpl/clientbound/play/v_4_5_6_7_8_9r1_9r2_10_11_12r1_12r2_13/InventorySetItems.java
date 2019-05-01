@@ -27,13 +27,13 @@ public class InventorySetItems extends MiddleInventorySetItems {
 				}
 				break;
 			}
-			case BREWING: {
+			case BREWING_STAND: {
 				if (!WindowSlotsRemappingHelper.hasBrewingBlazePowderSlot(version)) {
 					itemstacks.remove(WindowSlotsRemappingHelper.BREWING_BLAZE_POWDER_SLOT);
 				}
 				break;
 			}
-			case ENCHANT: {
+			case ENCHANTMENT: {
 				if (!WindowSlotsRemappingHelper.hasEnchantLapisSlot(version)) {
 					itemstacks.remove(WindowSlotsRemappingHelper.ENCHANT_LAPIS_SLOT);
 				}

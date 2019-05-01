@@ -5,7 +5,9 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
 import protocolsupport.protocol.utils.types.WindowType;
@@ -22,18 +24,12 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 	protected int windowId;
 	protected WindowType type;
 	protected BaseComponent title;
-	protected int slots;
-	protected int horseId;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		windowId = serverdata.readUnsignedByte();
-		type = WindowType.getById(StringSerializer.readVarIntUTF8String(serverdata));
+		windowId = VarNumberSerializer.readVarInt(serverdata);
+		type = MiscSerializer.readVarIntEnum(serverdata, WindowType.CONSTANT_LOOKUP);
 		title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
-		slots = serverdata.readUnsignedByte();
-		if (type == WindowType.HORSE) {
-			horseId = serverdata.readInt();
-		}
 	}
 
 	@Override

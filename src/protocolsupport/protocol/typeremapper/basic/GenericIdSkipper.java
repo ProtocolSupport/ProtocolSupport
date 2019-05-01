@@ -97,7 +97,10 @@ public class GenericIdSkipper {
 
 	public static final EnumSkippingRegistry<WindowType, EnumSkippingTable<WindowType>> INVENTORY = new EnumSkippingRegistry<WindowType, EnumSkippingTable<WindowType>>() {
 		{
-			registerSkipEntry(WindowType.HORSE, ProtocolVersionsHelper.BEFORE_1_6);
+			registerSkipEntry(WindowType.STONECUTTER, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkipEntry(WindowType.LECTERN, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkipEntry(WindowType.CARTOGRAPHY, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkipEntry(WindowType.STONECUTTER, ProtocolVersionsHelper.BEFORE_1_14);
 			registerSkipEntry(WindowType.HOPPER, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		@Override

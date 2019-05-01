@@ -44,7 +44,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 				}
 				break;
 			}
-			case BREWING: {
+			case BREWING_STAND: {
 				if (!WindowSlotsRemappingHelper.hasBrewingBlazePowderSlot(version)) {
 					if (slot == WindowSlotsRemappingHelper.BREWING_BLAZE_POWDER_SLOT) {
 						return RecyclableEmptyList.get();
@@ -55,7 +55,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 				}
 				break;
 			}
-			case ENCHANT: {
+			case ENCHANTMENT: {
 				if (!WindowSlotsRemappingHelper.hasEnchantLapisSlot(version)) {
 					if (slot == WindowSlotsRemappingHelper.ENCHANT_LAPIS_SLOT) {
 						return RecyclableEmptyList.get();

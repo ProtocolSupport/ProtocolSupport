@@ -20,7 +20,7 @@ public class InventoryData extends MiddleInventoryData {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if ((version == ProtocolVersion.MINECRAFT_1_8) && (cache.getWindowCache().getOpenedWindow() == WindowType.ENCHANT)) {
+		if ((version == ProtocolVersion.MINECRAFT_1_8) && (cache.getWindowCache().getOpenedWindow() == WindowType.ENCHANTMENT)) {
 			enchTypeVal[type] = value;
 			if ((type >= 7) && (type <= 9)) {
 				ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_DATA_ID);

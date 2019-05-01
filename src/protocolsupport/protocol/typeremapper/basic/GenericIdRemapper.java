@@ -11,8 +11,9 @@ public class GenericIdRemapper {
 
 	public static final EnumRemappingRegistry<WindowType, EnumRemappingTable<WindowType>> INVENTORY = new EnumRemappingRegistry<WindowType, EnumRemappingTable<WindowType>>() {
 		{
-			registerRemapEntry(WindowType.SHULKER, WindowType.CHEST, ProtocolVersionsHelper.BEFORE_1_11);
-			registerRemapEntry(WindowType.DROPPER, WindowType.DISPENSER, ProtocolVersionsHelper.BEFORE_1_5);
+			registerRemapEntry(WindowType.BLAST_FURNACE, WindowType.FURNACE, ProtocolVersionsHelper.BEFORE_1_14);
+			registerRemapEntry(WindowType.SMOKER, WindowType.FURNACE, ProtocolVersionsHelper.BEFORE_1_14);
+			registerRemapEntry(WindowType.SHULKER_BOX, WindowType.GENERIC_9X4, ProtocolVersionsHelper.BEFORE_1_11);
 		}
 		@Override
 		protected EnumRemappingTable<WindowType> createTable() {
