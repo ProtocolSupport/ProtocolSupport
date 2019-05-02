@@ -4155,6 +4155,70 @@
     "pename": "minecraft:daylight_detector",
     "pedata": 15
   },
+  "minecraft:daylight_detector[inverted=true,power=0]": {
+    "pename": "minecraft:daylight_detector_inverted",
+    "pedata": 0
+  },
+  "minecraft:daylight_detector[inverted=true,power=1]": {
+    "pename": "minecraft:daylight_detector_inverted",
+    "pedata": 1
+  },
+  "minecraft:daylight_detector[inverted=true,power=2]": {
+    "pename": "minecraft:daylight_detector_inverted",
+    "pedata": 2
+  },
+  "minecraft:daylight_detector[inverted=true,power=3]": {
+    "pename": "minecraft:daylight_detector_inverted",
+    "pedata": 3
+  },
+  "minecraft:daylight_detector[inverted=true,power=4]": {
+    "pename": "minecraft:daylight_detector_inverted",
+    "pedata": 4
+  },
+  "minecraft:daylight_detector[inverted=true,power=5]": {
+    "pename": "minecraft:daylight_detector_inverted",
+    "pedata": 5
+  },
+  "minecraft:daylight_detector[inverted=true,power=6]": {
+    "pename": "minecraft:daylight_detector_inverted",
+    "pedata": 6
+  },
+  "minecraft:daylight_detector[inverted=true,power=7]": {
+    "pename": "minecraft:daylight_detector_inverted",
+    "pedata": 7
+  },
+  "minecraft:daylight_detector[inverted=true,power=8]": {
+    "pename": "minecraft:daylight_detector_inverted",
+    "pedata": 8
+  },
+  "minecraft:daylight_detector[inverted=true,power=9]": {
+    "pename": "minecraft:daylight_detector_inverted",
+    "pedata": 9
+  },
+  "minecraft:daylight_detector[inverted=true,power=10]": {
+    "pename": "minecraft:daylight_detector_inverted",
+    "pedata": 10
+  },
+  "minecraft:daylight_detector[inverted=true,power=11]": {
+    "pename": "minecraft:daylight_detector_inverted",
+    "pedata": 11
+  },
+  "minecraft:daylight_detector[inverted=true,power=12]": {
+    "pename": "minecraft:daylight_detector_inverted",
+    "pedata": 12
+  },
+  "minecraft:daylight_detector[inverted=true,power=13]": {
+    "pename": "minecraft:daylight_detector_inverted",
+    "pedata": 13
+  },
+  "minecraft:daylight_detector[inverted=true,power=14]": {
+    "pename": "minecraft:daylight_detector_inverted",
+    "pedata": 14
+  },
+  "minecraft:daylight_detector[inverted=true,power=15]": {
+    "pename": "minecraft:daylight_detector_inverted",
+    "pedata": 15
+  },	
   "minecraft:redstone_block": {
     "pename": "minecraft:redstone_block",
     "pedata": 0
