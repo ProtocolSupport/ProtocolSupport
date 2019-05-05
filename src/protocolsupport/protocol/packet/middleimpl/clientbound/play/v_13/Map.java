@@ -21,7 +21,7 @@ public class Map extends MiddleMap {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID);
-		VarNumberSerializer.writeVarInt(serializer, itemData);
+		VarNumberSerializer.writeVarInt(serializer, id);
 		serializer.writeByte(scale);
 		serializer.writeBoolean(showIcons);
 		ArraySerializer.writeVarIntTArray(serializer, icons, (to, icon) -> {

@@ -13,9 +13,10 @@ public abstract class MiddleMap extends ClientBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected int itemData;
+	protected int id;
 	protected int scale;
 	protected boolean showIcons;
+	protected boolean locked;
 	protected Icon[] icons;
 	protected int columns;
 	protected int rows;
@@ -25,9 +26,10 @@ public abstract class MiddleMap extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		itemData = VarNumberSerializer.readVarInt(serverdata);
+		id = VarNumberSerializer.readVarInt(serverdata);
 		scale = serverdata.readUnsignedByte();
 		showIcons = serverdata.readBoolean();
+		locked = serverdata.readBoolean();
 		icons = ArraySerializer.readVarIntTArray(
 			serverdata, Icon.class,
 			from -> new Icon(

@@ -20,7 +20,7 @@ public class Map extends MiddleMap {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID);
-		VarNumberSerializer.writeVarInt(serializer, itemData);
+		VarNumberSerializer.writeVarInt(serializer, id);
 		serializer.writeByte(scale);
 		ArraySerializer.writeVarIntTArray(serializer, icons, (to, icon) -> {
 			to.writeByte(((icon.type <= 9 ? icon.type : 0) << 4) | icon.direction);
