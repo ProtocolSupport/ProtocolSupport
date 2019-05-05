@@ -7,18 +7,18 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public abstract class MiddleInventoryEnchant extends ServerBoundMiddlePacket {
+public abstract class MiddleInventoryButton extends ServerBoundMiddlePacket {
 
-	public MiddleInventoryEnchant(ConnectionImpl connection) {
+	public MiddleInventoryButton(ConnectionImpl connection) {
 		super(connection);
 	}
 
 	protected int windowId;
-	protected int enchantment;
+	protected int button;
 
 	@Override
 	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		return RecyclableSingletonList.create(create(windowId, enchantment));
+		return RecyclableSingletonList.create(create(windowId, button));
 	}
 
 	public static ServerBoundPacketData create(int windowId, int enchantment) {

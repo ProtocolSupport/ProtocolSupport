@@ -16,7 +16,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.HeldSlot;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.InventoryClick;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.InventoryClose;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.InventoryEnchant;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.InventoryButton;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.InventoryTransaction;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.Look;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_6_7_8_9r1_9r2_10_11_12r1_12r2_13.PlayerAbilities;
@@ -56,7 +56,7 @@ public class PacketDecoder extends AbstractModernPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x03, ClientCommand::new);
 		registry.register(NetworkState.PLAY, 0x04, ClientSettings::new);
 		registry.register(NetworkState.PLAY, 0x05, InventoryTransaction::new);
-		registry.register(NetworkState.PLAY, 0x06, InventoryEnchant::new);
+		registry.register(NetworkState.PLAY, 0x06, InventoryButton::new);
 		registry.register(NetworkState.PLAY, 0x07, InventoryClick::new);
 		registry.register(NetworkState.PLAY, 0x08, InventoryClose::new);
 		registry.register(NetworkState.PLAY, 0x09, CustomPayload::new);
