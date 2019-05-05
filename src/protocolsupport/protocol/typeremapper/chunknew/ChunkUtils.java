@@ -26,16 +26,16 @@ public class ChunkUtils {
 		}
 	}
 
-	private static final byte[] fake18ChunkDataSky = new byte[8192 + 2048 + 2048 + 256];
-	private static final byte[] fake18ChunkDataNoSky = new byte[8192 + 2048 + 256];
-	public static byte[] getEmptyChunkShort(boolean hasSkyLight) {
-		return hasSkyLight ? fake18ChunkDataSky : fake18ChunkDataNoSky;
+	protected static final byte[] emptySectionShortSky = new byte[8192 + 2048 + 2048 + 256];
+	protected static final byte[] emptySectonShortNoSky = new byte[8192 + 2048 + 256];
+	public static byte[] getEmptySectionShort(boolean hasSkyLight) {
+		return hasSkyLight ? emptySectionShortSky : emptySectonShortNoSky;
 	}
 
-	private static final byte[] fakePre18ChunkDataSky = Compressor.compressStatic(new byte[4096 + 2048 + 2048 + 2048 + 256]);
-	private static final byte[] fakePre18ChunkDataNoSky	= Compressor.compressStatic(new byte[4096 + 2048 + 2048 + 256]);
-	public static byte[] getPre18ChunkData(boolean hasSkyLight) {
-		return hasSkyLight ? fakePre18ChunkDataSky : fakePre18ChunkDataNoSky;
+	protected static final byte[] emptySectionByteSky = Compressor.compressStatic(new byte[4096 + 2048 + 2048 + 2048 + 256]);
+	protected static final byte[] emptySectonByteNoSky = Compressor.compressStatic(new byte[4096 + 2048 + 2048 + 256]);
+	public static byte[] getEmptySectionByte(boolean hasSkyLight) {
+		return hasSkyLight ? emptySectionByteSky : emptySectonByteNoSky;
 	}
 
 }

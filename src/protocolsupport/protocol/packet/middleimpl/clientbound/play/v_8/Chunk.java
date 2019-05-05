@@ -37,7 +37,7 @@ public class Chunk extends MiddleChunk {
 		chunkdata.writeBoolean(full);
 		if ((blockMask == 0) && full) {
 			chunkdata.writeShort(1);
-			ArraySerializer.writeVarIntByteArray(chunkdata, ChunkUtils.getEmptyChunkShort(hasSkyLight));
+			ArraySerializer.writeVarIntByteArray(chunkdata, ChunkUtils.getEmptySectionShort(hasSkyLight));
 		} else {
 			chunkdata.writeShort(blockMask);
 			ArraySerializer.writeVarIntByteArray(chunkdata, ChunkWriterShort.writeSections(
