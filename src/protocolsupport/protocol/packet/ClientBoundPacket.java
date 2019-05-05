@@ -100,6 +100,7 @@ public class ClientBoundPacket {
 	public static final int PLAY_LOOK_AT = ServerPlatform.get().getPacketFactory().getOutPlayLookAtPacketId();
 	public static final int PLAY_CHUNK_LIGHT = ServerPlatform.get().getPacketFactory().getOutPlayChunkLightPacketId();
 	public static final int PLAY_SET_VIEW_CENTER = ServerPlatform.get().getPacketFactory().getOutPlaySetViewCenterPacketId();
+	public static final int PLAY_MERCHANT_TRADE_LIST = ServerPlatform.get().getPacketFactory().getOutPlayMerchantTradeListPacketId();
 
 	public static final int LEGACY_PLAY_UPDATE_SIGN_ID = 100;
 	public static final int LEGACY_PLAY_USE_BED_ID = 101;

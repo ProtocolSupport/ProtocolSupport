@@ -339,4 +339,6 @@ public interface PlatformPacketFactory {
 
 	public int getInPlayUpdateStructureBlockPacketId();
 
+	public int getOutPlayMerchantTradeListPacketId();
+
 }

@@ -1,43 +1,65 @@
 package protocolsupport.protocol.utils.types;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class MerchantData {
 
-	private final int windowId;
-	private final List<TradeOffer> offers = new ArrayList<>(10);
+	protected final int windowId;
+	protected final TradeOffer[] offers;
+	protected final int villagerLevel;
+	protected final int villagerXp;
+	protected final boolean villagerRegular;
 
-	public MerchantData(int windowId) {
+	public MerchantData(int windowId, TradeOffer[] offers, int villagerLevel, int villagerXp, boolean villagerRegular) {
 		this.windowId = windowId;
+		this.offers = offers;
+		this.villagerLevel = villagerLevel;
+		this.villagerXp = villagerXp;
+		this.villagerRegular = villagerRegular;
 	}
 
 	public int getWindowId() {
 		return windowId;
 	}
 
-	public void addOffer(TradeOffer offer) {
-		offers.add(offer);
+	public TradeOffer[] getOffers() {
+		return offers;
 	}
 
-	public List<TradeOffer> getOffers() {
-		return Collections.unmodifiableList(offers);
+	public int getVillagerLevel() {
+		return villagerLevel;
+	}
+
+	public int getVillagerXP() {
+		return villagerXp;
+	}
+
+	public boolean isVillagerRegular() {
+		return villagerRegular;
 	}
 
 	public static class TradeOffer {
-		private final NetworkItemStack itemstack1;
-		private final NetworkItemStack itemstack2;
-		private final NetworkItemStack result;
-		private final int uses;
-		private final int maxuses;
 
-		public TradeOffer(NetworkItemStack itemstack1, NetworkItemStack itemstack2, NetworkItemStack result, int uses, int maxuses) {
+		protected final NetworkItemStack itemstack1;
+		protected final NetworkItemStack itemstack2;
+		protected final NetworkItemStack result;
+		protected final int uses;
+		protected final int maxuses;
+		protected final int xp;
+		protected final int specialPrice;
+		protected final float priceMultiplier;
+
+		public TradeOffer(
+			NetworkItemStack itemstack1, NetworkItemStack itemstack2, NetworkItemStack result,
+			int uses, int maxuses,
+			int xp, int specialPrice, float priceMultiplier
+		) {
 			this.itemstack1 = itemstack1;
 			this.result = result;
 			this.uses = uses;
 			this.maxuses = maxuses;
 			this.itemstack2 = itemstack2;
+			this.xp = xp;
+			this.specialPrice = specialPrice;
+			this.priceMultiplier = priceMultiplier;
 		}
 
 		public NetworkItemStack getItemStack1() {
@@ -67,6 +89,19 @@ public class MerchantData {
 		public int getMaxUses() {
 			return maxuses;
 		}
+
+		public int getXP() {
+			return xp;
+		}
+
+		public int getSpecialPrice() {
+			return specialPrice;
+		}
+
+		public float getPriceMultiplier() {
+			return priceMultiplier;
+		}
+
 	}
 
 }

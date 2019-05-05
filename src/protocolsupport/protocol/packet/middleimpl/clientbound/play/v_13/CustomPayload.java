@@ -1,12 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.MerchantDataSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -18,23 +18,14 @@ public class CustomPayload extends MiddleCustomPayload {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		return RecyclableSingletonList.create(create(version, tag, data));
+	}
+
+	public static ClientBoundPacketData create(ProtocolVersion version, String tag, ByteBuf data) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID);
 		StringSerializer.writeString(serializer, version, tag);
-		switch (tag) {
-			case (LegacyCustomPayloadChannelName.MODERN_TRADER_LIST): {
-				String locale = cache.getAttributesCache().getLocale();
-				MerchantDataSerializer.writeMerchantData(
-					serializer, version, locale,
-					MerchantDataSerializer.readMerchantData(data)
-				);
-				break;
-			}
-			default: {
-				serializer.writeBytes(data);
-				break;
-			}
-		}
-		return RecyclableSingletonList.create(serializer);
+		serializer.writeBytes(data);
+		return serializer;
 	}
 
 }
