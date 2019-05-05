@@ -18,7 +18,8 @@ public class ChunkWriterVariesWithLight {
 		ByteBuf buffer, int mask, int globalPaletteBitsPerBlock,
 		ArrayBasedIdRemappingTable blockDataRemappingTable,
 		FlatteningBlockDataTable flatteningBlockDataTable,
-		CachedChunk chunk, boolean hasSkyLight, IntConsumer sectionPresentConsumer
+		CachedChunk chunk, boolean hasSkyLight,
+		IntConsumer sectionPresentConsumer
 	) {
 		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
 			if (Utils.isBitSet(mask, sectionNumber)) {
@@ -49,7 +50,8 @@ public class ChunkWriterVariesWithLight {
 	public static void writeSectionsPreFlattening(
 		ByteBuf buffer, int mask, int globalPaletteBitsPerBlock,
 		ArrayBasedIdRemappingTable blockDataRemappingTable,
-		CachedChunk chunk, boolean hasSkyLight, IntConsumer sectionPresentConsumer
+		CachedChunk chunk, boolean hasSkyLight,
+		IntConsumer sectionPresentConsumer
 	) {
 		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
 			if (Utils.isBitSet(mask, sectionNumber)) {
