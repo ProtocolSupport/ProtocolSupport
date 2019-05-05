@@ -14,9 +14,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunknew.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.protocol.utils.chunk.ChunkConstants;
 import protocolsupport.protocol.utils.types.TileEntity;
-import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -43,18 +41,13 @@ public class ChunkLight extends MiddleChunkLight {
 			serializer.writeBoolean(false); //full
 			VarNumberSerializer.writeVarInt(serializer, blockMask);
 			ArraySerializer.writeVarIntByteArray(serializer, to -> {
-				for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-					if (Utils.isBitSet(blockMask, sectionNumber)) {
-						ChunkWriterVariesWithLight.writeSectionDataPreFlattening(
-							to,
-							13, blockDataRemappingTable,
-							cachedChunk, hasSkyLight, sectionNumber
-						);
-						resendTiles.addAll(cachedChunk.getTiles(sectionNumber).values());
-					}
-				}
+				ChunkWriterVariesWithLight.writeSectionsPreFlattening(
+					to, blockMask, 13,
+					blockDataRemappingTable,
+					cachedChunk, hasSkyLight,
+					sectionNumber -> resendTiles.addAll(cachedChunk.getTiles(sectionNumber).values())
+				);
 			});
-
 			ArraySerializer.writeVarIntTArray(
 				serializer,
 				resendTiles,

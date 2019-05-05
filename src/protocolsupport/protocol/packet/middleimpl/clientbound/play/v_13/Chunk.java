@@ -16,8 +16,6 @@ import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.Flattenin
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunknew.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.protocol.utils.chunk.ChunkConstants;
-import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -38,15 +36,12 @@ public class Chunk extends MiddleChunk {
 		VarNumberSerializer.writeVarInt(serializer, blockMask);
 		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 		ArraySerializer.writeVarIntByteArray(serializer, to -> {
-			for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-				if (Utils.isBitSet(blockMask, sectionNumber)) {
-					ChunkWriterVariesWithLight.writeSectionDataFlattening(
-						to,
-						14, blockDataRemappingTable, flatteningBlockDataTable,
-						cachedChunk, hasSkyLight, sectionNumber
-					);
-				}
-			}
+			ChunkWriterVariesWithLight.writeSectionsFlattening(
+				to, blockMask, 14,
+				blockDataRemappingTable, flatteningBlockDataTable,
+				cachedChunk, hasSkyLight,
+				sectionNumber -> {}
+			);
 			if (full) {
 				for (int i = 0; i < biomeData.length; i++) {
 					to.writeInt(biomeData[i]);
