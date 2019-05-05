@@ -68,7 +68,7 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 					for (int blockIndex = 0; blockIndex < ChunkConstants.BLOCKS_IN_SECTION; blockIndex++) {
 						int blockdata = reader.getBlockData(blockIndex);
 						section.setBlockData(blockIndex, (short) blockdata);
-						if (tileRemapper.usedToBeTile(blockIndex)) {
+						if (tileRemapper.usedToBeTile(blockdata)) {
 							Position position = new Position(
 								(coord.getX() << 4) + (blockIndex & 0xF),
 								(sectionNumber << 4) + ((blockIndex >> 8) & 0xF),
