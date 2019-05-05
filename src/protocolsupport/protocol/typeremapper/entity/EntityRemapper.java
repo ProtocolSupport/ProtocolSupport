@@ -57,6 +57,10 @@ public class EntityRemapper {
 		}
 	}
 
+	public ArrayMap<DataWatcherObject<?>> getOriginalMetadata() {
+		return originalMetadata;
+	}
+
 	public NetworkEntityType getRemappedEntityType() {
 		return remappedEntityType;
 	}
