@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r2_10_11_12r1_12r2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,6 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.block.FlatteningBlockData;
-import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunknew.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
@@ -26,7 +24,6 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class ChunkLight extends MiddleChunkLight {
 
 	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
-	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 
 	public ChunkLight(ConnectionImpl connection) {
 		super(connection);
@@ -48,9 +45,9 @@ public class ChunkLight extends MiddleChunkLight {
 			ArraySerializer.writeVarIntByteArray(serializer, to -> {
 				for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
 					if (Utils.isBitSet(blockMask, sectionNumber)) {
-						ChunkWriterVariesWithLight.writeSectionDataFlattening(
+						ChunkWriterVariesWithLight.writeSectionDataPreFlattening(
 							to,
-							14, blockDataRemappingTable, flatteningBlockDataTable,
+							13, blockDataRemappingTable,
 							cachedChunk, hasSkyLight, sectionNumber
 						);
 						resendTiles.addAll(cachedChunk.getTiles(sectionNumber).values());

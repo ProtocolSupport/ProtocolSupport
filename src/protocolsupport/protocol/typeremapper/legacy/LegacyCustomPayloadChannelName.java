@@ -8,7 +8,7 @@ public class LegacyCustomPayloadChannelName {
 
 	public static final String MODERN_REGISTER = "minecraft:register";
 	public static final String MODERN_UNREGISTER = "minecraft:unregister";
-	public static final String MODERN_TRADER_LIST = "minecraft:trader_list";
+	public static final String MODERN_TRADE_LIST = "minecraft:trader_list";
 	public static final String MODERN_BRAND = "minecraft:brand";
 	public static final String MODERN_BOOK_OPEN = "minecraft:book_open";
 	public static final String MODERN_BUNGEE = "bungeecord:main";
@@ -32,7 +32,7 @@ public class LegacyCustomPayloadChannelName {
 
 	public static String toPre13(String modernName) {
 		switch (modernName) {
-			case MODERN_TRADER_LIST: {
+			case MODERN_TRADE_LIST: {
 				return LEGACY_TRADE_LIST;
 			}
 			case MODERN_BRAND: {

@@ -1,11 +1,27 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r2_10_11_12r1_12r2;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
+import protocolsupport.protocol.typeremapper.chunknew.ChunkWriterVariesWithLight;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.utils.chunk.ChunkConstants;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Chunk extends MiddleChunk {
+
+	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	public Chunk(ConnectionImpl connection) {
 		super(connection);
@@ -13,27 +29,34 @@ public class Chunk extends MiddleChunk {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return null;
-	}
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
+		PositionSerializer.writeIntChunkCoord(serializer, coord);
+		serializer.writeBoolean(full);
+		VarNumberSerializer.writeVarInt(serializer, blockMask);
+		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
+		ArraySerializer.writeVarIntByteArray(serializer, to -> {
+			for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
+				if (Utils.isBitSet(blockMask, sectionNumber)) {
+					ChunkWriterVariesWithLight.writeSectionDataPreFlattening(
+						to,
+						13, blockDataRemappingTable,
+						cachedChunk, hasSkyLight, sectionNumber
+					);
+				}
+			}
+			if (full) {
+				for (int i = 0; i < biomeData.length; i++) {
+					to.writeInt(biomeData[i]);
+				}
+			}
+		});
+		ArraySerializer.writeVarIntTArray(
+			serializer,
+			Arrays.stream(cachedChunk.getTiles()).flatMap(l -> l.values().stream()).collect(Collectors.toList()),
+			(to, tile) -> ItemStackSerializer.writeTag(to, version, tile.getNBT())
+		);
 
-//	protected final ChunkTransformerBB transformer = new ChunkTransformerVariesLegacy(LegacyBlockData.REGISTRY.getTable(version), TileEntityRemapper.getRemapper(version), cache.getTileCache());
-//
-//	@Override
-//	public RecyclableCollection<ClientBoundPacketData> toData() {
-//		transformer.loadData(coord, data, bitmask, cache.getAttributesCache().hasSkyLightInCurrentDimension(), full, tiles);
-//
-//		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
-//		PositionSerializer.writeIntChunkCoord(serializer, coord);
-//		serializer.writeBoolean(full);
-//		VarNumberSerializer.writeVarInt(serializer, bitmask);
-//		ArraySerializer.writeVarIntByteArray(serializer, transformer::writeLegacyData);
-//		ArraySerializer.writeVarIntTArray(
-//			serializer,
-//			transformer.remapAndGetTiles(),
-//			(to, tile) -> ItemStackSerializer.writeTag(to, version, tile.getNBT())
-//		);
-//
-//		return RecyclableSingletonList.create(serializer);
-//	}
+		return RecyclableSingletonList.create(serializer);
+	}
 
 }

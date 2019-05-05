@@ -40,7 +40,11 @@ public class Chunk extends MiddleChunk {
 		ArraySerializer.writeVarIntByteArray(serializer, to -> {
 			for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
 				if (Utils.isBitSet(blockMask, sectionNumber)) {
-					ChunkWriterVariesWithLight.writeSectionData(to, blockDataRemappingTable, flatteningBlockDataTable, cachedChunk, hasSkyLight, sectionNumber);
+					ChunkWriterVariesWithLight.writeSectionDataFlattening(
+						to,
+						14, blockDataRemappingTable, flatteningBlockDataTable,
+						cachedChunk, hasSkyLight, sectionNumber
+					);
 				}
 			}
 			if (full) {

@@ -6,9 +6,9 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.utils.types.UsedHand;
 
-public abstract class MiddleOpenBook extends ClientBoundMiddlePacket {
+public abstract class MiddleBookOpen extends ClientBoundMiddlePacket {
 
-	public MiddleOpenBook(ConnectionImpl connection) {
+	public MiddleBookOpen(ConnectionImpl connection) {
 		super(connection);
 	}
 
