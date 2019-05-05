@@ -22,7 +22,7 @@ public class BookOpen extends MiddleBookOpen {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		buffer.clear();
-		MiscSerializer.writeVarIntEnum(buffer, version);
+		MiscSerializer.writeVarIntEnum(buffer, hand);
 		return RecyclableSingletonList.create(CustomPayload.create(version, LegacyCustomPayloadChannelName.LEGACY_BOOK_OPEN, buffer));
 	}
 
