@@ -5,8 +5,8 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockPlace;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.types.UsedHand;
 import protocolsupport.protocol.utils.i18n.I18NData;
-import protocolsupport.protocol.utils.types.UsedHand;
 
 public class BlockPlace extends MiddleBlockPlace {
 

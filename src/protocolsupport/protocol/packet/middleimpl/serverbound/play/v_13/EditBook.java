@@ -5,7 +5,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEditBook;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.utils.types.UsedHand;
+import protocolsupport.protocol.types.UsedHand;
 
 public class EditBook extends MiddleEditBook {
 

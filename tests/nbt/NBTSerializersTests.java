@@ -7,20 +7,20 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.utils.types.nbt.NBTByte;
-import protocolsupport.protocol.utils.types.nbt.NBTByteArray;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTDouble;
-import protocolsupport.protocol.utils.types.nbt.NBTFloat;
-import protocolsupport.protocol.utils.types.nbt.NBTInt;
-import protocolsupport.protocol.utils.types.nbt.NBTIntArray;
-import protocolsupport.protocol.utils.types.nbt.NBTList;
-import protocolsupport.protocol.utils.types.nbt.NBTLong;
-import protocolsupport.protocol.utils.types.nbt.NBTLongArray;
-import protocolsupport.protocol.utils.types.nbt.NBTShort;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
-import protocolsupport.protocol.utils.types.nbt.serializer.DefaultNBTSerializer;
+import protocolsupport.protocol.types.nbt.NBTByte;
+import protocolsupport.protocol.types.nbt.NBTByteArray;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTDouble;
+import protocolsupport.protocol.types.nbt.NBTFloat;
+import protocolsupport.protocol.types.nbt.NBTInt;
+import protocolsupport.protocol.types.nbt.NBTIntArray;
+import protocolsupport.protocol.types.nbt.NBTList;
+import protocolsupport.protocol.types.nbt.NBTLong;
+import protocolsupport.protocol.types.nbt.NBTLongArray;
+import protocolsupport.protocol.types.nbt.NBTShort;
+import protocolsupport.protocol.types.nbt.NBTString;
+import protocolsupport.protocol.types.nbt.NBTType;
+import protocolsupport.protocol.types.nbt.serializer.DefaultNBTSerializer;
 
 public class NBTSerializersTests {
 

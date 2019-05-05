@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import protocolsupport.protocol.utils.chunk.BlocksSection;
-import protocolsupport.protocol.utils.chunk.ChunkConstants;
-import protocolsupport.protocol.utils.types.ChunkCoord;
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.TileEntity;
+import protocolsupport.protocol.types.ChunkCoord;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.TileEntity;
+import protocolsupport.protocol.types.chunk.BlocksSection;
+import protocolsupport.protocol.types.chunk.ChunkConstants;
 
 public class ChunkCache {
 

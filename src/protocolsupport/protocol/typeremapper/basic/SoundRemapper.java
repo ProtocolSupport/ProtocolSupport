@@ -562,6 +562,7 @@ public class SoundRemapper {
 			registerRemapEntry("music_disc.ward", "record.ward", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 		}
 
+		@Override
 		public void registerRemapEntry(String from, String to, ProtocolVersion... versions) {
 			super.registerRemapEntry(from, to, versions);
 			super.registerRemapEntry(NamespacedKey.minecraft(from).toString(), to, versions);

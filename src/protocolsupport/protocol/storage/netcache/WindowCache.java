@@ -1,6 +1,6 @@
 package protocolsupport.protocol.storage.netcache;
 
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.types.WindowType;
 import protocolsupport.utils.Utils;
 
 public class WindowCache {

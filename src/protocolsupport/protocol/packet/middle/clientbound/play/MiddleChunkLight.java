@@ -8,8 +8,8 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.ChunkCache;
 import protocolsupport.protocol.storage.netcache.ChunkCache.CachedChunk;
-import protocolsupport.protocol.utils.chunk.ChunkConstants;
-import protocolsupport.protocol.utils.types.ChunkCoord;
+import protocolsupport.protocol.types.ChunkCoord;
+import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.utils.Utils;
 
 public abstract class MiddleChunkLight extends ClientBoundMiddlePacket {
@@ -50,7 +50,7 @@ public abstract class MiddleChunkLight extends ClientBoundMiddlePacket {
 		if (Utils.isBitSet(setSkyLightMask, 0)) {
 			skyLight[0] = ArraySerializer.readVarIntByteArray(serverdata);
 		}
-		for (int i = 1; i < ChunkConstants.SECTION_COUNT_LIGHT - 1; i++) {
+		for (int i = 1; i < (ChunkConstants.SECTION_COUNT_LIGHT - 1); i++) {
 			if (Utils.isBitSet(setSkyLightMask, i)) {
 				byte[] section = ArraySerializer.readVarIntByteArray(serverdata);
 				skyLight[i] = section;
@@ -66,7 +66,7 @@ public abstract class MiddleChunkLight extends ClientBoundMiddlePacket {
 		if (Utils.isBitSet(setBlockLightMask, 0)) {
 			blockLight[0] = ArraySerializer.readVarIntByteArray(serverdata);
 		}
-		for (int sectionNumber = 1; sectionNumber < ChunkConstants.SECTION_COUNT_LIGHT - 1; sectionNumber++) {
+		for (int sectionNumber = 1; sectionNumber < (ChunkConstants.SECTION_COUNT_LIGHT - 1); sectionNumber++) {
 			if (Utils.isBitSet(setBlockLightMask, sectionNumber)) {
 				byte[] section = ArraySerializer.readVarIntByteArray(serverdata);
 				blockLight[sectionNumber] = section;

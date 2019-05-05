@@ -22,17 +22,17 @@ import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.Enti
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHeadToDragonPlayerHeadComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.TileEntity;
+import protocolsupport.protocol.types.TileEntityType;
+import protocolsupport.protocol.types.nbt.NBTByte;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTNumber;
+import protocolsupport.protocol.types.nbt.NBTString;
+import protocolsupport.protocol.types.nbt.NBTType;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.TileEntity;
-import protocolsupport.protocol.utils.types.TileEntityType;
-import protocolsupport.protocol.utils.types.nbt.NBTByte;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTNumber;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupportbuildprocessor.Preload;
 

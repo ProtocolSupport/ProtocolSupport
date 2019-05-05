@@ -6,10 +6,10 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.storage.netcache.ChunkCache;
 import protocolsupport.protocol.storage.netcache.ChunkCache.CachedChunk;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
-import protocolsupport.protocol.utils.types.ChunkCoord;
-import protocolsupport.protocol.utils.types.TileEntity;
-import protocolsupport.protocol.utils.types.TileEntityType;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.ChunkCoord;
+import protocolsupport.protocol.types.TileEntity;
+import protocolsupport.protocol.types.TileEntityType;
+import protocolsupport.protocol.types.nbt.NBTCompound;
 
 public abstract class MiddleBlockTileUpdate extends MiddleBlock {
 

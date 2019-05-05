@@ -10,9 +10,9 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
 import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class EntityRemapper {
@@ -23,10 +23,10 @@ public class EntityRemapper {
 	}
 
 	protected NetworkEntity originalEntity;
-	protected final ArrayMap<DataWatcherObject<?>> originalMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
+	protected final ArrayMap<NetworkEntityMetadataObject<?>> originalMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
 
 	protected NetworkEntityType remappedEntityType;
-	protected final ArrayMap<DataWatcherObject<?>> remappedMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
+	protected final ArrayMap<NetworkEntityMetadataObject<?>> remappedMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
 
 	public void readEntity(NetworkEntity entity) {
 		if (entity == null) {
@@ -57,7 +57,7 @@ public class EntityRemapper {
 		}
 	}
 
-	public ArrayMap<DataWatcherObject<?>> getOriginalMetadata() {
+	public ArrayMap<NetworkEntityMetadataObject<?>> getOriginalMetadata() {
 		return originalMetadata;
 	}
 
@@ -65,7 +65,7 @@ public class EntityRemapper {
 		return remappedEntityType;
 	}
 
-	public ArrayMap<DataWatcherObject<?>> getRemappedMetadata() {
+	public ArrayMap<NetworkEntityMetadataObject<?>> getRemappedMetadata() {
 		return remappedMetadata;
 	}
 

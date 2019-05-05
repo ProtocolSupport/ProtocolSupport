@@ -1,7 +1,7 @@
 package protocolsupport.protocol.typeremapper.itemstack.complex;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.types.NetworkItemStack;
 
 @FunctionalInterface
 public interface ItemStackComplexRemapper {

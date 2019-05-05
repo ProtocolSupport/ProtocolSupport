@@ -5,12 +5,12 @@ import org.bukkit.Material;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.GameProfileSerializer;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.protocol.utils.authlib.UUIDTypeAdapter;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 
 public class DragonHeadToDragonPlayerHeadComplexRemapper implements ItemStackComplexRemapper {
 

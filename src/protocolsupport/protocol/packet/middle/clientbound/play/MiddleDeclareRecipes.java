@@ -10,7 +10,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.utils.CollectionsUtils;
 
 public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
@@ -199,7 +199,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 		public NetworkItemStack getResult() {
 			return result;
 		}
-		
+
 	}
 
 	public enum RecipeType {

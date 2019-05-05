@@ -5,7 +5,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.ChunkCache;
 import protocolsupport.protocol.storage.netcache.ChunkCache.CachedChunk;
-import protocolsupport.protocol.utils.types.ChunkCoord;
+import protocolsupport.protocol.types.ChunkCoord;
 
 public abstract class MiddleBlockChangeSingle extends MiddleBlock {
 

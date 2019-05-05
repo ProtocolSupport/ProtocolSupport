@@ -9,7 +9,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.chunknew.ChunkWriterVariesWithLight;
+import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;

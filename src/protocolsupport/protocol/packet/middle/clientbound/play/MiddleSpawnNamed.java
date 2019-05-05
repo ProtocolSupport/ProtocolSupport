@@ -8,7 +8,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 

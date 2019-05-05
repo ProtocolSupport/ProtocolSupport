@@ -12,13 +12,13 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.ChunkCache;
 import protocolsupport.protocol.storage.netcache.ChunkCache.CachedChunk;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
-import protocolsupport.protocol.utils.chunk.BlockStorageReader;
-import protocolsupport.protocol.utils.chunk.BlocksSection;
-import protocolsupport.protocol.utils.chunk.ChunkConstants;
-import protocolsupport.protocol.utils.types.ChunkCoord;
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.TileEntity;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.ChunkCoord;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.TileEntity;
+import protocolsupport.protocol.types.chunk.BlockStorageReader;
+import protocolsupport.protocol.types.chunk.BlocksSection;
+import protocolsupport.protocol.types.chunk.ChunkConstants;
+import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.utils.Utils;
 
 public abstract class MiddleChunk extends ClientBoundMiddlePacket {

@@ -16,7 +16,6 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AgeableE
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.LivingEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.base.TameableEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.BatEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.BlazeEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.CreeperEntityMetadataRemapper;
@@ -81,8 +80,8 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.special.Armor
 import protocolsupport.protocol.typeremapper.entity.metadata.types.special.PlayerEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -362,7 +361,7 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.CAT)
 			.addMapping(NetworkEntityType.CAT, new CatEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)
-			.addMapping(NetworkEntityType.OCELOT, TameableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
+			.addMapping(NetworkEntityType.OCELOT, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
 			.register();
 			new Mapping(NetworkEntityType.FOX)
 			.addMapping(NetworkEntityType.FOX, new FoxEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)

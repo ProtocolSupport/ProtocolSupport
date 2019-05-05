@@ -3,7 +3,7 @@ package protocolsupport.protocol.typeremapper.legacy;
 import java.util.EnumMap;
 import java.util.Map;
 
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.types.WindowType;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload

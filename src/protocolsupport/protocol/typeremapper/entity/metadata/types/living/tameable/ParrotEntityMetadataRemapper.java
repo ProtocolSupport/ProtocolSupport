@@ -2,14 +2,14 @@ package protocolsupport.protocol.typeremapper.entity.metadata.types.living.tamea
 
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.TameableEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 
 public class ParrotEntityMetadataRemapper extends TameableEntityMetadataRemapper {
 
 	public ParrotEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Parrot.VARIANT, 17), ProtocolVersionsHelper.UP_1_14);
-		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Parrot.VARIANT, 15), ProtocolVersionsHelper.RANGE__1_12__1_13_2);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Parrot.VARIANT, 17), ProtocolVersionsHelper.UP_1_14);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Parrot.VARIANT, 15), ProtocolVersionsHelper.RANGE__1_12__1_13_2);
 	}
 
 }

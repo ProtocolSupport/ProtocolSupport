@@ -1,11 +1,11 @@
 package protocolsupport.protocol.typeremapper.entity.metadata;
 
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public abstract class DataWatcherObjectRemapper {
 
-	public abstract void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped);
+	public abstract void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped);
 
 }

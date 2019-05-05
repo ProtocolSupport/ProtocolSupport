@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MerchantDataSerializer;
-import protocolsupport.protocol.utils.types.MerchantData;
+import protocolsupport.protocol.types.MerchantData;
 
 public abstract class MiddleMerchantTradeList extends ClientBoundMiddlePacket {
 

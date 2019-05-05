@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.utils.types.Difficulty;
+import protocolsupport.protocol.types.Difficulty;
 
 public abstract class MiddleServerDifficulty extends ClientBoundMiddlePacket {
 

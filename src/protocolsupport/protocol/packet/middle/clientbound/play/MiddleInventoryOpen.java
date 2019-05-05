@@ -10,7 +10,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.types.WindowType;
 import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {

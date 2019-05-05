@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.pingresponse.PingResponse;
+import protocolsupport.protocol.types.pingresponse.PingResponse;
 
 public abstract class MiddleServerInfo extends ClientBoundMiddlePacket {
 

@@ -5,13 +5,13 @@ import org.bukkit.enchantments.Enchantment;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackNBTComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEnchantmentId;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTList;
+import protocolsupport.protocol.types.nbt.NBTNumber;
+import protocolsupport.protocol.types.nbt.NBTString;
+import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.utils.CommonNBT;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTList;
-import protocolsupport.protocol.utils.types.nbt.NBTNumber;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class EnchantFromLegacyIdComplexRemapper extends ItemStackNBTComplexRemapper {
 

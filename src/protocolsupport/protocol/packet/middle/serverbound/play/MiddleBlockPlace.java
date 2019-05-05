@@ -7,8 +7,8 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.UsedHand;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.UsedHand;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 

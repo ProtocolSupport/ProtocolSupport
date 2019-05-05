@@ -3,9 +3,9 @@ package protocolsupport.protocol.serializer;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.utils.types.MerchantData;
-import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.types.MerchantData;
+import protocolsupport.protocol.types.MerchantData.TradeOffer;
+import protocolsupport.protocol.types.NetworkItemStack;
 
 public class MerchantDataSerializer {
 

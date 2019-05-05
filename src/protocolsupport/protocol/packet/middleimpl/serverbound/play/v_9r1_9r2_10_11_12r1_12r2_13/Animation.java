@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleAnimation;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.utils.types.UsedHand;
+import protocolsupport.protocol.types.UsedHand;
 
 public class Animation extends MiddleAnimation {
 

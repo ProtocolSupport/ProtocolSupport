@@ -9,10 +9,10 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalPosition;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -30,7 +30,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		DataWatcherSerializer.writeData(entitymetadata, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
 
 		if (entity.getType() == NetworkEntityType.PLAYER) {
-			Optional<DataWatcherObjectOptionalPosition> bedpositionObject = DataWatcherObjectIndex.EntityLiving.BED_LOCATION.getValue(entityRemapper.getOriginalMetadata());
+			Optional<NetworkEntityMetadataObjectOptionalPosition> bedpositionObject = NetworkEntityMetadataObjectIndex.EntityLiving.BED_LOCATION.getValue(entityRemapper.getOriginalMetadata());
 			if (bedpositionObject.isPresent()) {
 				Position bedposition = bedpositionObject.get().getValue();
 				if (bedposition != null) {

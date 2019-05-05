@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.utils.types.UsedHand;
+import protocolsupport.protocol.types.UsedHand;
 
 public abstract class MiddleBookOpen extends ClientBoundMiddlePacket {
 

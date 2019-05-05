@@ -10,9 +10,9 @@ import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.IntSkippingR
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.ArrayBasedIntSkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkippingTable;
+import protocolsupport.protocol.types.WindowType;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
-import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload

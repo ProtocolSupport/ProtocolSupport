@@ -1,17 +1,17 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.value;
 
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 
-public class IndexValueRemapperNoOp extends IndexValueRemapper<DataWatcherObject<Object>> {
+public class IndexValueRemapperNoOp extends IndexValueRemapper<NetworkEntityMetadataObject<Object>> {
 
 	@SuppressWarnings("unchecked")
-	public IndexValueRemapperNoOp(DataWatcherObjectIndex<? extends DataWatcherObject<?>> fromIndex, int toIndex) {
-		super((DataWatcherObjectIndex<DataWatcherObject<Object>>) fromIndex, toIndex);
+	public IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex<? extends NetworkEntityMetadataObject<?>> fromIndex, int toIndex) {
+		super((NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObject<Object>>) fromIndex, toIndex);
 	}
 
 	@Override
-	public DataWatcherObject<?> remapValue(DataWatcherObject<Object> object) {
+	public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObject<Object> object) {
 		return object;
 	}
 

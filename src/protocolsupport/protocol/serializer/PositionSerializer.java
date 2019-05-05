@@ -1,8 +1,8 @@
 package protocolsupport.protocol.serializer;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.utils.types.ChunkCoord;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.types.ChunkCoord;
+import protocolsupport.protocol.types.Position;
 
 public class PositionSerializer {
 

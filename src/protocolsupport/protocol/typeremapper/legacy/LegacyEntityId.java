@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.bukkit.entity.EntityType;
 
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload

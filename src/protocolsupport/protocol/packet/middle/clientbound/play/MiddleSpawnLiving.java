@@ -9,7 +9,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 

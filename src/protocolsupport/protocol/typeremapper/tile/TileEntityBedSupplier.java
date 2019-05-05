@@ -2,11 +2,11 @@ package protocolsupport.protocol.typeremapper.tile;
 
 import java.util.function.Function;
 
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.TileEntity;
-import protocolsupport.protocol.utils.types.TileEntityType;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTInt;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.TileEntity;
+import protocolsupport.protocol.types.TileEntityType;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTInt;
 
 class TileEntityBedSupplier implements Function<Position, TileEntity> {
 

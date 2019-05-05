@@ -12,7 +12,7 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.chunknew.ChunkWriterVariesWithLight;
+import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;

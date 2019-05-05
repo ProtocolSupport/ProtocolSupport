@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.itemstack.complex.toclient;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.types.NetworkItemStack;
 
 public class SpawnEggToIntIdComplexRemapper implements ItemStackComplexRemapper {
 

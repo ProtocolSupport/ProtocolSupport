@@ -10,7 +10,7 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyWindow;
 import protocolsupport.protocol.typeremapper.legacy.LegacyWindow.LegacyWindowData;
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.EnumRemappingTable;
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 

@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunkLight;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.chunknew.ChunkWriterByte;
+import protocolsupport.protocol.typeremapper.chunk.ChunkWriterByte;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.utils.recyclable.RecyclableArrayList;

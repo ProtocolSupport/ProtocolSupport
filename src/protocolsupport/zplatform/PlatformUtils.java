@@ -19,7 +19,7 @@ import io.netty.channel.ChannelPipeline;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public interface PlatformUtils {

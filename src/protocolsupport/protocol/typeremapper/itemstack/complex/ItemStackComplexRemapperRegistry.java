@@ -28,12 +28,12 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PotionTo
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.SpawnEggToIntIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.SpawnEggToStringIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ItemSpawnEggData;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload

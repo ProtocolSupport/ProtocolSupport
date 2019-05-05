@@ -8,8 +8,8 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.ChunkCache;
 import protocolsupport.protocol.storage.netcache.ChunkCache.CachedChunk;
-import protocolsupport.protocol.utils.types.ChunkCoord;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.types.ChunkCoord;
+import protocolsupport.protocol.types.Position;
 import protocolsupport.utils.Utils;
 
 public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {

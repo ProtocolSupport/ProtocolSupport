@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.utils.types.ChunkCoord;
+import protocolsupport.protocol.types.ChunkCoord;
 
 public abstract class MiddleSetViewCenter extends ClientBoundMiddlePacket {
 

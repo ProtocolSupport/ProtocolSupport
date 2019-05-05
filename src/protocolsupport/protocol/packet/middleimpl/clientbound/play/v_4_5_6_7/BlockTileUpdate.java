@@ -10,9 +10,9 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
+import protocolsupport.protocol.types.TileEntity;
+import protocolsupport.protocol.types.TileEntityType;
 import protocolsupport.protocol.utils.CommonNBT;
-import protocolsupport.protocol.utils.types.TileEntity;
-import protocolsupport.protocol.utils.types.TileEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 

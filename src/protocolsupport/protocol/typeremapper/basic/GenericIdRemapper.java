@@ -2,8 +2,8 @@ package protocolsupport.protocol.typeremapper.basic;
 
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.EnumRemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.EnumRemappingTable;
+import protocolsupport.protocol.types.WindowType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.types.WindowType;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload

@@ -20,6 +20,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_12r1_12r2_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BlockAction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BlockChangeSingle;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BookOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.Chunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.ChunkLight;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.CraftRecipeConfirm;
@@ -31,7 +32,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.Inventor
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.LookAt;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.Map;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.MerchantTradeList;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BookOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.QueryNBTResponse;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.ScoreboardObjective;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.ScoreboardTeam;

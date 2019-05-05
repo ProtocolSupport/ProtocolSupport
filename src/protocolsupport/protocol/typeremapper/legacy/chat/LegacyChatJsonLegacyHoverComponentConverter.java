@@ -8,18 +8,18 @@ import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTShort;
+import protocolsupport.protocol.types.nbt.NBTString;
+import protocolsupport.protocol.types.nbt.NBTType;
+import protocolsupport.protocol.types.nbt.mojangson.LegacyMojangsonSerializer;
+import protocolsupport.protocol.types.nbt.mojangson.MojangsonParser;
+import protocolsupport.protocol.types.nbt.mojangson.MojangsonSerializer;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ItemStackWriteEventHelper;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTShort;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
-import protocolsupport.protocol.utils.types.nbt.mojangson.LegacyMojangsonSerializer;
-import protocolsupport.protocol.utils.types.nbt.mojangson.MojangsonParser;
-import protocolsupport.protocol.utils.types.nbt.mojangson.MojangsonSerializer;
 
 public class LegacyChatJsonLegacyHoverComponentConverter extends LegacyChatJsonComponentConverter {
 

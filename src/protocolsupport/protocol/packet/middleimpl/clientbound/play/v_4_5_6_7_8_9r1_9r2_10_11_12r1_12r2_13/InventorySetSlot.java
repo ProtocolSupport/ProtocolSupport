@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySe
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.typeremapper.basic.WindowSlotsRemappingHelper;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -28,7 +28,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 			//TODO: remap for versions that don't actually support this special window id
 			return RecyclableSingletonList.create(create(version, locale, windowId, slot, itemstack));
 		}
-		if (windowId == WINDOW_ID_PLAYER_HOTBAR && slot >= 36 && slot < 45) {
+		if ((windowId == WINDOW_ID_PLAYER_HOTBAR) && (slot >= 36) && (slot < 45)) {
 			return RecyclableSingletonList.create(create(version, locale, windowId, slot, itemstack));
 		}
 

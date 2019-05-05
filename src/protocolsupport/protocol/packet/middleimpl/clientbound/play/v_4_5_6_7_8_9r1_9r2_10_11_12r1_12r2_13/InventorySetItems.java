@@ -6,8 +6,8 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySe
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.typeremapper.basic.WindowSlotsRemappingHelper;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 

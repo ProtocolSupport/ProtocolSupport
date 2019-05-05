@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockPlace;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.types.UsedHand;
+import protocolsupport.protocol.types.UsedHand;
 
 public class BlockPlace extends MiddleBlockPlace {
 
