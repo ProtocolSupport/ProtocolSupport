@@ -240,6 +240,10 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlaySetViewCenterPacketId();
 
+	public int getOutPlayUpdateViewDistancePacketId();
+
+	public int getOutPlayMerchantTradeListPacketId();
+
 
 	public int getInHandshakeStartPacketId();
 
@@ -338,7 +342,5 @@ public interface PlatformPacketFactory {
 	public int getInPlayUpdateCommandMinecartPacketId();
 
 	public int getInPlayUpdateStructureBlockPacketId();
-
-	public int getOutPlayMerchantTradeListPacketId();
 
 }
