@@ -244,6 +244,8 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayMerchantTradeListPacketId();
 
+	public int getOutPlayBookOpenPacketId();
+
 
 	public int getInHandshakeStartPacketId();
 

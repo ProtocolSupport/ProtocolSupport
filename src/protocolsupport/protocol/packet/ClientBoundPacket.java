@@ -102,6 +102,7 @@ public class ClientBoundPacket {
 	public static final int PLAY_SET_VIEW_CENTER = ServerPlatform.get().getPacketFactory().getOutPlaySetViewCenterPacketId();
 	public static final int PLAY_UPDATE_VIEW_DISTANCE = ServerPlatform.get().getPacketFactory().getOutPlayUpdateViewDistancePacketId();
 	public static final int PLAY_MERCHANT_TRADE_LIST = ServerPlatform.get().getPacketFactory().getOutPlayMerchantTradeListPacketId();
+	public static final int PLAY_BOOK_OPEN = ServerPlatform.get().getPacketFactory().getOutPlayBookOpenPacketId();
 
 	public static final int LEGACY_PLAY_UPDATE_SIGN_ID = 100;
 	public static final int LEGACY_PLAY_USE_BED_ID = 101;

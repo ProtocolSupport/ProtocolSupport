@@ -649,6 +649,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		return getOutId(PacketPlayOutViewDistance.class);
 	}
 
+	@Override
+	public int getOutPlayBookOpenPacketId() {
+		return getOutId(PacketPlayOutOpenBook.class);
+	}
+
 
 	@Override
 	public int getInHandshakeStartPacketId() {

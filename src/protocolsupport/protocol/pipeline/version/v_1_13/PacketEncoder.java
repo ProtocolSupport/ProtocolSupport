@@ -31,6 +31,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.Inventor
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.LookAt;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.Map;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.MerchantTradeList;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BookOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.QueryNBTResponse;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.ScoreboardObjective;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.ScoreboardTeam;
@@ -301,6 +302,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_LOOK_AT, LookAt::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_LIGHT, ChunkLight::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MERCHANT_TRADE_LIST, MerchantTradeList::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BOOK_OPEN, BookOpen::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_VIEW_CENTER, NoopSetViewCenter::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_VIEW_DISTANCE, NoopUpdateViewDistance::new);
 	}
