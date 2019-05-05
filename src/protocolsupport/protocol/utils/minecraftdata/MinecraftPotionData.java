@@ -11,7 +11,7 @@ import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
-public class PotionData {
+public class MinecraftPotionData {
 
 	private static final Int2ObjectOpenHashMap<String> idToName = new Int2ObjectOpenHashMap<>();
 

@@ -3,13 +3,11 @@ package protocolsupport.zplatform;
 import java.security.PublicKey;
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.utils.authlib.GameProfile;
-import protocolsupport.protocol.utils.types.Position;
 
 public interface PlatformPacketFactory {
 
@@ -36,8 +34,6 @@ public interface PlatformPacketFactory {
 	public Object createLoginEncryptionBeginPacket(PublicKey publicKey, byte[] randomBytes);
 
 	public Object createSetCompressionPacket(int threshold);
-
-	public Object createBlockBreakSoundPacket(Position pos, Material type);
 
 	public Object createStatusPongPacket(long pingId);
 

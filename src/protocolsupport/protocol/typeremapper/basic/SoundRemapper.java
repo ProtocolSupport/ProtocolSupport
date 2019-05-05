@@ -4,7 +4,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.GenericRemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.GenericRemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.minecraftdata.SoundData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftSoundData;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -571,7 +571,7 @@ public class SoundRemapper {
 	}
 
 	public static String getSoundName(ProtocolVersion version, int id) {
-		return getSoundName(version, SoundData.getNameById(id));
+		return getSoundName(version, MinecraftSoundData.getNameById(id));
 	}
 
 }

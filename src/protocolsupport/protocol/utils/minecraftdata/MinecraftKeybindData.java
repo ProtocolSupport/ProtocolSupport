@@ -7,9 +7,9 @@ import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
-public class KeybindData {
+public class MinecraftKeybindData {
 
-	private static final HashMap<String, String> nameToKeyRepr = new HashMap<>();
+	protected static final HashMap<String, String> nameToKeyRepr = new HashMap<>();
 
 	static {
 		ResourceUtils.getAsBufferedReader(MinecraftData.getResourcePath("keybinds")).lines()

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.spigotmc.SpigotConfig;
 
@@ -31,9 +30,6 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.utils.authlib.GameProfile;
-import protocolsupport.protocol.utils.minecraftdata.BlockData;
-import protocolsupport.protocol.utils.minecraftdata.BlockData.BlockDataEntry;
-import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.PlatformPacketFactory;
 
@@ -107,17 +103,6 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public Object createSetCompressionPacket(int threshold) {
 		return new PacketLoginOutSetCompression(threshold);
-	}
-
-	@Override
-	public Object createBlockBreakSoundPacket(Position pos, Material type) {
-		BlockDataEntry blockdataentry = BlockData.get(type);
-		return new PacketPlayOutNamedSoundEffect(
-			IRegistry.SOUND_EVENT.fromId(blockdataentry.getBreakSound()), SoundCategory.BLOCKS,
-			pos.getX(), pos.getY(), pos.getZ(),
-			(blockdataentry.getVolume() + 1.0F) / 2.0F,
-			blockdataentry.getPitch() * 0.8F
-		);
 	}
 
 	@Override
