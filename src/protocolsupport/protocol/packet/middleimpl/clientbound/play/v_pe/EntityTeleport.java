@@ -38,35 +38,20 @@ public class EntityTeleport extends MiddleEntityTeleport {
 		cache.setPitch(pitch);
 
 		// Check if a relative movement is needed (Less than 5 blocks)
-		if (Math.abs(x - oldX) < RELATIVE_THRESHOLD &&
-			Math.abs(y - oldY) < RELATIVE_THRESHOLD &&
-			Math.abs(z - oldZ) < RELATIVE_THRESHOLD) {
-
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOVE_ENTITY_DELTA);
-			VarNumberSerializer.writeVarLong(serializer, entity.getId());
-			serializer.writeByte(EntityLook.FLAG_HAS_COORDS |
-				EntityLook.FLAG_HAS_PITCH |
-				EntityLook.FLAG_HAS_YAW |
-				EntityLook.FLAG_HAS_HEAD_YAW |
-				(onGround ? EntityLook.FLAG_ONGROUND : 0)
-			);
-
-			VarNumberSerializer.writeSVarInt(serializer, Float.floatToRawIntBits(x) - Float.floatToRawIntBits(oldX));
-			VarNumberSerializer.writeSVarInt(serializer, Float.floatToRawIntBits(y) - Float.floatToRawIntBits(oldY));
-			VarNumberSerializer.writeSVarInt(serializer, Float.floatToRawIntBits(z) - Float.floatToRawIntBits(oldZ));
-
-			serializer.writeByte(pitch);
-			serializer.writeByte(yaw);
-			serializer.writeByte(headYaw);
-
-			return serializer;
+		if (!teleported && Math.abs(x - oldX) < RELATIVE_THRESHOLD && Math.abs(y - oldY) < RELATIVE_THRESHOLD && Math.abs(z - oldZ) < RELATIVE_THRESHOLD) {
+			return serializeMoveEntityDelta(entity, x, y, z, oldX, oldY, oldZ, yaw, headYaw, pitch, onGround);
 		}
 
+		return serializeEntityTeleport(entity, x, y, z, pitch, yaw, headYaw, onGround, teleported);
+	}
+
+	private static ClientBoundPacketData serializeEntityTeleport(NetworkEntity entity, float x, float y, float z, byte pitch, byte yaw, byte headYaw, boolean onGround, boolean teleported) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.ENTITY_TELEPORT);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		byte flag = 0;
 		flag |= teleported ? FLAG_TELEPORTED : 0;
 		flag |= onGround ? FLAG_ONGROUND : 0;
+
 		serializer.writeByte(flag);
 		serializer.writeFloatLE(x);
 		serializer.writeFloatLE(y);
@@ -74,6 +59,29 @@ public class EntityTeleport extends MiddleEntityTeleport {
 		serializer.writeByte(pitch);
 		serializer.writeByte(yaw);
 		serializer.writeByte(headYaw);
+
+		return serializer;
+	}
+
+	private static ClientBoundPacketData serializeMoveEntityDelta(NetworkEntity entity, float x, float y, float z, float oldX, float oldY, float oldZ, byte yaw, byte headYaw, byte pitch, boolean onGround) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.MOVE_ENTITY_DELTA);
+		VarNumberSerializer.writeVarLong(serializer, entity.getId());
+
+		serializer.writeByte(EntityLook.FLAG_HAS_COORDS |
+			EntityLook.FLAG_HAS_PITCH |
+			EntityLook.FLAG_HAS_YAW |
+			EntityLook.FLAG_HAS_HEAD_YAW |
+			(onGround ? EntityLook.FLAG_ONGROUND : 0)
+		);
+
+		VarNumberSerializer.writeSVarInt(serializer, Float.floatToRawIntBits(x) - Float.floatToRawIntBits(oldX));
+		VarNumberSerializer.writeSVarInt(serializer, Float.floatToRawIntBits(y) - Float.floatToRawIntBits(oldY));
+		VarNumberSerializer.writeSVarInt(serializer, Float.floatToRawIntBits(z) - Float.floatToRawIntBits(oldZ));
+
+		serializer.writeByte(pitch);
+		serializer.writeByte(yaw);
+		serializer.writeByte(headYaw);
+
 		return serializer;
 	}
 
