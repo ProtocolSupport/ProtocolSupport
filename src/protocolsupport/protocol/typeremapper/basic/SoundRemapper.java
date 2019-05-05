@@ -1,5 +1,7 @@
 package protocolsupport.protocol.typeremapper.basic;
 
+import org.bukkit.NamespacedKey;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.GenericRemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.GenericRemappingTable;
@@ -559,6 +561,12 @@ public class SoundRemapper {
 			registerRemapEntry("music_disc.ward", "records.ward", ProtocolVersionsHelper.BEFORE_1_9);
 			registerRemapEntry("music_disc.ward", "record.ward", ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 		}
+
+		public void registerRemapEntry(String from, String to, ProtocolVersion... versions) {
+			super.registerRemapEntry(from, to, versions);
+			super.registerRemapEntry(NamespacedKey.minecraft(from).toString(), to, versions);
+		}
+
 		@Override
 		protected GenericRemappingTable<String> createTable() {
 			return new GenericRemappingTable<>();
