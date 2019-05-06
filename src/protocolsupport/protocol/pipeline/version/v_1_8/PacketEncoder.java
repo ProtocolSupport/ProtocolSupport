@@ -44,7 +44,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8.SpawnEx
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8.SpawnGlobal;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8.SpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.TabComplete;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14.ChangeDimension;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13.ChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14.EntityAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14.Explosion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14.GameStateChange;
