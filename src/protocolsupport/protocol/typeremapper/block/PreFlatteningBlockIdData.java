@@ -6,20 +6,21 @@ import org.bukkit.Material;
 
 import com.google.gson.JsonObject;
 
-import protocolsupport.api.MaterialAPI;
 import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
 
+@SuppressWarnings("deprecation")
 @Preload
 public class PreFlatteningBlockIdData {
 
 	protected static final int[] toLegacyId = new int[MinecraftData.BLOCKDATA_COUNT];
 
 	static {
-		Arrays.fill(toLegacyId, MaterialAPI.getBlockDataNetworkId(Material.STONE.createBlockData()));
+		Arrays.fill(toLegacyId, Material.LEGACY_BEDROCK.getId() << 4);
+
 		JsonObject rootObject = ResourceUtils.getAsJson(MappingsData.getResourcePath("preflatteningblockdataid.json"));
 		for (String blockdataString : rootObject.keySet()) {
 			toLegacyId[Integer.parseInt(blockdataString)] = JsonUtils.getInt(rootObject, blockdataString);

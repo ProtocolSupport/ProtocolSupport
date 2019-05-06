@@ -1,17 +1,10 @@
 package protocolsupport.protocol.typeremapper.itemstack;
 
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Map.Entry;
-
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.JsonUtils;
@@ -35,25 +28,19 @@ public class FlatteningItemId {
 		}
 	};
 
-	protected static void load(ProtocolVersion version) {
-		JsonObject itemsData = ResourceUtils.getAsJson(MappingsData.getFlatteningResoucePath(version, "items.json"));
-		if (itemsData != null) {
-			ArrayBasedIdRemappingTable tableToClient = REGISTRY_TO_CLIENT.getTable(version);
-			ArrayBasedIdRemappingTable tableFromClient = REGISTRY_FROM_CLIENT.getTable(version);
-			for (Entry<String, JsonElement> entry : itemsData.entrySet()) {
-				int modernId = MaterialAPI.getItemNetworkId(ItemMaterialLookup.getByKey(entry.getKey()));
-				if (modernId == -1) {
-					throw new IllegalStateException(MessageFormat.format("Item material {0} doesn''t exist", entry.getKey()));
-				}
-				int legacyId = JsonUtils.getInt(entry.getValue().getAsJsonObject(), "protocol_id");
+	static {
+		JsonObject rootObject = ResourceUtils.getAsJson(MappingsData.getResourcePath("flatteningitem.json"));
+		for (String versionString : rootObject.keySet()) {
+			JsonObject entriesObject = rootObject.get(versionString).getAsJsonObject();
+			ArrayBasedIdRemappingTable tableToClient = REGISTRY_TO_CLIENT.getTable(ProtocolVersion.valueOf(versionString));
+			ArrayBasedIdRemappingTable tableFromClient = REGISTRY_FROM_CLIENT.getTable(ProtocolVersion.valueOf(versionString));
+			for (String itemidString : entriesObject.keySet()) {
+				int modernId = Integer.parseInt(itemidString);
+				int legacyId = JsonUtils.getInt(entriesObject, itemidString);
 				tableToClient.setRemap(modernId, legacyId);
 				tableFromClient.setRemap(legacyId, modernId);
 			}
 		}
-	}
-
-	static {
-		Arrays.stream(ProtocolVersion.getAllSupported()).forEach(FlatteningItemId::load);
 	}
 
 }
