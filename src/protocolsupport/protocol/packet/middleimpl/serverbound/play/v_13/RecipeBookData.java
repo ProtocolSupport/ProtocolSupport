@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13_14;
+package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
@@ -10,6 +10,10 @@ public class RecipeBookData extends MiddleRecipeBookData {
 
 	public RecipeBookData(ConnectionImpl connection) {
 		super(connection);
+		blastingRecipeBookOpen = false;
+		blastingRecipeBookFiltering = false;
+		smokingRecipeBookOpen = false;
+		smokingRecipeBookFiltering = false;
 	}
 
 	@Override

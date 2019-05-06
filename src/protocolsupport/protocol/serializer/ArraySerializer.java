@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
@@ -98,6 +99,10 @@ public class ArraySerializer {
 
 	public static void writeVarIntByteArray(ByteBuf to, Consumer<ByteBuf> dataWriter) {
 		MiscSerializer.writeLengthPrefixedBytes(to, VarNumberSerializer::writeFixedSizeVarInt, dataWriter);
+	}
+
+	public static void writeVarIntTArray(ByteBuf to, ToIntFunction<ByteBuf> arrayWriter) {
+		MiscSerializer.writeSizePrefixedData(to, VarNumberSerializer::writeFixedSizeVarInt, arrayWriter);
 	}
 
 	public static <T> void writeVarIntTArray(ByteBuf to, T[] array, BiConsumer<ByteBuf, T> elementWriter) {

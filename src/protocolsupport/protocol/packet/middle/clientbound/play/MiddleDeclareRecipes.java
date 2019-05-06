@@ -281,4 +281,5 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 		}
 
 	}
+
 }

@@ -19,10 +19,4 @@ public abstract class MiddleGameStateChange extends ClientBoundMiddlePacket {
 		value = serverdata.readFloat();
 	}
 
-	@Override
-	public boolean postFromServerRead() {
-		//TODO: restore rain after finding out what exactly causes rain particles to spawn in insane amounts and cause OOM
-		return type != 2;
-	}
-
 }
