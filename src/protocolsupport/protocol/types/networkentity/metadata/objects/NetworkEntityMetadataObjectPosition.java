@@ -15,7 +15,7 @@ public class NetworkEntityMetadataObjectPosition extends ReadableNetworkEntityMe
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
-		PositionSerializer.writeLegacyPositionL(to, value);
+		PositionSerializer.writePosition(to, value);
 	}
 
 }

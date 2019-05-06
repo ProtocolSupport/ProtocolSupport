@@ -94,4 +94,9 @@ public class PositionSerializer {
 		to.writeInt(chunk.getZ());
 	}
 
+	public static void writeVarIntChunkCoord(ByteBuf to, ChunkCoord chunk) {
+		VarNumberSerializer.writeVarInt(to, chunk.getX());
+		VarNumberSerializer.writeVarInt(to, chunk.getZ());
+	}
+
 }

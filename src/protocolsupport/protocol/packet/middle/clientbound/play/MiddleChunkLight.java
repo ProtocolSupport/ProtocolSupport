@@ -26,7 +26,7 @@ public abstract class MiddleChunkLight extends ClientBoundMiddlePacket {
 	protected int emptySkyLightMask;
 	protected int emptyBlockLightMask;
 	protected final byte[][] skyLight = new byte[ChunkConstants.SECTION_COUNT_LIGHT][];
-	protected final  byte[][] blockLight = new byte[ChunkConstants.SECTION_COUNT_LIGHT][];
+	protected final byte[][] blockLight = new byte[ChunkConstants.SECTION_COUNT_LIGHT][];
 
 	protected boolean preChunk;
 	protected CachedChunk cachedChunk;

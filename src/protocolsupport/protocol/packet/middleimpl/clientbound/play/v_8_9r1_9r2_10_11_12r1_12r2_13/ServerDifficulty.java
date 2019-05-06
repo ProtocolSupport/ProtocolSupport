@@ -4,6 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleServerDifficulty;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -16,7 +17,7 @@ public class ServerDifficulty extends MiddleServerDifficulty {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SERVER_DIFFICULTY_ID);
-		serializer.writeByte(difficulty.getId());
+		MiscSerializer.writeByteEnum(serializer, difficulty);
 		return RecyclableSingletonList.create(serializer);
 	}
 

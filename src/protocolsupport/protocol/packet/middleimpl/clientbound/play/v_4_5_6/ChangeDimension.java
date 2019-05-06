@@ -4,6 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -18,7 +19,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_RESPAWN_ID);
 		serializer.writeInt(dimension.getId());
-		serializer.writeByte(difficulty.getId());
+		MiscSerializer.writeByteEnum(serializer, difficulty);
 		serializer.writeByte(gamemode.getId());
 		serializer.writeShort(256);
 		StringSerializer.writeString(serializer, version, leveltype);

@@ -53,7 +53,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Explo
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.GameStateChange;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.HeldSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.KickDisconnect;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Map;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnExpOrb;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnGlobal;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnLiving;
@@ -63,6 +62,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Spawn
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.StartGame;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.TabComplete;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.UpdateMap;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.BlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.BookOpen;
@@ -89,13 +89,13 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.Unl
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.WorldEvent;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.WorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.WorldSound;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.EntityStatus;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.InventoryClose;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.InventoryConfirmTransaction;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.InventoryData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.InventorySetItems;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.InventorySetSlot;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.TimeUpdate;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14.EntityStatus;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14.InventoryClose;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14.InventoryConfirmTransaction;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14.InventoryData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14.InventorySetItems;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14.InventorySetSlot;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14.TimeUpdate;
 import protocolsupport.protocol.pipeline.version.util.encoder.AbstractLegacyPacketEncoder;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 
@@ -221,7 +221,7 @@ public class PacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID, InventorySetItems::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_DATA_ID, InventoryData::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_TRANSACTION_ID, InventoryConfirmTransaction::new);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, UpdateMap::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_PLAYER_INFO_ID, PlayerListSetEntry::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ABILITIES_ID, PlayerAbilities::new);

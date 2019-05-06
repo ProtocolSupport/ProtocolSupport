@@ -57,10 +57,8 @@ public class NetworkEntityMetadataObjectRegistry {
 		register(NetworkEntityMetadataObjectBoolean.class, 6, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 		register(NetworkEntityMetadataObjectVector3f.class, 8, ProtocolVersionsHelper.UP_1_13);
 		register(NetworkEntityMetadataObjectVector3f.class, 7, ProtocolVersionsHelper.BEFORE_1_13);
-		register(NetworkEntityMetadataObjectPosition.class, 9, ProtocolVersionsHelper.UP_1_13);
-		register(NetworkEntityMetadataObjectPosition.class, 8, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-		register(NetworkEntityMetadataObjectOptionalPosition.class, 10, ProtocolVersionsHelper.UP_1_13);
-		register(NetworkEntityMetadataObjectOptionalPosition.class, 9, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+		register(NetworkEntityMetadataObjectPosition.class, 9, ProtocolVersionsHelper.UP_1_14);
+		register(NetworkEntityMetadataObjectOptionalPosition.class, 10, ProtocolVersionsHelper.UP_1_14);
 		register(NetworkEntityMetadataObjectDirection.class, 11, ProtocolVersionsHelper.UP_1_13);
 		register(NetworkEntityMetadataObjectDirection.class, 10, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 		register(NetworkEntityMetadataObjectOptionalUUID.class, 12, ProtocolVersionsHelper.UP_1_13);
@@ -76,6 +74,11 @@ public class NetworkEntityMetadataObjectRegistry {
 		register(NetworkEntityMetadataObjectShort.class, 1, ProtocolVersionsHelper.BEFORE_1_9);
 		register(NetworkEntityMetadataObjectInt.class, 2, ProtocolVersionsHelper.BEFORE_1_9);
 		register(NetworkEntityMetadataObjectVector3i.class, 6, ProtocolVersionsHelper.BEFORE_1_9);
+//TODO: implement
+//		register(NetworkEntityMetadataObjectOptionalLegacyPosition.class, 10, ProtocolVersionsHelper.ALL_1_13);
+//		register(NetworkEntityMetadataObjectOptionalLegacyPosition.class, 9, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+//		register(NetworkEntityMetadataObjectLegacyPosition.class, 9, ProtocolVersionsHelper.ALL_1_13);
+//		register(NetworkEntityMetadataObjectLegacyPosition.class, 8, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 	}
 
 	public static int getTypeId(@SuppressWarnings("rawtypes") Class<? extends NetworkEntityMetadataObject> clazz, ProtocolVersion version) {

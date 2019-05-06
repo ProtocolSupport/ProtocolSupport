@@ -53,7 +53,6 @@ public class Chunk extends MiddleChunk {
 			Arrays.stream(cachedChunk.getTiles()).flatMap(l -> l.values().stream()).collect(Collectors.toList()),
 			(to, tile) -> ItemStackSerializer.writeTag(to, version, tile.getNBT())
 		);
-
 		return RecyclableSingletonList.create(serializer);
 	}
 

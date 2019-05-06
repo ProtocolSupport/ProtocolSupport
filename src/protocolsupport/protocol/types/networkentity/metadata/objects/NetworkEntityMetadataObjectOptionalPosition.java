@@ -19,7 +19,7 @@ public class NetworkEntityMetadataObjectOptionalPosition extends ReadableNetwork
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
 		to.writeBoolean(value != null);
 		if (value != null) {
-			PositionSerializer.writeLegacyPositionL(to, value);
+			PositionSerializer.writePosition(to, value);
 		}
 	}
 
