@@ -29,13 +29,11 @@ public class RabbitEntityMetadataRemapper extends AgeableEntityMetadataRemapper 
 
 					entitySize *= PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType());
 
-					remapped.put(PeMetaBase.SCALE, new DataWatcherObjectFloatLe(entitySize));
-
 					PEDataValues.PEEntityData pocketdata = PEDataValues.getEntityData(entity.getType());
-					if (pocketdata.getBoundingBox() != null) {
-						remapped.put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getWidth() * entitySize));
-						remapped.put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));
-					}
+
+					remapped.put(PeMetaBase.SCALE, new DataWatcherObjectFloatLe(entitySize));
+					remapped.put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getWidth() * entitySize));
+					remapped.put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));
 				});
 			}
 		}, ProtocolVersionsHelper.ALL_PE);
