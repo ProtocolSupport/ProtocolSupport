@@ -28,12 +28,11 @@ public class ZombieEntityMetadataRemapper extends InsentientEntityMetadataRemapp
 					entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_BABY, boolWatcher.getValue());
 					float sizescale = PEMetaProviderSPI.getProvider().getSizeScale(entity.getUUID(), entity.getId(), entity.getType().getBukkitType());
 					float entitySize = boolWatcher.getValue() ? 0.5f * sizescale : sizescale;
-					remapped.put(PeMetaBase.SCALE, new DataWatcherObjectFloatLe(entitySize)); //Send scale -> avoid big mobs with floating heads.
 					PEEntityData pocketdata = PEDataValues.getEntityData(entity.getType());
-					if (pocketdata.getBoundingBox() != null) {
-						remapped.put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getWidth() * entitySize));
-						remapped.put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));
-					}
+
+					remapped.put(PeMetaBase.SCALE, new DataWatcherObjectFloatLe(entitySize)); //Send scale -> avoid big mobs with floating heads.
+					remapped.put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getWidth() * entitySize));
+					remapped.put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(pocketdata.getBoundingBox().getHeight() * entitySize));
 				});
 			}
 		}, ProtocolVersionsHelper.ALL_PE);
