@@ -1,130 +1,34 @@
-[
-  {
-    "name": "speed",
-    "id": 1
-  },
-  {
-    "name": "slowness",
-    "id": 2
-  },
-  {
-    "name": "haste",
-    "id": 3
-  },
-  {
-    "name": "mining_fatigue",
-    "id": 4
-  },
-  {
-    "name": "strength",
-    "id": 5
-  },
-  {
-    "name": "instant_health",
-    "id": 6
-  },
-  {
-    "name": "instant_damage",
-    "id": 7
-  },
-  {
-    "name": "jump_boost",
-    "id": 8
-  },
-  {
-    "name": "nausea",
-    "id": 9
-  },
-  {
-    "name": "regeneration",
-    "id": 10
-  },
-  {
-    "name": "resistance",
-    "id": 11
-  },
-  {
-    "name": "fire_resistance",
-    "id": 12
-  },
-  {
-    "name": "water_breathing",
-    "id": 13
-  },
-  {
-    "name": "invisibility",
-    "id": 14
-  },
-  {
-    "name": "blindness",
-    "id": 15
-  },
-  {
-    "name": "night_vision",
-    "id": 16
-  },
-  {
-    "name": "hunger",
-    "id": 17
-  },
-  {
-    "name": "weakness",
-    "id": 18
-  },
-  {
-    "name": "poison",
-    "id": 19
-  },
-  {
-    "name": "wither",
-    "id": 20
-  },
-  {
-    "name": "health_boost",
-    "id": 21
-  },
-  {
-    "name": "absorption",
-    "id": 22
-  },
-  {
-    "name": "saturation",
-    "id": 23
-  },
-  {
-    "name": "glowing",
-    "id": 24
-  },
-  {
-    "name": "levitation",
-    "id": 25
-  },
-  {
-    "name": "luck",
-    "id": 26
-  },
-  {
-    "name": "unluck",
-    "id": 27
-  },
-  {
-    "name": "slow_falling",
-    "id": 28
-  },
-  {
-    "name": "conduit_power",
-    "id": 29
-  },
-  {
-    "name": "dolphins_grace",
-    "id": 30
-  },
-  {
-    "name": "bad_omen",
-    "id": 31
-  },
-  {
-    "name": "hero_of_the_village",
-    "id": 32
-  }
-]
+{
+  "1": "speed",
+  "2": "slowness",
+  "3": "haste",
+  "4": "mining_fatigue",
+  "5": "strength",
+  "6": "instant_health",
+  "7": "instant_damage",
+  "8": "jump_boost",
+  "9": "nausea",
+  "10": "regeneration",
+  "11": "resistance",
+  "12": "fire_resistance",
+  "13": "water_breathing",
+  "14": "invisibility",
+  "15": "blindness",
+  "16": "night_vision",
+  "17": "hunger",
+  "18": "weakness",
+  "19": "poison",
+  "20": "wither",
+  "21": "health_boost",
+  "22": "absorption",
+  "23": "saturation",
+  "24": "glowing",
+  "25": "levitation",
+  "26": "luck",
+  "27": "unluck",
+  "28": "slow_falling",
+  "29": "conduit_power",
+  "30": "dolphins_grace",
+  "31": "bad_omen",
+  "32": "hero_of_the_village"
+}
