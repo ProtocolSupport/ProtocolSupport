@@ -27,6 +27,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 	}
 
 	public static ClientBoundPacketData create(NetworkEntity entity, float x, float y, float z, byte pitch, byte yaw, byte headYaw, boolean onGround, boolean teleported) {
+		// TODO: Cache relative movement, when relative packet translation is implemented
 		final NetworkEntityDataCache cache = entity.getDataCache();
 
 		final float oldX = cache.getPosX();
