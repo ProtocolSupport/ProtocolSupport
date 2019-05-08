@@ -2,6 +2,7 @@ package protocolsupport.protocol.typeremapper.pe;
 
 import protocolsupport.api.TranslationAPI;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chat;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.i18n.I18NData;
@@ -10,7 +11,7 @@ public class PERecord {
 
 	public static ClientBoundPacketData createPacket(String disc) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHAT);
-		serializer.writeByte(4);
+		serializer.writeByte(Chat.TYPE_JUKEBOX_POPUP);
 		StringSerializer.writeString(serializer, ProtocolVersionsHelper.LATEST_PE, " " + TranslationAPI.translate(I18NData.DEFAULT_LOCALE, "record.nowPlaying", TranslationAPI.getTranslationString(I18NData.DEFAULT_LOCALE, disc)));
 		return serializer;
 	}
