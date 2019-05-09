@@ -10,7 +10,6 @@ import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 public class PERecord {
 
 	public static ClientBoundPacketData createPacket(Connection connection, NetworkDataCache cache, String disc) {
-
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHAT);
 		serializer.writeByte(Chat.TYPE_JUKEBOX_POPUP);
 		StringSerializer.writeString(serializer, connection.getVersion(), " " + TranslationAPI.translate(cache.getAttributesCache().getLocale(), "record.nowPlaying", TranslationAPI.getTranslationString(cache.getAttributesCache().getLocale(), disc)));
