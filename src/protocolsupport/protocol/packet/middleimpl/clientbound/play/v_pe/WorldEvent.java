@@ -6,7 +6,9 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldEvent;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.pe.PELevelEvent;
+import protocolsupport.protocol.typeremapper.pe.PERecord;
 import protocolsupport.protocol.typeremapper.pe.PESoundLevelEvent;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -79,7 +81,10 @@ public class WorldEvent extends MiddleWorldEvent {
 				int soundLevelId = data - 673;
 				// If the soundLevelId != any Minecraft record, the song will stop
 				if (data != 0) { // The vanilla server uses 0 as the "please stop this song" data
-					return RecyclableSingletonList.create(PESoundLevelEvent.createPacket(soundLevelId, position));
+					RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+					packets.add(PESoundLevelEvent.createPacket(soundLevelId, position));
+					packets.add(PERecord.createPacket(connection.getVersion(), cache.getAttributesCache().getLocale(), PERecord.getDiscName(soundLevelId)));
+					return packets;
 				} else { // If else, stop the record by sending the STOP_RECORD sound event
 					return RecyclableSingletonList.create(PESoundLevelEvent.createPacket(PESoundLevelEvent.STOP_RECORD, position));
 				}
