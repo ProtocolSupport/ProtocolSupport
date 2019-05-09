@@ -1,18 +1,17 @@
 package protocolsupport.protocol.typeremapper.pe;
 
-import protocolsupport.api.Connection;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.TranslationAPI;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chat;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 
 public class PERecord {
 
-	public static ClientBoundPacketData createPacket(Connection connection, NetworkDataCache cache, String disc) {
+	public static ClientBoundPacketData createPacket(ProtocolVersion version, String locale, String disc) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHAT);
 		serializer.writeByte(Chat.TYPE_JUKEBOX_POPUP);
-		StringSerializer.writeString(serializer, connection.getVersion(), " " + TranslationAPI.translate(cache.getAttributesCache().getLocale(), "record.nowPlaying", TranslationAPI.getTranslationString(cache.getAttributesCache().getLocale(), disc)));
+		StringSerializer.writeString(serializer, version, " " + TranslationAPI.translate(locale, "record.nowPlaying", TranslationAPI.getTranslationString(locale, disc)));
 		return serializer;
 	}
 
