@@ -15,7 +15,15 @@ public class NetworkEntityMetadataObjectPosition extends ReadableNetworkEntityMe
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
-		PositionSerializer.writePosition(to, value);
+		writePositionL(to, version, value);
+	}
+
+	protected static void writePositionL(ByteBuf to, ProtocolVersion version, Position position) {
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_14)) {
+			PositionSerializer.writePosition(to, position);
+		} else {
+			PositionSerializer.writeLegacyPositionL(to, position);
+		}
 	}
 
 }
