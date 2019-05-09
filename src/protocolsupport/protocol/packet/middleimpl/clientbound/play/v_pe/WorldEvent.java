@@ -83,7 +83,7 @@ public class WorldEvent extends MiddleWorldEvent {
 				if (data != 0) { // The vanilla server uses 0 as the "please stop this song" data
 					RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 					packets.add(PESoundLevelEvent.createPacket(soundLevelId, position));
-					packets.add(PERecord.createPacket(PERecord.getDiscName(soundLevelId)));
+					packets.add(PERecord.createPacket(connection, cache, PERecord.getDiscName(soundLevelId)));
 					return packets;
 				} else { // If else, stop the record by sending the STOP_RECORD sound event
 					return RecyclableSingletonList.create(PESoundLevelEvent.createPacket(PESoundLevelEvent.STOP_RECORD, position));
