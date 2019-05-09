@@ -13,7 +13,7 @@ public class PositionSerializer {
 	public static Position readPosition(ByteBuf from) {
 		long l = from.readLong();
 		return new Position(
-			(int) (l >> 38), (int) (l & 0xFFF), (int) ((l << 38) >> 50)
+			(int) (l >> 38), (int) (l & 0xFFF), (int) ((l << 26) >> 38)
 		);
 	}
 
@@ -21,7 +21,7 @@ public class PositionSerializer {
 		long l = from.readLong();
 		to.setX((int) (l >> 38));
 		to.setY((int) (l & 0xFFF));
-		to.setZ((int) ((l << 38) >> 50));
+		to.setZ((int) ((l << 26) >> 38));
 	}
 
 	public static void readLegacyPositionLTo(ByteBuf from, Position to) {

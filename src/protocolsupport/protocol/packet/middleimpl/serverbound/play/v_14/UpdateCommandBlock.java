@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13_14;
+package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
@@ -15,7 +15,7 @@ public class UpdateCommandBlock extends MiddleUpdateCommandBlock {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		PositionSerializer.readLegacyPositionLTo(clientdata, position);
+		PositionSerializer.readPositionTo(clientdata, position);
 		command = StringSerializer.readString(clientdata, version);
 		mode = MiscSerializer.readVarIntEnum(clientdata, Mode.CONSTANT_LOOKUP);
 		flags = clientdata.readUnsignedByte();
