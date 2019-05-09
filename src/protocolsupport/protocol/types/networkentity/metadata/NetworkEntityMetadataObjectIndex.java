@@ -183,6 +183,15 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectOptionalUUID> UNKNOWN_2 = takeNextIndex(NetworkEntityMetadataObjectOptionalUUID.class);
 	}
 
+	public static class Panda extends Ageable {
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> BREED_TIMER = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> SNEEZE_TIMER = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> EAT_TIMER = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> GENE_MAIN = takeNextIndex(NetworkEntityMetadataObjectByte.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> GENE_HIDDEN = takeNextIndex(NetworkEntityMetadataObjectByte.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
+	}
+
 	public static class Turtle extends Ageable {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectPosition> HOME_POS = takeNextIndex(NetworkEntityMetadataObjectPosition.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> HAS_EGG = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);

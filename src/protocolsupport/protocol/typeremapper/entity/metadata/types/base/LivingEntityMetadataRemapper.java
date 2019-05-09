@@ -11,6 +11,8 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class LivingEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 
+	public static final LivingEntityMetadataRemapper INSTANCE = new LivingEntityMetadataRemapper();
+
 	public LivingEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex.Entity.NAMETAG, 2, 64), ProtocolVersion.MINECRAFT_1_8);
 		addRemap(new IndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex.Entity.NAMETAG, 10, 64), ProtocolVersionsHelper.RANGE__1_6__1_7);

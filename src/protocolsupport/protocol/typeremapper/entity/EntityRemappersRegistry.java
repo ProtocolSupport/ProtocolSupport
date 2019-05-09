@@ -37,6 +37,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.living.WitchE
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.WitherEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.FoxEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.OcelotEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PandaEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PigEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PolarBearEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.RabbitEntityMetadataRemapper;
@@ -206,7 +207,7 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.POLAR_BEAR)
 			.addMapping(NetworkEntityType.POLAR_BEAR, new PolarBearEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_11)
-			.addMapping(NetworkEntityType.SPIDER, new LivingEntityMetadataRemapper(), ProtocolVersionsHelper.BEFORE_1_11)
+			.addMapping(NetworkEntityType.SPIDER, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.VILLAGER)
 			.addMapping(NetworkEntityType.VILLAGER, new VillagerEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
@@ -358,6 +359,11 @@ public class EntityRemappersRegistry {
 			new Mapping(NetworkEntityType.WANDERING_TRADER)
 			.addMapping(NetworkEntityType.WANDERING_TRADER, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_14)
 			.addMapping(NetworkEntityType.VILLAGER, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
+			.register();
+			new Mapping(NetworkEntityType.PANDA)
+			.addMapping(NetworkEntityType.PANDA, new PandaEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)
+			.addMapping(NetworkEntityType.POLAR_BEAR, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.RANGE__1_11__1_13_2)
+			.addMapping(NetworkEntityType.SPIDER, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.CAT)
 			.addMapping(NetworkEntityType.CAT, new CatEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)
