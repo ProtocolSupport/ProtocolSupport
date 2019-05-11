@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
-
 import io.netty.buffer.Unpooled;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.listeners.internal.ChunkUpdateRequest;
@@ -57,7 +57,6 @@ public class Chunk extends MiddleChunk {
 					ItemStackSerializer.writeTag(chunkdata, true, version, tile.getNBT());
 				}
 			};
-			//TODO: https://github.com/Hydreon/Steadfast2/commit/2afb697f06b202e592c0c1d9f554e42ca97c2b51#diff-25b631f57eb40ee931ada671c441804eL44
 			if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
 				ByteBuf tmpBuf = Unpooled.buffer(512);
 				chunkDataProducer.accept(tmpBuf);
