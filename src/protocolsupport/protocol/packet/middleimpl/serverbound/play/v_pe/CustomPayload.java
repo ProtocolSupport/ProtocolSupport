@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
@@ -17,7 +16,7 @@ public class CustomPayload extends MiddleCustomPayload {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		tag = StringSerializer.readString(clientdata, connection.getVersion(), 20);
-		data = Unpooled.wrappedBuffer(ArraySerializer.readVarIntByteArray(clientdata));
+		data = ArraySerializer.readVarIntByteArraySlice(clientdata);
 	}
 
 }
