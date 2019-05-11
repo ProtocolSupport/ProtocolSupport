@@ -122,13 +122,25 @@ public class CraftingData extends MiddleDeclareRecipes {
 		VarNumberSerializer.writeSVarInt(to, width);
 		VarNumberSerializer.writeSVarInt(to, height);
 		for (NetworkItemStack stack : required) {
-			ItemStackSerializer.writePEItemStack(to, stack);
+			if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+				final int typeId = stack.isNull() ? 0 : stack.getTypeId();
+				VarNumberSerializer.writeSVarInt(to, typeId);
+				if (typeId != 0) {
+					VarNumberSerializer.writeSVarInt(to, stack.getLegacyData());
+					VarNumberSerializer.writeSVarInt(to, stack.getAmount());
+				}
+			} else {
+				ItemStackSerializer.writePEItemStack(to, stack);
+			}
 		}
 		VarNumberSerializer.writeVarInt(to, 1); // result item count
 		ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output);
 		MiscSerializer.writePEUUID(to, UUID.nameUUIDFromBytes(to.array()));
 		if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_11)) {
 			StringSerializer.writeString(to, connection.getVersion(), TAG_CRAFTING_TABLE);
+		}
+		if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+			VarNumberSerializer.writeSVarInt(to, 0); //priority
 		}
 		recipesWritten++;
 	}
@@ -138,13 +150,24 @@ public class CraftingData extends MiddleDeclareRecipes {
 		VarNumberSerializer.writeSVarInt(to, PE_RECIPE_TYPE_SHAPELESS); //recipe type
 		VarNumberSerializer.writeVarInt(to, required.size());
 		for (NetworkItemStack stack : required) {
-			ItemStackSerializer.writePEItemStack(to, stack);
+			if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+				VarNumberSerializer.writeSVarInt(to, stack.getTypeId());
+				if (stack.getTypeId() != 0) {
+					VarNumberSerializer.writeSVarInt(to, stack.getLegacyData());
+					VarNumberSerializer.writeSVarInt(to, stack.getAmount());
+				}
+			} else {
+				ItemStackSerializer.writePEItemStack(to, stack);
+			}
 		}
 		VarNumberSerializer.writeVarInt(to, 1); // result item count
 		ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output);
 		MiscSerializer.writePEUUID(to, UUID.nameUUIDFromBytes(to.array()));
 		if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_11)) {
 			StringSerializer.writeString(to, connection.getVersion(), TAG_CRAFTING_TABLE);
+		}
+		if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+			VarNumberSerializer.writeSVarInt(to, 0); //priority
 		}
 		recipesWritten++;
 	}

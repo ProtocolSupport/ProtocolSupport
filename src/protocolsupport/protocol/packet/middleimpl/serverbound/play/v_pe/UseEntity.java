@@ -16,6 +16,7 @@ import protocolsupport.protocol.utils.types.UsedHand;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
+//TODO: is this not actually hooked into anything?
 public class UseEntity extends ServerBoundMiddlePacket {
 
 	public UseEntity(ConnectionImpl connection) {

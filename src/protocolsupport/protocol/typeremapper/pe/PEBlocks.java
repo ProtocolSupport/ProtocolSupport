@@ -31,6 +31,7 @@ import protocolsupportbuildprocessor.Preload;
 public class PEBlocks {
 
 	private static final byte[] peBlockDef;
+	private static final byte[] peBlockDef112;
 	private static final int[] pcToPeRuntimeId = new int[MinecraftData.BLOCKDATA_COUNT];
 	private static final int[] pcWaterlogged = new int[MinecraftData.BLOCKDATA_COUNT];
 	private static final EnumMap<ProtocolVersion, Integer> waterRuntime = new EnumMap<>(ProtocolVersion.class);
@@ -70,19 +71,29 @@ public class PEBlocks {
 		}
 		//Compile PE block definition for sending on login.
 		ByteBuf def = Unpooled.buffer();
+		ByteBuf def112 = Unpooled.buffer();
 		VarNumberSerializer.writeVarInt(def, peBlocks.size());
-		peBlocks.forEach(block -> {
+		VarNumberSerializer.writeVarInt(def112, peBlocks.size());
+		int blockId = 0;
+		for (PEBlock block : peBlocks) {
 			StringSerializer.writeString(def, ProtocolVersionsHelper.LATEST_PE, block.getName());
+			StringSerializer.writeString(def112, ProtocolVersionsHelper.LATEST_PE, block.getName());
 			def.writeShortLE(block.getData());
-		});
+			def112.writeShortLE(block.getData());
+			def112.writeShortLE(blockId++);
+		}
 		peBlockDef = MiscSerializer.readAllBytes(def);
+		peBlockDef112 = MiscSerializer.readAllBytes(def112);
 	}
 
 	public static int getPocketRuntimeId(int pcRuntimeId) {
 		return pcToPeRuntimeId[pcRuntimeId];
 	}
 
-	public static byte[] getPocketRuntimeDefinition() {
+	public static byte[] getPocketRuntimeDefinition(ProtocolVersion version) {
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+			return peBlockDef112;
+		}
 		return peBlockDef;
 	}
 

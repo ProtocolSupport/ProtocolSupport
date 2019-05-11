@@ -47,7 +47,7 @@ public class BaseEntityMetadataRemapper extends EntityMetadataRemapper {
 			this.version = version;
 			this.idMap = id -> {
 				if (id >= PeMetaBase.BOUNDINGBOX_WIDTH && id < PeMetaBase.ALWAYS_SHOW_NAMETAG
-						&& version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_11)) {
+						&& version.equals(ProtocolVersion.MINECRAFT_PE_1_11)) {
 					return id + 1;
 				}
 				return id;

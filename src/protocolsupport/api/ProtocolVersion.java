@@ -37,7 +37,8 @@ public enum ProtocolVersion {
 	MINECRAFT_1_5_1(60, new OrderId(ProtocolType.PC, 2), "1.5.1"),
 	MINECRAFT_1_4_7(51, new OrderId(ProtocolType.PC, 1), "1.4.7"),
 	MINECRAFT_LEGACY(-1, new OrderId(ProtocolType.PC, 0)),
-	MINECRAFT_PE_FUTURE(-1, new OrderId(ProtocolType.PE, 5)),
+	MINECRAFT_PE_FUTURE(-1, new OrderId(ProtocolType.PE, 6)),
+	MINECRAFT_PE_1_12(361, new OrderId(ProtocolType.PE, 5), "PE-1.12.0"),
 	MINECRAFT_PE_1_11(354, new OrderId(ProtocolType.PE, 4), "PE-1.11.0"),
 	MINECRAFT_PE_1_10(340, new OrderId(ProtocolType.PE, 3), "PE-1.10.0"),
 	MINECRAFT_PE_1_9(332, new OrderId(ProtocolType.PE, 2), "PE-1.9.0"),
@@ -268,7 +269,7 @@ public enum ProtocolVersion {
 				return MINECRAFT_1_13_2;
 			}
 			case PE: {
-				return MINECRAFT_PE_1_11;
+				return MINECRAFT_PE_1_12;
 			}
 			default: {
 				throw new IllegalArgumentException(MessageFormat.format("No supported versions for protocol type {0}", type));

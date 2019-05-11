@@ -113,13 +113,19 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeBoolean(false); //Microsoft GamerTags only. Hell no!
 		startgame.writeBoolean(false); //is from world template
 		startgame.writeBoolean(false); //is world template option locked
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+			startgame.writeByte(1); //only spawn v1 villagers
+		}
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //level ID (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //world name (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //premium world template id (empty string)
 		startgame.writeBoolean(false); //is trial
 		startgame.writeLongLE(0); //world ticks
 		VarNumberSerializer.writeSVarInt(startgame, 0); //enchantment seed FFS MOJANG
-		startgame.writeBytes(PEBlocks.getPocketRuntimeDefinition());
+		startgame.writeBytes(PEBlocks.getPocketRuntimeDefinition(version));
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+			VarNumberSerializer.writeVarInt(startgame, 0); // item list size
+		}
 		StringSerializer.writeString(startgame, version, ""); //Multiplayer correlation id.
 		packets.add(startgame);
 
