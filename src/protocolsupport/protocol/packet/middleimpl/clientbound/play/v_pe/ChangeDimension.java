@@ -39,7 +39,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 		packets.add(createRaw(0, 0, 0, getPeDimensionId(dimension)));
 		packets.add(Chunk.createChunkPublisherUpdate(0, 0, 0));
 		//needs a few chunks before the dim switch ack can confirm
-		Chunk.addFakeChunks(packets, new ChunkCoord(0, 0));
+		Chunk.addFakeChunks(packets, new ChunkCoord(0, 0), version);
 		packets.add(ClientBoundPacketData.create(PEPacketIDs.EXT_PS_AWAIT_DIM_SWITCH_ACK));
 		final Position pos = cache.getMovementCache().getChunkPublisherPosition();
 		packets.add(Chunk.createChunkPublisherUpdate(pos.getX(), pos.getY(), pos.getZ()));

@@ -75,22 +75,26 @@ public class Chunk extends MiddleChunk {
 		}
 	}
 
-	public static void addFakeChunks(RecyclableCollection<ClientBoundPacketData> packets, ChunkCoord coord) {
+	public static void addFakeChunks(RecyclableCollection<ClientBoundPacketData> packets, ChunkCoord coord, ProtocolVersion version) {
 		for (int x = -1; x <= 1; x++) {
 			for (int z = -1; z <= 1; z++) {
-				packets.add(createEmptyChunk(new ChunkCoord(coord.getX() + x, coord.getZ() + z)));
+				packets.add(createEmptyChunk(new ChunkCoord(coord.getX() + x, coord.getZ() + z), version));
 			}
 		}
 	}
 
-	public static void writeEmptyChunk(ByteBuf out, ChunkCoord chunk) {
+	public static void writeEmptyChunk(ByteBuf out, ChunkCoord chunk, ProtocolVersion version) {
 		PositionSerializer.writePEChunkCoord(out, chunk);
-		out.writeBytes(EmptyChunk.getPEChunkData());
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+			out.writeBytes(EmptyChunk.getPEChunkData112());
+		} else {
+			out.writeBytes(EmptyChunk.getPEChunkData());
+		}
 	}
 
-	public static ClientBoundPacketData createEmptyChunk(ChunkCoord chunk) {
+	public static ClientBoundPacketData createEmptyChunk(ChunkCoord chunk, ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA);
-		writeEmptyChunk(serializer, chunk);
+		writeEmptyChunk(serializer, chunk, version);
 		return serializer;
 	}
 

@@ -30,7 +30,7 @@ public class SetPosition extends MiddleSetPosition {
 		if (movecache.isPEPositionAboveLeniency()) {
 			ChunkCoord chunk = new ChunkCoord(NumberConversions.floor(x) >> 4, NumberConversions.floor(z) >> 4);
 			if (!cache.getPEChunkMapCache().isMarkedAsSent(chunk)) {
-				Chunk.addFakeChunks(packets, chunk);
+				Chunk.addFakeChunks(packets, chunk, version);
 			}
 			byte headYaw = cache.getWatchedEntityCache().getSelfPlayer().getDataCache().getHeadRotation((byte) 0);
 			packets.add(create(
