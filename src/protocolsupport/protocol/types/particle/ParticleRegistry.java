@@ -26,7 +26,10 @@ public class ParticleRegistry {
 		register(ParticleDamageIndicator::new);
 		register(ParticleDragonBreath::new);
 		register(ParticleDrippingLava::new);
+		register(ParticleFallingLava::new);
+		register(ParticleLandingLava::new);
 		register(ParticleDrippingWater::new);
+		register(ParticleFallingWater::new);
 		register(ParticleDust::new);
 		register(ParticleEffect::new);
 		register(ParticleElderGuardian::new);
@@ -40,7 +43,9 @@ public class ParticleRegistry {
 		register(ParticleFirework::new);
 		register(ParticleFishing::new);
 		register(ParticleFlame::new);
+		register(ParticleFlash::new);
 		register(ParticleHappyVillager::new);
+		register(ParticleComposter::new);
 		register(ParticleHeart::new);
 		register(ParticleInstantEffect::new);
 		register(ParticleItem::new);
@@ -54,6 +59,7 @@ public class ParticleRegistry {
 		register(ParticlePortal::new);
 		register(ParticleRain::new);
 		register(ParticleSmoke::new);
+		register(ParticleSneeze::new);
 		register(ParticleSpit::new);
 		register(ParticleSquidInk::new);
 		register(ParticleSweepAttack::new);
@@ -66,6 +72,8 @@ public class ParticleRegistry {
 		register(ParticleBubbleColumnUp::new);
 		register(ParticleNautilus::new);
 		register(ParticleDolphin::new);
+		register(ParticleCampfireCozySmoke::new);
+		register(ParticleCampfireSignalSmoke::new);
 	}
 
 	public static Particle fromId(int id) {

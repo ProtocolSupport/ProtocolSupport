@@ -9,6 +9,16 @@ public class ParticleFallingDust extends Particle {
 		super(pId);
 	}
 
+	public ParticleFallingDust(int id, float offsetX, float offsetY, float offsetZ, float speed, int count, int blockdata) {
+		this(id);
+		this.offsetX = offsetX;
+		this.offsetY = offsetY;
+		this.offsetZ = offsetZ;
+		this.data = speed;
+		this.count = count;
+		this.blockdata = blockdata;
+	}
+
 	protected int blockdata;
 
 	public int getBlockData() {

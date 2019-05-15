@@ -14,8 +14,13 @@ public class ParticleItem extends Particle {
 	protected ProtocolVersion version;
 	protected String locale;
 
-	public ParticleItem(int pId, ProtocolVersion version, String locale, NetworkItemStack itemstack) {
+	public ParticleItem(int pId, float offsetX, float offsetY, float offsetZ, float speed, int count, ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		this(pId);
+		this.offsetX = offsetX;
+		this.offsetY = offsetY;
+		this.offsetZ = offsetZ;
+		this.data = speed;
+		this.count = count;
 		this.version = version;
 		this.locale = locale;
 		this.itemstack = itemstack;
