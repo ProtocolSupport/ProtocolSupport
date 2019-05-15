@@ -21,10 +21,20 @@ public abstract class MiddleBlockChangeSingle extends MiddleBlock {
 	public void readFromServerData(ByteBuf serverdata) {
 		super.readFromServerData(serverdata);
 		id = VarNumberSerializer.readVarInt(serverdata);
+	}
+
+	@Override
+	public boolean postFromServerRead() {
 		int x = position.getX();
 		int y = position.getY();
 		int z = position.getZ();
-		cache.getChunkCache().get(ChunkCoord.fromGlobal(x, z)).setBlock(y >> 4, CachedChunk.getBlockIndex(x & 0xF, y & 0xF, z & 0xF), id);
+		CachedChunk cachedChunk = cache.getChunkCache().get(ChunkCoord.fromGlobal(x, z));
+		if (cachedChunk != null) {
+			cachedChunk.setBlock(y >> 4, CachedChunk.getBlockIndex(x & 0xF, y & 0xF, z & 0xF), id);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

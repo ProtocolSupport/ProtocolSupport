@@ -26,16 +26,24 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		chunkCoord = PositionSerializer.readIntChunkCoord(serverdata);
-		CachedChunk cachedChunk = chunkCache.get(chunkCoord);
 		records = ArraySerializer.readVarIntTArray(
 			serverdata,
 			Record.class,
-			from -> {
-				Record record = new Record(serverdata.readUnsignedShort(), VarNumberSerializer.readVarInt(from));
-				cachedChunk.setBlock(record.y >> 4, CachedChunk.getBlockIndex(record.x, record.y & 0xF, record.z), record.id);
-				return record;
-			}
+			from -> new Record(serverdata.readUnsignedShort(), VarNumberSerializer.readVarInt(from))
 		);
+	}
+
+	@Override
+	public boolean postFromServerRead() {
+		CachedChunk cachedChunk = chunkCache.get(chunkCoord);
+		if (cachedChunk != null) {
+			for (Record record : records) {
+				cachedChunk.setBlock(record.y >> 4, CachedChunk.getBlockIndex(record.x, record.y & 0xF, record.z), record.id);
+			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public static class Record {
