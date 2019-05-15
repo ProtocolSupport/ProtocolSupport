@@ -153,6 +153,12 @@ public class LegacyEntityId {
 		toLegacyIntId.put(NetworkEntityType.EVOCATOR_FANGS, 79);
 		toLegacyIntId.put(NetworkEntityType.ARMOR_STAND_OBJECT, 78);
 		toLegacyIntId.put(NetworkEntityType.MINECART, 10);
+		toLegacyIntId.put(NetworkEntityType.MINECART_CHEST, 10);
+		toLegacyIntId.put(NetworkEntityType.MINECART_FURNACE, 10);
+		toLegacyIntId.put(NetworkEntityType.MINECART_TNT, 10);
+		toLegacyIntId.put(NetworkEntityType.MINECART_MOB_SPAWNER, 10);
+		toLegacyIntId.put(NetworkEntityType.MINECART_HOPPER, 10);
+		toLegacyIntId.put(NetworkEntityType.MINECART_COMMAND, 10);
 	}
 
 	public static int getObjectIntId(NetworkEntityType type) {

@@ -13,6 +13,7 @@ import org.bukkit.material.MaterialData;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
@@ -44,7 +45,7 @@ public class ItemStackWriteEventHelper {
 						loreNBT = new NBTList<>(NBTType.STRING);
 					}
 					for (String lore : additionalLore) {
-						loreNBT.addTag(new NBTString(lore));
+						loreNBT.addTag(new NBTString(ChatAPI.toJSON(new TextComponent(lore))));
 					}
 					displayNBT.setTag(CommonNBT.DISPLAY_LORE, loreNBT);
 				}
