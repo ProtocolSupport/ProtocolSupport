@@ -22,23 +22,29 @@ public abstract class MiddleBlockTileUpdate extends MiddleBlock {
 
 	protected TileEntity tile;
 
-	protected CachedChunk cachedChunk;
-
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		super.readFromServerData(serverdata);
 		int type = serverdata.readUnsignedByte();
 		NBTCompound tag = ItemStackSerializer.readTag(serverdata);
 		tile = new TileEntity(TileEntityType.getByNetworkId(type), position, tag);
+	}
 
+	@Override
+	public boolean postFromServerRead() {
 		int x = tile.getPosition().getX();
 		int y = tile.getPosition().getY();
 		int z = tile.getPosition().getZ();
-		cachedChunk = chunkCache.get(ChunkCoord.fromGlobal(x, z));
-		tile = tileRemapper.remap(
-			tile, tileRemapper.tileThatNeedsBlockData(tile.getType()) ? cachedChunk.getBlock(y >> 4, CachedChunk.getBlockIndex(x & 0xF, y & 0xF, z & 0xF)) : -1
-		);
-		cachedChunk.getTiles(tile.getPosition().getY() >> 4).put(tile.getPosition(), tile);
+		CachedChunk cachedChunk = chunkCache.get(ChunkCoord.fromGlobal(x, z));
+		if (cachedChunk != null) {
+			tile = tileRemapper.remap(
+				tile, tileRemapper.tileThatNeedsBlockData(tile.getType()) ? cachedChunk.getBlock(y >> 4, CachedChunk.getBlockIndex(x & 0xF, y & 0xF, z & 0xF)) : -1
+			);
+			cachedChunk.getTiles(tile.getPosition().getY() >> 4).put(tile.getPosition(), tile);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
