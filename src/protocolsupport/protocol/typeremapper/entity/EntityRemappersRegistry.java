@@ -12,6 +12,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.EntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AbstractMerchantEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AgeableEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
@@ -357,7 +358,7 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.LAMA, LamaEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
 			.register();
 			new Mapping(NetworkEntityType.WANDERING_TRADER)
-			.addMapping(NetworkEntityType.WANDERING_TRADER, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_14)
+			.addMapping(NetworkEntityType.WANDERING_TRADER, new AbstractMerchantEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)
 			.addMapping(NetworkEntityType.VILLAGER, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
 			.register();
 			new Mapping(NetworkEntityType.PANDA)

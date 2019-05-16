@@ -172,7 +172,11 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> STANDING_UP = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 	}
 
-	public static class Villager extends Ageable {
+	public static class AbstractMerchant extends Ageable {
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> HEAD_SHAKE_TIMER = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
+	}
+
+	public static class Villager extends AbstractMerchant {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVillagerData> VDATA = takeNextIndex(NetworkEntityMetadataObjectVillagerData.class);
 	}
 
