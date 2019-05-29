@@ -33,6 +33,16 @@ public class CraftingData extends MiddleDeclareRecipes {
 	public static final String TAG_CRAFTING_TABLE = "crafting_table";
 	public static final String TAG_FURNACE = "furnace";
 
+	protected static UUID createUUID(List<NetworkItemStack> in, NetworkItemStack out) {
+		long mostSigBits = 41 * out.hashCode();
+		long leastSigBits = out.hashCode();
+		for (NetworkItemStack is : in) {
+			mostSigBits = mostSigBits * 31 + is.hashCode();
+			leastSigBits = leastSigBits * 524287 + is.hashCode();
+		}
+		return new UUID(mostSigBits, leastSigBits);
+	}
+
 	protected int recipesWritten;
 
 	public CraftingData(ConnectionImpl connection) {
@@ -118,7 +128,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 
 	protected void addRecipeShaped(ByteBuf to, NetworkItemStack output, int width, int height, List<NetworkItemStack> required) {
 		String locale = connection.getCache().getAttributesCache().getLocale();
-		UUID uuid = UUID.nameUUIDFromBytes(to.array());
+		UUID uuid = createUUID(required, output);
 		VarNumberSerializer.writeSVarInt(to, PE_RECIPE_TYPE_SHAPED); //recipe type
 		if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
 			StringSerializer.writeString(to, connection.getVersion(), "recipe_shaped_" + uuid);
@@ -151,7 +161,7 @@ public class CraftingData extends MiddleDeclareRecipes {
 
 	protected void addRecipeShapeless(ByteBuf to, NetworkItemStack output, List<NetworkItemStack> required) {
 		String locale = connection.getCache().getAttributesCache().getLocale();
-		UUID uuid = UUID.nameUUIDFromBytes(to.array());
+		UUID uuid = createUUID(required, output);
 		VarNumberSerializer.writeSVarInt(to, PE_RECIPE_TYPE_SHAPELESS); //recipe type
 		if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
 			StringSerializer.writeString(to, connection.getVersion(), "recipe_shapeless_" + uuid);
@@ -196,4 +206,5 @@ public class CraftingData extends MiddleDeclareRecipes {
 		}
 		recipesWritten++;
 	}
+
 }
