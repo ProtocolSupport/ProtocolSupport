@@ -1,19 +1,19 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.value;
 
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBoolean;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
 
-public class IndexValueRemapperBooleanToByte extends IndexValueRemapper<DataWatcherObjectBoolean> {
+public class IndexValueRemapperBooleanToByte extends IndexValueRemapper<NetworkEntityMetadataObjectBoolean> {
 
-	public IndexValueRemapperBooleanToByte(DataWatcherObjectIndex<DataWatcherObjectBoolean> fromIndex, int toIndex) {
+	public IndexValueRemapperBooleanToByte(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> fromIndex, int toIndex) {
 		super(fromIndex, toIndex);
 	}
 
 	@Override
-	public DataWatcherObject<?> remapValue(DataWatcherObjectBoolean object) {
-		return new DataWatcherObjectByte((byte) (object.getValue() ? 1 : 0));
+	public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectBoolean object) {
+		return new NetworkEntityMetadataObjectByte((byte) (object.getValue() ? 1 : 0));
 	}
 
 }

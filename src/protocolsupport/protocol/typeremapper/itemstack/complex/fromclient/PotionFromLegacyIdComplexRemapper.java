@@ -6,10 +6,10 @@ import org.bukkit.Material;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotionId;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
 
 public class PotionFromLegacyIdComplexRemapper implements ItemStackComplexRemapper {
 

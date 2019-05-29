@@ -1,10 +1,6 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.living.skeleton;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
 
 public class SkeletonEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 

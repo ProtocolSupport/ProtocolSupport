@@ -57,11 +57,11 @@ import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.protocol.pipeline.common.PacketDecrypter;
 import protocolsupport.protocol.pipeline.common.PacketEncrypter;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.serializer.DefaultNBTSerializer;
 import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.GameProfile;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.serializer.DefaultNBTSerializer;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.spigot.injector.network.SpigotNettyInjector;
@@ -138,7 +138,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public int getMobTypeNetworkId(EntityType type) {
+	public int getEntityTypeNetworkId(EntityType type) {
 		return IRegistry.ENTITY_TYPE.a(EntityTypes.a(type.getName()).get());
 	}
 

@@ -1,6 +1,6 @@
 package protocolsupport.protocol.typeremapper.legacy;
 
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.types.Position;
 import protocolsupport.utils.Utils;
 
 public class LegacyRelMoveConverter {

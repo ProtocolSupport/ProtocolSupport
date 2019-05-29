@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.ObjIntConsumer;
+import java.util.function.ToIntFunction;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
@@ -74,6 +75,16 @@ public class MiscSerializer {
 		int writerIndexDataEnd = to.writerIndex();
 		to.writerIndex(lengthWriterIndex);
 		lengthWriter.accept(to, writerIndexDataEnd - writerIndexDataStart);
+		to.writerIndex(writerIndexDataEnd);
+	}
+
+	public static void writeSizePrefixedData(ByteBuf to, ObjIntConsumer<ByteBuf> sizeWriter, ToIntFunction<ByteBuf> dataWriter) {
+		int sizeWriterIndex = to.writerIndex();
+		sizeWriter.accept(to, 0);
+		int size = dataWriter.applyAsInt(to);
+		int writerIndexDataEnd = to.writerIndex();
+		to.writerIndex(sizeWriterIndex);
+		sizeWriter.accept(to, size);
 		to.writerIndex(writerIndexDataEnd);
 	}
 

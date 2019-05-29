@@ -5,13 +5,12 @@ import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import org.bukkit.Chunk;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
+import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.utils.authlib.GameProfile;
-import protocolsupport.protocol.utils.types.Position;
 
 public interface PlatformPacketFactory {
 
@@ -49,8 +48,6 @@ public interface PlatformPacketFactory {
 
 	public Object createSetCompressionPacket(int threshold);
 
-	public Object createBlockBreakSoundPacket(Position pos, Material type);
-
 	public Object createStatusPongPacket(long pingId);
 
 	public Object createStausServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, String motd, int maxPlayers);
@@ -68,7 +65,6 @@ public interface PlatformPacketFactory {
 	public Object createUpdateChunkPacket(Chunk chunk);
 
 	public Object createBlockUpdatePacket(Position pos, int block);
-
 
 	public int getOutLoginDisconnectPacketId();
 
@@ -257,6 +253,12 @@ public interface PlatformPacketFactory {
 	public int getOutPlayChunkLightPacketId();
 
 	public int getOutPlaySetViewCenterPacketId();
+
+	public int getOutPlayUpdateViewDistancePacketId();
+
+	public int getOutPlayMerchantTradeListPacketId();
+
+	public int getOutPlayBookOpenPacketId();
 
 
 	public int getInHandshakeStartPacketId();

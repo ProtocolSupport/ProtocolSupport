@@ -10,7 +10,6 @@ import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
 import org.bukkit.Chunk;
-import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_14_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.spigotmc.SpigotConfig;
@@ -38,9 +37,6 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.authlib.GameProfile;
-import protocolsupport.protocol.utils.minecraftdata.BlockData;
-import protocolsupport.protocol.utils.minecraftdata.BlockData.BlockDataEntry;
-import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.PlatformPacketFactory;
 
@@ -174,17 +170,6 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public Object createBlockBreakSoundPacket(Position pos, Material type) {
-		BlockDataEntry blockdataentry = BlockData.get(type);
-		return new PacketPlayOutNamedSoundEffect(
-			IRegistry.SOUND_EVENT.fromId(blockdataentry.getBreakSound()), SoundCategory.BLOCKS,
-			pos.getX(), pos.getY(), pos.getZ(),
-			(blockdataentry.getVolume() + 1.0F) / 2.0F,
-			blockdataentry.getPitch() * 0.8F
-		);
-	}
-
-	@Override
 	public Object createStatusPongPacket(long pingId) {
 		return new PacketStatusOutPong(pingId);
 	}
@@ -243,7 +228,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public Object createBlockUpdatePacket(Position pos, int block) {
+	public Object createBlockUpdatePacket(protocolsupport.protocol.types.Position pos, int block) {
 		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
 		PositionSerializer.writePosition(serializer, pos);
 		VarNumberSerializer.writeVarInt(serializer, block);
@@ -724,6 +709,21 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getOutPlaySetViewCenterPacketId() {
 		return getOutId(PacketPlayOutViewCentre.class);
+	}
+
+	@Override
+	public int getOutPlayMerchantTradeListPacketId() {
+		return getOutId(PacketPlayOutOpenWindowMerchant.class);
+	}
+
+	@Override
+	public int getOutPlayUpdateViewDistancePacketId() {
+		return getOutId(PacketPlayOutViewDistance.class);
+	}
+
+	@Override
+	public int getOutPlayBookOpenPacketId() {
+		return getOutId(PacketPlayOutOpenBook.class);
 	}
 
 

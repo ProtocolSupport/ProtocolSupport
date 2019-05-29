@@ -5,10 +5,12 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.types.WindowType;
 import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
@@ -27,8 +29,8 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		windowId = serverdata.readUnsignedByte();
-		type = WindowType.getById(StringSerializer.readVarIntUTF8String(serverdata));
+		windowId = VarNumberSerializer.readVarInt(serverdata);
+		type = MiscSerializer.readVarIntEnum(serverdata, WindowType.CONSTANT_LOOKUP);
 		title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
 		slots = serverdata.readUnsignedByte();
 		if (type == WindowType.HORSE) {
@@ -50,11 +52,11 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 				invSlots = 1;
 				break;
 			}
-			case CRAFTING_TABLE: {
+			case CRAFTING: {
 				invSlots = 10;
 				break;
 			}
-			case ENCHANT: {
+			case ENCHANTMENT: {
 				invSlots = 2;
 				break;
 			}

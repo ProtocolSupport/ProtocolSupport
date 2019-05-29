@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.particle.legacy;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.types.NetworkItemStack;
 
 public class LegacyParticleIconCrack extends LegacyParticle {
 

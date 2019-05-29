@@ -10,6 +10,10 @@ public class RecipeBookData extends MiddleRecipeBookData {
 
 	public RecipeBookData(ConnectionImpl connection) {
 		super(connection);
+		blastingRecipeBookOpen = false;
+		blastingRecipeBookFiltering = false;
+		smokingRecipeBookOpen = false;
+		smokingRecipeBookFiltering = false;
 	}
 
 	@Override

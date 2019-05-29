@@ -6,6 +6,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
@@ -13,12 +14,13 @@ import org.bukkit.material.MaterialData;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ItemStackWriteEvent;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTList;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTList;
+import protocolsupport.protocol.types.nbt.NBTString;
+import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.zplatform.ServerPlatform;
 
 @SuppressWarnings("deprecation")
@@ -44,7 +46,7 @@ public class ItemStackWriteEventHelper {
 						loreNBT = new NBTList<>(NBTType.STRING);
 					}
 					for (String lore : additionalLore) {
-						loreNBT.addTag(new NBTString(lore));
+						loreNBT.addTag(new NBTString(ChatAPI.toJSON(new TextComponent(lore))));
 					}
 					displayNBT.setTag(CommonNBT.DISPLAY_LORE, loreNBT);
 				}
@@ -138,41 +140,40 @@ public class ItemStackWriteEventHelper {
 			throw reject();
 		}
 
-//TODO: restore after paper update
-//		@Override
-//		public void setLore(List<String> lore) {
-//			throw reject();
-//		}
-//
-//		@Override
-//		public ItemStack add() {
-//			throw reject();
-//		}
-//
-//		@Override
-//		public ItemStack add(int qty) {
-//			throw reject();
-//		}
-//
-//		@Override
-//		public ItemStack subtract() {
-//			throw reject();
-//		}
-//
-//		@Override
-//		public ItemStack subtract(int qty) {
-//			throw reject();
-//		}
-//
-//		@Override
-//		public void addItemFlags(ItemFlag... itemFlags) {
-//			throw reject();
-//		}
-//
-//		@Override
-//		public ItemStack ensureServerConversions() {
-//			throw reject();
-//		}
+		@Override
+		public void setLore(List<String> lore) {
+			throw reject();
+		}
+
+		@Override
+		public ItemStack add() {
+			throw reject();
+		}
+
+		@Override
+		public ItemStack add(int qty) {
+			throw reject();
+		}
+
+		@Override
+		public ItemStack subtract() {
+			throw reject();
+		}
+
+		@Override
+		public ItemStack subtract(int qty) {
+			throw reject();
+		}
+
+		@Override
+		public void addItemFlags(ItemFlag... itemFlags) {
+			throw reject();
+		}
+
+		@Override
+		public ItemStack ensureServerConversions() {
+			throw reject();
+		}
 
 	}
 

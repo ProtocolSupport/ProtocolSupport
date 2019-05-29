@@ -4,21 +4,13 @@ import java.util.HashMap;
 
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeMulti;
-import protocolsupport.protocol.utils.types.ChunkCoord;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.types.ChunkCoord;
+import protocolsupport.protocol.types.Position;
 
 public class TileDataCache {
 
 	public static int createLocalPositionFromChunkBlock(int section, int blockindex) {
 		return (blockindex << 4) | section;
-	}
-
-	public static int createLocalPositionFromMultiChangeBlock(int coord) {
-		int x = MiddleBlockChangeMulti.getCoordX(coord);
-		int y = MiddleBlockChangeMulti.getCoordY(coord);
-		int z = MiddleBlockChangeMulti.getCoordZ(coord);
-		return ((y & 0xF) << 12) | (z << 8) | (x << 4) | (y >> 4);
 	}
 
 	public static ChunkCoord getChunkCoordsFromPosition(Position position) {
@@ -31,7 +23,6 @@ public class TileDataCache {
 		int z = position.getZ() & 0xF;
 		return ((y & 0xF) << 12) | (z << 8) | (x << 4) | (y >> 4);
 	}
-
 
 	protected final HashMap<ChunkCoord, Int2IntMap> tileblockdatas = new HashMap<>();
 

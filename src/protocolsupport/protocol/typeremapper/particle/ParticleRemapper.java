@@ -19,58 +19,67 @@ import protocolsupport.protocol.typeremapper.particle.legacy.LegacyParticleIconC
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.types.particle.Particle;
+import protocolsupport.protocol.types.particle.ParticleAmbientEntityEffect;
+import protocolsupport.protocol.types.particle.ParticleAngryVillager;
+import protocolsupport.protocol.types.particle.ParticleBarrier;
+import protocolsupport.protocol.types.particle.ParticleBlock;
+import protocolsupport.protocol.types.particle.ParticleBubble;
+import protocolsupport.protocol.types.particle.ParticleCampfireCozySmoke;
+import protocolsupport.protocol.types.particle.ParticleCampfireSignalSmoke;
+import protocolsupport.protocol.types.particle.ParticleCloud;
+import protocolsupport.protocol.types.particle.ParticleComposter;
+import protocolsupport.protocol.types.particle.ParticleCrit;
+import protocolsupport.protocol.types.particle.ParticleDamageIndicator;
+import protocolsupport.protocol.types.particle.ParticleDragonBreath;
+import protocolsupport.protocol.types.particle.ParticleDrippingLava;
+import protocolsupport.protocol.types.particle.ParticleDrippingWater;
+import protocolsupport.protocol.types.particle.ParticleDust;
+import protocolsupport.protocol.types.particle.ParticleEffect;
+import protocolsupport.protocol.types.particle.ParticleElderGuardian;
+import protocolsupport.protocol.types.particle.ParticleEnchant;
+import protocolsupport.protocol.types.particle.ParticleEnchantedHit;
+import protocolsupport.protocol.types.particle.ParticleEndRod;
+import protocolsupport.protocol.types.particle.ParticleEntityEffect;
+import protocolsupport.protocol.types.particle.ParticleExplosion;
+import protocolsupport.protocol.types.particle.ParticleExplosionEmitter;
+import protocolsupport.protocol.types.particle.ParticleFallingDust;
+import protocolsupport.protocol.types.particle.ParticleFallingLava;
+import protocolsupport.protocol.types.particle.ParticleFallingWater;
+import protocolsupport.protocol.types.particle.ParticleFirework;
+import protocolsupport.protocol.types.particle.ParticleFishing;
+import protocolsupport.protocol.types.particle.ParticleFlame;
+import protocolsupport.protocol.types.particle.ParticleFlash;
+import protocolsupport.protocol.types.particle.ParticleHappyVillager;
+import protocolsupport.protocol.types.particle.ParticleHeart;
+import protocolsupport.protocol.types.particle.ParticleInstantEffect;
+import protocolsupport.protocol.types.particle.ParticleItem;
+import protocolsupport.protocol.types.particle.ParticleItemSlime;
+import protocolsupport.protocol.types.particle.ParticleItemSnowball;
+import protocolsupport.protocol.types.particle.ParticleLandingLava;
+import protocolsupport.protocol.types.particle.ParticleLargeSmoke;
+import protocolsupport.protocol.types.particle.ParticleLava;
+import protocolsupport.protocol.types.particle.ParticleMycelium;
+import protocolsupport.protocol.types.particle.ParticleNote;
+import protocolsupport.protocol.types.particle.ParticlePoof;
+import protocolsupport.protocol.types.particle.ParticlePortal;
+import protocolsupport.protocol.types.particle.ParticleRain;
+import protocolsupport.protocol.types.particle.ParticleSmoke;
+import protocolsupport.protocol.types.particle.ParticleSneeze;
+import protocolsupport.protocol.types.particle.ParticleSpit;
+import protocolsupport.protocol.types.particle.ParticleSplash;
+import protocolsupport.protocol.types.particle.ParticleSweepAttack;
+import protocolsupport.protocol.types.particle.ParticleTotemOfUndying;
+import protocolsupport.protocol.types.particle.ParticleUnderwater;
+import protocolsupport.protocol.types.particle.ParticleWitch;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.i18n.I18NData;
-import protocolsupport.protocol.utils.types.particle.Particle;
-import protocolsupport.protocol.utils.types.particle.ParticleAmbientEntityEffect;
-import protocolsupport.protocol.utils.types.particle.ParticleAngryVillager;
-import protocolsupport.protocol.utils.types.particle.ParticleBarrier;
-import protocolsupport.protocol.utils.types.particle.ParticleBlock;
-import protocolsupport.protocol.utils.types.particle.ParticleBubble;
-import protocolsupport.protocol.utils.types.particle.ParticleCloud;
-import protocolsupport.protocol.utils.types.particle.ParticleCrit;
-import protocolsupport.protocol.utils.types.particle.ParticleDamageIndicator;
-import protocolsupport.protocol.utils.types.particle.ParticleDragonBreath;
-import protocolsupport.protocol.utils.types.particle.ParticleDrippingLava;
-import protocolsupport.protocol.utils.types.particle.ParticleDrippingWater;
-import protocolsupport.protocol.utils.types.particle.ParticleDust;
-import protocolsupport.protocol.utils.types.particle.ParticleEffect;
-import protocolsupport.protocol.utils.types.particle.ParticleElderGuardian;
-import protocolsupport.protocol.utils.types.particle.ParticleEnchant;
-import protocolsupport.protocol.utils.types.particle.ParticleEnchantedHit;
-import protocolsupport.protocol.utils.types.particle.ParticleEndRod;
-import protocolsupport.protocol.utils.types.particle.ParticleEntityEffect;
-import protocolsupport.protocol.utils.types.particle.ParticleExplosion;
-import protocolsupport.protocol.utils.types.particle.ParticleExplosionEmitter;
-import protocolsupport.protocol.utils.types.particle.ParticleFallingDust;
-import protocolsupport.protocol.utils.types.particle.ParticleFirework;
-import protocolsupport.protocol.utils.types.particle.ParticleFishing;
-import protocolsupport.protocol.utils.types.particle.ParticleFlame;
-import protocolsupport.protocol.utils.types.particle.ParticleHappyVillager;
-import protocolsupport.protocol.utils.types.particle.ParticleHeart;
-import protocolsupport.protocol.utils.types.particle.ParticleInstantEffect;
-import protocolsupport.protocol.utils.types.particle.ParticleItem;
-import protocolsupport.protocol.utils.types.particle.ParticleItemSlime;
-import protocolsupport.protocol.utils.types.particle.ParticleItemSnowball;
-import protocolsupport.protocol.utils.types.particle.ParticleLargeSmoke;
-import protocolsupport.protocol.utils.types.particle.ParticleLava;
-import protocolsupport.protocol.utils.types.particle.ParticleMycelium;
-import protocolsupport.protocol.utils.types.particle.ParticleNote;
-import protocolsupport.protocol.utils.types.particle.ParticlePoof;
-import protocolsupport.protocol.utils.types.particle.ParticlePortal;
-import protocolsupport.protocol.utils.types.particle.ParticleRain;
-import protocolsupport.protocol.utils.types.particle.ParticleSmoke;
-import protocolsupport.protocol.utils.types.particle.ParticleSpit;
-import protocolsupport.protocol.utils.types.particle.ParticleSplash;
-import protocolsupport.protocol.utils.types.particle.ParticleSweepAttack;
-import protocolsupport.protocol.utils.types.particle.ParticleTotemOfUndying;
-import protocolsupport.protocol.utils.types.particle.ParticleUnderwater;
-import protocolsupport.protocol.utils.types.particle.ParticleWitch;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
 public class ParticleRemapper {
 
+	//TODO: actually move out legacy id remaps to separate class
 	public static final RemappingRegistry<ParticleRemappingTable> REGISTRY = new RemappingRegistry<ParticleRemappingTable>() {
 		{
 			Arrays.stream(ProtocolVersionsHelper.UP_1_13)
@@ -83,7 +92,18 @@ public class ParticleRemapper {
 					original.getData(), original.getCount(),
 					BlockRemappingHelper.remapFBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, original.getBlockData())
 				), version);
-				registerRemap(ParticleItem.class, original -> new ParticleItem(original.getId(), version, I18NData.DEFAULT_LOCALE, original.getItemStack()), version);
+				registerRemap(ParticleFallingDust.class, original -> new ParticleFallingDust(
+					original.getId(),
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount(),
+					BlockRemappingHelper.remapFBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, original.getBlockData())
+				));
+				registerRemap(ParticleItem.class, original -> new ParticleItem(
+					original.getId(),
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount(),
+					version, I18NData.DEFAULT_LOCALE, original.getItemStack()
+				), version);
 			});
 
 			Any<Integer, String> explode = new Any<>(0, "explode");
@@ -118,8 +138,8 @@ public class ParticleRemapper {
 			registerSimpleLegacyRemap(ParticleCloud.class, new Any<>(29, "cloud"), ProtocolVersionsHelper.BEFORE_1_13);
 			registerRemap(
 				ParticleDust.class,
-				original -> new LegacyParticle(30,
-					"reddust",
+				original -> new LegacyParticle(
+					30, "reddust",
 					original.getRed(), original.getGreen(), original.getBlue(),
 					1, 0
 				),
@@ -190,6 +210,15 @@ public class ParticleRemapper {
 			registerSimpleLegacyRemap(ParticleTotemOfUndying.class, new Any<>(47, "totem"), ProtocolVersionsHelper.RANGE__1_11_1__1_12_2);
 			registerSimpleLegacyRemap(ParticleSpit.class, new Any<>(48, "spit"), ProtocolVersionsHelper.RANGE__1_11_1__1_12_2);
 
+			//TODO: check if some of those particles can be mapped to another particle
+			registerSkip(ParticleFallingLava.class, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkip(ParticleLandingLava.class, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkip(ParticleFallingWater.class, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkip(ParticleFlash.class, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkip(ParticleComposter.class, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkip(ParticleSneeze.class, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkip(ParticleCampfireCozySmoke.class, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkip(ParticleCampfireSignalSmoke.class, ProtocolVersionsHelper.BEFORE_1_14);
 			registerSkip(ParticleTotemOfUndying.class, ProtocolVersionsHelper.BEFORE_1_11);
 			registerSkip(ParticleSpit.class, ProtocolVersionsHelper.BEFORE_1_11);
 			registerSkip(ParticleDragonBreath.class, ProtocolVersionsHelper.BEFORE_1_9);

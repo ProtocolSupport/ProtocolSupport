@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.Validate;
 
+import protocolsupport.protocol.types.GameMode;
 import protocolsupport.protocol.utils.i18n.I18NData;
-import protocolsupport.protocol.utils.types.Environment;
-import protocolsupport.protocol.utils.types.GameMode;
+import protocolsupport.protocol.types.Environment;
 import protocolsupport.utils.Utils;
 
 public class AttributesCache {

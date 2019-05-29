@@ -1,8 +1,8 @@
 package protocolsupport.protocol.serializer;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.utils.types.ChunkCoord;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.types.ChunkCoord;
+import protocolsupport.protocol.types.Position;
 
 public class PositionSerializer {
 
@@ -13,7 +13,7 @@ public class PositionSerializer {
 	public static Position readPosition(ByteBuf from) {
 		long l = from.readLong();
 		return new Position(
-			(int) (l >> 38), (int) (l & 0xFFF), (int) ((l << 38) >> 50)
+			(int) (l >> 38), (int) (l & 0xFFF), (int) ((l << 26) >> 38)
 		);
 	}
 
@@ -33,7 +33,7 @@ public class PositionSerializer {
 		long l = from.readLong();
 		to.setX((int) (l >> 38));
 		to.setY((int) (l & 0xFFF));
-		to.setZ((int) ((l << 38) >> 50));
+		to.setZ((int) ((l << 26) >> 38));
 	}
 
 	public static void readLegacyPositionLTo(ByteBuf from, Position to) {
@@ -97,7 +97,7 @@ public class PositionSerializer {
 		to.writeInt(position.getZ());
 	}
 
-	public static ChunkCoord readChunkCoord(ByteBuf from) {
+	public static ChunkCoord readIntChunkCoord(ByteBuf from) {
 		return new ChunkCoord(from.readInt(), from.readInt());
 	}
 
@@ -125,6 +125,11 @@ public class PositionSerializer {
 
 	public static void writeLocalCoord(ByteBuf to, int coord) {
 		to.writeShort(coord);
+	}
+
+	public static void writeVarIntChunkCoord(ByteBuf to, ChunkCoord chunk) {
+		VarNumberSerializer.writeVarInt(to, chunk.getX());
+		VarNumberSerializer.writeVarInt(to, chunk.getZ());
 	}
 
 }

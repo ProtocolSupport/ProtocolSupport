@@ -2,7 +2,7 @@ package protocolsupport.api.chat.components;
 
 import java.text.MessageFormat;
 
-import protocolsupport.protocol.utils.minecraftdata.KeybindData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftKeybindData;
 
 /**
  * Chat component that displays the client's current keybind for the specified key
@@ -20,7 +20,7 @@ public class KeybindComponent extends BaseComponent {
 
 	@Override
 	public String getValue(String locale) {
-		String keybindtext = KeybindData.getKey(keybind);
+		String keybindtext = MinecraftKeybindData.getKey(keybind);
 		return MessageFormat.format("{0}({1})", keybind, keybindtext != null ? keybindtext : "unknown");
 	}
 

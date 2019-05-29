@@ -1,26 +1,27 @@
 package protocolsupport.protocol.serializer;
 
 import io.netty.buffer.ByteBuf;
+
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.utils.CommonNBT;
-import protocolsupport.protocol.utils.types.MerchantData;
+import protocolsupport.protocol.types.MerchantData;
 import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTInt;
-import protocolsupport.protocol.utils.types.nbt.NBTList;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
-import protocolsupport.protocol.utils.types.MerchantData.TradeOffer;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTInt;
+import protocolsupport.protocol.types.nbt.NBTList;
+import protocolsupport.protocol.types.nbt.NBTType;
+import protocolsupport.protocol.types.MerchantData.TradeOffer;
+import protocolsupport.protocol.types.NetworkItemStack;
 
 public class MerchantDataSerializer {
 
 	public static MerchantData readMerchantData(ByteBuf from) {
-		MerchantData merchdata = new MerchantData(from.readInt());
-		int count = from.readUnsignedByte();
-		for (int i = 0; i < count; i++) {
+		int windowId = VarNumberSerializer.readVarInt(from);
+		TradeOffer[] offers = new TradeOffer[from.readUnsignedByte()];
+		for (int i = 0; i < offers.length; i++) {
 			NetworkItemStack itemstack1 = ItemStackSerializer.readItemStack(from);
 			NetworkItemStack result = ItemStackSerializer.readItemStack(from);
 			NetworkItemStack itemstack2 = NetworkItemStack.NULL;
@@ -30,14 +31,30 @@ public class MerchantDataSerializer {
 			boolean disabled = from.readBoolean();
 			int uses = from.readInt();
 			int maxuses = from.readInt();
-			merchdata.addOffer(new TradeOffer(itemstack1, itemstack2, result, disabled ? maxuses : uses, maxuses));
+			int xp = from.readInt();
+			int specialPrice = from.readInt();
+			float priceMultiplier = from.readFloat();
+			offers[i] = new TradeOffer(
+				itemstack1, itemstack2, result,
+				disabled ? maxuses : uses, maxuses,
+				xp, specialPrice, priceMultiplier
+			);
 		}
-		return merchdata;
+		int villagerLevel = VarNumberSerializer.readVarInt(from);
+		int villagerXp = VarNumberSerializer.readVarInt(from);
+		boolean villagerRegular = from.readBoolean();
+		return new MerchantData(windowId, offers, villagerLevel, villagerXp, villagerRegular);
 	}
 
 	public static void writeMerchantData(ByteBuf to, ProtocolVersion version, String locale, MerchantData merchdata) {
-		to.writeInt(merchdata.getWindowId());
-		to.writeByte(merchdata.getOffers().size());
+		boolean advandedTrading = isUsingAdvancedTrading(version);
+		boolean usesCount = isUsingUsesCount(version);
+		if (advandedTrading) {
+			VarNumberSerializer.writeVarInt(to, merchdata.getWindowId());
+		} else {
+			to.writeInt(merchdata.getWindowId());
+		}
+		to.writeByte(merchdata.getOffers().length);
 		for (TradeOffer offer : merchdata.getOffers()) {
 			ItemStackSerializer.writeItemStack(to, version, locale, offer.getItemStack1());
 			ItemStackSerializer.writeItemStack(to, version, locale, offer.getResult());
@@ -46,10 +63,20 @@ public class MerchantDataSerializer {
 				ItemStackSerializer.writeItemStack(to, version, locale, offer.getItemStack2());
 			}
 			to.writeBoolean(offer.isDisabled());
-			if (isUsingUsesCount(version)) {
+			if (usesCount) {
 				to.writeInt(offer.getUses());
 				to.writeInt(offer.getMaxUses());
 			}
+			if (advandedTrading) {
+				to.writeInt(offer.getXP());
+				to.writeInt(offer.getSpecialPrice());
+				to.writeFloat(offer.getPriceMultiplier());
+			}
+		}
+		if (advandedTrading) {
+			VarNumberSerializer.writeVarInt(to, merchdata.getVillagerLevel());
+			VarNumberSerializer.writeVarInt(to, merchdata.getVillagerXP());
+			to.writeBoolean(merchdata.isVillagerRegular());
 		}
 	}
 
@@ -86,8 +113,12 @@ public class MerchantDataSerializer {
 		ItemStackSerializer.writeTag(to, true, version, tag);
 	}
 
-	private static boolean isUsingUsesCount(ProtocolVersion version) {
-		return version.getProtocolType() == ProtocolType.PC && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+	protected static boolean isUsingAdvancedTrading(ProtocolVersion version) {
+		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_14);
+	}
+
+	protected static boolean isUsingUsesCount(ProtocolVersion version) {
+		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
 	}
 
 }

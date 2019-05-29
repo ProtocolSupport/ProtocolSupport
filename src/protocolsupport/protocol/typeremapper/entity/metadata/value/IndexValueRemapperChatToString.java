@@ -1,24 +1,24 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.value;
 
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectChat;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectChat;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectString;
 
-public class IndexValueRemapperChatToString extends IndexValueRemapper<DataWatcherObjectChat> {
+public class IndexValueRemapperChatToString extends IndexValueRemapper<NetworkEntityMetadataObjectChat> {
 
 	protected final int limit;
 
-	public IndexValueRemapperChatToString(DataWatcherObjectIndex<DataWatcherObjectChat> fromIndex, int toIndex, int limit) {
+	public IndexValueRemapperChatToString(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectChat> fromIndex, int toIndex, int limit) {
 		super(fromIndex, toIndex);
 		this.limit = limit;
 	}
 
 	@Override
-	public DataWatcherObject<?> remapValue(DataWatcherObjectChat object) {
+	public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectChat object) {
 		//TODO: pass locale
-		return new DataWatcherObjectString(LegacyChat.clampLegacyText(object.getValue().toLegacyText(), limit));
+		return new NetworkEntityMetadataObjectString(LegacyChat.clampLegacyText(object.getValue().toLegacyText(), limit));
 	}
 
 }

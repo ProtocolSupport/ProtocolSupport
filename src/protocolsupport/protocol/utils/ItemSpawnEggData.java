@@ -8,8 +8,8 @@ import org.bukkit.entity.EntityType;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupportbuildprocessor.Preload;
 
 @SuppressWarnings("deprecation")

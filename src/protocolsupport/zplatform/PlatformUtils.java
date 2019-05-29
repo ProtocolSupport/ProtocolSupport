@@ -20,7 +20,7 @@ import io.netty.channel.EventLoopGroup;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public interface PlatformUtils {
@@ -31,7 +31,7 @@ public interface PlatformUtils {
 
 	public String serializeItemStackToNBTJson(ItemStack itemstack);
 
-	public int getMobTypeNetworkId(EntityType type);
+	public int getEntityTypeNetworkId(EntityType type);
 
 	public int getItemNetworkId(Material material);
 

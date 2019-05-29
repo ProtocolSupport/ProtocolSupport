@@ -6,9 +6,9 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.types.Environment;
-import protocolsupport.protocol.utils.types.GameMode;
+import protocolsupport.protocol.types.Environment;
+import protocolsupport.protocol.types.GameMode;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 

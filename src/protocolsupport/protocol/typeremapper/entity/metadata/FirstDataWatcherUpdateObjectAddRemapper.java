@@ -1,20 +1,20 @@
 package protocolsupport.protocol.typeremapper.entity.metadata;
 
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class FirstDataWatcherUpdateObjectAddRemapper extends DataWatcherObjectRemapper {
 
 	private final int index;
-	private final DataWatcherObject<?> object;
-	public FirstDataWatcherUpdateObjectAddRemapper(int index, DataWatcherObject<?> object) {
+	private final NetworkEntityMetadataObject<?> object;
+	public FirstDataWatcherUpdateObjectAddRemapper(int index, NetworkEntityMetadataObject<?> object) {
 		this.index = index;
 		this.object = object;
 	}
 
 	@Override
-	public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+	public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
 		if (entity.getDataCache().isFirstMeta()) {
 			remapped.put(index, object);
 		}

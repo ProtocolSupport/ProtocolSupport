@@ -3,7 +3,8 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.utils.types.Difficulty;
+import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.types.Difficulty;
 
 public abstract class MiddleServerDifficulty extends ClientBoundMiddlePacket {
 
@@ -16,7 +17,7 @@ public abstract class MiddleServerDifficulty extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		difficulty = Difficulty.getById(serverdata.readByte());
+		difficulty = MiscSerializer.readByteEnum(serverdata, Difficulty.CONSTANT_LOOKUP);
 		locked = serverdata.readBoolean();
 	}
 

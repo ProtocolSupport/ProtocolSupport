@@ -39,9 +39,9 @@ public class NetworkDataCache {
 		return cpccache;
 	}
 
-	protected final TileDataCache tilecache = new TileDataCache();
-	public TileDataCache getTileCache() {
-		return tilecache;
+	protected final ChunkCache chunkcache = new ChunkCache();
+	public ChunkCache getChunkCache() {
+		return chunkcache;
 	}
 
 

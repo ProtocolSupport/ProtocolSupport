@@ -7,9 +7,11 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOp
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdRemapper;
+import protocolsupport.protocol.typeremapper.legacy.LegacyWindow;
+import protocolsupport.protocol.typeremapper.legacy.LegacyWindow.LegacyWindowData;
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.EnumRemappingTable;
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -23,14 +25,14 @@ public class InventoryOpen extends MiddleInventoryOpen {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
+		type = typeRemapper.getRemap(type);
+		LegacyWindowData wdata = LegacyWindow.getData(type);
+
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID);
 		serializer.writeByte(windowId);
-		StringSerializer.writeString(serializer, version, typeRemapper.getRemap(type).getId());
+		StringSerializer.writeString(serializer, version, wdata.getStringId());
 		StringSerializer.writeString(serializer, version, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), title)));
-		serializer.writeByte(slots);
-		if (type == WindowType.HORSE) {
-			serializer.writeInt(horseId);
-		}
+		serializer.writeByte(wdata.getSlots());
 		return RecyclableSingletonList.create(serializer);
 	}
 

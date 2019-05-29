@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.utils.ProfileProperty;
-import protocolsupport.protocol.utils.types.GameMode;
+import protocolsupport.protocol.types.GameMode;
 import protocolsupport.utils.Utils;
 
 public class PlayerListCache {

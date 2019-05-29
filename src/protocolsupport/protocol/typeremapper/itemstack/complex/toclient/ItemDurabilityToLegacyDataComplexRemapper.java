@@ -3,8 +3,8 @@ package protocolsupport.protocol.typeremapper.itemstack.complex.toclient;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
 import protocolsupport.protocol.utils.CommonNBT;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.nbt.NBTNumber;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.nbt.NBTNumber;
 
 public class ItemDurabilityToLegacyDataComplexRemapper implements ItemStackComplexRemapper {
 
