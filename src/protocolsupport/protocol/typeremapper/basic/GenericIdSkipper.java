@@ -101,6 +101,8 @@ public class GenericIdSkipper {
 			registerSkipEntry(WindowType.LECTERN, ProtocolVersionsHelper.BEFORE_1_14);
 			registerSkipEntry(WindowType.CARTOGRAPHY, ProtocolVersionsHelper.BEFORE_1_14);
 			registerSkipEntry(WindowType.STONECUTTER, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkipEntry(WindowType.GRINDSTONE, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkipEntry(WindowType.LOOM, ProtocolVersionsHelper.BEFORE_1_14);
 			registerSkipEntry(WindowType.HOPPER, ProtocolVersionsHelper.BEFORE_1_5);
 		}
 		@Override
