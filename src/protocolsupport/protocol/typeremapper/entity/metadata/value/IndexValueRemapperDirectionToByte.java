@@ -1,19 +1,19 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.value;
 
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectDirection;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectDirection;
 
-public final class IndexValueRemapperDirectionToByte extends IndexValueRemapper<DataWatcherObjectDirection> {
+public final class IndexValueRemapperDirectionToByte extends IndexValueRemapper<NetworkEntityMetadataObjectDirection> {
 
-	public IndexValueRemapperDirectionToByte(DataWatcherObjectIndex<DataWatcherObjectDirection> fromIndex, int toIndex) {
+	public IndexValueRemapperDirectionToByte(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectDirection> fromIndex, int toIndex) {
 		super(fromIndex, toIndex);
 	}
 
 	@Override
-	public DataWatcherObject<?> remapValue(DataWatcherObjectDirection object) {
-		return new DataWatcherObjectByte((byte) object.getValue().ordinal());
+	public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectDirection object) {
+		return new NetworkEntityMetadataObjectByte((byte) object.getValue().ordinal());
 	}
 
 }

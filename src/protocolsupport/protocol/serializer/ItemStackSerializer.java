@@ -22,7 +22,7 @@ import protocolsupport.protocol.types.nbt.NBTEnd;
 import protocolsupport.protocol.types.nbt.serializer.DefaultNBTSerializer;
 import protocolsupport.protocol.utils.ItemStackWriteEventHelper;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.types.nbt.serializer.PENBTSerializer;
+import protocolsupport.protocol.types.nbt.serializer.PENBTSerializer;
 
 public class ItemStackSerializer {
 

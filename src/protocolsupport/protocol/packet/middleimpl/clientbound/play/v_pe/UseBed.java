@@ -5,8 +5,8 @@
 //import protocolsupport.protocol.packet.middle.clientbound.play.MiddleUseBed;
 //import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 //import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
-//import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3vi;
-//import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+//import protocolsupport.protocol.types.networkentity.metadata.objects.DataWatcherObjectVector3vi;
+//import protocolsupport.protocol.types.networkentity.NetworkEntity;
 //import protocolsupport.utils.recyclable.RecyclableArrayList;
 //import protocolsupport.utils.recyclable.RecyclableCollection;
 //

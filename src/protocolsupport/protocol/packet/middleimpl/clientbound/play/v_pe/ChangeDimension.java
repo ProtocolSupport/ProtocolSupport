@@ -9,10 +9,10 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChangeDimen
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.types.ChunkCoord;
-import protocolsupport.protocol.utils.types.Environment;
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.types.ChunkCoord;
+import protocolsupport.protocol.types.Environment;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 

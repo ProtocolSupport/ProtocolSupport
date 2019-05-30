@@ -1,4 +1,4 @@
-package protocolsupport.protocol.utils.types;
+package protocolsupport.protocol.types;
 
 import java.text.MessageFormat;
 

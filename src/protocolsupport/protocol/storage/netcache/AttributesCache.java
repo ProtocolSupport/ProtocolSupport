@@ -2,7 +2,7 @@ package protocolsupport.protocol.storage.netcache;
 
 import java.util.UUID;
 
-import org.apache.commons.lang3.Validate;
+import com.google.common.base.Preconditions;
 
 import protocolsupport.protocol.types.GameMode;
 import protocolsupport.protocol.utils.i18n.I18NData;
@@ -40,7 +40,7 @@ public class AttributesCache {
 	protected UUID peClientUUID;
 
 	public void setPEClientUUID(UUID uuid) {
-		Validate.notNull(uuid, "PE client uuid (identity) can't be null");
+		Preconditions.checkNotNull(uuid, "PE client uuid (identity) can't be null");
 		this.peClientUUID = uuid;
 	}
 

@@ -118,16 +118,16 @@ public class DataWatcherSerializer {
 		to.writeByte(127);
 	}
 
-	public static void writePEData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> peMetadata) {
+	public static void writePEData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<NetworkEntityMetadataObject<?>> peMetadata) {
 		int entries = 0;
 		int writerPreIndex = to.writerIndex();
 		//Fake fixed-varint length.
 		to.writeZero(VarNumberSerializer.MAX_LENGTH);
 		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
-			DataWatcherObject<?> object = peMetadata.get(key);
+			NetworkEntityMetadataObject<?> object = peMetadata.get(key);
 			if (object != null) {
 				VarNumberSerializer.writeVarInt(to, key);
-				VarNumberSerializer.writeVarInt(to, DataWatcherObjectIdRegistry.getTypeId(object, version));
+				VarNumberSerializer.writeVarInt(to, NetworkEntityMetadataObjectRegistry.getTypeId(object, version));
 				object.writeToStream(to, version, locale);
 				entries++;
 			}

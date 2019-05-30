@@ -44,7 +44,6 @@ public class NetworkDataCache {
 		return chunkcache;
 	}
 
-
 	protected final PEChunkMapCache pechunkmapcache = new PEChunkMapCache();
 	public PEChunkMapCache getPEChunkMapCache() {
 		return pechunkmapcache;

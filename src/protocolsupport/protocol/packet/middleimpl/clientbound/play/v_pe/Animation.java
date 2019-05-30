@@ -5,10 +5,10 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityAnima
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3vi;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVector3vi;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -40,9 +40,9 @@ public class Animation extends MiddleEntityAnimation {
 				NetworkEntity player = cache.getWatchedEntityCache().getSelfPlayer();
 				if (entityId == player.getId()) {
 					// See UseBed for detail; basically we reverse the stuff done there
-					packets.add(EntityMetadata.createFromAttribute(version, cache.getAttributesCache().getLocale(), player, EntityMetadata.PeMetaBase.BED_POSTION, new DataWatcherObjectVector3vi(Position.ZERO)));
+					packets.add(EntityMetadata.createFromAttribute(version, cache.getAttributesCache().getLocale(), player, EntityMetadata.PeMetaBase.BED_POSTION, new NetworkEntityMetadataObjectVector3vi(Position.ZERO)));
 					// Clear player flags
-					packets.add(EntityMetadata.createFromAttribute(version, cache.getAttributesCache().getLocale(), player, EntityMetadata.PeMetaBase.PLAYER_FLAGS, new DataWatcherObjectByte((byte) 0)));
+					packets.add(EntityMetadata.createFromAttribute(version, cache.getAttributesCache().getLocale(), player, EntityMetadata.PeMetaBase.PLAYER_FLAGS, new NetworkEntityMetadataObjectByte((byte) 0)));
 				}
 				packets.add(create(entityId, ANIMATION_WAKE_UP));
 				return packets;

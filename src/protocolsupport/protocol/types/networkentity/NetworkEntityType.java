@@ -136,6 +136,10 @@ public enum NetworkEntityType {
 		return etype != EType.NONE;
 	}
 
+	public boolean isAlive() {
+		return etype == EType.MOB || this == PLAYER;
+	}
+
 	public NetworkEntityType getSuperType() {
 		return superType;
 	}

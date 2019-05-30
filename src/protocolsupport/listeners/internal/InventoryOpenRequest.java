@@ -12,8 +12,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Inventor
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.WindowType;
 
 public class InventoryOpenRequest extends PluginMessageData {
 

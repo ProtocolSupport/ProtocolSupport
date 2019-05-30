@@ -1,19 +1,19 @@
-package protocolsupport.protocol.utils.datawatcher.objects;
+package protocolsupport.protocol.types.networkentity.metadata.objects;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class DataWatcherObjectShortLe extends DataWatcherObject<Short> {
+public class NetworkEntityMetadataShortLe extends NetworkEntityMetadataObject<Short> {
 
-	public DataWatcherObjectShortLe() {
+	public NetworkEntityMetadataShortLe() {
 	}
 
-	public DataWatcherObjectShortLe(short s) {
+	public NetworkEntityMetadataShortLe(short s) {
 		value = s;
 	}
 
-	public DataWatcherObjectShortLe(int i) {
+	public NetworkEntityMetadataShortLe(int i) {
 		value = (short) i;
 	}
 

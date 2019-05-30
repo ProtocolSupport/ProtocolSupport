@@ -22,7 +22,7 @@ import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.storage.netcache.MovementCache;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.types.Position;
 
 import java.util.Map;
 import java.util.WeakHashMap;

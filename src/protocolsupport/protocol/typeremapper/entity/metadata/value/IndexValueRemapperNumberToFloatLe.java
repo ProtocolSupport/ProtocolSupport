@@ -1,19 +1,19 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.value;
 
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloatLe;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectFloatLe;
 
-public class IndexValueRemapperNumberToFloatLe extends IndexValueRemapper<DataWatcherObject<Number>> {
+public class IndexValueRemapperNumberToFloatLe extends IndexValueRemapper<NetworkEntityMetadataObject<Number>> {
 
 	@SuppressWarnings("unchecked")
-	public IndexValueRemapperNumberToFloatLe(DataWatcherObjectIndex<? extends DataWatcherObject<? extends Number>> fromIndex, int toIndex) {
-		super((DataWatcherObjectIndex<DataWatcherObject<Number>>) fromIndex, toIndex);
+	public IndexValueRemapperNumberToFloatLe(NetworkEntityMetadataObjectIndex<? extends NetworkEntityMetadataObject<? extends Number>> fromIndex, int toIndex) {
+		super((NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObject<Number>>) fromIndex, toIndex);
 	}
 
 	@Override
-	public DataWatcherObject<?> remapValue(DataWatcherObject<Number> object) {
-		return new DataWatcherObjectFloatLe(object.getValue().floatValue());
+	public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObject<Number> object) {
+		return new NetworkEntityMetadataObjectFloatLe(object.getValue().floatValue());
 	}
 
 }

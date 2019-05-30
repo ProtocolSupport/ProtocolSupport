@@ -13,7 +13,7 @@ import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEnti
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVarInt;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectSVarInt;
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.types.WindowType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 
@@ -32,7 +32,7 @@ public abstract class BaseHorseEntityMetadataRemapper extends AgeableEntityMetad
 					remapped.put(PeMetaBase.EATING_HAYSTACK, new NetworkEntityMetadataObjectVarInt(((byteWatcher.getValue() & (1 << (6-1))) != 0) ? 0b100000 : 0));
 					if ((byteWatcher.getValue() & (1 << (2-1))) != 0) {
 						//When tamed set these weird properties to make the inventory work. FFS Mojang.
-						remapped.put(PeMetaBase.HORSE_CONTAINER_TYPE, new NetworkEntityMetadataObjectByte((byte) PEDataValues.WINDOWTYPE.getTable(ProtocolVersionsHelper.LATEST_PE).getRemap(WindowType.HORSE.toLegacyId()))); //Inventory Type
+						remapped.put(PeMetaBase.HORSE_CONTAINER_TYPE, new NetworkEntityMetadataObjectByte((byte) PEDataValues.WINDOWTYPE.getTable(ProtocolVersionsHelper.LATEST_PE).getRemap(WindowType.HORSE.ordinal()))); //Inventory Type
 						remapped.put(PeMetaBase.HORSE_ANIMAL_SLOTS, new NetworkEntityMetadataObjectSVarInt(2)); //Animal slots (left side of the image)
 					}
 				});

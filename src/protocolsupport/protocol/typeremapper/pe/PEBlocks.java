@@ -42,7 +42,7 @@ public class PEBlocks {
 		final ArrayList<PEBlock> peBlocks = new ArrayList<>();
 		final JsonObject peMappings = ResourceUtils.getAsJson(PEDataValues.getResourcePath("blockmapping.json"));
 		//Load in PE blockdefinitions (used for login definition list and mapping name+data -> runtimeid)
-		for (JsonElement element : ResourceUtils.getAsIterableJson(PEDataValues.getResourcePath("blockdefinition.json"))) {
+		for (JsonElement element : ResourceUtils.getAsJson(PEDataValues.getResourcePath("blockdefinition.json")).getAsJsonArray()) {
 			JsonObject object = element.getAsJsonObject();
 			peBlocks.add(new PEBlock(JsonUtils.getString(object, "name"), (short) JsonUtils.getInt(object, "data")));
 		}

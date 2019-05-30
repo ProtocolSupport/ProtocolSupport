@@ -8,7 +8,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.Connection;
 import protocolsupport.listeners.InternalPluginMessageRequest.PluginMessageData;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.types.Position;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class BlockUpdateRequest extends PluginMessageData {

@@ -8,9 +8,9 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMe
 import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarInt;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityItemDataCache;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectSVarInt;
+import protocolsupport.protocol.types.networkentity.NetworkEntityItemDataCache;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -26,7 +26,7 @@ public class SpawnObject extends MiddleSpawnObject {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ProtocolVersion version = connection.getVersion();
-		ArrayMap<DataWatcherObject<?>> spawnmeta = null;
+		ArrayMap<NetworkEntityMetadataObject<?>> spawnmeta = null;
 		switch (entity.getType()) {
 			case ITEM: {
 				((NetworkEntityItemDataCache) entity.getDataCache()).setData(x, y, z, motX / 8000F, motY / 8000F, motZ / 8000F);
@@ -39,7 +39,7 @@ public class SpawnObject extends MiddleSpawnObject {
 				spawnmeta = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
 				int pocketBlock = PEBlocks.toPocketBlock(version, ServerPlatform.get().getMiscUtils().getBlockDataByNetworkId(objectdata));
 				y -= 0.1; //Freaking PE pushes block because block breaks after sand is spawned
-				spawnmeta.put(PeMetaBase.VARIANT, new DataWatcherObjectSVarInt(pocketBlock));
+				spawnmeta.put(PeMetaBase.VARIANT, new NetworkEntityMetadataObjectSVarInt(pocketBlock));
 			}
 			default: {
 				PEDataValues.PEEntityData typeData = PEDataValues.getEntityData(entity.getType());

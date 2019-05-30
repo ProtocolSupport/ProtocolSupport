@@ -5,28 +5,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBlockData;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBoolean;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectChat;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectDirection;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectEntityPose;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectFloat;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectInt;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectItemStack;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectNBTTagCompound;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalChat;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalPosition;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalUUID;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalVarInt;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectParticle;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectPosition;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectShort;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectString;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVarInt;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVector3f;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVector3i;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVillagerData;
+import protocolsupport.protocol.types.networkentity.metadata.objects.*;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupportbuildprocessor.Preload;
 
@@ -76,6 +55,16 @@ public class NetworkEntityMetadataObjectRegistry {
 		register(NetworkEntityMetadataObjectShort.class, 1, ProtocolVersionsHelper.BEFORE_1_9);
 		register(NetworkEntityMetadataObjectInt.class, 2, ProtocolVersionsHelper.BEFORE_1_9);
 		register(NetworkEntityMetadataObjectVector3i.class, 6, ProtocolVersionsHelper.BEFORE_1_9);
+		register(NetworkEntityMetadataShortLe.class, 1, ProtocolVersionsHelper.ALL_PE);
+		register(NetworkEntityMetadataObjectVarInt.class, 2, ProtocolVersionsHelper.ALL_PE);
+		register(NetworkEntityMetadataObjectSVarInt.class, 2, ProtocolVersionsHelper.ALL_PE);
+		register(NetworkEntityMetadataObjectFloatLe.class, 3, ProtocolVersionsHelper.ALL_PE);
+		register(NetworkEntityMetadataObjectString.class, 4, ProtocolVersionsHelper.ALL_PE);
+		register(NetworkEntityMetadataObjectItemStack.class, 5, ProtocolVersionsHelper.ALL_PE);
+		register(NetworkEntityMetadataObjectVector3vi.class, 6, ProtocolVersionsHelper.ALL_PE);
+		register(NetworkEntityMetadataObjectVarLong.class, 7, ProtocolVersionsHelper.ALL_PE);
+		register(NetworkEntityMetadataObjectSVarLong.class, 7, ProtocolVersionsHelper.ALL_PE);
+		register(NetworkEntityMetadataObjectVector3fLe.class, 8, ProtocolVersionsHelper.ALL_PE);
 	}
 
 	public static int getTypeId(@SuppressWarnings("rawtypes") Class<? extends NetworkEntityMetadataObject> clazz, ProtocolVersion version) {

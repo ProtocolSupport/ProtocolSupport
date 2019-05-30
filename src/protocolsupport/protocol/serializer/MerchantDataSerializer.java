@@ -8,7 +8,7 @@ import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.types.MerchantData;
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.types.WindowType;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTInt;
 import protocolsupport.protocol.types.nbt.NBTList;
@@ -83,7 +83,7 @@ public class MerchantDataSerializer {
 	public static void writePEMerchantData(ByteBuf to, ProtocolVersion version, NetworkDataCache cache, long villagerId, String title, MerchantData merchdata) {
 		String locale = cache.getAttributesCache().getLocale();
 		to.writeByte((byte) cache.getWindowCache().getOpenedWindowId());
-		to.writeByte(PEDataValues.WINDOWTYPE.getTable(version).getRemap(WindowType.VILLAGER.toLegacyId()));
+		to.writeByte(PEDataValues.WINDOWTYPE.getTable(version).getRemap(WindowType.MERCHANT.ordinal()));
 		VarNumberSerializer.writeSVarInt(to, 0); //?
 		VarNumberSerializer.writeSVarInt(to, 0); //?
 		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_8)) {

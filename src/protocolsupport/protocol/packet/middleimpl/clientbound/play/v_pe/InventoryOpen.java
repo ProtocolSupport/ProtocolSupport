@@ -20,10 +20,10 @@ import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityInventoryDa
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeContainer;
 import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeVillager;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.WindowType;
+import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -49,16 +49,16 @@ public class InventoryOpen extends MiddleInventoryOpen {
 					packets.add(openEquipment(connection.getVersion(), windowId, type, horseId, horseTypeData.getInventoryFilter().getFilter()));
 				}
 			}
-		} else if (type == WindowType.VILLAGER) {
+		} else if (type == WindowType.MERCHANT) {
 			//Villagers, require fake villager to be spawned and with merchantdata it opens the actual inventory.
 			PEFakeVillager villager = cache.getPEInventoryCache().getFakeVillager();
 			villager.setTitle(title);
 			packets.add(villager.spawnVillager(cache, version));
 		} else {
 			//Fake shulker with chest, because shulker is way too buggy.
-			if (type == WindowType.SHULKER) {
-				type = WindowType.CHEST;
-			} else if (type == WindowType.ENCHANT) {
+			if (type == WindowType.SHULKER_BOX) {
+				type = WindowType.GENERIC_9X3;
+			} else if (type == WindowType.ENCHANTMENT) {
 				type = WindowType.HOPPER;
 			}
 			//Normal inventory, requires fake blocks to open. First check if plugins (Hmmpf) have closed inventory.
@@ -82,7 +82,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	public static ClientBoundPacketData openEquipment(ProtocolVersion version, int windowId, WindowType type, long entityId, NBTCompound nbt) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.EQUIPMENT);
 		serializer.writeByte(windowId);
-		serializer.writeByte(PEDataValues.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()));
+		serializer.writeByte(PEDataValues.WINDOWTYPE.getTable(version).getRemap(type.ordinal()));
 		VarNumberSerializer.writeSVarInt(serializer, 0); //UNKOWN :F
 		VarNumberSerializer.writeSVarLong(serializer, entityId);
 		ItemStackSerializer.writeTag(serializer, true, version, nbt);
@@ -98,7 +98,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 
 	private static ByteBuf serialize(ByteBuf serializer, ProtocolVersion version, int windowId, WindowType type, Position pePosition, int horseId) {
 		serializer.writeByte(windowId);
-		serializer.writeByte(PEDataValues.WINDOWTYPE.getTable(version).getRemap(type.toLegacyId()));
+		serializer.writeByte(PEDataValues.WINDOWTYPE.getTable(version).getRemap(type.ordinal()));
 		PositionSerializer.writePEPosition(serializer, pePosition);
 		VarNumberSerializer.writeSVarLong(serializer, horseId);
 		return serializer;

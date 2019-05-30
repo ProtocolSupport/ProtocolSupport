@@ -1,4 +1,4 @@
-package protocolsupport.protocol.utils.networkentity;
+package protocolsupport.protocol.types.networkentity;
 
 public class NetworkEntityLamaDataCache extends NetworkEntityDataCache {
 

@@ -12,11 +12,11 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory;
-import protocolsupport.protocol.utils.types.BlockFace;
-import protocolsupport.protocol.utils.types.GameMode;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.UsedHand;
+import protocolsupport.protocol.types.BlockFace;
+import protocolsupport.protocol.types.GameMode;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.UsedHand;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -59,13 +59,13 @@ public class UseItem extends ServerBoundMiddlePacket {
 		switch (subTypeId) {
 			case USE_CLICK_AIR: {
 				face = -1;
-				packets.add(MiddleBlockPlace.create(position, face, UsedHand.MAIN, cX, cY, cZ));
+				packets.add(MiddleBlockPlace.create(position, face, UsedHand.MAIN, cX, cY, cZ, false));
 				break;
 			}
 			case USE_CLICK_BLOCK: {
-				packets.add(MiddleBlockPlace.create(position, face, UsedHand.MAIN, cX, cY, cZ));
+				packets.add(MiddleBlockPlace.create(position, face, UsedHand.MAIN, cX, cY, cZ, false));
 				if (PEInventory.shouldDoClickUpdate(itemstack)) {
-					packets.add(MiddleBlockPlace.create(Position.ZERO, -1, UsedHand.MAIN, cX, cY, cZ));
+					packets.add(MiddleBlockPlace.create(Position.ZERO, -1, UsedHand.MAIN, cX, cY, cZ, false));
 				}
 				//Modify position to request server update for the correct block.
 				BlockFace.getById(face).modPosition(position);

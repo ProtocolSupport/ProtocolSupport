@@ -4,8 +4,8 @@ import protocolsupport.protocol.typeremapper.pe.inventory.PETransactionRemapper;
 import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeBeacon;
 import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeEnchanting;
 import protocolsupport.protocol.typeremapper.pe.inventory.fakes.PEFakeVillager;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.Position;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.ArrayDequeMultiMap.ChildDeque;
 

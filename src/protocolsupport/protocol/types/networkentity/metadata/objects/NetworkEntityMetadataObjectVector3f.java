@@ -8,11 +8,11 @@ import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEnti
 
 public class NetworkEntityMetadataObjectVector3f extends ReadableNetworkEntityMetadataObject<Vector> {
 
-	public DataWatcherObjectVector3f() {
+	public NetworkEntityMetadataObjectVector3f() {
 		value = new Vector(0, 0, 0);
 	}
 
-	public DataWatcherObjectVector3f(Vector position) {
+	public NetworkEntityMetadataObjectVector3f(Vector position) {
 		value = position;
 	}
 

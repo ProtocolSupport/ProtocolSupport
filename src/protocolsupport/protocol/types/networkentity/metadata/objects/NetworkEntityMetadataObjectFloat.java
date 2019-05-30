@@ -6,10 +6,10 @@ import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEnti
 
 public class NetworkEntityMetadataObjectFloat extends ReadableNetworkEntityMetadataObject<Float> {
 
-	public DataWatcherObjectFloat() {
+	public NetworkEntityMetadataObjectFloat() {
 	}
 
-	public DataWatcherObjectFloat(float value) {
+	public NetworkEntityMetadataObjectFloat(float value) {
 		this.value = value;
 	}
 

@@ -5,12 +5,12 @@ import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPotion;
-import protocolsupport.protocol.utils.minecraftdata.PotionData;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTList;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTList;
+import protocolsupport.protocol.types.nbt.NBTString;
+import protocolsupport.protocol.types.nbt.NBTType;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftPotionData;
 
 public class PotionToPEIdSpecificRemapper implements ItemStackComplexRemapper {
 
@@ -27,7 +27,7 @@ public class PotionToPEIdSpecificRemapper implements ItemStackComplexRemapper {
 			String potion = potionTag.getValue();
 			NBTList<NBTCompound> tagList = tag.getTagListOfType("CustomPotionEffects", NBTType.COMPOUND);
 			if (tagList != null && tagList.size() >= 1) {
-				potion = PotionData.getNameById(tagList.getTag(0).getNumberTag("Id").getAsInt());
+				potion = MinecraftPotionData.getNameById(tagList.getTag(0).getNumberTag("Id").getAsInt());
 			}
 			if (PEPotion.hasPERemap(potion)) {
 				tag.removeTag("Potion");

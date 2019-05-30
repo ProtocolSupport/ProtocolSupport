@@ -1,20 +1,20 @@
-package protocolsupport.protocol.utils.datawatcher.objects;
+package protocolsupport.protocol.types.networkentity.metadata.objects;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class DataWatcherObjectVarLong extends DataWatcherObject<Integer> {
+public class NetworkEntityMetadataObjectVarLong extends NetworkEntityMetadataObject<Integer> {
 
-	public DataWatcherObjectVarLong() {
+	public NetworkEntityMetadataObjectVarLong() {
 	}
 
-	public DataWatcherObjectVarLong(Integer Value) {
+	public NetworkEntityMetadataObjectVarLong(Integer Value) {
 		this.value = Value;
 	}
 
-	public DataWatcherObjectVarLong(int Value) {
+	public NetworkEntityMetadataObjectVarLong(int Value) {
 		this.value = Value;
 	}
 

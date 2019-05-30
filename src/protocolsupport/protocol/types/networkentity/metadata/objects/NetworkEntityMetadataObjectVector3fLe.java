@@ -1,18 +1,19 @@
-package protocolsupport.protocol.utils.datawatcher.objects;
+package protocolsupport.protocol.types.networkentity.metadata.objects;
 
 import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
+
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class DataWatcherObjectVector3fLe extends DataWatcherObject<Vector> {
+public class NetworkEntityMetadataObjectVector3fLe extends NetworkEntityMetadataObject<Vector> {
 
-	public DataWatcherObjectVector3fLe() {
+	public NetworkEntityMetadataObjectVector3fLe() {
 		value = new Vector(0, 0, 0);
 	}
 
-	public DataWatcherObjectVector3fLe(Vector position) {
+	public NetworkEntityMetadataObjectVector3fLe(Vector position) {
 		value = position;
 	}
 

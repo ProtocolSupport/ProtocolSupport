@@ -143,7 +143,7 @@
 //import protocolsupport.protocol.utils.authlib.GameProfile;
 //import protocolsupport.protocol.utils.minecraftdata.BlockData;
 //import protocolsupport.protocol.utils.minecraftdata.BlockData.BlockDataEntry;
-//import protocolsupport.protocol.utils.types.Position;
+//import protocolsupport.protocol.types.Position;
 //import protocolsupport.utils.ReflectionUtils;
 //import protocolsupport.zplatform.PlatformPacketFactory;
 //

@@ -1,22 +1,21 @@
-package protocolsupport.protocol.utils.datawatcher.objects;
+package protocolsupport.protocol.types.networkentity.metadata.objects;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class DataWatcherObjectVector3vi extends ReadableDataWatcherObject<Position> {
+public class NetworkEntityMetadataObjectVector3vi extends NetworkEntityMetadataObject<Position> {
 
-	public DataWatcherObjectVector3vi() {
+	public NetworkEntityMetadataObjectVector3vi() {
 		value = new Position(0, 0, 0);
 	}
 
-	public DataWatcherObjectVector3vi(Position position) {
+	public NetworkEntityMetadataObjectVector3vi(Position position) {
 		value = position;
 	}
 
-	@Override
 	public void readFromStream(ByteBuf from) {
 		PositionSerializer.readPEPositionTo(from, value);
 	}

@@ -1,15 +1,15 @@
-package protocolsupport.protocol.utils.datawatcher.objects;
+package protocolsupport.protocol.types.networkentity.metadata.objects;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class DataWatcherObjectFloatLe extends DataWatcherObject<Float> {
+public class NetworkEntityMetadataObjectFloatLe extends NetworkEntityMetadataObject<Float> {
 
-	public DataWatcherObjectFloatLe() {
+	public NetworkEntityMetadataObjectFloatLe() {
 	}
 
-	public DataWatcherObjectFloatLe(float value) {
+	public NetworkEntityMetadataObjectFloatLe(float value) {
 		this.value = value;
 	}
 

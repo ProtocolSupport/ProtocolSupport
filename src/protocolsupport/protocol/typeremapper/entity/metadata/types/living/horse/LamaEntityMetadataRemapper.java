@@ -7,10 +7,9 @@ import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRem
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityLamaDataCache;
+import protocolsupport.protocol.types.networkentity.NetworkEntityLamaDataCache;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
-import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class LamaEntityMetadataRemapper extends CargoHorseEntityMetadataRemapper {
 
