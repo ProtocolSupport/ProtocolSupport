@@ -60,6 +60,8 @@ public class GenericIdSkipper {
 
 	public static final IntSkippingRegistry<ArrayBasedIntSkippingTable> EFFECT = new IntSkippingRegistry<ArrayBasedIntSkippingTable>() {
 		{
+			registerSkipEntry(PotionEffectType.HERO_OF_THE_VILLAGE, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkipEntry(PotionEffectType.BAD_OMEN, ProtocolVersionsHelper.BEFORE_1_14);
 			registerSkipEntry(PotionEffectType.CONDUIT_POWER, ProtocolVersionsHelper.BEFORE_1_13);
 			registerSkipEntry(PotionEffectType.SLOW_FALLING, ProtocolVersionsHelper.BEFORE_1_13);
 			registerSkipEntry(PotionEffectType.DOLPHINS_GRACE, ProtocolVersionsHelper.BEFORE_1_13);
@@ -77,7 +79,7 @@ public class GenericIdSkipper {
 		}
 		@Override
 		protected ArrayBasedIntSkippingTable createTable() {
-			return new ArrayBasedIntSkippingTable(32);
+			return new ArrayBasedIntSkippingTable(33);
 		}
 	};
 
