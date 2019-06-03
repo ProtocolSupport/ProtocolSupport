@@ -68,6 +68,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_5_6_7.Score
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_5_6_7.ScoreboardTeam;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_5_6_7.WorldParticle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7.EntitySetAttributes;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7.InventoryHorseOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8.EntityLeash;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8.VehiclePassengers;
@@ -233,6 +234,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID, GameStateChange::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_WEATHER_ID, SpawnGlobal::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_OPEN_ID, InventoryOpen::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_HORSE_OPEN_ID, InventoryHorseOpen::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_CLOSE_ID, InventoryClose::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, InventorySetSlot::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID, InventorySetItems::new);

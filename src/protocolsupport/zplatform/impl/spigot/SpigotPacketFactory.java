@@ -410,6 +410,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
+	public int getOutPlayWindowHorseOpenPacketId() {
+		return getOutId(PacketPlayOutOpenWindowHorse.class);
+	}
+
+	@Override
 	public int getOutPlayWindowClosePacketId() {
 		return getOutId(PacketPlayOutCloseWindow.class);
 	}

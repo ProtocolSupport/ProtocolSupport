@@ -57,6 +57,7 @@ public class ClientBoundPacket {
 	public static final int PLAY_GAME_STATE_CHANGE_ID = ServerPlatform.get().getPacketFactory().getOutPlayGameStateChangePacketId();
 	public static final int PLAY_SPAWN_WEATHER_ID = ServerPlatform.get().getPacketFactory().getOutPlaySpawnWeatherPacketId();
 	public static final int PLAY_WINDOW_OPEN_ID = ServerPlatform.get().getPacketFactory().getOutPlayWindowOpenPacketId();
+	public static final int PLAY_WINDOW_HORSE_OPEN_ID = ServerPlatform.get().getPacketFactory().getOutPlayWindowHorseOpenPacketId();
 	public static final int PLAY_WINDOW_CLOSE_ID = ServerPlatform.get().getPacketFactory().getOutPlayWindowClosePacketId();
 	public static final int PLAY_WINDOW_SET_SLOT_ID = ServerPlatform.get().getPacketFactory().getOutPlayWindowSetSlotPacketId();
 	public static final int PLAY_WINDOW_SET_ITEMS_ID = ServerPlatform.get().getPacketFactory().getOutPlayWindowSetItemsPacketId();

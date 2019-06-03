@@ -150,6 +150,8 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayWindowOpenPacketId();
 
+	public int getOutPlayWindowHorseOpenPacketId();
+
 	public int getOutPlayWindowClosePacketId();
 
 	public int getOutPlayWindowSetSlotPacketId();

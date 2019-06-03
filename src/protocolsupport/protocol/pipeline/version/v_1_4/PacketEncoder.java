@@ -39,6 +39,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorl
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4.InventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.Chat;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.InventoryHorseOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.SetPosition;
@@ -216,6 +217,7 @@ public class PacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID, GameStateChange::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_WEATHER_ID, SpawnGlobal::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_OPEN_ID, InventoryOpen::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_HORSE_OPEN_ID, InventoryHorseOpen::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_CLOSE_ID, InventoryClose::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, InventorySetSlot::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID, InventorySetItems::new);

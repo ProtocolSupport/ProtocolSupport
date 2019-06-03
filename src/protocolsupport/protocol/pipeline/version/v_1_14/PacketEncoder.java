@@ -40,6 +40,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14.ChunkLig
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14.DeclareRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14.DeclareTags;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14.EntityMetadata;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14.InventoryHorseOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14.InventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14.MerchantTradeList;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14.ServerDifficulty;
@@ -175,6 +176,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID, GameStateChange::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_WEATHER_ID, SpawnGlobal::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_OPEN_ID, InventoryOpen::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_HORSE_OPEN_ID, InventoryHorseOpen::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_CLOSE_ID, InventoryClose::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, InventorySetSlot::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID, InventorySetItems::new);
