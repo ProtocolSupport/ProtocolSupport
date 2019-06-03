@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.types.WindowType;
 
 public abstract class MiddleInventoryHorseOpen extends ClientBoundMiddlePacket {
 
@@ -20,6 +21,12 @@ public abstract class MiddleInventoryHorseOpen extends ClientBoundMiddlePacket {
 		windowId = serverdata.readByte();
 		slots = VarNumberSerializer.readVarInt(serverdata);
 		entityId = serverdata.readInt();
+	}
+
+	@Override
+	public boolean postFromServerRead() {
+		cache.getWindowCache().setOpenedWindow(windowId, WindowType.HORSE);
+		return true;
 	}
 
 }

@@ -27,6 +27,7 @@ public enum WindowType {
 	SMOKER,
 	CARTOGRAPHY,
 	STONECUTTER,
+	//specials (don't actually exist at network level)
 	HORSE,
 	PLAYER;
 
