@@ -1,6 +1,5 @@
 package protocolsupport.protocol.storage.netcache;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +41,9 @@ public class ChunkCache {
 		@SuppressWarnings("unchecked")
 		protected final Map<Position, TileEntity>[] tiles = new HashMap[ChunkConstants.SECTION_COUNT_BLOCKS];
 		{
-			Arrays.fill(tiles, new HashMap<>());
+			for (int i = 0; i < tiles.length; i++) {
+				tiles[i] = new HashMap<>();
+			}
 		}
 
 		public BlocksSection getBlocksSection(int sectionNumber) {
