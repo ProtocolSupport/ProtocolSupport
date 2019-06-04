@@ -8,6 +8,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14.LoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_8_9r1_9r2_10_11_12r1_12r2_13_14.EncryptionRequest;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_8_9r1_9r2_10_11_12r1_12r2_13_14.SetCompression;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopEntitySound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopSetViewCenter;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopUpdateViewDistance;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12r1_12r2_13_14.EntityEffectAdd;
@@ -307,6 +308,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BOOK_OPEN, BookOpen::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_VIEW_CENTER, NoopSetViewCenter::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_VIEW_DISTANCE, NoopUpdateViewDistance::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_SOUND_ID, NoopEntitySound::new);
 	}
 
 	public PacketEncoder(ConnectionImpl connection) {

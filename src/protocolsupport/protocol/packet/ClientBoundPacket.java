@@ -43,6 +43,7 @@ public class ClientBoundPacket {
 	public static final int PLAY_ENTITY_METADATA_ID = ServerPlatform.get().getPacketFactory().getOutPlayEntityMetadataPacketId();
 	public static final int PLAY_ENTITY_EFFECT_ADD_ID = ServerPlatform.get().getPacketFactory().getOutPlayEntityEffectAddPacketId();
 	public static final int PLAY_ENTITY_EFFECT_REMOVE_ID = ServerPlatform.get().getPacketFactory().getOutPlayEntityEffectRemovePacketId();
+	public static final int PLAY_ENTITY_SOUND_ID = ServerPlatform.get().getPacketFactory().getOutPlayEntitySoundPacketId();
 	public static final int PLAY_EXPERIENCE_ID = ServerPlatform.get().getPacketFactory().getOutPlayExperiencePacketId();
 	public static final int PLAY_ENTITY_ATTRIBUTES_ID = ServerPlatform.get().getPacketFactory().getOutPlayEntityAttributesPacketId();
 	public static final int PLAY_CHUNK_SINGLE_ID = ServerPlatform.get().getPacketFactory().getOutPlayChunkSinglePacketId();

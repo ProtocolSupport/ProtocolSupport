@@ -40,6 +40,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14.ChunkLig
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14.DeclareRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14.DeclareTags;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14.EntityMetadata;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14.EntitySound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14.InventoryHorseOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14.InventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14.MerchantTradeList;
@@ -161,6 +162,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_METADATA_ID, EntityMetadata::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_ADD_ID, EntityEffectAdd::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_EFFECT_REMOVE_ID, EntityEffectRemove::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_SOUND_ID, EntitySound::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_EXPERIENCE_ID, SetExperience::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_ATTRIBUTES_ID, EntitySetAttributes::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_SINGLE_ID, Chunk::new);

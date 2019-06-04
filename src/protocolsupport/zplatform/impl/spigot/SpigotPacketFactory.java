@@ -340,6 +340,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
+	public int getOutPlayEntitySoundPacketId() {
+		return getOutId(PacketPlayOutEntitySound.class);
+	}
+
+	@Override
 	public int getOutPlayExperiencePacketId() {
 		return getOutId(PacketPlayOutExperience.class);
 	}

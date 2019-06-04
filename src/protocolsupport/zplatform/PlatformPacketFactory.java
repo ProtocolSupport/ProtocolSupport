@@ -122,6 +122,8 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayEntityEffectRemovePacketId();
 
+	public int getOutPlayEntitySoundPacketId();
+
 	public int getOutPlayExperiencePacketId();
 
 	public int getOutPlayEntityAttributesPacketId();
