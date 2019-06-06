@@ -17,7 +17,7 @@ public class NetworkEntityMetadataObjectOptionalVarInt extends ReadableNetworkEn
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
-		VarNumberSerializer.writeVarInt(to, value != 0 ? value + 1 : 0);
+		VarNumberSerializer.writeVarInt(to, value != null ? value + 1 : 0);
 	}
 
 }
