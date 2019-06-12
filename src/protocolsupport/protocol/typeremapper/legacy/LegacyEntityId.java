@@ -140,8 +140,8 @@ public class LegacyEntityId {
 		toLegacyIntId.put(NetworkEntityType.FISHING_FLOAT, 90);
 		toLegacyIntId.put(NetworkEntityType.ITEM, 2);
 		toLegacyIntId.put(NetworkEntityType.ARROW, 60);
+		toLegacyIntId.put(NetworkEntityType.TIPPED_ARROW, 60);
 		toLegacyIntId.put(NetworkEntityType.SPECTRAL_ARROW, 91);
-		toLegacyIntId.put(NetworkEntityType.TIPPED_ARROW, 92);
 		toLegacyIntId.put(NetworkEntityType.THROWN_TRIDENT, 94);
 		toLegacyIntId.put(NetworkEntityType.FIREWORK, 76);
 		toLegacyIntId.put(NetworkEntityType.ITEM_FRAME, 71);
