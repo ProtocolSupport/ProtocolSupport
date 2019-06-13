@@ -6,6 +6,9 @@ plugins {
 apply from: 'helper.gradle'
 
 
+defaultTasks 'build'
+
+
 group 'protocolsupport'
 version '4.29-dev'
 sourceCompatibility = JavaVersion.VERSION_1_8
