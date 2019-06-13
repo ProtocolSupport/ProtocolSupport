@@ -140,6 +140,9 @@ task generateInfo(type: DefaultTask) {doLast{
 	new FileOutputStream(buildInfoFile).withCloseable({ properties.store(it, "Build info") })
 }}
 
+Set<String> workaroundRelocationClasses = new HashSet<>();
+workaroundRelocationClasses.add("protocolsupport/zplatform/impl/spigot/entitytracker/SpigotEntityTrackerEntryInjectorMap.class");
+
 shadowJar {
 	doFirst {
 		new File(destinationDir, archiveName).delete()
@@ -158,9 +161,24 @@ shadowJar {
 	relocate 'com.google.gson', 'protocolsupport.libs.com.google.gson'
 }
 
+
+task workaroundRelocation(type: Zip) {
+	def originalJar = new File(shadowJar.destinationDir, shadowJar.archiveName)
+
+	archiveName = shadowJar.archiveName
+
+	from(zipTree(originalJar)) {
+        exclude(workaroundRelocationClasses)
+	}
+
+	from(sourceSets.main.output.classesDir) {
+		include(workaroundRelocationClasses)    
+	}
+}
+
 task copyFinalJarToTarget(type: DefaultTask) {doLast{
 	java.nio.file.Files.copy(
-		jar.archivePath.getAbsoluteFile().toPath(),
+		workaroundRelocation.archivePath.getAbsoluteFile().toPath(),
 		new File(targetJarDirectory, jar.baseName + '.jar').getAbsoluteFile().toPath(),
 		java.nio.file.StandardCopyOption.REPLACE_EXISTING
 	)
@@ -176,4 +194,5 @@ jar.enabled = false
 jar.finalizedBy(shadowJar)
 shadowJar.dependsOn(generateInfo)
 shadowJar.dependsOn(generateLocaleList)
-shadowJar.finalizedBy(copyFinalJarToTarget)
+shadowJar.finalizedBy(workaroundRelocation)
+workaroundRelocation.finalizedBy(copyFinalJarToTarget)
