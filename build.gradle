@@ -1,30 +1,9 @@
-buildscript {
-	dependencies {
-		classpath 'org.jdom:jdom2:2.0.6'
-		classpath 'org.ow2.asm:asm:5.1'
-		classpath 'org.ow2.asm:asm-commons:5.1'
-		classpath 'commons-io:commons-io:2.5'
-		classpath 'org.apache.ant:ant:1.9.7'
-		classpath 'org.codehaus.plexus:plexus-utils:3.0.24'
-		classpath 'org.vafer:jdependency:1.1'
-		classpath files('gradle/plugins/shadowPlugin.jar')
-	}
-	repositories {
-		mavenCentral()
-	}
-}
-
 plugins {
+	id 'com.github.johnrengelman.shadow' version '5.0.0'
 	id 'java'
 }
 
 apply from: 'helper.gradle'
-apply plugin: com.github.jengelman.gradle.plugins.shadow.ShadowPlugin
-
-
-tasks.withType(AbstractCompile) {
-	classpath += configurations.shadow
-}
 
 
 group 'protocolsupport'
@@ -89,13 +68,15 @@ repositories {
 }
 
 dependencies {
-	shadow fileTree(dir: librariesRuntimeDirectory, include: '*.jar')
-	compile fileTree(dir: librariesShadeDirectory, include: '*.jar')
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
 	compile group: 'it.unimi.dsi', name: 'fastutil', version: '8.2.2'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
+	compile fileTree(dir: librariesShadeDirectory, include: '*.jar')
+	shadow fileTree(dir: librariesRuntimeDirectory, include: '*.jar')
+
 	annotationProcessor fileTree(dir: annotationProcessorsDirectory, include: '*.jar')
 	shadow fileTree(dir: annotationProcessorsDirectory, include: '*.jar')
+
 	testCompile fileTree(dir: librariesRuntimeDirectory, include: '*.jar')
 	testCompile fileTree(dir: librariesShadeDirectory, include: '*.jar')
 	testCompile 'org.junit.jupiter:junit-jupiter-api:5.2.0'
@@ -103,6 +84,11 @@ dependencies {
 }
 
 compileJava {
+	doFirst {
+	    classpath -= configurations.shadow
+	    classpath += configurations.shadow
+	}
+
 	options.encoding = 'UTF-8'
 	options.incremental = false
 	options.compilerArgs << ("-Aprotocolsupportbuildprocessor.generatedresourcesdirectory=" + newFile(generatedResourcesDirectory, resourcesDirectoryName, "preload").getAbsolutePath())
@@ -140,9 +126,6 @@ task generateInfo(type: DefaultTask) {doLast{
 	new FileOutputStream(buildInfoFile).withCloseable({ properties.store(it, "Build info") })
 }}
 
-Set<String> workaroundRelocationClasses = new HashSet<>();
-workaroundRelocationClasses.add("protocolsupport/zplatform/impl/spigot/entitytracker/SpigotEntityTrackerEntryInjectorMap.class");
-
 shadowJar {
 	doFirst {
 		new File(destinationDir, archiveName).delete()
@@ -153,32 +136,37 @@ shadowJar {
 	from generatedResourcesDirectory
 
 	archiveName = jar.archiveName
-	minimizeJar = true
 
 	exclude 'META-INF/**'
 	relocate 'org.apache', 'protocolsupport.libs.org.apache'
 	relocate 'it.unimi.dsi.fastutil', 'protocolsupport.libs.it.unimi.dsi.fastutil'
 	relocate 'com.google.gson', 'protocolsupport.libs.com.google.gson'
+
+	minimize()
 }
 
 
-task workaroundRelocation(type: Zip) {
-	def originalJar = new File(shadowJar.destinationDir, shadowJar.archiveName)
+task postprocessFatJar(type: Zip) {
+	Set<String> workaroundRelocationClasses = new HashSet<>(Arrays.asList(
+		"protocolsupport/zplatform/impl/spigot/entitytracker/SpigotEntityTrackerEntryInjectorMap.class"
+	));
+	File originalJar = new File(shadowJar.destinationDir, shadowJar.archiveName)
 
 	archiveName = shadowJar.archiveName
 
 	from(zipTree(originalJar)) {
         exclude(workaroundRelocationClasses)
+        exclude 'META-INF/**'
 	}
 
-	from(sourceSets.main.output.classesDir) {
+	from(sourceSets.main.output.classesDirs) {
 		include(workaroundRelocationClasses)    
 	}
 }
 
 task copyFinalJarToTarget(type: DefaultTask) {doLast{
 	java.nio.file.Files.copy(
-		workaroundRelocation.archivePath.getAbsoluteFile().toPath(),
+		postprocessFatJar.archivePath.getAbsoluteFile().toPath(),
 		new File(targetJarDirectory, jar.baseName + '.jar').getAbsoluteFile().toPath(),
 		java.nio.file.StandardCopyOption.REPLACE_EXISTING
 	)
@@ -194,5 +182,5 @@ jar.enabled = false
 jar.finalizedBy(shadowJar)
 shadowJar.dependsOn(generateInfo)
 shadowJar.dependsOn(generateLocaleList)
-shadowJar.finalizedBy(workaroundRelocation)
-workaroundRelocation.finalizedBy(copyFinalJarToTarget)
+shadowJar.finalizedBy(postprocessFatJar)
+postprocessFatJar.finalizedBy(copyFinalJarToTarget)
