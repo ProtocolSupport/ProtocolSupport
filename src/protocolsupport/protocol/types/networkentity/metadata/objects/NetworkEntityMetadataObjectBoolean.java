@@ -6,6 +6,13 @@ import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEnti
 
 public class NetworkEntityMetadataObjectBoolean extends ReadableNetworkEntityMetadataObject<Boolean> {
 
+	public NetworkEntityMetadataObjectBoolean() {
+	}
+
+	public NetworkEntityMetadataObjectBoolean(boolean value) {
+		this.value = value;
+	}
+
 	@Override
 	public void readFromStream(ByteBuf from) {
 		value = from.readBoolean();

@@ -37,7 +37,6 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.living.Vindic
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.WitchEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.WitherEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.FoxEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.OcelotEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PandaEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PigEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PolarBearEntityMetadataRemapper;
@@ -191,7 +190,7 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.BAT, new BatEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
 			.register();
 			new Mapping(NetworkEntityType.OCELOT)
-			.addMapping(NetworkEntityType.OCELOT, new OcelotEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.OCELOT, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
 			.register();
 			new Mapping(NetworkEntityType.WOLF)
 			.addMapping(NetworkEntityType.WOLF, new WolfEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
