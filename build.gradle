@@ -123,6 +123,7 @@ task generateInfo(type: DefaultTask) {doLast{
 	properties.setProperty("buildtime", new Date().format("yyyy.MM.dd 'at' HH:mm:ss z"))
 	properties.setProperty("buildhost", System.getProperty("protocolsupport.buildhost", "unknown"))
 	properties.setProperty("buildnumber", System.getProperty("protocolsupport.buildnumber", "unknown"))
+	properties.setProperty("buildgit", System.getProperty("protocolsupport.buildgit", "unknown"))
 	File buildInfoFile = newFile(generatedResourcesDirectory, resourcesDirectoryName, "buildinfo")
 	buildInfoFile.getParentFile().mkdirs()
 	buildInfoFile.createNewFile()

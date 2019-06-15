@@ -99,12 +99,14 @@ public class ProtocolSupport extends JavaPlugin {
 		public final String buildtime;
 		public final String buildhost;
 		public final String buildnumber;
+		public final String buildgit;
 		public BuildInfo() throws IOException {
 			Properties properties = new Properties();
 			properties.load(ResourceUtils.getAsBufferedReader("buildinfo"));
 			buildtime = properties.getProperty("buildtime");
 			buildhost = properties.getProperty("buildhost");
 			buildnumber = properties.getProperty("buildnumber");
+			buildgit = properties.getProperty("buildgit");
 		}
 		@Override
 		public String toString() {
