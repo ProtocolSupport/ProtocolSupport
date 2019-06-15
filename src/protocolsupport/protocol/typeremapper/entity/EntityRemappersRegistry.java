@@ -10,7 +10,7 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.EntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AbstractMerchantEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AgeableEntityMetadataRemapper;
@@ -90,13 +90,13 @@ public class EntityRemappersRegistry {
 
 	public static class EntityRemappingTable extends RemappingTable {
 
-		protected final EnumMap<NetworkEntityType, Pair<NetworkEntityType, List<DataWatcherObjectRemapper>>> table = new EnumMap<>(NetworkEntityType.class);
+		protected final EnumMap<NetworkEntityType, Pair<NetworkEntityType, List<NetworkEntityMetadataObjectRemapper>>> table = new EnumMap<>(NetworkEntityType.class);
 
-		public Pair<NetworkEntityType, List<DataWatcherObjectRemapper>> getRemap(NetworkEntityType from) {
+		public Pair<NetworkEntityType, List<NetworkEntityMetadataObjectRemapper>> getRemap(NetworkEntityType from) {
 			return table.get(from);
 		}
 
-		public void setRemap(NetworkEntityType from, NetworkEntityType to, List<DataWatcherObjectRemapper> metadataRemapper) {
+		public void setRemap(NetworkEntityType from, NetworkEntityType to, List<NetworkEntityMetadataObjectRemapper> metadataRemapper) {
 			table.put(from, ImmutablePair.of(to, metadataRemapper));
 		}
 

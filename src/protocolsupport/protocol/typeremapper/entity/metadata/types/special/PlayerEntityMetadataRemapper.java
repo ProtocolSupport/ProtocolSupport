@@ -1,7 +1,7 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.special;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.LivingEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNumberToInt;
@@ -40,7 +40,7 @@ public class PlayerEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.RIGHT_SHOULDER_ENTITY, 18), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.RIGHT_SHOULDER_ENTITY, 16), ProtocolVersionsHelper.RANGE__1_12__1_13_2);
 
-		addRemap(new DataWatcherObjectRemapper() {
+		addRemap(new NetworkEntityMetadataObjectRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
 				NetworkEntityMetadataObjectIndex.Entity.FLAGS.getValue(original)

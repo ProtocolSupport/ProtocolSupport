@@ -6,7 +6,7 @@ import protocolsupport.protocol.typeremapper.block.FlatteningBlockData;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperBooleanToByte;
@@ -54,7 +54,7 @@ public class EndermanEntityMetadataRemapper extends InsentientEntityMetadataRema
 				return new NetworkEntityMetadataObjectShort((short) BlockRemappingHelper.remapBlockDataM12(blockDataRemappingTable, object.getValue()));
 			}
 		}, ProtocolVersion.MINECRAFT_1_8);
-		addRemapPerVersion(version -> new DataWatcherObjectRemapper() {
+		addRemapPerVersion(version -> new NetworkEntityMetadataObjectRemapper() {
 			final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {

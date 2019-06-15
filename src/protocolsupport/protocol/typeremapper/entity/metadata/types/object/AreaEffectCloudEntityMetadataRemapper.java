@@ -1,6 +1,6 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.object;
 
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
@@ -32,7 +32,7 @@ public class AreaEffectCloudEntityMetadataRemapper extends BaseEntityMetadataRem
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.AreaEffectCloud.PARTICLE, 10), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.AreaEffectCloud.PARTICLE, 9), ProtocolVersionsHelper.ALL_1_13);
 		addRemapPerVersion(
-			version -> new DataWatcherObjectRemapper() {
+			version -> new NetworkEntityMetadataObjectRemapper() {
 				ParticleRemappingTable particleRemapper = ParticleRemapper.REGISTRY.getTable(version);
 				@Override
 				public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {

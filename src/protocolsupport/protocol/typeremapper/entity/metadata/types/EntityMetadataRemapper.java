@@ -8,27 +8,27 @@ import java.util.Map;
 import java.util.function.Function;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
 
 public class EntityMetadataRemapper {
 
 	public static final EntityMetadataRemapper NOOP = new EntityMetadataRemapper();
 
-	protected final EnumMap<ProtocolVersion, List<DataWatcherObjectRemapper>> entries = new EnumMap<>(ProtocolVersion.class);
+	protected final EnumMap<ProtocolVersion, List<NetworkEntityMetadataObjectRemapper>> entries = new EnumMap<>(ProtocolVersion.class);
 
-	public Map<ProtocolVersion, List<DataWatcherObjectRemapper>> getRemaps() {
+	public Map<ProtocolVersion, List<NetworkEntityMetadataObjectRemapper>> getRemaps() {
 		return entries;
 	}
 
-	public List<DataWatcherObjectRemapper> getRemaps(ProtocolVersion version) {
+	public List<NetworkEntityMetadataObjectRemapper> getRemaps(ProtocolVersion version) {
 		return entries.computeIfAbsent(version, k -> new ArrayList<>());
 	}
 
-	public void addRemap(DataWatcherObjectRemapper objectremapper, ProtocolVersion... versions) {
+	public void addRemap(NetworkEntityMetadataObjectRemapper objectremapper, ProtocolVersion... versions) {
 		Arrays.stream(versions).forEach(version -> getRemaps(version).add(objectremapper));
 	}
 
-	public void addRemapPerVersion(Function<ProtocolVersion, DataWatcherObjectRemapper> objectRemapperProvider, ProtocolVersion... versions) {
+	public void addRemapPerVersion(Function<ProtocolVersion, NetworkEntityMetadataObjectRemapper> objectRemapperProvider, ProtocolVersion... versions) {
 		Arrays.stream(versions).forEach(version -> getRemaps(version).add(objectRemapperProvider.apply(version)));
 	}
 

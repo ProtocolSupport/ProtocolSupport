@@ -4,11 +4,11 @@ import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
-public class FirstDataWatcherUpdateObjectAddRemapper extends DataWatcherObjectRemapper {
+public class FirstNetworkEntityMetadataUpdateObjectAddRemapper extends NetworkEntityMetadataObjectRemapper {
 
 	private final int index;
 	private final NetworkEntityMetadataObject<?> object;
-	public FirstDataWatcherUpdateObjectAddRemapper(int index, NetworkEntityMetadataObject<?> object) {
+	public FirstNetworkEntityMetadataUpdateObjectAddRemapper(int index, NetworkEntityMetadataObject<?> object) {
 		this.index = index;
 		this.object = object;
 	}
