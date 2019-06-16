@@ -37,10 +37,11 @@ public abstract class MiddleBlockTileUpdate extends MiddleBlock {
 		int z = tile.getPosition().getZ();
 		CachedChunk cachedChunk = chunkCache.get(ChunkCoord.fromGlobal(x, z));
 		if (cachedChunk != null) {
+			int sectionNumber = y >> 4;
 			tile = tileRemapper.remap(
-				tile, tileRemapper.tileThatNeedsBlockData(tile.getType()) ? cachedChunk.getBlock(y >> 4, CachedChunk.getBlockIndex(x & 0xF, y & 0xF, z & 0xF)) : -1
+				tile, tileRemapper.tileThatNeedsBlockData(tile.getType()) ? cachedChunk.getBlock(sectionNumber, CachedChunk.getBlockIndex(x & 0xF, y & 0xF, z & 0xF)) : -1
 			);
-			cachedChunk.getTiles(tile.getPosition().getY() >> 4).put(tile.getPosition(), tile);
+			cachedChunk.getTiles(sectionNumber).put(tile.getPosition(), tile);
 			return true;
 		} else {
 			return false;
