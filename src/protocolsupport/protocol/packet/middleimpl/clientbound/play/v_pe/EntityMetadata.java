@@ -1,7 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
@@ -54,7 +56,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		boolean hasName = entity.getDataCache().getPeBaseFlag(PeMetaBase.FLAG_ALWAYS_SHOW_NAMETAG);
 		boolean isInvisible = entity.getDataCache().getPeBaseFlag(PeMetaBase.FLAG_INVISIBLE);
 		if (isInvisible && hasName) {
-			entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_INVISIBLE, false);
+			entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_INVISIBLE, ((CraftEntity)Bukkit.getEntity(entity.getUUID())).getHandle().isInvisible());
 			entityRemapper.getRemappedMetadata().put(PeMetaBase.SCALE, new DataWatcherObjectFloatLe(0));
 			entityRemapper.getRemappedMetadata().put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(0));
 			entityRemapper.getRemappedMetadata().put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(0));
