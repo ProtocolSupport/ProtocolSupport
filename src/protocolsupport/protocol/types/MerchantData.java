@@ -7,13 +7,15 @@ public class MerchantData {
 	protected final int villagerLevel;
 	protected final int villagerXp;
 	protected final boolean villagerRegular;
+	protected final boolean restockingVillager;
 
-	public MerchantData(int windowId, TradeOffer[] offers, int villagerLevel, int villagerXp, boolean villagerRegular) {
+	public MerchantData(int windowId, TradeOffer[] offers, int villagerLevel, int villagerXp, boolean villagerRegular, boolean restockingVillager) {
 		this.windowId = windowId;
 		this.offers = offers;
 		this.villagerLevel = villagerLevel;
 		this.villagerXp = villagerXp;
 		this.villagerRegular = villagerRegular;
+		this.restockingVillager = restockingVillager;
 	}
 
 	public int getWindowId() {
@@ -34,6 +36,10 @@ public class MerchantData {
 
 	public boolean isVillagerRegular() {
 		return villagerRegular;
+	}
+
+	public boolean isRestockingVillager() {
+		return restockingVillager;
 	}
 
 	public static class TradeOffer {
