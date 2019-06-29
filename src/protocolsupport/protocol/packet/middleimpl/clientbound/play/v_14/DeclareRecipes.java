@@ -32,7 +32,15 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 		registerWriter(RecipeType.CRAFTING_SPECIAL_FIREWORK_ROCKET, RecipeWriter.SIMPLE);
 		registerWriter(RecipeType.CRAFTING_SPECIAL_FIREWORK_STAR, RecipeWriter.SIMPLE);
 		registerWriter(RecipeType.CRAFTING_SPECIAL_FIREWORK_STAR_FADE, RecipeWriter.SIMPLE);
-		registerWriter(RecipeType.CRAFTING_SPECIAL_REPAIRITEM, RecipeWriter.SIMPLE);
+		registerWriter(RecipeType.CRAFTING_SPECIAL_REPAIRITEM, new RecipeWriter<Recipe>() {
+			@Override
+			public boolean writeRecipe(ByteBuf to, ProtocolVersion version, Recipe recipe) {
+				if (version.isBefore(ProtocolVersion.MINECRAFT_1_14_3)) {
+					return false;
+				}
+				return super.writeRecipe(to, version, recipe);
+			}
+		});
 		registerWriter(RecipeType.CRAFTING_SPECIAL_TIPPEDARROW, RecipeWriter.SIMPLE);
 		registerWriter(RecipeType.CRAFTING_SPECIAL_BANNERDUPLICATE, RecipeWriter.SIMPLE);
 		registerWriter(RecipeType.CRAFTING_SPECIAL_BANNERADDPATTERN, RecipeWriter.SIMPLE);
@@ -96,10 +104,11 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 
 		public static final RecipeWriter<Recipe> SIMPLE = new RecipeWriter<>();
 
-		public void writeRecipe(ByteBuf to, ProtocolVersion version, T recipe) {
+		public boolean writeRecipe(ByteBuf to, ProtocolVersion version, T recipe) {
 			StringSerializer.writeString(to, version, recipe.getType().getInternalName());
 			StringSerializer.writeString(to, version, recipe.getId());
 			writeRecipeData(to, version, recipe);
+			return true;
 		}
 
 		protected void writeRecipeData(ByteBuf to, ProtocolVersion version, T recipe) {
@@ -119,9 +128,8 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 			for (Recipe recipe : recipes) {
 				@SuppressWarnings("unchecked")
 				RecipeWriter<Recipe> writer = (RecipeWriter<Recipe>) recipeWriters.get(recipe.getType());
-				if (writer != null) {
+				if (writer != null && writer.writeRecipe(to, version, recipe)) {
 					writtenRecipeCount++;
-					writer.writeRecipe(to, version, recipe);
 				}
 			}
 			return writtenRecipeCount;
