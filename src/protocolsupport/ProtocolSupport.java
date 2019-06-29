@@ -39,13 +39,16 @@ public class ProtocolSupport extends JavaPlugin {
 
 	protected static final String supported_platform_version = "1.14.3";
 
+
+	private boolean loaded = false;
+
 	@Override
 	public void onLoad() {
 		try {
 			buildinfo = new BuildInfo();
 		} catch (Throwable t) {
 			getLogger().severe("Unable to load buildinfo, make sure you built this version using Gradle");
-			Bukkit.shutdown();
+			return;
 		}
 		if (!ServerPlatform.detect()) {
 			BIG_ERROR_THAT_ANYONE_CAN_SEE("Unsupported platform or version");
@@ -69,7 +72,9 @@ public class ProtocolSupport extends JavaPlugin {
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, shutting down", t);
 			Bukkit.shutdown();
+			return;
 		}
+		loaded = true;
 	}
 
 	protected void BIG_ERROR_THAT_ANYONE_CAN_SEE(String message) {
@@ -91,6 +96,9 @@ public class ProtocolSupport extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		if (!loaded) {
+			return;
+		}
 		ServerPlatform.get().getInjector().onEnable();
 		getCommand("protocolsupport").setExecutor(new CommandHandler());
 		getServer().getPluginManager().registerEvents(new FeatureEmulation(), this);
@@ -102,6 +110,9 @@ public class ProtocolSupport extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		Bukkit.shutdown();
+		if (!loaded) {
+			return;
+		}
 		ServerPlatform.get().getInjector().onDisable();
 	}
 
