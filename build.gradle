@@ -40,7 +40,10 @@ task updateSpigot(type: BuildLibraryTask) {
 task updateRuntimeLibraries(type: UpdateLibrariesTask) {
 	directory = librariesRuntimeDirectory
 	libraries = []
-	manualLibraries = new HashSet<>(Arrays.asList(updateSpigot.targetLibraryName))
+	manualLibraries = new HashSet<>(Arrays.asList(
+		updateSpigot.targetLibraryName,
+		"fastutil-spigot-relocated.jar"
+	))
 }
 
 task updateShadeLibraries(type: UpdateLibrariesTask) {
@@ -152,7 +155,9 @@ shadowJar {
 
 task postprocessFatJar(type: Zip) {
 	Set<String> workaroundRelocationClasses = new HashSet<>(Arrays.asList(
-		"protocolsupport/zplatform/impl/spigot/entitytracker/SpigotEntityTrackerEntryInjectorMap.class"
+		"protocolsupport/zplatform/impl/spigot/entitytracker/SpigotEntityTrackerEntryInjectorMap.class",
+		"protocolsupport/zplatform/impl/spigot/entitytracker/PaperSpigotEntityTrackerEntryInjectorMap.class",
+		"protocolsupport/zplatform/impl/spigot/injector/SpigotEntityTrackerInjector.class"
 	));
 	File originalJar = new File(shadowJar.destinationDir, shadowJar.archiveName)
 
