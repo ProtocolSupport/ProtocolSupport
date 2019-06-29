@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Properties;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -36,6 +37,8 @@ public class ProtocolSupport extends JavaPlugin {
 		return buildinfo;
 	}
 
+	protected static final String supported_platform_version = "1.14.3";
+
 	@Override
 	public void onLoad() {
 		try {
@@ -45,15 +48,13 @@ public class ProtocolSupport extends JavaPlugin {
 			Bukkit.shutdown();
 		}
 		if (!ServerPlatform.detect()) {
-			getLogger().severe("Unsupported server implementation type or version");
-			Bukkit.shutdown();
+			BIG_ERROR_THAT_ANYONE_CAN_SEE("Unsupported platform or version");
 			return;
 		} else {
 			getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get().getIdentifier().getName()));
 		}
-		if (!ServerPlatform.get().getMiscUtils().getVersionName().equals("1.14.3")) {
-			getLogger().severe("Unsupported server version " + ServerPlatform.get().getMiscUtils().getVersionName());
-			Bukkit.shutdown();
+		if (!ServerPlatform.get().getMiscUtils().getVersionName().equals(supported_platform_version)) {
+			BIG_ERROR_THAT_ANYONE_CAN_SEE("Unsupported server minecraft version " + ServerPlatform.get().getMiscUtils().getVersionName());
 			return;
 		}
 		try {
@@ -66,9 +67,26 @@ public class ProtocolSupport extends JavaPlugin {
 			});
 			ServerPlatform.get().getInjector().onLoad();
 		} catch (Throwable t) {
-			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
+			getLogger().log(Level.SEVERE, "Error when loading, shutting down", t);
 			Bukkit.shutdown();
 		}
+	}
+
+	protected void BIG_ERROR_THAT_ANYONE_CAN_SEE(String message) {
+		Logger logger = getLogger();
+		logger.severe("╔══════════════════════════════════════════════════════════════════╗");
+		logger.severe("║                               ERROR                               ");
+		logger.severe("║   " + message);
+		logger.severe("║                                                                   ");
+		logger.severe("║   This version of plugin only supports");
+		logger.severe("║   server minecraft version " + supported_platform_version);
+		logger.severe("║   and following platforms:                                        ");
+		logger.severe("║   - Spigot (https://www.spigotmc.org/)                            ");
+		logger.severe("║   - Paper (https://papermc.io/)                                   ");
+		logger.severe("║                                                                   ");
+		logger.severe("║                                                                   ");
+		logger.severe("║       https://github.com/ProtocolSupport/ProtocolSupport/         ");
+		logger.severe("╚══════════════════════════════════════════════════════════════════╝");
 	}
 
 	@Override
