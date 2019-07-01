@@ -54,6 +54,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.BookOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.Chunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.ChunkLight;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.ChunkUnload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityRelMove;
@@ -64,7 +65,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SetPositi
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SpawnPainting;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.UnloadChunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.UpdateMap;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2.EntityEffectAdd;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10.CollectEffect;
@@ -275,7 +275,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS_ID, VehiclePassengers::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_TITLE_ID, Title::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_BORDER_ID, WorldBorder::new);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID, UnloadChunk::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID, ChunkUnload::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SERVER_DIFFICULTY_ID, ServerDifficulty::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_COMBAT_EVENT_ID, CombatEvent::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_LIGHT, ChunkLight::new);

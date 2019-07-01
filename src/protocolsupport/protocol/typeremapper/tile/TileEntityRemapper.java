@@ -210,6 +210,10 @@ public class TileEntityRemapper {
 
 	protected final Int2ObjectMap<Function<Position, TileEntity>> blockdataToTile = new Int2ObjectOpenHashMap<>();
 
+	public TileEntity remap(TileEntity tileentity) {
+		return remap(tileentity, -1);
+	}
+
 	public TileEntity remap(TileEntity tileentity, int blockdata) {
 		List<ObjIntConsumer<TileEntity>> transformers = tileToTile.get(tileentity.getType());
 		if (transformers != null) {

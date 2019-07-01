@@ -2,15 +2,15 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleUnloadChunk;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunkUnload;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class UnloadChunk extends MiddleUnloadChunk {
+public class ChunkUnload extends MiddleChunkUnload {
 
-	public UnloadChunk(ConnectionImpl connection) {
+	public ChunkUnload(ConnectionImpl connection) {
 		super(connection);
 	}
 

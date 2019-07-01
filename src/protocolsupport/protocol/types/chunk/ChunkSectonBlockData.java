@@ -3,10 +3,10 @@ package protocolsupport.protocol.types.chunk;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-//TODO: actually make the reader read the whole section data (the only argument will be ByteBuf to read from)
 public class ChunkSectonBlockData {
 
 	public static ChunkSectonBlockData readFromStream(ByteBuf stream) {
+		short nonAirBlockCount = stream.readShort();
 		byte bitsPerBlock = stream.readByte();
 		short[] palette = ChunkConstants.GLOBAL_PALETTE;
 		if (bitsPerBlock != ChunkConstants.GLOBAL_PALETTE_BITS_PER_BLOCK) {
@@ -19,19 +19,25 @@ public class ChunkSectonBlockData {
 		for (int i = 0; i < blockdata.length; i++) {
 			blockdata[i] = stream.readLong();
 		}
-		return new ChunkSectonBlockData(palette, bitsPerBlock, blockdata);
+		return new ChunkSectonBlockData(nonAirBlockCount, palette, bitsPerBlock, blockdata);
 	}
 
+	protected final short nonAirBlockCount;
 	protected final short[] palette;
 	protected final long[] blockdata;
 	protected final int bitsPerBlock;
 	private final int singleValMask;
 
-	public ChunkSectonBlockData(short[] palette, int bitsPerBlock, long[] blockdata) {
+	public ChunkSectonBlockData(short nonAirBlockCount, short[] palette, int bitsPerBlock, long[] blockdata) {
+		this.nonAirBlockCount = nonAirBlockCount;
 		this.palette = palette;
 		this.blockdata = blockdata;
 		this.bitsPerBlock = bitsPerBlock;
 		this.singleValMask = (1 << bitsPerBlock) - 1;
+	}
+
+	public int getNonAirBlockCount() {
+		return nonAirBlockCount;
 	}
 
 	public int getBitsPerBlock() {

@@ -19,6 +19,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_11_12r1_12r
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_12r1_12r2_13_14.Advancements;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_12r1_12r2_13_14.AdvancementsTab;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BlockAction;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BookOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.Chunk;
@@ -30,7 +31,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.Inventor
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.MerchantTradeList;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.SpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.UpdateMap;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14.CraftRecipeConfirm;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14.DeclareCommands;
@@ -87,6 +87,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.BossBar;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.ChunkUnload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.EntityLeash;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.EntityRelMove;
@@ -97,7 +98,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.SpawnExpOrb;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.SpawnGlobal;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.SpawnNamed;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.UnloadChunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.VehicleMove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.VehiclePassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14.Pong;
@@ -286,7 +286,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS_ID, VehiclePassengers::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_TITLE_ID, Title::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_BORDER_ID, WorldBorder::new);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID, UnloadChunk::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID, ChunkUnload::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SERVER_DIFFICULTY_ID, ServerDifficulty::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_COMBAT_EVENT_ID, CombatEvent::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_COOLDOWN_ID, SetCooldown::new);

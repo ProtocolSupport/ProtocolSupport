@@ -70,9 +70,6 @@ public class CachedChunk {
 		CachedChunkSectionBlockStorage section = blocks[sectionNumber];
 		if (section == null) {
 			section = new CachedChunkSectionBlockStorage();
-			if (blockdata != 0) {
-				section.setBlockCount(1);
-			}
 			blocks[sectionNumber] = section;
 		}
 		section.setBlockData(blockIndex, blockdata);

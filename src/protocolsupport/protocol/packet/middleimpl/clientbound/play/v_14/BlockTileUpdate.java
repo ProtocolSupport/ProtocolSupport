@@ -7,11 +7,14 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockTileUp
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BlockTileUpdate extends MiddleBlockTileUpdate {
+
+	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
 	public BlockTileUpdate(ConnectionImpl connection) {
 		super(connection);
@@ -19,7 +22,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(create(version, tile));
+		return RecyclableSingletonList.create(create(version, tileRemapper.remap(tile)));
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, TileEntity tile) {
