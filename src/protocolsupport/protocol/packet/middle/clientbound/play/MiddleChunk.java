@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -14,9 +13,8 @@ import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.protocol.types.chunk.ChunkSectonBlockData;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class MiddleChunk extends ClientBoundMiddlePacket {
+public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 
 	public MiddleChunk(ConnectionImpl connection) {
 		super(connection);
@@ -52,11 +50,6 @@ public class MiddleChunk extends ClientBoundMiddlePacket {
 		}
 
 		tiles = ArraySerializer.readVarIntTArray(serverdata, TileEntity.class, from -> new TileEntity(ItemStackSerializer.readTag(serverdata)));
-	}
-
-	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return null;
 	}
 
 }

@@ -33,11 +33,11 @@ public abstract class MiddleChunkLight extends ClientBoundMiddlePacket {
 		emptySkyLightMask = VarNumberSerializer.readVarInt(serverdata);
 		emptyBlockLightMask = VarNumberSerializer.readVarInt(serverdata);
 
-		for (int i = 0; i < ChunkConstants.SECTION_COUNT_LIGHT; i++) {
-			skyLight[i] = Utils.isBitSet(setSkyLightMask, i) ? ArraySerializer.readVarIntByteArray(serverdata) : null;
+		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_LIGHT; sectionNumber++) {
+			skyLight[sectionNumber] = Utils.isBitSet(setSkyLightMask, sectionNumber) ? ArraySerializer.readVarIntByteArray(serverdata) : null;
 		}
-		for (int i = 0; i < ChunkConstants.SECTION_COUNT_LIGHT; i++) {
-			blockLight[i] = Utils.isBitSet(setBlockLightMask, i) ? ArraySerializer.readVarIntByteArray(serverdata) : null;
+		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_LIGHT; sectionNumber++) {
+			blockLight[sectionNumber] = Utils.isBitSet(setBlockLightMask, sectionNumber) ? ArraySerializer.readVarIntByteArray(serverdata) : null;
 		}
 	}
 
