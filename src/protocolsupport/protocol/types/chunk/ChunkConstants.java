@@ -5,10 +5,10 @@ import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 public class ChunkConstants {
 
 	public static final int GLOBAL_PALETTE_BITS_PER_BLOCK = 14;
-	public static final int[] GLOBAL_PALETTE = new int[MinecraftData.BLOCKDATA_COUNT];
+	public static final short[] GLOBAL_PALETTE = new short[MinecraftData.BLOCKDATA_COUNT];
 	static {
 		for (int i = 0; i < GLOBAL_PALETTE.length; i++) {
-			GLOBAL_PALETTE[i] = i;
+			GLOBAL_PALETTE[i] = (short) i;
 		}
 	}
 

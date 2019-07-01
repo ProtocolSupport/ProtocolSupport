@@ -6,8 +6,8 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.ChunkCache;
-import protocolsupport.protocol.storage.netcache.ChunkCache.CachedChunk;
+import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
+import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
 import protocolsupport.protocol.types.ChunkCoord;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.utils.Utils;
@@ -38,7 +38,7 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 		CachedChunk cachedChunk = chunkCache.get(chunkCoord);
 		if (cachedChunk != null) {
 			for (Record record : records) {
-				cachedChunk.setBlock(record.y >> 4, CachedChunk.getBlockIndex(record.x, record.y & 0xF, record.z), record.id);
+				cachedChunk.setBlock(record.y >> 4, CachedChunk.getBlockIndex(record.x, record.y & 0xF, record.z), (short) record.id);
 			}
 			return true;
 		} else {

@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.storage.netcache.ChunkCache;
+import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
 import protocolsupport.protocol.types.ChunkCoord;
 
 public abstract class MiddleUnloadChunk extends ClientBoundMiddlePacket {

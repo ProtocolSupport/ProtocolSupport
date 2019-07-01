@@ -9,15 +9,15 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.ChunkCache;
-import protocolsupport.protocol.storage.netcache.ChunkCache.CachedChunk;
+import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
+import protocolsupport.protocol.storage.netcache.chunk.CachedChunkSectionBlockStorage;
+import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.types.ChunkCoord;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
-import protocolsupport.protocol.types.chunk.BlockStorageReader;
-import protocolsupport.protocol.types.chunk.BlocksSection;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
+import protocolsupport.protocol.types.chunk.ChunkSectonBlockData;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.utils.Utils;
 
@@ -53,32 +53,25 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 			ByteBuf chunkdata = ArraySerializer.readVarIntByteArraySlice(serverdata);
 			for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
 				if (Utils.isBitSet(blockMask, sectionNumber)) {
-					BlocksSection section = new BlocksSection(chunkdata.readShort());
-					Map<Position, TileEntity> tiles = cachedChunk.getTiles(sectionNumber);
-					tiles.clear();
+					int blockcount = chunkdata.readShort();
+					ChunkSectonBlockData sectiondata = ChunkSectonBlockData.readFromStream(chunkdata);
 
-					byte bitsPerBlock = chunkdata.readByte();
-					int[] palette = ChunkConstants.GLOBAL_PALETTE;
-					if (bitsPerBlock != ChunkConstants.GLOBAL_PALETTE_BITS_PER_BLOCK) {
-						palette = ArraySerializer.readVarIntVarIntArray(chunkdata);
-					}
+					cachedChunk.setBlocksSection(sectionNumber, new CachedChunkSectionBlockStorage(blockcount, sectiondata));
 
-					BlockStorageReader reader = new BlockStorageReader(palette, bitsPerBlock, VarNumberSerializer.readVarInt(chunkdata));
-					reader.readFromStream(chunkdata);
+					//TODO: move to middleimps?
+					Map<Position, TileEntity> directTiles = cachedChunk.getTiles(sectionNumber);
 					for (int blockIndex = 0; blockIndex < ChunkConstants.BLOCKS_IN_SECTION; blockIndex++) {
-						int blockdata = reader.getBlockData(blockIndex);
-						section.setBlockData(blockIndex, (short) blockdata);
+						int blockdata = sectiondata.getBlockData(blockIndex);
 						if (tileRemapper.usedToBeTile(blockdata)) {
 							Position position = new Position(
 								(coord.getX() << 4) + (blockIndex & 0xF),
 								(sectionNumber << 4) + ((blockIndex >> 8) & 0xF),
 								(coord.getZ() << 4) + ((blockIndex >> 4) & 0xF)
 							);
-							tiles.put(position, tileRemapper.getLegacyTileFromBlock(position, blockdata));
+							directTiles.put(position, tileRemapper.getLegacyTileFromBlock(position, blockdata));
 						}
 					}
 
-					cachedChunk.setBlocksSection(sectionNumber, section);
 				}
 			}
 			if (full) {
@@ -103,6 +96,5 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 			cachedChunk.getTiles(sectionNumber).put(tile.getPosition(), tile);
 		}
 	}
-
 
 }
