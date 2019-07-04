@@ -85,7 +85,7 @@ public class BlockStoragePaletted extends BlockStorage {
 					throw MaxSizeReachedException.instance;
 				}
 				runtimeToGlobal[cRuntimeId] = (short) k;
-				return cRuntimeId;
+				return (byte) cRuntimeId;
 			});
 		}
 
