@@ -99,7 +99,7 @@ public class BaseEntityMetadataRemapper extends EntityMetadataRemapper {
 			mapPut.accept(PeMetaBase.MAX_AIR, new NetworkEntityMetadataShortLe(300));
 			// = PE Bounding Box =
 			PEEntityData pocketdata = PEDataValues.getEntityData(entity.getType());
-			if (pocketdata == null) {
+			if (pocketdata == null || pocketdata.getBoundingBox() == null) {
 				ProtocolSupport.logWarning("PE BoundingBox missing for entity: " + entity.getType());
 			} else {
 				if (pocketdata.getBoundingBox() != null) {
