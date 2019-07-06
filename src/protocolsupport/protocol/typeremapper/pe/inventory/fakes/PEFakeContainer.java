@@ -82,7 +82,7 @@ public class PEFakeContainer {
 			invCache.getFakeContainers().addFirst(position);
 			//Create fake inventory block.
 			final int networkTileId = MaterialAPI.getBlockDataNetworkId(typeData.getObj1().createBlockData());
-			BlockChangeSingle.create(version, position, cache, networkTileId, packets);
+			BlockChangeSingle.create(version, position, networkTileId, packets);
 			//Set tile data for fake block.
 			if (typeData.getObj2() != TileEntityType.UNKNOWN) {
 				NBTCompound tag = new NBTCompound();

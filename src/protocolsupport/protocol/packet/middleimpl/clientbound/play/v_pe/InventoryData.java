@@ -48,7 +48,7 @@ public class InventoryData extends MiddleInventoryData {
 				}
 				break;
 			}
-			case ENCHANT: {
+			case ENCHANTMENT: {
 				if (type <= 2) { //(0-2) EnchantmentXP per option
 					invCache.getFakeEnchanting().updateOptionXP(type, value);
 				} else if (type == 3) {
@@ -80,7 +80,7 @@ public class InventoryData extends MiddleInventoryData {
 			case ANVIL: {
 				break; //Once PE starts trusting the server we need to send xp cost from here.
 			}
-			case BREWING: {
+			case BREWING_STAND: {
 				switch (type) {
 					case 0: { //Brew time (0 - 400) (400 is empty)
 						return RecyclableSingletonList.create(create(windowId, 0, Math.round(value / 2f) * 2));

@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.entity.metadata.types.living;
 
 import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNumberToByte;
@@ -20,7 +20,7 @@ public class SlimeEntityMetadataRemapper extends InsentientEntityMetadataRemappe
 	public static final SlimeEntityMetadataRemapper INSTANCE = new SlimeEntityMetadataRemapper();
 
 	public SlimeEntityMetadataRemapper() {
-		addRemap(new DataWatcherObjectRemapper() {
+		addRemap(new NetworkEntityMetadataObjectRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
 				NetworkEntityMetadataObjectIndex.Slime.SIZE.getValue(original).ifPresent(intWatcher -> {

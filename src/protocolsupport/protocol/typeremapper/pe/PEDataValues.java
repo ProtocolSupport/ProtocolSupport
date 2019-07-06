@@ -350,7 +350,7 @@ public class PEDataValues {
 
 		@Override
 		protected ArrayBasedIdRemappingTable createTable() {
-			return new ArrayBasedIdRemappingTable(14);
+			return new ArrayBasedIdRemappingTable(32);
 		}
 
 		private void registerRemapEntry(WindowType type, int to, ProtocolVersion... versions) {

@@ -1,7 +1,7 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.base;
 
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.PeFlagRemapper;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
@@ -17,7 +17,7 @@ public class TameableEntityMetadataRemapper extends AgeableEntityMetadataRemappe
 		addRemap(new PeFlagRemapper(
 			NetworkEntityMetadataObjectIndex.Tameable.TAME_FLAGS, new int[] {1, 2, 3}, new int[] {PeMetaBase.FLAG_SITTING, PeMetaBase.FLAG_ANGRY, PeMetaBase.FLAG_TAMED}
 			), ProtocolVersionsHelper.ALL_PE);
-		addRemap(new DataWatcherObjectRemapper() {
+		addRemap(new NetworkEntityMetadataObjectRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
 				NetworkEntityMetadataObjectIndex.Tameable.TAME_FLAGS.getValue(original).ifPresent(byteWatcher -> {

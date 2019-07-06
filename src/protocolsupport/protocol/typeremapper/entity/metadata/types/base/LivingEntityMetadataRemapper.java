@@ -2,7 +2,6 @@ package protocolsupport.protocol.typeremapper.entity.metadata.types.base;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
-import protocolsupport.protocol.typeremapper.entity.metadata.FirstDataWatcherUpdateObjectAddRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperBooleanToByte;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNumberToByte;
@@ -19,7 +18,8 @@ public class LivingEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 	public LivingEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.EntityLiving.POTION_COLOR, PeMetaBase.POTION_COLOR), ProtocolVersionsHelper.ALL_PE);
 		addRemap(new IndexValueRemapperBooleanToByte(NetworkEntityMetadataObjectIndex.EntityLiving.POTION_AMBIENT, PeMetaBase.POTION_AMBIENT), ProtocolVersionsHelper.ALL_PE);
-		addRemap(new FirstDataWatcherUpdateObjectAddRemapper(PeMetaBase.HEALTH, new NetworkEntityMetadataObjectVarInt(10)), ProtocolVersionsHelper.ALL_PE);
+		//TODO: add whatever FirstDataWatcherUpdateObjectAddRemapper is
+		//addRemap(new FirstDataWatcherUpdateObjectAddRemapper(PeMetaBase.HEALTH, new NetworkEntityMetadataObjectVarInt(10)), ProtocolVersionsHelper.ALL_PE);
 		addRemap(new IndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex.Entity.NAMETAG, 2, 64), ProtocolVersion.MINECRAFT_1_8);
 		addRemap(new IndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex.Entity.NAMETAG, 10, 64), ProtocolVersionsHelper.RANGE__1_6__1_7);
 		addRemap(new IndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex.Entity.NAMETAG, 5, 64), ProtocolVersionsHelper.BEFORE_1_6);

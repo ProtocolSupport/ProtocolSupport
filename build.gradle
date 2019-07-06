@@ -11,10 +11,8 @@ defaultTasks 'build'
 
 group 'protocolsupport'
 version '4.29-dev-pe'
-
 sourceCompatibility = JavaVersion.VERSION_1_8
 
-import java.text.MessageFormat
 
 File librariesRuntimeDirectory = new File("libraries_runtime")
 File librariesShadeDirectory = new File("libraries_shade")

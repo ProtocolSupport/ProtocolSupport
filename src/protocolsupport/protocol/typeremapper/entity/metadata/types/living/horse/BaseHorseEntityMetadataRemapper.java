@@ -1,7 +1,7 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse;
 
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AgeableEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNumberToInt;
@@ -25,7 +25,7 @@ public abstract class BaseHorseEntityMetadataRemapper extends AgeableEntityMetad
 				new int[] {PeMetaBase.FLAG_TAMED, PeMetaBase.FLAG_SADDLED, PeMetaBase.FLAG_WASD_CONTROLLED,
 					PeMetaBase.FLAG_CAN_POWER_JUMP, PeMetaBase.FLAG_IN_LOVE, /*PeMetaBase.FLAG_USING_ITEM,*/ PeMetaBase.FLAG_REARING, PeMetaBase.FLAG_BREATHING}
 			), ProtocolVersionsHelper.ALL_PE);
-		addRemap(new DataWatcherObjectRemapper(){
+		addRemap(new NetworkEntityMetadataObjectRemapper(){
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
 				NetworkEntityMetadataObjectIndex.BaseHorse.FLAGS.getValue(original).ifPresent(byteWatcher -> {

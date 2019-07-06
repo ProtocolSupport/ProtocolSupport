@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.entity.metadata.types.living;
 
 import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData;
@@ -17,7 +17,7 @@ public class GiantEntityMetadataRemapper extends InsentientEntityMetadataRemappe
 	public static final GiantEntityMetadataRemapper INSTANCE = new GiantEntityMetadataRemapper();
 
 	public GiantEntityMetadataRemapper() {
-		addRemap(new DataWatcherObjectRemapper() {
+		addRemap(new NetworkEntityMetadataObjectRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
 				entity.getDataCache().setSizeModifier(6f);

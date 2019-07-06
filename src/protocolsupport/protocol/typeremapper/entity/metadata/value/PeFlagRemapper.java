@@ -1,13 +1,13 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.value;
 
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
-public final class PeFlagRemapper extends DataWatcherObjectRemapper {
+public final class PeFlagRemapper extends NetworkEntityMetadataObjectRemapper {
 
 	protected final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> fromByteId;
 	protected final int[] fromBitPosI;

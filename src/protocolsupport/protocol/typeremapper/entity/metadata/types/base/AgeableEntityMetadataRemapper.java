@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.entity.metadata.types.base;
 
 import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNumberToInt;
@@ -20,7 +20,7 @@ public class AgeableEntityMetadataRemapper extends InsentientEntityMetadataRemap
 	public static final AgeableEntityMetadataRemapper INSTANCE = new AgeableEntityMetadataRemapper();
 
 	public AgeableEntityMetadataRemapper() {
-		addRemap(new DataWatcherObjectRemapper() {
+		addRemap(new NetworkEntityMetadataObjectRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, CollectionsUtils.ArrayMap<NetworkEntityMetadataObject<?>> original, CollectionsUtils.ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
 				NetworkEntityMetadataObjectIndex.Ageable.IS_BABY.getValue(original).ifPresent(boolWatcher -> {

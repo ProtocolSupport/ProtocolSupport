@@ -25,7 +25,7 @@ public abstract class MiddleInventoryHorseOpen extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		cache.getWindowCache().setOpenedWindow(windowId, WindowType.HORSE);
+		cache.getWindowCache().setOpenedWindow(WindowType.HORSE, windowId, slots, entityId);
 		return true;
 	}
 
