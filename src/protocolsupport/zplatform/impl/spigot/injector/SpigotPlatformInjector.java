@@ -11,9 +11,6 @@ public class SpigotPlatformInjector implements PlatformInjector {
 	@Override
 	public void onLoad() {
 		try {
-//TODO: restore after implementing
-//			Class.forName(SpigotEntityTracker.class.getName());
-//			Class.forName(SpigotEntityTrackerEntry.class.getName());
 			SpigotServerInjector.inject();
 			SpigotNettyInjector.inject();
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {

@@ -8,6 +8,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14.LoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_8_9r1_9r2_10_11_12r1_12r2_13_14.EncryptionRequest;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_8_9r1_9r2_10_11_12r1_12r2_13_14.SetCompression;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopEntitySound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopSetViewCenter;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopUpdateViewDistance;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12r1_12r2_13_14.EntityEffectAdd;
@@ -18,17 +19,18 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_11_12r1_12r
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_12r1_12r2_13_14.Advancements;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_12r1_12r2_13_14.AdvancementsTab;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BlockAction;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.BookOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.Chunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.ChunkLight;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.DeclareRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.DeclareTags;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.InventoryHorseOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.InventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.MerchantTradeList;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.SpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13.UpdateMap;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14.CraftRecipeConfirm;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14.DeclareCommands;
@@ -59,11 +61,11 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14.KickDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockBreakAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockOpenSignEditor;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.ServerDifficulty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.SpawnPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.StartGame;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.WorldEvent;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14.BlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14.Camera;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14.Chat;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14.CombatEvent;
@@ -85,6 +87,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.BossBar;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.ChunkUnload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.EntityLeash;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.EntityRelMove;
@@ -95,7 +98,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.SpawnExpOrb;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.SpawnGlobal;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.SpawnNamed;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.UnloadChunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.VehicleMove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14.VehiclePassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14.Pong;
@@ -260,6 +262,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID, GameStateChange::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_WEATHER_ID, SpawnGlobal::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_OPEN_ID, InventoryOpen::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_HORSE_OPEN_ID, InventoryHorseOpen::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_CLOSE_ID, InventoryClose::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, InventorySetSlot::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID, InventorySetItems::new);
@@ -283,7 +286,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS_ID, VehiclePassengers::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_TITLE_ID, Title::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WORLD_BORDER_ID, WorldBorder::new);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID, UnloadChunk::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID, ChunkUnload::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SERVER_DIFFICULTY_ID, ServerDifficulty::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_COMBAT_EVENT_ID, CombatEvent::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_COOLDOWN_ID, SetCooldown::new);
@@ -305,6 +308,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BOOK_OPEN, BookOpen::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_VIEW_CENTER, NoopSetViewCenter::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_VIEW_DISTANCE, NoopUpdateViewDistance::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_SOUND_ID, NoopEntitySound::new);
 	}
 
 	public PacketEncoder(ConnectionImpl connection) {

@@ -83,14 +83,21 @@ public class FeatureEmulation implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
-		BlockDataEntry blockdataentry = MinecraftBlockData.get(MaterialAPI.getBlockDataNetworkId(event.getBlock().getBlockData()));
-		player.playSound(
-			event.getBlock().getLocation(),
-			blockdataentry.getBreakSound(),
-			SoundCategory.BLOCKS,
-			(blockdataentry.getVolume() + 1.0F) / 2.0F,
-			blockdataentry.getPitch() * 0.8F
-		);
+		Connection connection = ProtocolSupportAPI.getConnection(player);
+		if (
+			(connection != null) &&
+			(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
+			connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)
+		) {
+			BlockDataEntry blockdataentry = MinecraftBlockData.get(MaterialAPI.getBlockDataNetworkId(event.getBlock().getBlockData()));
+			player.playSound(
+				event.getBlock().getLocation(),
+				blockdataentry.getBreakSound(),
+				SoundCategory.BLOCKS,
+				(blockdataentry.getVolume() + 1.0F) / 2.0F,
+				blockdataentry.getPitch() * 0.8F
+			);
+		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

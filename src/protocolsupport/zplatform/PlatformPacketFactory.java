@@ -140,6 +140,8 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayEntityEffectRemovePacketId();
 
+	public int getOutPlayEntitySoundPacketId();
+
 	public int getOutPlayExperiencePacketId();
 
 	public int getOutPlayEntityAttributesPacketId();
@@ -167,6 +169,8 @@ public interface PlatformPacketFactory {
 	public int getOutPlaySpawnWeatherPacketId();
 
 	public int getOutPlayWindowOpenPacketId();
+
+	public int getOutPlayWindowHorseOpenPacketId();
 
 	public int getOutPlayWindowClosePacketId();
 

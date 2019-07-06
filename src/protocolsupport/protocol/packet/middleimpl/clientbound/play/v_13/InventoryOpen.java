@@ -1,6 +1,8 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
@@ -28,12 +30,18 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		type = typeRemapper.getRemap(type);
 		LegacyWindowData wdata = LegacyWindow.getData(type);
 
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID);
-		serializer.writeByte(windowId);
-		StringSerializer.writeString(serializer, version, wdata.getStringId());
-		StringSerializer.writeString(serializer, version, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), title)));
-		serializer.writeByte(wdata.getSlots());
-		return RecyclableSingletonList.create(serializer);
+		return RecyclableSingletonList.create(writeData(
+			ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID),
+			version, windowId, wdata.getStringId(), LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), title), wdata.getSlots()
+		));
+	}
+
+	public static ClientBoundPacketData writeData(ClientBoundPacketData to, ProtocolVersion version, int windowId, String type, BaseComponent title, int slots) {
+		to.writeByte(windowId);
+		StringSerializer.writeString(to, version, type);
+		StringSerializer.writeString(to, version, ChatAPI.toJSON(title));
+		to.writeByte(slots);
+		return to;
 	}
 
 }

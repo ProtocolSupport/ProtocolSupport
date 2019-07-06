@@ -1,9 +1,9 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractBlockChangeMulti;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -16,7 +16,7 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class BlockChangeMulti extends MiddleBlockChangeMulti {
+public class BlockChangeMulti extends AbstractBlockChangeMulti {
 
 	public BlockChangeMulti(ConnectionImpl connection) {
 		super(connection);
@@ -35,7 +35,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 			serializer.writeShort(record.coord);
 			VarNumberSerializer.writeVarInt(to, BlockRemappingHelper.remapFBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, record.id));
 		});
-		packets.add(0, serializer);
+		packets.add(serializer);
 		return packets;
 	}
 

@@ -427,6 +427,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
+	public int getOutPlayEntitySoundPacketId() {
+		return getOutId(PacketPlayOutEntitySound.class);
+	}
+
+	@Override
 	public int getOutPlayExperiencePacketId() {
 		return getOutId(PacketPlayOutExperience.class);
 	}
@@ -494,6 +499,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getOutPlayWindowOpenPacketId() {
 		return getOutId(PacketPlayOutOpenWindow.class);
+	}
+
+	@Override
+	public int getOutPlayWindowHorseOpenPacketId() {
+		return getOutId(PacketPlayOutOpenWindowHorse.class);
 	}
 
 	@Override

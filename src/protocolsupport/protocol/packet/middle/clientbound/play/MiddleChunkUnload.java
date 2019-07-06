@@ -4,14 +4,15 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.storage.netcache.ChunkCache;
+import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
 import protocolsupport.protocol.types.ChunkCoord;
 
-public abstract class MiddleUnloadChunk extends ClientBoundMiddlePacket {
+//TODO: split the class to legacy and new one, and remove usage of chunk cache from new one
+public abstract class MiddleChunkUnload extends ClientBoundMiddlePacket {
 
 	protected final ChunkCache chunkCache = cache.getChunkCache();
 
-	public MiddleUnloadChunk(ConnectionImpl connection) {
+	public MiddleChunkUnload(ConnectionImpl connection) {
 		super(connection);
 	}
 

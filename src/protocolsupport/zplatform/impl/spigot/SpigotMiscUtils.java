@@ -39,6 +39,7 @@ import io.netty.channel.EventLoopGroup;
 import net.minecraft.server.v1_14_R1.AxisAlignedBB;
 import net.minecraft.server.v1_14_R1.Block;
 import net.minecraft.server.v1_14_R1.DedicatedServer;
+import net.minecraft.server.v1_14_R1.DedicatedServerProperties;
 import net.minecraft.server.v1_14_R1.EntityPlayer;
 import net.minecraft.server.v1_14_R1.EntityTypes;
 import net.minecraft.server.v1_14_R1.EnumProtocol;
@@ -253,7 +254,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public void enableDebug() {
 		try {
-			ReflectionUtils.getField(DedicatedServer.class, "debug").set(getServer(), true);
+			ReflectionUtils.getField(DedicatedServerProperties.class, "debug").set(((DedicatedServer)getServer()).getDedicatedServerProperties(), true);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException("Exception occured while enabled debug");
 		}
@@ -262,7 +263,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public void disableDebug() {
 		try {
-			ReflectionUtils.getField(DedicatedServer.class, "debug").set(getServer(), false);
+			ReflectionUtils.getField(DedicatedServerProperties.class, "debug").set(((DedicatedServer)getServer()).getDedicatedServerProperties(), false);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException("Exception occured while disabling debug");
 		}

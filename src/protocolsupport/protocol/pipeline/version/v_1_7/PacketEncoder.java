@@ -16,6 +16,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopCraf
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDeclareCommands;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDeclareRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDeclareTags;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopEntitySound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopLookAt;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopPlayerListHeaderFooter;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopServerDifficulty;
@@ -33,6 +34,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.Blo
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.BookOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.Chunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.ChunkLight;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.ChunkUnload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.CollectEffect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.Entity;
@@ -50,7 +52,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.Kee
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.MerchantTradeList;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.PlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.SetExperience;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.UnloadChunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.WorldEvent;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.WorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.WorldSound;
@@ -68,6 +69,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_5_6_7.Score
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_5_6_7.ScoreboardTeam;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_5_6_7.WorldParticle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7.EntitySetAttributes;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7.InventoryHorseOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8.EntityLeash;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8.VehiclePassengers;
@@ -233,6 +235,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID, GameStateChange::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SPAWN_WEATHER_ID, SpawnGlobal::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_OPEN_ID, InventoryOpen::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_HORSE_OPEN_ID, InventoryHorseOpen::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_CLOSE_ID, InventoryClose::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, InventorySetSlot::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_ITEMS_ID, InventorySetItems::new);
@@ -252,7 +255,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_RESOURCE_PACK_ID, ResourcePack::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_KICK_DISCONNECT_ID, KickDisconnect::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_PASSENGERS_ID, VehiclePassengers::new);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID, UnloadChunk::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID, ChunkUnload::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_CHUNK_LIGHT, ChunkLight::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MERCHANT_TRADE_LIST, MerchantTradeList::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BOOK_OPEN, BookOpen::new);
@@ -277,6 +280,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_LOOK_AT, NoopLookAt::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_VIEW_CENTER, NoopSetViewCenter::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_VIEW_DISTANCE, NoopUpdateViewDistance::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_SOUND_ID, NoopEntitySound::new);
 	}
 
 	public PacketEncoder(ConnectionImpl connection) {

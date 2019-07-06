@@ -78,6 +78,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 
 	public static class Insentient extends EntityLiving {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
+		public static final int FLAGS_BIT_ATTACKING = 2;
 	}
 
 	public static final class Player extends EntityLiving {
@@ -373,7 +374,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 	}
 
 	public static class Trident extends Arrow {
-		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> LOYALTY = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> LOYALTY = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 	}
 
 	public static class Firework extends Entity {

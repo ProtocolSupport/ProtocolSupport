@@ -43,7 +43,8 @@ public class MerchantDataSerializer {
 		int villagerLevel = VarNumberSerializer.readVarInt(from);
 		int villagerXp = VarNumberSerializer.readVarInt(from);
 		boolean villagerRegular = from.readBoolean();
-		return new MerchantData(windowId, offers, villagerLevel, villagerXp, villagerRegular);
+		boolean restockingVillager = from.readBoolean();
+		return new MerchantData(windowId, offers, villagerLevel, villagerXp, villagerRegular, restockingVillager);
 	}
 
 	public static void writeMerchantData(ByteBuf to, ProtocolVersion version, String locale, MerchantData merchdata) {
@@ -77,6 +78,9 @@ public class MerchantDataSerializer {
 			VarNumberSerializer.writeVarInt(to, merchdata.getVillagerLevel());
 			VarNumberSerializer.writeVarInt(to, merchdata.getVillagerXP());
 			to.writeBoolean(merchdata.isVillagerRegular());
+			if (isUsingRestockingVillagerField(version)) {
+				to.writeBoolean(merchdata.isRestockingVillager());
+			}
 		}
 	}
 
@@ -121,4 +125,7 @@ public class MerchantDataSerializer {
 		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
 	}
 
+	protected static boolean isUsingRestockingVillagerField(ProtocolVersion version) {
+		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_14_3);
+	}
 }

@@ -10,7 +10,7 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.EntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AbstractMerchantEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AgeableEntityMetadataRemapper;
@@ -38,7 +38,6 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.living.Vindic
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.WitchEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.WitherEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.FoxEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.OcelotEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PandaEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PigEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PolarBearEntityMetadataRemapper;
@@ -93,13 +92,13 @@ public class EntityRemappersRegistry {
 
 	public static class EntityRemappingTable extends RemappingTable {
 
-		protected final EnumMap<NetworkEntityType, Pair<NetworkEntityType, List<DataWatcherObjectRemapper>>> table = new EnumMap<>(NetworkEntityType.class);
+		protected final EnumMap<NetworkEntityType, Pair<NetworkEntityType, List<NetworkEntityMetadataObjectRemapper>>> table = new EnumMap<>(NetworkEntityType.class);
 
-		public Pair<NetworkEntityType, List<DataWatcherObjectRemapper>> getRemap(NetworkEntityType from) {
+		public Pair<NetworkEntityType, List<NetworkEntityMetadataObjectRemapper>> getRemap(NetworkEntityType from) {
 			return table.get(from);
 		}
 
-		public void setRemap(NetworkEntityType from, NetworkEntityType to, List<DataWatcherObjectRemapper> metadataRemapper) {
+		public void setRemap(NetworkEntityType from, NetworkEntityType to, List<NetworkEntityMetadataObjectRemapper> metadataRemapper) {
 			table.put(from, ImmutablePair.of(to, metadataRemapper));
 		}
 
@@ -193,7 +192,7 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.BAT, new BatEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.OCELOT)
-			.addMapping(NetworkEntityType.OCELOT, new OcelotEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)
+			.addMapping(NetworkEntityType.OCELOT, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL)
 			.register();
 			new Mapping(NetworkEntityType.WOLF)
 			.addMapping(NetworkEntityType.WOLF, new WolfEntityMetadataRemapper(), ProtocolVersionsHelper.ALL)

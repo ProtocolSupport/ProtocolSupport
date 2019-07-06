@@ -43,6 +43,7 @@ public class ClientBoundPacket {
 	public static final int PLAY_ENTITY_METADATA_ID = ServerPlatform.get().getPacketFactory().getOutPlayEntityMetadataPacketId();
 	public static final int PLAY_ENTITY_EFFECT_ADD_ID = ServerPlatform.get().getPacketFactory().getOutPlayEntityEffectAddPacketId();
 	public static final int PLAY_ENTITY_EFFECT_REMOVE_ID = ServerPlatform.get().getPacketFactory().getOutPlayEntityEffectRemovePacketId();
+	public static final int PLAY_ENTITY_SOUND_ID = ServerPlatform.get().getPacketFactory().getOutPlayEntitySoundPacketId();
 	public static final int PLAY_EXPERIENCE_ID = ServerPlatform.get().getPacketFactory().getOutPlayExperiencePacketId();
 	public static final int PLAY_ENTITY_ATTRIBUTES_ID = ServerPlatform.get().getPacketFactory().getOutPlayEntityAttributesPacketId();
 	public static final int PLAY_CHUNK_SINGLE_ID = ServerPlatform.get().getPacketFactory().getOutPlayChunkSinglePacketId();
@@ -57,6 +58,7 @@ public class ClientBoundPacket {
 	public static final int PLAY_GAME_STATE_CHANGE_ID = ServerPlatform.get().getPacketFactory().getOutPlayGameStateChangePacketId();
 	public static final int PLAY_SPAWN_WEATHER_ID = ServerPlatform.get().getPacketFactory().getOutPlaySpawnWeatherPacketId();
 	public static final int PLAY_WINDOW_OPEN_ID = ServerPlatform.get().getPacketFactory().getOutPlayWindowOpenPacketId();
+	public static final int PLAY_WINDOW_HORSE_OPEN_ID = ServerPlatform.get().getPacketFactory().getOutPlayWindowHorseOpenPacketId();
 	public static final int PLAY_WINDOW_CLOSE_ID = ServerPlatform.get().getPacketFactory().getOutPlayWindowClosePacketId();
 	public static final int PLAY_WINDOW_SET_SLOT_ID = ServerPlatform.get().getPacketFactory().getOutPlayWindowSetSlotPacketId();
 	public static final int PLAY_WINDOW_SET_ITEMS_ID = ServerPlatform.get().getPacketFactory().getOutPlayWindowSetItemsPacketId();

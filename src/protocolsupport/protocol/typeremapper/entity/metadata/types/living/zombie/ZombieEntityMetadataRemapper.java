@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.entity.metadata.types.living.zombi
 
 import protocolsupport.api.unsafe.pemetadata.PEMetaProviderSPI;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.EntityMetadata.PeMetaBase;
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperBooleanToByte;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
@@ -10,9 +10,11 @@ import protocolsupport.protocol.typeremapper.pe.PEDataValues;
 import protocolsupport.protocol.typeremapper.pe.PEDataValues.PEEntityData;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.entity.metadata.value.InsentientAttackingToLegacySwingingHadsIndexValesRemapper;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectFloatLe;
-import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.utils.CollectionsUtils;
 
 public class ZombieEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
@@ -20,7 +22,7 @@ public class ZombieEntityMetadataRemapper extends InsentientEntityMetadataRemapp
 	public static final ZombieEntityMetadataRemapper INSTANCE = new ZombieEntityMetadataRemapper();
 
 	public ZombieEntityMetadataRemapper() {
-		addRemap(new DataWatcherObjectRemapper() {
+		addRemap(new NetworkEntityMetadataObjectRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, CollectionsUtils.ArrayMap<NetworkEntityMetadataObject<?>> original, CollectionsUtils.ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
 				NetworkEntityMetadataObjectIndex.Zombie.BABY.getValue(original).ifPresent(boolWatcher -> {
@@ -42,10 +44,9 @@ public class ZombieEntityMetadataRemapper extends InsentientEntityMetadataRemapp
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Zombie.BABY, 11), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperBooleanToByte(NetworkEntityMetadataObjectIndex.Zombie.BABY, 12), ProtocolVersionsHelper.BEFORE_1_9);
 
-//TODO: from entity pose
-//		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Zombie.HANDS_UP, 14), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
-//		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Zombie.HANDS_UP, 15), ProtocolVersion.MINECRAFT_1_10);
-//		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Zombie.HANDS_UP, 14), ProtocolVersionsHelper.ALL_1_9);
+		addRemap(new InsentientAttackingToLegacySwingingHadsIndexValesRemapper(14), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
+		addRemap(new InsentientAttackingToLegacySwingingHadsIndexValesRemapper(15), ProtocolVersion.MINECRAFT_1_10);
+		addRemap(new InsentientAttackingToLegacySwingingHadsIndexValesRemapper(14), ProtocolVersionsHelper.ALL_1_9);
 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Zombie.DROWNING, 16), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Zombie.DROWNING, 15), ProtocolVersionsHelper.ALL_1_13);

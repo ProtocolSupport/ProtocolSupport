@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Properties;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -42,24 +43,27 @@ public class ProtocolSupport extends JavaPlugin {
 
 	private PEProxyServer peserver;
 
+	protected static final String supported_platform_version = "1.14.3";
+
+
+	private boolean loaded = false;
+
 	@Override
 	public void onLoad() {
 		try {
 			buildinfo = new BuildInfo();
 		} catch (Throwable t) {
 			getLogger().severe("Unable to load buildinfo, make sure you built this version using Gradle");
-			Bukkit.shutdown();
+			return;
 		}
 		if (!ServerPlatform.detect()) {
-			getLogger().severe("Unsupported server implementation type or version");
-			Bukkit.shutdown();
+			BIG_ERROR_THAT_ANYONE_CAN_SEE("Unsupported platform or version");
 			return;
 		} else {
 			getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get().getIdentifier().getName()));
 		}
-		if (!ServerPlatform.get().getMiscUtils().getVersionName().equals("1.14.1")) {
-			getLogger().severe("Unsupported server version " + ServerPlatform.get().getMiscUtils().getVersionName());
-			Bukkit.shutdown();
+		if (!ServerPlatform.get().getMiscUtils().getVersionName().equals(supported_platform_version)) {
+			BIG_ERROR_THAT_ANYONE_CAN_SEE("Unsupported server minecraft version " + ServerPlatform.get().getMiscUtils().getVersionName());
 			return;
 		}
 		try {
@@ -72,13 +76,35 @@ public class ProtocolSupport extends JavaPlugin {
 			});
 			ServerPlatform.get().getInjector().onLoad();
 		} catch (Throwable t) {
-			getLogger().log(Level.SEVERE, "Error when loading, make sure you are using supported server version", t);
+			getLogger().log(Level.SEVERE, "Error when loading, shutting down", t);
 			Bukkit.shutdown();
+			return;
 		}
+		loaded = true;
+	}
+
+	protected void BIG_ERROR_THAT_ANYONE_CAN_SEE(String message) {
+		Logger logger = getLogger();
+		logger.severe("╔══════════════════════════════════════════════════════════════════╗");
+		logger.severe("║                               ERROR                               ");
+		logger.severe("║   " + message);
+		logger.severe("║                                                                   ");
+		logger.severe("║   This version of plugin only supports");
+		logger.severe("║   server minecraft version " + supported_platform_version);
+		logger.severe("║   and following platforms:                                        ");
+		logger.severe("║   - Spigot (https://www.spigotmc.org/)                            ");
+		logger.severe("║   - Paper (https://papermc.io/)                                   ");
+		logger.severe("║                                                                   ");
+		logger.severe("║                                                                   ");
+		logger.severe("║       https://github.com/ProtocolSupport/ProtocolSupport/         ");
+		logger.severe("╚══════════════════════════════════════════════════════════════════╝");
 	}
 
 	@Override
 	public void onEnable() {
+		if (!loaded) {
+			return;
+		}
 		ServerPlatform.get().getInjector().onEnable();
 		getCommand("protocolsupport").setExecutor(new CommandHandler());
 		getServer().getPluginManager().registerEvents(new FeatureEmulation(), this);
@@ -96,6 +122,9 @@ public class ProtocolSupport extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		Bukkit.shutdown();
+		if (!loaded) {
+			return;
+		}
 		ServerPlatform.get().getInjector().onDisable();
 		if (peserver != null) {
 			peserver.stop();
@@ -118,12 +147,14 @@ public class ProtocolSupport extends JavaPlugin {
 		public final String buildtime;
 		public final String buildhost;
 		public final String buildnumber;
+		public final String buildgit;
 		public BuildInfo() throws IOException {
 			Properties properties = new Properties();
 			properties.load(ResourceUtils.getAsBufferedReader("buildinfo"));
 			buildtime = properties.getProperty("buildtime");
 			buildhost = properties.getProperty("buildhost");
 			buildnumber = properties.getProperty("buildnumber");
+			buildgit = properties.getProperty("buildgit");
 		}
 		@Override
 		public String toString() {

@@ -1,8 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
@@ -15,6 +12,7 @@ import protocolsupport.protocol.typeremapper.block.FlatteningBlockData;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVaries;
+import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -23,6 +21,7 @@ public class Chunk extends MiddleChunk {
 
 	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
+	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
 	public Chunk(ConnectionImpl connection) {
 		super(connection);
@@ -40,8 +39,7 @@ public class Chunk extends MiddleChunk {
 				to, blockMask, 14,
 				blockDataRemappingTable,
 				flatteningBlockDataTable,
-				cachedChunk,
-				sectionNumber -> {}
+				sections
 			);
 			if (full) {
 				for (int i = 0; i < biomeData.length; i++) {
@@ -51,8 +49,8 @@ public class Chunk extends MiddleChunk {
 		});
 		ArraySerializer.writeVarIntTArray(
 			serializer,
-			Arrays.stream(cachedChunk.getTiles()).flatMap(l -> l.values().stream()).collect(Collectors.toList()),
-			(to, tile) -> ItemStackSerializer.writeTag(to, version, tile.getNBT())
+			tiles,
+			(to, tile) -> ItemStackSerializer.writeTag(to, version, tileRemapper.remap(tile).getNBT())
 		);
 		return RecyclableSingletonList.create(serializer);
 	}

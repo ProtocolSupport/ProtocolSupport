@@ -1,10 +1,10 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
 import it.unimi.dsi.fastutil.ints.IntConsumer;
-import protocolsupport.protocol.storage.netcache.ChunkCache.CachedChunk;
+import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
+import protocolsupport.protocol.storage.netcache.chunk.CachedChunkSectionBlockStorage;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.protocol.types.chunk.BlocksSection;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.utils.Utils;
 
@@ -25,7 +25,7 @@ public class ChunkWriterShort {
 
 		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
 			if (Utils.isBitSet(mask, sectionNumber)) {
-				BlocksSection section = chunk.getBlocksSection(sectionNumber);
+				CachedChunkSectionBlockStorage section = chunk.getBlocksSection(sectionNumber);
 
 				if (section != null) {
 					for (int blockIndex = 0; blockIndex < ChunkConstants.BLOCKS_IN_SECTION; blockIndex++) {

@@ -1,5 +1,6 @@
 package protocolsupport.protocol.storage.netcache;
 
+import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
 import protocolsupport.utils.Utils;
 
 public class NetworkDataCache {
