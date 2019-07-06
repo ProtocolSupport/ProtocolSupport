@@ -57,14 +57,6 @@ public class ServerPlatform {
 		return injector;
 	}
 
-	public void onEnable() {
-		injector.onEnable();
-	}
-
-	public void onDisable() {
-		injector.onDisable();
-	}
-
 	public PlatformUtils getMiscUtils() {
 		return utils;
 	}
