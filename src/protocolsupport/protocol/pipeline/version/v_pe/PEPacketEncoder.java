@@ -47,7 +47,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Inventor
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventorySetSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KeepAlive;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KickDisconnect;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Map;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.PlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.ServerDifficulty;
@@ -136,7 +135,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_STOP_SOUND, StopSound::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_BREAK_ANIMATION_ID, BlockBreakAnimation::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate::new);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map::new);
+		//registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID, EntityEquipment::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_ACTION_ID, BlockAction::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_HELD_SLOT_ID, HeldSlot::new);

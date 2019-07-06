@@ -93,7 +93,7 @@ public class PEFakeContainer {
 					Position auxPos = position.clone();
 					auxPos.modifyX(1); //Get adjacent block.
 					invCache.getFakeContainers().addLast(auxPos);
-					BlockChangeSingle.create(version, auxPos, cache, networkTileId, packets);
+					BlockChangeSingle.create(version, auxPos, networkTileId, packets);
 					tag.setTag("pairx", new NBTInt(auxPos.getX()));
 					tag.setTag("pairz", new NBTInt(auxPos.getZ()));
 					tag.setTag("pairlead", new NBTByte((byte) 1));

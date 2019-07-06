@@ -16,6 +16,10 @@ public class BlockPalette {
 		return blockstateToRuntimeId.computeIfAbsent(blockstate, k -> nextRuntimeId++);
 	}
 
+	public int size() {
+		return blockstateToRuntimeId.size();
+	}
+
 	public int[] getBlockStates() {
 		return blockstateToRuntimeId.keySet().toIntArray();
 	}
