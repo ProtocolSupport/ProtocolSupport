@@ -12,6 +12,7 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
+import protocolsupport.protocol.typeremapper.chunk.BlockStorageWriterPE;
 import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
@@ -24,8 +25,10 @@ import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.protocol.types.chunk.ChunkSectonBlockData;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class Chunk extends MiddleChunk {
 
@@ -41,13 +44,12 @@ public class Chunk extends MiddleChunk {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		if (!full) { //request full chunk if not given, but still send partial chunk
 			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new ChunkUpdateRequest(coord));
+			return RecyclableEmptyList.get();
 		}
 		RemappingTable.ArrayBasedIdRemappingTable blockRemappingTable = LegacyBlockData.REGISTRY.getTable(connection.getVersion());
 		RemappingTable.ArrayBasedIdRemappingTable biomeRemappingTable = PEDataValues.BIOME.getTable(connection.getVersion());
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData chunkpacket = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA);
-		chunkpacket.writerIndex(chunkpacket.writerIndex() + 16);
-		chunkpacket.readerIndex(chunkpacket.readerIndex() + 16);
 		PositionSerializer.writePEChunkCoord(chunkpacket, coord);
 
 		//1.12 does section count first, then payload. earlier does payload including section count
@@ -64,29 +66,31 @@ public class Chunk extends MiddleChunk {
 				if (section != null) {
 					int[] palette = new int[section.getPalette().length];
 					for (int i = 0 ; i < palette.length ; i++) { //generate palette first
-						int pcId = section.getPalette()[i];
-						palette[i] = PEBlocks.getPocketRuntimeId(
-							blockRemappingTable.getRemap(section.getBlockData(pcId)));
+						int pcId = section.getPalette()[i] & 0xFFFF;
+						palette[i] = PEBlocks.getPocketRuntimeId(blockRemappingTable.getRemap(pcId));
 					}
 					int bitsPerBlock = getPocketBitsPerBlock(section.getBitsPerBlock());
-					BlockStorageWriterPE blockstorage = new BlockStorageWriterPE(bitsPerBlock,
-						ChunkConstants.SECTION_COUNT_BLOCKS);
-					BlockStorageWriterPE waterstorage = new BlockStorageWriterPE(1,
-						ChunkConstants.SECTION_COUNT_BLOCKS); //Waterlogged -> second storage. Only true/false per block
-					for (int blockIndex = 0; blockIndex < ChunkConstants.BLOCKS_IN_SECTION; blockIndex++) {
-						int runtimeId = section.getRuntimeId(blockIndex);
-						blockstorage.setBlockState(blockIndex, runtimeId);
-						if (PEBlocks.isPCBlockWaterlogged(section.getPalette()[runtimeId])) {
-							waterstorage.setBlockState(blockIndex, 1);
+					BlockStorageWriterPE blockstorage = new BlockStorageWriterPE(bitsPerBlock, ChunkConstants.BLOCKS_IN_SECTION);
+					BlockStorageWriterPE waterstorage = new BlockStorageWriterPE(1, ChunkConstants.BLOCKS_IN_SECTION); //Waterlogged -> second storage. Only true/false per block
+					int peIndex = 0;
+					for (int x = 0; x < 16; x++) { for (int z = 0; z < 16; z++) { for (int y = 0; y < 16; y++) {
+						int pcIndex = getPcIndex(x, y, z);
+						int runtimeId = section.getRuntimeId(pcIndex);
+						int pcId = section.getPalette()[runtimeId];
+						blockstorage.setBlockState(peIndex, runtimeId);
+						if (PEBlocks.isPCBlockWaterlogged(pcId)) {
+							waterstorage.setBlockState(peIndex, 1);
 						}
-					}
+						peIndex++;
+					}}}
+					chunkdata.writeByte(2); //blockstorage count.
 					chunkdata.writeByte((bitsPerBlock << 1) | FLAG_RUNTIME);
-					for (int word : blockstorage.blockdata) {
+					for (int word : blockstorage.getBlockData()) {
 						chunkdata.writeIntLE(word);
 					}
 					ArraySerializer.writeSVarIntSVarIntArray(chunkdata, palette);
 					chunkdata.writeByte((1 << 1) | FLAG_RUNTIME); //Water storage.
-					for (int word : waterstorage.blockdata) {
+					for (int word : waterstorage.getBlockData()) {
 						chunkdata.writeIntLE(word);
 					}
 					VarNumberSerializer.writeSVarInt(chunkdata, 2); //Palette size
@@ -132,6 +136,10 @@ public class Chunk extends MiddleChunk {
 		return pcBitsPerBlock;
 	}
 
+	protected static int getPcIndex(int x, int y, int z) {
+		return (y << 8) | (z << 4) | (x);
+	}
+
 	public static void addFakeChunks(RecyclableCollection<ClientBoundPacketData> packets, ChunkCoord coord) {
 		for (int x = -1; x <= 1; x++) {
 			for (int z = -1; z <= 1; z++) {
@@ -164,28 +172,31 @@ public class Chunk extends MiddleChunk {
 		return networkChunkUpdate;
 	}
 
-	public static class BlockStorageWriterPE {
+	/*public static class BlockStorageWriterPE {
 
 		public final int[] blockdata;
 		public final int bitsPerBlock;
 		public final int blocksPerWord;
 		public final int singleValMask;
 
-		public BlockStorageWriterPE(int bitsPerBlock, int blocks) {
-			this.bitsPerBlock = bitsPerBlock;
+		public BlockStorageWriterPE(int bitsPerBlock) {
 			assert(bitsPerBlock <= Integer.SIZE);
+			this.bitsPerBlock = bitsPerBlock;
 			blocksPerWord = Integer.SIZE / bitsPerBlock;
-			final int blockdataSize = (blocks + (blocksPerWord - 1)) / blocksPerWord;
-			blockdata = new int[blockdataSize];
+			blockdata = new int[(ChunkConstants.BLOCKS_IN_SECTION + blocksPerWord - 1) / blocksPerWord];
 			singleValMask = (1 << bitsPerBlock) - 1;
 		}
 
 		public void setBlockState(int index, int blockstate) {
 			final int arrIndex = index / blocksPerWord;
-			final int bitIndex =  (index % blocksPerWord) * bitsPerBlock;
-			this.blockdata[arrIndex] = ((this.blockdata[arrIndex] & ~(this.singleValMask << bitIndex)) | ((blockstate & this.singleValMask) << bitIndex));
+			final int bitIndex = (index % blocksPerWord) * bitsPerBlock;
+			if (singleValMask >> bitsPerBlock != 0) {
+				throw new IllegalArgumentException("Block ID too large for palette's bitsPerBlock");
+			}
+			//blockdata[arrIndex] = ((blockdata[arrIndex] & ~(singleValMask << bitIndex)) | ((blockstate & singleValMask) << bitIndex));
+			blockdata[arrIndex] = blockdata[arrIndex] | (blockstate << bitIndex);
 		}
 
-	}
+	}*/
 
 }

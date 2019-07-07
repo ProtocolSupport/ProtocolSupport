@@ -357,14 +357,17 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.TRADER_LAMA)
 			.addMapping(NetworkEntityType.TRADER_LAMA, LamaEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_14)
+			.addMapping(NetworkEntityType.TRADER_LAMA, LamaEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PE)
 			.addMapping(NetworkEntityType.LAMA, LamaEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
 			.register();
 			new Mapping(NetworkEntityType.WANDERING_TRADER)
 			.addMapping(NetworkEntityType.WANDERING_TRADER, new AbstractMerchantEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)
+			.addMapping(NetworkEntityType.WANDERING_TRADER, new AbstractMerchantEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PE)
 			.addMapping(NetworkEntityType.VILLAGER, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
 			.register();
 			new Mapping(NetworkEntityType.PANDA)
 			.addMapping(NetworkEntityType.PANDA, new PandaEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)
+			.addMapping(NetworkEntityType.PANDA, new PandaEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PE)
 			.addMapping(NetworkEntityType.POLAR_BEAR, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.RANGE__1_11__1_13_2)
 			.addMapping(NetworkEntityType.SPIDER, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
@@ -374,10 +377,12 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.FOX)
 			.addMapping(NetworkEntityType.FOX, new FoxEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)
+			.addMapping(NetworkEntityType.FOX, new FoxEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PE)
 			.addMapping(NetworkEntityType.OCELOT, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
 			.register();
 			new Mapping(NetworkEntityType.PILLAGER)
 			.addMapping(NetworkEntityType.PILLAGER, new PillagerEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)
+			.addMapping(NetworkEntityType.PILLAGER, new PillagerEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PE)
 			.addMapping(NetworkEntityType.ILLUSIONER, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.RANGE__1_11__1_13_2)
 			.addMapping(NetworkEntityType.WITCH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();

@@ -164,7 +164,11 @@ public class PEDataValues {
 		registerEntity(NetworkEntityType.MINECART_HOPPER, null, "minecraft:hopper_minecart");
 		registerEntity(NetworkEntityType.MINECART_COMMAND, null, "minecraft:command_block_minecart");
 		//registerEntity(NetworkEntityType.NPC, null, "minecraft:npc");
-		//registerEntity(NetworkEntityType.PANDA, null, "minecraft:panda");
+		registerEntity(NetworkEntityType.PANDA, null, "minecraft:panda");
+		registerEntity(NetworkEntityType.PILLAGER, null, "minecraft:pillager");
+		registerEntity(NetworkEntityType.FOX, null, "minecraft:fox");
+		registerEntity(NetworkEntityType.TRADER_LAMA, null, "minecraft:villager");
+		registerEntity(NetworkEntityType.WANDERING_TRADER, null, "minecraft:villager");
 		//registerEntity(NetworkEntityType.BALLOON, null, "minecraft:balloon");
 		//registerEntity(NetworkEntityType.WITHER_SKULL_DANGEROUS, null, "minecraft:wither_skull_dangerous");
 		//registerEntity(NetworkEntityType.LIGHTNING_BOLT, null, "minecraft:lightning_bolt");

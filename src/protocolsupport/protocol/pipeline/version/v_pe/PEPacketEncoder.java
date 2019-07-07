@@ -145,7 +145,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, InventorySetSlot::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_DATA_ID, InventoryData::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_TRANSACTION_ID, InventoryConfirmTransaction::new);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_RECIPES, CraftingData::new);
+		//registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_RECIPES, CraftingData::new); //TODO: fix crafting
 		//registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BED_ID, UseBed::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_COMMANDS, DeclareCommands::new);
 	}

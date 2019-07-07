@@ -14,6 +14,8 @@ import protocolsupport.protocol.types.chunk.ChunkSectonBlockData;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.utils.Utils;
 
+import java.util.Arrays;
+
 public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 
 	public MiddleChunk(ConnectionImpl connection) {
@@ -30,6 +32,7 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
+		Arrays.fill(sections, null);
 		coord = PositionSerializer.readIntChunkCoord(serverdata);
 		full = serverdata.readBoolean();
 		blockMask = VarNumberSerializer.readVarInt(serverdata);

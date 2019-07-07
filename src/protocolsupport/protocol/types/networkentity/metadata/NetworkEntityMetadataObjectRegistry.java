@@ -55,6 +55,7 @@ public class NetworkEntityMetadataObjectRegistry {
 		register(NetworkEntityMetadataObjectShort.class, 1, ProtocolVersionsHelper.BEFORE_1_9);
 		register(NetworkEntityMetadataObjectInt.class, 2, ProtocolVersionsHelper.BEFORE_1_9);
 		register(NetworkEntityMetadataObjectVector3i.class, 6, ProtocolVersionsHelper.BEFORE_1_9);
+		register(NetworkEntityMetadataObjectByte.class, 0, ProtocolVersionsHelper.ALL_PE);
 		register(NetworkEntityMetadataShortLe.class, 1, ProtocolVersionsHelper.ALL_PE);
 		register(NetworkEntityMetadataObjectVarInt.class, 2, ProtocolVersionsHelper.ALL_PE);
 		register(NetworkEntityMetadataObjectSVarInt.class, 2, ProtocolVersionsHelper.ALL_PE);
