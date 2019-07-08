@@ -23,4 +23,8 @@ public class ChunkCache {
 		chunks.remove(coord);
 	}
 
+	public void clear() {
+		chunks.clear();
+	}
+
 }
