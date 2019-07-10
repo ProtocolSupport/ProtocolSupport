@@ -9,6 +9,7 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyPotionId;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTString;
+import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 
 public class PotionFromLegacyIdComplexRemapper implements ItemStackComplexRemapper {
@@ -18,11 +19,7 @@ public class PotionFromLegacyIdComplexRemapper implements ItemStackComplexRemapp
 		int data = itemstack.getLegacyData();
 		String name = LegacyPotionId.fromLegacyId(data);
 		if (!StringUtils.isEmpty(name)) {
-			NBTCompound tag = itemstack.getNBT();
-			if (tag == null) {
-				tag = new NBTCompound();
-				itemstack.setNBT(tag);
-			}
+			NBTCompound tag = CommonNBT.getOrCreateRootTag(itemstack);
 			tag.setTag("Potion", new NBTString(name));
 			itemstack.setTypeId(ItemMaterialLookup.getRuntimeId(LegacyPotionId.isThrowable(data) ? Material.SPLASH_POTION : Material.POTION));
 		}
