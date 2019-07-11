@@ -32,19 +32,6 @@ public abstract class AbstractChunk extends MiddleChunk {
 		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
 			if (Utils.isBitSet(blockMask, sectionNumber)) {
 				cachedChunk.setBlocksSection(sectionNumber, new CachedChunkSectionBlockStorage(sections[sectionNumber]));
-//TODO: move to section writers (so we don't waste cpu getting block twice and doing additional big loop)
-//				Map<Position, TileEntity> directTiles = cachedChunk.getTiles(sectionNumber);
-//				for (int blockIndex = 0; blockIndex < ChunkConstants.BLOCKS_IN_SECTION; blockIndex++) {
-//					int blockdata = <section>.getBlockData(blockIndex);
-//					if (tileRemapper.usedToBeTile(blockdata)) {
-//						Position position = new Position(
-//							(coord.getX() << 4) + (blockIndex & 0xF),
-//							(sectionNumber << 4) + ((blockIndex >> 8) & 0xF),
-//							(coord.getZ() << 4) + ((blockIndex >> 4) & 0xF)
-//						);
-//						directTiles.put(position, tileRemapper.getLegacyTileFromBlock(position, blockdata));
-//					}
-//				}
 			}
 		}
 

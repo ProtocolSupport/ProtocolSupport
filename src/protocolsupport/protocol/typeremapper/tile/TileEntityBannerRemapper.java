@@ -66,4 +66,5 @@ public class TileEntityBannerRemapper extends TileEntityWithBlockDataNBTRemapper
 		register(list, Material.RED_WALL_BANNER, 1);
 		register(list, Material.BLACK_WALL_BANNER, 0);
 	}
+
 }
