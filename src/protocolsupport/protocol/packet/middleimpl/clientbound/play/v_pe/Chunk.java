@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import io.netty.buffer.ByteBuf;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.listeners.internal.ChunkUpdateRequest;
 import protocolsupport.protocol.ConnectionImpl;
@@ -33,6 +34,8 @@ public class Chunk extends MiddleChunk {
 
 	protected static final int FLAG_RUNTIME = 1;
 	protected static final int SUBCHUNK_VERSION = 8;
+	protected static final int AIR_BLOCK_ID = 0;
+	protected static final int WATERLOG_BLOCK_ID = 54;
 
 	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
@@ -51,12 +54,11 @@ public class Chunk extends MiddleChunk {
 		ClientBoundPacketData chunkpacket = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA);
 
 		PositionSerializer.writePEChunkCoord(chunkpacket, coord);
-		//1.12 does section count first, then payload. earlier does payload including section count
-		if (/* IS_1.12 */false) {
-			chunkpacket.writeByte(ChunkConstants.SECTION_COUNT_BLOCKS);
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+			chunkpacket.writeByte(ChunkConstants.SECTION_COUNT_BLOCKS); //1.12 does section count first
 		}
 		ArraySerializer.writeVarIntByteArray(chunkpacket, chunkdata -> {
-			if (/* !IS_1.12 */true) {
+			if (version.isBefore(ProtocolVersion.MINECRAFT_PE_1_12)) {
 				chunkdata.writeByte(ChunkConstants.SECTION_COUNT_BLOCKS);
 			}
 			for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
@@ -97,14 +99,14 @@ public class Chunk extends MiddleChunk {
 						chunkdata.writeIntLE(word);
 					}
 					VarNumberSerializer.writeSVarInt(chunkdata, 2); //Palette size
-					VarNumberSerializer.writeSVarInt(chunkdata, 0); //Palette air
-					VarNumberSerializer.writeSVarInt(chunkdata, 54); //Palette water
+					VarNumberSerializer.writeSVarInt(chunkdata, AIR_BLOCK_ID); //Palette air
+					VarNumberSerializer.writeSVarInt(chunkdata, WATERLOG_BLOCK_ID); //Palette water
 				} else {
 					chunkdata.writeByte(1); //blockstorage count.
 					chunkdata.writeByte((1 << 1) | FLAG_RUNTIME);
 					chunkdata.writeZero(512);
 					VarNumberSerializer.writeSVarInt(chunkdata, 1); //Palette size
-					VarNumberSerializer.writeSVarInt(chunkdata, 0); //Palette: Air
+					VarNumberSerializer.writeSVarInt(chunkdata, AIR_BLOCK_ID); //Palette: Air
 				}
 			}
 			chunkdata.writeZero(512); //heightmap (will be recalculated by client anyway)
@@ -143,22 +145,26 @@ public class Chunk extends MiddleChunk {
 		return (y << 8) | (z << 4) | (x);
 	}
 
-	public static void addFakeChunks(RecyclableCollection<ClientBoundPacketData> packets, ChunkCoord coord) {
+	public static void addFakeChunks(RecyclableCollection<ClientBoundPacketData> packets, ChunkCoord coord, ProtocolVersion version) {
 		for (int x = -1; x <= 1; x++) {
 			for (int z = -1; z <= 1; z++) {
-				packets.add(createEmptyChunk(new ChunkCoord(coord.getX() + x, coord.getZ() + z)));
+				packets.add(createEmptyChunk(new ChunkCoord(coord.getX() + x, coord.getZ() + z), version));
 			}
 		}
 	}
 
-	public static void writeEmptyChunk(ByteBuf out, ChunkCoord chunk) {
+	public static void writeEmptyChunk(ByteBuf out, ChunkCoord chunk, ProtocolVersion version) {
 		PositionSerializer.writePEChunkCoord(out, chunk);
-		out.writeBytes(EmptyChunk.getPEChunkData());
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+			out.writeBytes(EmptyChunk.getPEChunkData112());
+		} else {
+			out.writeBytes(EmptyChunk.getPEChunkData());
+		}
 	}
 
-	public static ClientBoundPacketData createEmptyChunk(ChunkCoord chunk) {
+	public static ClientBoundPacketData createEmptyChunk(ChunkCoord chunk, ProtocolVersion version) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA);
-		writeEmptyChunk(serializer, chunk);
+		writeEmptyChunk(serializer, chunk, version);
 		return serializer;
 	}
 

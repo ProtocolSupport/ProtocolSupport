@@ -33,6 +33,16 @@ public class CraftingData extends MiddleDeclareRecipes {
 	public static final String TAG_CRAFTING_TABLE = "crafting_table";
 	public static final String TAG_FURNACE = "furnace";
 
+	protected static UUID createUUID(List<NetworkItemStack> in, NetworkItemStack out) {
+		long mostSigBits = 41 * out.hashCode();
+		long leastSigBits = out.hashCode();
+		for (NetworkItemStack is : in) {
+			mostSigBits = mostSigBits * 31 + is.hashCode();
+			leastSigBits = leastSigBits * 524287 + is.hashCode();
+		}
+		return new UUID(mostSigBits, leastSigBits);
+	}
+
 	protected int recipesWritten;
 
 	public CraftingData(ConnectionImpl connection) {
@@ -118,33 +128,64 @@ public class CraftingData extends MiddleDeclareRecipes {
 
 	protected void addRecipeShaped(ByteBuf to, NetworkItemStack output, int width, int height, List<NetworkItemStack> required) {
 		String locale = connection.getCache().getAttributesCache().getLocale();
+		UUID uuid = createUUID(required, output);
 		VarNumberSerializer.writeSVarInt(to, PE_RECIPE_TYPE_SHAPED); //recipe type
+		if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+			StringSerializer.writeString(to, connection.getVersion(), "recipe_shaped_" + uuid);
+		}
 		VarNumberSerializer.writeSVarInt(to, width);
 		VarNumberSerializer.writeSVarInt(to, height);
 		for (NetworkItemStack stack : required) {
-			ItemStackSerializer.writePEItemStack(to, stack);
+			if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+				final int typeId = stack.isNull() ? 0 : stack.getTypeId();
+				VarNumberSerializer.writeSVarInt(to, typeId);
+				if (typeId != 0) {
+					VarNumberSerializer.writeSVarInt(to, stack.getLegacyData());
+					VarNumberSerializer.writeSVarInt(to, stack.getAmount());
+				}
+			} else {
+				ItemStackSerializer.writePEItemStack(to, stack);
+			}
 		}
 		VarNumberSerializer.writeVarInt(to, 1); // result item count
 		ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output);
-		MiscSerializer.writePEUUID(to, UUID.nameUUIDFromBytes(to.array()));
+		MiscSerializer.writePEUUID(to, uuid);
 		if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_11)) {
 			StringSerializer.writeString(to, connection.getVersion(), TAG_CRAFTING_TABLE);
+		}
+		if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+			VarNumberSerializer.writeSVarInt(to, 0); //priority
 		}
 		recipesWritten++;
 	}
 
 	protected void addRecipeShapeless(ByteBuf to, NetworkItemStack output, List<NetworkItemStack> required) {
 		String locale = connection.getCache().getAttributesCache().getLocale();
+		UUID uuid = createUUID(required, output);
 		VarNumberSerializer.writeSVarInt(to, PE_RECIPE_TYPE_SHAPELESS); //recipe type
+		if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+			StringSerializer.writeString(to, connection.getVersion(), "recipe_shapeless_" + uuid);
+		}
 		VarNumberSerializer.writeVarInt(to, required.size());
 		for (NetworkItemStack stack : required) {
-			ItemStackSerializer.writePEItemStack(to, stack);
+			if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+				VarNumberSerializer.writeSVarInt(to, stack.getTypeId());
+				if (stack.getTypeId() != 0) {
+					VarNumberSerializer.writeSVarInt(to, stack.getLegacyData());
+					VarNumberSerializer.writeSVarInt(to, stack.getAmount());
+				}
+			} else {
+				ItemStackSerializer.writePEItemStack(to, stack);
+			}
 		}
 		VarNumberSerializer.writeVarInt(to, 1); // result item count
 		ItemStackSerializer.writeItemStack(to, connection.getVersion(), locale, output);
-		MiscSerializer.writePEUUID(to, UUID.nameUUIDFromBytes(to.array()));
+		MiscSerializer.writePEUUID(to, uuid);
 		if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_11)) {
 			StringSerializer.writeString(to, connection.getVersion(), TAG_CRAFTING_TABLE);
+		}
+		if (connection.getVersion().isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+			VarNumberSerializer.writeSVarInt(to, 0); //priority
 		}
 		recipesWritten++;
 	}
@@ -165,4 +206,5 @@ public class CraftingData extends MiddleDeclareRecipes {
 		}
 		recipesWritten++;
 	}
+
 }

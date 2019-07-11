@@ -28,6 +28,11 @@ public class EmptyChunk {
 		return fakePEChunkData;
 	}
 
+	private static final byte[] fakePEChunkData112;
+	public static byte[] getPEChunkData112() {
+		return fakePEChunkData112;
+	}
+
 	static {
 		ByteBuf serializer = Unpooled.buffer();
 		ArraySerializer.writeVarIntByteArray(serializer, chunkdata -> {
@@ -42,7 +47,15 @@ public class EmptyChunk {
 			chunkdata.writeZero(256); //Biomedata.
 			chunkdata.writeByte(0); //borders
 		});
+		serializer.markReaderIndex();
 		fakePEChunkData = MiscSerializer.readAllBytes(serializer);
+		serializer.resetReaderIndex();
+
+		ByteBuf tmpBuf = Unpooled.buffer(512);
+		VarNumberSerializer.writeVarInt(tmpBuf, serializer.readUnsignedByte());
+		tmpBuf.writeByte(0);
+		ArraySerializer.writeVarIntByteArray(tmpBuf, serializer);
+		fakePEChunkData112 = MiscSerializer.readAllBytes(tmpBuf);
 	}
 
 }
