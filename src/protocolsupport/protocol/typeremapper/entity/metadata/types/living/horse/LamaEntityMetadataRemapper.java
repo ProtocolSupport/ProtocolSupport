@@ -23,7 +23,9 @@ public class LamaEntityMetadataRemapper extends CargoHorseEntityMetadataRemapper
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
 				NetworkEntityMetadataObjectIndex.Lama.STRENGTH.getValue(original).ifPresent(intWatcher -> {
-					((NetworkEntityLamaDataCache) entity.getDataCache()).setStrength(intWatcher.getValue());
+					if (entity.getDataCache() instanceof NetworkEntityLamaDataCache) {
+						((NetworkEntityLamaDataCache) entity.getDataCache()).setStrength(intWatcher.getValue());
+					}
 				});
 		}}, ProtocolVersionsHelper.ALL_PE);
 

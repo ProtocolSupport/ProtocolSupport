@@ -135,7 +135,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_STOP_SOUND, StopSound::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_BREAK_ANIMATION_ID, BlockBreakAnimation::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate::new);
-		//registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map::new);
+		//registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map::new); //TODO: PE maps
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID, EntityEquipment::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_ACTION_ID, BlockAction::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_HELD_SLOT_ID, HeldSlot::new);
@@ -145,8 +145,8 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID, InventorySetSlot::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_DATA_ID, InventoryData::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_TRANSACTION_ID, InventoryConfirmTransaction::new);
-		//registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_RECIPES, CraftingData::new); //TODO: fix crafting
-		//registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BED_ID, UseBed::new);
+		//registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_RECIPES, CraftingData::new); //TODO: fix PE crafting
+		//registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BED_ID, UseBed::new); //TODO: fix PE use beds
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_COMMANDS, DeclareCommands::new);
 	}
 

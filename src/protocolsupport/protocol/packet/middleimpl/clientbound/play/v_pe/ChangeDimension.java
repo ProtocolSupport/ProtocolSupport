@@ -1,12 +1,15 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import java.text.MessageFormat;
+import java.util.HashSet;
+import java.util.Set;
 
 import io.netty.buffer.ByteBuf;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14.Entity;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.types.ChunkCoord;
@@ -18,14 +21,18 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class ChangeDimension extends MiddleChangeDimension {
 
+	protected Set<Long> entityRemovals = new HashSet<>();
+
 	public ChangeDimension(ConnectionImpl connection) {
 		super(connection);
 	}
 
 	@Override
 	public boolean postFromServerRead() {
+		entityRemovals.clear();
+		cache.getWatchedEntityCache().forEach(
+			(id, entity) -> entityRemovals.add(id.longValue()));
 		cache.getPEChunkMapCache().clear();
-		//TODO: send remove entity packets
 		return super.postFromServerRead();
 	}
 
@@ -36,6 +43,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 			packets.add(InventoryClose.create(connection.getVersion(), cache.getWindowCache().getOpenedWindowId()));
 			cache.getWindowCache().closeWindow();
 		}
+		entityRemovals.forEach(id -> packets.add(EntityDestroy.create(id)));
 		packets.add(createRaw(0, 0, 0, getPeDimensionId(dimension)));
 		packets.add(Chunk.createChunkPublisherUpdate(0, 0, 0));
 		//needs a few chunks before the dim switch ack can confirm

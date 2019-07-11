@@ -82,6 +82,7 @@ public class PEDataValues {
 		registerEntity(NetworkEntityType.LAMA, 29, "minecraft:llama");
 		registerEntity(NetworkEntityType.BAT, 19, "minecraft:bat");
 		registerEntity(NetworkEntityType.OCELOT, 22, "minecraft:cat");
+		registerEntity(NetworkEntityType.CAT, 22, "minecraft:cat");
 		registerEntity(NetworkEntityType.WOLF, 14, "minecraft:wolf");
 		registerEntity(NetworkEntityType.PIG, 12, "minecraft:pig");
 		registerEntity(NetworkEntityType.RABBIT, 18, "minecraft:rabbit");
