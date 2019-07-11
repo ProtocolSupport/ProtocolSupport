@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.protocol.types.nbt.NBTString;
 
-class TileEntityToLegacyTypeNameRemapper implements Consumer<TileEntity> {
+public class TileEntityToLegacyTypeNameRemapper implements Consumer<TileEntity> {
 
 	protected final String name;
 	public TileEntityToLegacyTypeNameRemapper(String name) {

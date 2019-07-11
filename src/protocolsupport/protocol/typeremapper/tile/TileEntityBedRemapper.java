@@ -13,7 +13,7 @@ import protocolsupport.protocol.types.nbt.NBTInt;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.CollectionsUtils.ArrayMap.Entry;
 
-class TileEntityBedRemapper extends TileEntityWithBlockDataNBTRemapper {
+public class TileEntityBedRemapper extends TileEntityWithBlockDataNBTRemapper {
 
 	protected void register(List<Entry<Consumer<NBTCompound>>> list, Material bed, int color) {
 		for (BlockData blockdata : MaterialAPI.getBlockDataList(bed)) {
