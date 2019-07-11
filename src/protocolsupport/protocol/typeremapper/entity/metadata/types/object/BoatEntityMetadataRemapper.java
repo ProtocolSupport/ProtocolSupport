@@ -36,7 +36,6 @@ public class BoatEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Boat.RIGHT_PADDLE, 11), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Boat.SPLASH_TIMER, 13), ProtocolVersionsHelper.UP_1_13);
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Boat.SPLASH_TIMER, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 	}
 
 }

@@ -22,7 +22,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.living.BlazeE
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.CreeperEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.EnderDragonEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.EndermanEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.EvokerEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.SpellcasterIllagerEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.GhastEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.GuardianEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.IronGolemEntityMetadataRemapper;
@@ -33,7 +33,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.living.SlimeE
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.SnowmanEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.SpiderEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.VexEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.VindicatorEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.IllagerEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.WitchEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.WitherEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.FoxEntityMetadataRemapper;
@@ -56,7 +56,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LegacyZombieHorseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.skeleton.LegacyStrayEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.skeleton.LegacyWitherSkeletonEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.skeleton.SkeletonEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.skeleton.LegacySkeletonEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.tameable.CatEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.tameable.ParrotEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.tameable.WolfEntityMetadataRemapper;
@@ -272,14 +272,14 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.MAGMA_CUBE, SlimeEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
 			.register();
 			new Mapping(NetworkEntityType.SKELETON)
-			.addMapping(NetworkEntityType.SKELETON, SkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.SKELETON, LegacySkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
 			.register();
 			new Mapping(NetworkEntityType.WITHER_SKELETON)
-			.addMapping(NetworkEntityType.WITHER_SKELETON, SkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.WITHER_SKELETON, LegacySkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
 			.addMapping(NetworkEntityType.SKELETON, new LegacyWitherSkeletonEntityMetadataRemapper(), ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.STRAY)
-			.addMapping(NetworkEntityType.STRAY, SkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.STRAY, LegacySkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
 			.addMapping(NetworkEntityType.SKELETON, new LegacyStrayEntityMetadataRemapper(), ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.WITCH)
@@ -305,15 +305,15 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.SQUID, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_8)
 			.register();
 			new Mapping(NetworkEntityType.VINDICATOR)
-			.addMapping(NetworkEntityType.VINDICATOR, new VindicatorEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.VINDICATOR, new IllagerEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_11)
 			.addMapping(NetworkEntityType.WITCH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.EVOKER)
-			.addMapping(NetworkEntityType.EVOKER, EvokerEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.EVOKER, SpellcasterIllagerEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
 			.addMapping(NetworkEntityType.WITCH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.ILLUSIONER)
-			.addMapping(NetworkEntityType.ILLUSIONER, EvokerEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.ILLUSIONER, SpellcasterIllagerEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
 			.addMapping(NetworkEntityType.WITCH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.VEX)

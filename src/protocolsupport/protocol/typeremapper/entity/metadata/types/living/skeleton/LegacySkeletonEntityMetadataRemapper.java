@@ -5,11 +5,11 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.base.Insentie
 import protocolsupport.protocol.typeremapper.entity.metadata.value.InsentientAttackingToLegacySwingingHadsIndexValesRemapper;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
-public class SkeletonEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
+public class LegacySkeletonEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
-	public static final SkeletonEntityMetadataRemapper INSTANCE = new SkeletonEntityMetadataRemapper();
+	public static final LegacySkeletonEntityMetadataRemapper INSTANCE = new LegacySkeletonEntityMetadataRemapper();
 
-	public SkeletonEntityMetadataRemapper() {
+	public LegacySkeletonEntityMetadataRemapper() {
 		addRemap(new InsentientAttackingToLegacySwingingHadsIndexValesRemapper(12), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 		addRemap(new InsentientAttackingToLegacySwingingHadsIndexValesRemapper(13), ProtocolVersion.MINECRAFT_1_10);
 		addRemap(new InsentientAttackingToLegacySwingingHadsIndexValesRemapper(12), ProtocolVersionsHelper.ALL_1_9);

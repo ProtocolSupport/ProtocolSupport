@@ -303,11 +303,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> DRINKING_POTION = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 	}
 
-	public static class Vindicator extends RaidParticipant {
-		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> HAS_TARGET = takeNextIndex(NetworkEntityMetadataObjectByte.class);
-	}
-
-	public static class Evoker extends RaidParticipant {
+	public static class SpellcasterIllager extends RaidParticipant {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> SPELL = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 	}
 
