@@ -7,7 +7,6 @@ import javax.crypto.SecretKey;
 import org.bukkit.Bukkit;
 
 import net.minecraft.server.v1_14_R1.IChatBaseComponent;
-import net.minecraft.server.v1_14_R1.ITickable;
 import net.minecraft.server.v1_14_R1.PacketLoginInCustomPayload;
 import net.minecraft.server.v1_14_R1.PacketLoginInEncryptionBegin;
 import net.minecraft.server.v1_14_R1.PacketLoginInListener;
@@ -15,15 +14,10 @@ import net.minecraft.server.v1_14_R1.PacketLoginInStart;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public class SpigotLoginListener extends AbstractLoginListener implements ITickable, PacketLoginInListener {
+public class SpigotLoginListener extends AbstractLoginListener implements PacketLoginInListener {
 
 	public SpigotLoginListener(NetworkManagerWrapper networkmanager, String hostname) {
 		super(networkmanager, hostname);
-	}
-
-	@Override
-	public void tick() {
-		loginTick();
 	}
 
 	@Override

@@ -40,7 +40,7 @@ import protocolsupportbuildprocessor.Preload;
 
 @SuppressWarnings("deprecation")
 @Preload
-public abstract class AbstractLoginListener implements IPacketListener {
+public abstract class AbstractLoginListener implements IPacketListener, IServerThreadTickListener {
 
 	protected static final int loginThreadKeepAlive = JavaSystemProperty.getValue("loginthreadskeepalive", 60, Integer::parseInt);
 
@@ -69,7 +69,8 @@ public abstract class AbstractLoginListener implements IPacketListener {
 	}
 
 	protected int loginTicks;
-	public void loginTick() {
+	@Override
+	public void tick() {
 		if (loginTicks++ == 600) {
 			disconnect("Took too long to log in");
 		}
