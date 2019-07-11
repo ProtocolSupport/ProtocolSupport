@@ -41,7 +41,7 @@ public class Chunk extends AbstractChunk {
 			);
 			if (full) {
 				for (int i = 0; i < biomeData.length; i++) {
-					to.writeInt(biomeData[i]);
+					to.writeByte(biomeData[i]);
 				}
 			}
 		});
