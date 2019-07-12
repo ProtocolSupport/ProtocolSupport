@@ -26,6 +26,7 @@ import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.protocol.types.chunk.ChunkSectonBlockData;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -44,7 +45,7 @@ public class Chunk extends MiddleChunk {
 	}
 
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if (!full) { //request full chunk if not given, but still send partial chunk
+		if (!full || (blockMask & 0xF) != 0xF) { //request full chunk if not given
 			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new ChunkUpdateRequest(coord));
 			return RecyclableEmptyList.get();
 		}
@@ -52,10 +53,11 @@ public class Chunk extends MiddleChunk {
 		RemappingTable.ArrayBasedIdRemappingTable biomeRemappingTable = PEDataValues.BIOME.getTable(connection.getVersion());
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		ClientBoundPacketData chunkpacket = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA);
+		cache.getPEChunkMapCache().markSent(coord);
 
 		PositionSerializer.writePEChunkCoord(chunkpacket, coord);
 		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
-			chunkpacket.writeByte(ChunkConstants.SECTION_COUNT_BLOCKS); //1.12 does section count first
+			chunkpacket.writeShortLE(ChunkConstants.SECTION_COUNT_BLOCKS);
 		}
 		ArraySerializer.writeVarIntByteArray(chunkpacket, chunkdata -> {
 			if (version.isBefore(ProtocolVersion.MINECRAFT_PE_1_12)) {
@@ -63,8 +65,7 @@ public class Chunk extends MiddleChunk {
 			}
 			for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
 				ChunkSectonBlockData section = sections[sectionNumber];
-				chunkdata.writeByte(SUBCHUNK_VERSION);
-				if (section != null) {
+				if (Utils.isBitSet(blockMask, sectionNumber)) {
 					int bitsPerBlock = getPocketBitsPerBlock(section.getBitsPerBlock());
 					BlockStorageWriterPE blockstorage = new BlockStorageWriterPE(bitsPerBlock);
 					BlockStorageWriterPE waterstorage = new BlockStorageWriterPE(1); //Waterlogged -> second storage. Only true/false per block
@@ -83,6 +84,7 @@ public class Chunk extends MiddleChunk {
 							}
 						}
 					}
+					chunkdata.writeByte(SUBCHUNK_VERSION);
 					chunkdata.writeByte(2); //blockstorage count.
 					chunkdata.writeByte((bitsPerBlock << 1) | FLAG_RUNTIME);
 					for (int word : blockstorage.getBlockData()) {
@@ -102,11 +104,7 @@ public class Chunk extends MiddleChunk {
 					VarNumberSerializer.writeSVarInt(chunkdata, AIR_BLOCK_ID); //Palette air
 					VarNumberSerializer.writeSVarInt(chunkdata, WATERLOG_BLOCK_ID); //Palette water
 				} else {
-					chunkdata.writeByte(1); //blockstorage count.
-					chunkdata.writeByte((1 << 1) | FLAG_RUNTIME);
-					chunkdata.writeZero(512);
-					VarNumberSerializer.writeSVarInt(chunkdata, 1); //Palette size
-					VarNumberSerializer.writeSVarInt(chunkdata, AIR_BLOCK_ID); //Palette: Air
+					writeEmptySubChunk(chunkdata);
 				}
 			}
 			chunkdata.writeZero(512); //heightmap (will be recalculated by client anyway)
@@ -153,6 +151,15 @@ public class Chunk extends MiddleChunk {
 		}
 	}
 
+	public static void writeEmptySubChunk(ByteBuf out) {
+		out.writeByte(SUBCHUNK_VERSION);
+		out.writeByte(1); //blockstorage count.
+		out.writeByte((1 << 1) | FLAG_RUNTIME);
+		out.writeZero(512);
+		VarNumberSerializer.writeSVarInt(out, 1); //Palette size
+		VarNumberSerializer.writeSVarInt(out, AIR_BLOCK_ID); //Palette: Air
+	}
+
 	public static void writeEmptyChunk(ByteBuf out, ChunkCoord chunk, ProtocolVersion version) {
 		PositionSerializer.writePEChunkCoord(out, chunk);
 		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
@@ -166,19 +173,6 @@ public class Chunk extends MiddleChunk {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA);
 		writeEmptyChunk(serializer, chunk, version);
 		return serializer;
-	}
-
-	public static void writeChunkPublisherUpdate(ByteBuf out, int x, int y, int z) {
-		VarNumberSerializer.writeSVarInt(out, x);
-		VarNumberSerializer.writeVarInt(out, y);
-		VarNumberSerializer.writeSVarInt(out, z);
-		VarNumberSerializer.writeVarInt(out, 512); //radius, gets clamped by client
-	}
-
-	public static ClientBoundPacketData createChunkPublisherUpdate(int x, int y, int z) {
-		ClientBoundPacketData networkChunkUpdate = ClientBoundPacketData.create(PEPacketIDs.NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET);
-		writeChunkPublisherUpdate(networkChunkUpdate, x, y, z);
-		return networkChunkUpdate;
 	}
 
 }
