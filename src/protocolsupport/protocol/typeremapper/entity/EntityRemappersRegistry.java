@@ -47,6 +47,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageabl
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.fish.FishEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.fish.PufferFishEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.fish.TropicalFishEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.BaseHorseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.BattleHorseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.CargoHorseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LamaEntityMetadataRemapper;
@@ -183,7 +184,7 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.LAMA)
 			.addMapping(NetworkEntityType.LAMA, LamaEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
-			.addMapping(NetworkEntityType.COMMON_HORSE, LamaEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_10)
+			.addMapping(NetworkEntityType.COMMON_HORSE, BaseHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_10)
 			.addMapping(NetworkEntityType.COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
 			.register();
 			new Mapping(NetworkEntityType.BAT)
@@ -355,6 +356,8 @@ public class EntityRemappersRegistry {
 			new Mapping(NetworkEntityType.TRADER_LAMA)
 			.addMapping(NetworkEntityType.TRADER_LAMA, LamaEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_14)
 			.addMapping(NetworkEntityType.LAMA, LamaEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
+			.addMapping(NetworkEntityType.COMMON_HORSE, BaseHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_10)
+			.addMapping(NetworkEntityType.COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
 			.register();
 			new Mapping(NetworkEntityType.WANDERING_TRADER)
 			.addMapping(NetworkEntityType.WANDERING_TRADER, new AbstractMerchantEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)

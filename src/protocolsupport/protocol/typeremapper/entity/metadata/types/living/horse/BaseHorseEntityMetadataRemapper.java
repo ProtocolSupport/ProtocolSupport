@@ -6,7 +6,9 @@ import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRem
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
-public abstract class BaseHorseEntityMetadataRemapper extends AgeableEntityMetadataRemapper {
+public class BaseHorseEntityMetadataRemapper extends AgeableEntityMetadataRemapper {
+
+	public static final BaseHorseEntityMetadataRemapper INSTANCE = new BaseHorseEntityMetadataRemapper();
 
 	public BaseHorseEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.BaseHorse.FLAGS, 15), ProtocolVersionsHelper.UP_1_14);
