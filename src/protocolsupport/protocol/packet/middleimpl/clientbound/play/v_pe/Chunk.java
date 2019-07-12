@@ -47,7 +47,7 @@ public class Chunk extends MiddleChunk {
 	}
 
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if (!full || (blockMask & 0xF) != 0xF) { //request full chunk if not given
+		if (!full && (blockMask & 0xF) != 0xF) { //request full chunk if not given
 			InternalPluginMessageRequest.receivePluginMessageRequest(connection, new ChunkUpdateRequest(coord));
 			return RecyclableEmptyList.get();
 		}
@@ -71,7 +71,7 @@ public class Chunk extends MiddleChunk {
 					int bitsPerBlock = getPocketBitsPerBlock(section.getBitsPerBlock());
 					BlockStorageWriterPE blockstorage = new BlockStorageWriterPE(bitsPerBlock);
 					BlockStorageWriterPE waterstorage = new BlockStorageWriterPE(1); //Waterlogged -> second storage. Only true/false per block
-					int peIndex = 0; //subchunk iterator order is different
+					int peIndex = 0; //subchunk iterator order is different for PE
 					for (int x = 0; x < 16; x++) {
 						for (int z = 0; z < 16; z++) {
 							for (int y = 0; y < 16; y++) {
