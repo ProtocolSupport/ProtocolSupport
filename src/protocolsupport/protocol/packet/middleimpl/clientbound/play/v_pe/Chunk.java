@@ -33,10 +33,12 @@ import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class Chunk extends MiddleChunk {
 
-	protected static final int FLAG_RUNTIME = 1;
 	protected static final int SUBCHUNK_VERSION = 8;
 	protected static final int AIR_BLOCK_ID = 0;
 	protected static final int WATERLOG_BLOCK_ID = 54;
+
+	protected static final int FLAG_RUNTIME = 1;
+	protected static final int SINGLE_ID_STORAGE_HEADER = (1 << 1) | FLAG_RUNTIME;
 
 	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
@@ -64,12 +66,12 @@ public class Chunk extends MiddleChunk {
 				chunkdata.writeByte(ChunkConstants.SECTION_COUNT_BLOCKS);
 			}
 			for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-				ChunkSectonBlockData section = sections[sectionNumber];
 				if (Utils.isBitSet(blockMask, sectionNumber)) {
+					ChunkSectonBlockData section = sections[sectionNumber];
 					int bitsPerBlock = getPocketBitsPerBlock(section.getBitsPerBlock());
 					BlockStorageWriterPE blockstorage = new BlockStorageWriterPE(bitsPerBlock);
 					BlockStorageWriterPE waterstorage = new BlockStorageWriterPE(1); //Waterlogged -> second storage. Only true/false per block
-					int peIndex = 0;
+					int peIndex = 0; //subchunk iterator order is different
 					for (int x = 0; x < 16; x++) {
 						for (int z = 0; z < 16; z++) {
 							for (int y = 0; y < 16; y++) {
@@ -91,12 +93,11 @@ public class Chunk extends MiddleChunk {
 						chunkdata.writeIntLE(word);
 					}
 					VarNumberSerializer.writeSVarInt(chunkdata, section.getPalette().length);
-					for (int i = 0 ; i < section.getPalette().length ; i++) {
-						int pcId = section.getPalette()[i] & 0xFFFF;
-						VarNumberSerializer.writeSVarInt(chunkdata,
-							PEBlocks.getPocketRuntimeId(blockRemappingTable.getRemap(pcId)));
+					for (int pcId : section.getPalette()) {
+						VarNumberSerializer.writeSVarInt(chunkdata, PEBlocks.getPocketRuntimeId(
+							blockRemappingTable.getRemap(pcId & 0xFFFF)));
 					}
-					chunkdata.writeByte((1 << 1) | FLAG_RUNTIME); //Water storage.
+					chunkdata.writeByte(SINGLE_ID_STORAGE_HEADER);
 					for (int word : waterstorage.getBlockData()) {
 						chunkdata.writeIntLE(word);
 					}
@@ -130,7 +131,7 @@ public class Chunk extends MiddleChunk {
 		return packets;
 	}
 
-	protected static int getPocketBitsPerBlock(int pcBitsPerBlock) {
+	protected static final int getPocketBitsPerBlock(int pcBitsPerBlock) {
 		if (pcBitsPerBlock == 7) {
 			return 8;
 		} else if (pcBitsPerBlock > 8) {
@@ -139,7 +140,7 @@ public class Chunk extends MiddleChunk {
 		return pcBitsPerBlock;
 	}
 
-	protected static int getPcIndex(int x, int y, int z) {
+	protected static final int getPcIndex(int x, int y, int z) {
 		return (y << 8) | (z << 4) | (x);
 	}
 
@@ -154,7 +155,7 @@ public class Chunk extends MiddleChunk {
 	public static void writeEmptySubChunk(ByteBuf out) {
 		out.writeByte(SUBCHUNK_VERSION);
 		out.writeByte(1); //blockstorage count.
-		out.writeByte((1 << 1) | FLAG_RUNTIME);
+		out.writeByte(SINGLE_ID_STORAGE_HEADER);
 		out.writeZero(512);
 		VarNumberSerializer.writeSVarInt(out, 1); //Palette size
 		VarNumberSerializer.writeSVarInt(out, AIR_BLOCK_ID); //Palette: Air
