@@ -54,8 +54,8 @@ public class LegacyCustomPayloadData {
 
 	public static RecyclableCollection<ServerBoundPacketData> transformBookEdit(ProtocolVersion version, String locale, ByteBuf data) {
 		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version, locale);
-		book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
 		if (!book.isNull()) {
+			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
 			return RecyclableSingletonList.create(MiddleEditBook.create(book, false, UsedHand.MAIN));
 		} else {
 			return RecyclableEmptyList.get();
@@ -76,7 +76,6 @@ public class LegacyCustomPayloadData {
 							newPages.addTag(new NBTString(ChatAPI.fromJSON(page.getValue()).toLegacyText(locale)));
 						}
 						rootTag.setTag("pages", newPages);
-						book.setNBT(rootTag);
 					}
 				}
 			}

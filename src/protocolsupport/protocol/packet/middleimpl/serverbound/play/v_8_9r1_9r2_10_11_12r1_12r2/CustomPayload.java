@@ -49,6 +49,9 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 			case LegacyCustomPayloadChannelName.LEGACY_TRADE_SELECT: {
 				return LegacyCustomPayloadData.transformTradeSelect(data);
 			}
+			case LegacyCustomPayloadChannelName.LEGACY_PICK_ITEM: {
+				return LegacyCustomPayloadData.transformPickItem(data);
+			}
 			case LegacyCustomPayloadChannelName.LEGACY_STRUCTURE_BLOCK: {
 				return LegacyCustomPayloadData.transformStructureBlock(version, data);
 			}

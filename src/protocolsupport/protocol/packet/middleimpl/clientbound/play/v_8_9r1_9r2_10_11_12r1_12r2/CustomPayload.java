@@ -1,5 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2;
 
+import java.util.function.Consumer;
+
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
@@ -23,6 +25,13 @@ public class CustomPayload extends MiddleCustomPayload {
 		return RecyclableSingletonList.create(create(
 			version, Utils.clampString(cache.getChannelsCache().getLegacyName(LegacyCustomPayloadChannelName.toPre13(tag)), 20), data
 		));
+	}
+
+	public static ClientBoundPacketData create(ProtocolVersion version, String tag, Consumer<ByteBuf> dataWriter) {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID);
+		StringSerializer.writeString(serializer, version, tag);
+		dataWriter.accept(serializer);
+		return serializer;
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, String tag, ByteBuf data) {
