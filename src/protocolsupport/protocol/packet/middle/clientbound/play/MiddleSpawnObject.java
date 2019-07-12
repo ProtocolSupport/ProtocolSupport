@@ -8,15 +8,12 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
-import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry;
-import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry.ObjectDataRemappingTable;
 import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 
 	protected final EntityRemapper entityRemapper = new EntityRemapper(version);
-	protected final ObjectDataRemappingTable entityObjectDataRemappingTable = ObjectDataRemappersRegistry.REGISTRY.getTable(version);
 
 	public MiddleSpawnObject(ConnectionImpl connection) {
 		super(connection);
