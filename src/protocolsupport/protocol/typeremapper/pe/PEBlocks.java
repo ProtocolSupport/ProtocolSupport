@@ -35,6 +35,7 @@ public class PEBlocks {
 	private static final int[] pcToPeRuntimeId = new int[MinecraftData.BLOCKDATA_COUNT];
 	private static final int[] pcWaterlogged = new int[MinecraftData.BLOCKDATA_COUNT];
 	private static final EnumMap<ProtocolVersion, Integer> waterRuntime = new EnumMap<>(ProtocolVersion.class);
+	private static final EnumMap<ProtocolVersion, Integer> airRuntime = new EnumMap<>(ProtocolVersion.class);
 
 	private static final int CAN_BE_WATERLOGGED = 1;
 	private static final int IS_WATERLOGGED = 2;
@@ -68,6 +69,9 @@ public class PEBlocks {
 		//Specify water block for waterlog remapping.
 		for (ProtocolVersion version : ProtocolVersionsHelper.ALL_PE) {
 			waterRuntime.put(version, toPocketBlock(version, Material.WATER));
+		}
+		for (ProtocolVersion version : ProtocolVersionsHelper.ALL_PE) {
+			airRuntime.put(version, toPocketBlock(version, Material.AIR));
 		}
 		//Compile PE block definition for sending on login.
 		ByteBuf def = Unpooled.buffer();
@@ -115,6 +119,10 @@ public class PEBlocks {
 
 	public static int getPEWaterId(ProtocolVersion version) {
 		return waterRuntime.get(version);
+	}
+
+	public static int getPEAirId(ProtocolVersion version) {
+		return airRuntime.get(version);
 	}
 
 	private static class PEBlock {

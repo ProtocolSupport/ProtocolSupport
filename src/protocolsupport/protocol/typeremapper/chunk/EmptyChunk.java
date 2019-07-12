@@ -2,6 +2,7 @@ package protocolsupport.protocol.typeremapper.chunk;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Chunk;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -38,7 +39,7 @@ public class EmptyChunk {
 		ByteBuf serializer = Unpooled.buffer();
 		ArraySerializer.writeVarIntByteArray(serializer, chunkdata -> {
 			chunkdata.writeByte(1); //1 section
-			Chunk.writeEmptySubChunk(chunkdata);
+			Chunk.writeEmptySubChunk(chunkdata, ProtocolVersion.MINECRAFT_PE_1_8);
 			chunkdata.writeZero(512); //heightmap.
 			chunkdata.writeZero(256); //Biomedata.
 			chunkdata.writeByte(0); //borders
@@ -50,7 +51,7 @@ public class EmptyChunk {
 		ByteBuf serializer = Unpooled.buffer();
 		serializer.writeShortLE(1); //1 section
 		ArraySerializer.writeVarIntByteArray(serializer, chunkdata -> {
-			Chunk.writeEmptySubChunk(chunkdata);
+			Chunk.writeEmptySubChunk(chunkdata, ProtocolVersion.MINECRAFT_PE_1_12);
 			chunkdata.writeZero(512); //heightmap.
 			chunkdata.writeZero(256); //Biomedata.
 			chunkdata.writeByte(0); //borders
