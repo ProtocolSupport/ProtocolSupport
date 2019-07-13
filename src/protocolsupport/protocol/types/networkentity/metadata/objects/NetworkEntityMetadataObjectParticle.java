@@ -12,6 +12,13 @@ import protocolsupport.protocol.types.particle.ParticleRegistry;
 
 public class NetworkEntityMetadataObjectParticle extends ReadableNetworkEntityMetadataObject<Particle> {
 
+	public NetworkEntityMetadataObjectParticle() {
+	}
+
+	public NetworkEntityMetadataObjectParticle(Particle value) {
+		this.value = value;
+	}
+
 	@Override
 	public void readFromStream(ByteBuf from) {
 		value = ParticleRegistry.fromId(VarNumberSerializer.readVarInt(from));
