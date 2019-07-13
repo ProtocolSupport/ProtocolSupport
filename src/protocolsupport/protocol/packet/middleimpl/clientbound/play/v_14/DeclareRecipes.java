@@ -128,7 +128,7 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 			for (Recipe recipe : recipes) {
 				@SuppressWarnings("unchecked")
 				RecipeWriter<Recipe> writer = (RecipeWriter<Recipe>) recipeWriters.get(recipe.getType());
-				if (writer != null && writer.writeRecipe(to, version, recipe)) {
+				if ((writer != null) && writer.writeRecipe(to, version, recipe)) {
 					writtenRecipeCount++;
 				}
 			}
