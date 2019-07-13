@@ -146,7 +146,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 
 	protected static void writePlayerListEntry(ProtocolVersion version, ByteBuf serializer, byte[] skindata, UUID uuid, Boolean isNormalModel, String username) {
 		MiscSerializer.writePEUUID(serializer, uuid);
-		VarNumberSerializer.writeVarInt(serializer, 0); //entity id
+		VarNumberSerializer.writeSVarLong(serializer, 0); //entity id
 		StringSerializer.writeString(serializer, version, username);
 		writeSkinData(version, serializer, isNormalModel, skindata);
 		StringSerializer.writeString(serializer, version, ""); //xuid

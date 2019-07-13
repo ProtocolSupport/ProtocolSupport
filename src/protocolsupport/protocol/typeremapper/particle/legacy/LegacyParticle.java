@@ -1,6 +1,6 @@
 package protocolsupport.protocol.typeremapper.particle.legacy;
 
-import protocolsupport.protocol.utils.types.particle.Particle;
+import protocolsupport.protocol.types.particle.Particle;
 
 public class LegacyParticle extends Particle {
 

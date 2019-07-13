@@ -9,11 +9,11 @@ import org.bukkit.inventory.ItemStack;
 
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
-import protocolsupport.protocol.utils.types.nbt.mojangson.MojangsonParser;
-import protocolsupport.protocol.utils.types.nbt.mojangson.MojangsonSerializer;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTString;
+import protocolsupport.protocol.types.nbt.NBTType;
+import protocolsupport.protocol.types.nbt.mojangson.MojangsonParser;
+import protocolsupport.protocol.types.nbt.mojangson.MojangsonSerializer;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 

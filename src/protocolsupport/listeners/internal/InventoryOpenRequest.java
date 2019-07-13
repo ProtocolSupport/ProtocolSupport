@@ -12,8 +12,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Inventor
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.WindowType;
 
 public class InventoryOpenRequest extends PluginMessageData {
 
@@ -45,7 +45,7 @@ public class InventoryOpenRequest extends PluginMessageData {
 	@Override
 	protected void read(ByteBuf from) {
 		windowId = from.readInt();
-		type = WindowType.getById(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC));
+		type = WindowType.valueOf(StringSerializer.readString(from, ProtocolVersionsHelper.LATEST_PC));
 		PositionSerializer.readPositionTo(from, position);
 		horseId = from.readInt();
 		delayTicks = from.readInt();
@@ -54,7 +54,7 @@ public class InventoryOpenRequest extends PluginMessageData {
 	@Override
 	protected void write(ByteBuf to) {
 		to.writeInt(windowId);
-		StringSerializer.writeString(to, ProtocolVersionsHelper.LATEST_PC, type.getId());
+		StringSerializer.writeString(to, ProtocolVersionsHelper.LATEST_PC, type.toString());
 		PositionSerializer.writePosition(to, position);
 		to.writeInt(horseId);
 		to.writeInt(delayTicks);

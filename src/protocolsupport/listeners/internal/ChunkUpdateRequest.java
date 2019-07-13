@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.Connection;
 import protocolsupport.listeners.InternalPluginMessageRequest.PluginMessageData;
-import protocolsupport.protocol.utils.types.ChunkCoord;
+import protocolsupport.protocol.types.ChunkCoord;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class ChunkUpdateRequest extends PluginMessageData {

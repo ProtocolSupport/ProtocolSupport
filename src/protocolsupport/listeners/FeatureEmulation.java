@@ -1,7 +1,7 @@
 package protocolsupport.listeners;
 
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,12 +17,14 @@ import org.bukkit.potion.PotionEffectType;
 
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.Connection;
+import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.tab.TabAPI;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData.BlockDataEntry;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class FeatureEmulation implements Listener {
@@ -80,14 +82,21 @@ public class FeatureEmulation implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
-		Connection connection = ProtocolSupportAPI.getConnection(event.getPlayer());
+		Player player = event.getPlayer();
+		Connection connection = ProtocolSupportAPI.getConnection(player);
 		if (
 			(connection != null) &&
 			(connection.getVersion().getProtocolType() == ProtocolType.PC) &&
 			connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_9)
 		) {
-			Block block = event.getBlock();
-			connection.sendPacket(ServerPlatform.get().getPacketFactory().createBlockBreakSoundPacket(new Position(block.getX(), block.getY(), block.getZ()), block.getType()));
+			BlockDataEntry blockdataentry = MinecraftBlockData.get(MaterialAPI.getBlockDataNetworkId(event.getBlock().getBlockData()));
+			player.playSound(
+				event.getBlock().getLocation(),
+				blockdataentry.getBreakSound(),
+				SoundCategory.BLOCKS,
+				(blockdataentry.getVolume() + 1.0F) / 2.0F,
+				blockdataentry.getPitch() * 0.8F
+			);
 		}
 	}
 

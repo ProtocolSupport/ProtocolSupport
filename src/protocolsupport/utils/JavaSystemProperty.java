@@ -5,7 +5,7 @@ import java.util.function.Function;
 public class JavaSystemProperty {
 
 	public static <T> T getValue(String property, T defaultValue, Function<String, T> converter) {
-		return JavaSystemProperty.getRawValue("protocolsupport."+property, defaultValue, converter);
+		return JavaSystemProperty.getRawValue("protocolsupport." + property, defaultValue, converter);
 	}
 
 	public static <T> T getRawValue(String property, T defaultValue, Function<String, T> converter) {

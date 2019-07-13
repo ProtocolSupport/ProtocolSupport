@@ -11,8 +11,10 @@ public class SpoofedDataParser {
 	private static final List<Function<String, SpoofedData>> parsers = new ArrayList<>();
 
 	static {
-		if (isPaperHandshakeEvent()) {
+		try {
+			Class.forName(PlayerHandshakeEvent.class.getName());
 			parsers.add(new PaperSpoofedDataParser());
+		} catch (Throwable e) {
 		}
 		parsers.add(new BungeeCordSpoofedDataParser());
 	}
@@ -28,15 +30,6 @@ public class SpoofedDataParser {
 			}
 		}
 		return null;
-	}
-
-	private static boolean isPaperHandshakeEvent() {
-		try {
-			Class.forName(PlayerHandshakeEvent.class.getName());
-			return true;
-		} catch (Throwable e) {
-			return false;
-		}
 	}
 
 }

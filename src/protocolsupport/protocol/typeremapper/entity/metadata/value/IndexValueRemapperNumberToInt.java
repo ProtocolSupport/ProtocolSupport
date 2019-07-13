@@ -1,19 +1,19 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.value;
 
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectInt;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectInt;
 
-public class IndexValueRemapperNumberToInt extends IndexValueRemapper<DataWatcherObject<Number>> {
+public class IndexValueRemapperNumberToInt extends IndexValueRemapper<NetworkEntityMetadataObject<Number>> {
 
 	@SuppressWarnings("unchecked")
-	public IndexValueRemapperNumberToInt(DataWatcherObjectIndex<? extends DataWatcherObject<? extends Number>> fromIndex, int toIndex) {
-		super((DataWatcherObjectIndex<DataWatcherObject<Number>>) fromIndex, toIndex);
+	public IndexValueRemapperNumberToInt(NetworkEntityMetadataObjectIndex<? extends NetworkEntityMetadataObject<? extends Number>> fromIndex, int toIndex) {
+		super((NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObject<Number>>) fromIndex, toIndex);
 	}
 
 	@Override
-	public DataWatcherObject<?> remapValue(DataWatcherObject<Number> object) {
-		return new DataWatcherObjectInt(object.getValue().intValue());
+	public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObject<Number> object) {
+		return new NetworkEntityMetadataObjectInt(object.getValue().intValue());
 	}
 
 }

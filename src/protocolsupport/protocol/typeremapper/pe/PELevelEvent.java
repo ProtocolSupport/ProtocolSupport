@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.pe;
 
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.types.Position;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload

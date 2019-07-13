@@ -17,14 +17,14 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockTil
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.storage.netcache.WindowCache;
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.TileEntity;
-import protocolsupport.protocol.utils.types.TileEntityType;
-import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.protocol.utils.types.nbt.NBTByte;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTInt;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.TileEntity;
+import protocolsupport.protocol.types.TileEntityType;
+import protocolsupport.protocol.types.WindowType;
+import protocolsupport.protocol.types.nbt.NBTByte;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTInt;
+import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupportbuildprocessor.Preload;
 
@@ -41,17 +41,22 @@ public class PEFakeContainer {
 	private static EnumMap<WindowType, Any<Material, TileEntityType>> invBlockType = new EnumMap<>(WindowType.class);
 
 	static {
-		regInvBlockType(WindowType.CHEST, 			Material.CHEST,			 	TileEntityType.CHEST);
-		regInvBlockType(WindowType.CRAFTING_TABLE, 	Material.CRAFTING_TABLE, 	TileEntityType.UNKNOWN);
+		regInvBlockType(WindowType.GENERIC_9X1, 	Material.CHEST,			 	TileEntityType.CHEST);
+		regInvBlockType(WindowType.GENERIC_9X2, 	Material.CHEST,			 	TileEntityType.CHEST);
+		regInvBlockType(WindowType.GENERIC_9X3, 	Material.CHEST,			 	TileEntityType.CHEST);
+		regInvBlockType(WindowType.GENERIC_9X4, 	Material.CHEST,			 	TileEntityType.CHEST);
+		regInvBlockType(WindowType.GENERIC_9X5, 	Material.CHEST,			 	TileEntityType.CHEST);
+		regInvBlockType(WindowType.GENERIC_9X6, 	Material.CHEST,			 	TileEntityType.CHEST);
+		regInvBlockType(WindowType.CRAFTING, 		Material.CRAFTING_TABLE, 	TileEntityType.UNKNOWN);
 		regInvBlockType(WindowType.FURNACE, 		Material.FURNACE, 			TileEntityType.FURNACE);
-		regInvBlockType(WindowType.DISPENSER, 		Material.DISPENSER, 		TileEntityType.DISPENSER);
-		regInvBlockType(WindowType.ENCHANT,			Material.HOPPER,		 	TileEntityType.HOPPER); //Fake with hopper
-		regInvBlockType(WindowType.BREWING,			Material.BREWING_STAND, 	TileEntityType.BREWING_STAND);
+		regInvBlockType(WindowType.GENERIC_3X3, 	Material.DISPENSER, 		TileEntityType.DISPENSER);
+		regInvBlockType(WindowType.ENCHANTMENT,		Material.HOPPER,		 	TileEntityType.HOPPER); //Fake with hopper
+		regInvBlockType(WindowType.BREWING_STAND,	Material.BREWING_STAND, 	TileEntityType.BREWING_STAND);
 		regInvBlockType(WindowType.BEACON,			Material.BEACON, 			TileEntityType.BEACON);
 		regInvBlockType(WindowType.ANVIL,			Material.ANVIL, 			TileEntityType.UNKNOWN);
 		regInvBlockType(WindowType.HOPPER,			Material.HOPPER, 			TileEntityType.HOPPER);
-		regInvBlockType(WindowType.DROPPER,			Material.DROPPER, 			TileEntityType.DROPPER);
-		regInvBlockType(WindowType.SHULKER,			Material.CHEST,				TileEntityType.CHEST); //Fake with chest
+		regInvBlockType(WindowType.GENERIC_3X3,		Material.DROPPER, 			TileEntityType.DROPPER);
+		regInvBlockType(WindowType.SHULKER_BOX,		Material.CHEST,				TileEntityType.CHEST); //Fake with chest
 	}
 
 	private static Any<Material, TileEntityType> getContainerData(WindowType type) {
@@ -77,7 +82,7 @@ public class PEFakeContainer {
 			invCache.getFakeContainers().addFirst(position);
 			//Create fake inventory block.
 			final int networkTileId = MaterialAPI.getBlockDataNetworkId(typeData.getObj1().createBlockData());
-			BlockChangeSingle.create(version, position, cache, networkTileId, packets);
+			BlockChangeSingle.create(version, position, networkTileId, packets);
 			//Set tile data for fake block.
 			if (typeData.getObj2() != TileEntityType.UNKNOWN) {
 				NBTCompound tag = new NBTCompound();
@@ -88,7 +93,7 @@ public class PEFakeContainer {
 					Position auxPos = position.clone();
 					auxPos.modifyX(1); //Get adjacent block.
 					invCache.getFakeContainers().addLast(auxPos);
-					BlockChangeSingle.create(version, auxPos, cache, networkTileId, packets);
+					BlockChangeSingle.create(version, auxPos, networkTileId, packets);
 					tag.setTag("pairx", new NBTInt(auxPos.getX()));
 					tag.setTag("pairz", new NBTInt(auxPos.getZ()));
 					tag.setTag("pairlead", new NBTByte((byte) 1));
@@ -110,7 +115,8 @@ public class PEFakeContainer {
 
 	//Check if player has / needs "fake" double chest.
 	public static boolean shouldDoDoubleChest(NetworkDataCache cache) {
-		return (cache.getWindowCache().getOpenedWindow() == WindowType.CHEST && cache.getWindowCache().getOpenedWindowSlots() > SMALLCONTAINERSLOTS);
+		return (cache.getWindowCache().getOpenedWindow().ordinal() < WindowType.GENERIC_9X6.ordinal()
+			&& cache.getWindowCache().getOpenedWindowSlots() > SMALLCONTAINERSLOTS);
 	}
 
 	//Request reset for all fake container blocks.

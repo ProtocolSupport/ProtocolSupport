@@ -13,9 +13,9 @@ import protocolsupport.protocol.typeremapper.pe.PEAdventureSettings;
 import protocolsupport.protocol.typeremapper.pe.PEBlocks;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.types.GameMode;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.GameMode;
+import protocolsupport.protocol.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.impl.pe.PECreativeInventory;
@@ -68,7 +68,7 @@ public class StartGame extends MiddleStartGame {
 		VarNumberSerializer.writeSVarInt(startgame, ChangeDimension.getPeDimensionId(dimension)); //world dimension
 		VarNumberSerializer.writeSVarInt(startgame, 1); //world type (1 - infinite)
 		VarNumberSerializer.writeSVarInt(startgame, GameMode.SURVIVAL.getId()); //world gamemode
-		VarNumberSerializer.writeSVarInt(startgame, difficulty.getId()); //world difficulty
+		VarNumberSerializer.writeSVarInt(startgame, 1); //world difficulty //TODO: set PE difficulty using... packet?
 		PositionSerializer.writePEPosition(startgame, new Position(0, 0, 0)); //spawn position
 		startgame.writeBoolean(false); //disable achievements
 		VarNumberSerializer.writeSVarInt(startgame, 0); //time
@@ -113,13 +113,19 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeBoolean(false); //Microsoft GamerTags only. Hell no!
 		startgame.writeBoolean(false); //is from world template
 		startgame.writeBoolean(false); //is world template option locked
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+			startgame.writeByte(1); //only spawn v1 villagers
+		}
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //level ID (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //world name (empty string)
 		StringSerializer.writeString(startgame, connection.getVersion(), ""); //premium world template id (empty string)
 		startgame.writeBoolean(false); //is trial
 		startgame.writeLongLE(0); //world ticks
 		VarNumberSerializer.writeSVarInt(startgame, 0); //enchantment seed FFS MOJANG
-		startgame.writeBytes(PEBlocks.getPocketRuntimeDefinition());
+		startgame.writeBytes(PEBlocks.getPocketRuntimeDefinition(version));
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+			VarNumberSerializer.writeVarInt(startgame, 0); // item list size
+		}
 		StringSerializer.writeString(startgame, version, ""); //Multiplayer correlation id.
 		packets.add(startgame);
 

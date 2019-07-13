@@ -17,7 +17,7 @@ public class SpawnPosition extends MiddleSpawnPosition {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_POSITION_ID);
-		PositionSerializer.writePosition(serializer, position);
+		PositionSerializer.writeLegacyPositionL(serializer, position);
 		return RecyclableSingletonList.create(serializer);
 	}
 

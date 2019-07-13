@@ -31,9 +31,11 @@ import protocolsupportbuildprocessor.Preload;
 public class PEBlocks {
 
 	private static final byte[] peBlockDef;
+	private static final byte[] peBlockDef112;
 	private static final int[] pcToPeRuntimeId = new int[MinecraftData.BLOCKDATA_COUNT];
 	private static final int[] pcWaterlogged = new int[MinecraftData.BLOCKDATA_COUNT];
 	private static final EnumMap<ProtocolVersion, Integer> waterRuntime = new EnumMap<>(ProtocolVersion.class);
+	private static final EnumMap<ProtocolVersion, Integer> airRuntime = new EnumMap<>(ProtocolVersion.class);
 
 	private static final int CAN_BE_WATERLOGGED = 1;
 	private static final int IS_WATERLOGGED = 2;
@@ -68,21 +70,34 @@ public class PEBlocks {
 		for (ProtocolVersion version : ProtocolVersionsHelper.ALL_PE) {
 			waterRuntime.put(version, toPocketBlock(version, Material.WATER));
 		}
+		for (ProtocolVersion version : ProtocolVersionsHelper.ALL_PE) {
+			airRuntime.put(version, toPocketBlock(version, Material.AIR));
+		}
 		//Compile PE block definition for sending on login.
 		ByteBuf def = Unpooled.buffer();
+		ByteBuf def112 = Unpooled.buffer();
 		VarNumberSerializer.writeVarInt(def, peBlocks.size());
-		peBlocks.forEach(block -> {
+		VarNumberSerializer.writeVarInt(def112, peBlocks.size());
+		int blockId = 0;
+		for (PEBlock block : peBlocks) {
 			StringSerializer.writeString(def, ProtocolVersionsHelper.LATEST_PE, block.getName());
+			StringSerializer.writeString(def112, ProtocolVersionsHelper.LATEST_PE, block.getName());
 			def.writeShortLE(block.getData());
-		});
+			def112.writeShortLE(block.getData());
+			def112.writeShortLE(blockId++);
+		}
 		peBlockDef = MiscSerializer.readAllBytes(def);
+		peBlockDef112 = MiscSerializer.readAllBytes(def112);
 	}
 
 	public static int getPocketRuntimeId(int pcRuntimeId) {
 		return pcToPeRuntimeId[pcRuntimeId];
 	}
 
-	public static byte[] getPocketRuntimeDefinition() {
+	public static byte[] getPocketRuntimeDefinition(ProtocolVersion version) {
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+			return peBlockDef112;
+		}
 		return peBlockDef;
 	}
 
@@ -104,6 +119,10 @@ public class PEBlocks {
 
 	public static int getPEWaterId(ProtocolVersion version) {
 		return waterRuntime.get(version);
+	}
+
+	public static int getPEAirId(ProtocolVersion version) {
+		return airRuntime.get(version);
 	}
 
 	private static class PEBlock {

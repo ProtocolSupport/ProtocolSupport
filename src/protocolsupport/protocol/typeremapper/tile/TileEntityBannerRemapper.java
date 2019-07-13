@@ -8,10 +8,10 @@ import org.bukkit.block.data.BlockData;
 
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper.TileEntityWithBlockDataNBTRemapper;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTInt;
-import protocolsupport.protocol.utils.types.nbt.NBTList;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTInt;
+import protocolsupport.protocol.types.nbt.NBTList;
+import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.CollectionsUtils.ArrayMap.Entry;
 

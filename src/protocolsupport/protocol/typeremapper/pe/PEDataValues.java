@@ -22,11 +22,11 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
-import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.mojangson.MojangsonParser;
+import protocolsupport.protocol.types.WindowType;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.mojangson.MojangsonParser;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupport.utils.Utils;
 import protocolsupportbuildprocessor.Preload;
@@ -82,6 +82,7 @@ public class PEDataValues {
 		registerEntity(NetworkEntityType.LAMA, 29, "minecraft:llama");
 		registerEntity(NetworkEntityType.BAT, 19, "minecraft:bat");
 		registerEntity(NetworkEntityType.OCELOT, 22, "minecraft:cat");
+		registerEntity(NetworkEntityType.CAT, 22, "minecraft:cat");
 		registerEntity(NetworkEntityType.WOLF, 14, "minecraft:wolf");
 		registerEntity(NetworkEntityType.PIG, 12, "minecraft:pig");
 		registerEntity(NetworkEntityType.RABBIT, 18, "minecraft:rabbit");
@@ -164,7 +165,11 @@ public class PEDataValues {
 		registerEntity(NetworkEntityType.MINECART_HOPPER, null, "minecraft:hopper_minecart");
 		registerEntity(NetworkEntityType.MINECART_COMMAND, null, "minecraft:command_block_minecart");
 		//registerEntity(NetworkEntityType.NPC, null, "minecraft:npc");
-		//registerEntity(NetworkEntityType.PANDA, null, "minecraft:panda");
+		registerEntity(NetworkEntityType.PANDA, null, "minecraft:panda");
+		registerEntity(NetworkEntityType.PILLAGER, null, "minecraft:pillager");
+		registerEntity(NetworkEntityType.FOX, null, "minecraft:fox");
+		registerEntity(NetworkEntityType.TRADER_LAMA, null, "minecraft:villager");
+		registerEntity(NetworkEntityType.WANDERING_TRADER, null, "minecraft:villager");
 		//registerEntity(NetworkEntityType.BALLOON, null, "minecraft:balloon");
 		//registerEntity(NetworkEntityType.WITHER_SKULL_DANGEROUS, null, "minecraft:wither_skull_dangerous");
 		//registerEntity(NetworkEntityType.LIGHTNING_BOLT, null, "minecraft:lightning_bolt");
@@ -330,28 +335,32 @@ public class PEDataValues {
 	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> WINDOWTYPE = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
 		{
 			registerRemapEntry(WindowType.PLAYER, -1, ProtocolVersionsHelper.ALL_PE);
-			registerRemapEntry(WindowType.CHEST, 0, ProtocolVersionsHelper.ALL_PE);
-			registerRemapEntry(WindowType.CRAFTING_TABLE, 1, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.GENERIC_9X1, 0, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.GENERIC_9X2, 0, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.GENERIC_9X3, 0, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.GENERIC_9X4, 0, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.GENERIC_9X5, 0, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.GENERIC_9X6, 0, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.CRAFTING, 1, ProtocolVersionsHelper.ALL_PE);
 			registerRemapEntry(WindowType.FURNACE, 2, ProtocolVersionsHelper.ALL_PE);
-			registerRemapEntry(WindowType.ENCHANT, 3, ProtocolVersionsHelper.ALL_PE);
-			registerRemapEntry(WindowType.BREWING, 4, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.ENCHANTMENT, 3, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.BREWING_STAND, 4, ProtocolVersionsHelper.ALL_PE);
 			registerRemapEntry(WindowType.ANVIL, 5, ProtocolVersionsHelper.ALL_PE);
-			registerRemapEntry(WindowType.DISPENSER, 6, ProtocolVersionsHelper.ALL_PE);
-			registerRemapEntry(WindowType.DROPPER, 7, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.GENERIC_3X3, 6, ProtocolVersionsHelper.ALL_PE);
 			registerRemapEntry(WindowType.HOPPER, 8, ProtocolVersionsHelper.ALL_PE);
 			registerRemapEntry(WindowType.HORSE, 12, ProtocolVersionsHelper.ALL_PE);
 			registerRemapEntry(WindowType.BEACON, 13, ProtocolVersionsHelper.ALL_PE);
-			registerRemapEntry(WindowType.VILLAGER, 15, ProtocolVersionsHelper.ALL_PE);
+			registerRemapEntry(WindowType.MERCHANT, 15, ProtocolVersionsHelper.ALL_PE);
 		}
 
 		@Override
 		protected ArrayBasedIdRemappingTable createTable() {
-			return new ArrayBasedIdRemappingTable(14);
+			return new ArrayBasedIdRemappingTable(32);
 		}
 
 		private void registerRemapEntry(WindowType type, int to, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
-				registerRemapEntry(type.toLegacyId(), to, version);
+				registerRemapEntry(type.ordinal(), to, version);
 			}
 		}
 	};

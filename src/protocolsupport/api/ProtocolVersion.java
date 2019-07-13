@@ -13,7 +13,11 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public enum ProtocolVersion {
 
-	MINECRAFT_FUTURE(-1, new OrderId(ProtocolType.PC, 23)),
+	MINECRAFT_FUTURE(-1, new OrderId(ProtocolType.PC, 27)),
+	MINECRAFT_1_14_3(490, new OrderId(ProtocolType.PC, 26), "1.14.3"),
+	MINECRAFT_1_14_2(485, new OrderId(ProtocolType.PC, 25), "1.14.2"),
+	MINECRAFT_1_14_1(480, new OrderId(ProtocolType.PC, 24), "1.14.1"),
+	MINECRAFT_1_14(477, new OrderId(ProtocolType.PC, 23), "1.14"),
 	MINECRAFT_1_13_2(404, new OrderId(ProtocolType.PC, 22), "1.13.2"),
 	MINECRAFT_1_13_1(401, new OrderId(ProtocolType.PC, 21), "1.13.1"),
 	MINECRAFT_1_13(393, new OrderId(ProtocolType.PC, 20), "1.13"),
@@ -37,7 +41,8 @@ public enum ProtocolVersion {
 	MINECRAFT_1_5_1(60, new OrderId(ProtocolType.PC, 2), "1.5.1"),
 	MINECRAFT_1_4_7(51, new OrderId(ProtocolType.PC, 1), "1.4.7"),
 	MINECRAFT_LEGACY(-1, new OrderId(ProtocolType.PC, 0)),
-	MINECRAFT_PE_FUTURE(-1, new OrderId(ProtocolType.PE, 5)),
+	MINECRAFT_PE_FUTURE(-1, new OrderId(ProtocolType.PE, 6)),
+	MINECRAFT_PE_1_12(361, new OrderId(ProtocolType.PE, 5), "PE-1.12.0"),
 	MINECRAFT_PE_1_11(354, new OrderId(ProtocolType.PE, 4), "PE-1.11.0"),
 	MINECRAFT_PE_1_10(340, new OrderId(ProtocolType.PE, 3), "PE-1.10.0"),
 	MINECRAFT_PE_1_9(332, new OrderId(ProtocolType.PE, 2), "PE-1.9.0"),
@@ -265,10 +270,10 @@ public enum ProtocolVersion {
 	public static ProtocolVersion getLatest(ProtocolType type) {
 		switch (type) {
 			case PC: {
-				return MINECRAFT_1_13_2;
+				return MINECRAFT_1_14_3;
 			}
 			case PE: {
-				return MINECRAFT_PE_1_11;
+				return MINECRAFT_PE_1_12;
 			}
 			default: {
 				throw new IllegalArgumentException(MessageFormat.format("No supported versions for protocol type {0}", type));

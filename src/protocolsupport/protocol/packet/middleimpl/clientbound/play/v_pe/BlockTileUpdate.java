@@ -8,7 +8,7 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.types.TileEntity;
+import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -18,11 +18,9 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 		super(connection);
 	}
 
-	protected final TileEntityRemapper tileremapper = TileEntityRemapper.getRemapper(connection.getVersion());
-
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableSingletonList.create(create(connection.getVersion(), tileremapper.remap(tile, cache.getTileCache().getBlockData(position))));
+		return RecyclableSingletonList.create(create(connection.getVersion(), tile));
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, TileEntity tile) {

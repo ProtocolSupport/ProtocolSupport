@@ -1,5 +1,6 @@
 package protocolsupport.protocol.storage.netcache;
 
+import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
 import protocolsupport.utils.Utils;
 
 public class NetworkDataCache {
@@ -39,11 +40,10 @@ public class NetworkDataCache {
 		return cpccache;
 	}
 
-	protected final TileDataCache tilecache = new TileDataCache();
-	public TileDataCache getTileCache() {
-		return tilecache;
+	protected final ChunkCache chunkcache = new ChunkCache();
+	public ChunkCache getChunkCache() {
+		return chunkcache;
 	}
-
 
 	protected final PEChunkMapCache pechunkmapcache = new PEChunkMapCache();
 	public PEChunkMapCache getPEChunkMapCache() {

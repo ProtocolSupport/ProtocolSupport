@@ -23,7 +23,7 @@ public class BlockAction extends MiddleBlockAction {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_ACTION_ID);
-		PositionSerializer.writePosition(serializer, position);
+		PositionSerializer.writeLegacyPositionL(serializer, position);
 		serializer.writeByte(actionId);
 		serializer.writeByte(actionParam);
 		VarNumberSerializer.writeVarInt(serializer, BlockRemappingHelper.remapBlockId(blockDataRemappingTable, blockId));

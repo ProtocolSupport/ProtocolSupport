@@ -1,26 +1,26 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.value;
 
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
-public final class PeFlagRemapper extends DataWatcherObjectRemapper {
+public final class PeFlagRemapper extends NetworkEntityMetadataObjectRemapper {
 
-	protected final DataWatcherObjectIndex<DataWatcherObjectByte> fromByteId;
+	protected final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> fromByteId;
 	protected final int[] fromBitPosI;
 	protected final int[] toPosI;
 
-	public PeFlagRemapper(DataWatcherObjectIndex<DataWatcherObjectByte> fromByteId, int[] fromBitPosi, int[] toPosi) {
+	public PeFlagRemapper(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> fromByteId, int[] fromBitPosi, int[] toPosi) {
 		this.fromByteId = fromByteId;
 		this.fromBitPosI = fromBitPosi;
 		this.toPosI = toPosi;
 	}
 
 	@Override
-	public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+	public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
 		fromByteId.getValue(original)
 		.ifPresent(fromByteWatcher -> {
 			byte fromByte = fromByteWatcher.getValue();

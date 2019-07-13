@@ -2,9 +2,9 @@ package protocolsupport.protocol.storage.netcache;
 
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateSign;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class PETileCache {

@@ -2,7 +2,7 @@ package protocolsupport.zplatform;
 
 import org.spigotmc.SpigotConfig;
 
-import net.minecraft.server.v1_13_R2.NetworkManager;
+import net.minecraft.server.v1_14_R1.NetworkManager;
 import protocolsupport.api.ServerPlatformIdentifier;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 import protocolsupport.zplatform.impl.spigot.SpigotPacketFactory;
@@ -23,7 +23,7 @@ public class ServerPlatform {
 		} catch (Throwable t) {
 		}
 		try {
-//TODO: update to glowstone 1.13 when it becomes available
+//TODO: update to glowstone 1.14 when it becomes available
 //			GlowServer.class.getDeclaredFields();
 //			current = new ServerPlatform(ServerPlatformIdentifier.GLOWSTONE, new GlowstonePlatformInjector(), new GlowStoneMiscUtils(), new GlowStonePacketFactory(), new GlowStoneWrapperFactory());
 		} catch (Throwable t) {
@@ -55,14 +55,6 @@ public class ServerPlatform {
 
 	public PlatformInjector getInjector() {
 		return injector;
-	}
-
-	public void onEnable() {
-		injector.onEnable();
-	}
-
-	public void onDisable() {
-		injector.onDisable();
 	}
 
 	public PlatformUtils getMiscUtils() {

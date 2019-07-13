@@ -4,19 +4,18 @@ import org.bukkit.Material;
 
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryEnchant;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventorySetItems;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InvTransaction;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTList;
-import protocolsupport.protocol.utils.types.nbt.NBTShort;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTList;
+import protocolsupport.protocol.types.nbt.NBTShort;
+import protocolsupport.protocol.types.nbt.NBTString;
+import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 
 public class PEFakeEnchanting {
@@ -108,7 +107,7 @@ public class PEFakeEnchanting {
 			setLapisStack(transaction.getNewItem());
 		} else if ((transaction.getSlot() > 1 && transaction.getSlot() <= 4) && (transaction.getInventoryId() != PESource.POCKET_INVENTORY)) {
 			//If and only if on of the three fake hopper option slots are clicked proceed with the enchanting.
-			packets.add(MiddleInventoryEnchant.create(cache.getWindowCache().getOpenedWindowId(), transaction.getSlot() - 2));
+			//packets.add(MiddleInventoryEnchant.create(cache.getWindowCache().getOpenedWindowId(), transaction.getSlot() - 2)); //TODO: fix 1.14 enchanting
 			//Stop caching inventory transaction (not necessary when we enchant!)
 			return false;
 		}

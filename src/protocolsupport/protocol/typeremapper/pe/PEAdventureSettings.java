@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.AttributesCache;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
-import protocolsupport.protocol.utils.types.GameMode;
+import protocolsupport.protocol.types.GameMode;
 
 public class PEAdventureSettings {
 

@@ -12,16 +12,17 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
+
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTEnd;
+import protocolsupport.protocol.types.nbt.serializer.DefaultNBTSerializer;
 import protocolsupport.protocol.utils.ItemStackWriteEventHelper;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTEnd;
-import protocolsupport.protocol.utils.types.nbt.serializer.DefaultNBTSerializer;
-import protocolsupport.protocol.utils.types.nbt.serializer.PENBTSerializer;
+import protocolsupport.protocol.types.nbt.serializer.PENBTSerializer;
 
 public class ItemStackSerializer {
 
@@ -236,9 +237,8 @@ public class ItemStackSerializer {
 			if (tag == null) {
 				to.writeShort(-1);
 			} else {
-				MiscSerializer.writeLengthPrefixedBytes(
+				ArraySerializer.writeShortByteArray(
 					to,
-					(lTo, length) -> lTo.writeShort(length),
 					lTo -> {
 						try (DataOutputStream outputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(lTo)))) {
 							DefaultNBTSerializer.INSTANCE.serializeTag(outputstream, tag);

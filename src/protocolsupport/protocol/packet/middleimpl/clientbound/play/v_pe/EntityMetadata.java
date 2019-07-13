@@ -12,14 +12,14 @@ import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloatLe;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectSVarLong;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityItemDataCache;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectFloatLe;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectSVarLong;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.networkentity.NetworkEntityItemDataCache;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.ObjectFloatTuple;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -44,7 +44,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		//Special metadata -> other packet remapper.
 		//Item type -> Spawn item remapper.
 		if (entity.getType().isOfType(NetworkEntityType.ITEM)) {
-			DataWatcherObjectIndex.Item.ITEM.getValue(entityRemapper.getOriginalMetadata()).ifPresent(itemWatcher -> {
+			NetworkEntityMetadataObjectIndex.Item.ITEM.getValue(entityRemapper.getOriginalMetadata()).ifPresent(itemWatcher -> {
 				NetworkEntityItemDataCache itemDataCache = (NetworkEntityItemDataCache) entity.getDataCache();
 				packets.addAll(itemDataCache.updateItem(version, entity.getId(), itemWatcher.getValue()));
 			});
@@ -55,9 +55,9 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		boolean isInvisible = entity.getDataCache().getPeBaseFlag(PeMetaBase.FLAG_INVISIBLE);
 		if (isInvisible && hasName) {
 			entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_INVISIBLE, false);
-			entityRemapper.getRemappedMetadata().put(PeMetaBase.SCALE, new DataWatcherObjectFloatLe(0));
-			entityRemapper.getRemappedMetadata().put(PeMetaBase.BOUNDINGBOX_HEIGTH, new DataWatcherObjectFloatLe(0));
-			entityRemapper.getRemappedMetadata().put(PeMetaBase.BOUNDINGBOX_WIDTH, new DataWatcherObjectFloatLe(0));
+			entityRemapper.getRemappedMetadata().put(PeMetaBase.SCALE, new NetworkEntityMetadataObjectFloatLe(0));
+			entityRemapper.getRemappedMetadata().put(PeMetaBase.BOUNDINGBOX_HEIGTH, new NetworkEntityMetadataObjectFloatLe(0));
+			entityRemapper.getRemappedMetadata().put(PeMetaBase.BOUNDINGBOX_WIDTH, new NetworkEntityMetadataObjectFloatLe(0));
 		}
 		if (entity.getType().isOfType(NetworkEntityType.PLAYER)) {
 			if (cache.getWatchedEntityCache().isSelf(entity.getId())) {
@@ -66,14 +66,14 @@ public class EntityMetadata extends MiddleEntityMetadata {
 			entity.getDataCache().setPeBaseFlag(PeMetaBase.FLAG_CAN_CLIMB, true);
 		}
 		//Meta health -> attribute packet remapper.
-		if (entity.getType().isOfType(NetworkEntityType.LIVING)) {
-			DataWatcherObjectIndex.EntityLiving.HEALTH.getValue(entityRemapper.getOriginalMetadata()).ifPresent(healthWatcher -> {
+		if (entity.getType().isAlive()) {
+			NetworkEntityMetadataObjectIndex.EntityLiving.HEALTH.getValue(entityRemapper.getOriginalMetadata()).ifPresent(healthWatcher -> {
 				packets.add(EntitySetAttributes.create(version, entity, new ObjectFloatTuple<>(AttributeInfo.HEALTH, healthWatcher.getValue())));
 			});
 		}
 		//Meta armor -> armor packet remapper.
 		if (entity.getType().isOfType(NetworkEntityType.COMMON_HORSE)) {
-			DataWatcherObjectIndex.BattleHorse.ARMOR.getValue(entityRemapper.getOriginalMetadata()).ifPresent(armorWatcher -> {
+			NetworkEntityMetadataObjectIndex.BattleHorse.ARMOR.getValue(entityRemapper.getOriginalMetadata()).ifPresent(armorWatcher -> {
 				NetworkItemStack armour = new NetworkItemStack();
 				switch (armorWatcher.getValue()) {
 					case 0: { armour = NetworkItemStack.NULL; break; }
@@ -93,19 +93,19 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		return packets;
 	}
 
-	private static ClientBoundPacketData createFromMetadata(ProtocolVersion version, String locale, NetworkEntity entity, ArrayMap<DataWatcherObject<?>> peMetadata) {
+	private static ClientBoundPacketData createFromMetadata(ProtocolVersion version, String locale, NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> peMetadata) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.SET_ENTITY_DATA);
 		VarNumberSerializer.writeVarLong(serializer, entity.getId());
 		DataWatcherSerializer.writePEData(serializer, version, locale, peMetadata);
 		return serializer;
 	}
 
-	public static ArrayMap<DataWatcherObject<?>> includeBaseFlags(ProtocolVersion version, ArrayMap<DataWatcherObject<?>> peMetadata, NetworkEntity entity) {
-		peMetadata.put(PeMetaBase.FLAGS, new DataWatcherObjectSVarLong(entity.getDataCache().getPeBaseFlags()));
+	public static ArrayMap<NetworkEntityMetadataObject<?>> includeBaseFlags(ProtocolVersion version, ArrayMap<NetworkEntityMetadataObject<?>> peMetadata, NetworkEntity entity) {
+		peMetadata.put(PeMetaBase.FLAGS, new NetworkEntityMetadataObjectSVarLong(entity.getDataCache().getPeBaseFlags()));
 		return peMetadata;
 	}
 
-	private static ClientBoundPacketData createWithBaseFlags(ProtocolVersion version, String locale, NetworkEntity entity, ArrayMap<DataWatcherObject<?>> peMetadata) {
+	private static ClientBoundPacketData createWithBaseFlags(ProtocolVersion version, String locale, NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> peMetadata) {
 		ClientBoundPacketData serializer = createFromMetadata(version, locale, entity, includeBaseFlags(version, peMetadata, entity));
 		return serializer;
 	}
@@ -117,8 +117,8 @@ public class EntityMetadata extends MiddleEntityMetadata {
 		return createWithBaseFlags(version, locale, entity, includeBaseFlags(version, faux.getRemappedMetadata(), entity));
 	}
 
-	public static ClientBoundPacketData createFromAttribute(ProtocolVersion version, String locale, NetworkEntity entity, int key, DataWatcherObject<?> value) {
-		ArrayMap<DataWatcherObject<?>> peMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
+	public static ClientBoundPacketData createFromAttribute(ProtocolVersion version, String locale, NetworkEntity entity, int key, NetworkEntityMetadataObject<?> value) {
+		ArrayMap<NetworkEntityMetadataObject<?>> peMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
 		peMetadata.put(key, value);
 
 		ClientBoundPacketData serializer = createFromMetadata(version, locale, entity, peMetadata);

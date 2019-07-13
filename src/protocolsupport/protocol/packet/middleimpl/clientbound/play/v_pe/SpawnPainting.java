@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -41,9 +42,15 @@ public class SpawnPainting extends MiddleSpawnPainting {
 				break;
 			}
 		}
-		VarNumberSerializer.writeSVarInt(serializer, mcpeX);
-		VarNumberSerializer.writeVarInt(serializer, position.getY());
-		VarNumberSerializer.writeSVarInt(serializer, mcpeZ);
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_PE_1_12)) {
+			serializer.writeFloatLE(mcpeX);
+			serializer.writeFloatLE(position.getY());
+			serializer.writeFloatLE(mcpeZ);
+		} else {
+			VarNumberSerializer.writeSVarInt(serializer, mcpeX);
+			VarNumberSerializer.writeVarInt(serializer, position.getY());
+			VarNumberSerializer.writeSVarInt(serializer, mcpeZ);
+		}
 		VarNumberSerializer.writeSVarInt(serializer, direction);
 		//TODO: Fix Type
 		StringSerializer.writeString(serializer, connection.getVersion(), "" + type);

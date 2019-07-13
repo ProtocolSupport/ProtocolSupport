@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import protocolsupport.ProtocolSupport;
@@ -29,9 +28,9 @@ public class ResourceUtils {
 		return reader != null ? Utils.GSON.fromJson(reader, JsonObject.class) : null;
 	}
 
-	public static Iterable<JsonElement> getAsIterableJson(String name) {
+	public static JsonArray getAsIterableJson(String name) {
 		BufferedReader reader = getAsBufferedReader(name);
-		return reader != null ?  Utils.GSON.fromJson(reader, JsonArray.class) : null;
+		return reader != null ? Utils.GSON.fromJson(reader, JsonArray.class) : null;
 	}
 
 }

@@ -19,7 +19,7 @@ public class BlockBreakAnimation extends MiddleBlockBreakAnimation {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_BREAK_ANIMATION_ID);
 		VarNumberSerializer.writeVarInt(serializer, entityId);
-		PositionSerializer.writePosition(serializer, position);
+		PositionSerializer.writeLegacyPositionL(serializer, position);
 		serializer.writeByte(stage);
 		return RecyclableSingletonList.create(serializer);
 	}

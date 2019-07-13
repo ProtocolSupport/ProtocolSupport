@@ -15,6 +15,7 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.Enchan
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.EnchantFromPEEnchantRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.FireworkFromPETagRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.LeatherArmorFromPERemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.LoreFromLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.MapFromLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.PotionFromLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.PotionFromPEIdRemapper;
@@ -33,6 +34,7 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.Firework
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.LeatherArmorToPESpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.MapItemLegacyIdToNbtSpecificRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.ItemDurabilityToLegacyDataComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.LoreToLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.MapToLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PotionToLegacyIdComplexRemapper;
@@ -41,12 +43,12 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.NBTStash
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.SpawnEggToIntIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.SpawnEggToStringIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ItemSpawnEggData;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -95,8 +97,9 @@ public class ItemStackComplexRemapperRegistry {
 		ItemStackComplexRemapper pestashremapper 	= new NBTStashRemapper();
 		PotionToPEIdSpecificRemapper pepotion 		= new PotionToPEIdSpecificRemapper();
 		BookPagesToPESpecificRemapper pebook 		= new BookPagesToPESpecificRemapper();
-		LeatherArmorToPESpecificRemapper peleatherarmor = new LeatherArmorToPESpecificRemapper();
 		FireworkToPETagSpecificRemapper pefireworks = new FireworkToPETagSpecificRemapper();
+		LeatherArmorToPESpecificRemapper peleatherarmor = new LeatherArmorToPESpecificRemapper();
+		LoreToLegacyTextComplexRemapper loretolegacytext = new LoreToLegacyTextComplexRemapper();
 
 		ItemSpawnEggData.getSpawnEggs()
 		.forEach(m -> {
@@ -109,10 +112,11 @@ public class ItemStackComplexRemapperRegistry {
 		MinecraftData.getItems()
 		.forEach(material -> {
 			registerToClient(material, pestashremapper, ProtocolVersionsHelper.ALL_PE);
+			registerToClient(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);
+			registerToClient(material, loretolegacytext, ProtocolVersionsHelper.BEFORE_1_14);
 			if (material.getMaxDurability() > 0) {
 				registerToClient(material, durabilitymapper, ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
 			}
-			registerToClient(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);
 			registerToClient(material, enchanttolegacyid, ProtocolVersionsHelper.BEFORE_1_13);
 			registerToClient(material, dnametolegacytext, ProtocolVersionsHelper.BEFORE_1_13_AND_PE);
 			registerToClient(material, peenchantremapper, ProtocolVersionsHelper.ALL_PE);
@@ -139,6 +143,7 @@ public class ItemStackComplexRemapperRegistry {
 		registerFromClient(Material.FILLED_MAP, new MapFromLegacyIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
 		registerFromClient(Material.POTION, new PotionFromLegacyIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
 		ItemStackComplexRemapper enchantfromlegacyid 	= new EnchantFromLegacyIdComplexRemapper();
+		LoreFromLegacyTextComplexRemapper lorefromlegacytext = new LoreFromLegacyTextComplexRemapper();
 		ItemStackComplexRemapper dnamefromlegacytext 	= new DisplayNameFromLegacyTextComplexRemapper();
 		ItemStackComplexRemapper frompeenchantremapper 	= new EnchantFromPEEnchantRemapper();
 		ItemStackComplexRemapper pestashremapper 		= new NBTUnStashRemapper();
@@ -151,8 +156,9 @@ public class ItemStackComplexRemapperRegistry {
 		.forEach(material -> {
 			//TODO: do we need these anymore? backwards mapping done with stashed NBT now
 			registerFromClient(material, dnamefromlegacytext, ProtocolVersionsHelper.BEFORE_1_13);
-			registerFromClient(material, frompeenchantremapper, ProtocolVersionsHelper.ALL_PE);
+			registerFromClient(material, lorefromlegacytext, ProtocolVersionsHelper.BEFORE_1_14);
 			registerFromClient(material, enchantfromlegacyid, ProtocolVersionsHelper.BEFORE_1_13);
+			registerFromClient(material, frompeenchantremapper, ProtocolVersionsHelper.ALL_PE);
 		});
 		//TODO FIX
 		//registerFromClient(Material.MAP, new MapItemNbtToLegacyIdRemapper(), ProtocolVersionsHelper.ALL_PE);
@@ -205,7 +211,7 @@ public class ItemStackComplexRemapperRegistry {
 		return itemstack;
 	}
 
-	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale,  NetworkItemStack itemstack) {
+	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		return remapComplex(toClientRemapper, version, locale, itemstack);
 	}
 

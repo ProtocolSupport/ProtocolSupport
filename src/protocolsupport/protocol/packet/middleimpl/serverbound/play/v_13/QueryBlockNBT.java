@@ -15,7 +15,7 @@ public class QueryBlockNBT extends MiddleQueryBlockNBT {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		id = VarNumberSerializer.readVarInt(clientdata);
-		PositionSerializer.readPositionTo(clientdata, position);
+		PositionSerializer.readLegacyPositionLTo(clientdata, position);
 	}
 
 }

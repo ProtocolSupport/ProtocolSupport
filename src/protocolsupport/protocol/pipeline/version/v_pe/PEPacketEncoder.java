@@ -47,13 +47,13 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Inventor
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.InventorySetSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KeepAlive;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.KickDisconnect;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Map;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.PlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.ServerDifficulty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetExperience;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetPosition;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SetViewCenter;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnExpOrb;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnGlobal;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.SpawnLiving;
@@ -66,7 +66,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.StopSoun
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.TimeUpdate;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.Title;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.UnloadChunk;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.UseBed;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.VehiclePassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.WorldEvent;
@@ -137,7 +136,7 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_STOP_SOUND, StopSound::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_BREAK_ANIMATION_ID, BlockBreakAnimation::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_TILE_ID, BlockTileUpdate::new);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map::new);
+		//registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_MAP_ID, Map::new); //TODO: PE maps
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID, EntityEquipment::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BLOCK_ACTION_ID, BlockAction::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_HELD_SLOT_ID, HeldSlot::new);
@@ -148,8 +147,9 @@ public class PEPacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_DATA_ID, InventoryData::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_WINDOW_TRANSACTION_ID, InventoryConfirmTransaction::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_RECIPES, CraftingData::new);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BED_ID, UseBed::new);
+		//registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_BED_ID, UseBed::new); //TODO: fix PE use beds
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_DECLARE_COMMANDS, DeclareCommands::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_VIEW_CENTER, SetViewCenter::new);
 	}
 
 	public PEPacketEncoder(ConnectionImpl connection) {

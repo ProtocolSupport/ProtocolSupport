@@ -13,12 +13,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_13_R2.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_13_R2.util.CraftIconCache;
-import org.bukkit.craftbukkit.v1_13_R2.util.CraftMagicNumbers;
+import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_14_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_14_R1.util.CraftIconCache;
+import org.bukkit.craftbukkit.v1_14_R1.util.CraftMagicNumbers;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -36,19 +36,21 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
-import net.minecraft.server.v1_13_R2.AxisAlignedBB;
-import net.minecraft.server.v1_13_R2.Block;
-import net.minecraft.server.v1_13_R2.EntityPlayer;
-import net.minecraft.server.v1_13_R2.EntityTypes;
-import net.minecraft.server.v1_13_R2.EnumProtocol;
-import net.minecraft.server.v1_13_R2.IRegistry;
-import net.minecraft.server.v1_13_R2.Item;
-import net.minecraft.server.v1_13_R2.MinecraftServer;
-import net.minecraft.server.v1_13_R2.MojangsonParser;
-import net.minecraft.server.v1_13_R2.NBTCompressedStreamTools;
-import net.minecraft.server.v1_13_R2.NBTReadLimiter;
-import net.minecraft.server.v1_13_R2.NBTTagCompound;
-import net.minecraft.server.v1_13_R2.WorldServer;
+import net.minecraft.server.v1_14_R1.AxisAlignedBB;
+import net.minecraft.server.v1_14_R1.Block;
+import net.minecraft.server.v1_14_R1.DedicatedServer;
+import net.minecraft.server.v1_14_R1.DedicatedServerProperties;
+import net.minecraft.server.v1_14_R1.EntityPlayer;
+import net.minecraft.server.v1_14_R1.EntityTypes;
+import net.minecraft.server.v1_14_R1.EnumProtocol;
+import net.minecraft.server.v1_14_R1.IRegistry;
+import net.minecraft.server.v1_14_R1.Item;
+import net.minecraft.server.v1_14_R1.MinecraftServer;
+import net.minecraft.server.v1_14_R1.MojangsonParser;
+import net.minecraft.server.v1_14_R1.NBTCompressedStreamTools;
+import net.minecraft.server.v1_14_R1.NBTReadLimiter;
+import net.minecraft.server.v1_14_R1.NBTTagCompound;
+import net.minecraft.server.v1_14_R1.WorldServer;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
@@ -56,11 +58,12 @@ import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.protocol.pipeline.common.PacketDecrypter;
 import protocolsupport.protocol.pipeline.common.PacketEncrypter;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.serializer.DefaultNBTSerializer;
 import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.GameProfile;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.serializer.DefaultNBTSerializer;
+import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.spigot.injector.network.SpigotNettyInjector;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
@@ -93,7 +96,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 		}
 	}
 
-	public static EnumProtocol netStateToProtocol(NetworkState state)  {
+	public static EnumProtocol netStateToProtocol(NetworkState state) {
 		switch (state) {
 			case HANDSHAKING: {
 				return EnumProtocol.HANDSHAKING;
@@ -136,8 +139,8 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public int getMobTypeNetworkId(EntityType type) {
-		return IRegistry.ENTITY_TYPE.a(EntityTypes.a(type.getName()));
+	public int getEntityTypeNetworkId(EntityType type) {
+		return IRegistry.ENTITY_TYPE.a(EntityTypes.a(type.getName()).get());
 	}
 
 	@Override
@@ -176,7 +179,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public ItemStack createItemStackFromNetwork(NetworkItemStack stack) {
-		net.minecraft.server.v1_13_R2.ItemStack nmsitemstack = new net.minecraft.server.v1_13_R2.ItemStack(Item.getById(stack.getTypeId()), stack.getAmount());
+		net.minecraft.server.v1_14_R1.ItemStack nmsitemstack = new net.minecraft.server.v1_14_R1.ItemStack(Item.getById(stack.getTypeId()), stack.getAmount());
 		NBTCompound rootTag = stack.getNBT();
 		if (rootTag != null) {
 			//TODO: a faster way to do that
@@ -194,7 +197,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public ItemStack deserializeItemStackFromNBTJson(String json) {
 		try {
-			return CraftItemStack.asCraftMirror(net.minecraft.server.v1_13_R2.ItemStack.a(MojangsonParser.parse(json)));
+			return CraftItemStack.asCraftMirror(net.minecraft.server.v1_14_R1.ItemStack.a(MojangsonParser.parse(json)));
 		} catch (CommandSyntaxException e) {
 			throw new RuntimeException(e);
 		}
@@ -202,7 +205,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public String serializeItemStackToNBTJson(ItemStack itemstack) {
-		net.minecraft.server.v1_13_R2.ItemStack nmsitemstack = CraftItemStack.asNMSCopy(itemstack);
+		net.minecraft.server.v1_14_R1.ItemStack nmsitemstack = CraftItemStack.asNMSCopy(itemstack);
 		NBTTagCompound compound = new NBTTagCompound();
 		nmsitemstack.save(compound);
 		return compound.toString();
@@ -240,7 +243,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public boolean isProxyPreventionEnabled() {
-		return getServer().S();
+		return getServer().T();
 	}
 
 	@Override
@@ -250,22 +253,30 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public void enableDebug() {
-		getServer().getPropertyManager().setProperty("debug", Boolean.TRUE);
+		try {
+			ReflectionUtils.getField(DedicatedServerProperties.class, "debug").set(((DedicatedServer)getServer()).getDedicatedServerProperties(), true);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new RuntimeException("Exception occured while enabled debug");
+		}
 	}
 
 	@Override
 	public void disableDebug() {
-		getServer().getPropertyManager().setProperty("debug", Boolean.FALSE);
+		try {
+			ReflectionUtils.getField(DedicatedServerProperties.class, "debug").set(((DedicatedServer)getServer()).getDedicatedServerProperties(), false);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new RuntimeException("Exception occured while disabling debug");
+		}
 	}
 
 	@Override
 	public int getCompressionThreshold() {
-		return getServer().aw();
+		return getServer().ay();
 	}
 
 	@Override
 	public KeyPair getEncryptionKeyPair() {
-		return getServer().E();
+		return getServer().getKeyPair();
 	}
 
 	@Override

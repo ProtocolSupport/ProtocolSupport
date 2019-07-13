@@ -24,7 +24,7 @@ public class CustomPayload extends MiddleCustomPayload {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if (tag.equals(LegacyCustomPayloadChannelName.MODERN_TRADER_LIST)) {
+		if (tag.equals(LegacyCustomPayloadChannelName.MODERN_TRADE_LIST)) {
 			return RecyclableSingletonList.create(cache.getPEInventoryCache().getFakeVillager().updateTrade(
 				cache, connection.getVersion(),
 				MerchantDataSerializer.readMerchantData(data)

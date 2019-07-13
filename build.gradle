@@ -1,38 +1,18 @@
-buildscript {
-	dependencies {
-		classpath 'org.jdom:jdom2:2.0.6'
-		classpath 'org.ow2.asm:asm:5.1'
-		classpath 'org.ow2.asm:asm-commons:5.1'
-		classpath 'commons-io:commons-io:2.5'
-		classpath 'org.apache.ant:ant:1.9.7'
-		classpath 'org.codehaus.plexus:plexus-utils:3.0.24'
-		classpath 'org.vafer:jdependency:1.1'
-		classpath files('gradle/plugins/shadowPlugin.jar')
-	}
-	repositories {
-		mavenCentral()
-	}
-}
-
 plugins {
+	id 'com.github.johnrengelman.shadow' version '5.0.0'
 	id 'java'
 }
 
 apply from: 'helper.gradle'
-apply plugin: com.github.jengelman.gradle.plugins.shadow.ShadowPlugin
 
 
-tasks.withType(AbstractCompile) {
-	classpath += configurations.shadow
-}
+defaultTasks 'build'
 
 
 group 'protocolsupport'
 version '4.29-dev-pe'
-
 sourceCompatibility = JavaVersion.VERSION_1_8
 
-import java.text.MessageFormat
 
 File librariesRuntimeDirectory = new File("libraries_runtime")
 File librariesShadeDirectory = new File("libraries_shade")
@@ -51,10 +31,10 @@ task setupFolders(type: DefaultTask) {doLast{
 
 task updateSpigot(type: BuildLibraryTask) {
 	targetDirectory = librariesRuntimeDirectory
-	targetLibraryName = "spigot-1.13.2-3.jar"
-	builderUrl = "https://papermc.io/ci/job/Paper-1.13/488/artifact/paperclip-488.jar"
+	targetLibraryName = "spigot-1.14.3-1.jar"
+	builderUrl = "https://papermc.io/api/v1/paper/1.14.3/108/download"
 	buildCommand = "java -Dpaperclip.patchonly=true -jar {BUILDER}"
-	builtLibraryName = ["cache", "patched_1.13.2.jar"]
+	builtLibraryName = ["cache", "patched_1.14.3.jar"]
 }
 
 task updateRuntimeLibraries(type: UpdateLibrariesTask) {
@@ -94,14 +74,17 @@ repositories {
 }
 
 dependencies {
-	shadow fileTree(dir: librariesRuntimeDirectory, include: '*.jar')
-	compile fileTree(dir: librariesShadeDirectory, include: '*.jar')
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
 	compile group: 'it.unimi.dsi', name: 'fastutil', version: '8.2.2'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
 	compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '5.2'
+	compile fileTree(dir: librariesShadeDirectory, include: '*.jar')
+	shadow fileTree(dir: librariesRuntimeDirectory, include: '*.jar')
+	shadow fileTree(dir: new File("libraries_runtime_manual"), include: '*.jar')
+
 	annotationProcessor fileTree(dir: annotationProcessorsDirectory, include: '*.jar')
 	shadow fileTree(dir: annotationProcessorsDirectory, include: '*.jar')
+
 	testCompile fileTree(dir: librariesRuntimeDirectory, include: '*.jar')
 	testCompile fileTree(dir: librariesShadeDirectory, include: '*.jar')
 	testCompile 'org.junit.jupiter:junit-jupiter-api:5.2.0'
@@ -109,6 +92,11 @@ dependencies {
 }
 
 compileJava {
+	doFirst {
+	    classpath -= configurations.shadow
+	    classpath += configurations.shadow
+	}
+
 	options.encoding = 'UTF-8'
 	options.incremental = false
 	options.compilerArgs << ("-Aprotocolsupportbuildprocessor.generatedresourcesdirectory=" + newFile(generatedResourcesDirectory, resourcesDirectoryName, "preload").getAbsolutePath())
@@ -140,6 +128,7 @@ task generateInfo(type: DefaultTask) {doLast{
 	properties.setProperty("buildtime", new Date().format("yyyy.MM.dd 'at' HH:mm:ss z"))
 	properties.setProperty("buildhost", System.getProperty("protocolsupport.buildhost", "unknown"))
 	properties.setProperty("buildnumber", System.getProperty("protocolsupport.buildnumber", "unknown"))
+	properties.setProperty("buildgit", System.getProperty("protocolsupport.buildgit", "unknown"))
 	File buildInfoFile = newFile(generatedResourcesDirectory, resourcesDirectoryName, "buildinfo")
 	buildInfoFile.getParentFile().mkdirs()
 	buildInfoFile.createNewFile()
@@ -156,7 +145,6 @@ shadowJar {
 	from generatedResourcesDirectory
 
 	archiveName = jar.archiveName
-	minimizeJar = true
 
 	exclude 'META-INF/**'
 	relocate 'org.apache', 'protocolsupport.libs.org.apache'
@@ -168,11 +156,34 @@ shadowJar {
 	relocate 'net.jcip', 'protocolsupport.libs.net.jcip'
 	relocate 'raknetserver', 'protocolsupport.libs.raknetserver'
 	relocate 'udpserversocketchannel', 'protocolsupport.libs.udpserversocketchannel'
+
+	minimize()
+}
+
+
+task postprocessFatJar(type: Zip) {
+	Set<String> workaroundRelocationClasses = new HashSet<>(Arrays.asList(
+		"protocolsupport/zplatform/impl/spigot/entitytracker/SpigotEntityTrackerEntryInjectorMap.class",
+		"protocolsupport/zplatform/impl/spigot/entitytracker/PaperSpigotEntityTrackerEntryInjectorMap.class",
+		"protocolsupport/zplatform/impl/spigot/injector/SpigotEntityTrackerInjector.class"
+	));
+	File originalJar = new File(shadowJar.destinationDir, shadowJar.archiveName)
+
+	archiveName = shadowJar.archiveName
+
+	from(zipTree(originalJar)) {
+        exclude(workaroundRelocationClasses)
+        exclude 'META-INF/**'
+	}
+
+	from(sourceSets.main.output.classesDirs) {
+		include(workaroundRelocationClasses)    
+	}
 }
 
 task copyFinalJarToTarget(type: DefaultTask) {doLast{
 	java.nio.file.Files.copy(
-		jar.archivePath.getAbsoluteFile().toPath(),
+		postprocessFatJar.archivePath.getAbsoluteFile().toPath(),
 		new File(targetJarDirectory, jar.baseName + '.jar').getAbsoluteFile().toPath(),
 		java.nio.file.StandardCopyOption.REPLACE_EXISTING
 	)
@@ -188,4 +199,5 @@ jar.enabled = false
 jar.finalizedBy(shadowJar)
 shadowJar.dependsOn(generateInfo)
 shadowJar.dependsOn(generateLocaleList)
-shadowJar.finalizedBy(copyFinalJarToTarget)
+shadowJar.finalizedBy(postprocessFatJar)
+postprocessFatJar.finalizedBy(copyFinalJarToTarget)

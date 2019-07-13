@@ -1,9 +1,9 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.object.minecart;
 
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class MinecartSpawnerEntityMetadataRemapper extends MinecartEntityMetadataRemapper {
@@ -11,9 +11,9 @@ public class MinecartSpawnerEntityMetadataRemapper extends MinecartEntityMetadat
 	public static final MinecartSpawnerEntityMetadataRemapper INSTANCE = new MinecartSpawnerEntityMetadataRemapper();
 
 	public MinecartSpawnerEntityMetadataRemapper() {
-		addRemap(new DataWatcherObjectRemapper() {
+		addRemap(new NetworkEntityMetadataObjectRemapper() {
 			@Override
-			public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
 				//Simulate spawnerMinecart in Pocket. TODO: Fix with ids.
 				//remapped.put(PeMetaBase.MINECART_BLOCK, new DataWatcherObjectSVarInt(52));
 				//remapped.put(PeMetaBase.MINECART_OFFSET, new DataWatcherObjectSVarInt(6));

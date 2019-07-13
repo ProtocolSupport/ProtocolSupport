@@ -3,7 +3,7 @@ package protocolsupport.protocol.storage.netcache;
 import java.util.HashSet;
 import java.util.Set;
 
-import protocolsupport.protocol.utils.types.ChunkCoord;
+import protocolsupport.protocol.types.ChunkCoord;
 
 public class PEChunkMapCache {
 

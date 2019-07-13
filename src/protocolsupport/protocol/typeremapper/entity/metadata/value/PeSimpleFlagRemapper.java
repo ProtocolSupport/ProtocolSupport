@@ -1,24 +1,24 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.value;
 
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIndex;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBoolean;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
-public class PeSimpleFlagRemapper extends DataWatcherObjectRemapper {
+public class PeSimpleFlagRemapper extends NetworkEntityMetadataObjectRemapper {
 
-	protected final DataWatcherObjectIndex<DataWatcherObjectBoolean> fromBooleanId;
+	protected final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> fromBooleanId;
 	protected final int toFlagId;
 
-	public PeSimpleFlagRemapper(DataWatcherObjectIndex<DataWatcherObjectBoolean> fromBooleanId, int toFlagId) {
+	public PeSimpleFlagRemapper(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> fromBooleanId, int toFlagId) {
 		this.fromBooleanId = fromBooleanId;
 		this.toFlagId = toFlagId;
 	}
 
 	@Override
-	public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
+	public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
 		fromBooleanId.getValue(original)
 		.ifPresent(booleanWatcher -> {
 			if (toFlagId < 0) {

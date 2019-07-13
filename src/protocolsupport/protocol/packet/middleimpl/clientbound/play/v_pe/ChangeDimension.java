@@ -1,6 +1,8 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
 import java.text.MessageFormat;
+import java.util.HashSet;
+import java.util.Set;
 
 import io.netty.buffer.ByteBuf;
 
@@ -9,14 +11,16 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChangeDimen
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.types.ChunkCoord;
-import protocolsupport.protocol.utils.types.Environment;
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.types.ChunkCoord;
+import protocolsupport.protocol.types.Environment;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class ChangeDimension extends MiddleChangeDimension {
+
+	protected Set<Long> entityRemovals = new HashSet<>();
 
 	public ChangeDimension(ConnectionImpl connection) {
 		super(connection);
@@ -24,8 +28,10 @@ public class ChangeDimension extends MiddleChangeDimension {
 
 	@Override
 	public boolean postFromServerRead() {
+		entityRemovals.clear();
+		cache.getWatchedEntityCache().forEach(
+			(id, entity) -> entityRemovals.add(id.longValue()));
 		cache.getPEChunkMapCache().clear();
-		//TODO: send remove entity packets
 		return super.postFromServerRead();
 	}
 
@@ -36,13 +42,14 @@ public class ChangeDimension extends MiddleChangeDimension {
 			packets.add(InventoryClose.create(connection.getVersion(), cache.getWindowCache().getOpenedWindowId()));
 			cache.getWindowCache().closeWindow();
 		}
+		entityRemovals.forEach(id -> packets.add(EntityDestroy.create(id)));
 		packets.add(createRaw(0, 0, 0, getPeDimensionId(dimension)));
-		packets.add(Chunk.createChunkPublisherUpdate(0, 0, 0));
+		packets.add(SetViewCenter.createChunkPublisherUpdate(0, 0, 0));
 		//needs a few chunks before the dim switch ack can confirm
-		Chunk.addFakeChunks(packets, new ChunkCoord(0, 0));
+		Chunk.addFakeChunks(packets, new ChunkCoord(0, 0), version);
 		packets.add(ClientBoundPacketData.create(PEPacketIDs.EXT_PS_AWAIT_DIM_SWITCH_ACK));
 		final Position pos = cache.getMovementCache().getChunkPublisherPosition();
-		packets.add(Chunk.createChunkPublisherUpdate(pos.getX(), pos.getY(), pos.getZ()));
+		packets.add(SetViewCenter.createChunkPublisherUpdate(pos.getX(), pos.getY(), pos.getZ()));
 		cache.getMovementCache().setPeNeedsPlayerSpawn(true);
 		return packets;
 	}

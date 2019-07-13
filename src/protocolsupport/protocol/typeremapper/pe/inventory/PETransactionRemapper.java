@@ -7,9 +7,9 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.GodPacket.InvTransaction;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
-import protocolsupport.protocol.utils.types.GameMode;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.types.GameMode;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.WindowType;
 import protocolsupport.utils.ArrayDequeMultiMap;
 import protocolsupport.utils.ArrayDequeMultiMap.ChildDeque;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -254,7 +254,7 @@ public class PETransactionRemapper {
 
 		public boolean isCraftingResult(NetworkDataCache cache) {
 			return (slot == 0) && (
-					(cache.getWindowCache().getOpenedWindow() == WindowType.CRAFTING_TABLE) ||
+					(cache.getWindowCache().getOpenedWindow() == WindowType.CRAFTING) ||
 					(cache.getWindowCache().getOpenedWindow() == WindowType.PLAYER)
 			);
 		}

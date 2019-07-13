@@ -7,14 +7,13 @@ import java.util.function.Function;
 import org.bukkit.Bukkit;
 
 import com.destroystokyo.paper.event.player.PlayerHandshakeEvent;
-import com.google.common.reflect.TypeToken;
+import com.destroystokyo.paper.profile.ProfileProperty;
+import com.google.gson.reflect.TypeToken;
 
-import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.utils.Utils;
 
 public class PaperSpoofedDataParser implements Function<String, SpoofedData> {
 
-	@SuppressWarnings("serial")
 	protected static final Type properties_type = new TypeToken<Collection<ProfileProperty>>() {}.getType();
 
 	@Override

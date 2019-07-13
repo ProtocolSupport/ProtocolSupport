@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.types.NetworkItemStack;
 
 public abstract class MiddleInventorySetItems extends ClientBoundMiddlePacket {
 
@@ -31,7 +31,7 @@ public abstract class MiddleInventorySetItems extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		return cache.getWindowCache().isValidWindowId(windowId) || windowId == WINDOW_ID_PLAYER_INVENTORY;
+		return cache.getWindowCache().isValidWindowId(windowId) || (windowId == WINDOW_ID_PLAYER_INVENTORY);
 	}
 
 }

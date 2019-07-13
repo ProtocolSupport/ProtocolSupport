@@ -1,8 +1,10 @@
 package protocolsupport.protocol.storage.netcache;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.utils.Utils;
+
+import java.util.function.BiConsumer;
 
 public class WatchedEntityCache {
 
@@ -50,6 +52,10 @@ public class WatchedEntityCache {
 	public void clearWatchedEntities() {
 		watchedEntities.clear();
 		readdSelfPlayer();
+	}
+
+	public void forEach(BiConsumer<Integer, NetworkEntity> consumer) {
+		watchedEntities.forEach(consumer);
 	}
 
 	@Override

@@ -15,12 +15,12 @@ import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.typeremapper.pe.inventory.PEInventory.PESource;
 import protocolsupport.protocol.typeremapper.pe.inventory.PESlotRemapper;
 import protocolsupport.protocol.typeremapper.pe.inventory.PETransactionRemapper;
-import protocolsupport.protocol.utils.types.GameMode;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
+import protocolsupport.protocol.types.GameMode;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.WindowType;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTString;
+import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -102,7 +102,7 @@ public class GodPacket extends ServerBoundMiddlePacket {
 				if (remapper.isCreativeTransaction(cache)) {
 					remapper.processCreativeTransaction(cache, transaction, packets);
 				} else {
-					if ((winCache.getOpenedWindow() != WindowType.ENCHANT) ||
+					if ((winCache.getOpenedWindow() != WindowType.ENCHANTMENT) ||
 						invCache.getFakeEnchanting().handleInventoryClick(cache, transaction, packets)) {
 						if (winCache.getOpenedWindow() == WindowType.ANVIL) {
 							processAnvilName(transaction, packets);

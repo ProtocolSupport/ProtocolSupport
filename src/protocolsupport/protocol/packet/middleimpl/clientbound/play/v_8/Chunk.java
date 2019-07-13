@@ -1,50 +1,55 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
+import java.util.Map;
+
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBA;
-import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerShort;
-import protocolsupport.protocol.typeremapper.chunk.EmptyChunk;
-import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
-import protocolsupport.protocol.utils.types.TileEntity;
+import protocolsupport.protocol.typeremapper.chunk.ChunkUtils;
+import protocolsupport.protocol.typeremapper.chunk.ChunkWriterShort;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class Chunk extends MiddleChunk {
+public class Chunk extends AbstractChunk {
+
+	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	public Chunk(ConnectionImpl connection) {
 		super(connection);
 	}
 
-	protected final ChunkTransformerBA transformer = new ChunkTransformerShort(LegacyBlockData.REGISTRY.getTable(version), TileEntityRemapper.getRemapper(version), cache.getTileCache());
-
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
-		transformer.loadData(chunk, data, bitmask, hasSkyLight, full, tiles);
 
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
-		PositionSerializer.writeChunkCoord(chunkdata, chunk);
+		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(full);
-		if ((bitmask == 0) && full) {
+		if ((blockMask == 0) && full) {
 			chunkdata.writeShort(1);
-			ArraySerializer.writeVarIntByteArray(chunkdata, EmptyChunk.get18ChunkData(hasSkyLight));
+			ArraySerializer.writeVarIntByteArray(chunkdata, ChunkUtils.getEmptySectionShort(hasSkyLight));
 		} else {
-			chunkdata.writeShort(bitmask);
-			ArraySerializer.writeVarIntByteArray(chunkdata, transformer.toLegacyData());
+			chunkdata.writeShort(blockMask);
+			ArraySerializer.writeVarIntByteArray(chunkdata, ChunkWriterShort.writeSections(
+				blockMask, blockDataRemappingTable, cachedChunk, hasSkyLight, sectionNumber -> {}
+			));
 		}
 		packets.add(chunkdata);
 
-		for (TileEntity tile : transformer.remapAndGetTiles()) {
-			packets.add(BlockTileUpdate.create(version, tile));
+		for (Map<Position, TileEntity> sectionTiles : cachedChunk.getTiles()) {
+			for (TileEntity tile : sectionTiles.values()) {
+				packets.add(BlockTileUpdate.create(version, tile));
+			}
 		}
 
 		return packets;

@@ -1,7 +1,6 @@
 package protocolsupport.protocol.storage.netcache;
 
-import protocolsupport.protocol.utils.types.Environment;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.types.Position;
 import protocolsupport.utils.Utils;
 
 public class MovementCache {

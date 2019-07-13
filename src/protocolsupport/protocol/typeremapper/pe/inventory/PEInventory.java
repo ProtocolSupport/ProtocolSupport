@@ -6,7 +6,7 @@ import java.util.List;
 import org.bukkit.Material;
 
 import protocolsupport.api.MaterialAPI;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload

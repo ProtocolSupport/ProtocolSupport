@@ -5,7 +5,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityDestr
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityDataCache;
+import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 

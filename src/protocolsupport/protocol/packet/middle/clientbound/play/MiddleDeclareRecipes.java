@@ -1,7 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import java.util.HashMap;
 import java.util.Map;
+
+import org.bukkit.NamespacedKey;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
@@ -9,7 +10,8 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.utils.CollectionsUtils;
 
 public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 
@@ -24,9 +26,8 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 		int count = VarNumberSerializer.readVarInt(serverdata);
 		recipes = new Recipe[count];
 		for (int i = 0; i < count; i++) {
-			String id = StringSerializer.readVarIntUTF8String(serverdata);
 			RecipeType type = RecipeType.getByInternalName(StringSerializer.readVarIntUTF8String(serverdata));
-			recipes[i] = type.read(id, serverdata);
+			recipes[i] = type.read(StringSerializer.readVarIntUTF8String(serverdata), serverdata);
 		}
 	}
 
@@ -143,8 +144,8 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 		protected final float exp;
 		protected final int time;
 
-		public SmeltingRecipe(String id, ByteBuf data) {
-			super(id, RecipeType.SMELTING);
+		public SmeltingRecipe(String id, RecipeType type, ByteBuf data) {
+			super(id, type);
 
 			group = StringSerializer.readVarIntUTF8String(data);
 			ingredient = new Ingredient(data);
@@ -174,6 +175,33 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 		}
 	}
 
+	public static class StonecuttingRecipe extends Recipe {
+
+		protected final String group;
+		protected final Ingredient ingredient;
+		protected final NetworkItemStack result;
+
+		public StonecuttingRecipe(String id, ByteBuf data) {
+			super(id, RecipeType.STONECUTTING);
+			group = StringSerializer.readVarIntUTF8String(data);
+			ingredient = new Ingredient(data);
+			result = ItemStackSerializer.readItemStack(data);
+		}
+
+		public String getGroup() {
+			return group;
+		}
+
+		public Ingredient getIngredient() {
+			return ingredient;
+		}
+
+		public NetworkItemStack getResult() {
+			return result;
+		}
+
+	}
+
 	public enum RecipeType {
 		CRAFTING_SHAPELESS {
 			@Override
@@ -200,21 +228,41 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 		CRAFTING_SPECIAL_BANNERADDPATTERN,
 		CRAFTING_SPECIAL_SHIELDDECORATION,
 		CRAFTING_SPECIAL_SHULKERBOXCOLORING,
+		CRAFTING_SPECIAL_SUSPICIOUSSTEW,
 		SMELTING {
 			@Override
 			public Recipe read(String id, ByteBuf data) {
-				return new SmeltingRecipe(id, data);
+				return new SmeltingRecipe(id, RecipeType.SMELTING, data);
+			}
+		},
+		BLASTING {
+			@Override
+			public Recipe read(String id, ByteBuf data) {
+				return new SmeltingRecipe(id, RecipeType.BLASTING, data);
+			}
+		},
+		SMOKING {
+			@Override
+			public Recipe read(String id, ByteBuf data) {
+				return new SmeltingRecipe(id, RecipeType.SMOKING, data);
+			}
+		},
+		CAMPFIRE_COOKING {
+			@Override
+			public Recipe read(String id, ByteBuf data) {
+				return new SmeltingRecipe(id, RecipeType.CAMPFIRE_COOKING, data);
+			}
+		},
+		STONECUTTING {
+			@Override
+			public Recipe read(String id, ByteBuf data) {
+				return new StonecuttingRecipe(id, data);
 			}
 		};
 
-		private static final Map<String, RecipeType> byInternalName = new HashMap<>();
-		private final String internalName = name().toLowerCase();
+		private static final Map<String, RecipeType> byInternalName = CollectionsUtils.makeEnumMappingMap(RecipeType.class, RecipeType::getInternalName);
 
-		static {
-			for (RecipeType recipeType : values()) {
-				byInternalName.put(recipeType.getInternalName(), recipeType);
-			}
-		}
+		private final String internalName = NamespacedKey.minecraft(name().toLowerCase()).toString();
 
 		public static RecipeType getByInternalName(String name) {
 			RecipeType recipeType = byInternalName.get(name);
@@ -228,9 +276,10 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 			return internalName;
 		}
 
-		public Recipe read(String id, ByteBuf serverdata) {
+		public Recipe read(String id, ByteBuf data) {
 			return new Recipe(id, this);
 		}
 
 	}
+
 }

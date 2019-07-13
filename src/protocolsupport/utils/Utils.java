@@ -97,7 +97,11 @@ public class Utils {
 	}
 
 	public static void repeat(int count, Runnable action) {
-	    IntStream.range(0, count).forEach(i -> action.run());
+		IntStream.range(0, count).forEach(i -> action.run());
+	}
+
+	public static boolean isBitSet(int bitmask, int bit) {
+		return ((bitmask & (1 << bit)) != 0);
 	}
 
 }

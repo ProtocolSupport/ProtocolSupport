@@ -14,8 +14,8 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
+import protocolsupport.protocol.types.GameMode;
 import protocolsupport.protocol.utils.EnumConstantLookups;
-import protocolsupport.protocol.utils.types.GameMode;
 import protocolsupport.utils.Utils;
 
 public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {

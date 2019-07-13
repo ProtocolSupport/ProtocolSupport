@@ -28,7 +28,7 @@ public abstract class MessageToMessageEncoder<I> extends ChannelOutboundHandlerA
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public void write(final ChannelHandlerContext channelHandlerContext, final Object o, final ChannelPromise channelPromise)  {
+	public void write(final ChannelHandlerContext channelHandlerContext, final Object o, final ChannelPromise channelPromise) {
 		RecyclableArrayList instance = null;
 		try {
 			if (this.acceptOutboundMessage(o)) {

@@ -6,26 +6,29 @@ import java.util.function.Supplier;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectRegistry;
+import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBlockData;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBoolean;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectChat;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectDirection;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectEntityPose;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectFloat;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectItemStack;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectNBTTagCompound;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalChat;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalPosition;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalUUID;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalVarInt;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectParticle;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectPosition;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectString;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVarInt;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVector3f;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVillagerData;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObjectIdRegistry;
-import protocolsupport.protocol.utils.datawatcher.ReadableDataWatcherObject;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBlockData;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectBoolean;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectByte;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectChat;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectDirection;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectFloat;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectItemStack;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectNBTTagCompound;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalChat;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalPosition;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectOptionalUUID;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectParticle;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectPosition;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectString;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVector3f;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class DataWatcherSerializer {
@@ -34,31 +37,34 @@ public class DataWatcherSerializer {
 	public static final int MAX_USED_META_INDEX = 100;
 
 	@SuppressWarnings("unchecked")
-	private static final Supplier<? extends ReadableDataWatcherObject<?>>[] registry = new Supplier[256];
+	protected static final Supplier<? extends ReadableNetworkEntityMetadataObject<?>>[] registry = new Supplier[256];
 	static {
-		register(DataWatcherObjectByte::new);
-		register(DataWatcherObjectVarInt::new);
-		register(DataWatcherObjectFloat::new);
-		register(DataWatcherObjectString::new);
-		register(DataWatcherObjectChat::new);
-		register(DataWatcherObjectOptionalChat::new);
-		register(DataWatcherObjectItemStack::new);
-		register(DataWatcherObjectBoolean::new);
-		register(DataWatcherObjectVector3f::new);
-		register(DataWatcherObjectPosition::new);
-		register(DataWatcherObjectOptionalPosition::new);
-		register(DataWatcherObjectDirection::new);
-		register(DataWatcherObjectOptionalUUID::new);
-		register(DataWatcherObjectBlockData::new);
-		register(DataWatcherObjectNBTTagCompound::new);
-		register(DataWatcherObjectParticle::new);
+		register(NetworkEntityMetadataObjectByte::new);
+		register(NetworkEntityMetadataObjectVarInt::new);
+		register(NetworkEntityMetadataObjectFloat::new);
+		register(NetworkEntityMetadataObjectString::new);
+		register(NetworkEntityMetadataObjectChat::new);
+		register(NetworkEntityMetadataObjectOptionalChat::new);
+		register(NetworkEntityMetadataObjectItemStack::new);
+		register(NetworkEntityMetadataObjectBoolean::new);
+		register(NetworkEntityMetadataObjectVector3f::new);
+		register(NetworkEntityMetadataObjectPosition::new);
+		register(NetworkEntityMetadataObjectOptionalPosition::new);
+		register(NetworkEntityMetadataObjectDirection::new);
+		register(NetworkEntityMetadataObjectOptionalUUID::new);
+		register(NetworkEntityMetadataObjectBlockData::new);
+		register(NetworkEntityMetadataObjectNBTTagCompound::new);
+		register(NetworkEntityMetadataObjectParticle::new);
+		register(NetworkEntityMetadataObjectVillagerData::new);
+		register(NetworkEntityMetadataObjectOptionalVarInt::new);
+		register(NetworkEntityMetadataObjectEntityPose::new);
 	}
 
-	private static void register(Supplier<? extends ReadableDataWatcherObject<?>> supplier) {
-		registry[DataWatcherObjectIdRegistry.getTypeId(supplier.get().getClass(), ProtocolVersionsHelper.LATEST_PC)] = supplier;
+	protected static void register(Supplier<? extends ReadableNetworkEntityMetadataObject<?>> supplier) {
+		registry[NetworkEntityMetadataObjectRegistry.getTypeId(supplier.get().getClass(), ProtocolVersionsHelper.LATEST_PC)] = supplier;
 	}
 
-	public static void readDataTo(ByteBuf from, ArrayMap<DataWatcherObject<?>> to) {
+	public static void readDataTo(ByteBuf from, ArrayMap<NetworkEntityMetadataObject<?>> to) {
 		do {
 			int key = from.readUnsignedByte();
 			if (key == 0xFF) {
@@ -66,7 +72,7 @@ public class DataWatcherSerializer {
 			}
 			int type = from.readUnsignedByte();
 			try {
-				ReadableDataWatcherObject<?> object = registry[type].get();
+				ReadableNetworkEntityMetadataObject<?> object = registry[type].get();
 				object.readFromStream(from);
 				to.put(key, object);
 			} catch (Exception e) {
@@ -75,14 +81,14 @@ public class DataWatcherSerializer {
 		} while (true);
 	}
 
-	public static void writeData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> objects) {
+	public static void writeData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<NetworkEntityMetadataObject<?>> objects) {
 		boolean hadObject = false;
 		for (int key = objects.getMinKey(); key < objects.getMaxKey(); key++) {
-			DataWatcherObject<?> object = objects.get(key);
+			NetworkEntityMetadataObject<?> object = objects.get(key);
 			if (object != null) {
 				hadObject = true;
 				to.writeByte(key);
-				to.writeByte(DataWatcherObjectIdRegistry.getTypeId(object, version));
+				to.writeByte(NetworkEntityMetadataObjectRegistry.getTypeId(object, version));
 				object.writeToStream(to, version, locale);
 			}
 		}
@@ -94,13 +100,13 @@ public class DataWatcherSerializer {
 		to.writeByte(0xFF);
 	}
 
-	public static void writeLegacyData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> objects) {
+	public static void writeLegacyData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<NetworkEntityMetadataObject<?>> objects) {
 		boolean hadObject = false;
 		for (int key = objects.getMinKey(); key < objects.getMaxKey(); key++) {
-			DataWatcherObject<?> object = objects.get(key);
+			NetworkEntityMetadataObject<?> object = objects.get(key);
 			if (object != null) {
 				hadObject = true;
-				int tk = ((DataWatcherObjectIdRegistry.getTypeId(object, version) << 5) | (key & 0x1F)) & 0xFF;
+				int tk = ((NetworkEntityMetadataObjectRegistry.getTypeId(object, version) << 5) | (key & 0x1F)) & 0xFF;
 				to.writeByte(tk);
 				object.writeToStream(to, version, locale);
 			}
@@ -112,16 +118,16 @@ public class DataWatcherSerializer {
 		to.writeByte(127);
 	}
 
-	public static void writePEData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> peMetadata) {
+	public static void writePEData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<NetworkEntityMetadataObject<?>> peMetadata) {
 		int entries = 0;
 		int writerPreIndex = to.writerIndex();
 		//Fake fixed-varint length.
 		to.writeZero(VarNumberSerializer.MAX_LENGTH);
 		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
-			DataWatcherObject<?> object = peMetadata.get(key);
+			NetworkEntityMetadataObject<?> object = peMetadata.get(key);
 			if (object != null) {
 				VarNumberSerializer.writeVarInt(to, key);
-				VarNumberSerializer.writeVarInt(to, DataWatcherObjectIdRegistry.getTypeId(object, version));
+				VarNumberSerializer.writeVarInt(to, NetworkEntityMetadataObjectRegistry.getTypeId(object, version));
 				object.writeToStream(to, version, locale);
 				entries++;
 			}

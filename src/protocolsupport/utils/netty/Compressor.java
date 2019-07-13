@@ -16,7 +16,7 @@ public class Compressor {
 	protected static final int compressionLevel = JavaSystemProperty.getValue("compressionlevel", 3, Integer::parseInt);
 
 	static {
-		ProtocolSupport.logInfo("Compression level: "+compressionLevel);
+		ProtocolSupport.logInfo("Compression level: " + compressionLevel);
 	}
 
 	protected static final Recycler<Compressor> recycler = new Recycler<Compressor>() {

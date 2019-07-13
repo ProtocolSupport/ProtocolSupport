@@ -9,13 +9,13 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe.BlockTil
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.storage.netcache.PEInventoryCache;
 import protocolsupport.protocol.typeremapper.pe.PEBlocks;
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.TileEntity;
-import protocolsupport.protocol.utils.types.TileEntityType;
-import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTInt;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.TileEntity;
+import protocolsupport.protocol.types.TileEntityType;
+import protocolsupport.protocol.types.WindowType;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTInt;
+import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 
 public class PEFakeBeacon {
@@ -47,7 +47,7 @@ public class PEFakeBeacon {
 						Position block = position.clone();
 						block.mod(x, -i, z);
 						invCache.getFakeContainers().addLast(block);
-						BlockChangeSingle.create(version, block, cache,
+						BlockChangeSingle.create(version, block,
 							PEBlocks.toPocketBlock(version, Material.EMERALD_BLOCK), packets);
 					}
 				}

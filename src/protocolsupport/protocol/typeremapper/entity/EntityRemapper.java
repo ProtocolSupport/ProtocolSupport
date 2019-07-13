@@ -9,10 +9,10 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class EntityRemapper {
@@ -23,10 +23,10 @@ public class EntityRemapper {
 	}
 
 	protected NetworkEntity originalEntity;
-	protected final ArrayMap<DataWatcherObject<?>> originalMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
+	protected final ArrayMap<NetworkEntityMetadataObject<?>> originalMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
 
 	protected NetworkEntityType remappedEntityType;
-	protected final ArrayMap<DataWatcherObject<?>> remappedMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
+	protected final ArrayMap<NetworkEntityMetadataObject<?>> remappedMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
 
 	public void readEntity(NetworkEntity entity) {
 		if (entity == null) {
@@ -45,7 +45,7 @@ public class EntityRemapper {
 	}
 
 	public void remap(boolean metadata) {
-		Pair<NetworkEntityType, List<DataWatcherObjectRemapper>> entityRemapper = table.getRemap(originalEntity.getType());
+		Pair<NetworkEntityType, List<NetworkEntityMetadataObjectRemapper>> entityRemapper = table.getRemap(originalEntity.getType());
 		if (entityRemapper == null) {
 			throw new IllegalStateException(MessageFormat.format("Missing entity remapper entry for entity type {0}", originalEntity.getType()));
 		}
@@ -57,16 +57,16 @@ public class EntityRemapper {
 		}
 	}
 
+	public ArrayMap<NetworkEntityMetadataObject<?>> getOriginalMetadata() {
+		return originalMetadata;
+	}
+
 	public NetworkEntityType getRemappedEntityType() {
 		return remappedEntityType;
 	}
 
-	public ArrayMap<DataWatcherObject<?>> getRemappedMetadata() {
+	public ArrayMap<NetworkEntityMetadataObject<?>> getRemappedMetadata() {
 		return remappedMetadata;
-	}
-
-	public ArrayMap<DataWatcherObject<?>> getOriginalMetadata() {
-		return originalMetadata;
 	}
 
 }
