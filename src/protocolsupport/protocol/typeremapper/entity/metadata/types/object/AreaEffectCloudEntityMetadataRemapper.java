@@ -3,9 +3,9 @@ package protocolsupport.protocol.typeremapper.entity.metadata.types.object;
 import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
+import protocolsupport.protocol.typeremapper.legacy.LegacyParticle;
 import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
 import protocolsupport.protocol.typeremapper.particle.ParticleRemapper.ParticleRemappingTable;
-import protocolsupport.protocol.typeremapper.particle.legacy.LegacyParticle;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
@@ -29,6 +29,7 @@ public class AreaEffectCloudEntityMetadataRemapper extends BaseEntityMetadataRem
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.AreaEffectCloud.SINGLE_POINT, 8), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.AreaEffectCloud.SINGLE_POINT, 7), ProtocolVersionsHelper.ALL_1_9);
 
+		//TODO: actually remap particle metadata for modern versions too
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.AreaEffectCloud.PARTICLE, 10), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.AreaEffectCloud.PARTICLE, 9), ProtocolVersionsHelper.ALL_1_13);
 		addRemapPerVersion(
@@ -38,11 +39,16 @@ public class AreaEffectCloudEntityMetadataRemapper extends BaseEntityMetadataRem
 				public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
 					NetworkEntityMetadataObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent(particleObject -> {
 						Particle particle = particleRemapper.getRemap(particleObject.getValue().getClass()).apply(particleObject.getValue());
-						remapped.put(9, new NetworkEntityMetadataObjectVarInt(particle.getId()));
-						if (particle instanceof LegacyParticle) {
-							LegacyParticle lParticle = (LegacyParticle) particle;
-							remapped.put(10, new NetworkEntityMetadataObjectVarInt(lParticle.getFirstParameter()));
-							remapped.put(11, new NetworkEntityMetadataObjectVarInt(lParticle.getSecondParameter()));
+						if (particle == null) {
+							return;
+						}
+						remapped.put(9, new NetworkEntityMetadataObjectVarInt(LegacyParticle.IntId.getId(particle)));
+						int[] data = LegacyParticle.IntId.getData(particle);
+						if (data.length >= 1) {
+							remapped.put(10, new NetworkEntityMetadataObjectVarInt(data[0]));
+						}
+						if (data.length >= 2) {
+							remapped.put(11, new NetworkEntityMetadataObjectVarInt(data[1]));
 						}
 					});
 				}

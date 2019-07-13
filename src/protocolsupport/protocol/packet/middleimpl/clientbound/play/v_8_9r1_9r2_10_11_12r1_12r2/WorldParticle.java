@@ -4,6 +4,8 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.ClientBoundPacket;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.legacy.LegacyParticle;
 import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
 import protocolsupport.protocol.typeremapper.particle.ParticleRemapper.ParticleRemappingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -25,7 +27,7 @@ public class WorldParticle extends MiddleWorldParticle {
 			return RecyclableEmptyList.get();
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_PARTICLES_ID);
-		serializer.writeInt(particle.getId());
+		serializer.writeInt(LegacyParticle.IntId.getId(particle));
 		serializer.writeBoolean(longdist);
 		serializer.writeFloat(x);
 		serializer.writeFloat(y);
@@ -35,7 +37,9 @@ public class WorldParticle extends MiddleWorldParticle {
 		serializer.writeFloat(particle.getOffsetZ());
 		serializer.writeFloat(particle.getData());
 		serializer.writeInt(particle.getCount());
-		particle.writeData(serializer);
+		for (int data : LegacyParticle.IntId.getData(particle)) {
+			VarNumberSerializer.writeVarInt(serializer, data);
+		}
 		return RecyclableSingletonList.create(serializer);
 	}
 

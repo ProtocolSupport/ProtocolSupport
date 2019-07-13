@@ -2,9 +2,7 @@ package protocolsupport.protocol.types.particle;
 
 import io.netty.buffer.ByteBuf;
 
-public class Particle {
-
-	protected final int id;
+public abstract class Particle {
 
 	protected float offsetX;
 	protected float offsetY;
@@ -12,12 +10,15 @@ public class Particle {
 	protected float data;
 	protected int count;
 
-	public Particle(int id) {
-		this.id = id;
+	protected Particle() {
 	}
 
-	public int getId() {
-		return id;
+	protected Particle(float offsetX, float offsetY, float offsetZ, float data, int count) {
+		this.offsetX = offsetX;
+		this.offsetY = offsetY;
+		this.offsetZ = offsetZ;
+		this.data = data;
+		this.count = count;
 	}
 
 	public void read(ByteBuf buf) {
@@ -50,9 +51,6 @@ public class Particle {
 
 	public int getCount() {
 		return count;
-	}
-
-	public void writeData(ByteBuf buf) {
 	}
 
 }

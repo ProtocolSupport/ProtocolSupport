@@ -1,17 +1,82 @@
 package protocolsupport.protocol.types.particle;
 
-import java.util.function.IntFunction;
+import java.util.function.Supplier;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import protocolsupport.protocol.types.particle.types.ParticleAmbientEntityEffect;
+import protocolsupport.protocol.types.particle.types.ParticleAngryVillager;
+import protocolsupport.protocol.types.particle.types.ParticleBarrier;
+import protocolsupport.protocol.types.particle.types.ParticleBlock;
+import protocolsupport.protocol.types.particle.types.ParticleBubble;
+import protocolsupport.protocol.types.particle.types.ParticleBubbleColumnUp;
+import protocolsupport.protocol.types.particle.types.ParticleBubblePop;
+import protocolsupport.protocol.types.particle.types.ParticleCampfireCozySmoke;
+import protocolsupport.protocol.types.particle.types.ParticleCampfireSignalSmoke;
+import protocolsupport.protocol.types.particle.types.ParticleCloud;
+import protocolsupport.protocol.types.particle.types.ParticleComposter;
+import protocolsupport.protocol.types.particle.types.ParticleCrit;
+import protocolsupport.protocol.types.particle.types.ParticleCurrentDown;
+import protocolsupport.protocol.types.particle.types.ParticleDamageIndicator;
+import protocolsupport.protocol.types.particle.types.ParticleDolphin;
+import protocolsupport.protocol.types.particle.types.ParticleDragonBreath;
+import protocolsupport.protocol.types.particle.types.ParticleDrippingLava;
+import protocolsupport.protocol.types.particle.types.ParticleDrippingWater;
+import protocolsupport.protocol.types.particle.types.ParticleDust;
+import protocolsupport.protocol.types.particle.types.ParticleEffect;
+import protocolsupport.protocol.types.particle.types.ParticleElderGuardian;
+import protocolsupport.protocol.types.particle.types.ParticleEnchant;
+import protocolsupport.protocol.types.particle.types.ParticleEnchantedHit;
+import protocolsupport.protocol.types.particle.types.ParticleEndRod;
+import protocolsupport.protocol.types.particle.types.ParticleEntityEffect;
+import protocolsupport.protocol.types.particle.types.ParticleExplosion;
+import protocolsupport.protocol.types.particle.types.ParticleExplosionEmitter;
+import protocolsupport.protocol.types.particle.types.ParticleFallingDust;
+import protocolsupport.protocol.types.particle.types.ParticleFallingLava;
+import protocolsupport.protocol.types.particle.types.ParticleFallingWater;
+import protocolsupport.protocol.types.particle.types.ParticleFirework;
+import protocolsupport.protocol.types.particle.types.ParticleFishing;
+import protocolsupport.protocol.types.particle.types.ParticleFlame;
+import protocolsupport.protocol.types.particle.types.ParticleFlash;
+import protocolsupport.protocol.types.particle.types.ParticleHappyVillager;
+import protocolsupport.protocol.types.particle.types.ParticleHeart;
+import protocolsupport.protocol.types.particle.types.ParticleInstantEffect;
+import protocolsupport.protocol.types.particle.types.ParticleItem;
+import protocolsupport.protocol.types.particle.types.ParticleItemSlime;
+import protocolsupport.protocol.types.particle.types.ParticleItemSnowball;
+import protocolsupport.protocol.types.particle.types.ParticleLandingLava;
+import protocolsupport.protocol.types.particle.types.ParticleLargeSmoke;
+import protocolsupport.protocol.types.particle.types.ParticleLava;
+import protocolsupport.protocol.types.particle.types.ParticleMycelium;
+import protocolsupport.protocol.types.particle.types.ParticleNautilus;
+import protocolsupport.protocol.types.particle.types.ParticleNote;
+import protocolsupport.protocol.types.particle.types.ParticlePoof;
+import protocolsupport.protocol.types.particle.types.ParticlePortal;
+import protocolsupport.protocol.types.particle.types.ParticleRain;
+import protocolsupport.protocol.types.particle.types.ParticleSmoke;
+import protocolsupport.protocol.types.particle.types.ParticleSneeze;
+import protocolsupport.protocol.types.particle.types.ParticleSpit;
+import protocolsupport.protocol.types.particle.types.ParticleSplash;
+import protocolsupport.protocol.types.particle.types.ParticleSquidInk;
+import protocolsupport.protocol.types.particle.types.ParticleSweepAttack;
+import protocolsupport.protocol.types.particle.types.ParticleTotemOfUndying;
+import protocolsupport.protocol.types.particle.types.ParticleUnderwater;
+import protocolsupport.protocol.types.particle.types.ParticleWitch;
 
 public class ParticleRegistry {
 
-	private static final Int2ObjectMap<IntFunction<Particle>> idToParticle = new Int2ObjectArrayMap<>(50);
-	private static int nextParticleId = 0;
+	protected static final Int2ObjectMap<Supplier<Particle>> idToParticle = new Int2ObjectArrayMap<>(64);
+	protected static final Object2IntMap<Class<? extends Particle>> classToId = new Object2IntOpenHashMap<>();
+	static {
+		classToId.defaultReturnValue(-1);
+	}
+	protected static int nextParticleId = 0;
 
-	private static void register(IntFunction<Particle> particle) {
+	protected static void register(Supplier<Particle> particle) {
 		idToParticle.put(nextParticleId, particle);
+		classToId.put(particle.get().getClass(), nextParticleId);
 		nextParticleId++;
 	}
 
@@ -77,7 +142,11 @@ public class ParticleRegistry {
 	}
 
 	public static Particle fromId(int id) {
-		return idToParticle.getOrDefault(id, pId -> null).apply(id);
+		return idToParticle.get(id).get();
+	}
+
+	public static int getId(Particle particle) {
+		return classToId.getInt(particle.getClass());
 	}
 
 }

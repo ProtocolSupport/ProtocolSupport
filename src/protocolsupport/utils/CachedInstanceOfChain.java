@@ -11,6 +11,7 @@ public class CachedInstanceOfChain<T> {
 
 	public void setKnownPath(Class<?> clazz, T path) {
 		knownPaths.put(clazz, path);
+		cachedPaths.put(clazz, path);
 	}
 
 	public T selectPath(Class<?> clazz) {

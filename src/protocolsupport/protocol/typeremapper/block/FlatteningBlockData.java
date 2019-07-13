@@ -37,13 +37,22 @@ public class FlatteningBlockData {
 	}
 
 	public static class FlatteningBlockDataTable extends RemappingTable {
+
 		protected final FlatteningBlockDataEntry[] table = new FlatteningBlockDataEntry[MinecraftData.BLOCKDATA_COUNT];
+
 		public FlatteningBlockDataEntry getRemap(int blockdataId) {
 			return table[blockdataId];
 		}
+
+		public int getBlockDataRemap(int blockdataId) {
+			FlatteningBlockDataEntry entry = getRemap(blockdataId);
+			return entry != null ? entry.getBlockDataId() : blockdataId;
+		}
+
 		public void setRemap(int blockdataId, FlatteningBlockDataEntry entry) {
 			table[blockdataId] = entry;
 		}
+
 	}
 
 	public static final class FlatteningBlockDataEntry {

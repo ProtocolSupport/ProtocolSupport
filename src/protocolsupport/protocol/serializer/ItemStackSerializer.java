@@ -96,6 +96,22 @@ public class ItemStackSerializer {
 	 * @param itemstack itemstack
 	 */
 	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, NetworkItemStack itemstack) {
+		if (!itemstack.isNull()) {
+			ItemStackWriteEventHelper.callEvent(version, locale, itemstack);
+
+			itemstack = ItemStackRemapper.remapToClient(version, locale, itemstack);
+		}
+
+		writeItemStackRemapped(to, version, itemstack);
+	}
+
+	/**
+	 * Writes client itemstack (provided protocol version format)
+	 * @param to buffer to write to
+	 * @param version protocol version
+	 * @param itemstack itemstack
+	 */
+	public static void writeItemStackRemapped(ByteBuf to, ProtocolVersion version, NetworkItemStack itemstack) {
 		if (itemstack.isNull()) {
 			if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
 				to.writeBoolean(false);
@@ -104,10 +120,6 @@ public class ItemStackSerializer {
 			}
 			return;
 		}
-
-		ItemStackWriteEventHelper.callEvent(version, locale, itemstack);
-
-		itemstack = ItemStackRemapper.remapToClient(version, locale, itemstack);
 
 		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
 			to.writeBoolean(true);

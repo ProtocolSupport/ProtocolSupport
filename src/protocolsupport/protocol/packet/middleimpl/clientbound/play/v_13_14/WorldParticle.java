@@ -8,6 +8,10 @@ import protocolsupport.protocol.typeremapper.particle.FlatteningParticleId;
 import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
 import protocolsupport.protocol.typeremapper.particle.ParticleRemapper.ParticleRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.types.particle.Particle;
+import protocolsupport.protocol.types.particle.ParticleDataSerializer;
+import protocolsupport.protocol.types.particle.ParticleRegistry;
+import protocolsupport.protocol.utils.TypeSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -15,7 +19,8 @@ import protocolsupport.utils.recyclable.RecyclableSingletonList;
 public class WorldParticle extends MiddleWorldParticle {
 
 	protected final ParticleRemappingTable remapper = ParticleRemapper.REGISTRY.getTable(version);
-	protected final ArrayBasedIdRemappingTable flatteningParticleIdTable = FlatteningParticleId.REGISTRY.getTable(version);
+	protected final ArrayBasedIdRemappingTable flatteningIdTable = FlatteningParticleId.REGISTRY.getTable(version);
+	protected final TypeSerializer.Entry<Particle> dataSerializer = ParticleDataSerializer.INSTANCE.get(version);
 
 	public WorldParticle(ConnectionImpl connection) {
 		super(connection);
@@ -28,7 +33,7 @@ public class WorldParticle extends MiddleWorldParticle {
 			return RecyclableEmptyList.get();
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_PARTICLES_ID);
-		serializer.writeInt(flatteningParticleIdTable.getRemap(particle.getId()));
+		serializer.writeInt(flatteningIdTable.getRemap(ParticleRegistry.getId(particle)));
 		serializer.writeBoolean(longdist);
 		serializer.writeFloat(x);
 		serializer.writeFloat(y);
@@ -38,7 +43,7 @@ public class WorldParticle extends MiddleWorldParticle {
 		serializer.writeFloat(particle.getOffsetZ());
 		serializer.writeFloat(particle.getData());
 		serializer.writeInt(particle.getCount());
-		particle.writeData(serializer);
+		dataSerializer.write(serializer, particle);
 		return RecyclableSingletonList.create(serializer);
 	}
 
