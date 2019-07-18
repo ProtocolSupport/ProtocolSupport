@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
-import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;

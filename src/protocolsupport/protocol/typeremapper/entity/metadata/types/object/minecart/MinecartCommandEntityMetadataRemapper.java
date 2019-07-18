@@ -1,8 +1,8 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.object.minecart;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperChatToString;
-import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperChatToString;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 

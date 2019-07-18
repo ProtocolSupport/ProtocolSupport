@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.entity.metadata.value;
+package protocolsupport.protocol.typeremapper.entity.metadata.object.value;
 
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;

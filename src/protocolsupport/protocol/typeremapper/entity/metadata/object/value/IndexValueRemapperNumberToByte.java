@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.entity.metadata.value;
+package protocolsupport.protocol.typeremapper.entity.metadata.object.value;
 
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;

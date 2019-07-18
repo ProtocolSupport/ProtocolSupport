@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.entity.metadata.value;
+package protocolsupport.protocol.typeremapper.entity.metadata.object.value;
 
 import org.bukkit.ChatColor;
 

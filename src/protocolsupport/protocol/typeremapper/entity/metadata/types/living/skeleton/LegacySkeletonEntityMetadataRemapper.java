@@ -1,8 +1,8 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.living.skeleton;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.InsentientAttackingToLegacySwingingHadsIndexValesRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.value.InsentientAttackingToLegacySwingingHadsIndexValesRemapper;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class LegacySkeletonEntityMetadataRemapper extends InsentientEntityMetadataRemapper {

@@ -1,14 +1,15 @@
-package protocolsupport.protocol.typeremapper.entity.metadata;
+package protocolsupport.protocol.typeremapper.entity.metadata.object.misc;
 
+import protocolsupport.protocol.typeremapper.entity.metadata.object.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
-public class FirstNetworkEntityMetadataUpdateObjectAddRemapper extends NetworkEntityMetadataObjectRemapper {
+public class NetworkEntityMetadataFirstUpdateObjectAddRemapper extends NetworkEntityMetadataObjectRemapper {
 
 	private final int index;
 	private final NetworkEntityMetadataObject<?> object;
-	public FirstNetworkEntityMetadataUpdateObjectAddRemapper(int index, NetworkEntityMetadataObject<?> object) {
+	public NetworkEntityMetadataFirstUpdateObjectAddRemapper(int index, NetworkEntityMetadataObject<?> object) {
 		this.index = index;
 		this.object = object;
 	}

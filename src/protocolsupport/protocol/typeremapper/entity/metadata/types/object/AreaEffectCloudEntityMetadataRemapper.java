@@ -1,8 +1,8 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.object;
 
-import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.NetworkEntityMetadataObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.legacy.LegacyParticle;
 import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
 import protocolsupport.protocol.typeremapper.particle.ParticleRemapper.ParticleRemappingTable;

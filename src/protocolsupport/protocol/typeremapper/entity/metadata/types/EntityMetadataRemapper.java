@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.entity.metadata.NetworkEntityMetadataObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.NetworkEntityMetadataObjectRemapper;
 
 public class EntityMetadataRemapper {
 

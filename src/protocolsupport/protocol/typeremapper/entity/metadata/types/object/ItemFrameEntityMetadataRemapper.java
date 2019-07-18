@@ -1,10 +1,10 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.object;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperNoOp;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperNumberToByte;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
-import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNumberToByte;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;

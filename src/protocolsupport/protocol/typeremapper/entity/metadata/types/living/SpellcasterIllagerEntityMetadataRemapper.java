@@ -1,6 +1,6 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.living;
 
-import protocolsupport.protocol.typeremapper.entity.metadata.value.IndexValueRemapperNoOp;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
