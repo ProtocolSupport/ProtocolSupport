@@ -18,7 +18,7 @@ public class StartGame extends MiddleStartGame {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_LOGIN_ID);
-		serializer.writeInt(playerEntityId);
+		serializer.writeInt(player.getId());
 		serializer.writeByte(gamemode.getId() | (hardcore ? 0x8 : 0));
 		serializer.writeInt(dimension.getId());
 		serializer.writeByte(maxplayers);

@@ -16,7 +16,7 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected int playerEntityId;
+	protected NetworkEntity player;
 	protected GameMode gamemode;
 	protected boolean hardcore;
 	protected Environment dimension;
@@ -27,7 +27,7 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		playerEntityId = serverdata.readInt();
+		player = NetworkEntity.createPlayer(serverdata.readInt());
 		int gmdata = serverdata.readByte();
 		gamemode = GameMode.getById(gmdata & 0xFFFFFFF7);
 		hardcore = (gmdata & 0x8) == 0x8;
@@ -41,7 +41,7 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		cache.getWatchedEntityCache().addWatchedSelfPlayer(NetworkEntity.createPlayer(playerEntityId));
+		cache.getWatchedEntityCache().addWatchedSelfPlayer(player);
 		cache.getAttributesCache().setCurrentDimension(dimension);
 		return true;
 	}

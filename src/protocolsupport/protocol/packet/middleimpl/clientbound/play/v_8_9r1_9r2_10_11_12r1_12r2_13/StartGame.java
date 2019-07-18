@@ -20,7 +20,7 @@ public class StartGame extends MiddleStartGame {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_LOGIN_ID);
-		serializer.writeInt(playerEntityId);
+		serializer.writeInt(player.getId());
 		serializer.writeByte(gamemode.getId() | (hardcore ? 0x8 : 0));
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9_1)) {
 			serializer.writeByte(dimension.getId());

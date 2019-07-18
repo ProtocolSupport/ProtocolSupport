@@ -19,7 +19,7 @@ public class StartGame extends MiddleStartGame {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_LOGIN_ID);
-		serializer.writeInt(playerEntityId);
+		serializer.writeInt(player.getId());
 		StringSerializer.writeString(serializer, version, leveltype);
 		serializer.writeByte(gamemode.getId() | (hardcore ? 0x8 : 0));
 		serializer.writeByte(dimension.getId());
