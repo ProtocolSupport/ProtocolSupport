@@ -98,7 +98,10 @@ public class Chunk extends MiddleChunk {
 					writeEmptySubChunk(chunkdata, version);
 				}
 			}
-			chunkdata.writeZero(512); //heightmap (will be recalculated by client anyway)
+
+			if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_PE_1_11)) {
+				chunkdata.writeZero(512); //heightmap (will be recalculated by client anyway) on 1.11 and before
+			}
 			for (int i = 0; i < biomeData.length; i++) {
 				chunkdata.writeByte(biomeRemappingTable.getRemap(biomeData[i]));
 			}
