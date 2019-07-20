@@ -246,6 +246,8 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayBookOpenPacketId();
 
+	public int getOutPlayAcknowledgePlayerDiggingId();
+
 
 	public int getInHandshakeStartPacketId();
 

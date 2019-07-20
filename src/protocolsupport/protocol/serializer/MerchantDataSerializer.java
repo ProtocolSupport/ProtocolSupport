@@ -25,10 +25,11 @@ public class MerchantDataSerializer {
 			int xp = from.readInt();
 			int specialPrice = from.readInt();
 			float priceMultiplier = from.readFloat();
+			int demand = from.readInt();
 			offers[i] = new TradeOffer(
 				itemstack1, itemstack2, result,
 				disabled ? maxuses : uses, maxuses,
-				xp, specialPrice, priceMultiplier
+				xp, specialPrice, priceMultiplier, demand
 			);
 		}
 		int villagerLevel = VarNumberSerializer.readVarInt(from);
@@ -64,6 +65,9 @@ public class MerchantDataSerializer {
 				to.writeInt(offer.getSpecialPrice());
 				to.writeFloat(offer.getPriceMultiplier());
 			}
+			if (isUsingDemand(version)) {
+				to.writeInt(offer.getDemand());
+			}
 		}
 		if (advandedTrading) {
 			VarNumberSerializer.writeVarInt(to, merchdata.getVillagerLevel());
@@ -85,5 +89,9 @@ public class MerchantDataSerializer {
 
 	protected static boolean isUsingRestockingVillagerField(ProtocolVersion version) {
 		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_14_3);
+	}
+
+	protected static boolean isUsingDemand(ProtocolVersion version) {
+		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_14_4);
 	}
 }

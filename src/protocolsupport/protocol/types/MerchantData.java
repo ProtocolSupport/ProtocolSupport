@@ -52,11 +52,11 @@ public class MerchantData {
 		protected final int xp;
 		protected final int specialPrice;
 		protected final float priceMultiplier;
+		protected final int demand;
 
 		public TradeOffer(
 			NetworkItemStack itemstack1, NetworkItemStack itemstack2, NetworkItemStack result,
-			int uses, int maxuses,
-			int xp, int specialPrice, float priceMultiplier
+			int uses, int maxuses, int xp, int specialPrice, float priceMultiplier, int demand
 		) {
 			this.itemstack1 = itemstack1;
 			this.result = result;
@@ -66,6 +66,7 @@ public class MerchantData {
 			this.xp = xp;
 			this.specialPrice = specialPrice;
 			this.priceMultiplier = priceMultiplier;
+			this.demand = demand;
 		}
 
 		public NetworkItemStack getItemStack1() {
@@ -106,6 +107,10 @@ public class MerchantData {
 
 		public float getPriceMultiplier() {
 			return priceMultiplier;
+		}
+
+		public int getDemand() {
+			return demand;
 		}
 
 	}
