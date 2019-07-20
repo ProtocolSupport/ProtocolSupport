@@ -68,6 +68,7 @@ import net.minecraft.server.v1_14_R1.PlayerInteractManager;
 import net.minecraft.server.v1_14_R1.PlayerList;
 import protocolsupport.protocol.packet.handler.AbstractLoginListenerPlay;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
+import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn {
@@ -324,6 +325,11 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 
 	@Override
 	public void a(PacketPlayInDifficultyLock arg0) {
+	}
+
+	@Override
+	public NetworkManager a() {
+		return ((SpigotNetworkManagerWrapper) this.networkManager).unwrap();
 	}
 
 }

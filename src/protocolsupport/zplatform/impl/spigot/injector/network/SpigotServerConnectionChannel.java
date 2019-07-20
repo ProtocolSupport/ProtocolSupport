@@ -31,7 +31,7 @@ public class SpigotServerConnectionChannel extends ChannelInitializer {
 	protected void initChannel(Channel channel) {
 		ChannelPipeline pipeline = channel.pipeline();
 		NetworkManagerWrapper networkmanager = new SpigotNetworkManagerWrapper((NetworkManager) pipeline.get(SpigotChannelHandlers.NETWORK_MANAGER));
-		networkmanager.setPacketListener(new SpigotFakePacketListener());
+		networkmanager.setPacketListener(new SpigotFakePacketListener(networkmanager));
 		ConnectionImpl connection = new ConnectionImpl(networkmanager);
 		connection.storeInChannel(channel);
 		ProtocolStorage.addConnection(channel.remoteAddress(), connection);
