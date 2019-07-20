@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.noop.NoopLog
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.noop.NoopSetCompression;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_4_5_6.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_4_5_6_7.EncryptionRequest;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopAcknowledgePlayerDigging;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopAdvancements;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopAdvanementsTab;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopBlockOpenSignEditor;
@@ -91,13 +92,13 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.Set
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.WorldEvent;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.WorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.WorldSound;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14.EntityStatus;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14.InventoryClose;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14.InventoryConfirmTransaction;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14.InventoryData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14.InventorySetItems;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14.InventorySetSlot;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14.TimeUpdate;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.EntityStatus;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.InventoryClose;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.InventoryConfirmTransaction;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.InventoryData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.InventorySetItems;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.InventorySetSlot;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.TimeUpdate;
 import protocolsupport.protocol.pipeline.version.util.encoder.AbstractLegacyPacketEncoder;
 import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
 
@@ -266,6 +267,7 @@ public class PacketEncoder extends AbstractLegacyPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_VIEW_CENTER, NoopSetViewCenter::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_VIEW_DISTANCE, NoopUpdateViewDistance::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_SOUND_ID, NoopEntitySound::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ACKNOWLEDGE_PLAYER_DIGGING, NoopAcknowledgePlayerDigging::new);
 	}
 
 	public PacketEncoder(ConnectionImpl connection) {

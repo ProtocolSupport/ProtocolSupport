@@ -649,6 +649,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		return getOutId(PacketPlayOutOpenBook.class);
 	}
 
+	@Override
+	public int getOutPlayAcknowledgePlayerDiggingId() {
+		return getOutId(PacketPlayOutBlockBreak.class);
+	}
+
 
 	@Override
 	public int getInHandshakeStartPacketId() {

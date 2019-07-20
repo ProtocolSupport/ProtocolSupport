@@ -7,11 +7,13 @@ import javax.crypto.SecretKey;
 import org.bukkit.Bukkit;
 
 import net.minecraft.server.v1_14_R1.IChatBaseComponent;
+import net.minecraft.server.v1_14_R1.NetworkManager;
 import net.minecraft.server.v1_14_R1.PacketLoginInCustomPayload;
 import net.minecraft.server.v1_14_R1.PacketLoginInEncryptionBegin;
 import net.minecraft.server.v1_14_R1.PacketLoginInListener;
 import net.minecraft.server.v1_14_R1.PacketLoginInStart;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
+import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotLoginListener extends AbstractLoginListener implements PacketLoginInListener {
@@ -51,6 +53,11 @@ public class SpigotLoginListener extends AbstractLoginListener implements Packet
 
 	@Override
 	public void a(PacketLoginInCustomPayload var1) {
+	}
+
+	@Override
+	public NetworkManager a() {
+		return ((SpigotNetworkManagerWrapper) this.networkManager).unwrap();
 	}
 
 }
