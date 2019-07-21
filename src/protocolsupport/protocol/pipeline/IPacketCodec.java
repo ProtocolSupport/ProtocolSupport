@@ -34,7 +34,7 @@ public abstract class IPacketCodec {
 		public int getPacketId(PacketType type) {
 			int id = registry[type.getOrdinal()];
 			if (id == NO_ENTRY) {
-				throw new NoSuchElementException("No packet id found for and packet type " + type);
+				throw new NoSuchElementException("No packet id found for and packet id " + type.getId());
 			}
 			return id;
 		}
