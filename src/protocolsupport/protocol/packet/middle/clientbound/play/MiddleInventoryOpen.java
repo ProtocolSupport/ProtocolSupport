@@ -8,14 +8,9 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
-import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
 import protocolsupport.protocol.types.WindowType;
-import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
-
-	protected final EnumSkippingTable<WindowType> typeSkipper = GenericIdSkipper.INVENTORY.getTable(version);
 
 	public MiddleInventoryOpen(ConnectionImpl connection) {
 		super(connection);
@@ -35,12 +30,7 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 	@Override
 	public boolean postFromServerRead() {
 		cache.getWindowCache().setOpenedWindow(windowId, type);
-		if (typeSkipper.shouldSkip(type)) {
-			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryClosePacket());
-			return false;
-		} else {
-			return true;
-		}
+		return true;
 	}
 
 }

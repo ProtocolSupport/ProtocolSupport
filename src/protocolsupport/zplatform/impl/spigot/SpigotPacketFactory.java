@@ -36,11 +36,6 @@ import protocolsupport.zplatform.PlatformPacketFactory;
 public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	@Override
-	public Object createInboundInventoryClosePacket() {
-		return new PacketPlayInCloseWindow();
-	}
-
-	@Override
 	public Object createOutboundChatPacket(String message, int position) {
 		return new PacketPlayOutChat(ChatSerializer.a(message), ChatMessageType.a((byte) position));
 	}

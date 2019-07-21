@@ -11,8 +11,6 @@ import protocolsupport.protocol.utils.authlib.GameProfile;
 
 public interface PlatformPacketFactory {
 
-	public Object createInboundInventoryClosePacket();
-
 	public Object createOutboundChatPacket(String message, int position);
 
 	public Object createTabHeaderFooterPacket(BaseComponent header, BaseComponent footer);
