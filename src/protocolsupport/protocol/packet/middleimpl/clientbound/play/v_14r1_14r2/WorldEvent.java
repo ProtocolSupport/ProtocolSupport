@@ -2,9 +2,10 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldEvent;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
@@ -24,7 +25,7 @@ public class WorldEvent extends MiddleWorldEvent {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		if (effectId == 2001) {
 			data = blockDataRemappingTable.getRemap(data);
 			if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
@@ -32,7 +33,7 @@ public class WorldEvent extends MiddleWorldEvent {
 			}
 		}
 		effectId = legacyEffectId.getRemap(effectId);
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_EVENT_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_EVENT);
 		serializer.writeInt(effectId);
 		PositionSerializer.writePosition(serializer, position);
 		serializer.writeInt(data);

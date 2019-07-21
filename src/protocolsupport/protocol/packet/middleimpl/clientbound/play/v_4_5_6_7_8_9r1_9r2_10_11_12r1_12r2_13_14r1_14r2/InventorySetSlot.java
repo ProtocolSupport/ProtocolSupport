@@ -2,9 +2,10 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySetSlot;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.typeremapper.basic.WindowSlotsRemappingHelper;
 import protocolsupport.protocol.types.NetworkItemStack;
@@ -19,7 +20,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		String locale = cache.getAttributesCache().getLocale();
 		if (windowId == WINDOW_ID_PLAYER_CURSOR) {
 			return RecyclableSingletonList.create(create(version, locale, windowId, slot, itemstack));
@@ -74,7 +75,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 	}
 
 	protected static ClientBoundPacketData create(ProtocolVersion version, String locale, int windowId, int slot, NetworkItemStack itemstack) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_SET_SLOT_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_SET_SLOT);
 		serializer.writeByte(windowId);
 		serializer.writeShort(slot);
 		ItemStackSerializer.writeItemStack(serializer, version, locale, itemstack);

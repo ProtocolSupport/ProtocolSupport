@@ -1,21 +1,22 @@
 package protocolsupport.protocol.typeremapper.packet;
 
-import protocolsupport.protocol.packet.ServerBoundPacket;
-import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
+import protocolsupport.utils.recyclable.Recyclable;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class AnimatePacketReorderer {
 
-	protected ServerBoundPacketData animatePacket;
+	protected IPacketData animatePacket;
 
-	public RecyclableCollection<ServerBoundPacketData> orderPackets(RecyclableCollection<ServerBoundPacketData> packets) {
+	public RecyclableCollection<? extends IPacketData> orderPackets(RecyclableCollection<? extends IPacketData> packets) {
 		try {
-			RecyclableArrayList<ServerBoundPacketData> ordered = RecyclableArrayList.create();
-			for (ServerBoundPacketData curPacket : packets) {
-				ServerBoundPacket packetType = curPacket.getPacketType();
+			RecyclableArrayList<IPacketData> ordered = RecyclableArrayList.create();
+			for (IPacketData curPacket : packets) {
+				PacketType packetType = curPacket.getPacketType();
 				//if the packet is use entity, we attempt to add a cached animate packet after it
-				if (packetType == ServerBoundPacket.PLAY_USE_ENTITY) {
+				if (packetType == PacketType.SERVERBOUND_PLAY_USE_ENTITY) {
 					ordered.add(curPacket);
 					if (animatePacket != null) {
 						ordered.add(animatePacket);
@@ -30,7 +31,7 @@ public class AnimatePacketReorderer {
 						animatePacket = null;
 					}
 					//if it is animate packet, we cache it
-					if (packetType == ServerBoundPacket.PLAY_ANIMATION) {
+					if (packetType == PacketType.SERVERBOUND_PLAY_ANIMATION) {
 						animatePacket = curPacket;
 					}
 					//any other type just gets added to ordered list
@@ -47,7 +48,7 @@ public class AnimatePacketReorderer {
 
 	public void release() {
 		if (animatePacket != null) {
-			animatePacket.recycle();
+			Recyclable.recycle(animatePacket);
 		}
 	}
 

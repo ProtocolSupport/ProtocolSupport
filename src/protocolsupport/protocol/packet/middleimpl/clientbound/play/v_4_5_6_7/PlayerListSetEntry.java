@@ -6,9 +6,10 @@ import java.util.UUID;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
@@ -22,7 +23,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		String locale = cache.getAttributesCache().getLocale();
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		switch (action) {
@@ -76,7 +77,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 	}
 
 	protected static ClientBoundPacketData create(ProtocolVersion version, String name, boolean addOrUpdate, short ping) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_PLAYER_INFO_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_PLAYER_INFO);
 		StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(name, 16));
 		serializer.writeBoolean(addOrUpdate);
 		serializer.writeShort(ping);

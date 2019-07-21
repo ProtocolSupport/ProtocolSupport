@@ -2,9 +2,10 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryData;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.types.WindowType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -19,17 +20,17 @@ public class InventoryData extends MiddleInventoryData {
 	private final int[] enchTypeVal = new int[10];
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		if ((version == ProtocolVersion.MINECRAFT_1_8) && (cache.getWindowCache().getOpenedWindow() == WindowType.ENCHANTMENT)) {
 			enchTypeVal[type] = value;
 			if ((type >= 7) && (type <= 9)) {
-				ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_DATA_ID);
+				ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_DATA);
 				serializer.writeByte(windowId);
 				serializer.writeShort(type - 3);
 				serializer.writeShort((value << 8) | enchTypeVal[type - 3]);
 				return RecyclableSingletonList.create(serializer);
 			} else if ((type >= 4) && (type <= 6)) {
-				ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_DATA_ID);
+				ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_DATA);
 				serializer.writeByte(windowId);
 				serializer.writeShort(type);
 				serializer.writeShort(((enchTypeVal[type + 3]) << 8) | value);
@@ -40,7 +41,7 @@ public class InventoryData extends MiddleInventoryData {
 				type = furTypeTr[type];
 			}
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_DATA_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_DATA);
 		serializer.writeByte(windowId);
 		serializer.writeShort(type);
 		serializer.writeShort(value);

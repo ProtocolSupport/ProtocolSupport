@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
@@ -26,7 +26,7 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() {
+	public RecyclableCollection<? extends IPacketData> toNative() {
 		switch (tag) {
 			case LegacyCustomPayloadChannelName.LEGACY_REGISTER: {
 				return LegacyCustomPayloadData.transformRegisterUnregister(cache.getChannelsCache(), tag, data, true);

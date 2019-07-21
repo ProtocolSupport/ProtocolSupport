@@ -35,6 +35,10 @@ import protocolsupport.protocol.pipeline.version.util.decoder.AbstractModernWith
 
 public class PacketDecoder extends AbstractModernWithReorderPacketDecoder {
 
+	public PacketDecoder(ConnectionImpl connection) {
+		super(connection, PacketCodec.instance);
+	}
+
 	{
 		registry.register(NetworkState.HANDSHAKING, 0x00, SetProtocol::new);
 		registry.register(NetworkState.LOGIN, 0x00, LoginStart::new);
@@ -65,10 +69,6 @@ public class PacketDecoder extends AbstractModernWithReorderPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x15, ClientSettings::new);
 		registry.register(NetworkState.PLAY, 0x16, ClientCommand::new);
 		registry.register(NetworkState.PLAY, 0x17, CustomPayload::new);
-	}
-
-	public PacketDecoder(ConnectionImpl connection) {
-		super(connection);
 	}
 
 }

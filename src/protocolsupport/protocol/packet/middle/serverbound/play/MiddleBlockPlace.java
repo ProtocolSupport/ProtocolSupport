@@ -1,8 +1,9 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ServerBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -27,13 +28,13 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 	protected boolean insideblock;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() {
+	public RecyclableCollection<? extends IPacketData> toNative() {
 		return RecyclableSingletonList.create(create(position, face, hand, cX, cY, cZ, insideblock));
 	}
 
 	public static ServerBoundPacketData create(Position position, int face, UsedHand hand, float cX, float cY, float cZ, boolean insideblock) {
 		if (face != -1) {
-			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_USE_ITEM);
+			ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_USE_ITEM);
 			MiscSerializer.writeVarIntEnum(creator, hand);
 			PositionSerializer.writePosition(creator, position);
 			VarNumberSerializer.writeVarInt(creator, face);
@@ -43,7 +44,7 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 			creator.writeBoolean(insideblock);
 			return creator;
 		} else {
-			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_BLOCK_PLACE);
+			ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_BLOCK_PLACE);
 			MiscSerializer.writeVarIntEnum(creator, hand);
 			return creator;
 		}

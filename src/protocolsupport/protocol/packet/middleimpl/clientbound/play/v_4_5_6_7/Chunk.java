@@ -3,8 +3,9 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 import java.util.Map;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunk;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
@@ -26,13 +27,13 @@ public class Chunk extends AbstractChunk {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		String locale = cache.getAttributesCache().getLocale();
 		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 
-		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
+		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(full);
 		if ((blockMask == 0) && full) {

@@ -175,6 +175,22 @@ public class ConnectionImpl extends Connection {
 		this.version = version;
 	}
 
+	protected ChannelHandlerContext transformerEncoderCtx;
+	protected ChannelHandlerContext transformerDecoderCtx;
+
+	public void setTransformerContentexts(ChannelHandlerContext transformerEncoderCtx, ChannelHandlerContext transformerDecoderCtx) {
+		this.transformerEncoderCtx = transformerEncoderCtx;
+		this.transformerDecoderCtx = transformerDecoderCtx;
+	}
+
+	public ChannelHandlerContext getTransformerEncoderCtx() {
+		return transformerEncoderCtx;
+	}
+
+	public ChannelHandlerContext getTransformerDecoderCtx() {
+		return transformerDecoderCtx;
+	}
+
 	protected static class LPacketEvent extends PacketEvent implements AutoCloseable {
 
 		protected static final Recycler<LPacketEvent> recycler = new Recycler<LPacketEvent>() {

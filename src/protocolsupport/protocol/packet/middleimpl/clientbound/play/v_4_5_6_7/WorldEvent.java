@@ -1,9 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldEvent;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
@@ -24,12 +25,12 @@ public class WorldEvent extends MiddleWorldEvent {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		if (effectId == 2001) {
 			data = PreFlatteningBlockIdData.getIdFromCombinedId(BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, data));
 		}
 		effectId = legacyEffectId.getRemap(effectId);
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WORLD_EVENT_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_EVENT);
 		serializer.writeInt(effectId);
 		PositionSerializer.writeLegacyPositionB(serializer, position);
 		serializer.writeInt(data);

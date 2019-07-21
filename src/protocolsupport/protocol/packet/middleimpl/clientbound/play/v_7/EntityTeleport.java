@@ -1,9 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -15,7 +16,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		NetworkEntity wentity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
 		if (wentity != null) {
 			switch (wentity.getType()) {
@@ -37,7 +38,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 				}
 			}
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_TELEPORT_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_TELEPORT);
 		serializer.writeInt(entityId);
 		serializer.writeInt((int) (x * 32));
 		serializer.writeInt((int) (y * 32));

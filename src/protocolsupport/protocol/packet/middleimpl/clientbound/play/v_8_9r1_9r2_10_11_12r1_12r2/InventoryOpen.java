@@ -4,9 +4,10 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyWindow;
@@ -25,12 +26,12 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		type = typeRemapper.getRemap(type);
 		LegacyWindowData wdata = LegacyWindow.getData(type);
 
 		return RecyclableSingletonList.create(writeData(
-			ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_OPEN_ID),
+			ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN),
 			version, windowId, wdata.getStringId(), title.toLegacyText(cache.getAttributesCache().getLocale()), wdata.getSlots()
 		));
 	}

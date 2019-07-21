@@ -3,8 +3,9 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1;
 import java.util.Map;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -27,10 +28,10 @@ public class Chunk extends AbstractChunk {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 
-		ClientBoundPacketData chunksingle = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
+		ClientBoundPacketData chunksingle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunksingle, coord);
 		chunksingle.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(chunksingle, blockMask);

@@ -1,8 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkLight;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -23,7 +24,7 @@ public class ChunkLight extends AbstractChunkLight {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		if (preChunk) {
 			return RecyclableEmptyList.get();
 		} else {
@@ -31,7 +32,7 @@ public class ChunkLight extends AbstractChunkLight {
 			boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 			RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 
-			ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
+			ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 			PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 			chunkdata.writeBoolean(false); //full
 			chunkdata.writeShort(blockMask);

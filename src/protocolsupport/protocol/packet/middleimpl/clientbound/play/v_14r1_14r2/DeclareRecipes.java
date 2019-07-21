@@ -6,9 +6,10 @@ import java.util.Map;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleDeclareRecipes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -121,14 +122,14 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_DECLARE_RECIPES);
+	public RecyclableCollection<? extends IPacketData> toData() {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_DECLARE_RECIPES);
 		ArraySerializer.writeVarIntTArray(serializer, to -> {
 			int writtenRecipeCount = 0;
 			for (Recipe recipe : recipes) {
 				@SuppressWarnings("unchecked")
 				RecipeWriter<Recipe> writer = (RecipeWriter<Recipe>) recipeWriters.get(recipe.getType());
-				if (writer != null && writer.writeRecipe(to, version, recipe)) {
+				if ((writer != null) && writer.writeRecipe(to, version, recipe)) {
 					writtenRecipeCount++;
 				}
 			}

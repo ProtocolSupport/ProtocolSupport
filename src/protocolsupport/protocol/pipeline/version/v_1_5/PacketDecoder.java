@@ -33,6 +33,10 @@ import protocolsupport.protocol.pipeline.version.util.decoder.AbstractLegacyPack
 
 public class PacketDecoder extends AbstractLegacyPacketDecoder {
 
+	public PacketDecoder(ConnectionImpl connection) {
+		super(connection, PacketCodec.instance);
+	}
+
 	{
 		registry.register(NetworkState.HANDSHAKING, 0x02, ClientLogin::new);
 		registry.register(NetworkState.HANDSHAKING, 0xFE, Ping::new);
@@ -61,10 +65,6 @@ public class PacketDecoder extends AbstractLegacyPacketDecoder {
 		registry.register(NetworkState.PLAY, 0xCD, ClientCommand::new);
 		registry.register(NetworkState.PLAY, 0xFA, CustomPayload::new);
 		registry.register(NetworkState.PLAY, 0xFF, KickDisconnect::new);
-	}
-
-	public PacketDecoder(ConnectionImpl connection) {
-		super(connection);
 	}
 
 }

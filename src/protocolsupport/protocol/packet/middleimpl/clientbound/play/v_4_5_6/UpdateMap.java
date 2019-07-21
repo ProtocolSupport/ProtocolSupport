@@ -3,9 +3,10 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
 import org.bukkit.Material;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleUpdateMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyMap;
 import protocolsupport.protocol.typeremapper.legacy.LegacyMap.ColumnEntry;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
@@ -23,9 +24,9 @@ public class UpdateMap extends MiddleUpdateMap {
 	private static final int mapId = Material.LEGACY_MAP.getId();
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		RecyclableCollection<ClientBoundPacketData> datas = RecyclableArrayList.create();
-		ClientBoundPacketData scaledata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID);
+		ClientBoundPacketData scaledata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_MAP);
 		scaledata.writeShort(mapId);
 		scaledata.writeShort(id);
 		scaledata.writeShort(2);
@@ -33,7 +34,7 @@ public class UpdateMap extends MiddleUpdateMap {
 		scaledata.writeByte(scale);
 		datas.add(scaledata);
 		if (icons.length > 0) {
-			ClientBoundPacketData iconsdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID);
+			ClientBoundPacketData iconsdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_MAP);
 			iconsdata.writeShort(mapId);
 			iconsdata.writeShort(id);
 			iconsdata.writeShort((icons.length * 3) + 1);
@@ -50,7 +51,7 @@ public class UpdateMap extends MiddleUpdateMap {
 			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, colors);
 			ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(version);
 			for (ColumnEntry entry : maptransformer.toPre18MapData()) {
-				ClientBoundPacketData mapdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID);
+				ClientBoundPacketData mapdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_MAP);
 				mapdata.writeShort(mapId);
 				mapdata.writeShort(id);
 				mapdata.writeShort(3 + entry.getColors().length);

@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleMerchantTradeList;
-import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.MerchantDataSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -15,7 +15,7 @@ public class MerchantTradeList extends MiddleMerchantTradeList {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		return RecyclableSingletonList.create(CustomPayload.create(version, LegacyCustomPayloadChannelName.LEGACY_TRADE_LIST, to -> {
 			MerchantDataSerializer.writeMerchantData(to, version, cache.getAttributesCache().getLocale(), merchantData);
 		}));

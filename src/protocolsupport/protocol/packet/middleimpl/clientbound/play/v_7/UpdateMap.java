@@ -1,9 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleUpdateMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyMap;
 import protocolsupport.protocol.typeremapper.legacy.LegacyMap.ColumnEntry;
@@ -19,16 +20,16 @@ public class UpdateMap extends MiddleUpdateMap {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		RecyclableCollection<ClientBoundPacketData> datas = RecyclableArrayList.create();
-		ClientBoundPacketData scaledata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID);
+		ClientBoundPacketData scaledata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_MAP);
 		VarNumberSerializer.writeVarInt(scaledata, id);
 		scaledata.writeShort(2);
 		scaledata.writeByte(2);
 		scaledata.writeByte(scale);
 		datas.add(scaledata);
 		if (icons.length > 0) {
-			ClientBoundPacketData iconsdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID);
+			ClientBoundPacketData iconsdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_MAP);
 			VarNumberSerializer.writeVarInt(iconsdata, id);
 			iconsdata.writeShort((icons.length * 3) + 1);
 			iconsdata.writeByte(1);
@@ -44,7 +45,7 @@ public class UpdateMap extends MiddleUpdateMap {
 			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, colors);
 			ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(version);
 			for (ColumnEntry entry : maptransformer.toPre18MapData()) {
-				ClientBoundPacketData mapdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_MAP_ID);
+				ClientBoundPacketData mapdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_MAP);
 				VarNumberSerializer.writeVarInt(mapdata, id);
 				mapdata.writeShort(3 + entry.getColors().length);
 				mapdata.writeByte(0);

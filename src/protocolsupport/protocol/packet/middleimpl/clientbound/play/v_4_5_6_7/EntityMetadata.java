@@ -4,9 +4,10 @@ import java.util.Optional;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.DataWatcherSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.types.Position;
@@ -24,8 +25,8 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData entitymetadata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_METADATA_ID);
+	public RecyclableCollection<? extends IPacketData> toData() {
+		ClientBoundPacketData entitymetadata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
 		entitymetadata.writeInt(entityId);
 		DataWatcherSerializer.writeLegacyData(entitymetadata, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
 
@@ -37,7 +38,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 					RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 					packets.add(entitymetadata);
 
-					ClientBoundPacketData usebed = ClientBoundPacketData.create(ClientBoundPacket.LEGACY_PLAY_USE_BED_ID);
+					ClientBoundPacketData usebed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED_ID);
 					usebed.writeInt(entityId);
 					if (version.isBefore(ProtocolVersion.MINECRAFT_1_7_5)) {
 						usebed.writeByte(0);

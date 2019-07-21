@@ -4,10 +4,11 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.util.Recycler;
 import io.netty.util.Recycler.Handle;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.utils.netty.WrappingBuffer;
 import protocolsupport.utils.recyclable.Recyclable;
 
-public class ClientBoundPacketData extends WrappingBuffer implements Recyclable {
+public class ClientBoundPacketData extends WrappingBuffer implements Recyclable, IPacketData {
 
 	protected static final Recycler<ClientBoundPacketData> recycler = new Recycler<ClientBoundPacketData>() {
 		@Override
@@ -16,9 +17,9 @@ public class ClientBoundPacketData extends WrappingBuffer implements Recyclable 
 		}
 	};
 
-	public static ClientBoundPacketData create(int packetId) {
+	public static ClientBoundPacketData create(PacketType packetType) {
 		ClientBoundPacketData packetdata = recycler.get();
-		packetdata.packetId = packetId;
+		packetdata.packetType = packetType;
 		return packetdata;
 	}
 
@@ -28,21 +29,32 @@ public class ClientBoundPacketData extends WrappingBuffer implements Recyclable 
 		this.handle = handle;
 	}
 
+	private PacketType packetType;
+
 	@Override
 	public void recycle() {
-		packetId = 0;
-		clear();
+		packetType = null;
+		buf.clear();
 		handle.recycle(this);
-	}
-
-	private int packetId;
-
-	public int getPacketId() {
-		return packetId;
 	}
 
 	@Override
 	public void setBuf(ByteBuf buf) {
+	}
+
+	@Override
+	public PacketType getPacketType() {
+		return packetType;
+	}
+
+	@Override
+	public int getDataLength() {
+		return buf.readableBytes();
+	}
+
+	@Override
+	public void writeData(ByteBuf to) {
+		to.writeBytes(buf);
 	}
 
 }

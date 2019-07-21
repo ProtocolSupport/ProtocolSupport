@@ -1,10 +1,11 @@
-package protocolsupport.protocol.utils.registry;
+package protocolsupport.protocol.pipeline.version.util;
 
 import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.MiddlePacket;
 
 @SuppressWarnings("unchecked")
@@ -16,6 +17,10 @@ public class MiddlePacketRegistry<T extends MiddlePacket> {
 	}
 
 	protected final Lazy<T>[] registry = new Lazy[NetworkState.values().length << 8];
+
+	public void register(NetworkState state, PacketType packetType, Function<ConnectionImpl, T> middlepacket) {
+		register(state, packetType.getId(), middlepacket);
+	}
 
 	public void register(NetworkState state, int packetId, Function<ConnectionImpl, T> middlepacket) {
 		registry[toKey(state, packetId)] = new Lazy<>(connection, middlepacket);
@@ -49,5 +54,6 @@ public class MiddlePacketRegistry<T extends MiddlePacket> {
 	protected static int toKey(NetworkState protocol, int packetId) {
 		return (protocol.ordinal() << 8) | packetId;
 	}
+
 
 }

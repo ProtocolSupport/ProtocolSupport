@@ -2,9 +2,10 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleVehiclePassengers;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -22,7 +23,7 @@ public class VehiclePassengers extends MiddleVehiclePassengers {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		if (cache.getWatchedEntityCache().getWatchedEntity(vehicleId) == null) {
 			return RecyclableEmptyList.get();
 		}
@@ -47,7 +48,7 @@ public class VehiclePassengers extends MiddleVehiclePassengers {
 	}
 
 	protected static ClientBoundPacketData create(int passengerId, int vehicleId) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_LEASH_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_LEASH);
 		serializer.writeInt(passengerId);
 		serializer.writeInt(vehicleId);
 		serializer.writeBoolean(false);

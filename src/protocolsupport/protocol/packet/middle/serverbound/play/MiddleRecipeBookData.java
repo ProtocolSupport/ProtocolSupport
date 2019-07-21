@@ -1,8 +1,9 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ServerBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -28,8 +29,8 @@ public abstract class MiddleRecipeBookData extends ServerBoundMiddlePacket {
 	protected boolean smokingRecipeBookFiltering;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_RECIPE_BOOK_DATA);
+	public RecyclableCollection<? extends IPacketData> toNative() {
+		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_RECIPE_BOOK_DATA);
 		MiscSerializer.writeVarIntEnum(creator, type);
 		switch (type) {
 			case DISPLAYED_RECIPE: {

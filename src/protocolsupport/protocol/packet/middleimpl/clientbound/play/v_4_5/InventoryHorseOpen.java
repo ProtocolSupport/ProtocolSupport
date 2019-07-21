@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryHorseOpen;
-import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.zplatform.ServerPlatform;
@@ -14,7 +14,7 @@ public class InventoryHorseOpen extends MiddleInventoryHorseOpen {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		return RecyclableEmptyList.get();
 	}
 

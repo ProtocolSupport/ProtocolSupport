@@ -1,8 +1,9 @@
 package protocolsupport.protocol.packet.middle.serverbound.handshake;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ServerBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -21,8 +22,8 @@ public abstract class MiddleSetProtocol extends ServerBoundMiddlePacket {
 	protected int nextState;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.HANDSHAKE_START);
+	public RecyclableCollection<? extends IPacketData> toNative() {
+		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_HANDSHAKE_START);
 		VarNumberSerializer.writeVarInt(creator, ProtocolVersionsHelper.LATEST_PC.getId());
 		StringSerializer.writeVarIntUTF8String(creator, hostname);
 		creator.writeShort(port);
