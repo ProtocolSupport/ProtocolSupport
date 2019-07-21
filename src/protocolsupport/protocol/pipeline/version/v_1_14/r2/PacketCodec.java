@@ -107,6 +107,7 @@ public class PacketCodec extends ModernPacketCodec {
 		registry.register(PacketType.CLIENTBOUND_PLAY_UPDATE_VIEW_DISTANCE, 0x41);
 		registry.register(PacketType.CLIENTBOUND_PLAY_MERCHANT_TRADE_LIST, 0x27);
 		registry.register(PacketType.CLIENTBOUND_PLAY_BOOK_OPEN, 0x2D);
+		registry.register(PacketType.CLIENTBOUND_PLAY_ACKNOWLEDGE_PLAYER_DIGGING, 0x5C);
 	}
 
 }
