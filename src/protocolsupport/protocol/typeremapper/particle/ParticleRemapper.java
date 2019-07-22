@@ -34,6 +34,7 @@ import protocolsupport.protocol.types.particle.types.ParticlePoof;
 import protocolsupport.protocol.types.particle.types.ParticleRain;
 import protocolsupport.protocol.types.particle.types.ParticleSneeze;
 import protocolsupport.protocol.types.particle.types.ParticleSpit;
+import protocolsupport.protocol.types.particle.types.ParticleSquidInk;
 import protocolsupport.protocol.types.particle.types.ParticleSweepAttack;
 import protocolsupport.protocol.types.particle.types.ParticleTotemOfUndying;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
@@ -83,6 +84,7 @@ public class ParticleRemapper {
 			registerSkip(ParticleSneeze.class, ProtocolVersionsHelper.BEFORE_1_14);
 			registerSkip(ParticleCampfireCozySmoke.class, ProtocolVersionsHelper.BEFORE_1_14);
 			registerSkip(ParticleCampfireSignalSmoke.class, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkip(ParticleSquidInk.class, ProtocolVersionsHelper.BEFORE_1_13);
 			registerSkip(ParticleTotemOfUndying.class, ProtocolVersionsHelper.BEFORE_1_11);
 			registerSkip(ParticleSpit.class, ProtocolVersionsHelper.BEFORE_1_11);
 			registerSkip(ParticleEndRod.class, ProtocolVersionsHelper.BEFORE_1_9);
