@@ -10,6 +10,7 @@ import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.types.Position;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -23,6 +24,10 @@ public class BlockChangeSingle extends AbstractBlockChangeSingle {
 
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
+		return createBlockChangeSinglePacket(position, id, blockDataRemappingTable);
+	}
+
+	public static RecyclableCollection<? extends IPacketData> createBlockChangeSinglePacket(Position position, int id, ArrayBasedIdRemappingTable blockDataRemappingTable) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE);
 		PositionSerializer.writeLegacyPositionB(serializer, position);
 		int lId = BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, id);
