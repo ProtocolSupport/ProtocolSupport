@@ -7,7 +7,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.noop.NoopSet
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_4_5_6_7.EncryptionRequest;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.LoginSuccess;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopAcknowledgePlayerDigging;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopAdvancements;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopAdvanementsTab;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopBossBar;
@@ -75,6 +74,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7.SetHeal
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8.EntityLeash;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8.VehiclePassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.PlayerAbilities;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.AcknowledgePlayerDigging;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.BlockAction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.BlockBreakAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.BlockChangeSingle;
@@ -282,7 +282,7 @@ public class PacketEncoder extends AbstractModernPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_SET_VIEW_CENTER, NoopSetViewCenter::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_UPDATE_VIEW_DISTANCE, NoopUpdateViewDistance::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ENTITY_SOUND_ID, NoopEntitySound::new);
-		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ACKNOWLEDGE_PLAYER_DIGGING, NoopAcknowledgePlayerDigging::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacket.PLAY_ACKNOWLEDGE_PLAYER_DIGGING, AcknowledgePlayerDigging::new);
 	}
 
 	public PacketEncoder(ConnectionImpl connection) {
