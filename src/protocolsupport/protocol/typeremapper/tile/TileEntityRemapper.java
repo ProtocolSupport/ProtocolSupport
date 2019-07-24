@@ -100,6 +100,9 @@ public class TileEntityRemapper {
 						type = NetworkEntityType.PIG;
 					} else {
 						type = CommonNBT.getSpawnedMobType(spawndataTag);
+						if (type == NetworkEntityType.NONE) {
+							type = NetworkEntityType.PIG;
+						}
 					}
 					spawndataTag.setTag("id", new NBTString(entityRemapTable.getRemap(type).getLeft().getKey()));
 				};
