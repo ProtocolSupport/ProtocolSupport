@@ -103,20 +103,8 @@ public class EntityRemappersRegistry {
 
 	}
 
-	public static class EntityRemapperRegistry extends RemappingRegistry<EntityRemappingTable> {
+	public static final RemappingRegistry<EntityRemappingTable> REGISTRY = new RemappingRegistry<EntityRemappingTable>() {
 
-		@Override
-		protected EntityRemappingTable createTable() {
-			return new EntityRemappingTable();
-		}
-
-		public void registerRemapEntry(NetworkEntityType from, NetworkEntityType to, EntityMetadataRemapper metadataRemapper, ProtocolVersion... versions) {
-			Arrays.stream(versions).forEach(version -> getTable(version).setRemap(from, to, metadataRemapper.getRemaps(version)));
-		}
-
-	}
-
-	public static final EntityRemapperRegistry REGISTRY = new EntityRemapperRegistry() {
 		final class Mapping {
 			private final NetworkEntityType from;
 			private final ArrayList<ImmutableTriple<NetworkEntityType, EntityMetadataRemapper, ProtocolVersion[]>> remaps = new ArrayList<>();
@@ -133,6 +121,7 @@ public class EntityRemappersRegistry {
 				}
 			}
 		}
+
 		{
 			new Mapping(NetworkEntityType.PLAYER)
 			.addMapping(NetworkEntityType.PLAYER, new PlayerEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
@@ -504,6 +493,15 @@ public class EntityRemappersRegistry {
 			new Mapping(NetworkEntityType.MINECART_COMMAND)
 			.addMapping(NetworkEntityType.MINECART_COMMAND, new MinecartCommandEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
 			.register();
+		}
+
+		@Override
+		protected EntityRemappingTable createTable() {
+			return new EntityRemappingTable();
+		}
+
+		public void registerRemapEntry(NetworkEntityType from, NetworkEntityType to, EntityMetadataRemapper metadataRemapper, ProtocolVersion... versions) {
+			Arrays.stream(versions).forEach(version -> getTable(version).setRemap(from, to, metadataRemapper.getRemaps(version)));
 		}
 	};
 
