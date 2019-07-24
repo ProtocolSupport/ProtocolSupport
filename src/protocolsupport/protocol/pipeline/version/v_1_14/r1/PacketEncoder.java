@@ -8,7 +8,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.LoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.EncryptionRequest;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.SetCompression;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopAcknowledgePlayerDigging;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12r1_12r2_13_14r1_14r2.EntityEffectAdd;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12r1_12r2_13_14r1_14r2.WorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12r1_12r2_13_14r1_14r2.WorldSound;
@@ -29,6 +28,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2.TabComplete;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2.UnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2.WorldParticle;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1.AcknowledgePlayerDigging;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.BlockAction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.BlockBreakAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.BlockChangeMulti;
@@ -211,7 +211,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BOOK_OPEN, BookOpen::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SET_VIEW_CENTER, SetViewCenter::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_UPDATE_VIEW_DISTANCE, UpdateViewDistance::new);
-		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ACKNOWLEDGE_PLAYER_DIGGING, NoopAcknowledgePlayerDigging::new);
+		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ACKNOWLEDGE_PLAYER_DIGGING, AcknowledgePlayerDigging::new);
 	}
 
 }
