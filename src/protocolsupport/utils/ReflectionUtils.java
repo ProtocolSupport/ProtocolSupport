@@ -4,9 +4,6 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.text.MessageFormat;
-
-import org.apache.commons.lang3.Validate;
 
 public class ReflectionUtils {
 
@@ -37,20 +34,14 @@ public class ReflectionUtils {
 		throw new RuntimeException("Can't find method " + name + " with params length " + paramlength);
 	}
 
-	public static void cloneFields(Object from, Object to) {
-		Validate.isTrue(from.getClass() == to.getClass(), MessageFormat.format("Object types missmatch: {0},{1}", from.getClass(), to.getClass()));
+	public static void setStaticFinalField(Class<?> clazz, String fieldname, Object value) {
 		try {
-		Class<?> clazz = from.getClass();
-			do {
-				for (Field field : clazz.getDeclaredFields()) {
-					if (!Modifier.isStatic(field.getModifiers())) {
-						ReflectionUtils.setAccessible(field);
-						field.set(to, field.get(from));
-					}
-				}
-			} while ((clazz = clazz.getSuperclass()) != null);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException("Unable to get/set object fields values", e);
+			Field field = clazz.getDeclaredField(fieldname);
+			field.setAccessible(true);
+			setAccessible(Field.class.getDeclaredField("modifiers")).setInt(field, field.getModifiers() & ~Modifier.FINAL);
+			field.set(null, value);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 
