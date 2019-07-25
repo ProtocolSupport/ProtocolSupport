@@ -7,9 +7,9 @@ import java.util.function.Function;
 import org.bukkit.Bukkit;
 
 import com.destroystokyo.paper.event.player.PlayerHandshakeEvent;
-import com.destroystokyo.paper.profile.ProfileProperty;
 import com.google.gson.reflect.TypeToken;
 
+import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.utils.Utils;
 
 public class PaperSpoofedDataParser implements Function<String, SpoofedData> {
