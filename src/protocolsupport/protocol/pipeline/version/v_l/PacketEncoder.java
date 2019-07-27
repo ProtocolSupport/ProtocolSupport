@@ -11,7 +11,7 @@ import protocolsupport.protocol.pipeline.version.util.encoder.AbstractPacketEnco
 public class PacketEncoder extends AbstractPacketEncoder {
 
 	public PacketEncoder(ConnectionImpl connection) {
-		super(connection, PacketCodec.instance);
+		super(connection);
 	}
 
 	{

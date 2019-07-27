@@ -15,4 +15,8 @@ public interface RunnableTransformOperation extends Runnable, IPacketData {
 		run();
 	}
 
+	@Override
+	default void recycle() {
+	}
+
 }

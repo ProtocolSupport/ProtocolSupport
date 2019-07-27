@@ -1,13 +1,9 @@
 package protocolsupport.protocol.pipeline.version.v_1_8;
 
-import java.util.concurrent.TimeUnit;
-
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.LoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.EncryptionRequest;
@@ -108,13 +104,20 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.ServerInfo;
 import protocolsupport.protocol.pipeline.version.util.encoder.AbstractPacketEncoder;
 import protocolsupport.protocol.typeremapper.packet.ChunkSendIntervalPacketQueue;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.zplatform.ServerPlatform;
 
 public class PacketEncoder extends AbstractPacketEncoder {
 
+	protected final ChunkSendIntervalPacketQueue chunkqueue = new ChunkSendIntervalPacketQueue(connection);
+
 	public PacketEncoder(ConnectionImpl connection) {
-		super(connection, PacketCodec.instance);
+		super(connection);
+		connection.addClientboundPacketProcessor(chunkqueue);
+	}
+
+	@Override
+	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+		super.handlerRemoved(ctx);
+		chunkqueue.release();
 	}
 
 	{
@@ -216,30 +219,6 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_UPDATE_VIEW_DISTANCE, NoopUpdateViewDistance::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_SOUND, NoopEntitySound::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ACKNOWLEDGE_PLAYER_DIGGING, AcknowledgePlayerDigging::new);
-	}
-
-	protected final ChunkSendIntervalPacketQueue chunkqueue = new ChunkSendIntervalPacketQueue();
-
-	@Override
-	protected RecyclableCollection<? extends IPacketData> processPackets(Channel channel, RecyclableCollection<? extends IPacketData> data) {
-		RecyclableCollection<? extends IPacketData> allowed = chunkqueue.processPackets(data);
-		long delay = chunkqueue.getUnlockDelay();
-		if (delay != -1) {
-			channel.eventLoop().schedule(
-				() -> {
-					chunkqueue.unlock();
-					connection.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("pushqueue"));
-				},
-				delay, TimeUnit.NANOSECONDS
-			);
-		}
-		return allowed;
-	}
-
-	@Override
-	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-		super.handlerRemoved(ctx);
-		chunkqueue.release();
 	}
 
 }

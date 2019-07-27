@@ -259,10 +259,6 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 				connection.changeAddress(encapsulatedinfo.getAddress());
 			}
 		}
-		connection.setTransformerContentexts(
-			channel.pipeline().context(ChannelHandlers.ENCODER_TRANSFORMER),
-			channel.pipeline().context(ChannelHandlers.DECODER_TRANSFORMER)
-		);
 		buffer.readerIndex(0);
 		channel.pipeline().firstContext().fireChannelRead(buffer.unwrap());
 	}

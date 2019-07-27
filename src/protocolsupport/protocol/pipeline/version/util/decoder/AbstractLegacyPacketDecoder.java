@@ -2,24 +2,23 @@ package protocolsupport.protocol.pipeline.version.util.decoder;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.pipeline.IPacketCodec;
 import protocolsupport.protocol.typeremapper.packet.AnimatePacketReorderer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
-import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 
+	protected final AnimatePacketReorderer animateReorderer = new AnimatePacketReorderer(connection);
+
 	public AbstractLegacyPacketDecoder(ConnectionImpl connection, IPacketCodec codec) {
 		super(connection, codec);
+		connection.addServerboundPacketProcessor(animateReorderer);
 	}
 
 	protected final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer(Unpooled.buffer());
-	protected final AnimatePacketReorderer animateReorderer = new AnimatePacketReorderer();
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf input) throws Exception {
@@ -39,11 +38,6 @@ public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder 
 			}
 		}
 		buffer.discardReadBytes();
-	}
-
-	@Override
-	protected RecyclableCollection<? extends IPacketData> processPackets(Channel channel, RecyclableCollection<? extends IPacketData> data) {
-		return animateReorderer.orderPackets(data);
 	}
 
 	@Override
