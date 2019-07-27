@@ -3,20 +3,30 @@ package protocolsupport.protocol.packet.middleimpl;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.PacketType;
 
-public interface RunnableTransformOperation extends Runnable, IPacketData {
+public class RunnableTransformOperation implements IPacketData {
+
+	protected final Runnable runnable;
+	public RunnableTransformOperation(Runnable runnable) {
+		this.runnable = runnable;
+	}
 
 	@Override
-	default PacketType getPacketType() {
+	public void writeData(ByteBuf to) {
+		runnable.run();
+	}
+
+	@Override
+	public int getDataLength() {
+		return 0;
+	}
+
+	@Override
+	public PacketType getPacketType() {
 		return PacketType.NONE;
 	}
 
 	@Override
-	default void writeData(ByteBuf to) {
-		run();
-	}
-
-	@Override
-	default void recycle() {
+	public void recycle() {
 	}
 
 }
