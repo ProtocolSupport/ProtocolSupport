@@ -7,7 +7,8 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.DataWatcherSerializer;
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
 import protocolsupport.protocol.typeremapper.entity.metadata.object.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
@@ -22,11 +23,16 @@ public class EntityRemapper {
 		this.table = EntityRemappersRegistry.REGISTRY.getTable(version);
 	}
 
+	public NetworkEntityType getRemap(NetworkEntityType from) {
+		return table.getRemap(from).getLeft();
+	}
+
 	protected NetworkEntity originalEntity;
-	protected final ArrayMap<NetworkEntityMetadataObject<?>> originalMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
+	//while meta indexes can be now up to 255, we actually use up to 31
+	protected final ArrayMap<NetworkEntityMetadataObject<?>> originalMetadata = new ArrayMap<>(31);
 
 	protected NetworkEntityType remappedEntityType;
-	protected final ArrayMap<NetworkEntityMetadataObject<?>> remappedMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
+	protected final NetworkEntityMetadataList remappedMetadata = new NetworkEntityMetadataList();
 
 	public void readEntity(NetworkEntity entity) {
 		if (entity == null) {
@@ -41,7 +47,7 @@ public class EntityRemapper {
 		}
 		originalEntity = entity;
 		originalMetadata.clear();
-		DataWatcherSerializer.readDataTo(serverdata, originalMetadata);
+		NetworkEntityMetadataSerializer.readDataTo(serverdata, originalMetadata);
 	}
 
 	public void remap(boolean metadata) {
@@ -65,7 +71,7 @@ public class EntityRemapper {
 		return remappedEntityType;
 	}
 
-	public ArrayMap<NetworkEntityMetadataObject<?>> getRemappedMetadata() {
+	public NetworkEntityMetadataList getRemappedMetadata() {
 		return remappedMetadata;
 	}
 

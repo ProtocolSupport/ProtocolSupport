@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.object.misc;
 
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.typeremapper.entity.metadata.object.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
@@ -15,9 +16,9 @@ public class NetworkEntityMetadataFirstUpdateObjectAddRemapper extends NetworkEn
 	}
 
 	@Override
-	public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
+	public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, NetworkEntityMetadataList remapped) {
 		if (entity.getDataCache().isFirstMeta()) {
-			remapped.put(index, object);
+			remapped.add(index, object);
 		}
 	}
 

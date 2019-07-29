@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.object.value;
 
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.typeremapper.entity.metadata.object.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
@@ -16,8 +17,8 @@ public abstract class IndexValueRemapper<T extends NetworkEntityMetadataObject<?
 	}
 
 	@Override
-	public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
-		fromIndex.getValue(original).ifPresent(v -> remapped.put(toIndex, remapValue(v)));
+	public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, NetworkEntityMetadataList remapped) {
+		fromIndex.getValue(original).ifPresent(v -> remapped.add(toIndex, remapValue(v)));
 	}
 
 	public abstract NetworkEntityMetadataObject<?> remapValue(T object);

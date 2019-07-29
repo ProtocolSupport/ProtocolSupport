@@ -1,6 +1,7 @@
 package protocolsupport.protocol.serializer;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 import io.netty.buffer.ByteBuf;
@@ -31,10 +32,7 @@ import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEnti
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
-public class DataWatcherSerializer {
-
-	//while meta indexes can be now up to 255, we actually use up to 31
-	public static final int MAX_USED_META_INDEX = 31;
+public class NetworkEntityMetadataSerializer {
 
 	@SuppressWarnings("unchecked")
 	protected static final Supplier<? extends ReadableNetworkEntityMetadataObject<?>>[] registry = new Supplier[256];
@@ -81,18 +79,16 @@ public class DataWatcherSerializer {
 		} while (true);
 	}
 
-	public static void writeData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<NetworkEntityMetadataObject<?>> objects) {
-		boolean hadObject = false;
-		for (int key = objects.getMinKey(); key < objects.getMaxKey(); key++) {
-			NetworkEntityMetadataObject<?> object = objects.get(key);
-			if (object != null) {
-				hadObject = true;
-				to.writeByte(key);
+	public static void writeData(ByteBuf to, ProtocolVersion version, String locale, NetworkEntityMetadataList objects) {
+		if (objects.getSize() > 0) {
+			for (int index = 0; index < objects.getSize(); index++) {
+				NetworkEntityMetadataList.Entry entry = objects.get(index);
+				NetworkEntityMetadataObject<?> object = entry.getObject();
+				to.writeByte(entry.getObjectIndex());
 				to.writeByte(NetworkEntityMetadataObjectRegistry.getTypeId(object, version));
 				object.writeToStream(to, version, locale);
 			}
-		}
-		if (!hadObject) {
+		} else {
 			to.writeByte(31);
 			to.writeByte(0);
 			to.writeByte(0);
@@ -100,22 +96,74 @@ public class DataWatcherSerializer {
 		to.writeByte(0xFF);
 	}
 
-	public static void writeLegacyData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<NetworkEntityMetadataObject<?>> objects) {
-		boolean hadObject = false;
-		for (int key = objects.getMinKey(); key < objects.getMaxKey(); key++) {
-			NetworkEntityMetadataObject<?> object = objects.get(key);
-			if (object != null) {
-				hadObject = true;
-				int tk = ((NetworkEntityMetadataObjectRegistry.getTypeId(object, version) << 5) | (key & 0x1F)) & 0xFF;
+	public static void writeLegacyData(ByteBuf to, ProtocolVersion version, String locale, NetworkEntityMetadataList objects) {
+		if (objects.getSize() > 0) {
+			for (int index = 0; index < objects.getSize(); index++) {
+				NetworkEntityMetadataList.Entry entry = objects.get(index);
+				NetworkEntityMetadataObject<?> object = entry.getObject();
+				int tk = ((NetworkEntityMetadataObjectRegistry.getTypeId(object, version) << 5) | (entry.getObjectIndex() & 0x1F)) & 0xFF;
 				to.writeByte(tk);
 				object.writeToStream(to, version, locale);
 			}
-		}
-		if (!hadObject) {
+		} else {
 			to.writeByte(31);
 			to.writeByte(0);
 		}
 		to.writeByte(127);
+	}
+
+
+	public static class NetworkEntityMetadataList {
+
+		protected Entry[] array = new Entry[16];
+		protected int size;
+
+		public int getSize() {
+			return size;
+		}
+
+		public void clear() {
+			size = 0;
+		}
+
+		public Entry get(int index) {
+			if ((index >= 0) && (index < size)) {
+				return array[index];
+			}
+			throw new IllegalArgumentException("Invalid index");
+		}
+
+		public void add(int index, NetworkEntityMetadataObject<?> object) {
+			if (size >= array.length) {
+				array = Arrays.copyOfRange(array, 0, array.length * 2);
+			}
+			Entry entry = array[size];
+			if (entry != null) {
+				entry.set(index, object);
+			} else {
+				array[size] = new Entry(index, object);
+			}
+			size++;
+		}
+
+		public static class Entry {
+			protected int index;
+			protected NetworkEntityMetadataObject<?> object;
+			protected Entry(int index, NetworkEntityMetadataObject<?> object) {
+				set(index, object);
+			}
+			protected void set(int index, NetworkEntityMetadataObject<?> object) {
+				this.index = index;
+				this.object = object;
+			}
+			public int getObjectIndex() {
+				return index;
+			}
+			public NetworkEntityMetadataObject<?> getObject() {
+				return object;
+			}
+		}
+
 	}
 
 }

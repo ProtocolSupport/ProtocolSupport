@@ -1,6 +1,7 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.living;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
@@ -57,11 +58,11 @@ public class EndermanEntityMetadataRemapper extends InsentientEntityMetadataRema
 		addRemapPerVersion(version -> new NetworkEntityMetadataObjectRemapper() {
 			final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 			@Override
-			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
+			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, NetworkEntityMetadataList remapped) {
 				NetworkEntityMetadataObjectIndex.Enderman.CARRIED_BLOCK.getValue(original).ifPresent(object -> {
 					int lId = BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, object.getValue());
-					remapped.put(16, new NetworkEntityMetadataObjectByte((byte) PreFlatteningBlockIdData.getIdFromCombinedId(lId)));
-					remapped.put(17, new NetworkEntityMetadataObjectByte((byte) PreFlatteningBlockIdData.getDataFromCombinedId(lId)));
+					remapped.add(16, new NetworkEntityMetadataObjectByte((byte) PreFlatteningBlockIdData.getIdFromCombinedId(lId)));
+					remapped.add(17, new NetworkEntityMetadataObjectByte((byte) PreFlatteningBlockIdData.getDataFromCombinedId(lId)));
 				});
 			}
 		}, ProtocolVersionsHelper.BEFORE_1_8);

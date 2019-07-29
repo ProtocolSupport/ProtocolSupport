@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.object;
 
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.typeremapper.entity.metadata.object.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEntityMetadataRemapper;
@@ -47,13 +48,13 @@ public class AreaEffectCloudEntityMetadataRemapper extends BaseEntityMetadataRem
 		}
 
 		@Override
-		public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
+		public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, NetworkEntityMetadataList remapped) {
 			NetworkEntityMetadataObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent(particleObject -> {
 				Particle particle = remapper.getRemap(particleObject.getValue().getClass()).apply(particleObject.getValue());
 				if (particle == null) {
 					return;
 				}
-				remapped.put(toIndex, new NetworkEntityMetadataObjectParticle(particle));
+				remapped.add(toIndex, new NetworkEntityMetadataObjectParticle(particle));
 			});
 		}
 
@@ -69,19 +70,19 @@ public class AreaEffectCloudEntityMetadataRemapper extends BaseEntityMetadataRem
 		}
 
 		@Override
-		public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
+		public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, NetworkEntityMetadataList remapped) {
 			NetworkEntityMetadataObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent(particleObject -> {
 				Particle particle = remapper.getRemap(particleObject.getValue().getClass()).apply(particleObject.getValue());
 				if (particle == null) {
 					return;
 				}
-				remapped.put(toIndex, new NetworkEntityMetadataObjectVarInt(LegacyParticle.IntId.getId(particle)));
+				remapped.add(toIndex, new NetworkEntityMetadataObjectVarInt(LegacyParticle.IntId.getId(particle)));
 				int[] data = LegacyParticle.IntId.getData(particle);
 				if (data.length >= 1) {
-					remapped.put(toIndex + 1, new NetworkEntityMetadataObjectVarInt(data[0]));
+					remapped.add(toIndex + 1, new NetworkEntityMetadataObjectVarInt(data[0]));
 				}
 				if (data.length >= 2) {
-					remapped.put(toIndex + 1, new NetworkEntityMetadataObjectVarInt(data[1]));
+					remapped.add(toIndex + 1, new NetworkEntityMetadataObjectVarInt(data[1]));
 				}
 			});
 		}

@@ -30,6 +30,7 @@ import protocolsupport.protocol.pipeline.IPacketCodec;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
+import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
 import protocolsupport.protocol.utils.authlib.GameProfile;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
@@ -553,6 +554,15 @@ public class ConnectionImpl extends Connection {
 
 	public NetworkDataCache getCache() {
 		return cache;
+	}
+
+	protected EntityRemapper entityRemapper;
+
+	public EntityRemapper getEntityRemapper() {
+		if (entityRemapper == null) {
+			entityRemapper = new EntityRemapper(version);
+		}
+		return entityRemapper;
 	}
 
 	@Override

@@ -13,7 +13,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 
-	protected final EntityRemapper entityRemapper = new EntityRemapper(version);
+	protected final EntityRemapper entityRemapper = connection.getEntityRemapper();
 
 	public MiddleSpawnObject(ConnectionImpl connection) {
 		super(connection);

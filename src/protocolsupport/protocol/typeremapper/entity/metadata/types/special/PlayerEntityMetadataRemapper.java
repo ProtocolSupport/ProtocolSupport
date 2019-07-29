@@ -1,6 +1,7 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.special;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.typeremapper.entity.metadata.object.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperNumberToInt;
@@ -42,13 +43,13 @@ public class PlayerEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 
 		addRemap(new NetworkEntityMetadataObjectRemapper() {
 			@Override
-			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, ArrayMap<NetworkEntityMetadataObject<?>> remapped) {
+			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, NetworkEntityMetadataList remapped) {
 				NetworkEntityMetadataObjectIndex.Entity.FLAGS.getValue(original)
 				.ifPresent(baseflags -> entity.getDataCache().setBaseFlags(baseflags.getValue()));
 				NetworkEntityMetadataObjectIndex.EntityLiving.HAND_USE.getValue(original)
 				.ifPresent(activehandflags -> {
 					entity.getDataCache().setBaseFlag(5, activehandflags.getValue());
-					remapped.put(0, new NetworkEntityMetadataObjectByte(entity.getDataCache().getBaseFlags()));
+					remapped.add(0, new NetworkEntityMetadataObjectByte(entity.getDataCache().getBaseFlags()));
 				});
 			}
 		}, ProtocolVersionsHelper.BEFORE_1_9);
