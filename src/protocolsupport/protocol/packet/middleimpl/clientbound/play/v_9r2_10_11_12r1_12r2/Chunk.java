@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r2_10_11_12r1_12r2;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
@@ -15,6 +14,8 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -46,12 +47,16 @@ public class Chunk extends AbstractChunk {
 				}
 			}
 		});
-		ArraySerializer.writeVarIntTArray(
-			serializer,
-			Arrays.stream(cachedChunk.getTiles()).flatMap(l -> l.values().stream()).collect(Collectors.toList()),
-			(to, tile) -> ItemStackSerializer.writeTag(to, version, tile.getNBT())
-		);
-
+		ArraySerializer.writeVarIntTArray(serializer, lTo -> {
+			int count = 0;
+			for (Map<Position, TileEntity> sectionTiles : cachedChunk.getTiles()) {
+				for (TileEntity tile : sectionTiles.values()) {
+					ItemStackSerializer.writeTag(lTo, version, tile.getNBT());
+				}
+				count += sectionTiles.size();
+			}
+			return count;
+		});
 		return RecyclableSingletonList.create(serializer);
 	}
 

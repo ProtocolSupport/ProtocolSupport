@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.shorts.Short2ByteOpenCustomHashMap;
 import it.unimi.dsi.fastutil.shorts.ShortHash;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 
-public class BlockStoragePaletted extends BlockStorage {
+public class BlockStorageBytePaletted extends BlockStorage {
 
 	protected static class MaxSizeReachedException extends RuntimeException {
 		protected static final MaxSizeReachedException instance = new MaxSizeReachedException();
@@ -17,14 +17,18 @@ public class BlockStoragePaletted extends BlockStorage {
 	}
 
 	protected final byte[] blocks = new byte[ChunkConstants.BLOCKS_IN_SECTION];
-	protected final BlockStoragePaletted.Palette palette;
+	protected final BlockStorageBytePaletted.Palette palette;
 
-	public BlockStoragePaletted() {
+	public BlockStorageBytePaletted() {
 		this.palette = new Palette();
 	}
 
-	public BlockStoragePaletted(short[] runtimeToGlobal) {
+	public BlockStorageBytePaletted(short[] runtimeToGlobal) {
 		this.palette = new Palette(runtimeToGlobal);
+	}
+
+	public BlockStorageBytePaletted.Palette getPalette() {
+		return palette;
 	}
 
 	@Override
@@ -37,11 +41,15 @@ public class BlockStoragePaletted extends BlockStorage {
 		setRuntimeId(index, palette.getOrComputeRuntimeId(blockdata));
 	}
 
+	public byte getRuntimeId(int index) {
+		return blocks[index];
+	}
+
 	public void setRuntimeId(int index, byte runtimeId) {
 		blocks[index] = runtimeId;
 	}
 
-	protected static class Palette {
+	public static class Palette {
 
 		protected static final short initial_size = 32;
 
@@ -76,6 +84,14 @@ public class BlockStoragePaletted extends BlockStorage {
 			for (int r = 0; r < rtgLenth; r++) {
 				this.globalToRuntime.put(runtimeToGlobal[r], (byte) r);
 			}
+		}
+
+		public short[] getPalette() {
+			return runtimeToGlobal;
+		}
+
+		public int getPaletteSize() {
+			return nextRuntimeId;
 		}
 
 		public byte getOrComputeRuntimeId(short globalId) {

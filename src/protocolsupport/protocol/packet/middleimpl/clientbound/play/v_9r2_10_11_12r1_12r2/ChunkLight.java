@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r2_10_11_12r1_12r2;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import protocolsupport.protocol.ConnectionImpl;
@@ -35,7 +36,7 @@ public class ChunkLight extends AbstractChunkLight {
 		} else {
 			int blockMask = ((setSkyLightMask | setBlockLightMask | emptySkyLightMask | emptyBlockLightMask) >> 1) & 0xFFFF;
 			boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
-			List<TileEntity> resendTiles = new ArrayList<>();
+			List<Collection<TileEntity>> resendTiles = new ArrayList<>();
 
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 			PositionSerializer.writeIntChunkCoord(serializer, coord);
@@ -46,14 +47,19 @@ public class ChunkLight extends AbstractChunkLight {
 					to, blockMask, 13,
 					blockDataRemappingTable,
 					cachedChunk, hasSkyLight,
-					sectionNumber -> resendTiles.addAll(cachedChunk.getTiles(sectionNumber).values())
+					sectionNumber -> resendTiles.add(cachedChunk.getTiles(sectionNumber).values())
 				);
 			});
-			ArraySerializer.writeVarIntTArray(
-				serializer,
-				resendTiles,
-				(to, tile) -> ItemStackSerializer.writeTag(to, version, tile.getNBT())
-			);
+			ArraySerializer.writeVarIntTArray(serializer, lTo -> {
+				int count = 0;
+				for (Collection<TileEntity> sectionTiles : resendTiles) {
+					for (TileEntity tile : sectionTiles) {
+						ItemStackSerializer.writeTag(lTo, version, tile.getNBT());
+					}
+					count += sectionTiles.size();
+				}
+				return count;
+			});
 
 			return RecyclableSingletonList.create(serializer);
 		}
