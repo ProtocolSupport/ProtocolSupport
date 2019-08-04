@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
@@ -18,9 +18,9 @@ public class Explosion extends AbstractMiddleExplosion {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_EXPLOSION);
-		serializer.writeDouble(x);
-		serializer.writeDouble(y);
-		serializer.writeDouble(z);
+		serializer.writeFloat(x);
+		serializer.writeFloat(y);
+		serializer.writeFloat(z);
 		serializer.writeFloat(radius);
 		serializer.writeInt(blocks.length);
 		for (Position block : blocks) {
