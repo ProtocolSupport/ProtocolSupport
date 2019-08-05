@@ -25,7 +25,12 @@ public class SpawnObject extends MiddleSpawnObject {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		NetworkEntityType type = entityRemapper.getRemappedEntityType();
-		objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
+		if (type.isOfType(NetworkEntityType.MINECART)) {
+			objectdata = LegacyEntityId.getMinecartObjectData(type);
+		} else {
+			objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
+		}
+	
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		MiscSerializer.writeUUID(serializer, entity.getUUID());
@@ -35,7 +40,7 @@ public class SpawnObject extends MiddleSpawnObject {
 		serializer.writeDouble(z);
 		serializer.writeByte(pitch);
 		serializer.writeByte(yaw);
-		serializer.writeInt(entity.getType().isOfType(NetworkEntityType.MINECART) ? LegacyEntityId.getMinecartObjectData(type) : objectdata);
+		serializer.writeInt(objectdata);
 		serializer.writeShort(motX);
 		serializer.writeShort(motY);
 		serializer.writeShort(motZ);

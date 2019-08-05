@@ -24,7 +24,11 @@ public class SpawnObject extends AbstractLocationOffsetSpawnObject {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		NetworkEntityType type = entityRemapper.getRemappedEntityType();
-		objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
+		if (type.isOfType(NetworkEntityType.MINECART)) {
+			objectdata = LegacyEntityId.getMinecartObjectData(type);
+		} else {
+			objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
+		}
 		x *= 32;
 		y *= 32;
 		z *= 32;
@@ -52,6 +56,7 @@ public class SpawnObject extends AbstractLocationOffsetSpawnObject {
 				}
 			}
 		}
+
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		serializer.writeByte(LegacyEntityId.getObjectIntId(type));
