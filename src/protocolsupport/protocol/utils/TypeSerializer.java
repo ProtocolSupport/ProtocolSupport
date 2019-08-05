@@ -37,7 +37,7 @@ public class TypeSerializer<T> {
 
 	@SuppressWarnings("unchecked")
 	protected <L extends T> void register(Class<L> clazz, BiConsumer<ByteBuf, L> serializer, ProtocolVersion... versions) {
-		for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
+		for (ProtocolVersion version : versions) {
 			entries.computeIfAbsent(version, Entry::new).serializers.setKnownPath(clazz, (BiConsumer<ByteBuf, T>) serializer);
 		}
 	}
