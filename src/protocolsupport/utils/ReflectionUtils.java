@@ -1,5 +1,6 @@
 package protocolsupport.utils;
 
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -36,11 +37,14 @@ public class ReflectionUtils {
 
 	public static void setStaticFinalField(Class<?> clazz, String fieldname, Object value) {
 		try {
-			Field field = clazz.getDeclaredField(fieldname);
-			field.setAccessible(true);
-			setAccessible(Field.class.getDeclaredField("modifiers")).setInt(field, field.getModifiers() & ~Modifier.FINAL);
+			Field field = setAccessible(clazz.getDeclaredField(fieldname));
+			try {
+				MethodHandles.privateLookupIn(Field.class, MethodHandles.lookup()).findSetter(Field.class, "modifiers", int.class).invokeExact(field, field.getModifiers() & ~Modifier.FINAL);
+			} catch (Throwable t) {
+				setAccessible(Field.class.getDeclaredField("modifiers")).setInt(field, field.getModifiers() & ~Modifier.FINAL);
+			}
 			field.set(null, value);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			throw new RuntimeException(e);
 		}
 	}
