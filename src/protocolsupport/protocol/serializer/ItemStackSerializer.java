@@ -131,7 +131,11 @@ public class ItemStackSerializer {
 	 * @return itemstack itemstack
 	 */
 	public static NetworkItemStack readItemStack(ByteBuf from, ProtocolVersion version, String locale) {
-		return ItemStackRemapper.remapFromClient(version, locale, ITEMSTACK_DESERIALIZER.get(version).apply(from));
+		NetworkItemStack itemstack = ITEMSTACK_DESERIALIZER.get(version).apply(from);
+		if (!itemstack.isNull()) {
+			itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack);
+		}
+		return itemstack;
 	}
 
 
