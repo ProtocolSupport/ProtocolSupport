@@ -32,17 +32,16 @@ public class FeatureEmulation implements Listener {
 	public FeatureEmulation() {
 		Bukkit.getScheduler().runTaskTimer(
 			ProtocolSupport.getInstance(),
-			() ->
-				Bukkit.getOnlinePlayers().stream()
-				.filter(player -> {
+			() -> {
+				for (Player player : Bukkit.getOnlinePlayers()) {
 					ProtocolVersion version = ProtocolSupportAPI.getProtocolVersion(player);
-					return (version.getProtocolType() == ProtocolType.PC) && version.isBefore(ProtocolVersion.MINECRAFT_1_9);
-				})
-				.filter(player ->
-					!player.isFlying() &&
-					(player.hasPotionEffect(PotionEffectType.LEVITATION) || player.hasPotionEffect(PotionEffectType.SLOW_FALLING))
-				)
-				.forEach(player -> player.setVelocity(player.getVelocity())),
+					if ((version.getProtocolType() == ProtocolType.PC) && version.isBefore(ProtocolVersion.MINECRAFT_1_9)) {
+						if (!player.isFlying() && (player.hasPotionEffect(PotionEffectType.LEVITATION) || player.hasPotionEffect(PotionEffectType.SLOW_FALLING))) {
+							player.setVelocity(player.getVelocity());
+						}
+					}
+				}
+			},
 			1, 1
 		);
 	}
