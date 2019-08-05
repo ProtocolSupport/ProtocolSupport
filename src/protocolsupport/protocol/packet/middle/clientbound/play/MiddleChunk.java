@@ -33,7 +33,7 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 		coord = PositionSerializer.readIntChunkCoord(serverdata);
 		full = serverdata.readBoolean();
 		blockMask = VarNumberSerializer.readVarInt(serverdata);
-		heightmaps = ItemStackSerializer.readTag(serverdata);
+		heightmaps = ItemStackSerializer.readDirectTag(serverdata);
 
 		{
 			ByteBuf chunkdata = ArraySerializer.readVarIntByteArraySlice(serverdata);
@@ -49,7 +49,7 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 			}
 		}
 
-		tiles = ArraySerializer.readVarIntTArray(serverdata, TileEntity.class, from -> new TileEntity(ItemStackSerializer.readTag(serverdata)));
+		tiles = ArraySerializer.readVarIntTArray(serverdata, TileEntity.class, from -> new TileEntity(ItemStackSerializer.readDirectTag(serverdata)));
 	}
 
 }

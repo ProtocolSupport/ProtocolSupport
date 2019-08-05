@@ -10,12 +10,12 @@ public class NetworkEntityMetadataObjectNBTTagCompound extends ReadableNetworkEn
 
 	@Override
 	public void readFromStream(ByteBuf from) {
-		value = ItemStackSerializer.readTag(from);
+		value = ItemStackSerializer.readDirectTag(from);
 	}
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
-		ItemStackSerializer.writeTag(to, version, value);
+		ItemStackSerializer.writeDirectTag(to, value);
 	}
 
 }

@@ -20,7 +20,7 @@ public abstract class MiddleBlockTileUpdate extends MiddleBlock {
 	public void readFromServerData(ByteBuf serverdata) {
 		super.readFromServerData(serverdata);
 		int type = serverdata.readUnsignedByte();
-		NBTCompound tag = ItemStackSerializer.readTag(serverdata);
+		NBTCompound tag = ItemStackSerializer.readDirectTag(serverdata);
 		tile = new TileEntity(TileEntityType.getByNetworkId(type), position, tag);
 	}
 

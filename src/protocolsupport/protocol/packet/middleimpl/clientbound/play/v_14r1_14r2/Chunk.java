@@ -34,7 +34,7 @@ public class Chunk extends MiddleChunk {
 		PositionSerializer.writeIntChunkCoord(serializer, coord);
 		serializer.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(serializer, blockMask);
-		ItemStackSerializer.writeTag(serializer, version, heightmaps);
+		ItemStackSerializer.writeDirectTag(serializer, heightmaps);
 		ArraySerializer.writeVarIntByteArray(serializer, to -> {
 			ChunkWriterVaries.writeSections(
 				to, blockMask, 14,
@@ -51,7 +51,7 @@ public class Chunk extends MiddleChunk {
 		ArraySerializer.writeVarIntTArray(
 			serializer,
 			tiles,
-			(to, tile) -> ItemStackSerializer.writeTag(to, version, tileRemapper.remap(tile).getNBT())
+			(to, tile) -> ItemStackSerializer.writeDirectTag(to, tileRemapper.remap(tile).getNBT())
 		);
 		return RecyclableSingletonList.create(serializer);
 	}

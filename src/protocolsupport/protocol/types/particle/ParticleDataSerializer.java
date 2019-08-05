@@ -12,7 +12,6 @@ import protocolsupport.protocol.types.particle.types.ParticleFallingDust;
 import protocolsupport.protocol.types.particle.types.ParticleItem;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.TypeSerializer;
-import protocolsupport.protocol.utils.i18n.I18NData;
 
 public class ParticleDataSerializer extends TypeSerializer<Particle> {
 
@@ -31,7 +30,7 @@ public class ParticleDataSerializer extends TypeSerializer<Particle> {
 			FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 			register(ParticleBlock.class, (to, particle) -> VarNumberSerializer.writeVarInt(to, flatteningBlockDataTable.getBlockDataRemap(particle.getBlockData())), version);
 			register(ParticleFallingDust.class, (to, particle) -> VarNumberSerializer.writeFixedSizeVarInt(to, flatteningBlockDataTable.getBlockDataRemap(particle.getBlockData())), version);
-			register(ParticleItem.class, (to, particle) -> ItemStackSerializer.writeItemStack(to, version, I18NData.DEFAULT_LOCALE, particle.getItemStack()), version);
+			register(ParticleItem.class, (to, particle) -> ItemStackSerializer.writeItemStackRemapped(to, version, particle.getItemStack()), version);
 		});
 	}
 

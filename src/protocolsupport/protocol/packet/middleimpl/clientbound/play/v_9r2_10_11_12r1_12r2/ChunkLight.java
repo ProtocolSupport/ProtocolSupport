@@ -54,7 +54,7 @@ public class ChunkLight extends AbstractChunkLight {
 				int count = 0;
 				for (Collection<TileEntity> sectionTiles : resendTiles) {
 					for (TileEntity tile : sectionTiles) {
-						ItemStackSerializer.writeTag(lTo, version, tile.getNBT());
+						ItemStackSerializer.writeDirectTag(lTo, tile.getNBT());
 					}
 					count += sectionTiles.size();
 				}

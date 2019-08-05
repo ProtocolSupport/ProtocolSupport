@@ -51,7 +51,7 @@ public class Chunk extends AbstractChunk {
 			int count = 0;
 			for (Map<Position, TileEntity> sectionTiles : cachedChunk.getTiles()) {
 				for (TileEntity tile : sectionTiles.values()) {
-					ItemStackSerializer.writeTag(lTo, version, tile.getNBT());
+					ItemStackSerializer.writeDirectTag(lTo, tile.getNBT());
 				}
 				count += sectionTiles.size();
 			}

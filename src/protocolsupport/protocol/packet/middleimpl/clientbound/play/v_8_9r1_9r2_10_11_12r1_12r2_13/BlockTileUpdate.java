@@ -38,7 +38,7 @@ public class BlockTileUpdate extends AbstractBlockTileUpdate {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_TILE);
 			PositionSerializer.writeLegacyPositionL(serializer, tile.getPosition());
 			serializer.writeByte(tile.getType().getNetworkId());
-			ItemStackSerializer.writeTag(serializer, version, tile.getNBT());
+			ItemStackSerializer.writeDirectTag(serializer, tile.getNBT());
 			return serializer;
 		}
 	}

@@ -3,7 +3,6 @@ package protocolsupport.protocol.serializer;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -12,7 +11,6 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
-import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.types.NetworkItemStack;
@@ -21,13 +19,98 @@ import protocolsupport.protocol.types.nbt.NBTEnd;
 import protocolsupport.protocol.types.nbt.serializer.DefaultNBTSerializer;
 import protocolsupport.protocol.utils.ItemStackWriteEventHelper;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.SimpleTypeDeserializer;
+import protocolsupport.protocol.utils.SimpleTypeSerializer;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class ItemStackSerializer {
 
+	public static final SimpleTypeDeserializer<NetworkItemStack> ITEMSTACK_DESERIALIZER = new SimpleTypeDeserializer<NetworkItemStack>() {{
+		register(ItemStackSerializer::readItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2));
+
+		register(from -> {
+			int typeId = from.readShort();
+			if (typeId < 0) {
+				return NetworkItemStack.NULL;
+			} else {
+				NetworkItemStack itemstack = new NetworkItemStack();
+				itemstack.setTypeId(typeId);
+				itemstack.setAmount(from.readByte());
+				itemstack.setNBT(readDirectTag(from));
+				return itemstack;
+			}
+		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_13, ProtocolVersion.MINECRAFT_1_13_1));
+
+		register(from -> {
+			int typeId = from.readShort();
+			if (typeId < 0) {
+				return NetworkItemStack.NULL;
+			} else {
+				NetworkItemStack itemstack = new NetworkItemStack();
+				itemstack.setTypeId(typeId);
+				itemstack.setAmount(from.readByte());
+				itemstack.setLegacyData(from.readShort());
+				itemstack.setNBT(readDirectTag(from));
+				return itemstack;
+			}
+		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_12_2, ProtocolVersion.MINECRAFT_1_8));
+
+		register(from -> {
+			int typeId = from.readShort();
+			if (typeId < 0) {
+				return NetworkItemStack.NULL;
+			} else {
+				NetworkItemStack itemstack = new NetworkItemStack();
+				itemstack.setTypeId(typeId);
+				itemstack.setAmount(from.readByte());
+				itemstack.setLegacyData(from.readShort());
+				itemstack.setNBT(readShortTag(from));
+				return itemstack;
+			}
+		}, ProtocolVersionsHelper.BEFORE_1_8);
+	}};
+
+	public static final SimpleTypeSerializer<NetworkItemStack> ITEMSTACK_SERIALIZER = new SimpleTypeSerializer<NetworkItemStack>() {{
+		register(ItemStackSerializer::writeItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2));
+
+		register((to, itemstack) -> {
+			if (itemstack.isNull()) {
+				to.writeShort(-1);
+			} else {
+				to.writeShort(itemstack.getTypeId());
+				to.writeByte(itemstack.getAmount());
+				writeDirectTag(to, itemstack.getNBT());
+			}
+		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_13, ProtocolVersion.MINECRAFT_1_13_1));
+
+		register((to, itemstack) -> {
+			if (itemstack.isNull()) {
+				to.writeShort(-1);
+			} else {
+				to.writeShort(itemstack.getTypeId());
+				to.writeByte(itemstack.getAmount());
+				to.writeShort(itemstack.getLegacyData());
+				writeDirectTag(to, itemstack.getNBT());
+			}
+		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_12_2, ProtocolVersion.MINECRAFT_1_8));
+
+		register((to, itemstack) -> {
+			if (itemstack.isNull()) {
+				to.writeShort(-1);
+			} else {
+				to.writeShort(itemstack.getTypeId());
+				to.writeByte(itemstack.getAmount());
+				to.writeShort(itemstack.getLegacyData());
+				writeShortTag(to, itemstack.getNBT());
+			}
+		}, ProtocolVersionsHelper.BEFORE_1_8);
+	}};
+
 	/**
-	 * Reads server itemstack (latest protocol version format) <br>
+	 * Reads itemstack using latest protocol version format
 	 * @param from buffer to read from
-	 * @return itemstack
+	 * @return itemstack itemstack
 	 */
 	public static NetworkItemStack readItemStack(ByteBuf from) {
 		if (!from.readBoolean()) {
@@ -36,44 +119,24 @@ public class ItemStackSerializer {
 		NetworkItemStack itemstack = new NetworkItemStack();
 		itemstack.setTypeId(VarNumberSerializer.readVarInt(from));
 		itemstack.setAmount(from.readByte());
-		itemstack.setNBT(readTag(from));
+		itemstack.setNBT(readDirectTag(from));
 		return itemstack;
 	}
 
 	/**
-	 * Reads client itemstack (provided protocol version format) <br>
+	 * Reads itemstack using provided protocol version format and remaps it <br>
 	 * @param from buffer to read from
 	 * @param version protocol version
 	 * @param locale client locale
-	 * @return itemstack
+	 * @return itemstack itemstack
 	 */
 	public static NetworkItemStack readItemStack(ByteBuf from, ProtocolVersion version, String locale) {
-		int type;
-		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
-			boolean exist = from.readBoolean();
-			if (!exist) {
-				return NetworkItemStack.NULL;
-			}
-			type = VarNumberSerializer.readVarInt(from);
-		} else {
-			type = from.readShort();
-			if (type < 0) {
-				return NetworkItemStack.NULL;
-			}
-		}
-		NetworkItemStack itemstack = new NetworkItemStack();
-		itemstack.setTypeId(type);
-		itemstack.setAmount(from.readByte());
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
-			itemstack.setLegacyData(from.readUnsignedShort());
-		}
-		itemstack.setNBT(readTag(from, version));
-		itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack);
-		return itemstack;
+		return ItemStackRemapper.remapFromClient(version, locale, ITEMSTACK_DESERIALIZER.get(version).apply(from));
 	}
 
+
 	/**
-	 * Writes server itemstack (latest protocol version format)
+	 * Writes itemstack using latest protocol version format
 	 * @param to buffer to write to
 	 * @param itemstack itemstack
 	 */
@@ -89,7 +152,7 @@ public class ItemStackSerializer {
 	}
 
 	/**
-	 * Writes client itemstack (provided protocol version format)
+	 * Remaps and writes itemstack using provided protocol version format
 	 * @param to buffer to write to
 	 * @param version protocol version
 	 * @param locale client locale
@@ -106,40 +169,32 @@ public class ItemStackSerializer {
 	}
 
 	/**
-	 * Writes client itemstack (provided protocol version format)
+	 * Writes itemstack using provided protocol version format
 	 * @param to buffer to write to
 	 * @param version protocol version
 	 * @param itemstack itemstack
 	 */
 	public static void writeItemStackRemapped(ByteBuf to, ProtocolVersion version, NetworkItemStack itemstack) {
-		if (itemstack.isNull()) {
-			if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
-				to.writeBoolean(false);
-			} else {
-				to.writeShort(-1);
-			}
-			return;
-		}
-
-		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13_2)) {
-			to.writeBoolean(true);
-			VarNumberSerializer.writeVarInt(to, itemstack.getTypeId());
-		} else {
-			to.writeShort(itemstack.getTypeId());
-		}
-		to.writeByte(itemstack.getAmount());
-		if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
-			to.writeShort(itemstack.getLegacyData());
-		}
-		writeTag(to, version, itemstack.getNBT());
+		ITEMSTACK_SERIALIZER.get(version).accept(to, itemstack);
 	}
 
-	/**
-	 * Reads server nbt (latest protocol version format)
-	 * @param from buffer to read form
-	 * @return nbt
-	 */
-	public static NBTCompound readTag(ByteBuf from) {
+
+
+	public static final SimpleTypeDeserializer<NBTCompound> TAG_DESERIALIZER = new SimpleTypeDeserializer<NBTCompound>() {{
+		register(ItemStackSerializer::readDirectTag, ProtocolVersionsHelper.UP_1_8);
+		register(ItemStackSerializer::readShortTag, ProtocolVersionsHelper.BEFORE_1_8);
+	}};
+
+	public static final SimpleTypeSerializer<NBTCompound> TAG_SERIALIZER = new SimpleTypeSerializer<NBTCompound>() {{
+		register(ItemStackSerializer::writeDirectTag, ProtocolVersionsHelper.UP_1_8);
+		register(ItemStackSerializer::writeShortTag, ProtocolVersionsHelper.BEFORE_1_8);
+	}};
+
+	public static NBTCompound readTag(ByteBuf from, ProtocolVersion version) {
+		return TAG_DESERIALIZER.get(version).apply(from);
+	}
+
+	public static NBTCompound readDirectTag(ByteBuf from) {
 		try {
 			return DefaultNBTSerializer.INSTANCE.deserializeTag(new ByteBufInputStream(from));
 		} catch (IOException e) {
@@ -147,69 +202,64 @@ public class ItemStackSerializer {
 		}
 	}
 
-	/**
-	 * Reads client nbt (provided protocol version)
-	 * @param from buffer to read form
-	 * @param version protocol version
-	 * @return nbt
-	 */
-	public static NBTCompound readTag(ByteBuf from, ProtocolVersion version) {
+	public static NBTCompound readShortTag(ByteBuf from) {
 		try {
-			if (isUsingShortLengthNBT(version)) {
-				final short length = from.readShort();
-				if (length < 0) {
-					return null;
-				}
-				try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new ByteBufInputStream(from.readSlice(length))))) {
-					return DefaultNBTSerializer.INSTANCE.deserializeTag(stream);
-				}
-			} else if (isUsingDirectNBT(version)) {
-				return DefaultNBTSerializer.INSTANCE.deserializeTag(new ByteBufInputStream(from));
-			} else {
-				throw new IllegalArgumentException(MessageFormat.format("Dont know how to read nbt of version {0}", version));
+			final short length = from.readShort();
+			if (length < 0) {
+				return null;
+			}
+			try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new ByteBufInputStream(from.readSlice(length))))) {
+				return DefaultNBTSerializer.INSTANCE.deserializeTag(stream);
 			}
 		} catch (IOException e) {
 			throw new DecoderException(e);
 		}
 	}
 
+	/**
+	 * Writes tag using provided protocol version format
+	 * @param to buffer to write to
+	 * @param version protocol version
+	 * @param tag nbt compound
+	 */
 	public static void writeTag(ByteBuf to, ProtocolVersion version, NBTCompound tag) {
-		if (isUsingShortLengthNBT(version)) {
-			if (tag == null) {
-				to.writeShort(-1);
+		TAG_SERIALIZER.get(version).accept(to, tag);
+	}
+
+	/**
+	 * Writes tag using latest protocol version format (Directly serializes nbt to buffer).
+	 * @param to buffer to write to
+	 * @param tag nbt compound
+	 */
+	public static void writeDirectTag(ByteBuf to, NBTCompound tag) {
+		try (ByteBufOutputStream outputstream = new ByteBufOutputStream(to)) {
+			if (tag != null) {
+				DefaultNBTSerializer.INSTANCE.serializeTag(outputstream, tag);
 			} else {
-				ArraySerializer.writeShortByteArray(
-					to,
-					lTo -> {
-						try (DataOutputStream outputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(lTo)))) {
-							DefaultNBTSerializer.INSTANCE.serializeTag(outputstream, tag);
-						} catch (Exception e) {
-							throw new EncoderException(e);
-						}
-					}
-				);
+				DefaultNBTSerializer.INSTANCE.serializeTag(outputstream, NBTEnd.INSTANCE);
 			}
-		} else if (isUsingDirectNBT(version)) {
-			try (ByteBufOutputStream outputstream = new ByteBufOutputStream(to)) {
-				if (tag != null) {
-					DefaultNBTSerializer.INSTANCE.serializeTag(outputstream, tag);
-				} else {
-					DefaultNBTSerializer.INSTANCE.serializeTag(outputstream, NBTEnd.INSTANCE);
-				}
-			} catch (IOException e) {
-				throw new EncoderException(e);
-			}
-		} else {
-			throw new IllegalArgumentException(MessageFormat.format("Dont know how to write nbt of version {0}", version));
+		} catch (IOException e) {
+			throw new EncoderException(e);
 		}
 	}
 
-	private static final boolean isUsingShortLengthNBT(ProtocolVersion version) {
-		return (version.getProtocolType() == ProtocolType.PC) && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_7_10);
-	}
-
-	private static final boolean isUsingDirectNBT(ProtocolVersion version) {
-		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8);
+	/**
+	 * Writes tag using legacy protocol version format (Prefixes serialized nbt data with short length).
+	 * @param to buffer to write to
+	 * @param tag nbt compound
+	 */
+	public static void  writeShortTag(ByteBuf to, NBTCompound tag) {
+		if (tag == null) {
+			to.writeShort(-1);
+		} else {
+			ArraySerializer.writeShortByteArray(to, lTo -> {
+				try (DataOutputStream outputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(lTo)))) {
+					DefaultNBTSerializer.INSTANCE.serializeTag(outputstream, tag);
+				} catch (Exception e) {
+					throw new EncoderException(e);
+				}
+			});
+		}
 	}
 
 }

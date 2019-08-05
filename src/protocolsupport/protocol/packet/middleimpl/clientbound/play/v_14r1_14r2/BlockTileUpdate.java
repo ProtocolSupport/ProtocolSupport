@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockTileUpdate;
@@ -23,14 +22,14 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
-		return RecyclableSingletonList.create(create(version, tileRemapper.remap(tile)));
+		return RecyclableSingletonList.create(create(tileRemapper.remap(tile)));
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, TileEntity tile) {
+	public static ClientBoundPacketData create(TileEntity tile) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_TILE);
 		PositionSerializer.writePosition(serializer, tile.getPosition());
 		serializer.writeByte(tile.getType().getNetworkId());
-		ItemStackSerializer.writeTag(serializer, version, tile.getNBT());
+		ItemStackSerializer.writeDirectTag(serializer, tile.getNBT());
 		return serializer;
 	}
 
