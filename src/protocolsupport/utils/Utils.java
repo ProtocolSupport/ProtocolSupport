@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 import com.google.gson.Gson;
@@ -96,6 +97,10 @@ public class Utils {
 
 	public static boolean isBitSet(int bitmask, int bit) {
 		return ((bitmask & (1 << bit)) != 0);
+	}
+
+	public static final long currentTimeMillisFromNanoTime() {
+		return TimeUnit.NANOSECONDS.toMillis(System.nanoTime());
 	}
 
 }
