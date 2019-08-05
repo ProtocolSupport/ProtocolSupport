@@ -5,8 +5,8 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleAcknowledge
 import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.BlockChangeSingle;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData;
-import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
+import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 

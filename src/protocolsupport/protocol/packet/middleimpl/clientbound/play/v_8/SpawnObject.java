@@ -29,7 +29,7 @@ public class SpawnObject extends MiddleSpawnObject {
 		} else {
 			objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
 		}
-	
+
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		serializer.writeByte(LegacyEntityId.getObjectIntId(type));
