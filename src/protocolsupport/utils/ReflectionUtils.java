@@ -38,11 +38,9 @@ public class ReflectionUtils {
 	public static void setStaticFinalField(Class<?> clazz, String fieldname, Object value) {
 		try {
 			Field field = setAccessible(clazz.getDeclaredField(fieldname));
-			try {
-				MethodHandles.privateLookupIn(Field.class, MethodHandles.lookup()).findSetter(Field.class, "modifiers", int.class).invokeExact(field, field.getModifiers() & ~Modifier.FINAL);
-			} catch (Throwable t) {
-				setAccessible(Field.class.getDeclaredField("modifiers")).setInt(field, field.getModifiers() & ~Modifier.FINAL);
-			}
+			((MethodHandles.Lookup) setAccessible(MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP")).get(null))
+			.findSetter(Field.class, "modifiers", int.class)
+			.invokeExact(field, field.getModifiers() & ~Modifier.FINAL);
 			field.set(null, value);
 		} catch (Throwable e) {
 			throw new RuntimeException(e);
