@@ -12,7 +12,7 @@ import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.protocol.types.chunk.ChunkSectonBlockData;
 import protocolsupport.protocol.types.nbt.NBTCompound;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.BitUtils;
 
 public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 
@@ -38,7 +38,7 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 		{
 			ByteBuf chunkdata = ArraySerializer.readVarIntByteArraySlice(serverdata);
 			for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-				if (Utils.isBitSet(blockMask, sectionNumber)) {
+				if (BitUtils.isBitSet(blockMask, sectionNumber)) {
 					sections[sectionNumber] = ChunkSectonBlockData.readFromStream(chunkdata);
 				}
 			}

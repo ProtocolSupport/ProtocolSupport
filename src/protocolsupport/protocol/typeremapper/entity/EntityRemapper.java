@@ -59,7 +59,7 @@ public class EntityRemapper {
 		if (metadata) {
 			remappedMetadata.clear();
 			entityRemapper.getRight().forEach(remapper -> remapper.remap(originalEntity, originalMetadata, remappedMetadata));
-			originalEntity.getDataCache().setFirstMeta(false);
+			originalEntity.getDataCache().unsetFirstMeta();
 		}
 	}
 

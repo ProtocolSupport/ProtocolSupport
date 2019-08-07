@@ -8,7 +8,7 @@ import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.Flattenin
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.protocol.types.chunk.ChunkSectonBlockData;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.BitUtils;
 
 public class ChunkWriterVaries {
 
@@ -19,7 +19,7 @@ public class ChunkWriterVaries {
 		ChunkSectonBlockData[] sections
 	) {
 		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-			if (Utils.isBitSet(mask, sectionNumber)) {
+			if (BitUtils.isBitSet(mask, sectionNumber)) {
 				ChunkSectonBlockData section = sections[sectionNumber];
 
 				int bitsPerBlock = section.getBitsPerBlock();

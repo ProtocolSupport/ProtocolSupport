@@ -6,7 +6,7 @@ import protocolsupport.protocol.storage.netcache.chunk.CachedChunkSectionBlockSt
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.BitUtils;
 
 public class ChunkWriterShort {
 
@@ -24,7 +24,7 @@ public class ChunkWriterShort {
 		int skyLightIndex = 10240 * columnsCount;
 
 		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-			if (Utils.isBitSet(mask, sectionNumber)) {
+			if (BitUtils.isBitSet(mask, sectionNumber)) {
 				CachedChunkSectionBlockStorage section = chunk.getBlocksSection(sectionNumber);
 
 				if (section != null) {

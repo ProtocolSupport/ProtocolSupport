@@ -7,6 +7,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexV
 import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperNumberToInt;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.LivingEntityMetadataRemapper;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
@@ -48,8 +49,9 @@ public class PlayerEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 				.ifPresent(baseflags -> entity.getDataCache().setBaseFlags(baseflags.getValue()));
 				NetworkEntityMetadataObjectIndex.EntityLiving.HAND_USE.getValue(original)
 				.ifPresent(activehandflags -> {
-					entity.getDataCache().setBaseFlag(5, activehandflags.getValue());
-					remapped.add(0, new NetworkEntityMetadataObjectByte(entity.getDataCache().getBaseFlags()));
+					NetworkEntityDataCache edata = entity.getDataCache();
+					edata.setBaseFlag(4, activehandflags.getValue() & 1);
+					remapped.add(0, new NetworkEntityMetadataObjectByte((byte) edata.getBaseFlags()));
 				});
 			}
 		}, ProtocolVersionsHelper.BEFORE_1_9);

@@ -5,7 +5,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunkLight;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
 import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.BitUtils;
 
 public abstract class AbstractChunkLight extends MiddleChunkLight {
 
@@ -29,15 +29,15 @@ public abstract class AbstractChunkLight extends MiddleChunkLight {
 		}
 
 		for (int sectionNumber = 1; sectionNumber < (ChunkConstants.SECTION_COUNT_LIGHT - 1); sectionNumber++) {
-			if (Utils.isBitSet(setSkyLightMask, sectionNumber)) {
+			if (BitUtils.isBitSet(setSkyLightMask, sectionNumber)) {
 				cachedChunk.setSkyLightSection(sectionNumber - 1, skyLight[sectionNumber]);
-			} else if (Utils.isBitSet(emptySkyLightMask, sectionNumber)) {
+			} else if (BitUtils.isBitSet(emptySkyLightMask, sectionNumber)) {
 				cachedChunk.setSkyLightSection(sectionNumber - 1, null);
 			}
 
-			if (Utils.isBitSet(setBlockLightMask, sectionNumber)) {
+			if (BitUtils.isBitSet(setBlockLightMask, sectionNumber)) {
 				cachedChunk.setBlockLightSection(sectionNumber - 1, blockLight[sectionNumber]);
-			} else if (Utils.isBitSet(emptyBlockLightMask, sectionNumber)) {
+			} else if (BitUtils.isBitSet(emptyBlockLightMask, sectionNumber)) {
 				cachedChunk.setBlockLightSection(sectionNumber - 1, null);
 			}
 		}

@@ -4,7 +4,7 @@ import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetada
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBoolean;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.BitUtils;
 
 public class InsentientAttackingToLegacySwingingHadsIndexValesRemapper extends IndexValueRemapper<NetworkEntityMetadataObjectByte> {
 
@@ -14,7 +14,7 @@ public class InsentientAttackingToLegacySwingingHadsIndexValesRemapper extends I
 
 	@Override
 	public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectByte object) {
-		return new NetworkEntityMetadataObjectBoolean(Utils.isBitSet(object.getValue(), NetworkEntityMetadataObjectIndex.Insentient.FLAGS_BIT_ATTACKING));
+		return new NetworkEntityMetadataObjectBoolean(BitUtils.isBitSet(object.getValue(), NetworkEntityMetadataObjectIndex.Insentient.FLAGS_BIT_ATTACKING));
 	}
 
 }

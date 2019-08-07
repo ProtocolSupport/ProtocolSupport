@@ -9,7 +9,7 @@ import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.BitUtils;
 
 public abstract class AbstractChunk extends MiddleChunk {
 
@@ -30,7 +30,7 @@ public abstract class AbstractChunk extends MiddleChunk {
 		}
 
 		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-			if (Utils.isBitSet(blockMask, sectionNumber)) {
+			if (BitUtils.isBitSet(blockMask, sectionNumber)) {
 				cachedChunk.setBlocksSection(sectionNumber, new CachedChunkSectionBlockStorage(sections[sectionNumber]));
 			}
 		}

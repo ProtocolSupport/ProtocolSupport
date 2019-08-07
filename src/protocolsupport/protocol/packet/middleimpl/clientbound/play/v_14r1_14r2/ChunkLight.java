@@ -9,7 +9,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.BitUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -28,12 +28,12 @@ public class ChunkLight extends MiddleChunkLight {
 		VarNumberSerializer.writeVarInt(serializer, emptySkyLightMask);
 		VarNumberSerializer.writeVarInt(serializer, emptyBlockLightMask);
 		for (int i = 0; i < ChunkConstants.SECTION_COUNT_LIGHT; i++) {
-			if (Utils.isBitSet(setSkyLightMask, i)) {
+			if (BitUtils.isBitSet(setSkyLightMask, i)) {
 				ArraySerializer.writeVarIntByteArray(serializer, skyLight[i]);
 			}
 		}
 		for (int i = 0; i < ChunkConstants.SECTION_COUNT_LIGHT; i++) {
-			if (Utils.isBitSet(setBlockLightMask, i)) {
+			if (BitUtils.isBitSet(setBlockLightMask, i)) {
 				ArraySerializer.writeVarIntByteArray(serializer, blockLight[i]);
 			}
 		}

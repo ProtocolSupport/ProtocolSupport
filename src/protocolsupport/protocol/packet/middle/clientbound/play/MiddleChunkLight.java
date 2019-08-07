@@ -8,7 +8,7 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.ChunkCoord;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.BitUtils;
 
 public abstract class MiddleChunkLight extends ClientBoundMiddlePacket {
 
@@ -34,10 +34,10 @@ public abstract class MiddleChunkLight extends ClientBoundMiddlePacket {
 		emptyBlockLightMask = VarNumberSerializer.readVarInt(serverdata);
 
 		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_LIGHT; sectionNumber++) {
-			skyLight[sectionNumber] = Utils.isBitSet(setSkyLightMask, sectionNumber) ? ArraySerializer.readVarIntByteArray(serverdata) : null;
+			skyLight[sectionNumber] = BitUtils.isBitSet(setSkyLightMask, sectionNumber) ? ArraySerializer.readVarIntByteArray(serverdata) : null;
 		}
 		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_LIGHT; sectionNumber++) {
-			blockLight[sectionNumber] = Utils.isBitSet(setBlockLightMask, sectionNumber) ? ArraySerializer.readVarIntByteArray(serverdata) : null;
+			blockLight[sectionNumber] = BitUtils.isBitSet(setBlockLightMask, sectionNumber) ? ArraySerializer.readVarIntByteArray(serverdata) : null;
 		}
 	}
 

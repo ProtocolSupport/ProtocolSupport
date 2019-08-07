@@ -95,10 +95,6 @@ public class Utils {
 		IntStream.range(0, count).forEach(i -> action.run());
 	}
 
-	public static boolean isBitSet(int bitmask, int bit) {
-		return ((bitmask & (1 << bit)) != 0);
-	}
-
 	public static final long currentTimeMillisFromNanoTime() {
 		return TimeUnit.NANOSECONDS.toMillis(System.nanoTime());
 	}
