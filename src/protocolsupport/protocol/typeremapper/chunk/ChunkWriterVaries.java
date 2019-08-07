@@ -19,7 +19,7 @@ public class ChunkWriterVaries {
 		ChunkSectonBlockData[] sections
 	) {
 		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-			if (BitUtils.isBitSet(mask, sectionNumber)) {
+			if (BitUtils.isIBitSet(mask, sectionNumber)) {
 				ChunkSectonBlockData section = sections[sectionNumber];
 
 				int bitsPerBlock = section.getBitsPerBlock();

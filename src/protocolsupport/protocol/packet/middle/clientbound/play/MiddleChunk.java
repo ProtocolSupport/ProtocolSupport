@@ -38,7 +38,7 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 		{
 			ByteBuf chunkdata = ArraySerializer.readVarIntByteArraySlice(serverdata);
 			for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-				if (BitUtils.isBitSet(blockMask, sectionNumber)) {
+				if (BitUtils.isIBitSet(blockMask, sectionNumber)) {
 					sections[sectionNumber] = ChunkSectonBlockData.readFromStream(chunkdata);
 				}
 			}

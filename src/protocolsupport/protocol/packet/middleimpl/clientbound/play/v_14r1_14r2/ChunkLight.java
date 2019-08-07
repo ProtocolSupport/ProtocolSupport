@@ -28,12 +28,12 @@ public class ChunkLight extends MiddleChunkLight {
 		VarNumberSerializer.writeVarInt(serializer, emptySkyLightMask);
 		VarNumberSerializer.writeVarInt(serializer, emptyBlockLightMask);
 		for (int i = 0; i < ChunkConstants.SECTION_COUNT_LIGHT; i++) {
-			if (BitUtils.isBitSet(setSkyLightMask, i)) {
+			if (BitUtils.isIBitSet(setSkyLightMask, i)) {
 				ArraySerializer.writeVarIntByteArray(serializer, skyLight[i]);
 			}
 		}
 		for (int i = 0; i < ChunkConstants.SECTION_COUNT_LIGHT; i++) {
-			if (BitUtils.isBitSet(setBlockLightMask, i)) {
+			if (BitUtils.isIBitSet(setBlockLightMask, i)) {
 				ArraySerializer.writeVarIntByteArray(serializer, blockLight[i]);
 			}
 		}

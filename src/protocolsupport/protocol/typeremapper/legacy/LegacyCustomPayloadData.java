@@ -31,6 +31,7 @@ import protocolsupport.protocol.types.nbt.NBTList;
 import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
+import protocolsupport.utils.BitUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -157,10 +158,10 @@ public class LegacyCustomPayloadData {
 			case 0: {
 				Position position = PositionSerializer.readLegacyPositionI(data);
 				String command = StringSerializer.readString(data, version);
-				boolean trackOutput = useTrackOutput ? data.readBoolean() : false;
+				int trackOutput = useTrackOutput ? data.readByte() : 0;
 				return RecyclableSingletonList.create(MiddleUpdateCommandBlock.create(
 					position, command, MiddleUpdateCommandBlock.Mode.REDSTONE,
-					(trackOutput ? MiddleUpdateCommandBlock.FLAG_TRACK_OUTPUT : 0)
+					BitUtils.createIBitMaskFromBit(MiddleUpdateCommandBlock.FLAGS_BIT_TRACK_OUTPUT, trackOutput)
 				));
 			}
 			case 1: {
@@ -177,10 +178,14 @@ public class LegacyCustomPayloadData {
 		}
 	}
 
+	protected static final int[] auto_command_block_bits = new int[] {
+		MiddleUpdateCommandBlock.FLAGS_BIT_TRACK_OUTPUT, MiddleUpdateCommandBlock.FLAGS_BIT_CONDITIONAL, MiddleUpdateCommandBlock.FLAGS_BIT_AUTO
+	};
+
 	public static RecyclableCollection<ServerBoundPacketData> transformAutoCommandBlockEdit(ProtocolVersion version, ByteBuf data) {
 		Position position = PositionSerializer.readLegacyPositionI(data);
 		String command = StringSerializer.readString(data, version);
-		boolean trackOutput = data.readBoolean();
+		int trackOutput = data.readByte();
 		MiddleUpdateCommandBlock.Mode mode = null;
 		switch (StringSerializer.readString(data, version)) {
 			case "SEQUENCE": {
@@ -196,13 +201,11 @@ public class LegacyCustomPayloadData {
 				break;
 			}
 		}
-		boolean conditional = data.readBoolean();
-		boolean auto = data.readBoolean();
+		int conditional = data.readByte();
+		int auto = data.readByte();
 		return RecyclableSingletonList.create(MiddleUpdateCommandBlock.create(
 			position, command, mode,
-			(trackOutput ? MiddleUpdateCommandBlock.FLAG_TRACK_OUTPUT : 0) |
-			(conditional ? MiddleUpdateCommandBlock.FLAG_CONDITIONAL : 0) |
-			(auto ? MiddleUpdateCommandBlock.FLAG_AUTO : 0)
+			BitUtils.createIBitMaskFromBits(auto_command_block_bits, new int[] {trackOutput, conditional, auto})
 		));
 	}
 

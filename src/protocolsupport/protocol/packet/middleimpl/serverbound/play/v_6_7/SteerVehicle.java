@@ -15,8 +15,8 @@ public class SteerVehicle extends MiddleSteerVehicle {
 	public void readFromClientData(ByteBuf clientdata) {
 		sideForce = clientdata.readFloat();
 		forwardForce = clientdata.readFloat();
-		BitUtils.setBit(flags, FLAGS_BIT_JUMPING, clientdata.readBoolean());
-		BitUtils.setBit(flags, FLAGS_BIT_UNMOUNT, clientdata.readBoolean());
+		BitUtils.setIBit(flags, FLAGS_BIT_JUMPING, clientdata.readByte());
+		BitUtils.setIBit(flags, FLAGS_BIT_UNMOUNT, clientdata.readByte());
 	}
 
 }

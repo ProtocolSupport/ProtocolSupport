@@ -30,7 +30,7 @@ public abstract class AbstractChunk extends MiddleChunk {
 		}
 
 		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-			if (BitUtils.isBitSet(blockMask, sectionNumber)) {
+			if (BitUtils.isIBitSet(blockMask, sectionNumber)) {
 				cachedChunk.setBlocksSection(sectionNumber, new CachedChunkSectionBlockStorage(sections[sectionNumber]));
 			}
 		}

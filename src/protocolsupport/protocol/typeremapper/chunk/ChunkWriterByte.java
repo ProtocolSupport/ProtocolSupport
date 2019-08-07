@@ -26,7 +26,7 @@ public class ChunkWriterByte {
 		int skyLightIndex = 8192 * columnsCount;
 
 		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-			if (BitUtils.isBitSet(mask, sectionNumber)) {
+			if (BitUtils.isIBitSet(mask, sectionNumber)) {
 				CachedChunkSectionBlockStorage section = chunk.getBlocksSection(sectionNumber);
 
 				if (section != null) {

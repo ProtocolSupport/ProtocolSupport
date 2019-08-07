@@ -15,18 +15,18 @@ public class NetworkEntityDataCache {
 		this.firstMeta = false;
 	}
 
-	protected long baseFlags = 0;
+	protected int baseFlags = 0;
 
-	public long getBaseFlags() {
+	public int getBaseFlags() {
 		return baseFlags;
 	}
 
-	public void setBaseFlags(long baseFlags) {
+	public void setBaseFlags(int baseFlags) {
 		this.baseFlags = baseFlags;
 	}
 
 	public void setBaseFlag(int bitpos, int value) {
-		baseFlags = BitUtils.setBit(baseFlags, bitpos, value);
+		baseFlags = BitUtils.setIBit(baseFlags, bitpos, value);
 	}
 
 

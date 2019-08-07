@@ -29,15 +29,15 @@ public abstract class AbstractChunkLight extends MiddleChunkLight {
 		}
 
 		for (int sectionNumber = 1; sectionNumber < (ChunkConstants.SECTION_COUNT_LIGHT - 1); sectionNumber++) {
-			if (BitUtils.isBitSet(setSkyLightMask, sectionNumber)) {
+			if (BitUtils.isIBitSet(setSkyLightMask, sectionNumber)) {
 				cachedChunk.setSkyLightSection(sectionNumber - 1, skyLight[sectionNumber]);
-			} else if (BitUtils.isBitSet(emptySkyLightMask, sectionNumber)) {
+			} else if (BitUtils.isIBitSet(emptySkyLightMask, sectionNumber)) {
 				cachedChunk.setSkyLightSection(sectionNumber - 1, null);
 			}
 
-			if (BitUtils.isBitSet(setBlockLightMask, sectionNumber)) {
+			if (BitUtils.isIBitSet(setBlockLightMask, sectionNumber)) {
 				cachedChunk.setBlockLightSection(sectionNumber - 1, blockLight[sectionNumber]);
-			} else if (BitUtils.isBitSet(emptyBlockLightMask, sectionNumber)) {
+			} else if (BitUtils.isIBitSet(emptyBlockLightMask, sectionNumber)) {
 				cachedChunk.setBlockLightSection(sectionNumber - 1, null);
 			}
 		}
