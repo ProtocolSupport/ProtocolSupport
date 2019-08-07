@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.IntStream;
 
 import com.google.gson.Gson;
 
@@ -92,7 +91,9 @@ public class Utils {
 	}
 
 	public static void repeat(int count, Runnable action) {
-		IntStream.range(0, count).forEach(i -> action.run());
+		for (int i = 0; i < count; i++) {
+			action.run();
+		}
 	}
 
 	public static final long currentTimeMillisFromNanoTime() {
