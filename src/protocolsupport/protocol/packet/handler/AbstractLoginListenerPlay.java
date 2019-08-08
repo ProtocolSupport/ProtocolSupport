@@ -8,8 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerLoginEvent;
 
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
@@ -38,14 +36,11 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener, ISer
 			return;
 		}
 
-		//send login success and wait for finish
 		CountDownLatch waitpacketsend = new CountDownLatch(1);
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(connection.getProfile()), new GenericFutureListener<Future<? super Void>>() {
-			@Override
-			public void operationComplete(Future<? super Void> p0) throws Exception {
-				waitpacketsend.countDown();
-			}
-		});
+		networkManager.sendPacket(
+			ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(connection.getProfile()),
+			future -> waitpacketsend.countDown()
+		);
 		try {
 			if (!waitpacketsend.await(5, TimeUnit.SECONDS)) {
 				disconnect("Timeout while waiting for login success send");
@@ -55,11 +50,11 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener, ISer
 			disconnect("Exception while waiting for login success send");
 			return;
 		}
-		//set network state to game
+
 		networkManager.setProtocol(NetworkState.PLAY);
-		//tick connection keep now
+
 		keepConnection();
-		//now fire login event
+
 		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent(connection);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isLoginDenied()) {
@@ -88,18 +83,14 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener, ISer
 	}
 
 	protected void tryJoin() {
-		//no longer attempt to join
 		ready = false;
 
-		//kick players with same uuid
 		Bukkit.getOnlinePlayers().stream()
 		.filter(player -> player.getUniqueId().equals(connection.getProfile().getUUID()))
 		.forEach(player -> player.kickPlayer("You logged in from another location"));
 
-		//get player
 		JoinData joindata = createJoinData();
 
-		//ps sync login event
 		PlayerSyncLoginEvent syncloginevent = new PlayerSyncLoginEvent(connection, joindata.player);
 		Bukkit.getPluginManager().callEvent(syncloginevent);
 		if (syncloginevent.isLoginDenied()) {
@@ -108,7 +99,6 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener, ISer
 			return;
 		}
 
-		//bukkit sync login event
 		PlayerLoginEvent bukkitevent = new PlayerLoginEvent(joindata.player, hostname, networkManager.getAddress().getAddress(), networkManager.getRawAddress().getAddress());
 		checkBans(bukkitevent, joindata.data);
 		Bukkit.getPluginManager().callEvent(bukkitevent);
@@ -118,9 +108,8 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener, ISer
 			return;
 		}
 
-		//send packet to notify about actual login phase finished
 		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("finishlogin"));
-		//add player to game
+
 		joinGame(joindata.data);
 	}
 

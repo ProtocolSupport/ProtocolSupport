@@ -6,6 +6,7 @@ import java.net.InetSocketAddress;
 import java.security.PrivateKey;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -196,7 +197,6 @@ public abstract class AbstractLoginListener implements IPacketListener, IServerT
 
 		InetAddress address = saddress.getAddress();
 
-		//profile complete event
 		PlayerProfileCompleteEvent event = new PlayerProfileCompleteEvent(connection);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isLoginDenied()) {
@@ -211,12 +211,9 @@ public abstract class AbstractLoginListener implements IPacketListener, IServerT
 		}
 		event.getProperties().values().forEach(c -> c.forEach(profile::addProperty));
 
-		//bukkit async prelogin event, no uuid and name modifications sohuld be done after it, so this event must be always fired after profile complete
 		AsyncPlayerPreLoginEvent asyncEvent = new AsyncPlayerPreLoginEvent(profile.getName(), address, profile.getUUID());
 		Bukkit.getPluginManager().callEvent(asyncEvent);
 
-		//legacy bukkit sync prelogin event, fire only if has listeners to avoid waiting for main thread
-		//the kick result is inherited from async pre login event
 		PlayerPreLoginEvent syncEvent = new PlayerPreLoginEvent(profile.getName(), address, profile.getUUID());
 		if (asyncEvent.getResult() != PlayerPreLoginEvent.Result.ALLOWED) {
 			syncEvent.disallow(asyncEvent.getResult(), asyncEvent.getKickMessage());
@@ -231,7 +228,6 @@ public abstract class AbstractLoginListener implements IPacketListener, IServerT
 			}
 		}
 
-		//kick if not allowed
 		if (syncEvent.getResult() != PlayerPreLoginEvent.Result.ALLOWED) {
 			disconnect(syncEvent.getKickMessage());
 			return;
@@ -239,18 +235,29 @@ public abstract class AbstractLoginListener implements IPacketListener, IServerT
 
 		Bukkit.getLogger().info("UUID of player " + connection.getProfile().getName() + " is " + connection.getProfile().getUUID());
 
-		//enable compression if version does support it
 		if (hasCompression(connection.getVersion())) {
 			int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
 			if (threshold >= 0) {
-				networkManager.sendPacket(
+				CountDownLatch waitpacketsend = new CountDownLatch(1);
+				networkManager.getChannel().eventLoop().execute(() -> networkManager.sendPacket(
 					ServerPlatform.get().getPacketFactory().createSetCompressionPacket(threshold),
-					future -> ServerPlatform.get().getMiscUtils().enableCompression(networkManager.getChannel().pipeline(), threshold)
-				);
+					future -> {
+						ServerPlatform.get().getMiscUtils().enableCompression(networkManager.getChannel().pipeline(), threshold);
+						waitpacketsend.countDown();
+					}
+				));
+				try {
+					if (!waitpacketsend.await(5, TimeUnit.SECONDS)) {
+						disconnect("Timeout while waiting for login success send");
+						return;
+					}
+				} catch (InterruptedException e) {
+					disconnect("Exception while waiting for login success send");
+					return;
+				}
 			}
 		}
 
-		//switch to login listener play which allows infinitely waiting on login screen if needed
 		AbstractLoginListenerPlay listener = getLoginListenerPlay();
 		networkManager.setPacketListener(listener);
 		listener.finishLogin();
