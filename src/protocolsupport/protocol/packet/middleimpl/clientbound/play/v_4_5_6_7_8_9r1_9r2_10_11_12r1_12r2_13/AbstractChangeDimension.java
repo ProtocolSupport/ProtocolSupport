@@ -4,6 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChangeDimension;
 
 public abstract class AbstractChangeDimension extends MiddleChangeDimension {
+	private boolean ignore = true;
 
 	public AbstractChangeDimension(ConnectionImpl connection) {
 		super(connection);
@@ -12,7 +13,11 @@ public abstract class AbstractChangeDimension extends MiddleChangeDimension {
 	@Override
 	public boolean postFromServerRead() {
 		super.postFromServerRead();
-		cache.getChunkCache().clear();
+		if (ignore) {
+			ignore = false;
+		} else {
+			cache.getChunkCache().clear();
+		}
 		return true;
 	}
 
