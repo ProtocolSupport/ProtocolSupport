@@ -45,7 +45,7 @@ public class PlayerEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 		addRemap(new NetworkEntityMetadataObjectRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, NetworkEntityMetadataList remapped) {
-				NetworkEntityMetadataObjectIndex.Entity.FLAGS.getValue(original)
+				NetworkEntityMetadataObjectIndex.Entity.BASE_FLAGS.getValue(original)
 				.ifPresent(baseflags -> entity.getDataCache().setBaseFlags(baseflags.getValue()));
 				NetworkEntityMetadataObjectIndex.EntityLiving.HAND_USE.getValue(original)
 				.ifPresent(activehandflags -> {

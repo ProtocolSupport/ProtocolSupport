@@ -58,7 +58,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 	}
 
 	public static class Entity {
-		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> BASE_FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> AIR = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectOptionalChat> NAMETAG = takeNextIndex(NetworkEntityMetadataObjectOptionalChat.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> NAMETAG_VISIBLE = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
@@ -77,7 +77,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 	}
 
 	public static class Insentient extends EntityLiving {
-		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> INS_FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 		public static final int FLAGS_BIT_ATTACKING = 2;
 	}
 
@@ -106,7 +106,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 	}
 
 	public static class ArmorStand extends EntityLiving {
-		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> ARMORSTAND_FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVector3f> HEAD_ROT = takeNextIndex(NetworkEntityMetadataObjectVector3f.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVector3f> BODY_ROT = takeNextIndex(NetworkEntityMetadataObjectVector3f.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVector3f> LEFT_ARM_ROT = takeNextIndex(NetworkEntityMetadataObjectVector3f.class);
@@ -116,7 +116,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 	}
 
 	public static class BaseHorse extends Ageable {
-		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> HORSE_FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectOptionalUUID> OWNER = takeNextIndex(NetworkEntityMetadataObjectOptionalUUID.class);
 	}
 
@@ -166,7 +166,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 	}
 
 	public static class Sheep extends Ageable {
-		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> SHEEP_FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 	}
 
 	public static class PolarBear extends Ageable {
@@ -183,7 +183,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 
 	public static class Fox extends Ageable {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> VARIANT = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
-		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> FOX_FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectOptionalUUID> UNKNOWN_1 = takeNextIndex(NetworkEntityMetadataObjectOptionalUUID.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectOptionalUUID> UNKNOWN_2 = takeNextIndex(NetworkEntityMetadataObjectOptionalUUID.class);
 	}
@@ -194,7 +194,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> EAT_TIMER = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> GENE_MAIN = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> GENE_HIDDEN = takeNextIndex(NetworkEntityMetadataObjectByte.class);
-		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> PANDA_FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 	}
 
 	public static class Turtle extends Ageable {

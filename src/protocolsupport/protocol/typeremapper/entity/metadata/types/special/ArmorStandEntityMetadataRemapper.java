@@ -10,9 +10,9 @@ public class ArmorStandEntityMetadataRemapper extends LivingEntityMetadataRemapp
 	public static final ArmorStandEntityMetadataRemapper INSTANCE = new ArmorStandEntityMetadataRemapper();
 
 	public ArmorStandEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ArmorStand.FLAGS, 13), ProtocolVersionsHelper.UP_1_14);
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ArmorStand.FLAGS, 11), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ArmorStand.FLAGS, 10), ProtocolVersionsHelper.RANGE__1_8__1_9);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ArmorStand.ARMORSTAND_FLAGS, 13), ProtocolVersionsHelper.UP_1_14);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ArmorStand.ARMORSTAND_FLAGS, 11), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ArmorStand.ARMORSTAND_FLAGS, 10), ProtocolVersionsHelper.RANGE__1_8__1_9);
 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ArmorStand.HEAD_ROT, 14), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ArmorStand.HEAD_ROT, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

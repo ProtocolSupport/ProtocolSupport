@@ -9,7 +9,7 @@ import protocolsupport.utils.BitUtils;
 public class InsentientAttackingToLegacySwingingHadsIndexValesRemapper extends IndexValueRemapper<NetworkEntityMetadataObjectByte> {
 
 	public InsentientAttackingToLegacySwingingHadsIndexValesRemapper(int toIndex) {
-		super(NetworkEntityMetadataObjectIndex.Insentient.FLAGS, toIndex);
+		super(NetworkEntityMetadataObjectIndex.Insentient.INS_FLAGS, toIndex);
 	}
 
 	@Override

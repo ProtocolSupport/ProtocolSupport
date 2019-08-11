@@ -13,7 +13,7 @@ public class PandaEntityMetadataRemapper extends AgeableEntityMetadataRemapper {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.EAT_TIMER, 17), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.GENE_MAIN, 18), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.GENE_HIDDEN, 19), ProtocolVersionsHelper.UP_1_14);
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.FLAGS, 19), ProtocolVersionsHelper.UP_1_14);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.PANDA_FLAGS, 20), ProtocolVersionsHelper.UP_1_14);
 	}
 
 }
