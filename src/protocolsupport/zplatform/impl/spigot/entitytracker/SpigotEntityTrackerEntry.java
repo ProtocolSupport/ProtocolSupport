@@ -37,7 +37,6 @@ import net.minecraft.server.v1_14_R1.PacketPlayOutEntityVelocity;
 import net.minecraft.server.v1_14_R1.PacketPlayOutMount;
 import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
 import net.minecraft.server.v1_14_R1.PacketPlayOutUpdateAttributes;
-import net.minecraft.server.v1_14_R1.PlayerConnection;
 import net.minecraft.server.v1_14_R1.Vec3D;
 import net.minecraft.server.v1_14_R1.WorldMap;
 import net.minecraft.server.v1_14_R1.WorldServer;
@@ -55,9 +54,9 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 	private long trackerX;
 	private long trackerY;
 	private long trackerZ;
-	private int trackerYaw;
-	private int trackerPitch;
-	private int trackerHeadYaw;
+	private byte trackerYaw;
+	private byte trackerPitch;
+	private byte trackerHeadYaw;
 	private Vec3D trackerVelocity;
 	private int trackerTicks;
 	private List<Entity> trackerPassengers;
@@ -75,9 +74,9 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 		this.updateInterval = updateInterval;
 		this.alwaysUpdateVelocity = alwaysUpdateVelocity;
 		this.storeTrackerLocation();
-		this.trackerYaw = MathHelper.d((entity.yaw * 256.0F) / 360.0F);
-		this.trackerPitch = MathHelper.d((entity.pitch * 256.0F) / 360.0F);
-		this.trackerHeadYaw = MathHelper.d((entity.getHeadRotation() * 256.0F) / 360.0F);
+		this.trackerYaw = (byte) MathHelper.d((entity.yaw * 256.0F) / 360.0F);
+		this.trackerPitch = (byte) MathHelper.d((entity.pitch * 256.0F) / 360.0F);
+		this.trackerHeadYaw = (byte) MathHelper.d((entity.getHeadRotation() * 256.0F) / 360.0F);
 	}
 
 	private void updateRotationIfChanged() {
@@ -129,6 +128,8 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 				} else if ((this.trackerTicks > 0) || (this.tracker instanceof EntityArrow)) {
 					this.broadcast.accept(new PacketPlayOutEntityTeleport(this.tracker));
 					this.storeTrackerLocation();
+					this.trackerYaw = (byte) MathHelper.d((this.tracker.yaw * 256.0F) / 360.0F);
+					this.trackerPitch = (byte) MathHelper.d((this.tracker.pitch * 256.0F) / 360.0F);
 				}
 
 				if ((this.alwaysUpdateVelocity || this.tracker.impulse || ((trackerLiving != null) && trackerLiving.isGliding())) && (this.trackerTicks > 0)) {
@@ -185,8 +186,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 
 	@Override
 	public void b(EntityPlayer entityplayer) {
-		PlayerConnection playerconnection = entityplayer.playerConnection;
-		this.a(playerconnection::sendPacket, entityplayer);
+		this.a(entityplayer.playerConnection::sendPacket, entityplayer);
 		this.tracker.b(entityplayer);
 		entityplayer.d(this.tracker);
 	}
@@ -195,9 +195,8 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 	public void a(Consumer<Packet<?>> consumer, EntityPlayer entityplayer) {
 		if (!this.tracker.dead) {
 			Packet<?> spawnPacket = this.tracker.N();
-			this.trackerHeadYaw = MathHelper.d((this.tracker.getHeadRotation() * 256.0F) / 360.0F);
 			consumer.accept(spawnPacket);
-			consumer.accept(new PacketPlayOutEntityHeadRotation(this.tracker, (byte) this.trackerHeadYaw));
+			consumer.accept(new PacketPlayOutEntityHeadRotation(this.tracker, this.trackerHeadYaw));
 
 			if (!this.tracker.getDataWatcher().d()) {
 				consumer.accept(new PacketPlayOutEntityMetadata(this.tracker.getId(), this.tracker.getDataWatcher(), true));
