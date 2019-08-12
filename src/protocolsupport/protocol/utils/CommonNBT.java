@@ -7,15 +7,14 @@ import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBT;
 import protocolsupport.protocol.types.nbt.NBTByte;
 import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTList;
+import protocolsupport.protocol.types.nbt.NBTNumber;
 import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftPotionData;
 
 public class CommonNBT {
-
-	public static final String DISPLAY = "display";
-	public static final String DISPLAY_NAME = "Name";
-	public static final String DISPLAY_LORE = "Lore";
 
 	public static NBTCompound getOrCreateRootTag(NetworkItemStack itemstack) {
 		NBTCompound tag = itemstack.getNBT();
@@ -26,6 +25,11 @@ public class CommonNBT {
 		return tag;
 	}
 
+
+	public static final String DISPLAY = "display";
+	public static final String DISPLAY_NAME = "Name";
+	public static final String DISPLAY_LORE = "Lore";
+
 	public static NBTCompound getOrCreateDisplayTag(NBTCompound rootTag) {
 		NBTCompound display = rootTag.getTagOfType(DISPLAY, NBTType.COMPOUND);
 		if (display == null) {
@@ -35,17 +39,6 @@ public class CommonNBT {
 		return display;
 	}
 
-	public static final String BOOK_ENCHANTMENTS = "StoredEnchantments";
-
-	public static final String MODERN_ENCHANTMENTS = "Enchantments";
-
-	public static final String LEGACY_ENCHANTMENTS = "ench";
-
-	public static final String MOB_SPAWNER_SPAWNDATA = "SpawnData";
-
-	public static NetworkEntityType getSpawnedMobType(NBTCompound spawndataTag) {
-		return NetworkEntityType.getByRegistrySTypeId(NBTString.getValueOrNull(spawndataTag.getTagOfType("id", NBTType.STRING)));
-	}
 
 	public static String[] getSignLines(NBTCompound tag) {
 		String[] lines = new String[4];
@@ -54,6 +47,45 @@ public class CommonNBT {
 		}
 		return lines;
 	}
+
+
+	public static final String BOOK_ENCHANTMENTS = "StoredEnchantments";
+
+	public static final String MODERN_ENCHANTMENTS = "Enchantments";
+
+	public static final String LEGACY_ENCHANTMENTS = "ench";
+
+
+	public static final String MOB_SPAWNER_SPAWNDATA = "SpawnData";
+
+	public static NetworkEntityType getSpawnedMobType(NBTCompound spawndataTag) {
+		return NetworkEntityType.getByRegistrySTypeId(NBTString.getValueOrNull(spawndataTag.getTagOfType("id", NBTType.STRING)));
+	}
+
+
+	public static final String POTION_TYPE = "Potion";
+
+	public static String getPotionEffectType(NBTCompound tag) {
+		NBTString potionType = tag.getTagOfType(POTION_TYPE, NBTType.STRING);
+		if (potionType != null) {
+			return potionType.getValue();
+		}
+		NBTList<NBTCompound> customPotionEffects = tag.getTagListOfType("CustomPotionEffects", NBTType.COMPOUND);
+		for (NBTCompound customPotionEffect : customPotionEffects.getTags()) {
+			NBTNumber potionId = customPotionEffect.getNumberTag("Id");
+			if (potionId != null) {
+				return MinecraftPotionData.getNameById(potionId.getAsInt());
+			}
+		}
+		return null;
+	}
+
+
+	public static final String ITEM_DAMAGE = "Damage";
+
+
+	public static final String MAP_ID = "map";
+
 
 	public static NetworkItemStack deserializeItemStackFromNBT(NBTCompound compound) {
 		NetworkItemStack stack = new NetworkItemStack();

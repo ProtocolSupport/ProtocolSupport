@@ -5,10 +5,7 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexR
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotionId;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
-import protocolsupport.protocol.types.nbt.NBTList;
-import protocolsupport.protocol.types.nbt.NBTString;
-import protocolsupport.protocol.types.nbt.NBTType;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftPotionData;
+import protocolsupport.protocol.utils.CommonNBT;
 
 public class PotionToLegacyIdComplexRemapper implements ItemStackComplexRemapper {
 
@@ -23,11 +20,7 @@ public class PotionToLegacyIdComplexRemapper implements ItemStackComplexRemapper
 		if (tag == null) {
 			return itemstack;
 		}
-		String potion = NBTString.getValueOrNull(tag.getTagOfType("Potion", NBTType.STRING));
-		NBTList<NBTCompound> customPotionEffects = tag.getTagListOfType("CustomPotionEffects", NBTType.COMPOUND);
-		if ((customPotionEffects != null) && (customPotionEffects.size() >= 1)) {
-			potion = MinecraftPotionData.getNameById(customPotionEffects.getTag(0).getNumberTag("Id").getAsInt());
-		}
+		String potion = CommonNBT.getPotionEffectType(tag);
 		if (potion != null) {
 			itemstack.setLegacyData(LegacyPotionId.toLegacyId(potion, isThrowablePotion));
 		}
