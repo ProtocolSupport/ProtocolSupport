@@ -13,6 +13,7 @@ import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkipping
 import protocolsupport.protocol.types.WindowType;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftPotionData;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -79,7 +80,7 @@ public class GenericIdSkipper {
 		}
 		@Override
 		protected ArrayBasedIntSkippingTable createTable() {
-			return new ArrayBasedIntSkippingTable(33);
+			return new ArrayBasedIntSkippingTable(MinecraftPotionData.ID_MAX + 1);
 		}
 	};
 
