@@ -2,8 +2,6 @@ package protocolsupport.protocol.utils.minecraftdata;
 
 import com.google.gson.JsonObject;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
@@ -11,23 +9,27 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class MinecraftBlockData {
 
-	protected static final Int2ObjectMap<BlockDataEntry> blocks = new Int2ObjectOpenHashMap<>();
+	protected static final BlockDataEntry[] blocks = new BlockDataEntry[MinecraftData.BLOCKDATA_COUNT];
 
 	static {
 		JsonObject rootObject = ResourceUtils.getAsJson(MinecraftData.getResourcePath("blocks.json"));
 		for (String blockdataidString : rootObject.keySet()) {
 			JsonObject blockdataObject = JsonUtils.getJsonObject(rootObject, blockdataidString);
 			JsonObject soundsObject = JsonUtils.getJsonObject(blockdataObject, "sounds");
-			blocks.put(Integer.parseInt(blockdataidString), new BlockDataEntry(
+			blocks[Integer.parseInt(blockdataidString)] = new BlockDataEntry(
 				MinecraftSoundData.getNameById(JsonUtils.getInt(soundsObject, "break")),
 				JsonUtils.getFloat(soundsObject, "volume"),
 				JsonUtils.getFloat(soundsObject, "pitch")
-			));
+			);
 		}
 	}
 
 	public static BlockDataEntry get(int blockdataId) {
-		return blocks.get(blockdataId);
+		if ((blockdataId >= 0) && (blockdataId < blocks.length)) {
+			return blocks[blockdataId];
+		} else {
+			return null;
+		}
 	}
 
 	public static class BlockDataEntry {

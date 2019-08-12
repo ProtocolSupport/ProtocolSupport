@@ -27,7 +27,7 @@ public class MinecraftPotionData {
 	}
 
 	public static String getNameById(int id) {
-		if (id >= 0 && id < idToName.length) {
+		if ((id >= 0) && (id < idToName.length)) {
 			return idToName[id];
 		} else {
 			return null;

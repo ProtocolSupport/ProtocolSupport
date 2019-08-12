@@ -2,7 +2,6 @@ package protocolsupport.protocol.utils.minecraftdata;
 
 import com.google.gson.JsonObject;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
@@ -10,17 +9,25 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class MinecraftSoundData {
 
-	private static final Int2ObjectOpenHashMap<String> idToName = new Int2ObjectOpenHashMap<>();
+	protected static final String[] idToName = new String[1024];
+
+	protected static void register(int id, String name) {
+		idToName[id] = name;
+	}
 
 	static {
 		JsonObject rootObject = ResourceUtils.getAsJson(MinecraftData.getResourcePath("sounds.json"));
 		for (String soundidString : rootObject.keySet()) {
-			idToName.put(Integer.parseInt(soundidString), JsonUtils.getString(rootObject, soundidString));
+			register(Integer.parseInt(soundidString), JsonUtils.getString(rootObject, soundidString));
 		}
 	}
 
 	public static String getNameById(int id) {
-		return idToName.get(id);
+		if ((id >= 0) && (id < idToName.length)) {
+			return idToName[id];
+		} else {
+			return null;
+		}
 	}
 
 }
