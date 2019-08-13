@@ -6,9 +6,9 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public abstract class MiddleVehiclePassengers extends ClientBoundMiddlePacket {
+public abstract class MiddleEntityPassengers extends ClientBoundMiddlePacket {
 
-	public MiddleVehiclePassengers(ConnectionImpl connection) {
+	public MiddleEntityPassengers(ConnectionImpl connection) {
 		super(connection);
 	}
 

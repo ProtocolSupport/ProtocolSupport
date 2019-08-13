@@ -26,7 +26,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 	}
 
 	public static ClientBoundPacketData create(TileEntity tile) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_TILE);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_TILE);
 		PositionSerializer.writePosition(serializer, tile.getPosition());
 		serializer.writeByte(tile.getType().getNetworkId());
 		ItemStackSerializer.writeDirectTag(serializer, tile.getNBT());

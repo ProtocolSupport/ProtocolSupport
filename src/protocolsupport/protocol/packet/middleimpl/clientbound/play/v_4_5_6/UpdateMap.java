@@ -26,7 +26,7 @@ public class UpdateMap extends MiddleUpdateMap {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		RecyclableCollection<ClientBoundPacketData> datas = RecyclableArrayList.create();
-		ClientBoundPacketData scaledata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_MAP);
+		ClientBoundPacketData scaledata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 		scaledata.writeShort(mapId);
 		scaledata.writeShort(id);
 		scaledata.writeShort(2);
@@ -34,7 +34,7 @@ public class UpdateMap extends MiddleUpdateMap {
 		scaledata.writeByte(scale);
 		datas.add(scaledata);
 		if (icons.length > 0) {
-			ClientBoundPacketData iconsdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_MAP);
+			ClientBoundPacketData iconsdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 			iconsdata.writeShort(mapId);
 			iconsdata.writeShort(id);
 			iconsdata.writeShort((icons.length * 3) + 1);
@@ -51,7 +51,7 @@ public class UpdateMap extends MiddleUpdateMap {
 			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, colors);
 			ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(version);
 			for (ColumnEntry entry : maptransformer.toPre18MapData()) {
-				ClientBoundPacketData mapdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_MAP);
+				ClientBoundPacketData mapdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 				mapdata.writeShort(mapId);
 				mapdata.writeShort(id);
 				mapdata.writeShort(3 + entry.getColors().length);

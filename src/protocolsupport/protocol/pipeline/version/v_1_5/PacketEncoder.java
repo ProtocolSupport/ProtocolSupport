@@ -38,7 +38,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.Invento
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.SetPosition;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.VehiclePassengers;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.EntityPassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.AcknowledgePlayerDigging;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockAction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockBreakAnimation;
@@ -117,16 +117,16 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.STATUS, PacketType.CLIENTBOUND_STATUS_SERVER_INFO, ServerInfo::new);
 		registry.register(NetworkState.STATUS, PacketType.CLIENTBOUND_STATUS_PONG, NoopPong::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_KEEP_ALIVE, KeepAlive::new);
-		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_LOGIN, StartGame::new);
+		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_START_GAME, StartGame::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_CHAT, Chat::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_UPDATE_TIME, TimeUpdate::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_EQUIPMENT, EntityEquipment::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SPAWN_POSITION, SpawnPosition::new);
-		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_UPDATE_HEALTH, SetHealth::new);
+		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SET_HEALTH, SetHealth::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_RESPAWN, ChangeDimension::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_POSITION, SetPosition::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_HELD_SLOT, HeldSlot::new);
-		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ANIMATION, EntityAnimation::new);
+		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_ANIMATION, EntityAnimation::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED, SpawnNamed::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_COLLECT_EFFECT, CollectEffect::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT, SpawnObject::new);
@@ -135,7 +135,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SPAWN_EXP_ORB, SpawnExpOrb::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_VELOCITY, EntityVelocity::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY, EntityDestroy::new);
-		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY, Entity::new);
+		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_NOOP, Entity::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE, EntityRelMove::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_LOOK, EntityLook::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE_LOOK, EntityRelMoveLook::new);
@@ -146,7 +146,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA, EntityMetadata::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_EFFECT_ADD, EntityEffectAdd::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_EFFECT_REMOVE, EntityEffectRemove::new);
-		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_EXPERIENCE, SetExperience::new);
+		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SET_EXPERIENCE, SetExperience::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE, Chunk::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI, BlockChangeMulti::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE, BlockChangeSingle::new);
@@ -158,7 +158,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND, WorldCustomSound::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES, WorldParticle::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_GAME_STATE_CHANGE, GameStateChange::new);
-		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SPAWN_WEATHER, SpawnGlobal::new);
+		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SPAWN_GLOBAL, SpawnGlobal::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN, InventoryOpen::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_WINDOW_HORSE_OPEN, InventoryHorseOpen::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_WINDOW_CLOSE, InventoryClose::new);
@@ -166,10 +166,10 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_WINDOW_SET_ITEMS, InventorySetItems::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_WINDOW_DATA, InventoryData::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_WINDOW_TRANSACTION, InventoryConfirmTransaction::new);
-		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_MAP, UpdateMap::new);
-		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_UPDATE_TILE, BlockTileUpdate::new);
+		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_UPDATE_MAP, UpdateMap::new);
+		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_TILE, BlockTileUpdate::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_PLAYER_INFO, PlayerListSetEntry::new);
-		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ABILITIES, PlayerAbilities::new);
+		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_PLAYER_ABILITIES, PlayerAbilities::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_TAB_COMPLETE, TabComplete::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SCOREBOARD_OBJECTIVE, ScoreboardObjective::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SCOREBOARD_SCORE, ScoreboardScore::new);
@@ -177,7 +177,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SCOREBOARD_TEAM, ScoreboardTeam::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD, CustomPayload::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_KICK_DISCONNECT, KickDisconnect::new);
-		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SET_PASSENGERS, VehiclePassengers::new);
+		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_PASSENGERS, EntityPassengers::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_CHUNK_UNLOAD, ChunkUnload::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_CHUNK_LIGHT, ChunkLight::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_MERCHANT_TRADE_LIST, MerchantTradeList::new);

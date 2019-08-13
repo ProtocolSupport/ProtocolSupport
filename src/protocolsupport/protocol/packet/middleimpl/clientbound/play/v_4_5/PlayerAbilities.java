@@ -16,7 +16,7 @@ public class PlayerAbilities extends MiddlePlayerAbilities {
 
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ABILITIES);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_PLAYER_ABILITIES);
 		serializer.writeByte(flags);
 		serializer.writeByte((int) (flyspeed * 255.0F));
 		serializer.writeByte((int) (walkspeed * 255.0F));

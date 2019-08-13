@@ -27,7 +27,7 @@ public class EntityAnimation extends MiddleEntityAnimation {
 
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ANIMATION);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_ANIMATION);
 		serializer.writeInt(entityId);
 		serializer.writeByte(animationIds.get(animation));
 		return RecyclableSingletonList.create(serializer);

@@ -1,9 +1,9 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleVehiclePassengers;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityPassengers;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
@@ -11,9 +11,9 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class VehiclePassengers extends MiddleVehiclePassengers {
+public class EntityPassengers extends MiddleEntityPassengers {
 
-	public VehiclePassengers(ConnectionImpl connection) {
+	public EntityPassengers(ConnectionImpl connection) {
 		super(connection);
 	}
 
@@ -51,6 +51,7 @@ public class VehiclePassengers extends MiddleVehiclePassengers {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_LEASH);
 		serializer.writeInt(passengerId);
 		serializer.writeInt(vehicleId);
+		serializer.writeBoolean(false);
 		return serializer;
 	}
 

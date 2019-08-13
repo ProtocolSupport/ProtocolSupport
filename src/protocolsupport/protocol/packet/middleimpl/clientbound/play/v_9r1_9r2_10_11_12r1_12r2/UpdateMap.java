@@ -20,7 +20,7 @@ public class UpdateMap extends MiddleUpdateMap {
 
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_MAP);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 		VarNumberSerializer.writeVarInt(serializer, id);
 		serializer.writeByte(scale);
 		serializer.writeBoolean(showIcons);

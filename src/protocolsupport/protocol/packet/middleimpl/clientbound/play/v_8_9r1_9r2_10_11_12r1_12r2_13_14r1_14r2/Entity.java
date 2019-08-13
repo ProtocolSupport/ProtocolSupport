@@ -17,7 +17,7 @@ public class Entity extends MiddleEntity {
 
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_NOOP);
 		VarNumberSerializer.writeVarInt(serializer, entityId);
 		return RecyclableSingletonList.create(serializer);
 	}

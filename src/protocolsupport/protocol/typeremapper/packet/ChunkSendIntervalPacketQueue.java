@@ -22,7 +22,7 @@ public class ChunkSendIntervalPacketQueue extends ClientboundPacketProcessor {
 		PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE.getId(), PacketType.CLIENTBOUND_PLAY_CHUNK_UNLOAD.getId(),
 		PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE.getId(), PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI.getId(),
 		PacketType.CLIENTBOUND_PLAY_BLOCK_ACTION.getId(), PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_ANIMATION.getId(),
-		PacketType.CLIENTBOUND_PLAY_UPDATE_TILE.getId(), PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN_ID.getId(),
+		PacketType.CLIENTBOUND_PLAY_BLOCK_TILE.getId(), PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN_ID.getId(),
 		PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED_ID.getId()
 	});
 	protected static boolean shouldQueue(IPacketData packet) {
