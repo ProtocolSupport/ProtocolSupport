@@ -21,7 +21,6 @@ public class PacketCodec extends ModernPacketCodec {
 		registry.register(PacketType.CLIENTBOUND_PLAY_SPAWN_PAINTING, 0x04);
 		registry.register(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED, 0x05);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_ANIMATION, 0x06);
-		registry.register(PacketType.CLIENTBOUND_PLAY_STATISTICS, 0x07);
 		registry.register(PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_ANIMATION, 0x08);
 		registry.register(PacketType.CLIENTBOUND_PLAY_BLOCK_TILE, 0x09);
 		registry.register(PacketType.CLIENTBOUND_PLAY_BLOCK_ACTION, 0x0A);

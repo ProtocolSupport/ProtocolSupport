@@ -67,7 +67,6 @@ public class PacketCodec extends ModernPacketCodec {
 		registry.register(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP, 0x24);
 		registry.register(PacketType.CLIENTBOUND_PLAY_BLOCK_TILE, 0x9);
 		registry.register(PacketType.CLIENTBOUND_PLAY_SIGN_EDITOR, 0x2A);
-		registry.register(PacketType.CLIENTBOUND_PLAY_STATISTICS, 0x7);
 		registry.register(PacketType.CLIENTBOUND_PLAY_PLAYER_INFO, 0x2D);
 		registry.register(PacketType.CLIENTBOUND_PLAY_PLAYER_ABILITIES, 0x2B);
 		registry.register(PacketType.CLIENTBOUND_PLAY_TAB_COMPLETE, 0xE);

@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r2;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
