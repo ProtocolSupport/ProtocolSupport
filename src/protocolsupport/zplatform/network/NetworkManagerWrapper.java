@@ -18,9 +18,13 @@ import protocolsupport.protocol.packet.handler.IServerThreadTickListener;
 
 public abstract class NetworkManagerWrapper {
 
-	protected final BukkitTask handlerTick;
-	public NetworkManagerWrapper() {
-		handlerTick = new BukkitRunnable() {
+	protected final Channel channel;
+
+	protected BukkitTask syncTickTask;
+
+	public NetworkManagerWrapper(Channel channel) {
+		this.channel = channel;
+		channel.eventLoop().submit(() -> syncTickTask = new BukkitRunnable() {
 			@Override
 			public void run() {
 				if (!isConnected()) {
@@ -32,7 +36,17 @@ public abstract class NetworkManagerWrapper {
 					((IServerThreadTickListener) handler).tick();
 				}
 			}
-		}.runTaskTimer(ProtocolSupport.getInstance(), 1, 1);
+		}.runTaskTimer(ProtocolSupport.getInstance(), 1, 1));
+	}
+
+	public Channel getChannel() {
+		return channel;
+	}
+
+	public void cancelSyncTickTask() {
+		if (syncTickTask != null) {
+			syncTickTask.cancel();
+		}
 	}
 
 	public abstract Object unwrap();
@@ -46,8 +60,6 @@ public abstract class NetworkManagerWrapper {
 	public abstract void setAddress(InetSocketAddress address);
 
 	public abstract boolean isConnected();
-
-	public abstract Channel getChannel();
 
 	public abstract void close(String closeMessage);
 

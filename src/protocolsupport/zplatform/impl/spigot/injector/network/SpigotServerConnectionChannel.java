@@ -30,7 +30,7 @@ public class SpigotServerConnectionChannel extends ChannelInitializer {
 	@Override
 	protected void initChannel(Channel channel) {
 		ChannelPipeline pipeline = channel.pipeline();
-		NetworkManagerWrapper networkmanager = new SpigotNetworkManagerWrapper((NetworkManager) pipeline.get(SpigotChannelHandlers.NETWORK_MANAGER));
+		NetworkManagerWrapper networkmanager = new SpigotNetworkManagerWrapper(channel, (NetworkManager) pipeline.get(SpigotChannelHandlers.NETWORK_MANAGER));
 		networkmanager.setPacketListener(new SpigotFakePacketListener(networkmanager));
 		ConnectionImpl connection = new ConnectionImpl(networkmanager);
 		connection.storeInChannel(channel);

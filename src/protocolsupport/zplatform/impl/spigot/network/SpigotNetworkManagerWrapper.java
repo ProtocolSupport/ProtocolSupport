@@ -27,7 +27,8 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	private final NetworkManager internal;
-	public SpigotNetworkManagerWrapper(NetworkManager internal) {
+	public SpigotNetworkManagerWrapper(Channel channel, NetworkManager internal) {
+		super(channel);
 		this.internal = internal;
 	}
 
@@ -54,11 +55,6 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 	@Override
 	public boolean isConnected() {
 		return internal.isConnected();
-	}
-
-	@Override
-	public Channel getChannel() {
-		return internal.channel;
 	}
 
 	@Override

@@ -85,6 +85,8 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener, ISer
 	protected void tryJoin() {
 		ready = false;
 
+		networkManager.cancelSyncTickTask();
+
 		Bukkit.getOnlinePlayers().stream()
 		.filter(player -> player.getUniqueId().equals(connection.getProfile().getUUID()))
 		.forEach(player -> player.kickPlayer("You logged in from another location"));
