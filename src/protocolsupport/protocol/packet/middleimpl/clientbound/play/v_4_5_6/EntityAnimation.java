@@ -14,9 +14,9 @@ public class EntityAnimation extends MiddleEntityAnimation {
 
 	protected static final EnumMap<Animation, Integer> animationIds = new EnumMap<>(Animation.class);
 	static {
-		animationIds.put(Animation.SWING_ARM, 1);
+		animationIds.put(Animation.SWING_MAIN_HAND, 1);
 		animationIds.put(Animation.WAKE_UP, 3);
-		animationIds.put(Animation.EAT, 5);
+		animationIds.put(Animation.SWING_OFF_HAND, 5);
 		animationIds.put(Animation.CRIT, 6);
 		animationIds.put(Animation.MAGIC_CRIT, 7);
 	}
