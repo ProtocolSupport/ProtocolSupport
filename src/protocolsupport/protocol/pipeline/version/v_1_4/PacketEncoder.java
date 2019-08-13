@@ -40,11 +40,11 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorl
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4.InventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.Chat;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.EntityPassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.InventoryHorseOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.SetPosition;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.EntityPassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.AcknowledgePlayerDigging;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockAction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockBreakAnimation;
