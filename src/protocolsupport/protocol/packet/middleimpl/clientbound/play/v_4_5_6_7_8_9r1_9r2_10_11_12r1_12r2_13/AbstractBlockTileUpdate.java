@@ -26,8 +26,8 @@ public abstract class AbstractBlockTileUpdate extends MiddleBlockTileUpdate {
 			int sectionNumber = y >> 4;
 			tile =
 				tileRemapper.tileThatNeedsBlockData(tile.getType()) ?
-				tileRemapper.remap(tile) :
-				tileRemapper.remap(tile, cachedChunk.getBlock(sectionNumber, CachedChunk.getBlockIndex(x & 0xF, y & 0xF, z & 0xF)));
+				tileRemapper.remap(tile, cachedChunk.getBlock(sectionNumber, CachedChunk.getBlockIndex(x & 0xF, y & 0xF, z & 0xF))) :
+				tileRemapper.remap(tile);
 			cachedChunk.getTiles(sectionNumber).put(tile.getPosition(), tile);
 			return true;
 		} else {
