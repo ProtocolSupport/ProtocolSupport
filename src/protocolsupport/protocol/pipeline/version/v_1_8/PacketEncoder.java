@@ -1,6 +1,5 @@
 package protocolsupport.protocol.pipeline.version.v_1_8;
 
-import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
@@ -112,12 +111,6 @@ public class PacketEncoder extends AbstractPacketEncoder {
 	public PacketEncoder(ConnectionImpl connection) {
 		super(connection);
 		connection.addClientboundPacketProcessor(chunkqueue);
-	}
-
-	@Override
-	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-		super.handlerRemoved(ctx);
-		chunkqueue.release();
 	}
 
 	{

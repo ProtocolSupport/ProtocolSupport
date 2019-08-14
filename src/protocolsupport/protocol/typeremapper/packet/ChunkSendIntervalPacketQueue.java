@@ -82,6 +82,7 @@ public class ChunkSendIntervalPacketQueue extends ClientboundPacketProcessor {
 		UNLOCKED, LOCKED;
 	}
 
+	@Override
 	public void release() {
 		queue.forEach(Recyclable::recycle);
 		queue.clear();

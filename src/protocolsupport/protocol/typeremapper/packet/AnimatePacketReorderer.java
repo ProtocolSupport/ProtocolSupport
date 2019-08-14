@@ -36,6 +36,7 @@ public class AnimatePacketReorderer extends ServerboundPacketProcessor {
 		}
 	}
 
+	@Override
 	public void release() {
 		if (animatePacket != null) {
 			animatePacket.recycle();

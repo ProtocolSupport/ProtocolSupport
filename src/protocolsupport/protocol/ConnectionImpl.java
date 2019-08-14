@@ -42,7 +42,18 @@ public class ConnectionImpl extends Connection {
 	protected final NetworkManagerWrapper networkmanager;
 	public ConnectionImpl(NetworkManagerWrapper networkmanager) {
 		this.networkmanager = networkmanager;
+		this.networkmanager.getChannel().attr(key).set(this);
 	}
+
+	public static ConnectionImpl getFromChannel(Channel channel) {
+		return channel.attr(key).get();
+	}
+
+	public void release() {
+		transformerEncoderHeadProcessor.release0();
+		transformerDecoderHeadProcessor.release0();
+	}
+
 
 	public NetworkManagerWrapper getNetworkManagerWrapper() {
 		return networkmanager;
@@ -174,14 +185,6 @@ public class ConnectionImpl extends Connection {
 		});
 	}
 
-	public static ConnectionImpl getFromChannel(Channel channel) {
-		return channel.attr(key).get();
-	}
-
-	public void storeInChannel(Channel channel) {
-		channel.attr(key).set(this);
-	}
-
 	public void setVersion(ProtocolVersion version) {
 		this.version = version;
 	}
@@ -248,7 +251,7 @@ public class ConnectionImpl extends Connection {
 	}
 
 	/**
-	 * Processes and writer data that was created as a result of serverbound packet transformation. <br>
+	 * Processes and reads data that was created as a result of serverbound packet transformation. <br>
 	 * Passed collection is recycled after this function completes.
 	 * @param packets packets data
 	 * @param firereadcomplete fire read complete after reading all packets
@@ -309,7 +312,19 @@ public class ConnectionImpl extends Connection {
 
 		private ClientboundPacketProcessor next;
 
-		private void write0(IPacketData packet) {
+		private void release0() {
+			release();
+			if (next != null) {
+				next.release0();
+			}
+		}
+
+		/**
+		 * Actually reads/writes packet
+		 * @param packet packet
+		 * @param promise
+		 */
+		protected final void write(IPacketData packet) {
 			if (next != null) {
 				next.process(packet);
 			} else {
@@ -336,20 +351,17 @@ public class ConnectionImpl extends Connection {
 		}
 
 		/**
-		 * Actually reads/writes packet
-		 * @param packet packet
-		 * @param promise
-		 */
-		protected final void write(IPacketData packet) {
-			write0(packet);
-		}
-
-		/**
 		 * Processes data that was created as a result of clientbound packet transformation
 		 * @param packet packet
 		 */
-		public void process(IPacketData packet) {
-			write0(packet);
+		protected void process(IPacketData packet) {
+			write(packet);
+		}
+
+		/**
+		 * Called after connection close and netty pipeline destroy
+		 */
+		protected void release() {
 		}
 
 	}
@@ -363,7 +375,18 @@ public class ConnectionImpl extends Connection {
 
 		private ServerboundPacketProcessor next;
 
-		private void read0(IPacketData packet) {
+		private void release0() {
+			release();
+			if (next != null) {
+				next.release0();
+			}
+		}
+
+		/**
+		 * Actually reads/writes packet
+		 * @param packet packet
+		 */
+		protected final void read(IPacketData packet) {
 			if (next != null) {
 				next.process(packet);
 			} else {
@@ -390,19 +413,17 @@ public class ConnectionImpl extends Connection {
 		}
 
 		/**
-		 * Actually reads/writes packet
-		 * @param packet packet
-		 */
-		protected final void read(IPacketData packet) {
-			read0(packet);
-		}
-
-		/**
 		 * Processes data that was created as a result of serverbound packet transformation.
 		 * @param packet packet
 		 */
-		public void process(IPacketData packet) {
-			read0(packet);
+		protected void process(IPacketData packet) {
+			read(packet);
+		}
+
+		/**
+		 * Called after connection close and netty pipeline destroy
+		 */
+		protected void release() {
 		}
 
 	}

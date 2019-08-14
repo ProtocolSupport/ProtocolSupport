@@ -40,10 +40,4 @@ public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder 
 		buffer.discardReadBytes();
 	}
 
-	@Override
-	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-		super.handlerRemoved(ctx);
-		animateReorderer.release();
-	}
-
 }

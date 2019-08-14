@@ -85,6 +85,13 @@ public class LogicHandler extends MessageToMessageCodec<Object, Object> {
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
 		Bukkit.getPluginManager().callEvent(new ConnectionCloseEvent(connection));
+
+	}
+
+	@Override
+	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+		super.handlerRemoved(ctx);
+		connection.release();
 		ProtocolStorage.removeConnection(connection.getRawAddress());
 	}
 
