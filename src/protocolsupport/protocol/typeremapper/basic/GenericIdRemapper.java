@@ -13,7 +13,7 @@ public class GenericIdRemapper {
 		{
 			registerRemapEntry(WindowType.BLAST_FURNACE, WindowType.FURNACE, ProtocolVersionsHelper.BEFORE_1_14);
 			registerRemapEntry(WindowType.SMOKER, WindowType.FURNACE, ProtocolVersionsHelper.BEFORE_1_14);
-			registerRemapEntry(WindowType.SHULKER_BOX, WindowType.GENERIC_9X4, ProtocolVersionsHelper.BEFORE_1_11);
+			registerRemapEntry(WindowType.SHULKER_BOX, WindowType.GENERIC_9X3, ProtocolVersionsHelper.BEFORE_1_11);
 		}
 		@Override
 		protected EnumRemappingTable<WindowType> createTable() {
