@@ -26,6 +26,9 @@ public class CommonNBT {
 	}
 
 
+	public static final String BLOCK_TAG = "BlockEntityTag";
+
+
 	public static final String DISPLAY = "display";
 	public static final String DISPLAY_NAME = "Name";
 	public static final String DISPLAY_LORE = "Lore";
@@ -85,6 +88,13 @@ public class CommonNBT {
 
 
 	public static final String MAP_ID = "map";
+
+
+	public static final String BANNER_BASE = "Base";
+
+	public static final String BANNER_PATTERNS = "Patterns";
+
+	public static final String BANNER_PATTERN_COLOR = "Color";
 
 
 	public static NetworkItemStack deserializeItemStackFromNBT(NBTCompound compound) {

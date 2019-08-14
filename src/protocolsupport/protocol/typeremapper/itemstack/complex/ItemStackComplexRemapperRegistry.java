@@ -5,17 +5,22 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.inventory.meta.BannerMeta;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.BannerFromLegacyComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.DisplayNameFromLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.EnchantFromLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.LoreFromLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.MapFromLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.PotionFromLegacyIdComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.ShieldFromLegacyComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.SpawnEggFromIntIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.SpawnEggFromStringIdComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.BannerToLegacyComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.BookPagesToLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DisplayNameToLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHeadToDragonPlayerHeadComplexRemapper;
@@ -27,8 +32,10 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.LoreToLe
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.MapToLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PotionToLegacyIdComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.ShieldToLegacyComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.SpawnEggToIntIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.SpawnEggToStringIdComplexRemapper;
+import protocolsupport.protocol.typeremapper.legacy.LegacyBanner;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
@@ -65,6 +72,15 @@ public class ItemStackComplexRemapperRegistry {
 
 	static {
 		registerToClient(Material.FILLED_MAP, new MapToLegacyIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
+		MinecraftData.getItems()
+		.filter(material -> Bukkit.getItemFactory().getItemMeta(material) instanceof BannerMeta)
+		.forEach(material -> {
+			Integer color = LegacyBanner.getColorByMaterial(material);
+			if (color != null) {
+				registerToClient(material, new BannerToLegacyComplexRemapper(color), ProtocolVersionsHelper.BEFORE_1_13);
+			}
+		});
+		registerToClient(Material.SHIELD, new ShieldToLegacyComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
 
 		registerToClient(Material.DRAGON_HEAD, new DragonHeadToDragonPlayerHeadComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
 		registerToClient(Material.PLAYER_HEAD, new PlayerHeadToLegacyOwnerComplexRemapper(), ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5));
@@ -105,8 +121,7 @@ public class ItemStackComplexRemapperRegistry {
 		LoreFromLegacyTextComplexRemapper lorefromlegacytext = new LoreFromLegacyTextComplexRemapper();
 		EnchantFromLegacyIdComplexRemapper enchantfromlegacyid = new EnchantFromLegacyIdComplexRemapper();
 		DisplayNameFromLegacyTextComplexRemapper dnamefromlegacytext = new DisplayNameFromLegacyTextComplexRemapper();
-		Arrays.stream(Material.values())
-		.filter(Material::isItem)
+		MinecraftData.getItems()
 		.forEach(material -> {
 			registerFromClient(material, lorefromlegacytext, ProtocolVersionsHelper.BEFORE_1_14);
 			registerFromClient(material, enchantfromlegacyid, ProtocolVersionsHelper.BEFORE_1_13);
@@ -114,6 +129,13 @@ public class ItemStackComplexRemapperRegistry {
 		});
 
 		registerFromClient(Material.FILLED_MAP, new MapFromLegacyIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
+		MinecraftData.getItems()
+		.filter(material -> Bukkit.getItemFactory().getItemMeta(material) instanceof BannerMeta)
+		.filter(material -> LegacyBanner.getColorByMaterial(material) != null)
+		.forEach(material -> registerFromClient(
+			material, new BannerFromLegacyComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_13
+		));
+		registerFromClient(Material.SHIELD, new ShieldFromLegacyComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
 
 		registerFromClient(Material.POTION, new PotionFromLegacyIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
 
