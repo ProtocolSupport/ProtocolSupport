@@ -4,4 +4,6 @@ public interface IPacketListener {
 
 	public void disconnect(String message);
 
+	public void destroy();
+
 }

@@ -49,7 +49,11 @@ public class ConnectionImpl extends Connection {
 		return channel.attr(key).get();
 	}
 
-	public void release() {
+	public void destroy() {
+		Object listener = networkmanager.getPacketListener();
+		if (listener instanceof IPacketListener) {
+			((IPacketListener) listener).destroy();
+		}
 		transformerEncoderHeadProcessor.release0();
 		transformerDecoderHeadProcessor.release0();
 	}

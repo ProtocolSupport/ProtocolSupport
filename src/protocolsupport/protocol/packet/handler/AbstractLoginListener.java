@@ -23,6 +23,7 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
 
 import io.netty.channel.ChannelPipeline;
+import io.netty.util.concurrent.ScheduledFuture;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
@@ -41,7 +42,7 @@ import protocolsupportbuildprocessor.Preload;
 
 @SuppressWarnings("deprecation")
 @Preload
-public abstract class AbstractLoginListener implements IPacketListener, IServerThreadTickListener {
+public abstract class AbstractLoginListener implements IPacketListener {
 
 	protected static final int loginThreadKeepAlive = JavaSystemProperty.getValue("loginthreadskeepalive", 60, Integer::parseInt);
 
@@ -52,7 +53,7 @@ public abstract class AbstractLoginListener implements IPacketListener, IServerT
 	protected static final Executor loginprocessor = new ThreadPoolExecutor(
 		1, Integer.MAX_VALUE,
 		loginThreadKeepAlive, TimeUnit.SECONDS,
-		new LinkedBlockingQueue<Runnable>(),
+		new LinkedBlockingQueue<>(),
 		r -> new Thread(r, "LoginProcessingThread")
 	);
 
@@ -62,18 +63,31 @@ public abstract class AbstractLoginListener implements IPacketListener, IServerT
 	protected final byte[] randomBytes = new byte[4];
 	protected LoginState state = LoginState.HELLO;
 
+	protected final Object timeoutTaskLock = new Object();
+	protected ScheduledFuture<?> timeoutTask;
+
 	public AbstractLoginListener(NetworkManagerWrapper networkmanager, String hostname) {
 		this.networkManager = networkmanager;
 		this.connection = ConnectionImpl.getFromChannel(networkmanager.getChannel());
 		this.hostname = hostname;
 		ThreadLocalRandom.current().nextBytes(randomBytes);
+
+		synchronized (timeoutTaskLock) {
+			this.timeoutTask = networkManager.getChannel().eventLoop().schedule(() -> disconnect("Took too long to log in"), 30, TimeUnit.SECONDS);
+		}
 	}
 
-	protected int loginTicks;
 	@Override
-	public void tick() {
-		if (loginTicks++ == 600) {
-			disconnect("Took too long to log in");
+	public void destroy() {
+		cancelTimeoutTask();
+	}
+
+	protected void cancelTimeoutTask() {
+		synchronized (timeoutTaskLock) {
+			if (timeoutTask != null) {
+				timeoutTask.cancel(false);
+				timeoutTask = null;
+			}
 		}
 	}
 
@@ -191,6 +205,8 @@ public abstract class AbstractLoginListener implements IPacketListener, IServerT
 		if (!networkManager.isConnected()) {
 			return;
 		}
+
+		cancelTimeoutTask();
 
 		GameProfile profile = connection.getProfile();
 		InetSocketAddress saddress = networkManager.getAddress();

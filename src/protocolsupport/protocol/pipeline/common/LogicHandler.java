@@ -91,7 +91,7 @@ public class LogicHandler extends MessageToMessageCodec<Object, Object> {
 	@Override
 	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
 		super.handlerRemoved(ctx);
-		connection.release();
+		connection.destroy();
 		ProtocolStorage.removeConnection(connection.getRawAddress());
 	}
 

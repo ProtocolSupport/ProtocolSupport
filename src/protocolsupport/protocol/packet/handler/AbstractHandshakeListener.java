@@ -23,11 +23,14 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 		this.networkManager = networkmanager;
 	}
 
+	@Override
+	public void destroy() {
+	}
+
 	public void handleSetProtocol(NetworkState nextState, String hostname, int port) {
 		switch (nextState) {
 			case LOGIN: {
 				networkManager.setProtocol(NetworkState.LOGIN);
-				//check connection throttle
 				try {
 					final InetAddress address = networkManager.getAddress().getAddress();
 					if (ThrottleTracker.isEnabled() && !ServerPlatform.get().getMiscUtils().isProxyEnabled()) {
@@ -39,13 +42,13 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 				} catch (Throwable t) {
 					Bukkit.getLogger().log(Level.WARNING, "Failed to check connection throttle", t);
 				}
+
 				ConnectionImpl connection = ConnectionImpl.getFromChannel(networkManager.getChannel());
-				//version check
 				if (!connection.getVersion().isSupported()) {
 					disconnect(MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replace("'", "''"), ServerPlatform.get().getMiscUtils().getVersionName()));
 					break;
 				}
-				//ps handshake event
+
 				ConnectionHandshakeEvent event = new ConnectionHandshakeEvent(connection, hostname);
 				Bukkit.getPluginManager().callEvent(event);
 				if (event.getSpoofedAddress() != null) {
@@ -56,7 +59,6 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 					return;
 				}
 				hostname = event.getHostname();
-				//bungee spoofed data handling
 				if (event.shouldParseHostname() && ServerPlatform.get().getMiscUtils().isProxyEnabled()) {
 					SpoofedData sdata = SpoofedDataParser.tryParse(hostname);
 					if (sdata == null) {
@@ -71,12 +73,11 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 					connection.changeAddress(new InetSocketAddress(sdata.getAddress(), connection.getAddress().getPort()));
 					networkManager.setSpoofedProfile(sdata.getUUID(), sdata.getProperties());
 				}
-				//switch to login stage
+
 				networkManager.setPacketListener(getLoginListener(networkManager, hostname + ":" + port));
 				break;
 			}
 			case STATUS: {
-				//switch to status stage
 				networkManager.setProtocol(NetworkState.STATUS);
 				networkManager.setPacketListener(getStatusListener(networkManager));
 				break;

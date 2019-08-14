@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerLoginEvent;
 
+import io.netty.util.concurrent.ScheduledFuture;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
@@ -21,16 +22,37 @@ import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public abstract class AbstractLoginListenerPlay implements IPacketListener, IServerThreadTickListener {
+public abstract class AbstractLoginListenerPlay implements IPacketListener {
 
 	protected final NetworkManagerWrapper networkManager;
 	protected final String hostname;
 	protected final ConnectionImpl connection;
 
+	protected final Object keepConnectionLock = new Object();
+	protected ScheduledFuture<?> keepConnectionTask;
+
 	protected AbstractLoginListenerPlay(NetworkManagerWrapper networkmanager, String hostname) {
 		this.networkManager = networkmanager;
 		this.connection = ConnectionImpl.getFromChannel(networkmanager.getChannel());
 		this.hostname = hostname;
+
+		synchronized (keepConnectionLock) {
+			this.keepConnectionTask = networkmanager.getChannel().eventLoop().scheduleWithFixedDelay(this::keepConnection, 4, 4, TimeUnit.SECONDS);
+		}
+	}
+
+	protected void cancelKeepConnectionTask() {
+		synchronized (keepConnectionLock) {
+			if (keepConnectionTask != null) {
+				keepConnectionTask.cancel(false);
+				keepConnectionTask = null;
+			}
+		}
+	}
+
+	@Override
+	public void destroy() {
+		cancelKeepConnectionTask();
 	}
 
 	public void finishLogin() {
@@ -52,7 +74,6 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener, ISer
 			disconnect("Exception while waiting for login success send");
 			return;
 		}
-
 		networkManager.setProtocol(NetworkState.PLAY);
 
 		keepConnection();
@@ -63,31 +84,32 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener, ISer
 			disconnect(event.getDenyLoginMessage());
 			return;
 		}
-		ready = true;
+
+		ServerPlatform.get().getMiscUtils().callSyncTask(() -> {
+			cancelKeepConnectionTask();
+			joinWorld();
+			return null;
+		});
 	}
 
-	protected boolean ready;
+	protected void keepConnection() {
+		//custom payload does nothing on a client when sent with invalid tag,
+		//but it resets client readtimeouthandler, and that is exactly what we need
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("keepalive"));
+		//we also need to reset server readtimeouthandler (may be null if netty already teared down the pipeline)
+		SimpleReadTimeoutHandler timeouthandler = ChannelHandlers.getTimeoutHandler(networkManager.getChannel().pipeline());
+		if (timeouthandler != null) {
+			timeouthandler.setLastRead();
+		}
+	}
 
 	protected int keepAliveTicks = 1;
 
-	@Override
-	public void tick() {
+	protected void joinWorld() {
 		if (!ServerPlatform.get().getMiscUtils().isRunning()) {
 			disconnect(org.spigotmc.SpigotConfig.restartMessage);
 			return;
 		}
-		if ((keepAliveTicks++ % 80) == 0) {
-			keepConnection();
-		}
-		if (ready) {
-			tryJoin();
-		}
-	}
-
-	protected void tryJoin() {
-		ready = false;
-
-		networkManager.cancelSyncTickTask();
 
 		UUID uuid = connection.getProfile().getUUID();
 		for (Player player : new ArrayList<>(Bukkit.getOnlinePlayers())) {
@@ -118,17 +140,6 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener, ISer
 		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("finishlogin"));
 
 		joinGame(joindata.data);
-	}
-
-	protected void keepConnection() {
-		//custom payload does nothing on a client when sent with invalid tag,
-		//but it resets client readtimeouthandler, and that is exactly what we need
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createEmptyCustomPayloadPacket("keepalive"));
-		//we also need to reset server readtimeouthandler (may be null if netty already teared down the pipeline)
-		SimpleReadTimeoutHandler timeouthandler = ChannelHandlers.getTimeoutHandler(networkManager.getChannel().pipeline());
-		if (timeouthandler != null) {
-			timeouthandler.setLastRead();
-		}
 	}
 
 	protected String getConnectionRepr() {
