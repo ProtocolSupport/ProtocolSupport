@@ -1,5 +1,7 @@
 package protocolsupport.protocol.packet.handler;
 
+import java.util.ArrayList;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -87,9 +89,12 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener, ISer
 
 		networkManager.cancelSyncTickTask();
 
-		Bukkit.getOnlinePlayers().stream()
-		.filter(player -> player.getUniqueId().equals(connection.getProfile().getUUID()))
-		.forEach(player -> player.kickPlayer("You logged in from another location"));
+		UUID uuid = connection.getProfile().getUUID();
+		for (Player player : new ArrayList<>(Bukkit.getOnlinePlayers())) {
+			if (player.getUniqueId().equals(uuid)) {
+				player.kickPlayer("You logged in from another location");
+			}
+		}
 
 		JoinData joindata = createJoinData();
 
