@@ -156,6 +156,16 @@ public class ItemStackSerializer {
 	}
 
 	/**
+	 * Writes itemstack using provided protocol version format
+	 * @param to buffer to write to
+	 * @param version protocol version
+	 * @param itemstack itemstack
+	 */
+	public static void writeItemStack(ByteBuf to, ProtocolVersion version, NetworkItemStack itemstack) {
+		ITEMSTACK_SERIALIZER.get(version).accept(to, itemstack);
+	}
+
+	/**
 	 * Remaps and writes itemstack using provided protocol version format
 	 * @param to buffer to write to
 	 * @param version protocol version
@@ -169,17 +179,7 @@ public class ItemStackSerializer {
 			itemstack = ItemStackRemapper.remapToClient(version, locale, itemstack);
 		}
 
-		writeItemStackRemapped(to, version, itemstack);
-	}
-
-	/**
-	 * Writes itemstack using provided protocol version format
-	 * @param to buffer to write to
-	 * @param version protocol version
-	 * @param itemstack itemstack
-	 */
-	public static void writeItemStackRemapped(ByteBuf to, ProtocolVersion version, NetworkItemStack itemstack) {
-		ITEMSTACK_SERIALIZER.get(version).accept(to, itemstack);
+		writeItemStack(to, version, itemstack);
 	}
 
 

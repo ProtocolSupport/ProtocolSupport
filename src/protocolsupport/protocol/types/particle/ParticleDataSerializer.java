@@ -30,7 +30,7 @@ public class ParticleDataSerializer extends TypeSerializer<Particle> {
 			FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 			register(ParticleBlock.class, (to, particle) -> VarNumberSerializer.writeVarInt(to, flatteningBlockDataTable.getBlockDataRemap(particle.getBlockData())), version);
 			register(ParticleFallingDust.class, (to, particle) -> VarNumberSerializer.writeFixedSizeVarInt(to, flatteningBlockDataTable.getBlockDataRemap(particle.getBlockData())), version);
-			register(ParticleItem.class, (to, particle) -> ItemStackSerializer.writeItemStackRemapped(to, version, particle.getItemStack()), version);
+			register(ParticleItem.class, (to, particle) -> ItemStackSerializer.writeItemStack(to, version, particle.getItemStack()), version);
 		});
 	}
 
