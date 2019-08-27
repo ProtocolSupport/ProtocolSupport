@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.BiFunction;
 
 import org.bukkit.entity.Player;
 
@@ -158,8 +159,9 @@ public abstract class Connection {
 	 * @param key map key
 	 * @return value from internal map
 	 */
-	public Object getMetadata(String key) {
-		return metadata.get(key);
+	@SuppressWarnings("unchecked")
+	public <T> T getMetadata(String key) {
+		return (T) metadata.get(key);
 	}
 
 	/**
@@ -168,8 +170,9 @@ public abstract class Connection {
 	 * @param key map key
 	 * @return deleted value from internal map
 	 */
-	public Object removeMetadata(String key) {
-		return metadata.remove(key);
+	@SuppressWarnings("unchecked")
+	public <T> T removeMetadata(String key) {
+		return (T) metadata.remove(key);
 	}
 
 	/**
@@ -179,6 +182,18 @@ public abstract class Connection {
 	 */
 	public boolean hasMetadata(String key) {
 		return metadata.containsKey(key);
+	}
+
+	/**
+	 * Computes key in internal map
+	 * @param <V> value type
+	 * @param key map key
+	 * @param function value compute function
+	 * @return computed value
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public <V> V computeMetadata(String key, BiFunction<String, V, V> function) {
+		return (V) metadata.compute(key, (BiFunction) function);
 	}
 
 	public abstract static class PacketListener {

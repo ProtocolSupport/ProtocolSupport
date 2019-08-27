@@ -53,6 +53,16 @@ public abstract class BaseComponent {
 	}
 
 	/**
+	 * Adds sibling to the end of the siblings list
+	 * @param sibling chat component sibling
+	 * @return this
+	 */
+	public BaseComponent withSibling(BaseComponent sibling) {
+		addSibling(sibling);
+		return this;
+	}
+
+	/**
 	 * Adds siblings to the end of the siblings list
 	 * @param siblings chat component siblings
 	 */
@@ -65,10 +75,31 @@ public abstract class BaseComponent {
 	/**
 	 * Adds siblings to the end of the siblings list
 	 * @param siblings chat component siblings
+	 * @return this
+	 */
+	public BaseComponent withSiblings(BaseComponent... siblings) {
+		addSiblings(siblings);
+		return this;
+	}
+
+	/**
+	 * Adds siblings to the end of the siblings list
+	 * @param siblings chat component siblings
 	 */
 	public void addSiblings(Collection<BaseComponent> siblings) {
 		this.siblings.addAll(siblings);
 	}
+
+	/**
+	 * Adds siblings to the end of the siblings list
+	 * @param siblings chat component siblings
+	 * @return this
+	 */
+	public BaseComponent withSiblings(Collection<BaseComponent> siblings) {
+		addSiblings(siblings);
+		return this;
+	}
+
 
 	/**
 	 * Returns current modifier
@@ -91,6 +122,17 @@ public abstract class BaseComponent {
 	}
 
 	/**
+	 * Sets current modifier<br>
+	 * Passing null removes the modifier
+	 * @param modifier modifier
+	 * @return this
+	 */
+	public BaseComponent withModifier(Modifier modifier) {
+		setModifier(modifier);
+		return this;
+	}
+
+	/**
 	 * Returns current click action or null if no action present
 	 * @return current click action or null
 	 */
@@ -105,6 +147,17 @@ public abstract class BaseComponent {
 	 */
 	public void setClickAction(ClickAction clickAction) {
 		this.clickAction = clickAction;
+	}
+
+	/**
+	 * Sets current click action<br>
+	 * Passing null removes click action
+	 * @param clickAction click action
+	 * @return this
+	 */
+	public BaseComponent withClickAction(ClickAction clickAction) {
+		setClickAction(clickAction);
+		return this;
 	}
 
 	/**
@@ -125,6 +178,17 @@ public abstract class BaseComponent {
 	}
 
 	/**
+	 * Sets current hover action<br>
+	 * Passing null removes the hover action
+	 * @param hoverAction hover action
+	 * @return this
+	 */
+	public BaseComponent withHoverAction(HoverAction hoverAction) {
+		setHoverAction(hoverAction);
+		return this;
+	}
+
+	/**
 	 * Returns current click insertion text
 	 * @return current click insertion text
 	 */
@@ -139,6 +203,17 @@ public abstract class BaseComponent {
 	 */
 	public void setClickInsertion(String clickInsertion) {
 		this.clickInsertion = clickInsertion;
+	}
+
+	/**
+	 * Sets current click insertion<br>
+	 * Passing null removes the click insertion
+	 * @param clickInsertion click insertion
+	 * @return this
+	 */
+	public BaseComponent withClickInsertion(String clickInsertion) {
+		setClickInsertion(clickInsertion);
+		return this;
 	}
 
 	/**
