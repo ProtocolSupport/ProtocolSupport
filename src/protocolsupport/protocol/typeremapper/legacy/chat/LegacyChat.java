@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.modifiers.Modifier;
+import protocolsupport.protocol.utils.EnumConstantLookups;
 
 public class LegacyChat {
 
@@ -180,6 +181,23 @@ public class LegacyChat {
 		combinedModifier.setStrikethrough(childModifier.isStrikethrough() != null ? childModifier.isStrikethrough() : parentModifier.isStrikethrough());
 		combinedModifier.setRandom(childModifier.isRandom() != null ? childModifier.isRandom() : parentModifier.isRandom());
 		return combinedModifier;
+	}
+
+	public static String addScoreboardTeamColorToPrefix(String prefix, int colorIndex) {
+		String prefixColors = ChatColor.getLastColors(prefix);
+		ChatColor color = EnumConstantLookups.CHAT_COLOR.getByOrdinal(colorIndex);
+		String colorString = color.toString();
+		if (
+			(prefixColors.isEmpty() && color != ChatColor.RESET) ||
+			!colorString.equals(prefixColors)
+		) {
+			if (color.isColor()) {
+				return prefix + colorString;
+			} else {
+				return prefix + ChatColor.RESET + colorString;
+			}
+		}
+		return prefix;
 	}
 
 	public static String clampLegacyText(String text, int limit) {

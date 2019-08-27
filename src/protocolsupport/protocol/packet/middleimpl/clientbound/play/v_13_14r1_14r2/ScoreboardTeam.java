@@ -9,6 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -28,7 +29,7 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 			serializer.writeByte(friendlyFire);
 			StringSerializer.writeString(serializer, version, nameTagVisibility);
 			StringSerializer.writeString(serializer, version, collisionRule);
-			serializer.writeByte(color);
+			VarNumberSerializer.writeVarInt(serializer, color);
 			StringSerializer.writeString(serializer, version, ChatAPI.toJSON(prefix));
 			StringSerializer.writeString(serializer, version, ChatAPI.toJSON(suffix));
 		}
