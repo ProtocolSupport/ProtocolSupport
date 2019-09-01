@@ -19,4 +19,7 @@ public abstract class ClientBoundMiddlePacket extends MiddlePacket {
 
 	public abstract RecyclableCollection<? extends IPacketData> toData();
 
+	public void postHandle() {
+	}
+
 }

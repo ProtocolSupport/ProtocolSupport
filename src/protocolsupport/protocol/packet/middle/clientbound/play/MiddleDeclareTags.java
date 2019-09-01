@@ -25,6 +25,14 @@ public abstract class MiddleDeclareTags extends ClientBoundMiddlePacket {
 		entities = readTags(serverdata);
 	}
 
+	@Override
+	public void postHandle() {
+		blocks = null;
+		items = null;
+		fluids = null;
+		entities = null;
+	}
+
 	protected static Tag[] readTags(ByteBuf from) {
 		return ArraySerializer.readVarIntTArray(from, Tag.class, lFrom -> {
 			return new Tag(StringSerializer.readVarIntUTF8String(lFrom), ArraySerializer.readVarIntVarIntArray(lFrom));

@@ -31,6 +31,11 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 		}
 	}
 
+	@Override
+	public void postHandle() {
+		recipes = null;
+	}
+
 	public static class Ingredient {
 		protected final NetworkItemStack[] possibleStacks;
 

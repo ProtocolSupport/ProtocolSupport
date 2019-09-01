@@ -48,11 +48,13 @@ public abstract class AbstractPacketEncoder extends ChannelOutboundHandlerAdapte
 				throw new DecoderException("Did not read all data from packet " + packetTransformer.getClass() + ", bytes left: " + input.readableBytes());
 			}
 			if (!packetTransformer.postFromServerRead()) {
+				packetTransformer.postHandle();
 				promise.setSuccess();
 				return;
 			}
 
 			connection.writeClientboundPackets(packetTransformer.toData(), promise, false);
+			packetTransformer.postHandle();
 		} catch (Exception exception) {
 			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 				input.readerIndex(0);

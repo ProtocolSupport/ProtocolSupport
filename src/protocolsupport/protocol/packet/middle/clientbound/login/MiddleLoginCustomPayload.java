@@ -24,4 +24,10 @@ public abstract class MiddleLoginCustomPayload extends ClientBoundMiddlePacket {
 		data = MiscSerializer.readAllBytesSlice(serverdata);
 	}
 
+	@Override
+	public void postHandle() {
+		tag = null;
+		data = null;
+	}
+
 }

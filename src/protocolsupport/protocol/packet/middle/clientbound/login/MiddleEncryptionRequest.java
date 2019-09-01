@@ -23,4 +23,11 @@ public abstract class MiddleEncryptionRequest extends ClientBoundMiddlePacket {
 		verifyToken = ArraySerializer.readVarIntByteArraySlice(serverdata);
 	}
 
+	@Override
+	public void postHandle() {
+		serverId = null;
+		publicKey = null;
+		verifyToken = null;
+	}
+
 }
