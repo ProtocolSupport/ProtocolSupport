@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.typeremapper.basic.WindowSlotsRemappingHelper;
 import protocolsupport.protocol.types.NetworkItemStack;
 
 public class InventoryClick extends MiddleInventoryClick {
@@ -15,25 +14,8 @@ public class InventoryClick extends MiddleInventoryClick {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		windowId = clientdata.readUnsignedByte();
+		windowId = clientdata.readByte();
 		slot = clientdata.readShort();
-		switch (cache.getWindowCache().getOpenedWindow()) {
-			case BREWING_STAND: {
-				if (!WindowSlotsRemappingHelper.hasBrewingBlazePowderSlot(version) && (slot >= WindowSlotsRemappingHelper.BREWING_BLAZE_POWDER_SLOT)) {
-					slot++;
-				}
-				break;
-			}
-			case ENCHANTMENT: {
-				if (!WindowSlotsRemappingHelper.hasEnchantLapisSlot(version) && (slot >= WindowSlotsRemappingHelper.ENCHANT_LAPIS_SLOT)) {
-					slot++;
-				}
-				break;
-			}
-			default: {
-				break;
-			}
-		}
 		button = clientdata.readUnsignedByte();
 		actionNumber = clientdata.readShort();
 		mode = clientdata.readUnsignedByte();

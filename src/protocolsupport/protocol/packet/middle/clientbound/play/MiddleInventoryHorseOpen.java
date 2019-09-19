@@ -4,9 +4,13 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.window.AbstractWindowsRemapper;
+import protocolsupport.protocol.typeremapper.window.WindowsRemappersRegistry;
 import protocolsupport.protocol.types.WindowType;
 
 public abstract class MiddleInventoryHorseOpen extends ClientBoundMiddlePacket {
+
+	protected final AbstractWindowsRemapper windowsRemapper = WindowsRemappersRegistry.get(version);
 
 	public MiddleInventoryHorseOpen(ConnectionImpl connection) {
 		super(connection);
@@ -25,7 +29,7 @@ public abstract class MiddleInventoryHorseOpen extends ClientBoundMiddlePacket {
 
 	@Override
 	public boolean postFromServerRead() {
-		cache.getWindowCache().setOpenedWindow(windowId, WindowType.HORSE);
+		cache.getWindowCache().setOpenedWindow(windowId, WindowType.HORSE, windowsRemapper.get(WindowType.HORSE, slots));
 		return true;
 	}
 

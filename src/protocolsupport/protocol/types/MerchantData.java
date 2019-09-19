@@ -2,14 +2,14 @@ package protocolsupport.protocol.types;
 
 public class MerchantData {
 
-	protected final int windowId;
+	protected final byte windowId;
 	protected final TradeOffer[] offers;
 	protected final int villagerLevel;
 	protected final int villagerXp;
 	protected final boolean villagerRegular;
 	protected final boolean restockingVillager;
 
-	public MerchantData(int windowId, TradeOffer[] offers, int villagerLevel, int villagerXp, boolean villagerRegular, boolean restockingVillager) {
+	public MerchantData(byte windowId, TradeOffer[] offers, int villagerLevel, int villagerXp, boolean villagerRegular, boolean restockingVillager) {
 		this.windowId = windowId;
 		this.offers = offers;
 		this.villagerLevel = villagerLevel;

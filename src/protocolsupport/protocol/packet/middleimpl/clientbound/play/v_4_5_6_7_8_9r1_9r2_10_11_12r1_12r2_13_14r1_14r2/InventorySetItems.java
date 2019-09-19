@@ -1,14 +1,17 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySetItems;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.IPacketData;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.typeremapper.basic.WindowSlotsRemappingHelper;
+import protocolsupport.protocol.typeremapper.window.WindowRemapper;
+import protocolsupport.protocol.typeremapper.window.WindowRemapper.WindowItems;
 import protocolsupport.protocol.types.NetworkItemStack;
-import protocolsupport.protocol.types.WindowType;
+import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -20,37 +23,27 @@ public class InventorySetItems extends MiddleInventorySetItems {
 
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
-		WindowType window = windowId == WINDOW_ID_PLAYER_INVENTORY ? WindowType.PLAYER : cache.getWindowCache().getOpenedWindow();
-		switch (window) {
-			case PLAYER: {
-				if (!WindowSlotsRemappingHelper.hasPlayerOffhandSlot(version)) {
-					itemstacks.remove(WindowSlotsRemappingHelper.PLAYER_OFF_HAND_SLOT);
-				}
-				break;
+		WindowRemapper remapper = windowId == WINDOW_ID_PLAYER_INVENTORY ? windowCache.getPlayerWindowRemapper() : windowCache.getOpenedWindowRemapper();
+
+		WindowItems[] windowitemsarray = remapper.toWindowItems(windowId, items);
+		if (windowitemsarray.length == 1) {
+			WindowItems windowitems = windowitemsarray[0];
+			return RecyclableSingletonList.create(create(version, cache.getAttributesCache().getLocale(), windowitems.getWindowId(), windowitems.getItems()));
+		} else {
+			String locale = cache.getAttributesCache().getLocale();
+			RecyclableArrayList<IPacketData> packets = RecyclableArrayList.create();
+			for (WindowItems windowitems : windowitemsarray) {
+				packets.add(create(version, locale, windowitems.getWindowId(), windowitems.getItems()));
 			}
-			case BREWING_STAND: {
-				if (!WindowSlotsRemappingHelper.hasBrewingBlazePowderSlot(version)) {
-					itemstacks.remove(WindowSlotsRemappingHelper.BREWING_BLAZE_POWDER_SLOT);
-				}
-				break;
-			}
-			case ENCHANTMENT: {
-				if (!WindowSlotsRemappingHelper.hasEnchantLapisSlot(version)) {
-					itemstacks.remove(WindowSlotsRemappingHelper.ENCHANT_LAPIS_SLOT);
-				}
-				break;
-			}
-			default: {
-				break;
-			}
+			return packets;
 		}
+	}
+
+	protected static ClientBoundPacketData create(ProtocolVersion version, String locale, byte windowId, NetworkItemStack[] items) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_SET_ITEMS);
 		serializer.writeByte(windowId);
-		serializer.writeShort(itemstacks.size());
-		for (NetworkItemStack itemstack : itemstacks) {
-			ItemStackSerializer.writeItemStack(serializer, version, cache.getAttributesCache().getLocale(), itemstack);
-		}
-		return RecyclableSingletonList.create(serializer);
+		ArraySerializer.writeShortTArray(serializer, items, (lTo, item) -> ItemStackSerializer.writeItemStack(lTo, version, locale, item));
+		return serializer;
 	}
 
 }

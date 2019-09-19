@@ -14,7 +14,7 @@ public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected int windowId;
+	protected byte windowId;
 
 	@Override
 	public RecyclableCollection<? extends IPacketData> toNative() {

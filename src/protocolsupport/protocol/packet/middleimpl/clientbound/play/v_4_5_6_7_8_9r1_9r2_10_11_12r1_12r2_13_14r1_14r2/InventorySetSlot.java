@@ -7,7 +7,8 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySe
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.typeremapper.basic.WindowSlotsRemappingHelper;
+import protocolsupport.protocol.typeremapper.window.WindowRemapper;
+import protocolsupport.protocol.typeremapper.window.WindowRemapper.SlotDoesntExistException;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -36,45 +37,18 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 		if (!cache.getWindowCache().isValidWindowId(windowId)) {
 			return RecyclableEmptyList.get();
 		}
-		switch (cache.getWindowCache().getOpenedWindow()) {
-			case PLAYER: {
-				if (!WindowSlotsRemappingHelper.hasPlayerOffhandSlot(version)) {
-					if (slot == WindowSlotsRemappingHelper.PLAYER_OFF_HAND_SLOT) {
-						return RecyclableEmptyList.get();
-					}
-				}
-				break;
-			}
-			case BREWING_STAND: {
-				if (!WindowSlotsRemappingHelper.hasBrewingBlazePowderSlot(version)) {
-					if (slot == WindowSlotsRemappingHelper.BREWING_BLAZE_POWDER_SLOT) {
-						return RecyclableEmptyList.get();
-					}
-					if (slot > WindowSlotsRemappingHelper.BREWING_BLAZE_POWDER_SLOT) {
-						slot--;
-					}
-				}
-				break;
-			}
-			case ENCHANTMENT: {
-				if (!WindowSlotsRemappingHelper.hasEnchantLapisSlot(version)) {
-					if (slot == WindowSlotsRemappingHelper.ENCHANT_LAPIS_SLOT) {
-						return RecyclableEmptyList.get();
-					}
-					if (slot > WindowSlotsRemappingHelper.ENCHANT_LAPIS_SLOT) {
-						slot--;
-					}
-				}
-				break;
-			}
-			default: {
-				break;
-			}
+
+		try {
+			int windowSlot = windowCache.getOpenedWindowRemapper().toWindowSlot(windowId, slot);
+			return RecyclableSingletonList.create(create(
+				version, locale, WindowRemapper.getWindowSlotWindowId(windowSlot), WindowRemapper.getWindowSlotSlot(windowSlot), itemstack
+			));
+		} catch (SlotDoesntExistException e) {
+			return RecyclableEmptyList.get();
 		}
-		return RecyclableSingletonList.create(create(version, locale, windowId, slot, itemstack));
 	}
 
-	protected static ClientBoundPacketData create(ProtocolVersion version, String locale, int windowId, int slot, NetworkItemStack itemstack) {
+	protected static ClientBoundPacketData create(ProtocolVersion version, String locale, byte windowId, int slot, NetworkItemStack itemstack) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_SET_SLOT);
 		serializer.writeByte(windowId);
 		serializer.writeShort(slot);

@@ -6,8 +6,10 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.window.WindowsRemappersRegistry;
 import protocolsupport.protocol.types.Environment;
 import protocolsupport.protocol.types.GameMode;
+import protocolsupport.protocol.types.WindowType;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
@@ -43,6 +45,7 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 	public boolean postFromServerRead() {
 		cache.getWatchedEntityCache().addWatchedSelfPlayer(player);
 		cache.getAttributesCache().setCurrentDimension(dimension);
+		cache.getWindowCache().setPlayerWindow(WindowsRemappersRegistry.get(version).get(WindowType.PLAYER, 0));
 		return true;
 	}
 
