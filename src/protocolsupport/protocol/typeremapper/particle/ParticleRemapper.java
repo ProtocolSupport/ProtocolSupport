@@ -97,6 +97,7 @@ public class ParticleRemapper {
 			registerSkip(ParticleDolphin.class, ProtocolVersionsHelper.BEFORE_1_13);
 			registerSkip(ParticleTotemOfUndying.class, ProtocolVersionsHelper.BEFORE_1_11);
 			registerSkip(ParticleSpit.class, ProtocolVersionsHelper.BEFORE_1_11);
+			registerSkip(ParticleFallingDust.class, ProtocolVersionsHelper.BEFORE_1_10);
 			registerSkip(ParticleEndRod.class, ProtocolVersionsHelper.BEFORE_1_9);
 			registerSkip(ParticleDamageIndicator.class, ProtocolVersionsHelper.BEFORE_1_9);
 			registerSkip(ParticleSweepAttack.class, ProtocolVersionsHelper.BEFORE_1_9);
