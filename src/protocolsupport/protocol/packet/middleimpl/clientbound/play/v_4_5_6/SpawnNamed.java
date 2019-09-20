@@ -23,7 +23,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
 		serializer.writeInt(entity.getId());
 		PlayerListEntry entry = cache.getPlayerListCache().getEntry(entity.getUUID());
-		StringSerializer.writeString(serializer, version, entry != null ? Utils.clampString(entry.getUserName(), 16) : "UNKNOWN");
+		StringSerializer.writeShortUTF16BEString(serializer, entry != null ? Utils.clampString(entry.getUserName(), 16) : "UNKNOWN");
 		serializer.writeInt((int) (x * 32));
 		serializer.writeInt((int) (y * 32));
 		serializer.writeInt((int) (z * 32));

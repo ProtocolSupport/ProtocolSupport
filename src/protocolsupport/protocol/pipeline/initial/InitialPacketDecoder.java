@@ -162,7 +162,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 						scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_1_5_2), ping152delay, TimeUnit.MILLISECONDS);
 					} else if (
 						(buffer.readUnsignedByte() == 0xFA) &&
-						"MC|PingHost".equals(StringSerializer.readString(buffer, ProtocolVersion.MINECRAFT_1_6_4))
+						"MC|PingHost".equals(StringSerializer.readShortUTF16BEString(buffer, Short.MAX_VALUE))
 					) {
 						//definitely 1.6
 						buffer.readUnsignedShort();
@@ -216,7 +216,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 						setProtocol(channel, ProtocolVersion.MINECRAFT_1_5_2);
 					} else if (
 						(firstpacketdata.readUnsignedByte() == 0xFA) &&
-						"MC|PingHost".equals(StringSerializer.readString(firstpacketdata, ProtocolVersion.MINECRAFT_1_6_4))
+						"MC|PingHost".equals(StringSerializer.readShortUTF16BEString(firstpacketdata, Short.MAX_VALUE))
 					) {
 						//1.6.*
 						firstpacketdata.readUnsignedShort();

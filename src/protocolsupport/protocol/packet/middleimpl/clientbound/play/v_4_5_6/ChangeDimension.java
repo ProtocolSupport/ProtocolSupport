@@ -24,7 +24,7 @@ public class ChangeDimension extends AbstractChangeDimension {
 		MiscSerializer.writeByteEnum(serializer, Difficulty.HARD);
 		serializer.writeByte(gamemode.getId());
 		serializer.writeShort(256);
-		StringSerializer.writeString(serializer, version, leveltype);
+		StringSerializer.writeShortUTF16BEString(serializer, leveltype);
 		return RecyclableSingletonList.create(serializer);
 	}
 

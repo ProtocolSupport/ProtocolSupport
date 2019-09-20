@@ -28,7 +28,7 @@ public class ServerInfo extends MiddleServerInfo {
 		.add(String.valueOf(ping.getPlayers().getOnline()))
 		.add(String.valueOf(ping.getPlayers().getMax()))
 		.toString();
-		StringSerializer.writeString(serializer, version, response);
+		StringSerializer.writeShortUTF16BEString(serializer, response);
 		return RecyclableSingletonList.create(serializer);
 	}
 

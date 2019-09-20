@@ -22,19 +22,19 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_TEAM);
-		StringSerializer.writeString(serializer, version, name);
+		StringSerializer.writeVarIntUTF8String(serializer, name);
 		MiscSerializer.writeByteEnum(serializer, mode);
 		if ((mode == Mode.CREATE) || (mode == Mode.UPDATE)) {
 			String locale = cache.getAttributesCache().getLocale();
-			StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(displayName.toLegacyText(locale), 32));
-			StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(LegacyChat.addScoreboardTeamColorToPrefix(prefix.toLegacyText(locale), color), 16));
-			StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(suffix.toLegacyText(locale), 16));
+			StringSerializer.writeVarIntUTF8String(serializer, LegacyChat.clampLegacyText(displayName.toLegacyText(locale), 32));
+			StringSerializer.writeVarIntUTF8String(serializer, LegacyChat.clampLegacyText(LegacyChat.addScoreboardTeamColorToPrefix(prefix.toLegacyText(locale), color), 16));
+			StringSerializer.writeVarIntUTF8String(serializer, LegacyChat.clampLegacyText(suffix.toLegacyText(locale), 16));
 			serializer.writeByte(friendlyFire);
-			StringSerializer.writeString(serializer, version, nameTagVisibility);
+			StringSerializer.writeVarIntUTF8String(serializer, nameTagVisibility);
 			serializer.writeByte(color <= 15 ? color : -1);
 		}
 		if ((mode == Mode.CREATE) || (mode == Mode.PLAYERS_ADD) || (mode == Mode.PLAYERS_REMOVE)) {
-			ArraySerializer.writeVarIntTArray(serializer, players, (to, element) -> StringSerializer.writeString(to, version, Utils.clampString(element, 16)));
+			ArraySerializer.writeVarIntTArray(serializer, players, (to, element) -> StringSerializer.writeVarIntUTF8String(to, Utils.clampString(element, 16)));
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

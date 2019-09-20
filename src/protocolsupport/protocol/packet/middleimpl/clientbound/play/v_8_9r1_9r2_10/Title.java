@@ -27,7 +27,7 @@ public class Title extends MiddleTitle {
 		switch (action) {
 			case SET_TITLE:
 			case SET_SUBTITLE: {
-				StringSerializer.writeString(serializer, version, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), message)));
+				StringSerializer.writeVarIntUTF8String(serializer, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), message)));
 				break;
 			}
 			case SET_TIMES: {

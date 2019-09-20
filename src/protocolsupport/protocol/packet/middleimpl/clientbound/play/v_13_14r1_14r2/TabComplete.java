@@ -24,10 +24,10 @@ public class TabComplete extends MiddleTabComplete {
 		VarNumberSerializer.writeVarInt(serializer, start);
 		VarNumberSerializer.writeVarInt(serializer, length);
 		ArraySerializer.writeVarIntTArray(serializer, matches, (data, match) -> {
-			StringSerializer.writeString(serializer, version, match.getMatch());
+			StringSerializer.writeVarIntUTF8String(serializer, match.getMatch());
 			serializer.writeBoolean(match.hasTooltip());
 			if (match.hasTooltip()) {
-				StringSerializer.writeString(serializer, version, match.getTooltip());
+				StringSerializer.writeVarIntUTF8String(serializer, match.getTooltip());
 			}
 		});
 		return RecyclableSingletonList.create(serializer);

@@ -23,7 +23,7 @@ public class BookOpen extends MiddleBookOpen {
 	public RecyclableCollection<? extends IPacketData> toData() {
 		buffer.clear();
 		MiscSerializer.writeVarIntEnum(buffer, hand);
-		return RecyclableSingletonList.create(CustomPayload.create(version, LegacyCustomPayloadChannelName.MODERN_BOOK_OPEN, buffer));
+		return RecyclableSingletonList.create(CustomPayload.create(LegacyCustomPayloadChannelName.MODERN_BOOK_OPEN, buffer));
 	}
 
 }

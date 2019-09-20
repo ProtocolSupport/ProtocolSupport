@@ -34,7 +34,7 @@ public class EntitySetAttributes extends MiddleEntitySetAttributes {
 		VarNumberSerializer.writeVarInt(serializer, entityId);
 		serializer.writeInt(sendattrs.size());
 		for (Attribute attribute : sendattrs) {
-			StringSerializer.writeString(serializer, version, attribute.key);
+			StringSerializer.writeVarIntUTF8String(serializer, attribute.key);
 			serializer.writeDouble(attribute.value);
 			VarNumberSerializer.writeVarInt(serializer, attribute.modifiers.length);
 			for (Modifier modifier : attribute.modifiers) {

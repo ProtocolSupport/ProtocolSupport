@@ -26,7 +26,7 @@ public class BossBar extends MiddleBossBar {
 		MiscSerializer.writeVarIntEnum(serializer, action);
 		switch (action) {
 			case ADD: {
-				StringSerializer.writeString(serializer, version, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), title)));
+				StringSerializer.writeVarIntUTF8String(serializer, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), title)));
 				serializer.writeFloat(percent);
 				VarNumberSerializer.writeVarInt(serializer, color);
 				VarNumberSerializer.writeVarInt(serializer, divider);
@@ -41,7 +41,7 @@ public class BossBar extends MiddleBossBar {
 				break;
 			}
 			case UPDATE_TITLE: {
-				StringSerializer.writeString(serializer, version, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), title)));
+				StringSerializer.writeVarIntUTF8String(serializer, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), title)));
 				break;
 			}
 			case UPDATE_STYLE: {

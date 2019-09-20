@@ -24,7 +24,7 @@ public class StopSound extends MiddleStopSound {
 			VarNumberSerializer.writeVarInt(serializer, source);
 		}
 		if (name != null) {
-			StringSerializer.writeString(serializer, version, name);
+			StringSerializer.writeVarIntUTF8String(serializer, name);
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

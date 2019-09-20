@@ -30,7 +30,7 @@ public class StartGame extends MiddleStartGame {
 		}
 		MiscSerializer.writeByteEnum(serializer, Difficulty.HARD);
 		serializer.writeByte(maxplayers);
-		StringSerializer.writeString(serializer, version, leveltype);
+		StringSerializer.writeVarIntUTF8String(serializer, leveltype);
 		serializer.writeBoolean(reducedDebugInfo);
 		return RecyclableSingletonList.create(serializer);
 	}

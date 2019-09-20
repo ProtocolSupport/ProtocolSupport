@@ -25,10 +25,10 @@ public class Ping extends ServerBoundMiddlePacket {
 	public void readFromClientData(ByteBuf clientdata) {
 		clientdata.readUnsignedByte();
 		clientdata.readUnsignedByte();
-		StringSerializer.readString(clientdata, version);
+		StringSerializer.readShortUTF16BEString(clientdata, Short.MAX_VALUE);
 		clientdata.readUnsignedShort();
 		clientdata.readUnsignedByte();
-		hostname = StringSerializer.readString(clientdata, version);
+		hostname = StringSerializer.readShortUTF16BEString(clientdata, Short.MAX_VALUE);
 		port = clientdata.readInt();
 	}
 

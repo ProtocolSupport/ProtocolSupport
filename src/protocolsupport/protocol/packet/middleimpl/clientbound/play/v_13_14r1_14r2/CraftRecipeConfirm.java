@@ -19,7 +19,7 @@ public class CraftRecipeConfirm extends MiddleCraftRecipeConfirm {
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CRAFT_RECIPE_CONFIRM);
 		serializer.writeByte(windowId);
-		StringSerializer.writeString(serializer, version, recipeId);
+		StringSerializer.writeVarIntUTF8String(serializer, recipeId);
 		return RecyclableSingletonList.create(serializer);
 	}
 

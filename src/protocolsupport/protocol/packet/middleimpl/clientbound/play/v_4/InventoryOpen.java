@@ -24,7 +24,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
 		serializer.writeByte(windowId);
 		serializer.writeByte(wdata.getIntId());
-		StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(title.toLegacyText(cache.getAttributesCache().getLocale()), 32));
+		StringSerializer.writeShortUTF16BEString(serializer, LegacyChat.clampLegacyText(title.toLegacyText(cache.getAttributesCache().getLocale()), 32));
 		serializer.writeByte(windowRemapper.toClientSlots(0));
 		return RecyclableSingletonList.create(serializer);
 	}

@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_
 import java.util.function.Consumer;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
@@ -24,20 +23,20 @@ public class CustomPayload extends MiddleCustomPayload {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		return RecyclableSingletonList.create(create(
-			version, Utils.clampString(cache.getChannelsCache().getLegacyName(LegacyCustomPayloadChannelName.toPre13(tag)), 20), data
+			Utils.clampString(cache.getChannelsCache().getLegacyName(LegacyCustomPayloadChannelName.toPre13(tag)), 20), data
 		));
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, String tag, Consumer<ByteBuf> dataWriter) {
+	public static ClientBoundPacketData create(String tag, Consumer<ByteBuf> dataWriter) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
-		StringSerializer.writeString(serializer, version, tag);
+		StringSerializer.writeVarIntUTF8String(serializer, tag);
 		dataWriter.accept(serializer);
 		return serializer;
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, String tag, ByteBuf data) {
+	public static ClientBoundPacketData create(String tag, ByteBuf data) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
-		StringSerializer.writeString(serializer, version, tag);
+		StringSerializer.writeVarIntUTF8String(serializer, tag);
 		serializer.writeBytes(data);
 		return serializer;
 	}

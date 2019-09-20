@@ -33,7 +33,7 @@ public class UpdateMap extends MiddleUpdateMap {
 			to.writeByte(icon.direction);
 			to.writeBoolean(icon.displayName != null);
 			if (icon.displayName != null) {
-				StringSerializer.writeString(to, version, icon.displayName);
+				StringSerializer.writeVarIntUTF8String(to, icon.displayName);
 			}
 		});
 		serializer.writeByte(columns);

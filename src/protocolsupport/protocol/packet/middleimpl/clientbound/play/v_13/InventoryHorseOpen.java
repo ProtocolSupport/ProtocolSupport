@@ -18,7 +18,7 @@ public class InventoryHorseOpen extends MiddleInventoryHorseOpen {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
-		InventoryOpen.writeData(serializer, version, windowId, "EntityHorse", new TextComponent("Horse"), slots);
+		InventoryOpen.writeData(serializer, windowId, "EntityHorse", new TextComponent("Horse"), slots);
 		serializer.writeInt(entityId);
 		return RecyclableSingletonList.create(serializer);
 	}

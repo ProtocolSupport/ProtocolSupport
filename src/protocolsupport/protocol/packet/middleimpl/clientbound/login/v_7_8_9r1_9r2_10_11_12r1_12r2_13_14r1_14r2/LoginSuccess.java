@@ -22,8 +22,8 @@ public class LoginSuccess extends MiddleLoginSuccess {
 			uuidstring = uuidstring.replace("-", "");
 		}
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LOGIN_SUCCESS);
-		StringSerializer.writeString(serializer, version, uuidstring);
-		StringSerializer.writeString(serializer, version, name);
+		StringSerializer.writeVarIntUTF8String(serializer, uuidstring);
+		StringSerializer.writeVarIntUTF8String(serializer, name);
 		return RecyclableSingletonList.create(serializer);
 	}
 

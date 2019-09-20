@@ -31,7 +31,7 @@ public class BlockTileUpdate extends AbstractBlockTileUpdate {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN_ID);
 			PositionSerializer.writeLegacyPositionL(serializer, tile.getPosition());
 			for (String line : CommonNBT.getSignLines(tile.getNBT())) {
-				StringSerializer.writeString(serializer, version, line);
+				StringSerializer.writeVarIntUTF8String(serializer, line);
 			}
 			return serializer;
 		} else {

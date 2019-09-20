@@ -20,7 +20,7 @@ public class NetworkEntityMetadataObjectOptionalChat extends ReadableNetworkEnti
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
 		to.writeBoolean(value != null);
 		if (value != null) {
-			StringSerializer.writeString(to, version, ChatAPI.toJSON(value));
+			StringSerializer.writeVarIntUTF8String(to, ChatAPI.toJSON(value));
 		}
 	}
 

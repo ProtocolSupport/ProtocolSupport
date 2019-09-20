@@ -19,7 +19,7 @@ public class EncryptionRequest extends MiddleEncryptionRequest {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LOGIN_ENCRYPTION_BEGIN);
-		StringSerializer.writeString(serializer, version, serverId);
+		StringSerializer.writeVarIntUTF8String(serializer, serverId);
 		ArraySerializer.writeVarIntByteArray(serializer, publicKey);
 		ArraySerializer.writeVarIntByteArray(serializer, verifyToken);
 		return RecyclableSingletonList.create(serializer);

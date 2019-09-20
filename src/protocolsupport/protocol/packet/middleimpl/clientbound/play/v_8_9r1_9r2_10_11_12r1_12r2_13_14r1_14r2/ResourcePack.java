@@ -18,8 +18,8 @@ public class ResourcePack extends MiddleResourcePack {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_RESOURCE_PACK);
-		StringSerializer.writeString(serializer, version, url);
-		StringSerializer.writeString(serializer, version, hash);
+		StringSerializer.writeVarIntUTF8String(serializer, url);
+		StringSerializer.writeVarIntUTF8String(serializer, hash);
 		return RecyclableSingletonList.create(serializer);
 	}
 

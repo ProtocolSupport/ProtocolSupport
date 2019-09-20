@@ -20,11 +20,11 @@ public class ScoreboardObjective extends MiddleScoreboardObjective {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_OBJECTIVE);
-		StringSerializer.writeString(serializer, version, name);
+		StringSerializer.writeVarIntUTF8String(serializer, name);
 		MiscSerializer.writeByteEnum(serializer, mode);
 		if (mode != Mode.REMOVE) {
-			StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(value.toLegacyText(cache.getAttributesCache().getLocale()), 32));
-			StringSerializer.writeString(serializer, version, getTypeString(type));
+			StringSerializer.writeVarIntUTF8String(serializer, LegacyChat.clampLegacyText(value.toLegacyText(cache.getAttributesCache().getLocale()), 32));
+			StringSerializer.writeVarIntUTF8String(serializer, getTypeString(type));
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

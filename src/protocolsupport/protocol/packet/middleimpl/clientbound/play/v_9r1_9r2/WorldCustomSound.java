@@ -20,7 +20,7 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND);
-		StringSerializer.writeString(serializer, version, SoundRemapper.getSoundName(version, id));
+		StringSerializer.writeVarIntUTF8String(serializer, SoundRemapper.getSoundName(version, id));
 		VarNumberSerializer.writeVarInt(serializer, category);
 		serializer.writeInt(x);
 		serializer.writeInt(y);

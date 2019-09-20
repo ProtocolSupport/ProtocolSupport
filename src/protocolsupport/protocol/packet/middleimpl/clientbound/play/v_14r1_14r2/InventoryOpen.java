@@ -23,7 +23,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
 		VarNumberSerializer.writeVarInt(serializer, windowId);
 		MiscSerializer.writeVarIntEnum(serializer, windowRemapper.toClientWindowType(type));
-		StringSerializer.writeString(serializer, version, ChatAPI.toJSON(title));
+		StringSerializer.writeVarIntUTF8String(serializer, ChatAPI.toJSON(title));
 		return RecyclableSingletonList.create(serializer);
 	}
 

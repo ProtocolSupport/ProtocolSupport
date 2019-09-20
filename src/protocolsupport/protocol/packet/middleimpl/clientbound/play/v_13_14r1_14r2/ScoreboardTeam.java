@@ -22,19 +22,19 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_TEAM);
-		StringSerializer.writeString(serializer, version, name);
+		StringSerializer.writeVarIntUTF8String(serializer, name);
 		MiscSerializer.writeByteEnum(serializer, mode);
 		if ((mode == Mode.CREATE) || (mode == Mode.UPDATE)) {
-			StringSerializer.writeString(serializer, version, ChatAPI.toJSON(displayName));
+			StringSerializer.writeVarIntUTF8String(serializer, ChatAPI.toJSON(displayName));
 			serializer.writeByte(friendlyFire);
-			StringSerializer.writeString(serializer, version, nameTagVisibility);
-			StringSerializer.writeString(serializer, version, collisionRule);
+			StringSerializer.writeVarIntUTF8String(serializer, nameTagVisibility);
+			StringSerializer.writeVarIntUTF8String(serializer, collisionRule);
 			VarNumberSerializer.writeVarInt(serializer, color);
-			StringSerializer.writeString(serializer, version, ChatAPI.toJSON(prefix));
-			StringSerializer.writeString(serializer, version, ChatAPI.toJSON(suffix));
+			StringSerializer.writeVarIntUTF8String(serializer, ChatAPI.toJSON(prefix));
+			StringSerializer.writeVarIntUTF8String(serializer, ChatAPI.toJSON(suffix));
 		}
 		if ((mode == Mode.CREATE) || (mode == Mode.PLAYERS_ADD) || (mode == Mode.PLAYERS_REMOVE)) {
-			ArraySerializer.writeVarIntStringArray(serializer, version, players);
+			ArraySerializer.writeVarIntVarIntUTF8StringArray(serializer, players);
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

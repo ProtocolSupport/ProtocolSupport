@@ -16,7 +16,7 @@ public class NetworkEntityMetadataObjectChat extends ReadableNetworkEntityMetada
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
-		StringSerializer.writeString(to, version, ChatAPI.toJSON(value));
+		StringSerializer.writeVarIntUTF8String(to, ChatAPI.toJSON(value));
 	}
 
 }

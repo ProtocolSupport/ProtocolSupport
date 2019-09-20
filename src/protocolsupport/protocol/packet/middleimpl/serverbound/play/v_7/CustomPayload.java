@@ -21,7 +21,7 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		tag = StringSerializer.readString(clientdata, version, 20);
+		tag = StringSerializer.readVarIntUTF8String(clientdata, 20);
 		data = ArraySerializer.readShortByteArraySlice(clientdata, Short.MAX_VALUE);
 	}
 
@@ -51,7 +51,7 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_RIGHT_NAME:
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_TYPO_NAME: {
-				return LegacyCustomPayloadData.transformAdvancedCommandBlockEdit(version, data, false);
+				return LegacyCustomPayloadData.transformAdvancedCommandBlockEdit(data, false);
 			}
 			default: {
 				return LegacyCustomPayloadData.transformCustomPayload(tag, data);

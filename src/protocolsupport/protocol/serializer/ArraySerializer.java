@@ -8,7 +8,6 @@ import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolVersion;
 
 public class ArraySerializer {
 
@@ -70,11 +69,6 @@ public class ArraySerializer {
 		to.writeBytes(data);
 	}
 
-	public static void writeShortByteArray(ByteBuf to, byte[] data) {
-		to.writeShort(data.length);
-		to.writeBytes(data);
-	}
-
 	public static void writeShortByteArray(ByteBuf to, Consumer<ByteBuf> dataWriter) {
 		MiscSerializer.writeLengthPrefixedBytes(to, (lTo, length) -> lTo.writeShort(length), dataWriter);
 	}
@@ -119,10 +113,10 @@ public class ArraySerializer {
 		}
 	}
 
-	public static void writeVarIntStringArray(ByteBuf to, ProtocolVersion version, String[] array) {
+	public static void writeVarIntVarIntUTF8StringArray(ByteBuf to, String[] array) {
 		VarNumberSerializer.writeVarInt(to, array.length);
 		for (String str : array) {
-			StringSerializer.writeString(to, version, str);
+			StringSerializer.writeVarIntUTF8String(to, str);
 		}
 	}
 

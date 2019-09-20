@@ -23,7 +23,7 @@ public class MerchantTradeList extends MiddleMerchantTradeList {
 	public RecyclableCollection<? extends IPacketData> toData() {
 		buffer.clear();
 		MerchantDataSerializer.writeMerchantData(buffer, version, cache.getAttributesCache().getLocale(), merchantData);
-		return RecyclableSingletonList.create(CustomPayload.create(version, LegacyCustomPayloadChannelName.MODERN_TRADE_LIST, buffer));
+		return RecyclableSingletonList.create(CustomPayload.create(LegacyCustomPayloadChannelName.MODERN_TRADE_LIST, buffer));
 	}
 
 }

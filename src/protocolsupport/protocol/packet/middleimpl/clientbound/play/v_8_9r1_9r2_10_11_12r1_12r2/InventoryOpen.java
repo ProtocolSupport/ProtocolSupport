@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2;
 
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.protocol.ConnectionImpl;
@@ -25,14 +24,14 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		LegacyWindowData wdata = LegacyWindowType.getData(windowRemapper.toClientWindowType(type));
 		return RecyclableSingletonList.create(writeData(
 			ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN),
-			version, windowId, wdata.getStringId(), title.toLegacyText(cache.getAttributesCache().getLocale()), windowRemapper.toClientSlots(0)
+			windowId, wdata.getStringId(), title.toLegacyText(cache.getAttributesCache().getLocale()), windowRemapper.toClientSlots(0)
 		));
 	}
 
-	public static ClientBoundPacketData writeData(ClientBoundPacketData to, ProtocolVersion version, int windowId, String type, String title, int slots) {
+	public static ClientBoundPacketData writeData(ClientBoundPacketData to, int windowId, String type, String title, int slots) {
 		to.writeByte(windowId);
-		StringSerializer.writeString(to, version, type);
-		StringSerializer.writeString(to, version, ChatAPI.toJSON(new TextComponent(title)));
+		StringSerializer.writeVarIntUTF8String(to, type);
+		StringSerializer.writeVarIntUTF8String(to, ChatAPI.toJSON(new TextComponent(title)));
 		to.writeByte(slots);
 		return to;
 	}

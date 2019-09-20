@@ -20,7 +20,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_RESPAWN);
 		serializer.writeInt(dimension.getId());
 		serializer.writeByte(gamemode.getId());
-		StringSerializer.writeString(serializer, version, leveltype);
+		StringSerializer.writeVarIntUTF8String(serializer, leveltype);
 		return RecyclableSingletonList.create(serializer);
 	}
 

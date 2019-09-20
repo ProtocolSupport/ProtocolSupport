@@ -1,8 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_l;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
@@ -26,7 +24,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		String[] data = StringSerializer.readString(clientdata, ProtocolVersion.getOldest(ProtocolType.PC)).split("[;]");
+		String[] data = StringSerializer.readShortUTF16BEString(clientdata, Short.MAX_VALUE).split("[;]");
 		String[] addrdata = data[1].split("[:]");
 		username = data[0];
 		hostname = addrdata[0];

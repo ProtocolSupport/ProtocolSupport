@@ -18,8 +18,8 @@ public class PlayerListHeaderFooter extends MiddlePlayerListHeaderFooter {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_PLAYER_LIST_HEADER_FOOTER);
-		StringSerializer.writeString(serializer, version, headerJson);
-		StringSerializer.writeString(serializer, version, footerJson);
+		StringSerializer.writeVarIntUTF8String(serializer, headerJson);
+		StringSerializer.writeVarIntUTF8String(serializer, footerJson);
 		return RecyclableSingletonList.create(serializer);
 	}
 

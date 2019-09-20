@@ -33,7 +33,7 @@ public class CombatEvent extends MiddleCombatEvent {
 			case ENTITY_DEAD: {
 				VarNumberSerializer.writeVarInt(serializer, playerId);
 				serializer.writeInt(entityId);
-				StringSerializer.writeString(serializer, version, message);
+				StringSerializer.writeVarIntUTF8String(serializer, message);
 				break;
 			}
 		}

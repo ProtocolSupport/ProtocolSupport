@@ -22,7 +22,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_PAINTING);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
-		StringSerializer.writeString(serializer, version, LegacyPainting.getName(type));
+		StringSerializer.writeVarIntUTF8String(serializer, LegacyPainting.getName(type));
 		PositionSerializer.writeLegacyPositionL(serializer, position);
 		serializer.writeByte(direction);
 		return RecyclableSingletonList.create(serializer);

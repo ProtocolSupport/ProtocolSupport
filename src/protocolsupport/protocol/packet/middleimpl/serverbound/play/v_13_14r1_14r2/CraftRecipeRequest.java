@@ -14,7 +14,7 @@ public class CraftRecipeRequest extends MiddleCraftRecipeRequest {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		windowId = clientdata.readUnsignedByte();
-		recipeId = StringSerializer.readString(clientdata, version);
+		recipeId = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
 		all = clientdata.readBoolean();
 	}
 

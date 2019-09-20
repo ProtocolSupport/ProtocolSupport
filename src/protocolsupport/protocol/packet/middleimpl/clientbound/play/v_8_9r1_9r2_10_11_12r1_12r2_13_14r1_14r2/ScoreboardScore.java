@@ -19,9 +19,9 @@ public class ScoreboardScore extends MiddleScoreboardScore {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_SCORE);
-		StringSerializer.writeString(serializer, version, name);
+		StringSerializer.writeVarIntUTF8String(serializer, name);
 		serializer.writeByte(mode);
-		StringSerializer.writeString(serializer, version, objectiveName);
+		StringSerializer.writeVarIntUTF8String(serializer, objectiveName);
 		if (mode != 1) {
 			VarNumberSerializer.writeVarInt(serializer, value);
 		}

@@ -25,7 +25,7 @@ public class StartGame extends MiddleStartGame {
 		serializer.writeByte(dimension.getId());
 		MiscSerializer.writeByteEnum(serializer, Difficulty.HARD);
 		serializer.writeByte(Math.min(maxplayers, 60));
-		StringSerializer.writeString(serializer, version, leveltype);
+		StringSerializer.writeVarIntUTF8String(serializer, leveltype);
 		return RecyclableSingletonList.create(serializer);
 	}
 

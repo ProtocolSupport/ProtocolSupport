@@ -21,20 +21,20 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_TEAM);
-		StringSerializer.writeString(serializer, version, name);
+		StringSerializer.writeVarIntUTF8String(serializer, name);
 		MiscSerializer.writeByteEnum(serializer, mode);
 		if ((mode == Mode.CREATE) || (mode == Mode.UPDATE)) {
 			String locale = cache.getAttributesCache().getLocale();
-			StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(displayName.toLegacyText(locale), 32));
-			StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(LegacyChat.addScoreboardTeamColorToPrefix(prefix.toLegacyText(locale), color), 16));
-			StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(suffix.toLegacyText(locale), 16));
+			StringSerializer.writeVarIntUTF8String(serializer, LegacyChat.clampLegacyText(displayName.toLegacyText(locale), 32));
+			StringSerializer.writeVarIntUTF8String(serializer, LegacyChat.clampLegacyText(LegacyChat.addScoreboardTeamColorToPrefix(prefix.toLegacyText(locale), color), 16));
+			StringSerializer.writeVarIntUTF8String(serializer, LegacyChat.clampLegacyText(suffix.toLegacyText(locale), 16));
 			serializer.writeByte(friendlyFire);
-			StringSerializer.writeString(serializer, version, nameTagVisibility);
-			StringSerializer.writeString(serializer, version, collisionRule);
+			StringSerializer.writeVarIntUTF8String(serializer, nameTagVisibility);
+			StringSerializer.writeVarIntUTF8String(serializer, collisionRule);
 			serializer.writeByte(color <= 15 ? color : -1);
 		}
 		if ((mode == Mode.CREATE) || (mode == Mode.PLAYERS_ADD) || (mode == Mode.PLAYERS_REMOVE)) {
-			ArraySerializer.writeVarIntStringArray(serializer, version, players);
+			ArraySerializer.writeVarIntVarIntUTF8StringArray(serializer, players);
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

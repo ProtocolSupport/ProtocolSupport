@@ -51,7 +51,7 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 		registerWriter(RecipeType.CRAFTING_SHAPELESS, new RecipeWriter<ShapelessRecipe>() {
 			@Override
 			protected void writeRecipeData(ByteBuf to, ProtocolVersion version, ShapelessRecipe recipe) {
-				StringSerializer.writeString(to, version, recipe.getGroup());
+				StringSerializer.writeVarIntUTF8String(to, recipe.getGroup());
 				ArraySerializer.writeVarIntTArray(to, recipe.getIngredients(), (lTo, ingredient) -> writeIngredient(lTo, version, ingredient));
 				ItemStackSerializer.writeItemStack(to, version, I18NData.DEFAULT_LOCALE, recipe.getResult());
 			}
@@ -61,7 +61,7 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 			protected void writeRecipeData(ByteBuf to, ProtocolVersion version, ShapedRecipe recipe) {
 				VarNumberSerializer.writeVarInt(to, recipe.getWidth());
 				VarNumberSerializer.writeVarInt(to, recipe.getHeight());
-				StringSerializer.writeString(to, version, recipe.getGroup());
+				StringSerializer.writeVarIntUTF8String(to, recipe.getGroup());
 				for (Ingredient ingredient : recipe.getIngredients()) {
 					writeIngredient(to, version, ingredient);
 				}
@@ -71,7 +71,7 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 		RecipeWriter<SmeltingRecipe> smeltingRecipeWriter = new RecipeWriter<SmeltingRecipe>() {
 			@Override
 			protected void writeRecipeData(ByteBuf to, ProtocolVersion version, SmeltingRecipe recipe) {
-				StringSerializer.writeString(to, version, recipe.getGroup());
+				StringSerializer.writeVarIntUTF8String(to, recipe.getGroup());
 				writeIngredient(to, version, recipe.getIngredient());
 				ItemStackSerializer.writeItemStack(to, version, I18NData.DEFAULT_LOCALE, recipe.getResult());
 				to.writeFloat(recipe.getExp());
@@ -85,7 +85,7 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 		registerWriter(RecipeType.STONECUTTING, new RecipeWriter<StonecuttingRecipe>() {
 			@Override
 			protected void writeRecipeData(ByteBuf to, ProtocolVersion version, StonecuttingRecipe recipe) {
-				StringSerializer.writeString(to, version, recipe.getGroup());
+				StringSerializer.writeVarIntUTF8String(to, recipe.getGroup());
 				writeIngredient(to, version, recipe.getIngredient());
 				ItemStackSerializer.writeItemStack(to, version, I18NData.DEFAULT_LOCALE, recipe.getResult());
 			}
@@ -106,8 +106,8 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 		public static final RecipeWriter<Recipe> SIMPLE = new RecipeWriter<>();
 
 		public boolean writeRecipe(ByteBuf to, ProtocolVersion version, T recipe) {
-			StringSerializer.writeString(to, version, recipe.getType().getInternalName());
-			StringSerializer.writeString(to, version, recipe.getId());
+			StringSerializer.writeVarIntUTF8String(to, recipe.getType().getInternalName());
+			StringSerializer.writeVarIntUTF8String(to, recipe.getId());
 			writeRecipeData(to, version, recipe);
 			return true;
 		}

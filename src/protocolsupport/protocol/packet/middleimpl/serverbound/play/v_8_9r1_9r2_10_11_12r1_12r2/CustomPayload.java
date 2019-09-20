@@ -21,7 +21,7 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		tag = StringSerializer.readString(clientdata, version, 20);
+		tag = StringSerializer.readVarIntUTF8String(clientdata, 20);
 		data = MiscSerializer.readAllBytesSlice(clientdata, Short.MAX_VALUE);
 	}
 
@@ -44,7 +44,7 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 				return LegacyCustomPayloadData.transformSetBeaconEffect(data);
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_NAME_ITEM: {
-				return LegacyCustomPayloadData.transformNameItemSString(version, data);
+				return LegacyCustomPayloadData.transformNameItemSString(data);
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_TRADE_SELECT: {
 				return LegacyCustomPayloadData.transformTradeSelect(data);
@@ -53,14 +53,14 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 				return LegacyCustomPayloadData.transformPickItem(data);
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_STRUCTURE_BLOCK: {
-				return LegacyCustomPayloadData.transformStructureBlock(version, data);
+				return LegacyCustomPayloadData.transformStructureBlock(data);
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_RIGHT_NAME:
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_TYPO_NAME: {
-				return LegacyCustomPayloadData.transformAdvancedCommandBlockEdit(version, data, true);
+				return LegacyCustomPayloadData.transformAdvancedCommandBlockEdit(data, true);
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_BLOCK_NAME: {
-				return LegacyCustomPayloadData.transformAutoCommandBlockEdit(version, data);
+				return LegacyCustomPayloadData.transformAutoCommandBlockEdit(data);
 			}
 			default: {
 				return LegacyCustomPayloadData.transformCustomPayload(tag, data);

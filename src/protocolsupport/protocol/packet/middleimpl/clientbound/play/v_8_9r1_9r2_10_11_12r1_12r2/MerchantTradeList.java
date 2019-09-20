@@ -16,7 +16,7 @@ public class MerchantTradeList extends MiddleMerchantTradeList {
 
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
-		return RecyclableSingletonList.create(CustomPayload.create(version, LegacyCustomPayloadChannelName.LEGACY_TRADE_LIST, to -> {
+		return RecyclableSingletonList.create(CustomPayload.create(LegacyCustomPayloadChannelName.LEGACY_TRADE_LIST, to -> {
 			MerchantDataSerializer.writeMerchantData(to, version, cache.getAttributesCache().getLocale(), merchantData);
 		}));
 	}

@@ -23,7 +23,7 @@ public class StartGame extends MiddleStartGame {
 		serializer.writeByte(gamemode.getId() | (hardcore ? 0x8 : 0));
 		serializer.writeInt(dimension.getId());
 		serializer.writeByte(maxplayers);
-		StringSerializer.writeString(serializer, version, leveltype);
+		StringSerializer.writeVarIntUTF8String(serializer, leveltype);
 		VarNumberSerializer.writeVarInt(serializer, renderDistance);
 		serializer.writeBoolean(reducedDebugInfo);
 		return RecyclableSingletonList.create(serializer);

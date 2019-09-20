@@ -4,8 +4,6 @@ import java.util.StringJoiner;
 
 import org.bukkit.ChatColor;
 
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.status.MiddleServerInfo;
@@ -29,7 +27,7 @@ public class ServerInfo extends MiddleServerInfo {
 		.add(String.valueOf(ping.getPlayers().getOnline()))
 		.add(String.valueOf(ping.getPlayers().getMax()))
 		.toString();
-		StringSerializer.writeString(serializer, ProtocolVersion.getOldest(ProtocolType.PC), response);
+		StringSerializer.writeShortUTF16BEString(serializer, response);
 		return RecyclableSingletonList.create(serializer);
 	}
 

@@ -17,7 +17,7 @@ public class BookOpen extends MiddleBookOpen {
 
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
-		return RecyclableSingletonList.create(CustomPayload.create(version, LegacyCustomPayloadChannelName.LEGACY_BOOK_OPEN, to -> {
+		return RecyclableSingletonList.create(CustomPayload.create(LegacyCustomPayloadChannelName.LEGACY_BOOK_OPEN, to -> {
 			MiscSerializer.writeVarIntEnum(to, hand);
 		}));
 	}

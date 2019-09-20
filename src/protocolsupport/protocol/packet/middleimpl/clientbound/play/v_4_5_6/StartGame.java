@@ -21,7 +21,7 @@ public class StartGame extends MiddleStartGame {
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_START_GAME);
 		serializer.writeInt(player.getId());
-		StringSerializer.writeString(serializer, version, leveltype);
+		StringSerializer.writeShortUTF16BEString(serializer, leveltype);
 		serializer.writeByte(gamemode.getId() | (hardcore ? 0x8 : 0));
 		serializer.writeByte(dimension.getId());
 		MiscSerializer.writeByteEnum(serializer, Difficulty.HARD);

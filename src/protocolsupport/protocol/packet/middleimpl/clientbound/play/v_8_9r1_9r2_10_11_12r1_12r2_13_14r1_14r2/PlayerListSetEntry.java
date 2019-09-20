@@ -1,16 +1,15 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2;
 
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
 
 import protocolsupport.api.utils.Any;
-import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.IPacketData;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -34,23 +33,21 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 			PlayerListEntry currentEntry = entry.getValue().getObj2();
 			switch (action) {
 				case ADD: {
-					StringSerializer.writeString(serializer, version, currentEntry.getUserName());
-					List<ProfileProperty> properties = currentEntry.getProperties(false);
-					VarNumberSerializer.writeVarInt(serializer, properties.size());
-					for (ProfileProperty property : properties) {
-						StringSerializer.writeString(serializer, version, property.getName());
-						StringSerializer.writeString(serializer, version, property.getValue());
+					StringSerializer.writeVarIntUTF8String(serializer, currentEntry.getUserName());
+					ArraySerializer.writeVarIntTArray(serializer, currentEntry.getProperties(false), (to, property) -> {
+						StringSerializer.writeVarIntUTF8String(serializer, property.getName());
+						StringSerializer.writeVarIntUTF8String(serializer, property.getValue());
 						serializer.writeBoolean(property.hasSignature());
 						if (property.hasSignature()) {
-							StringSerializer.writeString(serializer, version, property.getSignature());
+							StringSerializer.writeVarIntUTF8String(serializer, property.getSignature());
 						}
-					}
+					});
 					VarNumberSerializer.writeVarInt(serializer, currentEntry.getGameMode().getId());
 					VarNumberSerializer.writeVarInt(serializer, currentEntry.getPing());
 					String displayNameJson = currentEntry.getDisplayNameJson();
 					serializer.writeBoolean(displayNameJson != null);
 					if (displayNameJson != null) {
-						StringSerializer.writeString(serializer, version, displayNameJson);
+						StringSerializer.writeVarIntUTF8String(serializer, displayNameJson);
 					}
 					break;
 				}
@@ -66,7 +63,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 					String displayNameJson = currentEntry.getDisplayNameJson();
 					serializer.writeBoolean(displayNameJson != null);
 					if (displayNameJson != null) {
-						StringSerializer.writeString(serializer, version, displayNameJson);
+						StringSerializer.writeVarIntUTF8String(serializer, displayNameJson);
 					}
 					break;
 				}

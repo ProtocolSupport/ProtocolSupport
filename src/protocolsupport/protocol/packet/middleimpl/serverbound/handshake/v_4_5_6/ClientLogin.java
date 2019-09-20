@@ -25,8 +25,8 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
 		clientdata.readUnsignedByte();
-		username = StringSerializer.readString(clientdata, version, 16);
-		hostname = StringSerializer.readString(clientdata, version);
+		username = StringSerializer.readShortUTF16BEString(clientdata, 16);
+		hostname = StringSerializer.readShortUTF16BEString(clientdata, Short.MAX_VALUE);
 		port = clientdata.readInt();
 	}
 

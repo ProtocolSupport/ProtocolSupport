@@ -20,7 +20,7 @@ public class AdvancementsTab extends MiddleAdvancementsTab {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ADVANCEMENTS_TAB);
 		if (identifier != null) {
 			serializer.writeBoolean(true);
-			StringSerializer.writeString(serializer, version, identifier);
+			StringSerializer.writeVarIntUTF8String(serializer, identifier);
 		} else {
 			serializer.writeBoolean(false);
 		}

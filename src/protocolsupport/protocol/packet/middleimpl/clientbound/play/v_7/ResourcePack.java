@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 
-import java.nio.charset.StandardCharsets;
-
+import io.netty.buffer.ByteBufUtil;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleResourcePack;
@@ -21,8 +20,8 @@ public class ResourcePack extends MiddleResourcePack {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
-		StringSerializer.writeString(serializer, version, "MC|RPack");
-		ArraySerializer.writeShortByteArray(serializer, url.getBytes(StandardCharsets.UTF_8));
+		StringSerializer.writeVarIntUTF8String(serializer, "MC|RPack");
+		ArraySerializer.writeShortByteArray(serializer, to -> ByteBufUtil.writeUtf8(to, url));
 		return RecyclableSingletonList.create(serializer);
 	}
 

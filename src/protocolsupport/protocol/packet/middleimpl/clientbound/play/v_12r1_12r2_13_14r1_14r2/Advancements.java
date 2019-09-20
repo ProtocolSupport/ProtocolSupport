@@ -27,13 +27,13 @@ public class Advancements extends MiddleAdvancements {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ADVANCEMENTS);
 		serializer.writeBoolean(reset);
 		ArraySerializer.writeVarIntTArray(serializer, advancementsMapping, (to, element) -> {
-			StringSerializer.writeString(to, version, element.getObj1());
+			StringSerializer.writeVarIntUTF8String(to, element.getObj1());
 			writeAdvanvement(to, version, cache.getAttributesCache().getLocale(), element.getObj2());
 		});
-		ArraySerializer.writeVarIntStringArray(serializer, version, removeAdvancements);
+		ArraySerializer.writeVarIntVarIntUTF8StringArray(serializer, removeAdvancements);
 		ArraySerializer.writeVarIntTArray(serializer, advancementsProgress, (to, element) -> {
-			StringSerializer.writeString(to, version, element.getObj1());
-			wrtieAdvancementProgress(to, version, element.getObj2());
+			StringSerializer.writeVarIntUTF8String(to, element.getObj1());
+			wrtieAdvancementProgress(to, element.getObj2());
 		});
 		return RecyclableSingletonList.create(serializer);
 	}
@@ -41,7 +41,7 @@ public class Advancements extends MiddleAdvancements {
 	protected static void writeAdvanvement(ByteBuf to, ProtocolVersion version, String locale, Advancement advancement) {
 		if (advancement.parentId != null) {
 			to.writeBoolean(true);
-			StringSerializer.writeString(to, version, advancement.parentId);
+			StringSerializer.writeVarIntUTF8String(to, advancement.parentId);
 		} else {
 			to.writeBoolean(false);
 		}
@@ -51,27 +51,27 @@ public class Advancements extends MiddleAdvancements {
 		} else {
 			to.writeBoolean(false);
 		}
-		ArraySerializer.writeVarIntStringArray(to, version, advancement.criteria);
-		ArraySerializer.writeVarIntTArray(to, advancement.requirements, (buf, element) -> ArraySerializer.writeVarIntStringArray(to, version, element));
+		ArraySerializer.writeVarIntVarIntUTF8StringArray(to, advancement.criteria);
+		ArraySerializer.writeVarIntTArray(to, advancement.requirements, ArraySerializer::writeVarIntVarIntUTF8StringArray);
 	}
 
 	protected static void writeAdvancementDisplay(ByteBuf to, ProtocolVersion version, String locale, AdvancementDisplay display) {
-		StringSerializer.writeString(to, version, ChatAPI.toJSON(LegacyChatJson.convert(version, locale, display.title)));
-		StringSerializer.writeString(to, version, ChatAPI.toJSON(LegacyChatJson.convert(version, locale, display.description)));
+		StringSerializer.writeVarIntUTF8String(to, ChatAPI.toJSON(LegacyChatJson.convert(version, locale, display.title)));
+		StringSerializer.writeVarIntUTF8String(to, ChatAPI.toJSON(LegacyChatJson.convert(version, locale, display.description)));
 		ItemStackSerializer.writeItemStack(to, version, locale, display.icon);
 		MiscSerializer.writeVarIntEnum(to, display.frametype);
 		to.writeInt(display.flags);
 		if ((display.flags & AdvancementDisplay.flagHasBackgroundOffset) != 0) {
-			StringSerializer.writeString(to, version, display.background);
+			StringSerializer.writeVarIntUTF8String(to, display.background);
 		}
 		to.writeFloat(display.x);
 		to.writeFloat(display.y);
 	}
 
 
-	protected void wrtieAdvancementProgress(ByteBuf to, ProtocolVersion version, AdvancementProgress obj2) {
+	protected void wrtieAdvancementProgress(ByteBuf to, AdvancementProgress obj2) {
 		ArraySerializer.writeVarIntTArray(to, obj2.criterionsProgress, (toi, element) -> {
-			StringSerializer.writeString(toi, version, element.getObj1());
+			StringSerializer.writeVarIntUTF8String(toi, element.getObj1());
 			if (element.getObj2() != null) {
 				toi.writeBoolean(true);
 				toi.writeLong(element.getObj2());

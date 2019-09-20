@@ -20,10 +20,10 @@ public class ScoreboardObjective extends MiddleScoreboardObjective {
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_OBJECTIVE);
-		StringSerializer.writeString(serializer, version, name);
+		StringSerializer.writeVarIntUTF8String(serializer, name);
 		serializer.writeByte(mode.ordinal());
 		if (mode != Mode.REMOVE) {
-			StringSerializer.writeString(serializer, version, ChatAPI.toJSON(value));
+			StringSerializer.writeVarIntUTF8String(serializer, ChatAPI.toJSON(value));
 			MiscSerializer.writeVarIntEnum(serializer, type);
 		}
 		return RecyclableSingletonList.create(serializer);
