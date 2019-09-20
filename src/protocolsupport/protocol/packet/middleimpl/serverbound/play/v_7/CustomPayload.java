@@ -35,10 +35,10 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 				return LegacyCustomPayloadData.transformRegisterUnregister(cache.getChannelsCache(), tag, data, false);
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_BOOK_EDIT: {
-				return LegacyCustomPayloadData.transformBookEdit(version, cache.getAttributesCache().getLocale(), data);
+				return LegacyCustomPayloadData.transformBookEdit(version, data);
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_BOOK_SIGN: {
-				return LegacyCustomPayloadData.transformBookSign(version, cache.getAttributesCache().getLocale(), data);
+				return LegacyCustomPayloadData.transformBookSign(version, data);
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_SET_BEACON: {
 				return LegacyCustomPayloadData.transformSetBeaconEffect(data);

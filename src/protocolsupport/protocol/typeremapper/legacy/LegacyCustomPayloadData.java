@@ -31,6 +31,7 @@ import protocolsupport.protocol.types.nbt.NBTList;
 import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
+import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.BitUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
@@ -53,8 +54,8 @@ public class LegacyCustomPayloadData {
 		return RecyclableSingletonList.create(MiddleCustomPayload.create(modernTag, payloadModernTagJoiner.toString().getBytes(StandardCharsets.UTF_8)));
 	}
 
-	public static RecyclableCollection<ServerBoundPacketData> transformBookEdit(ProtocolVersion version, String locale, ByteBuf data) {
-		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version, locale);
+	public static RecyclableCollection<ServerBoundPacketData> transformBookEdit(ProtocolVersion version, ByteBuf data) {
+		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version);
 		if (!book.isNull()) {
 			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
 			return RecyclableSingletonList.create(MiddleEditBook.create(book, false, UsedHand.MAIN));
@@ -63,8 +64,8 @@ public class LegacyCustomPayloadData {
 		}
 	}
 
-	public static RecyclableCollection<ServerBoundPacketData> transformBookSign(ProtocolVersion version, String locale, ByteBuf data) {
-		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version, locale);
+	public static RecyclableCollection<ServerBoundPacketData> transformBookSign(ProtocolVersion version, ByteBuf data) {
+		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version);
 		if (!book.isNull()) {
 			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
 			if (version == ProtocolVersion.MINECRAFT_1_8) {
@@ -74,7 +75,7 @@ public class LegacyCustomPayloadData {
 					if (pages != null) {
 						NBTList<NBTString> newPages = new NBTList<>(NBTType.STRING);
 						for (NBTString page : pages.getTags()) {
-							newPages.addTag(new NBTString(ChatAPI.fromJSON(page.getValue()).toLegacyText(locale)));
+							newPages.addTag(new NBTString(ChatAPI.fromJSON(page.getValue()).toLegacyText(I18NData.DEFAULT_LOCALE)));
 						}
 						rootTag.setTag("pages", newPages);
 					}

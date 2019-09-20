@@ -8,7 +8,6 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
@@ -28,7 +27,7 @@ public class PrepareCraftingGrid extends ServerBoundMiddlePacket {
 		clientdata.readByte();
 		clientdata.readShort();
 		Function<ByteBuf, Void> elementReader = from -> {
-			ItemStackSerializer.readItemStack(from, version, I18NData.DEFAULT_LOCALE);
+			ItemStackSerializer.readItemStack(from, version);
 			from.readByte();
 			from.readByte();
 			return null;

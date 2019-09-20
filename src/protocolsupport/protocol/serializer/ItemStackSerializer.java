@@ -127,13 +127,12 @@ public class ItemStackSerializer {
 	 * Reads itemstack using provided protocol version format and remaps it <br>
 	 * @param from buffer to read from
 	 * @param version protocol version
-	 * @param locale client locale
 	 * @return itemstack itemstack
 	 */
-	public static NetworkItemStack readItemStack(ByteBuf from, ProtocolVersion version, String locale) {
+	public static NetworkItemStack readItemStack(ByteBuf from, ProtocolVersion version) {
 		NetworkItemStack itemstack = ITEMSTACK_DESERIALIZER.get(version).apply(from);
 		if (!itemstack.isNull()) {
-			itemstack = ItemStackRemapper.remapFromClient(version, locale, itemstack);
+			itemstack = ItemStackRemapper.remapFromClient(version, itemstack);
 		}
 		return itemstack;
 	}

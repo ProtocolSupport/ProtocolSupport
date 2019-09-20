@@ -3,6 +3,7 @@ package protocolsupport.protocol.typeremapper.itemstack;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapperRegistry;
 import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.utils.i18n.I18NData;
 
 public class ItemStackRemapper {
 
@@ -21,13 +22,13 @@ public class ItemStackRemapper {
 		return itemstack;
 	}
 
-	public static NetworkItemStack remapFromClient(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
+	public static NetworkItemStack remapFromClient(ProtocolVersion version, NetworkItemStack itemstack) {
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {
 			itemstack.setTypeId(PreFlatteningItemIdData.getModernIdByLegacyIdData(itemstack.getTypeId(), itemstack.getLegacyData()));
 		} else {
 			itemstack.setTypeId(FlatteningItemId.REGISTRY_FROM_CLIENT.getTable(version).getRemap(itemstack.getTypeId()));
 		}
-		return ItemStackComplexRemapperRegistry.remapFromClient(version, locale, itemstack);
+		return ItemStackComplexRemapperRegistry.remapFromClient(version, I18NData.DEFAULT_LOCALE, itemstack);
 	}
 
 	public static boolean isComplexlyRemapped(NetworkItemStack itemstack) {
