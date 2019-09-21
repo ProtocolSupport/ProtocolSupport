@@ -52,4 +52,13 @@ public class ClientBoundPacketData extends UnpooledHeapByteBuf implements Recycl
 		to.writeBytes(this);
 	}
 
+	@Override
+	public ClientBoundPacketData clone() {
+		ClientBoundPacketData packetdata = ClientBoundPacketData.create(getPacketType());
+		markReaderIndex();
+		packetdata.writeBytes(this);
+		resetReaderIndex();
+		return packetdata;
+	}
+
 }

@@ -39,7 +39,11 @@ public class ChunkSendIntervalPacketQueue extends ClientboundPacketProcessor {
 	@Override
 	public void process(IPacketData packet) {
 		if (locked) {
-			if (shouldQueue(packet)) {
+			if (packet.getPacketType() == PacketType.CLIENTBOUND_PLAY_ENTITY_PASSENGERS) {
+				System.err.println("ququq");
+				queue.add(packet.clone());
+				write(packet);
+			} else if (shouldQueue(packet)) {
 				queue.add(packet);
 			} else {
 				write(packet);

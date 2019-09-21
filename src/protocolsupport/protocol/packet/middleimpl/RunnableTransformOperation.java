@@ -29,4 +29,9 @@ public class RunnableTransformOperation implements IPacketData {
 	public void recycle() {
 	}
 
+	@Override
+	public RunnableTransformOperation clone() {
+		return new RunnableTransformOperation(runnable);
+	}
+
 }

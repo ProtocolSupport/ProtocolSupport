@@ -16,4 +16,6 @@ public interface IPacketData extends Recyclable {
 
 	public void writeData(ByteBuf to);
 
+	public IPacketData clone();
+
 }

@@ -52,4 +52,13 @@ public class ServerBoundPacketData extends UnpooledHeapByteBuf implements Recycl
 		to.writeBytes(this);
 	}
 
+	@Override
+	public ServerBoundPacketData clone() {
+		ServerBoundPacketData packetdata = ServerBoundPacketData.create(getPacketType());
+		markReaderIndex();
+		packetdata.writeBytes(this);
+		resetReaderIndex();
+		return packetdata;
+	}
+
 }
