@@ -27,7 +27,7 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 		if ((mode == Mode.CREATE) || (mode == Mode.UPDATE)) {
 			String locale = cache.getAttributesCache().getLocale();
 			StringSerializer.writeVarIntUTF8String(serializer, LegacyChat.clampLegacyText(displayName.toLegacyText(locale), 32));
-			StringSerializer.writeVarIntUTF8String(serializer, LegacyChat.clampLegacyText(LegacyChat.addScoreboardTeamColorToPrefix(prefix.toLegacyText(locale), color), 16));
+			StringSerializer.writeVarIntUTF8String(serializer, LegacyChat.formatLegacyPrefixWithTeamColor(prefix.toLegacyText(locale), 16, color));
 			StringSerializer.writeVarIntUTF8String(serializer, LegacyChat.clampLegacyText(suffix.toLegacyText(locale), 16));
 			serializer.writeByte(friendlyFire);
 			StringSerializer.writeVarIntUTF8String(serializer, nameTagVisibility);

@@ -183,7 +183,7 @@ public class LegacyChat {
 		return combinedModifier;
 	}
 
-	public static String addScoreboardTeamColorToPrefix(String prefix, int colorIndex) {
+	public static String formatLegacyPrefixWithTeamColor(String prefix, int prefixLimit, int colorIndex) {
 		String prefixColors = ChatColor.getLastColors(prefix);
 		ChatColor color = EnumConstantLookups.CHAT_COLOR.getByOrdinal(colorIndex);
 		String colorString = color.toString();
@@ -192,12 +192,12 @@ public class LegacyChat {
 			!colorString.equals(prefixColors)
 		) {
 			if (color.isColor()) {
-				return prefix + colorString;
+				return clampLegacyText(prefix, prefixLimit - colorString.length()) + colorString;
 			} else {
-				return prefix + ChatColor.RESET + colorString;
+				return clampLegacyText(prefix, prefixLimit - colorString.length() - 2) + ChatColor.RESET + colorString;
 			}
 		}
-		return prefix;
+		return clampLegacyText(prefix, prefixLimit);
 	}
 
 	public static String clampLegacyText(String text, int limit) {
