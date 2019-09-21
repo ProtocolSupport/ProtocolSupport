@@ -188,7 +188,7 @@ public class LegacyChat {
 		ChatColor color = EnumConstantLookups.CHAT_COLOR.getByOrdinal(colorIndex);
 		String colorString = color.toString();
 		if (
-			(prefixColors.isEmpty() && color != ChatColor.RESET) ||
+			(prefixColors.isEmpty() && (color != ChatColor.RESET)) ||
 			!colorString.equals(prefixColors)
 		) {
 			if (color.isColor()) {

@@ -60,7 +60,7 @@ public class ChunkWriterByte {
 
 		if (biomeData != null) {
 			for (int i = 0; i < biomeData.length; i++) {
-				data[data.length - 256 + i] = (byte) biomeData[i];
+				data[(data.length - 256) + i] = (byte) biomeData[i];
 			}
 		}
 
