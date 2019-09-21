@@ -22,6 +22,11 @@ public abstract class MiddleEntityAnimation extends ClientBoundMiddlePacket {
 		animation = Animation.BY_ID.get(serverdata.readUnsignedByte());
 	}
 
+	@Override
+	public boolean postFromServerRead() {
+		return animation != null;
+	}
+
 	protected static enum Animation {
 		SWING_MAIN_HAND(0), WAKE_UP(2), SWING_OFF_HAND(3), CRIT(4), MAGIC_CRIT(5);
 		public static final ArrayMap<Animation> BY_ID = CollectionsUtils.makeEnumMappingArrayMap(Animation.class, Animation::getId);
