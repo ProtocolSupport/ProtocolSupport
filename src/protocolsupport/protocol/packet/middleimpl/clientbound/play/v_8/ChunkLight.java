@@ -36,7 +36,7 @@ public class ChunkLight extends AbstractChunkLight {
 			PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 			chunkdata.writeBoolean(false); //full
 			chunkdata.writeShort(blockMask);
-			ArraySerializer.writeVarIntByteArray(chunkdata, ChunkWriterShort.writeSections(
+			ArraySerializer.writeVarIntByteArray(chunkdata, ChunkWriterShort.serializeSections(
 				blockMask, blockDataRemappingTable, cachedChunk, hasSkyLight,
 				sectionNumber -> cachedChunk.getTiles(sectionNumber).values().forEach(tile -> packets.add(BlockTileUpdate.create(version, tile)))
 			));

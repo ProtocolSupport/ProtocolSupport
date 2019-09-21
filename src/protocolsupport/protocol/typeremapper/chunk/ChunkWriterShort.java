@@ -10,14 +10,14 @@ import protocolsupport.utils.BitUtils;
 
 public class ChunkWriterShort {
 
-	public static byte[] writeSections(
+	public static byte[] serializeSections(
 		int mask,
 		ArrayBasedIdRemappingTable blockDataRemappingTable,
 		CachedChunk chunk, boolean hasSkyLight,
 		IntConsumer sectionPresentConsumer
 	) {
 		int columnsCount = Integer.bitCount(mask);
-		byte[] data = new byte[((hasSkyLight ? 12288 : 10240) * columnsCount) + 256];
+		byte[] data = new byte[((hasSkyLight ? 12288 : 10240) * columnsCount)];
 
 		int blockIdIndex = 0;
 		int blockLightIndex = 8192 * columnsCount;

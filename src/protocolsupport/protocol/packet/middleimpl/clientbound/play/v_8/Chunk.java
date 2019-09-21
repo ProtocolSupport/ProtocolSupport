@@ -41,9 +41,14 @@ public class Chunk extends AbstractChunk {
 			ArraySerializer.writeVarIntByteArray(chunkdata, ChunkUtils.getEmptySectionShort(hasSkyLight));
 		} else {
 			chunkdata.writeShort(blockMask);
-			ArraySerializer.writeVarIntByteArray(chunkdata, ChunkWriterShort.writeSections(
-				blockMask, blockDataRemappingTable, cachedChunk, hasSkyLight, sectionNumber -> {}
-			));
+			ArraySerializer.writeVarIntByteArray(chunkdata, to -> {
+				to.writeBytes(ChunkWriterShort.serializeSections(blockMask, blockDataRemappingTable, cachedChunk, hasSkyLight, sectionNumber -> {}));
+				if (full) {
+					for (int i = 0; i < biomeData.length; i++) {
+						to.writeByte(biomeData[i]);
+					}
+				}
+			});
 		}
 		packets.add(chunkdata);
 

@@ -37,8 +37,8 @@ public class ChunkLight extends AbstractChunkLight {
 			chunkdata.writeBoolean(false); //full
 			chunkdata.writeShort(blockMask);
 			chunkdata.writeShort(0);
-			byte[] compressed = Compressor.compressStatic(ChunkWriterByte.writeSections(
-				blockMask, blockDataRemappingTable, cachedChunk, hasSkyLight,
+			byte[] compressed = Compressor.compressStatic(ChunkWriterByte.serializeSectionsAndBiomes(
+				blockMask, blockDataRemappingTable, cachedChunk, hasSkyLight, null,
 				sectionNumber -> cachedChunk.getTiles(sectionNumber).values().forEach(tile -> packets.add(BlockTileUpdate.create(version, locale, tile)))
 			));
 			chunkdata.writeInt(compressed.length);

@@ -11,14 +11,15 @@ import protocolsupport.utils.BitUtils;
 
 public class ChunkWriterByte {
 
-	public static byte[] writeSections(
+	public static byte[] serializeSectionsAndBiomes(
 		int mask,
 		ArrayBasedIdRemappingTable blockDataRemappingTable,
 		CachedChunk chunk, boolean hasSkyLight,
+		int[] biomeData,
 		IntConsumer sectionPresentConsumer
 	) {
 		int columnsCount = Integer.bitCount(mask);
-		byte[] data = new byte[((hasSkyLight ? 10240 : 8192) * columnsCount) + 256];
+		byte[] data = new byte[((hasSkyLight ? 10240 : 8192) * columnsCount) + (biomeData != null ? 256 : 0)];
 
 		int blockIdIndex = 0;
 		int blockDataIndex = 4096 * columnsCount;
@@ -54,6 +55,12 @@ public class ChunkWriterByte {
 				}
 
 				sectionPresentConsumer.accept(sectionNumber);
+			}
+		}
+
+		if (biomeData != null) {
+			for (int i = 0; i < biomeData.length; i++) {
+				data[data.length - 256 + i] = (byte) biomeData[i];
 			}
 		}
 
