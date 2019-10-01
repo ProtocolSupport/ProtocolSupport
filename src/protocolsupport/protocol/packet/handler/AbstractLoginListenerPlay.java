@@ -103,8 +103,6 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 		}
 	}
 
-	protected int keepAliveTicks = 1;
-
 	protected void joinWorld() {
 		if (!ServerPlatform.get().getMiscUtils().isRunning()) {
 			disconnect(org.spigotmc.SpigotConfig.restartMessage);
