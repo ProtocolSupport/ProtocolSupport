@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
 
@@ -12,11 +13,13 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
+import io.netty.channel.EventLoop;
 import io.netty.handler.codec.EncoderException;
 import io.netty.util.AttributeKey;
 import io.netty.util.Recycler;
 import io.netty.util.Recycler.Handle;
 import io.netty.util.ReferenceCountUtil;
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.Connection;
 import protocolsupport.api.Connection.PacketListener.PacketEvent;
 import protocolsupport.api.Connection.PacketListener.RawPacketEvent;
@@ -125,67 +128,50 @@ public class ConnectionImpl extends Connection {
 		return networkmanager.getNetworkState();
 	}
 
-	@Override
-	public void sendPacket(Object packet) {
-		networkmanager.getChannel().eventLoop().submit(() -> {
+	public EventLoop getEventLoop() {
+		return networkmanager.getChannel().eventLoop();
+	}
+
+	public void submitTaskToEventLoop(Runnable task) {
+		getEventLoop().submit(() -> {
 			try {
-				ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.LOGIC);
-				if (ctx != null) {
-					ctx.writeAndFlush(packet);
+				if (!isConnected()) {
+					return;
 				}
-			} catch (Throwable t) {
-				System.err.println("Error occured while packet sending");
-				t.printStackTrace();
+				task.run();
+			} catch (Exception e) {
+				ProtocolSupport.getInstance().getLogger().log(Level.WARNING, "Unhandled exception occured in task submitted to event loop", e);
 			}
 		});
 	}
 
 	@Override
+	public void sendPacket(Object packet) {
+		submitTaskToEventLoop(() -> networkmanager.getChannel().pipeline().context(ChannelHandlers.LOGIC).writeAndFlush(packet));
+	}
+
+	@Override
 	public void receivePacket(Object packet) {
-		networkmanager.getChannel().eventLoop().submit(() -> {
-			try {
-				ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.LOGIC);
-				if (ctx != null) {
-					ctx.fireChannelRead(packet);
-					ctx.fireChannelReadComplete();
-				}
-			} catch (Throwable t) {
-				System.err.println("Error occured while packet receiving");
-				t.printStackTrace();
-			}
+		submitTaskToEventLoop(() -> {
+			ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.LOGIC);
+			ctx.fireChannelRead(packet);
+			ctx.fireChannelReadComplete();
 		});
 	}
 
 	@Override
 	public void sendRawPacket(byte[] data) {
 		ByteBuf dataInst = Unpooled.wrappedBuffer(data);
-		networkmanager.getChannel().eventLoop().submit(() -> {
-			try {
-				ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.RAW_CAPTURE_SEND);
-				if (ctx != null) {
-					ctx.writeAndFlush(dataInst);
-				}
-			} catch (Throwable t) {
-				System.err.println("Error occured while raw packet sending");
-				t.printStackTrace();
-			}
-		});
+		submitTaskToEventLoop(() -> networkmanager.getChannel().pipeline().context(ChannelHandlers.RAW_CAPTURE_SEND).writeAndFlush(dataInst));
 	}
 
 	@Override
 	public void receiveRawPacket(byte[] data) {
 		ByteBuf dataInst = Unpooled.wrappedBuffer(data);
-		networkmanager.getChannel().eventLoop().submit(() -> {
-			try {
-				ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.RAW_CAPTURE_RECEIVE);
-				if (ctx != null) {
-					ctx.fireChannelRead(dataInst);
-					ctx.fireChannelReadComplete();
-				}
-			} catch (Throwable t) {
-				System.err.println("Error occured while raw packet receiving");
-				t.printStackTrace();
-			}
+		submitTaskToEventLoop(() -> {
+			ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.RAW_CAPTURE_RECEIVE);
+			ctx.fireChannelRead(dataInst);
+			ctx.fireChannelReadComplete();
 		});
 	}
 

@@ -73,7 +73,7 @@ public class ChunkSendIntervalPacketQueue extends ClientboundPacketProcessor {
 
 	protected void lock() {
 		locked = true;
-		connection.getNetworkManagerWrapper().getChannel().eventLoop().schedule(
+		connection.getEventLoop().schedule(
 			() -> {
 				locked = false;
 				processQueue();

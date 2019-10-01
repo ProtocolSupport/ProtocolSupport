@@ -37,7 +37,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 		this.hostname = hostname;
 
 		synchronized (keepConnectionLock) {
-			this.keepConnectionTask = networkmanager.getChannel().eventLoop().scheduleWithFixedDelay(this::keepConnection, 4, 4, TimeUnit.SECONDS);
+			this.keepConnectionTask = connection.getEventLoop().scheduleWithFixedDelay(this::keepConnection, 4, 4, TimeUnit.SECONDS);
 		}
 	}
 
@@ -150,12 +150,12 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 	public void disconnect(final String s) {
 		try {
 			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + s);
-			ProtocolVersion version = ConnectionImpl.getFromChannel(networkManager.getChannel()).getVersion();
+			ProtocolVersion version = connection.getVersion();
 			if ((version.getProtocolType() == ProtocolType.PC) && version.isBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10)) {
 				//first send join game that will make client actually switch to game state
 				networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createFakeJoinGamePacket());
 				//send disconnect with a little delay
-				networkManager.getChannel().eventLoop().schedule(() -> disconnect0(s), 50, TimeUnit.MILLISECONDS);
+				connection.getEventLoop().schedule(() -> disconnect0(s), 50, TimeUnit.MILLISECONDS);
 			} else {
 				disconnect0(s);
 			}

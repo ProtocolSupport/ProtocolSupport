@@ -73,7 +73,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 		ThreadLocalRandom.current().nextBytes(randomBytes);
 
 		synchronized (timeoutTaskLock) {
-			this.timeoutTask = networkManager.getChannel().eventLoop().schedule(() -> disconnect("Took too long to log in"), 30, TimeUnit.SECONDS);
+			this.timeoutTask = connection.getEventLoop().schedule(() -> disconnect("Took too long to log in"), 30, TimeUnit.SECONDS);
 		}
 	}
 
@@ -255,7 +255,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 			int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
 			if (threshold >= 0) {
 				CountDownLatch waitpacketsend = new CountDownLatch(1);
-				networkManager.getChannel().eventLoop().execute(() -> networkManager.sendPacket(
+				connection.submitTaskToEventLoop(() -> networkManager.sendPacket(
 					ServerPlatform.get().getPacketFactory().createSetCompressionPacket(threshold),
 					future -> {
 						ServerPlatform.get().getMiscUtils().enableCompression(networkManager.getChannel().pipeline(), threshold);
