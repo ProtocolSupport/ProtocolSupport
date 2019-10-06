@@ -13,6 +13,7 @@ public class WindowCache {
 
 	protected WindowRemapper playerWindowRemapper;
 	protected WindowRemapper windowRemapper;
+	protected Object windowMetadata;
 
 	public void setPlayerWindow(WindowRemapper playerWindowRemaper) {
 		this.playerWindowRemapper = playerWindowRemaper;
@@ -23,6 +24,10 @@ public class WindowCache {
 		this.windowId = windowId;
 		this.windowType = windowType;
 		this.windowRemapper = windowRemapper;
+	}
+
+	public void setOpenedWindowMetadata(Object metadata) {
+		this.windowMetadata = metadata;
 	}
 
 	public WindowType getOpenedWindowType() {
@@ -41,10 +46,15 @@ public class WindowCache {
 		return windowRemapper;
 	}
 
+	public Object getOpenedWindowMetadata() {
+		return windowMetadata;
+	}
+
 	public void closeWindow() {
 		this.windowId = WINDOW_ID_PLAYER;
 		this.windowType = WindowType.PLAYER;
 		this.windowRemapper = playerWindowRemapper;
+		this.windowMetadata = null;
 	}
 
 	@Override

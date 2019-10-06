@@ -24,12 +24,6 @@ public abstract class WindowRemapper {
 		return clientSlots != ORIGINAL_SLOTS ? clientSlots : slots;
 	}
 
-	protected Object metadata;
-
-	public Object getMetadata() {
-		return metadata;
-	}
-
 	public abstract ClientItems[] toClientItems(byte windowId, NetworkItemStack[] content);
 
 	public abstract int toClientSlot(byte windowId, int slot);
