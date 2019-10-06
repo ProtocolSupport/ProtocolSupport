@@ -33,6 +33,7 @@ public class WindowsRemappersRegistry {
 			Pair.of(WindowType.ANVIL, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.ANVIL, 0))),
 			Pair.of(WindowType.ENCHANTMENT, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.ENCHANTMENT, 0))),
 			Pair.of(WindowType.BREWING_STAND, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.BREWING_STAND, 5))),
+			Pair.of(WindowType.BEACON, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.BEACON, 1))),
 			Pair.of(WindowType.HOPPER, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.HOPPER, 5))),
 			Pair.of(WindowType.MERCHANT, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.MERCHANT, 3))),
 			Pair.of(WindowType.FURNACE, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.FURNACE, 3))),
