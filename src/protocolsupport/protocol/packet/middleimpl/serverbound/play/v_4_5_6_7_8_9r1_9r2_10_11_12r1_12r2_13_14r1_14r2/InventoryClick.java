@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.typeremapper.window.WindowRemapper.SlotDoesntExistException;
 import protocolsupport.protocol.types.NetworkItemStack;
 
 public class InventoryClick extends MiddleInventoryClick {
@@ -14,14 +15,18 @@ public class InventoryClick extends MiddleInventoryClick {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		windowId = clientdata.readByte();
-		slot = clientdata.readShort();
-		button = clientdata.readUnsignedByte();
-		actionNumber = clientdata.readShort();
-		mode = clientdata.readUnsignedByte();
-		itemstack = ItemStackSerializer.readItemStack(clientdata, version);
-		if ((button == 0) && (mode == 1)) {
-			itemstack = NetworkItemStack.NULL;
+		try {
+			windowId = clientdata.readByte();
+			slot = windowCache.getOpenedWindowRemapper().fromWindowSlot(windowId, clientdata.readShort());
+			button = clientdata.readUnsignedByte();
+			actionNumber = clientdata.readShort();
+			mode = clientdata.readUnsignedByte();
+			itemstack = ItemStackSerializer.readItemStack(clientdata, version);
+			if ((button == 0) && (mode == MODE_SHIFT_CLICK)) {
+				itemstack = NetworkItemStack.NULL;
+			}
+		} catch (SlotDoesntExistException e) {
+			mode = MODE_NOOP;
 		}
 	}
 

@@ -3,7 +3,7 @@ package protocolsupport.protocol.typeremapper.window;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.WindowType;
 
-public class NoopWindowRemapper extends SingleWindowItemsInstanceRemapper {
+public class NoopWindowRemapper extends SingleWindowIdRemapper {
 
 	public static final NoopWindowRemapper INSTANCE = new NoopWindowRemapper();
 
@@ -24,14 +24,13 @@ public class NoopWindowRemapper extends SingleWindowItemsInstanceRemapper {
 	}
 
 	@Override
-	protected void fillWindowItems(WindowItems instance, byte windowId, NetworkItemStack[] content) {
-		instance.windowId = windowId;
+	protected void fillWindowItems(WindowItems instance, NetworkItemStack[] content) {
 		instance.items = content;
 	}
 
 	@Override
-	public int toWindowSlot(byte windowId, int slot) {
-		return createWindowSlot(windowId, slot);
+	public int toWindowSlot(int slot) {
+		return slot;
 	}
 
 	@Override

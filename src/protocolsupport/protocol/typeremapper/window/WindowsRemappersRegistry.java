@@ -58,9 +58,9 @@ public class WindowsRemappersRegistry {
 
 		WindowsRemapper remapper__8 = new WindowsRemapper(
 			remapper__9__10_2,
-			Pair.of(WindowType.PLAYER, new NonSlotCountBasedRemapperSelectFunction(new SingleWindowItemsInstanceRemapper(WindowType.PLAYER, 0) {
+			Pair.of(WindowType.PLAYER, new NonSlotCountBasedRemapperSelectFunction(new SingleWindowIdRemapper(WindowType.PLAYER, 0) {
 				@Override
-				public int toWindowSlot(byte windowId, int slot) {
+				public int toWindowSlot(int slot) {
 					if (slot < 45) {
 						return slot;
 					} else {
@@ -72,18 +72,17 @@ public class WindowsRemappersRegistry {
 					return slot;
 				}
 				@Override
-				protected void fillWindowItems(WindowItems instance, byte windowId, NetworkItemStack[] content) {
-					instance.windowId = windowId;
+				protected void fillWindowItems(WindowItems instance, NetworkItemStack[] content) {
 					instance.items = Arrays.copyOf(content, content.length - 1);
 				}
 			})),
-			Pair.of(WindowType.BREWING_STAND, new NonSlotCountBasedRemapperSelectFunction(new SingleWindowItemsSkipSlotRemapper(WindowType.BREWING_STAND, 4, 4)))
+			Pair.of(WindowType.BREWING_STAND, new NonSlotCountBasedRemapperSelectFunction(new SingleWindowIdSkipSlotRemapper(WindowType.BREWING_STAND, 4, 4)))
 		);
 		register(remapper__8, ProtocolVersion.MINECRAFT_1_8);
 
 		WindowsRemapper remapper__pre_8 = new WindowsRemapper(
 			remapper__8,
-			Pair.of(WindowType.ENCHANTMENT, new NonSlotCountBasedRemapperSelectFunction(new SingleWindowItemsSkipSlotRemapper(WindowType.ENCHANTMENT, 0, 1)))
+			Pair.of(WindowType.ENCHANTMENT, new NonSlotCountBasedRemapperSelectFunction(new SingleWindowIdSkipSlotRemapper(WindowType.ENCHANTMENT, 0, 1)))
 		);
 		register(remapper__pre_8, ProtocolVersionsHelper.BEFORE_1_8);
 	}

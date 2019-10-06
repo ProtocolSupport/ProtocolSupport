@@ -3,9 +3,9 @@ package protocolsupport.protocol.typeremapper.window;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.WindowType;
 
-public abstract class SingleWindowItemsInstanceRemapper extends WindowRemapper {
+public abstract class SingleWindowIdRemapper extends WindowRemapper {
 
-	public SingleWindowItemsInstanceRemapper(WindowType clientWindowType, int clientSlots) {
+	public SingleWindowIdRemapper(WindowType clientWindowType, int clientSlots) {
 		super(clientWindowType, clientSlots);
 	}
 
@@ -14,10 +14,18 @@ public abstract class SingleWindowItemsInstanceRemapper extends WindowRemapper {
 
 	@Override
 	public WindowItems[] toWindowItems(byte windowId, NetworkItemStack[] content) {
-		fillWindowItems(windowitems, windowId, content);
+		windowitems.windowId = windowId;
+		fillWindowItems(windowitems, content);
 		return windiwitemsarray;
 	}
 
-	protected abstract void fillWindowItems(WindowItems instance, byte windowId, NetworkItemStack[] content);
+	@Override
+	public int toWindowSlot(byte windowId, int slot) {
+		return createWindowSlot(windowId, toWindowSlot(slot));
+	}
+
+	protected abstract void fillWindowItems(WindowItems instance, NetworkItemStack[] content);
+
+	protected abstract int toWindowSlot(int slot);
 
 }

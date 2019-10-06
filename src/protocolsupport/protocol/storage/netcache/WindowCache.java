@@ -6,10 +6,10 @@ import protocolsupport.utils.Utils;
 
 public class WindowCache {
 
-	protected static final int WINDOW_ID_PLAYER = 0;
+	protected static final byte WINDOW_ID_PLAYER = 0;
 
 	protected WindowType windowType = WindowType.PLAYER;
-	protected int windowId = WINDOW_ID_PLAYER;
+	protected byte windowId = WINDOW_ID_PLAYER;
 
 	protected WindowRemapper playerWindowRemapper;
 	protected WindowRemapper windowRemapper;
@@ -19,7 +19,7 @@ public class WindowCache {
 		this.windowRemapper = playerWindowRemaper;
 	}
 
-	public void setOpenedWindow(int windowId, WindowType windowType, WindowRemapper windowRemapper) {
+	public void setOpenedWindow(byte windowId, WindowType windowType, WindowRemapper windowRemapper) {
 		this.windowId = windowId;
 		this.windowType = windowType;
 		this.windowRemapper = windowRemapper;

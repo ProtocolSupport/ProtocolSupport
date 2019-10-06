@@ -16,7 +16,7 @@ public abstract class MiddleInventoryHorseOpen extends ClientBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected int windowId;
+	protected byte windowId;
 	protected int slots;
 	protected int entityId;
 

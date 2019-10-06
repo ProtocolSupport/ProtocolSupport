@@ -5,25 +5,24 @@ import java.util.Arrays;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.WindowType;
 
-public class SingleWindowItemsSkipSlotRemapper extends SingleWindowItemsInstanceRemapper {
+public class SingleWindowIdSkipSlotRemapper extends SingleWindowIdRemapper {
 
 	protected final int skipSlot;
-	public SingleWindowItemsSkipSlotRemapper(WindowType clientWindowType, int clientSlots, int skipSlot) {
+	public SingleWindowIdSkipSlotRemapper(WindowType clientWindowType, int clientSlots, int skipSlot) {
 		super(clientWindowType, clientSlots);
 		this.skipSlot = skipSlot;
 	}
 
 	@Override
-	protected void fillWindowItems(WindowItems instance, byte windowId, NetworkItemStack[] content) {
+	protected void fillWindowItems(WindowItems instance, NetworkItemStack[] content) {
 		int clientItemsLenth = content.length - 1;
 		NetworkItemStack[] items = Arrays.copyOf(content, clientItemsLenth);
 		System.arraycopy(content, skipSlot + 1, items, skipSlot, clientItemsLenth - skipSlot);
-		instance.windowId = windowId;
 		instance.items = items;
 	}
 
 	@Override
-	public int toWindowSlot(byte windowId, int slot) {
+	public int toWindowSlot(int slot) {
 		if (slot == skipSlot) {
 			throw SlotDoesntExistException.INSTANCE;
 		}
