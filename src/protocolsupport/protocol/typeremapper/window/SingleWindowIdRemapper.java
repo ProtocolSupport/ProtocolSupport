@@ -9,23 +9,23 @@ public abstract class SingleWindowIdRemapper extends WindowRemapper {
 		super(clientWindowType, clientSlots);
 	}
 
-	protected final WindowItems windowitems = new WindowItems((byte) 0, null);
-	protected final WindowItems[] windiwitemsarray = new WindowItems[] {windowitems};
+	protected final ClientItems clientitems = new ClientItems((byte) 0, null);
+	protected final ClientItems[] clientitemsarray = new ClientItems[] {clientitems};
 
 	@Override
-	public WindowItems[] toWindowItems(byte windowId, NetworkItemStack[] content) {
-		windowitems.windowId = windowId;
-		fillWindowItems(windowitems, content);
-		return windiwitemsarray;
+	public ClientItems[] toClientItems(byte windowId, NetworkItemStack[] content) {
+		clientitems.windowId = windowId;
+		fillClientItems(clientitems, content);
+		return clientitemsarray;
 	}
 
 	@Override
-	public int toWindowSlot(byte windowId, int slot) {
-		return createWindowSlot(windowId, toWindowSlot(slot));
+	public int toClientSlot(byte windowId, int slot) {
+		return createClientSlot(windowId, toClientSlot(slot));
 	}
 
-	protected abstract void fillWindowItems(WindowItems instance, NetworkItemStack[] content);
+	protected abstract void fillClientItems(ClientItems instance, NetworkItemStack[] content);
 
-	protected abstract int toWindowSlot(int slot);
+	protected abstract int toClientSlot(int slot);
 
 }

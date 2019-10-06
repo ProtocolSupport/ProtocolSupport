@@ -17,7 +17,7 @@ public class InventoryClick extends MiddleInventoryClick {
 	public void readFromClientData(ByteBuf clientdata) {
 		try {
 			windowId = clientdata.readByte();
-			slot = windowCache.getOpenedWindowRemapper().fromWindowSlot(windowId, clientdata.readShort());
+			slot = windowCache.getOpenedWindowRemapper().fromClientSlot(windowId, clientdata.readShort());
 			button = clientdata.readUnsignedByte();
 			actionNumber = clientdata.readShort();
 			mode = clientdata.readUnsignedByte();

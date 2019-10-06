@@ -24,17 +24,17 @@ public class NoopWindowRemapper extends SingleWindowIdRemapper {
 	}
 
 	@Override
-	protected void fillWindowItems(WindowItems instance, NetworkItemStack[] content) {
+	protected void fillClientItems(ClientItems instance, NetworkItemStack[] content) {
 		instance.items = content;
 	}
 
 	@Override
-	public int toWindowSlot(int slot) {
+	public int toClientSlot(int slot) {
 		return slot;
 	}
 
 	@Override
-	public int fromWindowSlot(byte windowId, int slot) {
+	public int fromClientSlot(byte windowId, int slot) {
 		return slot;
 	}
 

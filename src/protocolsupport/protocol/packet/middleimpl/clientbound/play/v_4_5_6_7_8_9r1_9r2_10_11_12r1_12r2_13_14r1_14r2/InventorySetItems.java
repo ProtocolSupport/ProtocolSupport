@@ -9,7 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper;
-import protocolsupport.protocol.typeremapper.window.WindowRemapper.WindowItems;
+import protocolsupport.protocol.typeremapper.window.WindowRemapper.ClientItems;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -25,14 +25,14 @@ public class InventorySetItems extends MiddleInventorySetItems {
 	public RecyclableCollection<? extends IPacketData> toData() {
 		WindowRemapper remapper = windowId == WINDOW_ID_PLAYER_INVENTORY ? windowCache.getPlayerWindowRemapper() : windowCache.getOpenedWindowRemapper();
 
-		WindowItems[] windowitemsarray = remapper.toWindowItems(windowId, items);
+		ClientItems[] windowitemsarray = remapper.toClientItems(windowId, items);
 		if (windowitemsarray.length == 1) {
-			WindowItems windowitems = windowitemsarray[0];
+			ClientItems windowitems = windowitemsarray[0];
 			return RecyclableSingletonList.create(create(version, cache.getAttributesCache().getLocale(), windowitems.getWindowId(), windowitems.getItems()));
 		} else {
 			String locale = cache.getAttributesCache().getLocale();
 			RecyclableArrayList<IPacketData> packets = RecyclableArrayList.create();
-			for (WindowItems windowitems : windowitemsarray) {
+			for (ClientItems windowitems : windowitemsarray) {
 				packets.add(create(version, locale, windowitems.getWindowId(), windowitems.getItems()));
 			}
 			return packets;

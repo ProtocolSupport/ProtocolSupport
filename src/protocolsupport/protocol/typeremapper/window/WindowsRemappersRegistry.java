@@ -61,7 +61,7 @@ public class WindowsRemappersRegistry {
 			remapper__9__10_2,
 			Pair.of(WindowType.PLAYER, new NonSlotCountBasedRemapperSelectFunction(new SingleWindowIdRemapper(WindowType.PLAYER, 0) {
 				@Override
-				public int toWindowSlot(int slot) {
+				public int toClientSlot(int slot) {
 					if (slot < 45) {
 						return slot;
 					} else {
@@ -69,11 +69,11 @@ public class WindowsRemappersRegistry {
 					}
 				}
 				@Override
-				public int fromWindowSlot(byte windowId, int slot) {
+				public int fromClientSlot(byte windowId, int slot) {
 					return slot;
 				}
 				@Override
-				protected void fillWindowItems(WindowItems instance, NetworkItemStack[] content) {
+				protected void fillClientItems(ClientItems instance, NetworkItemStack[] content) {
 					instance.items = Arrays.copyOf(content, content.length - 1);
 				}
 			})),

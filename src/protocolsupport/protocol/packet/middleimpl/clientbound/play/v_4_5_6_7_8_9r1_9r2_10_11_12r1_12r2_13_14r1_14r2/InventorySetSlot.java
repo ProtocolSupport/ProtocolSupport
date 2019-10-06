@@ -39,9 +39,9 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 		}
 
 		try {
-			int windowSlot = windowCache.getOpenedWindowRemapper().toWindowSlot(windowId, slot);
+			int windowSlot = windowCache.getOpenedWindowRemapper().toClientSlot(windowId, slot);
 			return RecyclableSingletonList.create(create(
-				version, locale, WindowRemapper.getWindowSlotWindowId(windowSlot), WindowRemapper.getWindowSlotSlot(windowSlot), itemstack
+				version, locale, WindowRemapper.getClientSlotWindowId(windowSlot), WindowRemapper.getClientSlotSlot(windowSlot), itemstack
 			));
 		} catch (SlotDoesntExistException e) {
 			return RecyclableEmptyList.get();

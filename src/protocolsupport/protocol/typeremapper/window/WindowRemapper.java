@@ -30,30 +30,30 @@ public abstract class WindowRemapper {
 		return metadata;
 	}
 
-	public abstract WindowItems[] toWindowItems(byte windowId, NetworkItemStack[] content);
+	public abstract ClientItems[] toClientItems(byte windowId, NetworkItemStack[] content);
 
-	public abstract int toWindowSlot(byte windowId, int slot);
+	public abstract int toClientSlot(byte windowId, int slot);
 
-	public abstract int fromWindowSlot(byte windowId, int slot);
+	public abstract int fromClientSlot(byte windowId, int slot);
 
-	public static int createWindowSlot(byte windowId, int slot) {
+	public static int createClientSlot(byte windowId, int slot) {
 		return (slot << 8) | (windowId & 0xFF);
 	}
 
-	public static byte getWindowSlotWindowId(int windowSlot) {
+	public static byte getClientSlotWindowId(int windowSlot) {
 		return (byte) (windowSlot & 0xFF);
 	}
 
-	public static int getWindowSlotSlot(int windowSlot) {
+	public static int getClientSlotSlot(int windowSlot) {
 		return windowSlot >>> 8;
 	}
 
-	public static class WindowItems {
+	public static class ClientItems {
 
 		protected byte windowId;
 		protected NetworkItemStack[] items;
 
-		public WindowItems(byte windowId, NetworkItemStack[] content) {
+		public ClientItems(byte windowId, NetworkItemStack[] content) {
 			this.windowId = windowId;
 			this.items = content;
 		}

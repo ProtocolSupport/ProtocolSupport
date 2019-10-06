@@ -14,7 +14,7 @@ public class SingleWindowIdSkipSlotRemapper extends SingleWindowIdRemapper {
 	}
 
 	@Override
-	protected void fillWindowItems(WindowItems instance, NetworkItemStack[] content) {
+	protected void fillClientItems(ClientItems instance, NetworkItemStack[] content) {
 		int clientItemsLenth = content.length - 1;
 		NetworkItemStack[] items = Arrays.copyOf(content, clientItemsLenth);
 		System.arraycopy(content, skipSlot + 1, items, skipSlot, clientItemsLenth - skipSlot);
@@ -22,7 +22,7 @@ public class SingleWindowIdSkipSlotRemapper extends SingleWindowIdRemapper {
 	}
 
 	@Override
-	public int toWindowSlot(int slot) {
+	public int toClientSlot(int slot) {
 		if (slot == skipSlot) {
 			throw SlotDoesntExistException.INSTANCE;
 		}
@@ -30,7 +30,7 @@ public class SingleWindowIdSkipSlotRemapper extends SingleWindowIdRemapper {
 	}
 
 	@Override
-	public int fromWindowSlot(byte windowId, int slot) {
+	public int fromClientSlot(byte windowId, int slot) {
 		return slot < skipSlot ? slot : slot + 1;
 	}
 
