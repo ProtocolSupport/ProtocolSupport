@@ -1,11 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_l;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ServerBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -25,7 +24,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		String[] data = StringSerializer.readString(clientdata, ProtocolVersion.getOldest(ProtocolType.PC)).split("[;]");
+		String[] data = StringSerializer.readShortUTF16BEString(clientdata, Short.MAX_VALUE).split("[;]");
 		String[] addrdata = data[1].split("[:]");
 		username = data[0];
 		hostname = addrdata[0];
@@ -33,15 +32,15 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() {
+	public RecyclableCollection<? extends IPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-		ServerBoundPacketData hsscreator = ServerBoundPacketData.create(ServerBoundPacket.HANDSHAKE_START);
+		ServerBoundPacketData hsscreator = ServerBoundPacketData.create(PacketType.SERVERBOUND_HANDSHAKE_START);
 		VarNumberSerializer.writeVarInt(hsscreator, ProtocolVersionsHelper.LATEST_PC.getId());
 		StringSerializer.writeVarIntUTF8String(hsscreator, hostname);
 		hsscreator.writeShort(port);
 		VarNumberSerializer.writeVarInt(hsscreator, 2);
 		packets.add(hsscreator);
-		ServerBoundPacketData lscreator = ServerBoundPacketData.create(ServerBoundPacket.LOGIN_START);
+		ServerBoundPacketData lscreator = ServerBoundPacketData.create(PacketType.SERVERBOUND_LOGIN_START);
 		StringSerializer.writeVarIntUTF8String(lscreator, username);
 		packets.add(lscreator);
 		return packets;

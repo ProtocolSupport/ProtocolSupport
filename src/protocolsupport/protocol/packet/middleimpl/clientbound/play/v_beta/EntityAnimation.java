@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta;
 import java.util.EnumMap;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityAnimation;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -13,7 +13,7 @@ public class EntityAnimation extends MiddleEntityAnimation {
 
 	protected static final EnumMap<Animation, Integer> animationIds = new EnumMap<>(Animation.class);
 	static {
-		animationIds.put(Animation.SWING_ARM, 1);
+		animationIds.put(Animation.SWING_MAIN_HAND, 1);
 		animationIds.put(Animation.WAKE_UP, 3);
 	}
 
@@ -23,7 +23,7 @@ public class EntityAnimation extends MiddleEntityAnimation {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ANIMATION_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_ANIMATION);
 		serializer.writeInt(entityId);
 		serializer.writeByte(animationIds.getOrDefault(animation, 0));
 		return RecyclableSingletonList.create(serializer);

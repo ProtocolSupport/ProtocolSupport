@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleGameStateChange;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -28,7 +28,7 @@ public class GameStateChange extends MiddleGameStateChange {
 				break;
 			}
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_GAME_STATE_CHANGE_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_GAME_STATE_CHANGE);
 		serializer.writeByte(type);
 		return RecyclableSingletonList.create(serializer);
 	}

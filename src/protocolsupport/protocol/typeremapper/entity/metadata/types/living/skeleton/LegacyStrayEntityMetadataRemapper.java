@@ -1,13 +1,13 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.living.skeleton;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.entity.metadata.FirstDataWatcherUpdateObjectAddRemapper;
-import protocolsupport.protocol.utils.datawatcher.objects.DataWatcherObjectVarInt;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.misc.NetworkEntityMetadataFirstUpdateObjectAddRemapper;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVarInt;
 
-public class LegacyStrayEntityMetadataRemapper extends SkeletonEntityMetadataRemapper {
+public class LegacyStrayEntityMetadataRemapper extends LegacySkeletonEntityMetadataRemapper {
 
 	public LegacyStrayEntityMetadataRemapper() {
-		addRemap(new FirstDataWatcherUpdateObjectAddRemapper(12, new DataWatcherObjectVarInt(2)), ProtocolVersion.MINECRAFT_1_10);
+		addRemap(new NetworkEntityMetadataFirstUpdateObjectAddRemapper(12, new NetworkEntityMetadataObjectVarInt(2)), ProtocolVersion.MINECRAFT_1_10);
 	}
 
 }

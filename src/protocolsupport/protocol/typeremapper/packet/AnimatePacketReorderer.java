@@ -1,50 +1,42 @@
 package protocolsupport.protocol.typeremapper.packet;
 
-import protocolsupport.protocol.packet.ServerBoundPacket;
-import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.ConnectionImpl.ServerboundPacketProcessor;
+import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 
-public class AnimatePacketReorderer {
+public class AnimatePacketReorderer extends ServerboundPacketProcessor {
 
-	protected ServerBoundPacketData animatePacket;
+	public AnimatePacketReorderer(ConnectionImpl connection) {
+		super(connection);
+	}
 
-	public RecyclableCollection<ServerBoundPacketData> orderPackets(RecyclableCollection<ServerBoundPacketData> packets) {
-		try {
-			RecyclableArrayList<ServerBoundPacketData> ordered = RecyclableArrayList.create();
-			for (ServerBoundPacketData curPacket : packets) {
-				ServerBoundPacket packetType = curPacket.getPacketType();
-				//if the packet is use entity, we attempt to add a cached animate packet after it
-				if (packetType == ServerBoundPacket.PLAY_USE_ENTITY) {
-					ordered.add(curPacket);
-					if (animatePacket != null) {
-						ordered.add(animatePacket);
-						animatePacket = null;
-					}
-				}
-				//handle other packet types
-				else {
-					//attempt to add cached animate packet
-					if (animatePacket != null) {
-						ordered.add(animatePacket);
-						animatePacket = null;
-					}
-					//if it is animate packet, we cache it
-					if (packetType == ServerBoundPacket.PLAY_ANIMATION) {
-						animatePacket = curPacket;
-					}
-					//any other type just gets added to ordered list
-					else {
-						ordered.add(curPacket);
-					}
-				}
+	protected IPacketData animatePacket;
+
+	@Override
+	public void process(IPacketData packet) {
+		PacketType packetType = packet.getPacketType();
+
+		if (animatePacket != null) {
+			if (packetType == PacketType.SERVERBOUND_PLAY_USE_ENTITY) {
+				read(packet);
+				read(animatePacket);
+				animatePacket = null;
+				return;
+			} else {
+				read(animatePacket);
+				animatePacket = null;
 			}
-			return ordered;
-		} finally {
-			packets.recycleObjectOnly();
+		}
+
+		if (packetType == PacketType.SERVERBOUND_PLAY_ANIMATION) {
+			animatePacket = packet;
+		} else {
+			read(packet);
 		}
 	}
 
+	@Override
 	public void release() {
 		if (animatePacket != null) {
 			animatePacket.recycle();

@@ -69,7 +69,7 @@ public class I18NData {
 		if (deftlstring != null) {
 			return deftlstring;
 		}
-		return MessageFormat.format("Unknown translation key: {0}", key);
+		return key;
 	}
 
 	public static String translate(String locale, String key, String... args) {

@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
@@ -20,7 +20,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 		if (slot == 1) {
 			return RecyclableEmptyList.get();
 		} else {
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_EQUIPMENT_ID);
+			ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_EQUIPMENT);
 			serializer.writeInt(entityId);
 			serializer.writeShort(slot == 0 ? slot : slot - 1);
 			if (!itemstack.isNull()) {

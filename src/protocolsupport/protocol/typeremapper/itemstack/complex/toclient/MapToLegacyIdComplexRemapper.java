@@ -2,16 +2,17 @@ package protocolsupport.protocol.typeremapper.itemstack.complex.toclient;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.nbt.NBTNumber;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.nbt.NBTNumber;
+import protocolsupport.protocol.utils.CommonNBT;
 
 public class MapToLegacyIdComplexRemapper implements ItemStackComplexRemapper {
 
 	@Override
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		NBTNumber map;
-		if ((itemstack.getNBT() != null) && ((map = itemstack.getNBT().getNumberTag("map")) != null)) {
-			itemstack.setLegacyData(map.getAsInt());
+		NBTNumber mapId;
+		if ((itemstack.getNBT() != null) && ((mapId = itemstack.getNBT().getNumberTag(CommonNBT.MAP_ID)) != null)) {
+			itemstack.setLegacyData(mapId.getAsInt());
 		}
 		return itemstack;
 	}

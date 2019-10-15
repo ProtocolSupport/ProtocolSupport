@@ -10,8 +10,9 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.EntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AbstractMerchantEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AgeableEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
@@ -22,19 +23,22 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.living.BlazeE
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.CreeperEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.EnderDragonEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.EndermanEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.EvokerEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.GhastEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.GuardianEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.IllagerEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.IronGolemEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.PhantomEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.PillagerEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ShulkerEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.SlimeEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.SnowmanEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.SpellcasterIllagerEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.SpiderEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.VexEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.VindicatorEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.WitchEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.WitherEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.FoxEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PandaEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PigEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PolarBearEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.RabbitEntityMetadataRemapper;
@@ -44,6 +48,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageabl
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.fish.FishEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.fish.PufferFishEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.fish.TropicalFishEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.BaseHorseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.BattleHorseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.CargoHorseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LamaEntityMetadataRemapper;
@@ -51,10 +56,10 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LegacyMuleEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LegacySkeletonHorseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LegacyZombieHorseEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.skeleton.LegacySkeletonEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.skeleton.LegacyStrayEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.skeleton.LegacyWitherSkeletonEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.skeleton.SkeletonEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.tameable.OcelotEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.tameable.CatEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.tameable.ParrotEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.tameable.WolfEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.zombie.ZombieEntityMetadataRemapper;
@@ -78,8 +83,8 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.special.Armor
 import protocolsupport.protocol.typeremapper.entity.metadata.types.special.PlayerEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -87,32 +92,20 @@ public class EntityRemappersRegistry {
 
 	public static class EntityRemappingTable extends RemappingTable {
 
-		protected final EnumMap<NetworkEntityType, Pair<NetworkEntityType, List<DataWatcherObjectRemapper>>> table = new EnumMap<>(NetworkEntityType.class);
+		protected final EnumMap<NetworkEntityType, Pair<NetworkEntityType, List<NetworkEntityMetadataObjectRemapper>>> table = new EnumMap<>(NetworkEntityType.class);
 
-		public Pair<NetworkEntityType, List<DataWatcherObjectRemapper>> getRemap(NetworkEntityType from) {
+		public Pair<NetworkEntityType, List<NetworkEntityMetadataObjectRemapper>> getRemap(NetworkEntityType from) {
 			return table.get(from);
 		}
 
-		public void setRemap(NetworkEntityType from, NetworkEntityType to, List<DataWatcherObjectRemapper> metadataRemapper) {
+		public void setRemap(NetworkEntityType from, NetworkEntityType to, List<NetworkEntityMetadataObjectRemapper> metadataRemapper) {
 			table.put(from, ImmutablePair.of(to, metadataRemapper));
 		}
 
 	}
 
-	public static class EntityRemapperRegistry extends RemappingRegistry<EntityRemappingTable> {
+	public static final RemappingRegistry<EntityRemappingTable> REGISTRY = new RemappingRegistry<EntityRemappingTable>() {
 
-		@Override
-		protected EntityRemappingTable createTable() {
-			return new EntityRemappingTable();
-		}
-
-		public void registerRemapEntry(NetworkEntityType from, NetworkEntityType to, EntityMetadataRemapper metadataRemapper, ProtocolVersion... versions) {
-			Arrays.stream(versions).forEach(version -> getTable(version).setRemap(from, to, metadataRemapper.getRemaps(version)));
-		}
-
-	}
-
-	public static final EntityRemapperRegistry REGISTRY = new EntityRemapperRegistry() {
 		final class Mapping {
 			private final NetworkEntityType from;
 			private final ArrayList<ImmutableTriple<NetworkEntityType, EntityMetadataRemapper, ProtocolVersion[]>> remaps = new ArrayList<>();
@@ -129,6 +122,7 @@ public class EntityRemappersRegistry {
 				}
 			}
 		}
+
 		{
 			new Mapping(NetworkEntityType.PLAYER)
 			.addMapping(NetworkEntityType.PLAYER, new PlayerEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
@@ -180,7 +174,7 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.LAMA)
 			.addMapping(NetworkEntityType.LAMA, LamaEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
-			.addMapping(NetworkEntityType.COMMON_HORSE, LamaEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_10)
+			.addMapping(NetworkEntityType.COMMON_HORSE, BaseHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_10)
 			.addMapping(NetworkEntityType.COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
 			.register();
 			new Mapping(NetworkEntityType.BAT)
@@ -188,7 +182,7 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.CHICKEN, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.OCELOT)
-			.addMapping(NetworkEntityType.OCELOT, new OcelotEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.OCELOT, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
 			.addMapping(NetworkEntityType.WOLF, TameableEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.WOLF)
@@ -205,8 +199,8 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.SHEEP, new SheepEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
 			.register();
 			new Mapping(NetworkEntityType.POLAR_BEAR)
-			.addMapping(NetworkEntityType.POLAR_BEAR, new PolarBearEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_11)
-			.addMapping(NetworkEntityType.SPIDER, new LivingEntityMetadataRemapper(), ProtocolVersionsHelper.BEFORE_1_11)
+			.addMapping(NetworkEntityType.POLAR_BEAR, new PolarBearEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_10)
+			.addMapping(NetworkEntityType.SPIDER, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_10)
 			.register();
 			new Mapping(NetworkEntityType.VILLAGER)
 			.addMapping(NetworkEntityType.VILLAGER, new VillagerEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
@@ -280,14 +274,14 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.SLIME, SlimeEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.SKELETON)
-			.addMapping(NetworkEntityType.SKELETON, SkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.SKELETON, LegacySkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
 			.register();
 			new Mapping(NetworkEntityType.WITHER_SKELETON)
-			.addMapping(NetworkEntityType.WITHER_SKELETON, SkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.WITHER_SKELETON, LegacySkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
 			.addMapping(NetworkEntityType.SKELETON, new LegacyWitherSkeletonEntityMetadataRemapper(), ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.STRAY)
-			.addMapping(NetworkEntityType.STRAY, SkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.STRAY, LegacySkeletonEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
 			.addMapping(NetworkEntityType.SKELETON, new LegacyStrayEntityMetadataRemapper(), ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.WITCH)
@@ -317,15 +311,15 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.SQUID, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_8)
 			.register();
 			new Mapping(NetworkEntityType.VINDICATOR)
-			.addMapping(NetworkEntityType.VINDICATOR, new VindicatorEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.VINDICATOR, new IllagerEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_11)
 			.addMapping(NetworkEntityType.WITCH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.EVOKER)
-			.addMapping(NetworkEntityType.EVOKER, EvokerEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.EVOKER, SpellcasterIllagerEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
 			.addMapping(NetworkEntityType.WITCH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.register();
 			new Mapping(NetworkEntityType.ILLUSIONER)
-			.addMapping(NetworkEntityType.ILLUSIONER, EvokerEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+			.addMapping(NetworkEntityType.ILLUSIONER, SpellcasterIllagerEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
 			.addMapping(NetworkEntityType.WITCH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
 			.addMapping(NetworkEntityType.SKELETON, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
@@ -370,6 +364,38 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.TROPICAL_FISH, new TropicalFishEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_13)
 			.addMapping(NetworkEntityType.BAT, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_13)
 			.addMapping(NetworkEntityType.CHICKEN, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
+			.register();
+			new Mapping(NetworkEntityType.TRADER_LAMA)
+			.addMapping(NetworkEntityType.TRADER_LAMA, LamaEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_14)
+			.addMapping(NetworkEntityType.LAMA, LamaEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
+			.addMapping(NetworkEntityType.COMMON_HORSE, BaseHorseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_10)
+			.addMapping(NetworkEntityType.COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_6)
+			.register();
+			new Mapping(NetworkEntityType.WANDERING_TRADER)
+			.addMapping(NetworkEntityType.WANDERING_TRADER, new AbstractMerchantEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)
+			.addMapping(NetworkEntityType.VILLAGER, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
+			.register();
+			new Mapping(NetworkEntityType.PANDA)
+			.addMapping(NetworkEntityType.PANDA, new PandaEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)
+			.addMapping(NetworkEntityType.POLAR_BEAR, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.RANGE__1_10__1_13_2)
+			.addMapping(NetworkEntityType.SPIDER, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_10)
+			.register();
+			new Mapping(NetworkEntityType.CAT)
+			.addMapping(NetworkEntityType.CAT, new CatEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)
+			.addMapping(NetworkEntityType.OCELOT, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
+			.register();
+			new Mapping(NetworkEntityType.FOX)
+			.addMapping(NetworkEntityType.FOX, new FoxEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)
+			.addMapping(NetworkEntityType.OCELOT, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
+			.register();
+			new Mapping(NetworkEntityType.PILLAGER)
+			.addMapping(NetworkEntityType.PILLAGER, new PillagerEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)
+			.addMapping(NetworkEntityType.ILLUSIONER, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.RANGE__1_11__1_13_2)
+			.addMapping(NetworkEntityType.WITCH, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_11)
+			.register();
+			new Mapping(NetworkEntityType.RAVAGER)
+			.addMapping(NetworkEntityType.RAVAGER, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_14)
+			.addMapping(NetworkEntityType.CAVE_SPIDER, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
 			.register();
 			new Mapping(NetworkEntityType.ARMOR_STAND_MOB)
 			.addMapping(NetworkEntityType.ARMOR_STAND_MOB, ArmorStandEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_8)
@@ -506,6 +532,15 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.MINECART_COMMAND, new MinecartCommandEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
 			.addMapping(NetworkEntityType.MINECART, MinecartEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
+		}
+
+		@Override
+		protected EntityRemappingTable createTable() {
+			return new EntityRemappingTable();
+		}
+
+		public void registerRemapEntry(NetworkEntityType from, NetworkEntityType to, EntityMetadataRemapper metadataRemapper, ProtocolVersion... versions) {
+			Arrays.stream(versions).forEach(version -> getTable(version).setRemap(from, to, metadataRemapper.getRemaps(version)));
 		}
 	};
 

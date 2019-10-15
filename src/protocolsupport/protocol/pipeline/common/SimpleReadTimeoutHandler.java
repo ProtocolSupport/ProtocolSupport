@@ -6,12 +6,13 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.ReadTimeoutException;
 import io.netty.util.concurrent.ScheduledFuture;
+import protocolsupport.utils.Utils;
 
 public class SimpleReadTimeoutHandler extends ChannelInboundHandlerAdapter {
 
-	private volatile ScheduledFuture<?> timeoutTask;
-	protected final long timeoutTime;
-	protected long lastReadTime;
+	private ScheduledFuture<?> timeoutTask;
+	private final long timeoutTime;
+	private long lastReadTime;
 
 	public SimpleReadTimeoutHandler(int timeout) {
 		this(timeout, TimeUnit.SECONDS);
@@ -29,7 +30,10 @@ public class SimpleReadTimeoutHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		this.destroy();
+		if (this.timeoutTask != null) {
+			this.timeoutTask.cancel(false);
+			this.timeoutTask = null;
+		}
 		super.channelInactive(ctx);
 	}
 
@@ -40,16 +44,16 @@ public class SimpleReadTimeoutHandler extends ChannelInboundHandlerAdapter {
 	}
 
 	public void setLastRead() {
-		this.lastReadTime = System.currentTimeMillis();
+		this.lastReadTime = Utils.currentTimeMillisFromNanoTime();
 	}
 
 	private void initialize(final ChannelHandlerContext ctx) {
-		this.lastReadTime = System.currentTimeMillis();
+		this.lastReadTime = System.nanoTime();
 		this.timeoutTask = ctx.executor().schedule(new Runnable() {
 			@Override
 			public void run() {
 				if (ctx.channel().isOpen()) {
-					long untilTimeout = timeoutTime - (System.currentTimeMillis() - lastReadTime);
+					long untilTimeout = timeoutTime - (Utils.currentTimeMillisFromNanoTime() - lastReadTime);
 					if (untilTimeout <= 0) {
 						ctx.fireExceptionCaught(ReadTimeoutException.INSTANCE);
 					} else {
@@ -58,13 +62,6 @@ public class SimpleReadTimeoutHandler extends ChannelInboundHandlerAdapter {
 				}
 			}
 		}, this.timeoutTime, TimeUnit.MILLISECONDS);
-	}
-
-	private void destroy() {
-		if (this.timeoutTask != null) {
-			this.timeoutTask.cancel(false);
-			this.timeoutTask = null;
-		}
 	}
 
 }

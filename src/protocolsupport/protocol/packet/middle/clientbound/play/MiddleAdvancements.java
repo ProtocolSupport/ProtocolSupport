@@ -10,8 +10,8 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.utils.EnumConstantLookups;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
 
 public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 

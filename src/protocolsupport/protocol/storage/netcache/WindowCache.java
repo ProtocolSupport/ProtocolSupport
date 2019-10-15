@@ -1,21 +1,36 @@
 package protocolsupport.protocol.storage.netcache;
 
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.typeremapper.window.WindowRemapper;
+import protocolsupport.protocol.types.WindowType;
 import protocolsupport.utils.Utils;
 
 public class WindowCache {
 
-	protected static final int WINDOW_ID_PLAYER = 0;
+	protected static final byte WINDOW_ID_PLAYER = 0;
 
 	protected WindowType windowType = WindowType.PLAYER;
-	protected int windowId = WINDOW_ID_PLAYER;
+	protected byte windowId = WINDOW_ID_PLAYER;
 
-	public void setOpenedWindow(int windowId, WindowType windowType) {
-		this.windowId = windowId;
-		this.windowType = windowType;
+	protected WindowRemapper playerWindowRemapper;
+	protected WindowRemapper windowRemapper;
+	protected Object windowMetadata;
+
+	public void setPlayerWindow(WindowRemapper playerWindowRemaper) {
+		this.playerWindowRemapper = playerWindowRemaper;
+		this.windowRemapper = playerWindowRemaper;
 	}
 
-	public WindowType getOpenedWindow() {
+	public void setOpenedWindow(byte windowId, WindowType windowType, WindowRemapper windowRemapper) {
+		this.windowId = windowId;
+		this.windowType = windowType;
+		this.windowRemapper = windowRemapper;
+	}
+
+	public void setOpenedWindowMetadata(Object metadata) {
+		this.windowMetadata = metadata;
+	}
+
+	public WindowType getOpenedWindowType() {
 		return windowType;
 	}
 
@@ -23,9 +38,23 @@ public class WindowCache {
 		return windowId == this.windowId;
 	}
 
+	public WindowRemapper getPlayerWindowRemapper() {
+		return playerWindowRemapper;
+	}
+
+	public WindowRemapper getOpenedWindowRemapper() {
+		return windowRemapper;
+	}
+
+	public Object getOpenedWindowMetadata() {
+		return windowMetadata;
+	}
+
 	public void closeWindow() {
 		this.windowId = WINDOW_ID_PLAYER;
 		this.windowType = WindowType.PLAYER;
+		this.windowRemapper = playerWindowRemapper;
+		this.windowMetadata = null;
 	}
 
 	@Override

@@ -1,8 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.login.v_beta;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.login.MiddleLoginStart;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -15,9 +13,9 @@ public class LoginStart extends MiddleLoginStart {
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		int versionId = clientdata.readInt();
-		//TODO: switch version here
-		name = StringSerializer.readString(clientdata, ProtocolVersion.getOldest(ProtocolType.PC));
+		clientdata.readInt(); //version id
+		//TODO: switch version here somehow
+		name = StringSerializer.readShortUTF16BEString(clientdata, Short.MAX_VALUE);
 		clientdata.skipBytes(Long.BYTES + Byte.BYTES);
 	}
 

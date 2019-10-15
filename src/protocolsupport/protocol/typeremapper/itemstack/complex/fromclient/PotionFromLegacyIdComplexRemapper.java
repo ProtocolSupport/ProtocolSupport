@@ -6,10 +6,11 @@ import org.bukkit.Material;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotionId;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTString;
+import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
 
 public class PotionFromLegacyIdComplexRemapper implements ItemStackComplexRemapper {
 
@@ -18,12 +19,8 @@ public class PotionFromLegacyIdComplexRemapper implements ItemStackComplexRemapp
 		int data = itemstack.getLegacyData();
 		String name = LegacyPotionId.fromLegacyId(data);
 		if (!StringUtils.isEmpty(name)) {
-			NBTCompound tag = itemstack.getNBT();
-			if (tag == null) {
-				tag = new NBTCompound();
-				itemstack.setNBT(tag);
-			}
-			tag.setTag("Potion", new NBTString(name));
+			NBTCompound tag = CommonNBT.getOrCreateRootTag(itemstack);
+			tag.setTag(CommonNBT.POTION_TYPE, new NBTString(name));
 			itemstack.setTypeId(ItemMaterialLookup.getRuntimeId(LegacyPotionId.isThrowable(data) ? Material.SPLASH_POTION : Material.POTION));
 		}
 		return itemstack;

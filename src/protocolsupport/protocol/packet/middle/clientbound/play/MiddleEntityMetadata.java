@@ -3,11 +3,11 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleEntityMetadata extends MiddleEntity {
 
-	protected EntityRemapper entityRemapper = new EntityRemapper(version);
+	protected EntityRemapper entityRemapper = connection.getEntityRemapper();
 
 	public MiddleEntityMetadata(ConnectionImpl connection) {
 		super(connection);

@@ -26,6 +26,7 @@ public class Modifier {
 		obfuscated = null;
 	}
 
+	@Deprecated
 	public void set(ChatColor color) {
 		if (color == null) {
 			clear();
@@ -88,12 +89,22 @@ public class Modifier {
 		}
 	}
 
+	public Modifier withColor(ChatColor color) {
+		setColor(color);
+		return this;
+	}
+
 	public Boolean isBold() {
 		return bold;
 	}
 
 	public void setBold(Boolean bold) {
 		this.bold = bold;
+	}
+
+	public Modifier withBold(Boolean bold) {
+		setBold(bold);
+		return this;
 	}
 
 	public Boolean isItalic() {
@@ -104,12 +115,22 @@ public class Modifier {
 		this.italic = italic;
 	}
 
+	public Modifier withItalic(Boolean italic) {
+		setItalic(italic);
+		return this;
+	}
+
 	public Boolean isUnderlined() {
 		return underlined;
 	}
 
 	public void setUnderlined(Boolean underlined) {
 		this.underlined = underlined;
+	}
+
+	public Modifier withUnderlined(Boolean underlined) {
+		setUnderlined(underlined);
+		return this;
 	}
 
 	public Boolean isStrikethrough() {
@@ -120,12 +141,22 @@ public class Modifier {
 		this.strikethrough = strikethrough;
 	}
 
+	public Modifier withStrikethrough(Boolean strikethrough) {
+		setStrikethrough(strikethrough);
+		return this;
+	}
+
 	public Boolean isRandom() {
 		return obfuscated;
 	}
 
 	public void setRandom(Boolean random) {
 		this.obfuscated = random;
+	}
+
+	public Modifier withRandom(Boolean random) {
+		setRandom(random);
+		return this;
 	}
 
 	@Override

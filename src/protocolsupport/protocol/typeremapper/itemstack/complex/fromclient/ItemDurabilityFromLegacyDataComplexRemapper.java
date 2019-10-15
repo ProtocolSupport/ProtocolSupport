@@ -2,9 +2,10 @@ package protocolsupport.protocol.typeremapper.itemstack.complex.fromclient;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTInt;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTInt;
+import protocolsupport.protocol.utils.CommonNBT;
 
 public class ItemDurabilityFromLegacyDataComplexRemapper implements ItemStackComplexRemapper {
 
@@ -15,7 +16,7 @@ public class ItemDurabilityFromLegacyDataComplexRemapper implements ItemStackCom
 			tag = new NBTCompound();
 			itemstack.setNBT(tag);
 		}
-		tag.setTag("Damage", new NBTInt(itemstack.getLegacyData()));
+		tag.setTag(CommonNBT.ITEM_DAMAGE, new NBTInt(itemstack.getLegacyData()));
 		return itemstack;
 	}
 

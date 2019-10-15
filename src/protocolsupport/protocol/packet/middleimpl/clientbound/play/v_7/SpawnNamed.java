@@ -1,19 +1,19 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 
-import java.util.List;
 import java.util.UUID;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.DataWatcherSerializer;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
+import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
-import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -24,25 +24,23 @@ public class SpawnNamed extends MiddleSpawnNamed {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_NAMED_ID);
+	public RecyclableCollection<? extends IPacketData> toData() {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		UUID uuid = entity.getUUID();
-		StringSerializer.writeString(serializer, version, version == ProtocolVersion.MINECRAFT_1_7_10 ? uuid.toString() : uuid.toString().replace("-", ""));
+		StringSerializer.writeVarIntUTF8String(serializer, version == ProtocolVersion.MINECRAFT_1_7_10 ? uuid.toString() : uuid.toString().replace("-", ""));
 		PlayerListEntry entry = cache.getPlayerListCache().getEntry(uuid);
 		if (entry != null) {
-			StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(entry.getCurrentName(cache.getAttributesCache().getLocale()), 16));
+			StringSerializer.writeVarIntUTF8String(serializer, Utils.clampString(entry.getUserName(), 16));
 			if (version == ProtocolVersion.MINECRAFT_1_7_10) {
-				List<ProfileProperty> properties = entry.getProperties(true);
-				VarNumberSerializer.writeVarInt(serializer, properties.size());
-				for (ProfileProperty property : properties) {
-					StringSerializer.writeString(serializer, version, property.getName());
-					StringSerializer.writeString(serializer, version, property.getValue());
-					StringSerializer.writeString(serializer, version, property.getSignature());
-				}
+				ArraySerializer.writeVarIntTArray(serializer, entry.getProperties(true), (to, property) -> {
+					StringSerializer.writeVarIntUTF8String(serializer, property.getName());
+					StringSerializer.writeVarIntUTF8String(serializer, property.getValue());
+					StringSerializer.writeVarIntUTF8String(serializer, property.getSignature());
+				});
 			}
 		} else {
-			StringSerializer.writeString(serializer, version, "UNKNOWN");
+			StringSerializer.writeVarIntUTF8String(serializer, "UNKNOWN");
 			if (version == ProtocolVersion.MINECRAFT_1_7_10) {
 				VarNumberSerializer.writeVarInt(serializer, 0);
 			}
@@ -53,7 +51,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		serializer.writeByte(yaw);
 		serializer.writeByte(pitch);
 		serializer.writeShort(0);
-		DataWatcherSerializer.writeLegacyData(serializer, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
+		NetworkEntityMetadataSerializer.writeLegacyData(serializer, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
 		return RecyclableSingletonList.create(serializer);
 	}
 

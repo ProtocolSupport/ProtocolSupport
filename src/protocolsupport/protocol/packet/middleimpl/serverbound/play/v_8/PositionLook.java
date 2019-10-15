@@ -5,6 +5,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleMoveLook;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAccept;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -34,7 +35,7 @@ public class PositionLook extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() {
+	public RecyclableCollection<? extends IPacketData> toNative() {
 		int teleportId = cache.getMovementCache().tryTeleportConfirm(x, y, z);
 		if (teleportId == -1) {
 			return RecyclableSingletonList.create(MiddleMoveLook.create(x, y, z, yaw, pitch, onGround));

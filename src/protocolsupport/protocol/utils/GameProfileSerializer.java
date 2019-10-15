@@ -7,11 +7,11 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 
 import protocolsupport.api.utils.ProfileProperty;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTList;
+import protocolsupport.protocol.types.nbt.NBTString;
+import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.utils.authlib.GameProfile;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTList;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class GameProfileSerializer {
 

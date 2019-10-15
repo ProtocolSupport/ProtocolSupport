@@ -22,6 +22,11 @@ public abstract class MiddleStatistics extends ClientBoundMiddlePacket {
 		);
 	}
 
+	@Override
+	public void postHandle() {
+		statistics = null;
+	}
+
 	public static class Statistic {
 		public final int category;
 		public final int id;

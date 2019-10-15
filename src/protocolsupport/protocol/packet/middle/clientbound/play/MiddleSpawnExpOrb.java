@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class MiddleSpawnExpOrb extends ClientBoundMiddlePacket {
 

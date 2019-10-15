@@ -30,9 +30,7 @@ public class BlockRemappingHelper {
 	}
 
 	public static int remapFBlockDataId(ArrayBasedIdRemappingTable blockDataRemappingTable, FlatteningBlockDataTable flatteningBlockDataTable, int blockdata) {
-		blockdata = blockDataRemappingTable.getRemap(blockdata);
-		FlatteningBlockDataEntry entry = flatteningBlockDataTable.getRemap(blockdata);
-		return entry != null ? entry.getBlockDataId() : blockdata;
+		return flatteningBlockDataTable.getBlockDataRemap(blockDataRemappingTable.getRemap(blockdata));
 	}
 
 }

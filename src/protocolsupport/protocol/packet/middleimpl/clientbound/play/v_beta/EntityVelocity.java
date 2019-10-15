@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityVelocity;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -19,7 +19,7 @@ public class EntityVelocity extends MiddleEntityVelocity {
 	}
 
 	public static ClientBoundPacketData create(int entityId, int motX, int motY, int motZ) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_VELOCITY_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_VELOCITY);
 		serializer.writeInt(entityId);
 		serializer.writeShort(motX);
 		serializer.writeShort(motY);

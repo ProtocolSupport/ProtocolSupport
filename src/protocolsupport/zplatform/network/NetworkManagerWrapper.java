@@ -14,6 +14,16 @@ import protocolsupport.api.utils.ProfileProperty;
 
 public abstract class NetworkManagerWrapper {
 
+	protected final Channel channel;
+
+	public NetworkManagerWrapper(Channel channel) {
+		this.channel = channel;
+	}
+
+	public Channel getChannel() {
+		return channel;
+	}
+
 	public abstract Object unwrap();
 
 	public abstract InetSocketAddress getAddress();
@@ -25,8 +35,6 @@ public abstract class NetworkManagerWrapper {
 	public abstract void setAddress(InetSocketAddress address);
 
 	public abstract boolean isConnected();
-
-	public abstract Channel getChannel();
 
 	public abstract void close(String closeMessage);
 

@@ -6,11 +6,11 @@ import org.bukkit.Bukkit;
 
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
+import protocolsupport.protocol.types.TileEntity;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTInt;
+import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.utils.CommonNBT;
-import protocolsupport.protocol.utils.types.TileEntity;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTInt;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
 
 public class TileEntityPistonRemapper implements Consumer<TileEntity> {
 

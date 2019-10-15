@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleExplosion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.types.Position;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
@@ -18,7 +18,7 @@ public class Explosion extends MiddleExplosion {
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 
-		ClientBoundPacketData explosion = ClientBoundPacketData.create(ClientBoundPacket.PLAY_EXPLOSION_ID);
+		ClientBoundPacketData explosion = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_EXPLOSION);
 		explosion.writeDouble(x);
 		explosion.writeDouble(y);
 		explosion.writeDouble(z);

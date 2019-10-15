@@ -2,8 +2,8 @@ package protocolsupport.zplatform.impl.spigot.injector.network;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
-import net.minecraft.server.v1_13_R2.NetworkManager;
-import net.minecraft.server.v1_13_R2.Packet;
+import net.minecraft.server.v1_14_R1.NetworkManager;
+import net.minecraft.server.v1_14_R1.Packet;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.LogicHandler;
@@ -30,10 +30,9 @@ public class SpigotServerConnectionChannel extends ChannelInitializer {
 	@Override
 	protected void initChannel(Channel channel) {
 		ChannelPipeline pipeline = channel.pipeline();
-		NetworkManagerWrapper networkmanager = new SpigotNetworkManagerWrapper((NetworkManager) pipeline.get(SpigotChannelHandlers.NETWORK_MANAGER));
-		networkmanager.setPacketListener(new SpigotFakePacketListener());
+		NetworkManagerWrapper networkmanager = new SpigotNetworkManagerWrapper(channel, (NetworkManager) pipeline.get(SpigotChannelHandlers.NETWORK_MANAGER));
+		networkmanager.setPacketListener(new SpigotFakePacketListener(networkmanager));
 		ConnectionImpl connection = new ConnectionImpl(networkmanager);
-		connection.storeInChannel(channel);
 		ProtocolStorage.addConnection(channel.remoteAddress(), connection);
 		pipeline.addAfter(SpigotChannelHandlers.READ_TIMEOUT, ChannelHandlers.INITIAL_DECODER, new InitialPacketDecoder());
 		pipeline.addBefore(SpigotChannelHandlers.NETWORK_MANAGER, ChannelHandlers.LOGIC, new LogicHandler(connection, Packet.class));
@@ -44,10 +43,10 @@ public class SpigotServerConnectionChannel extends ChannelInitializer {
 		pipeline.addAfter(SpigotChannelHandlers.PREPENDER, ChannelHandlers.RAW_CAPTURE_SEND, new RawPacketDataCaptureSend(connection));
 		pipeline.addAfter(SpigotChannelHandlers.SPLITTER, ChannelHandlers.RAW_CAPTURE_RECEIVE, new RawPacketDataCaptureReceive(connection));
 		if (replaceDecoderEncoder) {
-			if (pipeline.get(SpigotChannelHandlers.DECODER).getClass().equals(net.minecraft.server.v1_13_R2.PacketDecoder.class)) {
+			if (pipeline.get(SpigotChannelHandlers.DECODER).getClass().equals(net.minecraft.server.v1_14_R1.PacketDecoder.class)) {
 				pipeline.replace(SpigotChannelHandlers.DECODER, SpigotChannelHandlers.DECODER, new SpigotPacketDecoder());
 			}
-			if (pipeline.get(SpigotChannelHandlers.ENCODER).getClass().equals(net.minecraft.server.v1_13_R2.PacketEncoder.class)) {
+			if (pipeline.get(SpigotChannelHandlers.ENCODER).getClass().equals(net.minecraft.server.v1_14_R1.PacketEncoder.class)) {
 				pipeline.replace(SpigotChannelHandlers.ENCODER, SpigotChannelHandlers.ENCODER, new SpigotPacketEncoder());
 			}
 		}

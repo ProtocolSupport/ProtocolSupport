@@ -2,34 +2,22 @@ package protocolsupport.protocol.pipeline.version.v_l;
 
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_l.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.noop.NoopPong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_l.ServerInfo;
-import protocolsupport.protocol.pipeline.version.util.encoder.AbstractLegacyPacketEncoder;
-import protocolsupport.protocol.utils.registry.PacketIdTransformerRegistry;
+import protocolsupport.protocol.pipeline.version.util.encoder.AbstractPacketEncoder;
 
-public class PacketEncoder extends AbstractLegacyPacketEncoder {
-
-	protected static final PacketIdTransformerRegistry packetIdRegistry = new PacketIdTransformerRegistry();
-	static {
-		packetIdRegistry.register(NetworkState.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, 0xFF);
-		packetIdRegistry.register(NetworkState.STATUS, ClientBoundPacket.STATUS_SERVER_INFO_ID, 0xFF);
-	}
-
-	@Override
-	protected int getNewPacketId(NetworkState currentProtocol, int oldPacketId) {
-		return packetIdRegistry.getNewPacketId(currentProtocol, oldPacketId);
-	}
-
-	{
-		registry.register(NetworkState.LOGIN, ClientBoundPacket.LOGIN_DISCONNECT_ID, LoginDisconnect::new);
-		registry.register(NetworkState.STATUS, ClientBoundPacket.STATUS_SERVER_INFO_ID, ServerInfo::new);
-		registry.register(NetworkState.STATUS, ClientBoundPacket.STATUS_PONG_ID, NoopPong::new);
-	}
+public class PacketEncoder extends AbstractPacketEncoder {
 
 	public PacketEncoder(ConnectionImpl connection) {
 		super(connection);
+	}
+
+	{
+		registry.register(NetworkState.LOGIN, PacketType.CLIENTBOUND_LOGIN_DISCONNECT, LoginDisconnect::new);
+		registry.register(NetworkState.STATUS, PacketType.CLIENTBOUND_STATUS_SERVER_INFO, ServerInfo::new);
+		registry.register(NetworkState.STATUS, PacketType.CLIENTBOUND_STATUS_PONG, NoopPong::new);
 	}
 
 }

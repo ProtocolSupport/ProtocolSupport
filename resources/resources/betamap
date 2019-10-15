@@ -1,0 +1,378 @@
+			this.registerRemapEntryForAllStates(Material.INFESTED_STONE, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.INFESTED_COBBLESTONE, Material.COBBLESTONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.INFESTED_STONE_BRICKS, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.INFESTED_MOSSY_STONE_BRICKS, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.INFESTED_CRACKED_STONE_BRICKS, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.INFESTED_CHISELED_STONE_BRICKS, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.STONE_BRICKS, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.MOSSY_STONE_BRICKS, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.CRACKED_STONE_BRICKS, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.CHISELED_STONE_BRICKS, Material.STONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.BROWN_MUSHROOM_BLOCK, Material.COBBLESTONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.RED_MUSHROOM_BLOCK, Material.COBBLESTONE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.IRON_BARS, Material.IRON_BLOCK.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.GLASS_PANE, Material.GLASS.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.MELON, Material.PUMPKIN.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.<Ageable>registerRemapEntryForAllStates(
+				Arrays.asList(Material.PUMPKIN_STEM, Material.MELON_STEM, Material.CARROTS, Material.POTATOES, Material.COCOA),
+				o -> cloneAgeable(o, (Ageable) Material.WHEAT.createBlockData()),
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
+			);
+			this.registerRemapEntryForAllStates(Material.VINE, Material.SUGAR_CANE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.ACACIA_FENCE_GATE, Material.BIRCH_FENCE_GATE, Material.DARK_OAK_FENCE_GATE,
+					Material.JUNGLE_FENCE_GATE, Material.OAK_FENCE_GATE, Material.SPRUCE_FENCE_GATE,
+					Material.NETHER_BRICK_FENCE
+				),
+				Material.OAK_FENCE.createBlockData(),
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
+			);
+			this.<Stairs>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.SANDSTONE_STAIRS, Material.RED_SANDSTONE_STAIRS, Material.STONE_BRICK_STAIRS, Material.STONE_BRICK_STAIRS,
+					Material.PRISMARINE_BRICK_STAIRS, Material.PRISMARINE_STAIRS, Material.DARK_PRISMARINE_STAIRS, Material.NETHER_BRICK_STAIRS
+				),
+				o -> toPre13StairsState(o, (Stairs) Material.COBBLESTONE_STAIRS.createBlockData()),
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
+			);
+			this.<Stairs>registerRemapEntryForAllStates(
+				Arrays.asList(Material.SPRUCE_STAIRS, Material.BIRCH_STAIRS, Material.JUNGLE_STAIRS),
+				o -> toPre13StairsState(o, (Stairs) Material.OAK_STAIRS.createBlockData()),
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
+			);
+			this.registerRemapEntryForAllStates(Material.MYCELIUM, Material.GRASS_BLOCK.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(Material.LILY_PAD, Material.OAK_PRESSURE_PLATE.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+//			112 Nether Brick
+//			115 Nether Wart
+			this.registerRemapEntryForAllStates(Material.ENCHANTING_TABLE, Material.OBSIDIAN.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(Material.BREWING_STAND, Material.CAULDRON, Material.ANVIL),
+				Material.COBBLESTONE.createBlockData(),
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
+			);
+//			119 End Portal
+//			120 End Portal Frame
+			this.registerRemapEntryForAllStates(
+				Material.END_STONE,
+				Material.SANDSTONE.createBlockData(),
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
+			);
+//			122 Dragon Egg
+			this.registerRemapEntryForAllStates(Material.REDSTONE_LAMP, Material.TORCH.createBlockData(), ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			this.<Slab>registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.ACACIA_SLAB, Material.DARK_OAK_SLAB, Material.BIRCH_SLAB,
+					Material.JUNGLE_SLAB, Material.OAK_SLAB, Material.SPRUCE_SLAB
+				),
+				o -> toPre13SlabState(o, (Slab) Material.PETRIFIED_OAK_SLAB.createBlockData()),
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
+			);
+//			129 Emerald Ore
+//			131 Tripwire Hook
+//			132 Tripwire
+//			133 Emerald Block
+//			137 Command Block
+//			138 Beacon Block
+//			139 Cobblestone Wall
+//			140 Flower Pot
+//			143 Wooden Button
+			this.registerRemapEntryForAllStates(
+				Arrays.asList(
+					Material.CREEPER_HEAD, Material.CREEPER_WALL_HEAD,
+					Material.ZOMBIE_HEAD, Material.ZOMBIE_WALL_HEAD,
+					Material.SKELETON_SKULL, Material.SKELETON_WALL_SKULL,
+					Material.WITHER_SKELETON_SKULL, Material.WITHER_SKELETON_WALL_SKULL,
+					Material.PLAYER_HEAD, Material.PLAYER_WALL_HEAD,
+					Material.DRAGON_HEAD, Material.DRAGON_WALL_HEAD
+				),
+				Material.JACK_O_LANTERN.createBlockData(),
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
+			);
+
+			this.<Directional>registerRemapEntryForAllStates(
+				Arrays.asList(Material.CHEST, Material.TRAPPED_CHEST, Material.ENDER_CHEST),
+				o -> {
+					Chest chest = (Chest) Material.CHEST.createBlockData();
+					chest.setWaterlogged(false);
+					chest.setFacing(o.getFacing());
+					chest.setType(Type.SINGLE);
+					return chest;
+				},
+				ProtocolVersion.MINECRAFT_BETA_1_7_3
+			);
+
+
+
+//			360 	
+//			Melon
+//		(minecraft:melon)
+//		361 	
+//			Pumpkin Seeds
+//		(minecraft:pumpkin_seeds)
+//		362 	
+//			Melon Seeds
+//		(minecraft:melon_seeds)
+//		363 	
+//			Raw Beef
+//		(minecraft:beef)
+//		364 	
+//			Steak
+//		(minecraft:cooked_beef)
+//		365 	
+//			Raw Chicken
+//		(minecraft:chicken)
+//		366 	
+//			Cooked Chicken
+//		(minecraft:cooked_chicken)
+//		367 	
+//			Rotten Flesh
+//		(minecraft:rotten_flesh)
+//		368 	
+//			Ender Pearl
+//		(minecraft:ender_pearl)
+//		369 	
+//			Blaze Rod
+//		(minecraft:blaze_rod)
+//		370 	
+//			Ghast Tear
+//		(minecraft:ghast_tear)
+//		371 	
+//			Gold Nugget
+//		(minecraft:gold_nugget)
+//		372 	
+//			Nether Wart
+//		(minecraft:nether_wart)
+//		373 	
+//			Potion
+//		(minecraft:potion)
+//		374 	
+//			Glass Bottle
+//		(minecraft:glass_bottle)
+//		375 	
+//			Spider Eye
+//		(minecraft:spider_eye)
+//		376 	
+//			Fermented Spider Eye
+//		(minecraft:fermented_spider_eye)
+//		377 	
+//			Blaze Powder
+//		(minecraft:blaze_powder)
+//		378 	
+//			Magma Cream
+//		(minecraft:magma_cream)
+//		379 	
+//			Brewing Stand
+//		(minecraft:brewing_stand)
+//		380 	
+//			Cauldron
+//		(minecraft:cauldron)
+//		381 	
+//			Eye of Ender
+//		(minecraft:ender_eye)
+//		382 	
+//			Glistering Melon
+//		(minecraft:speckled_melon)
+//		383:4 	
+//			Spawn Elder Guardian
+//		(minecraft:spawn_egg)
+//		383:5 	
+//			Spawn Wither Skeleton
+//		(minecraft:spawn_egg)
+//		383:6 	
+//			Spawn Stray
+//		(minecraft:spawn_egg)
+//		383:23 	
+//			Spawn Husk
+//		(minecraft:spawn_egg)
+//		383:27 	
+//			Spawn Zombie Villager
+//		(minecraft:spawn_egg)
+//		383:28 	
+//			Spawn Skeleton Horse
+//		(minecraft:spawn_egg)
+//		383:29 	
+//			Spawn Zombie Horse
+//		(minecraft:spawn_egg)
+//		383:31 	
+//			Spawn Donkey
+//		(minecraft:spawn_egg)
+//		383:32 	
+//			Spawn Mule
+//		(minecraft:spawn_egg)
+//		383:34 	
+//			Spawn Evoker
+//		(minecraft:spawn_egg)
+//		383:35 	
+//			Spawn Vex
+//		(minecraft:spawn_egg)
+//		383:36 	
+//			Spawn Vindicator
+//		(minecraft:spawn_egg)
+//		383:50 	
+//			Spawn Creeper
+//		(minecraft:spawn_egg)
+//		383:51 	
+//			Spawn Skeleton
+//		(minecraft:spawn_egg)
+//		383:52 	
+//			Spawn Spider
+//		(minecraft:spawn_egg)
+//		383:54 	
+//			Spawn Zombie
+//		(minecraft:spawn_egg)
+//		383:55 	
+//			Spawn Slime
+//		(minecraft:spawn_egg)
+//		383:56 	
+//			Spawn Ghast
+//		(minecraft:spawn_egg)
+//		383:57 	
+//			Spawn Zombie Pigman
+//		(minecraft:spawn_egg)
+//		383:58 	
+//			Spawn Enderman
+//		(minecraft:spawn_egg)
+//		383:59 	
+//			Spawn Cave Spider
+//		(minecraft:spawn_egg)
+//		383:60 	
+//			Spawn Silverfish
+//		(minecraft:spawn_egg)
+//		383:61 	
+//			Spawn Blaze
+//		(minecraft:spawn_egg)
+//		383:62 	
+//			Spawn Magma Cube
+//		(minecraft:spawn_egg)
+//		383:65 	
+//			Spawn Bat
+//		(minecraft:spawn_egg)
+//		383:66 	
+//			Spawn Witch
+//		(minecraft:spawn_egg)
+//		383:67 	
+//			Spawn Endermite
+//		(minecraft:spawn_egg)
+//		383:68 	
+//			Spawn Guardian
+//		(minecraft:spawn_egg)
+//		383:69 	
+//			Spawn Shulker
+//		(minecraft:spawn_egg)
+//		383:90 	
+//			Spawn Pig
+//		(minecraft:spawn_egg)
+//		383:91 	
+//			Spawn Sheep
+//		(minecraft:spawn_egg)
+//		383:92 	
+//			Spawn Cow
+//		(minecraft:spawn_egg)
+//		383:93 	
+//			Spawn Chicken
+//		(minecraft:spawn_egg)
+//		383:94 	
+//			Spawn Squid
+//		(minecraft:spawn_egg)
+//		383:95 	
+//			Spawn Wolf
+//		(minecraft:spawn_egg)
+//		383:96 	
+//			Spawn Mooshroom
+//		(minecraft:spawn_egg)
+//		383:98 	
+//			Spawn Ocelot
+//		(minecraft:spawn_egg)
+//		383:100 	
+//			Spawn Horse
+//		(minecraft:spawn_egg)
+//		383:101 	
+//			Spawn Rabbit
+//		(minecraft:spawn_egg)
+//		383:102 	
+//			Spawn Polar Bear
+//		(minecraft:spawn_egg)
+//		383:103 	
+//			Spawn Llama
+//		(minecraft:spawn_egg)
+//		383:105 	
+//			Spawn Parrot
+//		(minecraft:spawn_egg)
+//		383:120 	
+//			Spawn Villager
+//		(minecraft:spawn_egg)
+//		384 	
+//			Bottle o' Enchanting
+//		(minecraft:experience_bottle)
+//		385 	
+//			Fire Charge
+//		(minecraft:fire_charge)
+//		386 	
+//			Book and Quill
+//		(minecraft:writable_book)
+//		387 	
+//			Written Book
+//		(minecraft:written_book)
+//		388 	
+//			Emerald
+//		(minecraft:emerald)
+//		389 	
+//			Item Frame
+//		(minecraft:item_frame)
+//		390 	
+//			Flower Pot
+//		(minecraft:flower_pot)
+//		391 	
+//			Carrot
+//		(minecraft:carrot)
+//		392 	
+//			Potato
+//		(minecraft:potato)
+//		393 	
+//			Baked Potato
+//		(minecraft:baked_potato)
+//		394 	
+//			Poisonous Potato
+//		(minecraft:poisonous_potato)
+//		395 	
+//			Empty Map
+//		(minecraft:map)
+//		396 	
+//			Golden Carrot
+//		(minecraft:golden_carrot)
+//		397 	
+//			Mob Head (Skeleton)
+//		(minecraft:skull)
+//		397:1 	
+//			Mob Head (Wither Skeleton)
+//		(minecraft:skull)
+//		397:2 	
+//			Mob Head (Zombie)
+//		(minecraft:skull)
+//		397:3 	
+//			Mob Head (Human)
+//		(minecraft:skull)
+//		397:4 	
+//			Mob Head (Creeper)
+//		(minecraft:skull)
+//		397:5 	
+//			Mob Head (Dragon)
+//		(minecraft:skull)
+//		398 	
+//			Carrot on a Stick
+//		(minecraft:carrot_on_a_stick)
+//		399 	
+//			Nether Star
+//		(minecraft:nether_star)
+//		400 	
+//			Pumpkin Pie
+//		(minecraft:pumpkin_pie)
+//		401 	
+//			Firework Rocket
+//		(minecraft:fireworks)
+//		402 	
+//			Firework Star
+//		(minecraft:firework_charge)
+//		403 	
+//			Enchanted Book

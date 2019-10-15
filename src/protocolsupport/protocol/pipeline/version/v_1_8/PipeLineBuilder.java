@@ -13,6 +13,11 @@ public class PipeLineBuilder extends AbstractVarIntFramingPipeLineBuilder {
 		ChannelPipeline pipeline = channel.pipeline();
 		pipeline.addAfter(ChannelHandlers.RAW_CAPTURE_RECEIVE, ChannelHandlers.DECODER_TRANSFORMER, new PacketDecoder(connection));
 		pipeline.addAfter(ChannelHandlers.RAW_CAPTURE_SEND, ChannelHandlers.ENCODER_TRANSFORMER, new PacketEncoder(connection));
+		connection.setTransformerContentexts(
+			PacketCodec.instance,
+			pipeline.context(ChannelHandlers.ENCODER_TRANSFORMER),
+			pipeline.context(ChannelHandlers.DECODER_TRANSFORMER)
+		);
 	}
 
 }

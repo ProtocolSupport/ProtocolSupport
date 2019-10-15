@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -18,7 +18,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_NAMED_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
 		serializer.writeInt(entity.getId());
 		PlayerListEntry entry = cache.getPlayerListCache().getEntry(entity.getUUID());
 		StringSerializer.writeString(serializer, version, entry != null ? LegacyChat.clampLegacyText(entry.getCurrentName(cache.getAttributesCache().getLocale()), 16) : "UNKNOWN");

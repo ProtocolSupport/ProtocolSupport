@@ -20,4 +20,10 @@ public abstract class MiddleLoginSuccess extends ClientBoundMiddlePacket {
 		name = StringSerializer.readVarIntUTF8String(serverdata);
 	}
 
+	@Override
+	public void postHandle() {
+		uuidstring = null;
+		name = null;
+	}
+
 }

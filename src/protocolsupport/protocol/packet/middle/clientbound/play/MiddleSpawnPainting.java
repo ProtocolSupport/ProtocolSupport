@@ -8,9 +8,9 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
-import protocolsupport.protocol.utils.types.Position;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 

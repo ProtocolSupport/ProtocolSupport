@@ -1,7 +1,7 @@
 package protocolsupport.protocol.storage.netcache;
 
+import protocolsupport.protocol.types.Environment;
 import protocolsupport.protocol.utils.i18n.I18NData;
-import protocolsupport.protocol.utils.types.Environment;
 import protocolsupport.utils.Utils;
 
 public class AttributesCache {

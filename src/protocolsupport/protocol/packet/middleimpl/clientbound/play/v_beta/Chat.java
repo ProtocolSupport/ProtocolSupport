@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta;
 import org.bukkit.ChatColor;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChat;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -39,8 +39,8 @@ public class Chat extends MiddleChat {
 				substring = lastColors + substring;
 			}
 			lastColors = ChatColor.getLastColors(substring);
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHAT_ID);
-			StringSerializer.writeString(serializer, version, substring);
+			ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHAT);
+			StringSerializer.writeShortUTF16BEString(serializer, substring);
 			packets.add(serializer);
 		}
 

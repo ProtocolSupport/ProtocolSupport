@@ -1,31 +1,24 @@
 package protocolsupport.protocol.pipeline.version.util.decoder;
 
-import java.util.List;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.pipeline.IPacketCodec;
 
 public abstract class AbstractModernPacketDecoder extends AbstractPacketDecoder {
 
-	public AbstractModernPacketDecoder(ConnectionImpl connection) {
-		super(connection);
+	public AbstractModernPacketDecoder(ConnectionImpl connection, IPacketCodec codec) {
+		super(connection, codec);
 	}
 
 	@Override
-	protected int readPacketId(ByteBuf buffer) {
-		return VarNumberSerializer.readVarInt(buffer);
-	}
-
-	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> out) throws Exception {
+	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf input) throws Exception {
 		if (!input.isReadable()) {
 			return;
 		}
 		try {
-			decodeAndTransform(ctx, input, out);
+			decodeAndTransform(ctx, input);
 			if (input.isReadable()) {
 				throw new DecoderException("Did not read all data from packet, bytes left: " + input.readableBytes());
 			}

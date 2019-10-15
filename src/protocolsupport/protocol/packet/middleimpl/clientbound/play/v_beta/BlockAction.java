@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockAction;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -16,7 +16,7 @@ public class BlockAction extends MiddleBlockAction {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_BLOCK_ACTION_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_ACTION);
 		PositionSerializer.writeLegacyPositionS(serializer, position);
 		serializer.writeByte(actionId);
 		serializer.writeByte(actionParam);

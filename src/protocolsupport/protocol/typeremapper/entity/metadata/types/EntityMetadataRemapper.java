@@ -4,39 +4,50 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.NetworkEntityMetadataObjectRemapper;
 
 public class EntityMetadataRemapper {
 
 	public static final EntityMetadataRemapper NOOP = new EntityMetadataRemapper();
 
-	protected final EnumMap<ProtocolVersion, List<DataWatcherObjectRemapper>> entries = new EnumMap<>(ProtocolVersion.class);
+	protected final EnumMap<ProtocolVersion, NetworkEntityMetadataObjectRemapperList> entries = new EnumMap<>(ProtocolVersion.class);
 
-	public Map<ProtocolVersion, List<DataWatcherObjectRemapper>> getRemaps() {
-		return entries;
+	public List<NetworkEntityMetadataObjectRemapper> getRemaps(ProtocolVersion version) {
+		return getRemapsOrCreate(version).getCombined();
 	}
 
-	public List<DataWatcherObjectRemapper> getRemaps(ProtocolVersion version) {
-		return entries.computeIfAbsent(version, k -> new ArrayList<>());
+	protected NetworkEntityMetadataObjectRemapperList getRemapsOrCreate(ProtocolVersion version) {
+		return entries.computeIfAbsent(version, k -> new NetworkEntityMetadataObjectRemapperList());
 	}
 
-	public void addRemap(DataWatcherObjectRemapper objectremapper, ProtocolVersion... versions) {
-		Arrays.stream(versions).forEach(version -> getRemaps(version).add(objectremapper));
+	protected void addRemap(NetworkEntityMetadataObjectRemapper objectremapper, ProtocolVersion... versions) {
+		addRemapPerVersion(version -> objectremapper, versions);
 	}
 
-	public void addRemapPerVersion(Function<ProtocolVersion, DataWatcherObjectRemapper> objectRemapperProvider, ProtocolVersion... versions) {
-		Arrays.stream(versions).forEach(version -> getRemaps(version).add(objectRemapperProvider.apply(version)));
+	protected void addRemapPerVersion(Function<ProtocolVersion, NetworkEntityMetadataObjectRemapper> objectRemapperProvider, ProtocolVersion... versions) {
+		Arrays.stream(versions).forEach(version -> getRemapsOrCreate(version).normal.add(objectRemapperProvider.apply(version)));
 	}
 
-	@Override
-	public EntityMetadataRemapper clone() {
-		EntityMetadataRemapper clone = new EntityMetadataRemapper();
-		entries.forEach((version, lEntries) -> clone.getRemaps(version).addAll(lEntries));
-		return clone;
+	protected void addPostRemap(NetworkEntityMetadataObjectRemapper objectremapper, ProtocolVersion... versions) {
+		addPostRemapPerVersion(version -> objectremapper, versions);
+	}
+
+	protected void addPostRemapPerVersion(Function<ProtocolVersion, NetworkEntityMetadataObjectRemapper> objectRemapperProvider, ProtocolVersion... versions) {
+		Arrays.stream(versions).forEach(version -> getRemapsOrCreate(version).post.add(objectRemapperProvider.apply(version)));
+	}
+
+	protected static class NetworkEntityMetadataObjectRemapperList {
+		protected final List<NetworkEntityMetadataObjectRemapper> normal = new ArrayList<>();
+		protected final List<NetworkEntityMetadataObjectRemapper> post = new ArrayList<>();
+		public List<NetworkEntityMetadataObjectRemapper> getCombined() {
+			List<NetworkEntityMetadataObjectRemapper> combined = new ArrayList<>();
+			combined.addAll(normal);
+			combined.addAll(post);
+			return combined;
+		}
 	}
 
 }

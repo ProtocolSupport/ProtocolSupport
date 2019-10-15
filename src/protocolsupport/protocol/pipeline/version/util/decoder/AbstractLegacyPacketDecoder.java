@@ -1,29 +1,27 @@
 package protocolsupport.protocol.pipeline.version.util.decoder;
 
-import java.util.List;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.pipeline.IPacketCodec;
 import protocolsupport.protocol.typeremapper.packet.AnimatePacketReorderer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
-import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 
-	public AbstractLegacyPacketDecoder(ConnectionImpl connection) {
-		super(connection);
+	protected final AnimatePacketReorderer animateReorderer = new AnimatePacketReorderer(connection);
+
+	public AbstractLegacyPacketDecoder(ConnectionImpl connection, IPacketCodec codec) {
+		super(connection, codec);
+		connection.addServerboundPacketProcessor(animateReorderer);
 	}
 
 	protected final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer(Unpooled.buffer());
-	protected final AnimatePacketReorderer animateReorderer = new AnimatePacketReorderer();
 
 	@Override
-	public void decode(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) throws Exception {
+	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf input) throws Exception {
 		if (!input.isReadable()) {
 			return;
 		}
@@ -31,7 +29,7 @@ public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder 
 		while (buffer.isReadable()) {
 			buffer.markReaderIndex();
 			try {
-				decodeAndTransform(ctx, buffer, list);
+				decodeAndTransform(ctx, buffer);
 			} catch (EOFSignal signal) {
 				buffer.resetReaderIndex();
 				break;
@@ -40,22 +38,6 @@ public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder 
 			}
 		}
 		buffer.discardReadBytes();
-	}
-
-	@Override
-	protected RecyclableCollection<ServerBoundPacketData> processPackets(Channel channel, RecyclableCollection<ServerBoundPacketData> data) {
-		return animateReorderer.orderPackets(data);
-	}
-
-	@Override
-	protected int readPacketId(ByteBuf buffer) {
-		return buffer.readUnsignedByte();
-	}
-
-	@Override
-	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-		super.handlerRemoved(ctx);
-		animateReorderer.release();
 	}
 
 }

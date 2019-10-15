@@ -101,6 +101,11 @@ public class CollectionsUtils {
 			}
 		}
 
+		@Override
+		public String toString() {
+			return Utils.toStringAllFields(this);
+		}
+
 	}
 
 }

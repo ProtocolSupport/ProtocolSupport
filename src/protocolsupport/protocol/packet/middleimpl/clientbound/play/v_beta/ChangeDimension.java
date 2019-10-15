@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.utils.types.Environment;
+import protocolsupport.protocol.types.Environment;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -25,7 +25,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		if (!hadSkyLightInOldDimension && dimension != Environment.OVERWORLD) {
+		if (!hadSkyLightInOldDimension && (dimension != Environment.OVERWORLD)) {
 			RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 			packets.add(create(Environment.OVERWORLD));
 			packets.add(create(remapDimension(dimension)));
@@ -40,7 +40,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 	}
 
 	protected static ClientBoundPacketData create(Environment dimension) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_RESPAWN_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_RESPAWN);
 		serializer.writeByte(dimension.getId());
 		return serializer;
 	}

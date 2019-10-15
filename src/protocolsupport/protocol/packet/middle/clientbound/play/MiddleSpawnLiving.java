@@ -9,11 +9,11 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 
-	protected final EntityRemapper entityRemapper = new EntityRemapper(version);
+	protected final EntityRemapper entityRemapper = connection.getEntityRemapper();
 
 	public MiddleSpawnLiving(ConnectionImpl connection) {
 		super(connection);
@@ -23,9 +23,9 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 	protected double x;
 	protected double y;
 	protected double z;
-	protected int yaw;
-	protected int pitch;
-	protected int headPitch;
+	protected byte yaw;
+	protected byte pitch;
+	protected byte headPitch;
 	protected int motX;
 	protected int motY;
 	protected int motZ;
@@ -39,9 +39,9 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();
 		z = serverdata.readDouble();
-		yaw = serverdata.readUnsignedByte();
-		pitch = serverdata.readUnsignedByte();
-		headPitch = serverdata.readUnsignedByte();
+		yaw = serverdata.readByte();
+		pitch = serverdata.readByte();
+		headPitch = serverdata.readByte();
 		motX = serverdata.readShort();
 		motY = serverdata.readShort();
 		motZ = serverdata.readShort();

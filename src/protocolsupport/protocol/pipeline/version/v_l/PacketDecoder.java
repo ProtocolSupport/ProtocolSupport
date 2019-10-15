@@ -8,13 +8,13 @@ import protocolsupport.protocol.pipeline.version.util.decoder.AbstractLegacyPack
 
 public class PacketDecoder extends AbstractLegacyPacketDecoder {
 
+	public PacketDecoder(ConnectionImpl connection) {
+		super(connection, PacketCodec.instance);
+	}
+
 	{
 		registry.register(NetworkState.HANDSHAKING, 0x02, ClientLogin::new);
 		registry.register(NetworkState.HANDSHAKING, 0xFE, Ping::new);
-	}
-
-	public PacketDecoder(ConnectionImpl connection) {
-		super(connection);
 	}
 
 }

@@ -1,72 +1,65 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.AbstractLocationOffsetSpawnObject;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry;
+import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry.ObjectDataRemappingTable;
+import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class SpawnObject extends MiddleSpawnObject {
+public class SpawnObject extends AbstractLocationOffsetSpawnObject {
+
+	protected final ObjectDataRemappingTable entityObjectDataRemappingTable = ObjectDataRemappersRegistry.REGISTRY.getTable(version);
 
 	public SpawnObject(ConnectionImpl connection) {
 		super(connection);
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		NetworkEntityType type = entityRemapper.getRemappedEntityType();
-		objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
+		if (type.isOfType(NetworkEntityType.MINECART)) {
+			objectdata = LegacyEntityId.getMinecartObjectData(type);
+		} else {
+			objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
+		}
 		x *= 32;
 		y *= 32;
 		z *= 32;
-		switch (type) {
-			case ITEM_FRAME: {
-				switch (objectdata) {
-					case 0: {
-						z -= 32;
-						yaw = 128;
-						break;
-					}
-					case 1: {
-						x += 32;
-						yaw = 64;
-						break;
-					}
-					case 2: {
-						z += 32;
-						yaw = 0;
-						break;
-					}
-					case 3: {
-						x -= 32;
-						yaw = 192;
-						break;
-					}
+		if (type == NetworkEntityType.ITEM_FRAME) {
+			switch (objectdata) {
+				case 0: {
+					z -= 32;
+					yaw = (byte) 128;
+					break;
 				}
-				break;
-			}
-			case TNT:
-			case MINECART:
-			case MINECART_CHEST:
-			case MINECART_FURNACE:
-			case MINECART_TNT:
-			case MINECART_MOB_SPAWNER:
-			case MINECART_HOPPER:
-			case MINECART_COMMAND:
-			case FALLING_OBJECT: {
-				y += 16;
-				break;
-			}
-			default: {
-				break;
+				case 1: {
+					x += 32;
+					yaw = 64;
+					break;
+				}
+				case 2: {
+					z += 32;
+					yaw = 0;
+					break;
+				}
+				case 3: {
+					x -= 32;
+					yaw = (byte) 192;
+					break;
+				}
 			}
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID);
+
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
-		serializer.writeByte(type.getNetworkTypeId());
+		serializer.writeByte(LegacyEntityId.getObjectIntId(type));
 		serializer.writeInt((int) x);
 		serializer.writeInt((int) y);
 		serializer.writeInt((int) z);

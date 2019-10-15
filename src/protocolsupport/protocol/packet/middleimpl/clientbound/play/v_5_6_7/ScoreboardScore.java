@@ -1,9 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_5_6_7;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardScore;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -16,8 +17,8 @@ public class ScoreboardScore extends MiddleScoreboardScore {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SCOREBOARD_SCORE_ID);
+	public RecyclableCollection<? extends IPacketData> toData() {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_SCORE);
 		StringSerializer.writeString(serializer, version, Utils.clampString(name, 16));
 		serializer.writeByte(mode);
 		if (mode != 1) {

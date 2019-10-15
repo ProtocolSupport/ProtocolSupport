@@ -1,8 +1,9 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ServerBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -20,12 +21,12 @@ public abstract class MiddleUpdateCommandMinecart extends ServerBoundMiddlePacke
 	protected boolean trackOutput;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() {
+	public RecyclableCollection<? extends IPacketData> toNative() {
 		return RecyclableSingletonList.create(create(entityId, command, trackOutput));
 	}
 
 	public static ServerBoundPacketData create(int entityId, String command, boolean trackOutput) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_UPDATE_COMMAND_MINECART);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_UPDATE_COMMAND_MINECART);
 		VarNumberSerializer.writeVarInt(creator, entityId);
 		StringSerializer.writeVarIntUTF8String(creator, command);
 		creator.writeBoolean(trackOutput);

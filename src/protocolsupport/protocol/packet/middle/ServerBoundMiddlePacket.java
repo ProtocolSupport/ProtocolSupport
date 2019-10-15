@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public abstract class ServerBoundMiddlePacket extends MiddlePacket {
@@ -13,6 +13,6 @@ public abstract class ServerBoundMiddlePacket extends MiddlePacket {
 
 	public abstract void readFromClientData(ByteBuf clientdata);
 
-	public abstract RecyclableCollection<ServerBoundPacketData> toNative();
+	public abstract RecyclableCollection<? extends IPacketData> toNative();
 
 }

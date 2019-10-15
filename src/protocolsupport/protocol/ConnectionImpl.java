@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
 
@@ -11,19 +12,30 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPromise;
+import io.netty.channel.EventLoop;
+import io.netty.handler.codec.EncoderException;
 import io.netty.util.AttributeKey;
 import io.netty.util.Recycler;
 import io.netty.util.Recycler.Handle;
+import io.netty.util.ReferenceCountUtil;
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.Connection;
 import protocolsupport.api.Connection.PacketListener.PacketEvent;
 import protocolsupport.api.Connection.PacketListener.RawPacketEvent;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.NetworkState;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.handler.IPacketListener;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
+import protocolsupport.protocol.pipeline.IPacketCodec;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
+import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
 import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class ConnectionImpl extends Connection {
@@ -33,7 +45,22 @@ public class ConnectionImpl extends Connection {
 	protected final NetworkManagerWrapper networkmanager;
 	public ConnectionImpl(NetworkManagerWrapper networkmanager) {
 		this.networkmanager = networkmanager;
+		this.networkmanager.getChannel().attr(key).set(this);
 	}
+
+	public static ConnectionImpl getFromChannel(Channel channel) {
+		return channel.attr(key).get();
+	}
+
+	public void destroy() {
+		Object listener = networkmanager.getPacketListener();
+		if (listener instanceof IPacketListener) {
+			((IPacketListener) listener).destroy();
+		}
+		transformerEncoderHeadProcessor.release0();
+		transformerDecoderHeadProcessor.release0();
+	}
+
 
 	public NetworkManagerWrapper getNetworkManagerWrapper() {
 		return networkmanager;
@@ -101,79 +128,297 @@ public class ConnectionImpl extends Connection {
 		return networkmanager.getNetworkState();
 	}
 
-	@Override
-	public void sendPacket(Object packet) {
-		networkmanager.getChannel().eventLoop().submit(() -> {
+	public EventLoop getEventLoop() {
+		return networkmanager.getChannel().eventLoop();
+	}
+
+	public void submitTaskToEventLoop(Runnable task) {
+		getEventLoop().submit(() -> {
 			try {
-				ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.LOGIC);
-				if (ctx != null) {
-					ctx.writeAndFlush(packet);
+				if (!isConnected()) {
+					return;
 				}
-			} catch (Throwable t) {
-				System.err.println("Error occured while packet sending");
-				t.printStackTrace();
+				task.run();
+			} catch (Exception e) {
+				ProtocolSupport.getInstance().getLogger().log(Level.WARNING, "Unhandled exception occured in task submitted to event loop", e);
 			}
 		});
 	}
 
 	@Override
+	public void sendPacket(Object packet) {
+		submitTaskToEventLoop(() -> networkmanager.getChannel().pipeline().context(ChannelHandlers.LOGIC).writeAndFlush(packet));
+	}
+
+	@Override
 	public void receivePacket(Object packet) {
-		networkmanager.getChannel().eventLoop().submit(() -> {
-			try {
-				ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.LOGIC);
-				if (ctx != null) {
-					ctx.fireChannelRead(packet);
-				}
-			} catch (Throwable t) {
-				System.err.println("Error occured while packet receiving");
-				t.printStackTrace();
-			}
+		submitTaskToEventLoop(() -> {
+			ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.LOGIC);
+			ctx.fireChannelRead(packet);
+			ctx.fireChannelReadComplete();
 		});
 	}
 
 	@Override
 	public void sendRawPacket(byte[] data) {
 		ByteBuf dataInst = Unpooled.wrappedBuffer(data);
-		networkmanager.getChannel().eventLoop().submit(() -> {
-			try {
-				ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.RAW_CAPTURE_SEND);
-				if (ctx != null) {
-					ctx.writeAndFlush(dataInst);
-				}
-			} catch (Throwable t) {
-				System.err.println("Error occured while raw packet sending");
-				t.printStackTrace();
-			}
-		});
+		submitTaskToEventLoop(() -> networkmanager.getChannel().pipeline().context(ChannelHandlers.RAW_CAPTURE_SEND).writeAndFlush(dataInst));
 	}
 
 	@Override
 	public void receiveRawPacket(byte[] data) {
 		ByteBuf dataInst = Unpooled.wrappedBuffer(data);
-		networkmanager.getChannel().eventLoop().submit(() -> {
-			try {
-				ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.RAW_CAPTURE_RECEIVE);
-				if (ctx != null) {
-					ctx.fireChannelRead(dataInst);
-				}
-			} catch (Throwable t) {
-				System.err.println("Error occured while raw packet receiving");
-				t.printStackTrace();
-			}
+		submitTaskToEventLoop(() -> {
+			ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.RAW_CAPTURE_RECEIVE);
+			ctx.fireChannelRead(dataInst);
+			ctx.fireChannelReadComplete();
 		});
-	}
-
-	public static ConnectionImpl getFromChannel(Channel channel) {
-		return channel.attr(key).get();
-	}
-
-	public void storeInChannel(Channel channel) {
-		channel.attr(key).set(this);
 	}
 
 	public void setVersion(ProtocolVersion version) {
 		this.version = version;
 	}
+
+	//TODO: a separate class that handles middle writing?
+	protected IPacketCodec codec;
+	protected ChannelHandlerContext transformerEncoderCtx;
+	protected ChannelHandlerContext transformerDecoderCtx;
+	protected ClientboundPacketProcessor transformerEncoderHeadProcessor = new ClientboundPacketProcessor(this);
+	protected ServerboundPacketProcessor transformerDecoderHeadProcessor = new ServerboundPacketProcessor(this);
+
+	public void setTransformerContentexts(IPacketCodec codec, ChannelHandlerContext transformerEncoderCtx, ChannelHandlerContext transformerDecoderCtx) {
+		this.codec = codec;
+		this.transformerEncoderCtx = transformerEncoderCtx;
+		this.transformerDecoderCtx = transformerDecoderCtx;
+	}
+
+	/**
+	 * Adds clientbound processor. Added packet processor becomes first.
+	 * @param processor packet processor
+	 */
+	public void addClientboundPacketProcessor(ClientboundPacketProcessor processor) {
+		processor.next = transformerEncoderHeadProcessor;
+		transformerEncoderHeadProcessor = processor;
+	}
+
+	/**
+	 * Adds serverbound packet processor. Added packet processor becomes first.
+	 * @param processor packet processor
+	 */
+	public void addServerboundPacketProcessor(ServerboundPacketProcessor processor) {
+		processor.next = transformerDecoderHeadProcessor;
+		transformerDecoderHeadProcessor = processor;
+	}
+
+	protected ChannelPromise transformerEncoderCurrentRealChannelPromise;
+
+	/**
+	 * Processes and writes data that was created as a result of clientbound packet transformation. <br>
+	 * If promise is null, a void promise is used. <br>
+	 * Passed collection is recycled after this function completes.
+	 * @param packets packets data
+	 * @param promise channel promise
+	 * @param flush flush clientbound packets
+	 */
+	public void writeClientboundPackets(RecyclableCollection<? extends IPacketData> packets, ChannelPromise promise, boolean flush) {
+		try {
+			if (promise != null) {
+				transformerEncoderCurrentRealChannelPromise = promise;
+			}
+			for (IPacketData packet : packets) {
+				transformerEncoderHeadProcessor.process(packet);
+			}
+			if (flush) {
+				transformerEncoderCtx.flush();
+			}
+		} finally {
+			if (transformerEncoderCurrentRealChannelPromise != null) {
+				transformerEncoderCurrentRealChannelPromise.setSuccess();
+				transformerEncoderCurrentRealChannelPromise = null;
+			}
+			packets.recycleObjectOnly();
+		}
+	}
+
+	/**
+	 * Processes and reads data that was created as a result of serverbound packet transformation. <br>
+	 * Passed collection is recycled after this function completes.
+	 * @param packets packets data
+	 * @param firereadcomplete fire read complete after reading all packets
+	 */
+	public void readServerboundPackets(RecyclableCollection<? extends IPacketData> packets, boolean firereadcomplete) {
+		try {
+			for (IPacketData packet : packets) {
+				transformerDecoderHeadProcessor.process(packet);
+			}
+			if (firereadcomplete) {
+				transformerDecoderCtx.fireChannelReadComplete();
+			}
+		} finally {
+			packets.recycleObjectOnly();
+		}
+	}
+
+	protected void writeClientboundPacket(IPacketCodec codec, IPacketData packetdata) {
+		ByteBuf senddata = transformerEncoderCtx.alloc().heapBuffer(packetdata.getDataLength() + PacketType.MAX_PACKET_ID_LENGTH);
+		try {
+			codec.writePacketId(senddata, packetdata.getPacketType());
+			packetdata.writeData(senddata);
+			if (transformerEncoderCurrentRealChannelPromise != null) {
+				ChannelPromise promise = transformerEncoderCurrentRealChannelPromise;
+				transformerEncoderCurrentRealChannelPromise = null;
+				transformerEncoderCtx.write(senddata, promise);
+			} else {
+				transformerEncoderCtx.write(senddata, transformerEncoderCtx.voidPromise());
+			}
+		} catch (Throwable t) {
+			ReferenceCountUtil.safeRelease(senddata);
+			throw new EncoderException(t);
+		} finally {
+			packetdata.recycle();
+		}
+	}
+
+	protected void writeServerboundPacket(IPacketData packetdata) {
+		ByteBuf senddata = transformerDecoderCtx.alloc().heapBuffer(packetdata.getDataLength() + PacketType.MAX_PACKET_ID_LENGTH);
+		try {
+			VarNumberSerializer.writeVarInt(senddata, packetdata.getPacketType().getId());
+			packetdata.writeData(senddata);
+			transformerDecoderCtx.fireChannelRead(senddata);
+		} catch (Throwable t) {
+			ReferenceCountUtil.safeRelease(senddata);
+			throw new EncoderException(t);
+		} finally {
+			packetdata.recycle();
+		}
+	}
+
+	public static class ClientboundPacketProcessor {
+
+		protected final ConnectionImpl connection;
+		public ClientboundPacketProcessor(ConnectionImpl connection) {
+			this.connection = connection;
+		}
+
+		private ClientboundPacketProcessor next;
+
+		private void release0() {
+			release();
+			if (next != null) {
+				next.release0();
+			}
+		}
+
+		/**
+		 * Actually reads/writes packet
+		 * @param packet packet
+		 * @param promise
+		 */
+		protected final void write(IPacketData packet) {
+			if (next != null) {
+				next.process(packet);
+			} else {
+				PacketType type = packet.getPacketType();
+				switch (type.getDirection()) {
+					case CLIENTBOUND: {
+						connection.writeClientboundPacket(connection.codec, packet);
+						return;
+					}
+					case SERVERBOUND: {
+						connection.writeServerboundPacket(packet);
+						connection.transformerDecoderCtx.fireChannelReadComplete();
+						return;
+					}
+					case NONE: {
+						packet.writeData(Unpooled.EMPTY_BUFFER);
+						return;
+					}
+					default: {
+						throw new IllegalStateException("Unknown direction");
+					}
+				}
+			}
+		}
+
+		/**
+		 * Processes data that was created as a result of clientbound packet transformation
+		 * @param packet packet
+		 */
+		protected void process(IPacketData packet) {
+			write(packet);
+		}
+
+		/**
+		 * Called after connection close and netty pipeline destroy
+		 */
+		protected void release() {
+		}
+
+	}
+
+	public static class ServerboundPacketProcessor {
+
+		protected final ConnectionImpl connection;
+		public ServerboundPacketProcessor(ConnectionImpl connection) {
+			this.connection = connection;
+		}
+
+		private ServerboundPacketProcessor next;
+
+		private void release0() {
+			release();
+			if (next != null) {
+				next.release0();
+			}
+		}
+
+		/**
+		 * Actually reads/writes packet
+		 * @param packet packet
+		 */
+		protected final void read(IPacketData packet) {
+			if (next != null) {
+				next.process(packet);
+			} else {
+				PacketType type = packet.getPacketType();
+				switch (type.getDirection()) {
+					case SERVERBOUND: {
+						connection.writeServerboundPacket(packet);
+						return;
+					}
+					case CLIENTBOUND: {
+						connection.writeClientboundPacket(connection.codec, packet);
+						connection.transformerEncoderCtx.flush();
+						return;
+					}
+					case NONE: {
+						packet.writeData(Unpooled.EMPTY_BUFFER);
+						return;
+					}
+					default: {
+						throw new IllegalStateException("Unknown direction");
+					}
+				}
+			}
+		}
+
+		/**
+		 * Processes data that was created as a result of serverbound packet transformation.
+		 * @param packet packet
+		 */
+		protected void process(IPacketData packet) {
+			read(packet);
+		}
+
+		/**
+		 * Called after connection close and netty pipeline destroy
+		 */
+		protected void release() {
+		}
+
+	}
+
+
 
 	protected static class LPacketEvent extends PacketEvent implements AutoCloseable {
 
@@ -320,6 +565,15 @@ public class ConnectionImpl extends Connection {
 
 	public NetworkDataCache getCache() {
 		return cache;
+	}
+
+	protected EntityRemapper entityRemapper;
+
+	public EntityRemapper getEntityRemapper() {
+		if (entityRemapper == null) {
+			entityRemapper = new EntityRemapper(version);
+		}
+		return entityRemapper;
 	}
 
 	@Override

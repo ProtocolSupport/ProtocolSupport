@@ -8,11 +8,11 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 
-	protected final EntityRemapper entityRemapper = new EntityRemapper(version);
+	protected final EntityRemapper entityRemapper = connection.getEntityRemapper();
 
 	public MiddleSpawnNamed(ConnectionImpl connection) {
 		super(connection);
@@ -22,8 +22,8 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 	protected double x;
 	protected double y;
 	protected double z;
-	protected int yaw;
-	protected int pitch;
+	protected byte yaw;
+	protected byte pitch;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
@@ -33,8 +33,8 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();
 		z = serverdata.readDouble();
-		yaw = serverdata.readUnsignedByte();
-		pitch = serverdata.readUnsignedByte();
+		yaw = serverdata.readByte();
+		pitch = serverdata.readByte();
 		entityRemapper.readEntityWithMetadata(entity, serverdata);
 	}
 

@@ -1,11 +1,11 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 
-import java.nio.charset.StandardCharsets;
-
+import io.netty.buffer.ByteBufUtil;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleResourcePack;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -18,10 +18,10 @@ public class ResourcePack extends MiddleResourcePack {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CUSTOM_PAYLOAD_ID);
-		StringSerializer.writeString(serializer, version, "MC|RPack");
-		ArraySerializer.writeShortByteArray(serializer, url.getBytes(StandardCharsets.UTF_8));
+	public RecyclableCollection<? extends IPacketData> toData() {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
+		StringSerializer.writeVarIntUTF8String(serializer, "MC|RPack");
+		ArraySerializer.writeShortByteArray(serializer, to -> ByteBufUtil.writeUtf8(to, url));
 		return RecyclableSingletonList.create(serializer);
 	}
 

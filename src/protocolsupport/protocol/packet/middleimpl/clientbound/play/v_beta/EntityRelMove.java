@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityRelMove;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyRelMoveConverter;
@@ -22,7 +22,7 @@ public class EntityRelMove extends MiddleEntityRelMove {
 		int relMoveZ = relZ / 128;
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		for (RelMove relMove : LegacyRelMoveConverter.getRelMoves(new RelMove(relMoveX, relMoveY, relMoveZ), 127)) {
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_ENTITY_REL_MOVE_ID);
+			ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE);
 			serializer.writeInt(entityId);
 			serializer.writeByte(relMove.getX());
 			serializer.writeByte(relMove.getY());

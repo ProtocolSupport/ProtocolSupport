@@ -1,9 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnExpOrb;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -14,8 +15,8 @@ public class SpawnExpOrb extends MiddleSpawnExpOrb {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_EXP_ORB_ID);
+	public RecyclableCollection<? extends IPacketData> toData() {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_EXP_ORB);
 		serializer.writeInt(entity.getId());
 		serializer.writeInt((int) (x * 32));
 		serializer.writeInt((int) (y * 32));

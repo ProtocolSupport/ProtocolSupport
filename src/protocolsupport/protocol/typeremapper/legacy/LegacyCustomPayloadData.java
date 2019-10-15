@@ -23,14 +23,16 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.CustomPayloadChannelsCache;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.UsedHand;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTList;
+import protocolsupport.protocol.types.nbt.NBTString;
+import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.UsedHand;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTList;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
+import protocolsupport.protocol.utils.i18n.I18NData;
+import protocolsupport.utils.BitUtils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -52,18 +54,18 @@ public class LegacyCustomPayloadData {
 		return RecyclableSingletonList.create(MiddleCustomPayload.create(modernTag, payloadModernTagJoiner.toString().getBytes(StandardCharsets.UTF_8)));
 	}
 
-	public static RecyclableCollection<ServerBoundPacketData> transformBookEdit(ProtocolVersion version, String locale, ByteBuf data) {
-		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version, locale);
-		book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
+	public static RecyclableCollection<ServerBoundPacketData> transformBookEdit(ProtocolVersion version, ByteBuf data) {
+		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version);
 		if (!book.isNull()) {
+			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
 			return RecyclableSingletonList.create(MiddleEditBook.create(book, false, UsedHand.MAIN));
 		} else {
 			return RecyclableEmptyList.get();
 		}
 	}
 
-	public static RecyclableCollection<ServerBoundPacketData> transformBookSign(ProtocolVersion version, String locale, ByteBuf data) {
-		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version, locale);
+	public static RecyclableCollection<ServerBoundPacketData> transformBookSign(ProtocolVersion version, ByteBuf data) {
+		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version);
 		if (!book.isNull()) {
 			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
 			if (version == ProtocolVersion.MINECRAFT_1_8) {
@@ -73,10 +75,9 @@ public class LegacyCustomPayloadData {
 					if (pages != null) {
 						NBTList<NBTString> newPages = new NBTList<>(NBTType.STRING);
 						for (NBTString page : pages.getTags()) {
-							newPages.addTag(new NBTString(ChatAPI.fromJSON(page.getValue()).toLegacyText(locale)));
+							newPages.addTag(new NBTString(ChatAPI.fromJSON(page.getValue()).toLegacyText(I18NData.DEFAULT_LOCALE)));
 						}
 						rootTag.setTag("pages", newPages);
-						book.setNBT(rootTag);
 					}
 				}
 			}
@@ -86,20 +87,20 @@ public class LegacyCustomPayloadData {
 		}
 	}
 
-	public static RecyclableCollection<ServerBoundPacketData> transformStructureBlock(ProtocolVersion version, ByteBuf data) {
+	public static RecyclableCollection<ServerBoundPacketData> transformStructureBlock(ByteBuf data) {
 		Position position = PositionSerializer.readLegacyPositionI(data);
 		MiddleUpdateStructureBlock.Action action = MiddleUpdateStructureBlock.Action.CONSTANT_LOOKUP.getByOrdinal(data.readByte() - 1);
-		MiddleUpdateStructureBlock.Mode mode = MiddleUpdateStructureBlock.Mode.valueOf(StringSerializer.readString(data, version));
-		String name = StringSerializer.readString(data, version);
+		MiddleUpdateStructureBlock.Mode mode = MiddleUpdateStructureBlock.Mode.valueOf(StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE));
+		String name = StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE);
 		byte offsetX = (byte) data.readInt();
 		byte offsetY = (byte) data.readInt();
 		byte offsetZ = (byte) data.readInt();
 		byte sizeX = (byte) data.readInt();
 		byte sizeY = (byte) data.readInt();
 		byte sizeZ = (byte) data.readInt();
-		MiddleUpdateStructureBlock.Mirror mirror = MiddleUpdateStructureBlock.Mirror.valueOf(StringSerializer.readString(data, version));
-		MiddleUpdateStructureBlock.Rotation rotation = MiddleUpdateStructureBlock.Rotation.valueOf(StringSerializer.readString(data, version));
-		String metadata = StringSerializer.readString(data, version);
+		MiddleUpdateStructureBlock.Mirror mirror = MiddleUpdateStructureBlock.Mirror.valueOf(StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE));
+		MiddleUpdateStructureBlock.Rotation rotation = MiddleUpdateStructureBlock.Rotation.valueOf(StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE));
+		String metadata = StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE);
 		int ignoreEntities = data.readBoolean() ? 0x01 : 0;
 		int showAir = data.readBoolean() ? 0x02 : 0;
 		int showBoundingBox = data.readBoolean() ? 0x04 : 0;
@@ -119,9 +120,8 @@ public class LegacyCustomPayloadData {
 		return RecyclableSingletonList.create(MiddleSetBeaconEffect.create(primary, secondary));
 	}
 
-	public static RecyclableCollection<ServerBoundPacketData> transformNameItemSString(ProtocolVersion version, ByteBuf data) {
-		String name = StringSerializer.readString(data, version);
-		return RecyclableSingletonList.create(MiddleNameItem.create(name));
+	public static RecyclableCollection<ServerBoundPacketData> transformNameItemSString(ByteBuf data) {
+		return RecyclableSingletonList.create(MiddleNameItem.create(StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE)));
 	}
 
 	public static RecyclableCollection<ServerBoundPacketData> transformNameItemDString(ByteBuf data) {
@@ -144,29 +144,29 @@ public class LegacyCustomPayloadData {
 		return RecyclableSingletonList.create(MiddleCustomPayload.create(modernName, data));
 	}
 
-	public static RecyclableCollection<ServerBoundPacketData> transformBasicCommandBlockEdit(ProtocolVersion version, ByteBuf data) {
+	public static RecyclableCollection<ServerBoundPacketData> transformBasicCommandBlockEdit(ByteBuf data) {
 		Position position = PositionSerializer.readLegacyPositionI(data);
-		String command = StringSerializer.readString(data, version);
+		String command = StringSerializer.readShortUTF16BEString(data, Short.MAX_VALUE);
 		return RecyclableSingletonList.create(MiddleUpdateCommandBlock.create(
 			position, command, MiddleUpdateCommandBlock.Mode.REDSTONE, 0
 		));
 	}
 
-	public static RecyclableCollection<ServerBoundPacketData> transformAdvancedCommandBlockEdit(ProtocolVersion version, ByteBuf data, boolean useTrackOutput) {
+	public static RecyclableCollection<ServerBoundPacketData> transformAdvancedCommandBlockEdit(ByteBuf data, boolean useTrackOutput) {
 		int type = data.readByte();
 		switch (type) {
 			case 0: {
 				Position position = PositionSerializer.readLegacyPositionI(data);
-				String command = StringSerializer.readString(data, version);
-				boolean trackOutput = useTrackOutput ? data.readBoolean() : false;
+				String command = StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE);
+				int trackOutput = useTrackOutput ? data.readByte() : 0;
 				return RecyclableSingletonList.create(MiddleUpdateCommandBlock.create(
 					position, command, MiddleUpdateCommandBlock.Mode.REDSTONE,
-					(trackOutput ? MiddleUpdateCommandBlock.FLAG_TRACK_OUTPUT : 0)
+					BitUtils.createIBitMaskFromBit(MiddleUpdateCommandBlock.FLAGS_BIT_TRACK_OUTPUT, trackOutput)
 				));
 			}
 			case 1: {
 				int entityId = data.readInt();
-				String command = StringSerializer.readString(data, version);
+				String command = StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE);
 				boolean trackOutput = useTrackOutput ? data.readBoolean() : false;
 				return RecyclableSingletonList.create(MiddleUpdateCommandMinecart.create(
 					entityId, command, trackOutput
@@ -178,12 +178,16 @@ public class LegacyCustomPayloadData {
 		}
 	}
 
-	public static RecyclableCollection<ServerBoundPacketData> transformAutoCommandBlockEdit(ProtocolVersion version, ByteBuf data) {
+	protected static final int[] auto_command_block_bits = new int[] {
+		MiddleUpdateCommandBlock.FLAGS_BIT_TRACK_OUTPUT, MiddleUpdateCommandBlock.FLAGS_BIT_CONDITIONAL, MiddleUpdateCommandBlock.FLAGS_BIT_AUTO
+	};
+
+	public static RecyclableCollection<ServerBoundPacketData> transformAutoCommandBlockEdit(ByteBuf data) {
 		Position position = PositionSerializer.readLegacyPositionI(data);
-		String command = StringSerializer.readString(data, version);
-		boolean trackOutput = data.readBoolean();
+		String command = StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE);
+		int trackOutput = data.readByte();
 		MiddleUpdateCommandBlock.Mode mode = null;
-		switch (StringSerializer.readString(data, version)) {
+		switch (StringSerializer.readVarIntUTF8String(data, 16)) {
 			case "SEQUENCE": {
 				mode = MiddleUpdateCommandBlock.Mode.SEQUENCE;
 				break;
@@ -197,13 +201,11 @@ public class LegacyCustomPayloadData {
 				break;
 			}
 		}
-		boolean conditional = data.readBoolean();
-		boolean auto = data.readBoolean();
+		int conditional = data.readByte();
+		int auto = data.readByte();
 		return RecyclableSingletonList.create(MiddleUpdateCommandBlock.create(
 			position, command, mode,
-			(trackOutput ? MiddleUpdateCommandBlock.FLAG_TRACK_OUTPUT : 0) |
-			(conditional ? MiddleUpdateCommandBlock.FLAG_CONDITIONAL : 0) |
-			(auto ? MiddleUpdateCommandBlock.FLAG_AUTO : 0)
+			BitUtils.createIBitMaskFromBits(auto_command_block_bits, new int[] {trackOutput, conditional, auto})
 		));
 	}
 

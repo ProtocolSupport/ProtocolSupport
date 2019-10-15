@@ -7,11 +7,11 @@ import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
 import protocolsupport.api.MaterialAPI;
+import protocolsupport.protocol.typeremapper.legacy.LegacyBanner;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper.TileEntityWithBlockDataNBTRemapper;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTInt;
-import protocolsupport.protocol.utils.types.nbt.NBTList;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTInt;
+import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupport.utils.CollectionsUtils.ArrayMap.Entry;
 
@@ -20,13 +20,8 @@ public class TileEntityBannerRemapper extends TileEntityWithBlockDataNBTRemapper
 	protected void register(List<Entry<Consumer<NBTCompound>>> list, Material banner, int color) {
 		for (BlockData blockdata : MaterialAPI.getBlockDataList(banner)) {
 			list.add(new ArrayMap.Entry<>(MaterialAPI.getBlockDataNetworkId(blockdata), nbt -> {
-				nbt.setTag("Base", new NBTInt(color));
-				NBTList<NBTCompound> patterns = nbt.getTagListOfType("Patterns", NBTType.COMPOUND);
-				if (patterns != null) {
-					for (NBTCompound pattern : patterns.getTags()) {
-						pattern.setTag("Color", new NBTInt(15 - pattern.getNumberTag("Color").getAsInt()));
-					}
-				}
+				LegacyBanner.transformBanner(nbt);
+				nbt.setTag(CommonNBT.BANNER_BASE, new NBTInt(color));
 			}));
 		}
 	}
@@ -66,4 +61,5 @@ public class TileEntityBannerRemapper extends TileEntityWithBlockDataNBTRemapper
 		register(list, Material.RED_WALL_BANNER, 1);
 		register(list, Material.BLACK_WALL_BANNER, 0);
 	}
+
 }

@@ -3,8 +3,9 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 import org.bukkit.inventory.MainHand;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ServerBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -26,13 +27,13 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 	protected MainHand mainHand;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() {
+	public RecyclableCollection<? extends IPacketData> toNative() {
 		cache.getAttributesCache().setLocale(locale);
 		return RecyclableSingletonList.create(create(locale, viewDist, chatMode, chatColors, skinFlags, mainHand));
 	}
 
 	public static ServerBoundPacketData create(String locale, int viewDist, ChatMode chatMode, boolean chatColors, int skinFlags, MainHand mainHand) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_SETTINGS);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_SETTINGS);
 		StringSerializer.writeVarIntUTF8String(creator, locale);
 		creator.writeByte(viewDist);
 		MiscSerializer.writeVarIntEnum(creator, chatMode);

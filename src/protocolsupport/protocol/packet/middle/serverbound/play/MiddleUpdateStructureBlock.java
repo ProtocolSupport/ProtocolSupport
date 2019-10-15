@@ -1,15 +1,16 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ServerBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.utils.EnumConstantLookups;
-import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
@@ -37,7 +38,7 @@ public abstract class MiddleUpdateStructureBlock extends ServerBoundMiddlePacket
 	protected byte flags;
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() {
+	public RecyclableCollection<? extends IPacketData> toNative() {
 		return RecyclableSingletonList.create(create(position, action, mode, name, offsetX, offsetY, offsetZ, sizeX, sizeY, sizeZ, mirror, rotation, metadata, integrity, seed, flags));
 	}
 
@@ -45,7 +46,7 @@ public abstract class MiddleUpdateStructureBlock extends ServerBoundMiddlePacket
 		byte offsetX, byte offsetY, byte offsetZ, byte sizeX, byte sizeY, byte sizeZ,
 		Mirror mirror, Rotation rotation, String metadata, float integrity, long seed, byte flags
 	) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacket.PLAY_UPDATE_STRUCTURE_BLOCK);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_UPDATE_STRUCTURE_BLOCK);
 		PositionSerializer.writePosition(creator, position);
 		MiscSerializer.writeVarIntEnum(creator, action);
 		MiscSerializer.writeVarIntEnum(creator, mode);

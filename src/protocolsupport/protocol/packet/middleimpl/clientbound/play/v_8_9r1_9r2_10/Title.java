@@ -3,9 +3,10 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTitle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
@@ -19,14 +20,14 @@ public class Title extends MiddleTitle {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_TITLE_ID);
+	public RecyclableCollection<? extends IPacketData> toData() {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_TITLE);
 		int actionId = action.ordinal();
 		VarNumberSerializer.writeVarInt(serializer, actionId > 2 ? actionId - 1 : actionId);
 		switch (action) {
 			case SET_TITLE:
 			case SET_SUBTITLE: {
-				StringSerializer.writeString(serializer, version, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), message)));
+				StringSerializer.writeVarIntUTF8String(serializer, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), message)));
 				break;
 			}
 			case SET_TIMES: {

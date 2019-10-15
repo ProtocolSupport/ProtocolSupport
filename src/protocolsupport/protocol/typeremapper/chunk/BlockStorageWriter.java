@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
+import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.utils.Utils;
 
 public class BlockStorageWriter {
@@ -8,10 +9,10 @@ public class BlockStorageWriter {
 	private final int bitsPerBlock;
 	private final long singleValMask;
 
-	public BlockStorageWriter(int bitsPerBlock, int blocks) {
+	public BlockStorageWriter(int bitsPerBlock) {
 		this.bitsPerBlock = bitsPerBlock;
 		this.singleValMask = (1L << bitsPerBlock) - 1L;
-		this.blockdata = new long[Utils.ceilToBase(blocks * bitsPerBlock, 64) / 64];
+		this.blockdata = new long[Utils.ceilToBase(ChunkConstants.BLOCKS_IN_SECTION * bitsPerBlock, 64) / 64];
 	}
 
 	public void setBlockState(int index, int blockstate) {

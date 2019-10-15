@@ -1,16 +1,17 @@
 package protocolsupport.utils;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CachedInstanceOfChain<T> {
 
 	private final Map<Class<?>, T> knownPaths = new LinkedHashMap<>();
-	private final Map<Class<?>, T> cachedPaths = new HashMap<>();
+	private final Map<Class<?>, T> cachedPaths = new ConcurrentHashMap<>();
 
 	public void setKnownPath(Class<?> clazz, T path) {
 		knownPaths.put(clazz, path);
+		cachedPaths.put(clazz, path);
 	}
 
 	public T selectPath(Class<?> clazz) {

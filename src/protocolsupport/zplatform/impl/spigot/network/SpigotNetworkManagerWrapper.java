@@ -14,11 +14,11 @@ import com.mojang.authlib.properties.Property;
 import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.minecraft.server.v1_13_R2.ChatComponentText;
-import net.minecraft.server.v1_13_R2.NetworkManager;
-import net.minecraft.server.v1_13_R2.Packet;
-import net.minecraft.server.v1_13_R2.PacketListener;
-import net.minecraft.server.v1_13_R2.PlayerConnection;
+import net.minecraft.server.v1_14_R1.ChatComponentText;
+import net.minecraft.server.v1_14_R1.NetworkManager;
+import net.minecraft.server.v1_14_R1.Packet;
+import net.minecraft.server.v1_14_R1.PacketListener;
+import net.minecraft.server.v1_14_R1.PlayerConnection;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
@@ -27,7 +27,8 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	private final NetworkManager internal;
-	public SpigotNetworkManagerWrapper(NetworkManager internal) {
+	public SpigotNetworkManagerWrapper(Channel channel, NetworkManager internal) {
+		super(channel);
 		this.internal = internal;
 	}
 
@@ -54,11 +55,6 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 	@Override
 	public boolean isConnected() {
 		return internal.isConnected();
-	}
-
-	@Override
-	public Channel getChannel() {
-		return internal.channel;
 	}
 
 	@Override

@@ -1,14 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import io.netty.buffer.UnpooledHeapByteBuf;
 import io.netty.util.Recycler;
 import io.netty.util.Recycler.Handle;
-import protocolsupport.protocol.packet.ServerBoundPacket;
-import protocolsupport.utils.netty.WrappingBuffer;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.utils.recyclable.Recyclable;
 
-public class ServerBoundPacketData extends WrappingBuffer implements Recyclable {
+public class ServerBoundPacketData extends UnpooledHeapByteBuf implements Recyclable, IPacketData {
 
 	protected static final Recycler<ServerBoundPacketData> recycler = new Recycler<ServerBoundPacketData>() {
 		@Override
@@ -17,7 +16,7 @@ public class ServerBoundPacketData extends WrappingBuffer implements Recyclable 
 		}
 	};
 
-	public static ServerBoundPacketData create(ServerBoundPacket packet) {
+	public static ServerBoundPacketData create(PacketType packet) {
 		ServerBoundPacketData packetdata = recycler.get();
 		packetdata.packet = packet;
 		return packetdata;
@@ -25,19 +24,11 @@ public class ServerBoundPacketData extends WrappingBuffer implements Recyclable 
 
 	private final Handle<ServerBoundPacketData> handle;
 	private ServerBoundPacketData(Handle<ServerBoundPacketData> handle) {
-		super(Unpooled.buffer());
+		super(ALLOCATOR, 1024, Integer.MAX_VALUE);
 		this.handle = handle;
 	}
 
-	private ServerBoundPacket packet;
-
-	public ServerBoundPacket getPacketType() {
-		return packet;
-	}
-
-	public int getPacketId() {
-		return packet.getId();
-	}
+	private PacketType packet;
 
 	@Override
 	public void recycle() {
@@ -47,7 +38,27 @@ public class ServerBoundPacketData extends WrappingBuffer implements Recyclable 
 	}
 
 	@Override
-	public void setBuf(ByteBuf buf) {
+	public PacketType getPacketType() {
+		return packet;
+	}
+
+	@Override
+	public int getDataLength() {
+		return readableBytes();
+	}
+
+	@Override
+	public void writeData(ByteBuf to) {
+		to.writeBytes(this);
+	}
+
+	@Override
+	public ServerBoundPacketData clone() {
+		ServerBoundPacketData packetdata = ServerBoundPacketData.create(getPacketType());
+		markReaderIndex();
+		packetdata.writeBytes(this);
+		resetReaderIndex();
+		return packetdata;
 	}
 
 }

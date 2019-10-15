@@ -1,122 +1,34 @@
-[
-  {
-    "id": 1,
-    "name": "speed"
-  },
-  {
-    "id": 2,
-    "name": "slowness"
-  },
-  {
-    "id": 3,
-    "name": "haste"
-  },
-  {
-    "id": 4,
-    "name": "mining_fatigue"
-  },
-  {
-    "id": 5,
-    "name": "strength"
-  },
-  {
-    "id": 6,
-    "name": "instant_health"
-  },
-  {
-    "id": 7,
-    "name": "instant_damage"
-  },
-  {
-    "id": 8,
-    "name": "jump_boost"
-  },
-  {
-    "id": 9,
-    "name": "nausea"
-  },
-  {
-    "id": 10,
-    "name": "regeneration"
-  },
-  {
-    "id": 11,
-    "name": "resistance"
-  },
-  {
-    "id": 12,
-    "name": "fire_resistance"
-  },
-  {
-    "id": 13,
-    "name": "water_breathing"
-  },
-  {
-    "id": 14,
-    "name": "invisibility"
-  },
-  {
-    "id": 15,
-    "name": "blindness"
-  },
-  {
-    "id": 16,
-    "name": "night_vision"
-  },
-  {
-    "id": 17,
-    "name": "hunger"
-  },
-  {
-    "id": 18,
-    "name": "weakness"
-  },
-  {
-    "id": 19,
-    "name": "poison"
-  },
-  {
-    "id": 20,
-    "name": "wither"
-  },
-  {
-    "id": 21,
-    "name": "health_boost"
-  },
-  {
-    "id": 22,
-    "name": "absorption"
-  },
-  {
-    "id": 23,
-    "name": "saturation"
-  },
-  {
-    "id": 24,
-    "name": "glowing"
-  },
-  {
-    "id": 25,
-    "name": "levitation"
-  },
-  {
-    "id": 26,
-    "name": "luck"
-  },
-  {
-    "id": 27,
-    "name": "unluck"
-  },
-  {
-    "id": 28,
-    "name": "slow_falling"
-  },
-  {
-    "id": 29,
-    "name": "conduit_power"
-  },
-  {
-    "id": 30,
-    "name": "dolphins_grace"
-  }
-]
+{
+  "1": "speed",
+  "2": "slowness",
+  "3": "haste",
+  "4": "mining_fatigue",
+  "5": "strength",
+  "6": "instant_health",
+  "7": "instant_damage",
+  "8": "jump_boost",
+  "9": "nausea",
+  "10": "regeneration",
+  "11": "resistance",
+  "12": "fire_resistance",
+  "13": "water_breathing",
+  "14": "invisibility",
+  "15": "blindness",
+  "16": "night_vision",
+  "17": "hunger",
+  "18": "weakness",
+  "19": "poison",
+  "20": "wither",
+  "21": "health_boost",
+  "22": "absorption",
+  "23": "saturation",
+  "24": "glowing",
+  "25": "levitation",
+  "26": "luck",
+  "27": "unluck",
+  "28": "slow_falling",
+  "29": "conduit_power",
+  "30": "dolphins_grace",
+  "31": "bad_omen",
+  "32": "hero_of_the_village"
+}

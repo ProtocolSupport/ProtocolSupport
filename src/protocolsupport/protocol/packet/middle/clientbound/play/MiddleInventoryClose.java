@@ -10,11 +10,11 @@ public abstract class MiddleInventoryClose extends ClientBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected int windowId;
+	protected byte windowId;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		windowId = serverdata.readUnsignedByte();
+		windowId = serverdata.readByte();
 	}
 
 	@Override

@@ -1,13 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import io.netty.buffer.UnpooledHeapByteBuf;
 import io.netty.util.Recycler;
 import io.netty.util.Recycler.Handle;
-import protocolsupport.utils.netty.WrappingBuffer;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.utils.recyclable.Recyclable;
 
-public class ClientBoundPacketData extends WrappingBuffer implements Recyclable {
+public class ClientBoundPacketData extends UnpooledHeapByteBuf implements Recyclable, IPacketData {
 
 	protected static final Recycler<ClientBoundPacketData> recycler = new Recycler<ClientBoundPacketData>() {
 		@Override
@@ -16,33 +16,49 @@ public class ClientBoundPacketData extends WrappingBuffer implements Recyclable 
 		}
 	};
 
-	public static ClientBoundPacketData create(int packetId) {
+	public static ClientBoundPacketData create(PacketType packetType) {
 		ClientBoundPacketData packetdata = recycler.get();
-		packetdata.packetId = packetId;
+		packetdata.packetType = packetType;
 		return packetdata;
 	}
 
 	private final Handle<ClientBoundPacketData> handle;
 	private ClientBoundPacketData(Handle<ClientBoundPacketData> handle) {
-		super(Unpooled.buffer());
+		super(ALLOCATOR, 1024, Integer.MAX_VALUE);
 		this.handle = handle;
 	}
 
+	private PacketType packetType;
+
 	@Override
 	public void recycle() {
-		packetId = 0;
 		clear();
+		packetType = null;
 		handle.recycle(this);
 	}
 
-	private int packetId;
-
-	public int getPacketId() {
-		return packetId;
+	@Override
+	public PacketType getPacketType() {
+		return packetType;
 	}
 
 	@Override
-	public void setBuf(ByteBuf buf) {
+	public int getDataLength() {
+		return readableBytes();
+	}
+
+	@Override
+	public void writeData(ByteBuf to) {
+		to.writeBytes(this);
+	}
+
+	@Override
+	public ClientBoundPacketData clone() {
+		ClientBoundPacketData packetdata = ClientBoundPacketData.create(getPacketType());
+		markReaderIndex();
+		packetdata.writeBytes(this);
+		resetReaderIndex();
+		return packetdata;
 	}
 
 }

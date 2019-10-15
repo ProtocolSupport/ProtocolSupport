@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryConfirmTransaction;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
@@ -15,7 +15,7 @@ public class InventoryConfirmTransaction extends MiddleInventoryConfirmTransacti
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_WINDOW_TRANSACTION_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_TRANSACTION);
 		serializer.writeByte(windowId);
 		serializer.writeShort(actionNumber);
 		serializer.writeBoolean(accepted);

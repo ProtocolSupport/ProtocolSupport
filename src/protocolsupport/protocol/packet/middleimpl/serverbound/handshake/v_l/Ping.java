@@ -4,8 +4,9 @@ import org.bukkit.Bukkit;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ServerBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -24,15 +25,15 @@ public class Ping extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() {
+	public RecyclableCollection<? extends IPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-		ServerBoundPacketData hsscreator = ServerBoundPacketData.create(ServerBoundPacket.HANDSHAKE_START);
+		ServerBoundPacketData hsscreator = ServerBoundPacketData.create(PacketType.SERVERBOUND_HANDSHAKE_START);
 		VarNumberSerializer.writeVarInt(hsscreator, ProtocolVersionsHelper.LATEST_PC.getId());
 		StringSerializer.writeVarIntUTF8String(hsscreator, "");
 		hsscreator.writeShort(Bukkit.getPort());
 		VarNumberSerializer.writeVarInt(hsscreator, 1);
 		packets.add(hsscreator);
-		packets.add(ServerBoundPacketData.create(ServerBoundPacket.STATUS_REQUEST));
+		packets.add(ServerBoundPacketData.create(PacketType.SERVERBOUND_STATUS_REQUEST));
 		return packets;
 	}
 

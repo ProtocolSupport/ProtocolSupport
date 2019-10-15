@@ -1,42 +1,46 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunk;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBeta;
-import protocolsupport.protocol.typeremapper.chunk.ChunkTransformerBeta.ChunkUpdateData;
-import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
-import protocolsupport.protocol.utils.types.ChunkCoord;
+import protocolsupport.protocol.typeremapper.chunk.ChunkWriterBeta;
+import protocolsupport.protocol.typeremapper.chunk.ChunkWriterBeta.ChunkUpdateData;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.types.ChunkCoord;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
-public class Chunk extends MiddleChunk {
-
-	protected final ChunkTransformerBeta transformer = new ChunkTransformerBeta(LegacyBlockData.REGISTRY.getTable(version), TileEntityRemapper.getRemapper(version), cache.getTileCache());
+public class Chunk extends AbstractChunk {
 
 	public Chunk(ConnectionImpl connection) {
 		super(connection);
 	}
 
+	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
-		transformer.loadData(chunk, data, bitmask, hasSkyLight, full, tiles);
 
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 
 		if (full) {
-			packets.add(createPreChunk(chunk, true));
+			packets.add(createPreChunk(coord, true));
 		}
-		for (ChunkUpdateData udata : transformer.toLegacyData(full)) {
-			ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_SINGLE_ID);
-			chunkdata.writeInt(chunk.getX() << 4);
+		for (ChunkUpdateData udata : ChunkWriterBeta.serializeChunk(
+			full, blockMask,
+			blockDataRemappingTable,
+			cachedChunk, hasSkyLight,
+			sectionNumber -> {}
+		)) {
+			ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+			chunkdata.writeInt(coord.getX() << 4);
 			chunkdata.writeShort(udata.getSectionStart() << 4);
-			chunkdata.writeInt(chunk.getZ() << 4);
+			chunkdata.writeInt(coord.getZ() << 4);
 			chunkdata.writeByte(15); //size x
 			chunkdata.writeByte((udata.getSectionCount() << 4) - 1);
 			chunkdata.writeByte(15); //size z
@@ -50,8 +54,8 @@ public class Chunk extends MiddleChunk {
 	}
 
 	public static ClientBoundPacketData createPreChunk(ChunkCoord chunk, boolean load) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_CHUNK_UNLOAD_ID);
-		PositionSerializer.writeChunkCoord(serializer, chunk);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_UNLOAD);
+		PositionSerializer.writeIntChunkCoord(serializer, chunk);
 		serializer.writeBoolean(load);
 		return serializer;
 	}

@@ -1,10 +1,12 @@
 package protocolsupport.zplatform.impl.spigot.network.handler;
 
-import net.minecraft.server.v1_13_R2.IChatBaseComponent;
-import net.minecraft.server.v1_13_R2.PacketStatusInListener;
-import net.minecraft.server.v1_13_R2.PacketStatusInPing;
-import net.minecraft.server.v1_13_R2.PacketStatusInStart;
+import net.minecraft.server.v1_14_R1.IChatBaseComponent;
+import net.minecraft.server.v1_14_R1.NetworkManager;
+import net.minecraft.server.v1_14_R1.PacketStatusInListener;
+import net.minecraft.server.v1_14_R1.PacketStatusInPing;
+import net.minecraft.server.v1_14_R1.PacketStatusInStart;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;
+import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotStatusListener extends AbstractStatusListener implements PacketStatusInListener {
@@ -25,6 +27,11 @@ public class SpigotStatusListener extends AbstractStatusListener implements Pack
 	@Override
 	public void a(PacketStatusInPing packet) {
 		handlePing(packet.b());
+	}
+
+	@Override
+	public NetworkManager a() {
+		return ((SpigotNetworkManagerWrapper) this.networkManager).unwrap();
 	}
 
 }

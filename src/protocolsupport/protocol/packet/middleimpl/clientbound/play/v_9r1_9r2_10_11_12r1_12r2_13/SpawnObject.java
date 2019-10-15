@@ -1,29 +1,40 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry;
+import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry.ObjectDataRemappingTable;
+import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SpawnObject extends MiddleSpawnObject {
+
+	protected final ObjectDataRemappingTable entityObjectDataRemappingTable = ObjectDataRemappersRegistry.REGISTRY.getTable(version);
 
 	public SpawnObject(ConnectionImpl connection) {
 		super(connection);
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public RecyclableCollection<? extends IPacketData> toData() {
 		NetworkEntityType type = entityRemapper.getRemappedEntityType();
-		objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID);
+		if (type.isOfType(NetworkEntityType.MINECART)) {
+			objectdata = LegacyEntityId.getMinecartObjectData(type);
+		} else {
+			objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
+		}
+
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		MiscSerializer.writeUUID(serializer, entity.getUUID());
-		serializer.writeByte(type.getNetworkTypeId());
+		serializer.writeByte(LegacyEntityId.getObjectIntId(type));
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);
 		serializer.writeDouble(z);

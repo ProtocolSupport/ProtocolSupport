@@ -3,19 +3,13 @@ package protocolsupport.zplatform;
 import java.security.PublicKey;
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.utils.authlib.GameProfile;
-import protocolsupport.protocol.utils.types.Position;
 
 public interface PlatformPacketFactory {
-
-	public Object createInboundInventoryClosePacket();
-
-	public Object createInboundKeepAlivePacket(long keepAliveId);
 
 	public Object createOutboundChatPacket(String message, int position);
 
@@ -38,8 +32,6 @@ public interface PlatformPacketFactory {
 	public Object createLoginEncryptionBeginPacket(PublicKey publicKey, byte[] randomBytes);
 
 	public Object createSetCompressionPacket(int threshold);
-
-	public Object createBlockBreakSoundPacket(Position pos, Material type);
 
 	public Object createStatusPongPacket(long pingId);
 
@@ -88,8 +80,6 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayHeldSlotPacketId();
 
-	public int getOutPlayBedPacketId();
-
 	public int getOutPlayAnimationPacketId();
 
 	public int getOutPlaySpawnNamedPacketId();
@@ -130,6 +120,8 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayEntityEffectRemovePacketId();
 
+	public int getOutPlayEntitySoundPacketId();
+
 	public int getOutPlayExperiencePacketId();
 
 	public int getOutPlayEntityAttributesPacketId();
@@ -157,6 +149,8 @@ public interface PlatformPacketFactory {
 	public int getOutPlaySpawnWeatherPacketId();
 
 	public int getOutPlayWindowOpenPacketId();
+
+	public int getOutPlayWindowHorseOpenPacketId();
 
 	public int getOutPlayWindowClosePacketId();
 
@@ -239,6 +233,18 @@ public interface PlatformPacketFactory {
 	public int getOutPlayStopSoundPacketId();
 
 	public int getOutPlayLookAtPacketId();
+
+	public int getOutPlayChunkLightPacketId();
+
+	public int getOutPlaySetViewCenterPacketId();
+
+	public int getOutPlayUpdateViewDistancePacketId();
+
+	public int getOutPlayMerchantTradeListPacketId();
+
+	public int getOutPlayBookOpenPacketId();
+
+	public int getOutPlayAcknowledgePlayerDiggingId();
 
 
 	public int getInHandshakeStartPacketId();

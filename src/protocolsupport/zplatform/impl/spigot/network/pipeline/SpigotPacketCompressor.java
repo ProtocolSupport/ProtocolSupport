@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.utils.netty.ReusableReadHeapBuffer;
 
-public class SpigotPacketCompressor extends net.minecraft.server.v1_13_R2.PacketCompressor {
+public class SpigotPacketCompressor extends net.minecraft.server.v1_14_R1.PacketCompressor {
 
 	protected final Compressor compressor = Compressor.create();
 	protected final int threshold;

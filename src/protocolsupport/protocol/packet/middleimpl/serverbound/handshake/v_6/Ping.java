@@ -2,8 +2,9 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_6;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ServerBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -24,23 +25,23 @@ public class Ping extends ServerBoundMiddlePacket {
 	public void readFromClientData(ByteBuf clientdata) {
 		clientdata.readUnsignedByte();
 		clientdata.readUnsignedByte();
-		StringSerializer.readString(clientdata, version);
+		StringSerializer.readShortUTF16BEString(clientdata, Short.MAX_VALUE);
 		clientdata.readUnsignedShort();
 		clientdata.readUnsignedByte();
-		hostname = StringSerializer.readString(clientdata, version);
+		hostname = StringSerializer.readShortUTF16BEString(clientdata, Short.MAX_VALUE);
 		port = clientdata.readInt();
 	}
 
 	@Override
-	public RecyclableCollection<ServerBoundPacketData> toNative() {
+	public RecyclableCollection<? extends IPacketData> toNative() {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
-		ServerBoundPacketData hsscreator = ServerBoundPacketData.create(ServerBoundPacket.HANDSHAKE_START);
+		ServerBoundPacketData hsscreator = ServerBoundPacketData.create(PacketType.SERVERBOUND_HANDSHAKE_START);
 		VarNumberSerializer.writeVarInt(hsscreator, ProtocolVersionsHelper.LATEST_PC.getId());
 		StringSerializer.writeVarIntUTF8String(hsscreator, hostname);
 		hsscreator.writeShort(port);
 		VarNumberSerializer.writeVarInt(hsscreator, 1);
 		packets.add(hsscreator);
-		packets.add(ServerBoundPacketData.create(ServerBoundPacket.STATUS_REQUEST));
+		packets.add(ServerBoundPacketData.create(PacketType.SERVERBOUND_STATUS_REQUEST));
 		return packets;
 	}
 

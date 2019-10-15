@@ -1,39 +1,31 @@
 package protocolsupport.protocol.typeremapper.tile;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.ObjIntConsumer;
-import java.util.stream.IntStream;
 
-import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
-
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.ints.IntSet;
-import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHeadToDragonPlayerHeadComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
+import protocolsupport.protocol.types.TileEntity;
+import protocolsupport.protocol.types.TileEntityType;
+import protocolsupport.protocol.types.nbt.NBTByte;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTNumber;
+import protocolsupport.protocol.types.nbt.NBTString;
+import protocolsupport.protocol.types.nbt.NBTType;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
-import protocolsupport.protocol.utils.types.Position;
-import protocolsupport.protocol.utils.types.TileEntity;
-import protocolsupport.protocol.utils.types.TileEntityType;
-import protocolsupport.protocol.utils.types.nbt.NBTByte;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTNumber;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupportbuildprocessor.Preload;
 
@@ -68,9 +60,7 @@ public class TileEntityRemapper {
 	protected static void register(TileEntityType type, TileEntityWithBlockDataNBTRemapper transformer, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
 			TileEntityRemapper remapper = tileEntityRemappers.get(version);
-			IntStream.rangeClosed(transformer.remappers.getMinKey(), transformer.remappers.getMaxKey())
-			.filter(i -> transformer.remappers.get(i) != null)
-			.forEach(remapper.tileNeedsBlockData::add);
+			remapper.tileNeedsBlockData.add(type);
 			remapper.tileToTile
 			.computeIfAbsent(type, k -> new ArrayList<>())
 			.add(transformer);
@@ -94,16 +84,6 @@ public class TileEntityRemapper {
 		}
 	}
 
-	protected static void registerLegacyState(Material material, Function<Position, TileEntity> transformer, ProtocolVersion... versions) {
-		MaterialAPI.getBlockDataList(material).forEach(blockdata -> registerLegacyState(blockdata, transformer, versions));
-	}
-
-	protected static void registerLegacyState(BlockData blockdata, Function<Position, TileEntity> transformer, ProtocolVersion... versions) {
-		for (ProtocolVersion version : versions) {
-			tileEntityRemappers.get(version).blockdataToTile.put(MaterialAPI.getBlockDataNetworkId(blockdata), transformer);
-		}
-	}
-
 
 	static {
 		registerPerVersion(
@@ -120,6 +100,9 @@ public class TileEntityRemapper {
 						type = NetworkEntityType.PIG;
 					} else {
 						type = CommonNBT.getSpawnedMobType(spawndataTag);
+						if (type == NetworkEntityType.NONE) {
+							type = NetworkEntityType.PIG;
+						}
 					}
 					spawndataTag.setTag("id", new NBTString(entityRemapTable.getRemap(type).getLeft().getKey()));
 				};
@@ -131,6 +114,8 @@ public class TileEntityRemapper {
 
 		register(TileEntityType.BANNER, new TileEntityBannerRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
 		register(TileEntityType.SKULL, new TileEntitySkullRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
+
+		register(TileEntityType.BED, new TileEntityBedRemapper(), ProtocolVersionsHelper.ALL_1_12);
 
 		register(TileEntityType.MOB_SPAWNER, new TileEntityToLegacyTypeNameRemapper("MobSpawner"), ProtocolVersionsHelper.BEFORE_1_11);
 		register(TileEntityType.COMMAND_BLOCK, new TileEntityToLegacyTypeNameRemapper("Control"), ProtocolVersionsHelper.BEFORE_1_11);
@@ -189,29 +174,14 @@ public class TileEntityRemapper {
 			tile -> PlayerHeadToLegacyOwnerComplexRemapper.remap(tile.getNBT(), "Owner", "ExtraType"),
 			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5)
 		);
-
-		registerLegacyState(Material.WHITE_BED, new TileEntityBedSupplier(0), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.ORANGE_BED, new TileEntityBedSupplier(1), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.MAGENTA_BED, new TileEntityBedSupplier(2), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.LIGHT_BLUE_BED, new TileEntityBedSupplier(3), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.YELLOW_BED, new TileEntityBedSupplier(4), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.LIME_BED, new TileEntityBedSupplier(5), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.PINK_BED, new TileEntityBedSupplier(6), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.GRAY_BED, new TileEntityBedSupplier(7), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.LIGHT_GRAY_BED, new TileEntityBedSupplier(8), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.CYAN_BED, new TileEntityBedSupplier(9), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.PURPLE_BED, new TileEntityBedSupplier(10), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.BLUE_BED, new TileEntityBedSupplier(11), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.BROWN_BED, new TileEntityBedSupplier(12), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.GREEN_BED, new TileEntityBedSupplier(13), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.RED_BED, new TileEntityBedSupplier(14), ProtocolVersionsHelper.ALL_1_12);
-		registerLegacyState(Material.BLACK_BED, new TileEntityBedSupplier(15), ProtocolVersionsHelper.ALL_1_12);
 	}
 
 	protected final Map<TileEntityType, List<ObjIntConsumer<TileEntity>>> tileToTile = new EnumMap<>(TileEntityType.class);
-	protected final IntSet tileNeedsBlockData = new IntOpenHashSet();
+	protected final Set<TileEntityType> tileNeedsBlockData = Collections.newSetFromMap(new EnumMap<>(TileEntityType.class));
 
-	protected final Int2ObjectMap<Function<Position, TileEntity>> blockdataToTile = new Int2ObjectOpenHashMap<>();
+	public TileEntity remap(TileEntity tileentity) {
+		return remap(tileentity, -1);
+	}
 
 	public TileEntity remap(TileEntity tileentity, int blockdata) {
 		List<ObjIntConsumer<TileEntity>> transformers = tileToTile.get(tileentity.getType());
@@ -223,20 +193,8 @@ public class TileEntityRemapper {
 		return tileentity;
 	}
 
-	public TileEntity getLegacyTileFromBlock(Position position, int blockdata) {
-		Function<Position, TileEntity> constructor = blockdataToTile.get(blockdata);
-		if (constructor != null) {
-			return constructor.apply(position);
-		}
-		return null;
-	}
-
-	public boolean tileThatNeedsBlockData(int blockdata) {
-		return tileNeedsBlockData.contains(blockdata);
-	}
-
-	public boolean usedToBeTile(int blockdata) {
-		return blockdataToTile.containsKey(blockdata);
+	public boolean tileThatNeedsBlockData(TileEntityType type) {
+		return tileNeedsBlockData.contains(type);
 	}
 
 }

@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -38,7 +38,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 				break;
 			}
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_PAINTING_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_PAINTING);
 		serializer.writeInt(entity.getId());
 		StringSerializer.writeString(serializer, version, LegacyPainting.getName(type));
 		PositionSerializer.writeLegacyPositionI(serializer, position);

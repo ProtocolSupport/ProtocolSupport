@@ -12,8 +12,8 @@ public abstract class MiddleEntityRelMoveLook extends MiddleEntity {
 	protected int relX;
 	protected int relY;
 	protected int relZ;
-	protected int yaw;
-	protected int pitch;
+	protected byte yaw;
+	protected byte pitch;
 	protected boolean onGround;
 
 	@Override

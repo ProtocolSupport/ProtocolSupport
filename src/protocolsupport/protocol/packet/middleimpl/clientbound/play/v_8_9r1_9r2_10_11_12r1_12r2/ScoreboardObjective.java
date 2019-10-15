@@ -1,9 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardObjective;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
@@ -17,13 +18,13 @@ public class ScoreboardObjective extends MiddleScoreboardObjective {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SCOREBOARD_OBJECTIVE_ID);
-		StringSerializer.writeString(serializer, version, name);
+	public RecyclableCollection<? extends IPacketData> toData() {
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_OBJECTIVE);
+		StringSerializer.writeVarIntUTF8String(serializer, name);
 		MiscSerializer.writeByteEnum(serializer, mode);
 		if (mode != Mode.REMOVE) {
-			StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(value.toLegacyText(cache.getAttributesCache().getLocale()), 32));
-			StringSerializer.writeString(serializer, version, getTypeString(type));
+			StringSerializer.writeVarIntUTF8String(serializer, LegacyChat.clampLegacyText(value.toLegacyText(cache.getAttributesCache().getLocale()), 32));
+			StringSerializer.writeVarIntUTF8String(serializer, getTypeString(type));
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

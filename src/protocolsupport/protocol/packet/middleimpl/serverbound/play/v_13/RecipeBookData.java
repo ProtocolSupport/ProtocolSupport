@@ -10,6 +10,10 @@ public class RecipeBookData extends MiddleRecipeBookData {
 
 	public RecipeBookData(ConnectionImpl connection) {
 		super(connection);
+		blastingRecipeBookOpen = false;
+		blastingRecipeBookFiltering = false;
+		smokingRecipeBookOpen = false;
+		smokingRecipeBookFiltering = false;
 	}
 
 	@Override
@@ -17,7 +21,7 @@ public class RecipeBookData extends MiddleRecipeBookData {
 		type = MiscSerializer.readVarIntEnum(clientdata, Type.CONSTANT_LOOKUP);
 		switch (type) {
 			case DISPLAYED_RECIPE: {
-				recipeId = StringSerializer.readString(clientdata, version);
+				recipeId = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
 				break;
 			}
 			case RECIPE_BOOK_STATUS: {

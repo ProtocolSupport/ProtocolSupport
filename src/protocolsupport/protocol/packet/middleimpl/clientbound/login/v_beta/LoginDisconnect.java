@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.login.v_beta;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.login.MiddleLoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -16,7 +16,7 @@ public class LoginDisconnect extends MiddleLoginDisconnect {
 
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.LOGIN_DISCONNECT_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LOGIN_DISCONNECT);
 		StringSerializer.writeString(serializer, version, message.toLegacyText(cache.getAttributesCache().getLocale()));
 		return RecyclableSingletonList.create(serializer);
 	}

@@ -7,12 +7,13 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.DataWatcherSerializer;
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
-import protocolsupport.protocol.typeremapper.entity.metadata.DataWatcherObjectRemapper;
-import protocolsupport.protocol.utils.datawatcher.DataWatcherObject;
-import protocolsupport.protocol.utils.networkentity.NetworkEntity;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.NetworkEntityMetadataObjectRemapper;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class EntityRemapper {
@@ -22,11 +23,16 @@ public class EntityRemapper {
 		this.table = EntityRemappersRegistry.REGISTRY.getTable(version);
 	}
 
+	public NetworkEntityType getRemap(NetworkEntityType from) {
+		return table.getRemap(from).getLeft();
+	}
+
 	protected NetworkEntity originalEntity;
-	protected final ArrayMap<DataWatcherObject<?>> originalMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
+	//while meta indexes can be now up to 255, we actually use up to 31
+	protected final ArrayMap<NetworkEntityMetadataObject<?>> originalMetadata = new ArrayMap<>(31);
 
 	protected NetworkEntityType remappedEntityType;
-	protected final ArrayMap<DataWatcherObject<?>> remappedMetadata = new ArrayMap<>(DataWatcherSerializer.MAX_USED_META_INDEX + 1);
+	protected final NetworkEntityMetadataList remappedMetadata = new NetworkEntityMetadataList();
 
 	public void readEntity(NetworkEntity entity) {
 		if (entity == null) {
@@ -41,11 +47,11 @@ public class EntityRemapper {
 		}
 		originalEntity = entity;
 		originalMetadata.clear();
-		DataWatcherSerializer.readDataTo(serverdata, originalMetadata);
+		NetworkEntityMetadataSerializer.readDataTo(serverdata, originalMetadata);
 	}
 
 	public void remap(boolean metadata) {
-		Pair<NetworkEntityType, List<DataWatcherObjectRemapper>> entityRemapper = table.getRemap(originalEntity.getType());
+		Pair<NetworkEntityType, List<NetworkEntityMetadataObjectRemapper>> entityRemapper = table.getRemap(originalEntity.getType());
 		if (entityRemapper == null) {
 			throw new IllegalStateException(MessageFormat.format("Missing entity remapper entry for entity type {0}", originalEntity.getType()));
 		}
@@ -53,20 +59,20 @@ public class EntityRemapper {
 		if (metadata) {
 			remappedMetadata.clear();
 			entityRemapper.getRight().forEach(remapper -> remapper.remap(originalEntity, originalMetadata, remappedMetadata));
-			originalEntity.getDataCache().setFirstMeta(false);
+			originalEntity.getDataCache().unsetFirstMeta();
 		}
+	}
+
+	public ArrayMap<NetworkEntityMetadataObject<?>> getOriginalMetadata() {
+		return originalMetadata;
 	}
 
 	public NetworkEntityType getRemappedEntityType() {
 		return remappedEntityType;
 	}
 
-	public ArrayMap<DataWatcherObject<?>> getRemappedMetadata() {
+	public NetworkEntityMetadataList getRemappedMetadata() {
 		return remappedMetadata;
-	}
-
-	public ArrayMap<DataWatcherObject<?>> getOriginalMetadata() {
-		return originalMetadata;
 	}
 
 }

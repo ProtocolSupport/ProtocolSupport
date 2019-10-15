@@ -5,46 +5,54 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClose;
+import protocolsupport.protocol.packet.middleimpl.IPacketData;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
-import protocolsupport.protocol.utils.types.WindowType;
-import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.protocol.typeremapper.window.AbstractWindowsRemapper;
+import protocolsupport.protocol.typeremapper.window.WindowRemapper;
+import protocolsupport.protocol.typeremapper.window.WindowsRemappersRegistry;
+import protocolsupport.protocol.types.WindowType;
+import protocolsupport.utils.recyclable.RecyclableCollection;
+import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 
-	protected final EnumSkippingTable<WindowType> typeSkipper = GenericIdSkipper.INVENTORY.getTable(version);
+	protected final EnumSkippingTable<WindowType> windowSkipper = GenericIdSkipper.INVENTORY.getTable(version);
+	protected final AbstractWindowsRemapper windowsRemapper = WindowsRemappersRegistry.get(version);
 
 	public MiddleInventoryOpen(ConnectionImpl connection) {
 		super(connection);
 	}
 
-	protected int windowId;
+	protected byte windowId;
 	protected WindowType type;
 	protected BaseComponent title;
-	protected int slots;
-	protected int horseId;
+
+	protected WindowRemapper windowRemapper;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		windowId = serverdata.readUnsignedByte();
-		type = WindowType.getById(StringSerializer.readVarIntUTF8String(serverdata));
+		windowId = (byte) VarNumberSerializer.readVarInt(serverdata);
+		type = MiscSerializer.readVarIntEnum(serverdata, WindowType.CONSTANT_LOOKUP);
 		title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
-		slots = serverdata.readUnsignedByte();
-		if (type == WindowType.HORSE) {
-			horseId = serverdata.readInt();
-		}
 	}
 
 	@Override
-	public boolean postFromServerRead() {
-		cache.getWindowCache().setOpenedWindow(windowId, type);
-		if (typeSkipper.shouldSkip(type)) {
-			connection.receivePacket(ServerPlatform.get().getPacketFactory().createInboundInventoryClosePacket());
-			return false;
+	public RecyclableCollection<? extends IPacketData> toData() {
+		if (windowSkipper.shouldSkip(type)) {
+			return RecyclableSingletonList.create(MiddleInventoryClose.create(windowId));
 		} else {
-			return true;
+			windowRemapper = windowsRemapper.get(type, 0);
+			cache.getWindowCache().setOpenedWindow(windowId, type, windowRemapper);
+			return toData0();
 		}
 	}
+
+	protected abstract RecyclableCollection<? extends IPacketData> toData0();
+
 
 }

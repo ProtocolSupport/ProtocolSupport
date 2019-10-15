@@ -1,16 +1,21 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.ClientBoundPacket;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
+import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityItemDataCache;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.AbstractLocationOffsetSpawnObject;
+import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry;
+import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry.ObjectDataRemappingTable;
+import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
+import protocolsupport.protocol.types.networkentity.NetworkEntityItemDataCache;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class SpawnObject extends MiddleSpawnObject {
+public class SpawnObject extends AbstractLocationOffsetSpawnObject {
+
+	protected final ObjectDataRemappingTable entityObjectDataRemappingTable = ObjectDataRemappersRegistry.REGISTRY.getTable(version);
 
 	public SpawnObject(ConnectionImpl connection) {
 		super(connection);
@@ -31,33 +36,17 @@ public class SpawnObject extends MiddleSpawnObject {
 			return RecyclableEmptyList.get();
 		}
 		NetworkEntityType type = entityRemapper.getRemappedEntityType();
-		objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
-		x *= 32;
-		y *= 32;
-		z *= 32;
-		switch (type) {
-			case TNT:
-			case MINECART:
-			case MINECART_CHEST:
-			case MINECART_FURNACE:
-			case MINECART_TNT:
-			case MINECART_MOB_SPAWNER:
-			case MINECART_HOPPER:
-			case MINECART_COMMAND:
-			case FALLING_OBJECT: {
-				y += 16;
-				break;
-			}
-			default: {
-				break;
-			}
+		if (type.isOfType(NetworkEntityType.MINECART)) {
+			objectdata = LegacyEntityId.getMinecartObjectData(type);
+		} else {
+			objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacket.PLAY_SPAWN_OBJECT_ID);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		serializer.writeInt(entity.getId());
 		serializer.writeByte(type.getNetworkTypeId());
-		serializer.writeInt((int) x);
-		serializer.writeInt((int) y);
-		serializer.writeInt((int) z);
+		serializer.writeInt((int) x * 32);
+		serializer.writeInt((int) y * 32);
+		serializer.writeInt((int) z * 32);
 		serializer.writeInt(objectdata);
 		if (objectdata > 0) {
 			serializer.writeShort(motX);

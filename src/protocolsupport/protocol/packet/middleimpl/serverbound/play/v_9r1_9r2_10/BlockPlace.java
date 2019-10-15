@@ -6,17 +6,18 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockPlace;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.types.UsedHand;
+import protocolsupport.protocol.types.UsedHand;
 
 public class BlockPlace extends MiddleBlockPlace {
 
 	public BlockPlace(ConnectionImpl connection) {
 		super(connection);
+		insideblock = false;
 	}
 
 	@Override
 	public void readFromClientData(ByteBuf clientdata) {
-		PositionSerializer.readPositionTo(clientdata, position);
+		PositionSerializer.readLegacyPositionLTo(clientdata, position);
 		face = VarNumberSerializer.readVarInt(clientdata);
 		hand = MiscSerializer.readVarIntEnum(clientdata, UsedHand.CONSTANT_LOOKUP);
 		cX = clientdata.readUnsignedByte() / 16.0F;

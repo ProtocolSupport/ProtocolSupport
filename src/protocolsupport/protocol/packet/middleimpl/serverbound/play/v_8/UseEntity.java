@@ -7,7 +7,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.types.UsedHand;
+import protocolsupport.protocol.types.UsedHand;
 
 public class UseEntity extends MiddleUseEntity {
 

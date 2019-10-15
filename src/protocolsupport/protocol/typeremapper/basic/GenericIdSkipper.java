@@ -10,9 +10,10 @@ import protocolsupport.protocol.typeremapper.utils.SkippingRegistry.IntSkippingR
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.ArrayBasedIntSkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkippingTable;
+import protocolsupport.protocol.types.WindowType;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
-import protocolsupport.protocol.utils.types.WindowType;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftPotionData;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -60,6 +61,8 @@ public class GenericIdSkipper {
 
 	public static final IntSkippingRegistry<ArrayBasedIntSkippingTable> EFFECT = new IntSkippingRegistry<ArrayBasedIntSkippingTable>() {
 		{
+			registerSkipEntry(PotionEffectType.HERO_OF_THE_VILLAGE, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkipEntry(PotionEffectType.BAD_OMEN, ProtocolVersionsHelper.BEFORE_1_14);
 			registerSkipEntry(PotionEffectType.CONDUIT_POWER, ProtocolVersionsHelper.BEFORE_1_13);
 			registerSkipEntry(PotionEffectType.SLOW_FALLING, ProtocolVersionsHelper.BEFORE_1_13);
 			registerSkipEntry(PotionEffectType.DOLPHINS_GRACE, ProtocolVersionsHelper.BEFORE_1_13);
@@ -77,7 +80,7 @@ public class GenericIdSkipper {
 		}
 		@Override
 		protected ArrayBasedIntSkippingTable createTable() {
-			return new ArrayBasedIntSkippingTable(32);
+			return new ArrayBasedIntSkippingTable(MinecraftPotionData.ID_MAX + 1);
 		}
 	};
 
@@ -97,11 +100,16 @@ public class GenericIdSkipper {
 
 	public static final EnumSkippingRegistry<WindowType, EnumSkippingTable<WindowType>> INVENTORY = new EnumSkippingRegistry<WindowType, EnumSkippingTable<WindowType>>() {
 		{
-			registerSkipEntry(WindowType.HORSE, ProtocolVersionsHelper.BEFORE_1_6);
+			registerSkipEntry(WindowType.STONECUTTER, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkipEntry(WindowType.LECTERN, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkipEntry(WindowType.CARTOGRAPHY, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkipEntry(WindowType.STONECUTTER, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkipEntry(WindowType.GRINDSTONE, ProtocolVersionsHelper.BEFORE_1_14);
+			registerSkipEntry(WindowType.LOOM, ProtocolVersionsHelper.BEFORE_1_14);
 			registerSkipEntry(WindowType.HOPPER, ProtocolVersionsHelper.BEFORE_1_5);
-			registerSkipEntry(WindowType.ENCHANT, ProtocolVersion.MINECRAFT_BETA_1_7_3);
-			registerSkipEntry(WindowType.BREWING, ProtocolVersion.MINECRAFT_BETA_1_7_3);
-			registerSkipEntry(WindowType.VILLAGER, ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			registerSkipEntry(WindowType.ENCHANTMENT, ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			registerSkipEntry(WindowType.BREWING_STAND, ProtocolVersion.MINECRAFT_BETA_1_7_3);
+			registerSkipEntry(WindowType.MERCHANT, ProtocolVersion.MINECRAFT_BETA_1_7_3);
 			registerSkipEntry(WindowType.BEACON, ProtocolVersion.MINECRAFT_BETA_1_7_3);
 			registerSkipEntry(WindowType.ANVIL, ProtocolVersion.MINECRAFT_BETA_1_7_3);
 		}

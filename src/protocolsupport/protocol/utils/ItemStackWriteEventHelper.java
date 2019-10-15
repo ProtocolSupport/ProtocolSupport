@@ -14,12 +14,13 @@ import org.bukkit.material.MaterialData;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ItemStackWriteEvent;
-import protocolsupport.protocol.utils.types.NetworkItemStack;
-import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTList;
-import protocolsupport.protocol.utils.types.nbt.NBTString;
-import protocolsupport.protocol.utils.types.nbt.NBTType;
+import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTList;
+import protocolsupport.protocol.types.nbt.NBTString;
+import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.zplatform.ServerPlatform;
 
 @SuppressWarnings("deprecation")
@@ -45,7 +46,7 @@ public class ItemStackWriteEventHelper {
 						loreNBT = new NBTList<>(NBTType.STRING);
 					}
 					for (String lore : additionalLore) {
-						loreNBT.addTag(new NBTString(lore));
+						loreNBT.addTag(new NBTString(ChatAPI.toJSON(new TextComponent(lore))));
 					}
 					displayNBT.setTag(CommonNBT.DISPLAY_LORE, loreNBT);
 				}
@@ -120,6 +121,26 @@ public class ItemStackWriteEventHelper {
 		}
 
 		@Override
+		public void addEnchantment(Enchantment ench, int level) {
+			throw reject();
+		}
+
+		@Override
+		public void addEnchantments(Map<Enchantment, Integer> arg0) {
+			throw reject();
+		}
+
+		@Override
+		public void addUnsafeEnchantment(Enchantment ench, int level) {
+			throw reject();
+		}
+
+		@Override
+		public void addUnsafeEnchantments(Map<Enchantment, Integer> arg0) {
+			throw reject();
+		}
+
+		@Override
 		public void setLore(List<String> lore) {
 			throw reject();
 		}
@@ -141,26 +162,6 @@ public class ItemStackWriteEventHelper {
 
 		@Override
 		public ItemStack subtract(int qty) {
-			throw reject();
-		}
-
-		@Override
-		public void addEnchantment(Enchantment ench, int level) {
-			throw reject();
-		}
-
-		@Override
-		public void addEnchantments(Map<Enchantment, Integer> arg0) {
-			throw reject();
-		}
-
-		@Override
-		public void addUnsafeEnchantment(Enchantment ench, int level) {
-			throw reject();
-		}
-
-		@Override
-		public void addUnsafeEnchantments(Map<Enchantment, Integer> arg0) {
 			throw reject();
 		}
 
