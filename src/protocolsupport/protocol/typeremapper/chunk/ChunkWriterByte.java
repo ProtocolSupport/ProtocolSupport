@@ -33,7 +33,7 @@ public class ChunkWriterByte {
 				if (section != null) {
 					int blockLegacyDataAcc = 0;
 					for (int blockIndex = 0; blockIndex < ChunkConstants.BLOCKS_IN_SECTION; blockIndex++) {
-						int blockdata = BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, section.getBlockData(blockIndex));
+						int blockdata = BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, section.getBlockData(blockIndex));
 						data[blockIdIndex + blockIndex] = (byte) PreFlatteningBlockIdData.getIdFromCombinedId(blockdata);
 						byte blockLegacyData = (byte) PreFlatteningBlockIdData.getDataFromCombinedId(blockdata);
 						if ((blockIndex & 1) == 0) {

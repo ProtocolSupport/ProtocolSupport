@@ -31,7 +31,7 @@ public class ObjectDataRemappersRegistry {
 				ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 				registerRemapEntry(
 					NetworkEntityType.FALLING_OBJECT,
-					blockdata -> BlockRemappingHelper.remapBlockDataM12(blockDataRemappingTable, blockdata),
+					blockdata -> BlockRemappingHelper.remapPreFlatteningBlockDataM12(blockDataRemappingTable, blockdata),
 					version
 				);
 			});
@@ -41,7 +41,7 @@ public class ObjectDataRemappersRegistry {
 				ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 				registerRemapEntry(
 					NetworkEntityType.FALLING_OBJECT,
-					blockdata -> BlockRemappingHelper.remapBlockDataM16(blockDataRemappingTable, blockdata),
+					blockdata -> BlockRemappingHelper.remapPreFlatteningBlockDataM16(blockDataRemappingTable, blockdata),
 					version
 				);
 			});

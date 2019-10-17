@@ -28,7 +28,7 @@ public class BlockChangeMulti extends AbstractBlockChangeMulti {
 		serializer.writeInt(records.length * 4);
 		for (Record record : records) {
 			serializer.writeShort(record.coord);
-			serializer.writeShort(BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, record.id));
+			serializer.writeShort(BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, record.id));
 		}
 		return RecyclableSingletonList.create(serializer);
 	}

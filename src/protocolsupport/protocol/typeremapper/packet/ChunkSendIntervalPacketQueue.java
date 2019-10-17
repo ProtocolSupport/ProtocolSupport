@@ -17,7 +17,6 @@ public class ChunkSendIntervalPacketQueue extends ClientboundPacketProcessor {
 		super(connection);
 	}
 
-	//TODO: deal with entities
 	protected static final IntOpenHashSet queuedPacketTypes = new IntOpenHashSet(new int[] {
 		PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE.getId(), PacketType.CLIENTBOUND_PLAY_CHUNK_UNLOAD.getId(),
 		PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE.getId(), PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI.getId(),
@@ -40,7 +39,6 @@ public class ChunkSendIntervalPacketQueue extends ClientboundPacketProcessor {
 	public void process(IPacketData packet) {
 		if (locked) {
 			if (packet.getPacketType() == PacketType.CLIENTBOUND_PLAY_ENTITY_PASSENGERS) {
-				System.err.println("ququq");
 				queue.add(packet.clone());
 				write(packet);
 			} else if (shouldQueue(packet)) {

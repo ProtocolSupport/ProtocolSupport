@@ -4,9 +4,9 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public abstract class MiddleAcknowledgePlayerDigging extends MiddleBlock {
+public abstract class MiddleBlockBreakConfirm extends MiddleBlock {
 
-	public MiddleAcknowledgePlayerDigging(ConnectionImpl connection) {
+	public MiddleBlockBreakConfirm(ConnectionImpl connection) {
 		super(connection);
 	}
 

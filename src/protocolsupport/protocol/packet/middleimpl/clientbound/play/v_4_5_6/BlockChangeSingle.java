@@ -24,16 +24,16 @@ public class BlockChangeSingle extends AbstractBlockChangeSingle {
 
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
-		return createBlockChangeSinglePacket(position, id, blockDataRemappingTable);
+		return RecyclableSingletonList.create(create(blockDataRemappingTable, position, id));
 	}
 
-	public static RecyclableCollection<? extends IPacketData> createBlockChangeSinglePacket(Position position, int id, ArrayBasedIdRemappingTable blockDataRemappingTable) {
+	public static ClientBoundPacketData create(ArrayBasedIdRemappingTable blockDataRemappingTable, Position position, int id) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE);
 		PositionSerializer.writeLegacyPositionB(serializer, position);
-		int lId = BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, id);
+		int lId = BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, id);
 		serializer.writeShort(PreFlatteningBlockIdData.getIdFromCombinedId(lId));
 		serializer.writeByte(PreFlatteningBlockIdData.getDataFromCombinedId(lId));
-		return RecyclableSingletonList.create(serializer);
+		return serializer;
 	}
 
 }

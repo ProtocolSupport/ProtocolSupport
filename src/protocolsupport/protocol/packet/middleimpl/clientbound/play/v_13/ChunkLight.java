@@ -20,7 +20,6 @@ import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class ChunkLight extends AbstractChunkLight {
@@ -34,38 +33,34 @@ public class ChunkLight extends AbstractChunkLight {
 
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
-		if (preChunk) {
-			return RecyclableEmptyList.get();
-		} else {
-			int blockMask = ((setSkyLightMask | setBlockLightMask | emptySkyLightMask | emptyBlockLightMask) >> 1) & 0xFFFF;
-			boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
-			List<Collection<TileEntity>> resendTiles = new ArrayList<>();
+		int blockMask = ((setSkyLightMask | setBlockLightMask | emptySkyLightMask | emptyBlockLightMask) >> 1) & 0xFFFF;
+		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
+		List<Collection<TileEntity>> resendTiles = new ArrayList<>();
 
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
-			PositionSerializer.writeIntChunkCoord(serializer, coord);
-			serializer.writeBoolean(false); //full
-			VarNumberSerializer.writeVarInt(serializer, blockMask);
-			ArraySerializer.writeVarIntByteArray(serializer, to -> {
-				ChunkWriterVariesWithLight.writeSectionsFlattening(
-					to, blockMask, 14,
-					blockDataRemappingTable, flatteningBlockDataTable,
-					cachedChunk, hasSkyLight,
-					sectionNumber -> resendTiles.add(cachedChunk.getTiles(sectionNumber).values())
-				);
-			});
-			ArraySerializer.writeVarIntTArray(serializer, lTo -> {
-				int count = 0;
-				for (Collection<TileEntity> sectionTiles : resendTiles) {
-					for (TileEntity tile : sectionTiles) {
-						ItemStackSerializer.writeDirectTag(lTo, tile.getNBT());
-					}
-					count += sectionTiles.size();
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+		PositionSerializer.writeIntChunkCoord(serializer, coord);
+		serializer.writeBoolean(false); //full
+		VarNumberSerializer.writeVarInt(serializer, blockMask);
+		ArraySerializer.writeVarIntByteArray(serializer, to -> {
+			ChunkWriterVariesWithLight.writeSectionsFlattening(
+				to, blockMask, 14,
+				blockDataRemappingTable, flatteningBlockDataTable,
+				cachedChunk, hasSkyLight,
+				sectionNumber -> resendTiles.add(cachedChunk.getTiles(sectionNumber).values())
+			);
+		});
+		ArraySerializer.writeVarIntTArray(serializer, lTo -> {
+			int count = 0;
+			for (Collection<TileEntity> sectionTiles : resendTiles) {
+				for (TileEntity tile : sectionTiles) {
+					ItemStackSerializer.writeDirectTag(lTo, tile.getNBT());
 				}
-				return count;
-			});
+				count += sectionTiles.size();
+			}
+			return count;
+		});
 
-			return RecyclableSingletonList.create(serializer);
-		}
+		return RecyclableSingletonList.create(serializer);
 	}
 
 }

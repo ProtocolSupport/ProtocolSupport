@@ -39,8 +39,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2.EntityEffectAdd;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10.CollectEffect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10.Title;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.AcknowledgePlayerDigging;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.BlockAction;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.BlockBreakConfirm;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.CustomPayload;
@@ -83,10 +83,10 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2.ScoreboardTeam;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2.SpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2.UpdateMap;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13.ChunkUnload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.BossBar;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.ChunkUnload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.EntityLeash;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.EntityPassengers;
@@ -151,6 +151,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE, Chunk::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI, BlockChangeMulti::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE, BlockChangeSingle::new);
+		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_CONFIRM, BlockBreakConfirm::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_ACTION, BlockAction::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_ANIMATION, BlockBreakAnimation::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_EXPLOSION, Explosion::new);
@@ -207,7 +208,6 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SET_VIEW_CENTER, NoopSetViewCenter::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_UPDATE_VIEW_DISTANCE, NoopUpdateViewDistance::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_SOUND, NoopEntitySound::new);
-		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ACKNOWLEDGE_PLAYER_DIGGING, AcknowledgePlayerDigging::new);
 	}
 
 }

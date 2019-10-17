@@ -26,7 +26,7 @@ public class BlockAction extends MiddleBlockAction {
 		PositionSerializer.writeLegacyPositionS(serializer, position);
 		serializer.writeByte(actionId);
 		serializer.writeByte(actionParam);
-		serializer.writeShort(BlockRemappingHelper.remapBlockId(blockDataRemappingTable, blockId));
+		serializer.writeShort(BlockRemappingHelper.remapPreFlatteningBlockId(blockDataRemappingTable, blockId));
 		return RecyclableSingletonList.create(serializer);
 	}
 

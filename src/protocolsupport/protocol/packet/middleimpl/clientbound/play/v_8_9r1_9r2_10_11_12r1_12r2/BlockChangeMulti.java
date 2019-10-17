@@ -28,7 +28,7 @@ public class BlockChangeMulti extends AbstractBlockChangeMulti {
 		PositionSerializer.writeIntChunkCoord(serializer, chunkCoord);
 		ArraySerializer.writeVarIntTArray(serializer, records, (to, record) -> {
 			serializer.writeShort(record.coord);
-			VarNumberSerializer.writeVarInt(to, BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, record.id));
+			VarNumberSerializer.writeVarInt(to, BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, record.id));
 		});
 		return RecyclableSingletonList.create(serializer);
 	}

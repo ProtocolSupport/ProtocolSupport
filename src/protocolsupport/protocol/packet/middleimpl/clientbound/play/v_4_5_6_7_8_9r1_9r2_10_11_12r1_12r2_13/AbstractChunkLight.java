@@ -15,16 +15,15 @@ public abstract class AbstractChunkLight extends MiddleChunkLight {
 		super(connection);
 	}
 
-	protected boolean preChunk;
 	protected CachedChunk cachedChunk;
 
 	@Override
 	public boolean postFromServerRead() {
+		boolean chunkLoaded = false;
 		cachedChunk = chunkCache.get(coord);
 		if (cachedChunk != null) {
-			preChunk = false;
+			chunkLoaded = true;
 		} else {
-			preChunk = true;
 			cachedChunk = chunkCache.add(coord);
 		}
 
@@ -41,7 +40,8 @@ public abstract class AbstractChunkLight extends MiddleChunkLight {
 				cachedChunk.setBlockLightSection(sectionNumber - 1, null);
 			}
 		}
-		return true;
+
+		return chunkLoaded;
 	}
 
 }

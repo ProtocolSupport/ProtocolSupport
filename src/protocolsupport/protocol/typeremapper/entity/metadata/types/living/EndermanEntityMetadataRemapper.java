@@ -31,28 +31,28 @@ public class EndermanEntityMetadataRemapper extends InsentientEntityMetadataRema
 			final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 			@Override
 			public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectBlockData object) {
-				return new NetworkEntityMetadataObjectBlockData(BlockRemappingHelper.remapFBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, object.getValue()));
+				return new NetworkEntityMetadataObjectBlockData(BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, object.getValue()));
 			}
 		}, ProtocolVersionsHelper.ALL_1_13);
 		addRemapPerVersion(version -> new IndexValueRemapper<NetworkEntityMetadataObjectBlockData>(NetworkEntityMetadataObjectIndex.Enderman.CARRIED_BLOCK, 12) {
 			final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 			@Override
 			public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectBlockData object) {
-				return new NetworkEntityMetadataObjectBlockData(BlockRemappingHelper.remapBlockDataM12(blockDataRemappingTable, object.getValue()));
+				return new NetworkEntityMetadataObjectBlockData(BlockRemappingHelper.remapPreFlatteningBlockDataM12(blockDataRemappingTable, object.getValue()));
 			}
 		}, ProtocolVersionsHelper.RANGE__1_10__1_12_2);
 		addRemapPerVersion(version -> new IndexValueRemapper<NetworkEntityMetadataObjectBlockData>(NetworkEntityMetadataObjectIndex.Enderman.CARRIED_BLOCK, 11) {
 			final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 			@Override
 			public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectBlockData object) {
-				return new NetworkEntityMetadataObjectBlockData(BlockRemappingHelper.remapBlockDataM12(blockDataRemappingTable, object.getValue()));
+				return new NetworkEntityMetadataObjectBlockData(BlockRemappingHelper.remapPreFlatteningBlockDataM12(blockDataRemappingTable, object.getValue()));
 			}
 		}, ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapper<NetworkEntityMetadataObjectBlockData>(NetworkEntityMetadataObjectIndex.Enderman.CARRIED_BLOCK, 16) {
 			final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(ProtocolVersion.MINECRAFT_1_8);
 			@Override
 			public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectBlockData object) {
-				return new NetworkEntityMetadataObjectShort((short) BlockRemappingHelper.remapBlockDataM12(blockDataRemappingTable, object.getValue()));
+				return new NetworkEntityMetadataObjectShort((short) BlockRemappingHelper.remapPreFlatteningBlockDataM12(blockDataRemappingTable, object.getValue()));
 			}
 		}, ProtocolVersion.MINECRAFT_1_8);
 		addRemapPerVersion(version -> new NetworkEntityMetadataObjectRemapper() {
@@ -60,7 +60,7 @@ public class EndermanEntityMetadataRemapper extends InsentientEntityMetadataRema
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, NetworkEntityMetadataList remapped) {
 				NetworkEntityMetadataObjectIndex.Enderman.CARRIED_BLOCK.getValue(original).ifPresent(object -> {
-					int lId = BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, object.getValue());
+					int lId = BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, object.getValue());
 					remapped.add(16, new NetworkEntityMetadataObjectByte((byte) PreFlatteningBlockIdData.getIdFromCombinedId(lId)));
 					remapped.add(17, new NetworkEntityMetadataObjectByte((byte) PreFlatteningBlockIdData.getDataFromCombinedId(lId)));
 				});

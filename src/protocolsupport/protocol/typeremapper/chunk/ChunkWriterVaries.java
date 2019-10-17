@@ -29,7 +29,7 @@ public class ChunkWriterVaries {
 					short[] palette = section.getPalette();
 					VarNumberSerializer.writeVarInt(buffer, palette.length);
 					for (short blockdata : palette) {
-						VarNumberSerializer.writeVarInt(buffer, BlockRemappingHelper.remapFBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, blockdata));
+						VarNumberSerializer.writeVarInt(buffer, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, blockdata));
 					}
 					ArraySerializer.writeVarIntLongArray(buffer, section.getBlockData());
 				} else {
@@ -37,7 +37,7 @@ public class ChunkWriterVaries {
 					buffer.writeByte(globalPaletteBitsPerBlock);
 					BlockStorageWriter blockstorage = new BlockStorageWriter(globalPaletteBitsPerBlock);
 					for (int blockIndex = 0; blockIndex < ChunkConstants.BLOCKS_IN_SECTION; blockIndex++) {
-						blockstorage.setBlockState(blockIndex, BlockRemappingHelper.remapFBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, section.getBlockData(blockIndex)));
+						blockstorage.setBlockState(blockIndex, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, section.getBlockData(blockIndex)));
 					}
 					ArraySerializer.writeVarIntLongArray(buffer, blockstorage.getBlockData());
 				}
