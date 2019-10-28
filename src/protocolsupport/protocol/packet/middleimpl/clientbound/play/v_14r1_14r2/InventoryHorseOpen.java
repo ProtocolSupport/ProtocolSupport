@@ -19,7 +19,7 @@ public class InventoryHorseOpen extends MiddleInventoryHorseOpen {
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData horseopen = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_HORSE_OPEN);
 		horseopen.writeByte(windowId);
-		VarNumberSerializer.writeVarInt(horseopen, windowId);
+		VarNumberSerializer.writeVarInt(horseopen, slots);
 		horseopen.writeInt(entityId);
 		return RecyclableSingletonList.create(horseopen);
 	}
