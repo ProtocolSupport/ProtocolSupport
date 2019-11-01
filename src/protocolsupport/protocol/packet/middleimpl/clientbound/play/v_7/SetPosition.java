@@ -2,13 +2,13 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPosition;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.IPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractSetPosition;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class SetPosition extends MiddleSetPosition {
+public class SetPosition extends AbstractSetPosition {
 
 	public SetPosition(ConnectionImpl connection) {
 		super(connection);
@@ -24,14 +24,6 @@ public class SetPosition extends MiddleSetPosition {
 		serializer.writeFloat(pitch);
 		serializer.writeBoolean(false);
 		return RecyclableSingletonList.create(serializer);
-	}
-
-	@Override
-	public boolean postFromServerRead() {
-		if (teleportConfirmId != 0) {
-			cache.getMovementCache().setTeleportLocation(x, y, z, teleportConfirmId);
-		}
-		return true;
 	}
 
 }
