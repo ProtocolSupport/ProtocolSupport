@@ -22,7 +22,7 @@ public abstract class AbstractBlockChangeSingle extends MiddleBlockChangeSingle 
 		if (y >= 256) {
 			return false;
 		}
-		CachedChunk cachedChunk = cache.getChunkCache().get(ChunkCoord.fromGlobal(x, z));
+		CachedChunk cachedChunk = chunkCache.get(ChunkCoord.fromGlobal(x, z));
 		if (cachedChunk != null) {
 			cachedChunk.setBlock(y >> 4, CachedChunk.getBlockIndex(x & 0xF, y & 0xF, z & 0xF), (short) id);
 			return true;
