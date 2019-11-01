@@ -34,7 +34,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 			return RecyclableSingletonList.create(create(version, locale, windowId, slot, itemstack));
 		}
 
-		if (!cache.getWindowCache().isValidWindowId(windowId)) {
+		if (!windowCache.isValidWindowId(windowId)) {
 			return RecyclableEmptyList.get();
 		}
 

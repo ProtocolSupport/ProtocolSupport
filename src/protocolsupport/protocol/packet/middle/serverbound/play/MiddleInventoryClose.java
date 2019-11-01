@@ -5,10 +5,13 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
+
+	protected final WindowCache windowCache = cache.getWindowCache();
 
 	public MiddleInventoryClose(ConnectionImpl connection) {
 		super(connection);
@@ -18,7 +21,7 @@ public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
 
 	@Override
 	public RecyclableCollection<? extends IPacketData> toNative() {
-		cache.getWindowCache().closeWindow();
+		windowCache.closeWindow();
 		return RecyclableSingletonList.create(create(windowId));
 	}
 

@@ -10,6 +10,7 @@ import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.WindowCache;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
 import protocolsupport.protocol.typeremapper.window.AbstractWindowsRemapper;
@@ -20,6 +21,8 @@ import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
+
+	protected final WindowCache windowCache = cache.getWindowCache();
 
 	protected final EnumSkippingTable<WindowType> windowSkipper = GenericIdSkipper.INVENTORY.getTable(version);
 	protected final AbstractWindowsRemapper windowsRemapper = WindowsRemappersRegistry.get(version);
@@ -47,12 +50,11 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 			return RecyclableSingletonList.create(MiddleInventoryClose.create(windowId));
 		} else {
 			windowRemapper = windowsRemapper.get(type, 0);
-			cache.getWindowCache().setOpenedWindow(windowId, type, windowRemapper);
+			windowCache.setOpenedWindow(windowId, type, windowRemapper);
 			return toData0();
 		}
 	}
 
 	protected abstract RecyclableCollection<? extends IPacketData> toData0();
-
 
 }
