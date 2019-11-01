@@ -29,7 +29,7 @@ public class ChunkWriterShort {
 
 				if (section != null) {
 					for (int blockIndex = 0; blockIndex < ChunkConstants.BLOCKS_IN_SECTION; blockIndex++) {
-						int blockdata = BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, section.getBlockData(blockIndex));
+						int blockdata = BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, section.getBlockData(blockIndex));
 						int index = blockIdIndex + (blockIndex << 1);
 						data[index] = (byte) blockdata;
 						data[index + 1] = (byte) (blockdata >> 8);

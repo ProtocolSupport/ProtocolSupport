@@ -28,7 +28,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2.TabComplete;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2.UnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2.WorldParticle;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1.AcknowledgePlayerDigging;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1.BlockBreakConfirm;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.BlockAction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.BlockBreakAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.BlockChangeMulti;
@@ -39,6 +39,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.B
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.ChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.Chunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.ChunkLight;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.ChunkUnload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.DeclareRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.DeclareTags;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.EntityMetadata;
@@ -88,7 +89,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.WorldBorder;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.BossBar;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.ChunkUnload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.EntityLeash;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.EntityPassengers;
@@ -210,7 +210,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BOOK_OPEN, BookOpen::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SET_VIEW_CENTER, SetViewCenter::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_UPDATE_VIEW_DISTANCE, UpdateViewDistance::new);
-		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ACKNOWLEDGE_PLAYER_DIGGING, AcknowledgePlayerDigging::new);
+		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_CONFIRM, BlockBreakConfirm::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_STATISTICS, NoopStatistics::new);
 	}
 

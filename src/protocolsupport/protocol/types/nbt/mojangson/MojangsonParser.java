@@ -91,6 +91,10 @@ public class MojangsonParser {
 		NBTCompound compound = new NBTCompound();
 		for (;;) {
 			char keyStartChar = skipWhitespace(reader);
+			if (keyStartChar == MojangsonConstants.compound_end) {
+				return compound;
+			}
+
 			String key = keyStartChar == MojangsonConstants.string_quote ? readQuotedString(reader) : readUnquotedString(keyStartChar, reader);
 			if (skipWhitespace(reader) != MojangsonConstants.compound_kv) {
 				throw new IllegalArgumentException("Missing kv separator after compound key");

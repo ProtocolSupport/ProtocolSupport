@@ -12,7 +12,6 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 import protocolsupport.utils.netty.Compressor;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class ChunkLight extends AbstractChunkLight {
 
@@ -24,29 +23,25 @@ public class ChunkLight extends AbstractChunkLight {
 
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
-		if (preChunk) {
-			return RecyclableEmptyList.get();
-		} else {
-			int blockMask = ((setSkyLightMask | setBlockLightMask | emptySkyLightMask | emptyBlockLightMask) >> 1) & 0xFFFF;
-			String locale = cache.getAttributesCache().getLocale();
-			boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
-			RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
+		int blockMask = ((setSkyLightMask | setBlockLightMask | emptySkyLightMask | emptyBlockLightMask) >> 1) & 0xFFFF;
+		String locale = cache.getAttributesCache().getLocale();
+		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
+		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 
-			ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
-			PositionSerializer.writeIntChunkCoord(chunkdata, coord);
-			chunkdata.writeBoolean(false); //full
-			chunkdata.writeShort(blockMask);
-			chunkdata.writeShort(0);
-			byte[] compressed = Compressor.compressStatic(ChunkWriterByte.serializeSectionsAndBiomes(
-				blockMask, blockDataRemappingTable, cachedChunk, hasSkyLight, null,
-				sectionNumber -> cachedChunk.getTiles(sectionNumber).values().forEach(tile -> packets.add(BlockTileUpdate.create(version, locale, tile)))
-			));
-			chunkdata.writeInt(compressed.length);
-			chunkdata.writeBytes(compressed);
-			packets.add(0, chunkdata);
+		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
+		chunkdata.writeBoolean(false); //full
+		chunkdata.writeShort(blockMask);
+		chunkdata.writeShort(0);
+		byte[] compressed = Compressor.compressStatic(ChunkWriterByte.serializeSectionsAndBiomes(
+			blockMask, blockDataRemappingTable, cachedChunk, hasSkyLight, null,
+			sectionNumber -> cachedChunk.getTiles(sectionNumber).values().forEach(tile -> packets.add(BlockTileUpdate.create(version, locale, tile)))
+		));
+		chunkdata.writeInt(compressed.length);
+		chunkdata.writeBytes(compressed);
+		packets.add(0, chunkdata);
 
-			return packets;
-		}
+		return packets;
 	}
 
 }

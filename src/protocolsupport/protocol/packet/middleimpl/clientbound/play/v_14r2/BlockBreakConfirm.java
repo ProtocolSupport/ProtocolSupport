@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r2;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleAcknowledgePlayerDigging;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockBreakConfirm;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -15,9 +15,9 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
-public class AcknowledgePlayerDigging extends MiddleAcknowledgePlayerDigging {
+public class BlockBreakConfirm extends MiddleBlockBreakConfirm {
 
-	public AcknowledgePlayerDigging(ConnectionImpl connection) {
+	public BlockBreakConfirm(ConnectionImpl connection) {
 		super(connection);
 	}
 
@@ -26,9 +26,9 @@ public class AcknowledgePlayerDigging extends MiddleAcknowledgePlayerDigging {
 
 	@Override
 	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ACKNOWLEDGE_PLAYER_DIGGING);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_CONFIRM);
 		PositionSerializer.writePosition(serializer, position);
-		VarNumberSerializer.writeVarInt(serializer, BlockRemappingHelper.remapFBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, blockId));
+		VarNumberSerializer.writeVarInt(serializer, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, blockId));
 		VarNumberSerializer.writeVarInt(serializer, status);
 		serializer.writeBoolean(successful);
 		return RecyclableSingletonList.create(serializer);

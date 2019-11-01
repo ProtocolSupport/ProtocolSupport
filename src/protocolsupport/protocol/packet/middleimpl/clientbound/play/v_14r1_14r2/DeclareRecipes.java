@@ -15,6 +15,13 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.recipe.Recipe;
+import protocolsupport.protocol.types.recipe.RecipeIngredient;
+import protocolsupport.protocol.types.recipe.RecipeType;
+import protocolsupport.protocol.types.recipe.ShapedRecipe;
+import protocolsupport.protocol.types.recipe.ShapelessRecipe;
+import protocolsupport.protocol.types.recipe.SmeltingRecipe;
+import protocolsupport.protocol.types.recipe.StonecuttingRecipe;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
@@ -62,7 +69,7 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 				VarNumberSerializer.writeVarInt(to, recipe.getWidth());
 				VarNumberSerializer.writeVarInt(to, recipe.getHeight());
 				StringSerializer.writeVarIntUTF8String(to, recipe.getGroup());
-				for (Ingredient ingredient : recipe.getIngredients()) {
+				for (RecipeIngredient ingredient : recipe.getIngredients()) {
 					writeIngredient(to, version, ingredient);
 				}
 				ItemStackSerializer.writeItemStack(to, version, I18NData.DEFAULT_LOCALE, recipe.getResult());
@@ -93,8 +100,8 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 
 	}
 
-	protected static void writeIngredient(ByteBuf to, ProtocolVersion version, Ingredient ingredient) {
-		NetworkItemStack[] possibleStacks = ingredient.getPossibleStacks();
+	protected static void writeIngredient(ByteBuf to, ProtocolVersion version, RecipeIngredient ingredient) {
+		NetworkItemStack[] possibleStacks = ingredient.getPossibleItemStacks();
 		VarNumberSerializer.writeVarInt(to, possibleStacks.length);
 		for (int i = 0; i < possibleStacks.length; i++) {
 			ItemStackSerializer.writeItemStack(to, version, I18NData.DEFAULT_LOCALE, possibleStacks[i]);

@@ -54,7 +54,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.S
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.UpdateMap;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.UpdateViewDistance;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2.WorldEvent;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r2.AcknowledgePlayerDigging;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r2.BlockBreakConfirm;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r2.Statistics;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.EntityStatus;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.InventoryClose;
@@ -87,8 +87,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.SetExperience;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.WorldBorder;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13.ChunkUnload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.BossBar;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.ChunkUnload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.EntityLeash;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.EntityPassengers;
@@ -211,7 +211,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BOOK_OPEN, BookOpen::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SET_VIEW_CENTER, SetViewCenter::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_UPDATE_VIEW_DISTANCE, UpdateViewDistance::new);
-		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ACKNOWLEDGE_PLAYER_DIGGING, AcknowledgePlayerDigging::new);
+		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_CONFIRM, BlockBreakConfirm::new);
 	}
 
 }

@@ -163,7 +163,7 @@ public class PacketType {
 	public static final PacketType CLIENTBOUND_PLAY_UPDATE_VIEW_DISTANCE = new PacketType(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayUpdateViewDistancePacketId());
 	public static final PacketType CLIENTBOUND_PLAY_MERCHANT_TRADE_LIST = new PacketType(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayMerchantTradeListPacketId());
 	public static final PacketType CLIENTBOUND_PLAY_BOOK_OPEN = new PacketType(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayBookOpenPacketId());
-	public static final PacketType CLIENTBOUND_PLAY_ACKNOWLEDGE_PLAYER_DIGGING = new PacketType(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayAcknowledgePlayerDiggingId());
+	public static final PacketType CLIENTBOUND_PLAY_BLOCK_BREAK_CONFIRM = new PacketType(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayAcknowledgePlayerDiggingId());
 
 	public static final PacketType CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN_ID = new PacketType(Direction.CLIENTBOUND, -1);
 	public static final PacketType CLIENTBOUND_LEGACY_PLAY_USE_BED_ID = new PacketType(Direction.CLIENTBOUND, -1);

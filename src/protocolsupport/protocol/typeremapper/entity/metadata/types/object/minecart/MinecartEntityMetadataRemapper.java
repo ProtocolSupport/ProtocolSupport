@@ -44,7 +44,7 @@ public class MinecartEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 			final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 			@Override
 			public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectVarInt object) {
-				return new NetworkEntityMetadataObjectVarInt(BlockRemappingHelper.remapFBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, object.getValue()));
+				return new NetworkEntityMetadataObjectVarInt(BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, object.getValue()));
 			}
 		}, ProtocolVersionsHelper.ALL_1_13);
 		addRemapPerVersion(
@@ -52,7 +52,7 @@ public class MinecartEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 				final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 				@Override
 				public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectVarInt object) {
-					return new NetworkEntityMetadataObjectVarInt(BlockRemappingHelper.remapBlockDataM12(blockDataRemappingTable, object.getValue()));
+					return new NetworkEntityMetadataObjectVarInt(BlockRemappingHelper.remapPreFlatteningBlockDataM12(blockDataRemappingTable, object.getValue()));
 				}
 			},
 			ProtocolVersionsHelper.RANGE__1_10__1_12_2
@@ -62,7 +62,7 @@ public class MinecartEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 				final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 				@Override
 				public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectVarInt object) {
-					return new NetworkEntityMetadataObjectVarInt(BlockRemappingHelper.remapBlockDataM12(blockDataRemappingTable, object.getValue()));
+					return new NetworkEntityMetadataObjectVarInt(BlockRemappingHelper.remapPreFlatteningBlockDataM12(blockDataRemappingTable, object.getValue()));
 				}
 			},
 			ProtocolVersionsHelper.ALL_1_9
@@ -71,7 +71,7 @@ public class MinecartEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 			final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(ProtocolVersion.MINECRAFT_1_8);
 			@Override
 			public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectVarInt object) {
-				return new NetworkEntityMetadataObjectInt(BlockRemappingHelper.remapBlockDataM12(blockDataRemappingTable, object.getValue()));
+				return new NetworkEntityMetadataObjectInt(BlockRemappingHelper.remapPreFlatteningBlockDataM12(blockDataRemappingTable, object.getValue()));
 			}
 		}, ProtocolVersion.MINECRAFT_1_8);
 		addRemapPerVersion(
@@ -79,7 +79,7 @@ public class MinecartEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 				final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 				@Override
 				public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectVarInt object) {
-					return new NetworkEntityMetadataObjectInt(BlockRemappingHelper.remapBlockDataM16(blockDataRemappingTable, object.getValue()));
+					return new NetworkEntityMetadataObjectInt(BlockRemappingHelper.remapPreFlatteningBlockDataM16(blockDataRemappingTable, object.getValue()));
 				}
 			},
 			ProtocolVersionsHelper.BEFORE_1_8
