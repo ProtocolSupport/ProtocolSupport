@@ -4,7 +4,6 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListSetEntry;
@@ -28,36 +27,34 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 		switch (action) {
 			case ADD: {
-				for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
-					PlayerListEntry oldEntry = entry.getValue().getObj1();
-					PlayerListEntry currentEntry = entry.getValue().getObj2();
+				for (Entry<UUID, PlayerListOldNewEntry> entry : infos.entrySet()) {
+					PlayerListEntry oldEntry = entry.getValue().getOldEntry();
 					if (oldEntry != null) {
 						packets.add(createRemove(version, oldEntry.getCurrentName(locale)));
 					}
+					PlayerListEntry currentEntry = entry.getValue().getNewEntry();
 					packets.add(createAddOrUpdate(version, currentEntry.getCurrentName(locale), (short) currentEntry.getPing()));
 				}
 				break;
 			}
 			case PING: {
-				for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
-					PlayerListEntry currentEntry = entry.getValue().getObj2();
+				for (Entry<UUID, PlayerListOldNewEntry> entry : infos.entrySet()) {
+					PlayerListEntry currentEntry = entry.getValue().getNewEntry();
 					packets.add(createAddOrUpdate(version, currentEntry.getCurrentName(locale), (short) currentEntry.getPing()));
 				}
 				break;
 			}
 			case DISPLAY_NAME: {
-				for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
-					PlayerListEntry oldEntry = entry.getValue().getObj1();
-					PlayerListEntry currentEntry = entry.getValue().getObj2();
-					packets.add(createRemove(version, oldEntry.getCurrentName(locale)));
+				for (Entry<UUID, PlayerListOldNewEntry> entry : infos.entrySet()) {
+					packets.add(createRemove(version, entry.getValue().getOldEntry().getCurrentName(locale)));
+					PlayerListEntry currentEntry = entry.getValue().getNewEntry();
 					packets.add(createAddOrUpdate(version, currentEntry.getCurrentName(locale), (short) currentEntry.getPing()));
 				}
 				break;
 			}
 			case REMOVE: {
-				for (Entry<UUID, Any<PlayerListEntry, PlayerListEntry>> entry : infos.entrySet()) {
-					PlayerListEntry oldEntry = entry.getValue().getObj1();
-					packets.add(createRemove(version, oldEntry.getCurrentName(locale)));
+				for (Entry<UUID, PlayerListOldNewEntry> entry : infos.entrySet()) {
+					packets.add(createRemove(version, entry.getValue().getOldEntry().getCurrentName(locale)));
 				}
 				break;
 			}

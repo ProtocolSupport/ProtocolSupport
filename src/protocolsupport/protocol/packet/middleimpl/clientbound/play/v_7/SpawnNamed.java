@@ -12,12 +12,15 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.PlayerListCache;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SpawnNamed extends MiddleSpawnNamed {
+
+	protected final PlayerListCache playerlistCache = cache.getPlayerListCache();
 
 	public SpawnNamed(ConnectionImpl connection) {
 		super(connection);
@@ -29,7 +32,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		UUID uuid = entity.getUUID();
 		StringSerializer.writeVarIntUTF8String(serializer, version == ProtocolVersion.MINECRAFT_1_7_10 ? uuid.toString() : uuid.toString().replace("-", ""));
-		PlayerListEntry entry = cache.getPlayerListCache().getEntry(uuid);
+		PlayerListEntry entry = playerlistCache.getEntry(uuid);
 		if (entry != null) {
 			StringSerializer.writeVarIntUTF8String(serializer, Utils.clampString(entry.getUserName(), 16));
 			if (version == ProtocolVersion.MINECRAFT_1_7_10) {

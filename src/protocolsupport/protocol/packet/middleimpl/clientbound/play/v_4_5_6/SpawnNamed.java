@@ -7,12 +7,15 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.storage.netcache.PlayerListCache;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.utils.Utils;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SpawnNamed extends MiddleSpawnNamed {
+
+	protected final PlayerListCache playerlistCache = cache.getPlayerListCache();
 
 	public SpawnNamed(ConnectionImpl connection) {
 		super(connection);
@@ -22,7 +25,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 	public RecyclableCollection<? extends IPacketData> toData() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
 		serializer.writeInt(entity.getId());
-		PlayerListEntry entry = cache.getPlayerListCache().getEntry(entity.getUUID());
+		PlayerListEntry entry = playerlistCache.getEntry(entity.getUUID());
 		StringSerializer.writeShortUTF16BEString(serializer, entry != null ? Utils.clampString(entry.getUserName(), 16) : "UNKNOWN");
 		serializer.writeInt((int) (x * 32));
 		serializer.writeInt((int) (y * 32));
