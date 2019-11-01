@@ -6,11 +6,14 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.storage.netcache.CustomPayloadChannelsCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadData;
 import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class CustomPayload extends ServerBoundMiddlePacket {
+
+	protected final CustomPayloadChannelsCache channelsCache = cache.getChannelsCache();
 
 	public CustomPayload(ConnectionImpl connection) {
 		super(connection);
@@ -29,10 +32,10 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 	public RecyclableCollection<? extends IPacketData> toNative() {
 		switch (tag) {
 			case LegacyCustomPayloadChannelName.LEGACY_REGISTER: {
-				return LegacyCustomPayloadData.transformRegisterUnregister(cache.getChannelsCache(), tag, data, true);
+				return LegacyCustomPayloadData.transformRegisterUnregister(channelsCache, tag, data, true);
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_UNREGISTER: {
-				return LegacyCustomPayloadData.transformRegisterUnregister(cache.getChannelsCache(), tag, data, false);
+				return LegacyCustomPayloadData.transformRegisterUnregister(channelsCache, tag, data, false);
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_BOOK_EDIT: {
 				return LegacyCustomPayloadData.transformBookEdit(version, data);
