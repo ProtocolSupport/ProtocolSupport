@@ -4,7 +4,7 @@ import protocolsupport.protocol.utils.EnumConstantLookups;
 
 public enum BlockDirection {
 
-	DOWN(-1), UP(-1),
+	DOWN(0), UP(0),
 	NORTH(2), SOUTH(0),
 	WEST(1), EAST(3);
 
