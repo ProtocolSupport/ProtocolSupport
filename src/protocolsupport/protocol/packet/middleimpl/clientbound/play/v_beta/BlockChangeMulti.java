@@ -31,7 +31,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		for (int i = 0; i < rLength; i++) {
 			Record record = records[i];
 			serializer.writeShort(record.coord);
-			int blockdata = BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, record.id);
+			int blockdata = BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, record.id);
 			types[i] = (byte) PreFlatteningBlockIdData.getIdFromCombinedId(blockdata);
 			metadata[i] = (byte) PreFlatteningBlockIdData.getDataFromCombinedId(blockdata);
 		}

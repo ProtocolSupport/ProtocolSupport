@@ -26,7 +26,7 @@ public class WorldEvent extends MiddleWorldEvent {
 	@Override
 	public RecyclableCollection<ClientBoundPacketData> toData() {
 		if (effectId == 2001) {
-			data = PreFlatteningBlockIdData.getIdFromCombinedId(BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, data));
+			data = PreFlatteningBlockIdData.getIdFromCombinedId(BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, data));
 		}
 		effectId = legacyEffectId.getRemap(effectId);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_EVENT);

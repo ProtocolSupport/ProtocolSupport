@@ -111,8 +111,8 @@ public class ChunkWriterBeta {
 
 					int blockdataIndex1 = getBlockIndex(x, y, z);
 					int blockdataIndex2 = getBlockIndex(x, y + 1, z);
-					int blockdata1 = BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, storage.getBlockData(blockdataIndex1));
-					int blockdata2 = BlockRemappingHelper.remapBlockDataNormal(blockDataRemappingTable, storage.getBlockData(blockdataIndex2));
+					int blockdata1 = BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, storage.getBlockData(blockdataIndex1));
+					int blockdata2 = BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, storage.getBlockData(blockdataIndex2));
 					target[betaIndex] = (byte) PreFlatteningBlockIdData.getIdFromCombinedId(blockdata1);
 					target[betaIndex + 1] = (byte) PreFlatteningBlockIdData.getIdFromCombinedId(blockdata2);
 					target[betaBlockDataIndex + betaNibbleIndex] = (byte) (

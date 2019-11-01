@@ -49,7 +49,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorl
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldSound;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.AcknowledgePlayerDigging;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.BlockBreakConfirm;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.BlockAction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta.BlockChangeSingle;
@@ -134,7 +134,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_CHUNK_UNLOAD, ChunkUnload::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI, BlockChangeMulti::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE, BlockChangeSingle::new);
-		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ACKNOWLEDGE_PLAYER_DIGGING, AcknowledgePlayerDigging::new);
+		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_CONFIRM, BlockBreakConfirm::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_ACTION, BlockAction::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_TILE, BlockTileUpdate::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_EXPLOSION, Explosion::new);
