@@ -6,11 +6,11 @@ import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
 import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
 import protocolsupport.protocol.types.ChunkCoord;
 
-public abstract class AbstracBlockBreakConfirm extends MiddleBlockBreakConfirm {
+public abstract class AbstractBlockBreakConfirm extends MiddleBlockBreakConfirm {
 
 	protected final ChunkCache chunkCache = cache.getChunkCache();
 
-	public AbstracBlockBreakConfirm(ConnectionImpl connection) {
+	public AbstractBlockBreakConfirm(ConnectionImpl connection) {
 		super(connection);
 	}
 
