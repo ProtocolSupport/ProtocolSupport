@@ -5,8 +5,11 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleKeepAlive;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.KeepAliveCache;
 
 public class KeepAlive extends MiddleKeepAlive {
+
+	protected final KeepAliveCache keepaliveCache = cache.getKeepAliveCache();
 
 	public KeepAlive(ConnectionImpl connection) {
 		super(connection);
@@ -19,7 +22,7 @@ public class KeepAlive extends MiddleKeepAlive {
 		} else {
 			keepAliveId = clientdata.readLong();
 		}
-		keepAliveId = cache.getKeepAliveCache().tryConfirmKeepAlive((int) keepAliveId);
+		keepAliveId = keepaliveCache.tryConfirmKeepAlive((int) keepAliveId);
 	}
 
 }
