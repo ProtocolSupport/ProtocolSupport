@@ -14,8 +14,9 @@ public class LivingEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 	public static final LivingEntityMetadataRemapper INSTANCE = new LivingEntityMetadataRemapper();
 
 	public LivingEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex.Entity.NAMETAG, 2, 64), ProtocolVersion.MINECRAFT_1_8);
-		addRemap(new IndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex.Entity.NAMETAG, 10, 64), ProtocolVersionsHelper.RANGE__1_6__1_7);
+		addRemap(new IndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex.Entity.NAMETAG, 2), ProtocolVersion.MINECRAFT_1_8);
+		addRemap(new IndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex.Entity.NAMETAG, 10), ProtocolVersionsHelper.ALL_1_7);
+		addRemap(new IndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex.Entity.NAMETAG, 10, 64), ProtocolVersionsHelper.ALL_1_6);
 		addRemap(new IndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex.Entity.NAMETAG, 5, 64), ProtocolVersionsHelper.BEFORE_1_6);
 
 		addRemap(new IndexValueRemapperBooleanToByte(NetworkEntityMetadataObjectIndex.Entity.NAMETAG_VISIBLE, 3), ProtocolVersion.MINECRAFT_1_8);
