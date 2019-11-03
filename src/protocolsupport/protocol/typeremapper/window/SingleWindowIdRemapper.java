@@ -1,5 +1,7 @@
 package protocolsupport.protocol.typeremapper.window;
 
+import java.util.function.Supplier;
+
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.WindowType;
 
@@ -7,6 +9,10 @@ public abstract class SingleWindowIdRemapper extends WindowRemapper {
 
 	public SingleWindowIdRemapper(WindowType clientWindowType, int clientSlots) {
 		super(clientWindowType, clientSlots);
+	}
+
+	public SingleWindowIdRemapper(WindowType clientWindowType, int clientSlots, Supplier<Object> windowMetadataCreator) {
+		super(clientWindowType, clientSlots, windowMetadataCreator);
 	}
 
 	protected final ClientItems clientitems = new ClientItems((byte) 0, null);

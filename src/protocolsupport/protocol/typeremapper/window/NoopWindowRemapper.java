@@ -1,5 +1,7 @@
 package protocolsupport.protocol.typeremapper.window;
 
+import java.util.function.Supplier;
+
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.WindowType;
 
@@ -21,6 +23,10 @@ public class NoopWindowRemapper extends SingleWindowIdRemapper {
 
 	public NoopWindowRemapper(WindowType windowType, int windowSlots) {
 		super(windowType, windowSlots);
+	}
+
+	public NoopWindowRemapper(WindowType windowType, int windowSlots, Supplier<Object> windowMetadataCreator) {
+		super(windowType, windowSlots, windowMetadataCreator);
 	}
 
 	@Override

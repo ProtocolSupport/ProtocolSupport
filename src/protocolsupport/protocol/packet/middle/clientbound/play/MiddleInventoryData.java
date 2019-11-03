@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.storage.netcache.WindowCache;
+import protocolsupport.protocol.storage.netcache.window.WindowCache;
 
 public abstract class MiddleInventoryData extends ClientBoundMiddlePacket {
 
@@ -13,13 +13,13 @@ public abstract class MiddleInventoryData extends ClientBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected int windowId;
+	protected byte windowId;
 	protected int type;
 	protected int value;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		windowId = serverdata.readUnsignedByte();
+		windowId = serverdata.readByte();
 		type = serverdata.readShort();
 		value = serverdata.readShort();
 	}

@@ -1,4 +1,4 @@
-package protocolsupport.protocol.storage.netcache;
+package protocolsupport.protocol.storage.netcache.window;
 
 import protocolsupport.protocol.typeremapper.window.WindowRemapper;
 import protocolsupport.protocol.types.WindowType;
@@ -24,10 +24,7 @@ public class WindowCache {
 		this.windowId = windowId;
 		this.windowType = windowType;
 		this.windowRemapper = windowRemapper;
-	}
-
-	public void setOpenedWindowMetadata(Object metadata) {
-		this.windowMetadata = metadata;
+		this.windowMetadata = windowRemapper.createWindowMetadata();
 	}
 
 	public WindowType getOpenedWindowType() {
