@@ -2,14 +2,12 @@ package protocolsupport.zplatform.impl.spigot;
 
 import java.io.IOException;
 import java.security.PublicKey;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
-import org.spigotmc.SpigotConfig;
 
 import com.google.common.collect.BiMap;
 
@@ -115,7 +113,6 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		for (int i = 0; i < profiles.size(); i++) {
 			gprofiles[i] = new com.mojang.authlib.GameProfile(profileUUID, profiles.get(i));
 		}
-		gprofiles = Arrays.copyOfRange(gprofiles, 0, Math.min(gprofiles.length, SpigotConfig.playerSample));
 		playerSample.a(gprofiles);
 
 		ServerPing serverping = new ServerPing();
