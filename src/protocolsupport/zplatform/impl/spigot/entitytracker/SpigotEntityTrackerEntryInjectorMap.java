@@ -4,7 +4,9 @@ import java.util.logging.Level;
 
 import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
+import net.minecraft.server.v1_14_R1.EntityTypes;
 import net.minecraft.server.v1_14_R1.PlayerChunkMap.EntityTracker;
+import net.minecraft.server.v1_14_R1.WorldServer;
 import protocolsupport.ProtocolSupport;
 
 public class SpigotEntityTrackerEntryInjectorMap extends Int2ObjectOpenHashMap<EntityTracker> {
@@ -14,7 +16,16 @@ public class SpigotEntityTrackerEntryInjectorMap extends Int2ObjectOpenHashMap<E
 	@Override
 	public EntityTracker put(int k, EntityTracker v) {
 		try {
-			SpigotEntityTrackerEntryInjector.injectEntry(v);
+			SpigotEntityTrackerEntryInjector.injectEntry(v, (tracker, entity) -> {
+				EntityTypes<?> entitytypes = entity.getEntityType();
+				return new SpigotEntityTrackerEntry(
+					(WorldServer) entity.world, entity,
+					entitytypes.getUpdateInterval(),
+					entitytypes.isDeltaTracking(),
+					tracker::broadcast,
+					tracker.trackedPlayers
+				);
+			});
 		} catch (Throwable e) {
 			ProtocolSupport.getInstance().getLogger().log(Level.SEVERE, e, () -> "Failed to inject entity tracker instance");
 		}

@@ -4,12 +4,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.util.Vector;
+
+import com.google.common.collect.Maps;
 
 import net.minecraft.server.v1_14_R1.AttributeInstance;
 import net.minecraft.server.v1_14_R1.AttributeMapServer;
@@ -50,16 +53,21 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 	private final int updateInterval;
 	private final boolean alwaysUpdateVelocity;
 	private final Consumer<Packet<?>> broadcast;
-	private final Set<EntityPlayer> trackedPlayers;
+	private int trackerTicks;
 	private long trackerX;
 	private long trackerY;
 	private long trackerZ;
 	private byte trackerYaw;
 	private byte trackerPitch;
 	private byte trackerHeadYaw;
-	private Vec3D trackerVelocity;
-	private int trackerTicks;
-	private List<Entity> trackerPassengers;
+	private Vec3D trackerVelocity = Vec3D.a;
+	private List<Entity> trackerPassengers = Collections.emptyList();
+
+	private final Set<EntityPlayer> trackedPlayers;
+
+	//map field for plugins that may work with it
+	@SuppressWarnings("unused")
+	private final Map<EntityPlayer, Boolean> trackedPlayerMap;
 
 	public SpigotEntityTrackerEntry(WorldServer worldserver, Entity entity, int updateInterval, boolean alwaysUpdateVelocity, Consumer<Packet<?>> consumer, Set<EntityPlayer> trackedPlayers) {
 		super(worldserver, entity, updateInterval, alwaysUpdateVelocity, consumer, trackedPlayers);
@@ -67,9 +75,6 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 		this.tracker = entity;
 		this.trackerLiving = (tracker instanceof EntityLiving) ? (EntityLiving) tracker : null;
 		this.trackerAttributeMap = trackerLiving != null ? (AttributeMapServer) trackerLiving.getAttributeMap() : null;
-		this.trackedPlayers = trackedPlayers;
-		this.trackerVelocity = Vec3D.a;
-		this.trackerPassengers = Collections.emptyList();
 		this.broadcast = consumer;
 		this.updateInterval = updateInterval;
 		this.alwaysUpdateVelocity = alwaysUpdateVelocity;
@@ -77,6 +82,25 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 		this.trackerYaw = (byte) MathHelper.d((entity.yaw * 256.0F) / 360.0F);
 		this.trackerPitch = (byte) MathHelper.d((entity.pitch * 256.0F) / 360.0F);
 		this.trackerHeadYaw = (byte) MathHelper.d((entity.getHeadRotation() * 256.0F) / 360.0F);
+		this.trackedPlayers = trackedPlayers;
+		this.trackedPlayerMap = Maps.asMap(trackedPlayers, element -> false);
+	}
+
+	public SpigotEntityTrackerEntry(WorldServer worldserver, Entity entity, int updateInterval, boolean alwaysUpdateVelocity, Consumer<Packet<?>> consumer, Map<EntityPlayer, Boolean> trackedPlayerMap) {
+		super(worldserver, entity, updateInterval, alwaysUpdateVelocity, consumer, trackedPlayerMap);
+		this.world = worldserver;
+		this.tracker = entity;
+		this.trackerLiving = (tracker instanceof EntityLiving) ? (EntityLiving) tracker : null;
+		this.trackerAttributeMap = trackerLiving != null ? (AttributeMapServer) trackerLiving.getAttributeMap() : null;
+		this.broadcast = consumer;
+		this.updateInterval = updateInterval;
+		this.alwaysUpdateVelocity = alwaysUpdateVelocity;
+		this.storeTrackerLocation();
+		this.trackerYaw = (byte) MathHelper.d((entity.yaw * 256.0F) / 360.0F);
+		this.trackerPitch = (byte) MathHelper.d((entity.pitch * 256.0F) / 360.0F);
+		this.trackerHeadYaw = (byte) MathHelper.d((entity.getHeadRotation() * 256.0F) / 360.0F);
+		this.trackedPlayerMap = trackedPlayerMap;
+		this.trackedPlayers = Collections.newSetFromMap(trackedPlayerMap);
 	}
 
 	private void updateRotationIfChanged() {
