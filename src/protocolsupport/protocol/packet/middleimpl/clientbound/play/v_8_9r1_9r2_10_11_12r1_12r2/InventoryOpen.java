@@ -6,12 +6,9 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyWindowType;
 import protocolsupport.protocol.typeremapper.legacy.LegacyWindowType.LegacyWindowData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class InventoryOpen extends MiddleInventoryOpen {
 
@@ -20,20 +17,23 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData0() {
+	protected void writeToClient0() {
 		LegacyWindowData wdata = LegacyWindowType.getData(windowRemapper.toClientWindowType(type));
-		return RecyclableSingletonList.create(writeData(
-			ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN),
-			windowId, wdata.getStringId(), title.toLegacyText(cache.getAttributesCache().getLocale()), windowRemapper.toClientSlots(0)
-		));
+		ClientBoundPacketData windowopen = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
+		writeData(
+			windowopen,
+			windowId, wdata.getStringId(),
+			title.toLegacyText(cache.getAttributesCache().getLocale()),
+			windowRemapper.toClientSlots(0)
+		);
+		codec.write(windowopen);
 	}
 
-	public static ClientBoundPacketData writeData(ClientBoundPacketData to, int windowId, String type, String title, int slots) {
+	public static void writeData(ClientBoundPacketData to, int windowId, String type, String title, int slots) {
 		to.writeByte(windowId);
 		StringSerializer.writeVarIntUTF8String(to, type);
 		StringSerializer.writeVarIntUTF8String(to, ChatAPI.toJSON(new TextComponent(title)));
 		to.writeByte(slots);
-		return to;
 	}
 
 }

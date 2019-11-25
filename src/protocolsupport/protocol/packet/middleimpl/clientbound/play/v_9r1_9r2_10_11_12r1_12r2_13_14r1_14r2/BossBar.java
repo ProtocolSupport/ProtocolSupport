@@ -5,13 +5,10 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBossBar;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BossBar extends MiddleBossBar {
 
@@ -20,41 +17,41 @@ public class BossBar extends MiddleBossBar {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BOSS_BAR);
-		MiscSerializer.writeUUID(serializer, uuid);
-		MiscSerializer.writeVarIntEnum(serializer, action);
+	public void writeToClient() {
+		ClientBoundPacketData bossbar = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_BOSS_BAR);
+		MiscSerializer.writeUUID(bossbar, uuid);
+		MiscSerializer.writeVarIntEnum(bossbar, action);
 		switch (action) {
 			case ADD: {
-				StringSerializer.writeVarIntUTF8String(serializer, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), title)));
-				serializer.writeFloat(percent);
-				VarNumberSerializer.writeVarInt(serializer, color);
-				VarNumberSerializer.writeVarInt(serializer, divider);
-				serializer.writeByte(flags);
+				StringSerializer.writeVarIntUTF8String(bossbar, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), title)));
+				bossbar.writeFloat(percent);
+				VarNumberSerializer.writeVarInt(bossbar, color);
+				VarNumberSerializer.writeVarInt(bossbar, divider);
+				bossbar.writeByte(flags);
 				break;
 			}
 			case REMOVE: {
 				break;
 			}
 			case UPDATE_PERCENT: {
-				serializer.writeFloat(percent);
+				bossbar.writeFloat(percent);
 				break;
 			}
 			case UPDATE_TITLE: {
-				StringSerializer.writeVarIntUTF8String(serializer, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), title)));
+				StringSerializer.writeVarIntUTF8String(bossbar, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), title)));
 				break;
 			}
 			case UPDATE_STYLE: {
-				VarNumberSerializer.writeVarInt(serializer, color);
-				VarNumberSerializer.writeVarInt(serializer, divider);
+				VarNumberSerializer.writeVarInt(bossbar, color);
+				VarNumberSerializer.writeVarInt(bossbar, divider);
 				break;
 			}
 			case UPDATE_FLAGS: {
-				serializer.writeByte(flags);
+				bossbar.writeByte(flags);
 				break;
 			}
 		}
-		return RecyclableSingletonList.create(serializer);
+		codec.write(bossbar);
 	}
 
 }

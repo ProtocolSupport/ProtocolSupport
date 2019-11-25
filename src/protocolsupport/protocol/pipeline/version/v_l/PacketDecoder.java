@@ -9,7 +9,7 @@ import protocolsupport.protocol.pipeline.version.util.decoder.AbstractLegacyPack
 public class PacketDecoder extends AbstractLegacyPacketDecoder {
 
 	public PacketDecoder(ConnectionImpl connection) {
-		super(connection, PacketCodec.instance);
+		super(connection);
 	}
 
 	{

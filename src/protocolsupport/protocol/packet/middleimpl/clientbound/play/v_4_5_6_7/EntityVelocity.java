@@ -4,9 +4,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityVelocity;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityVelocity extends MiddleEntityVelocity {
 
@@ -15,13 +12,13 @@ public class EntityVelocity extends MiddleEntityVelocity {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_VELOCITY);
-		serializer.writeInt(entityId);
-		serializer.writeShort(motX);
-		serializer.writeShort(motY);
-		serializer.writeShort(motZ);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData entityvelocity = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_VELOCITY);
+		entityvelocity.writeInt(entityId);
+		entityvelocity.writeShort(motX);
+		entityvelocity.writeShort(motY);
+		entityvelocity.writeShort(motZ);
+		codec.write(entityvelocity);
 	}
 
 }

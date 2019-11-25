@@ -4,10 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleExplosion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.types.Position;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Explosion extends MiddleExplosion {
 
@@ -16,22 +13,22 @@ public class Explosion extends MiddleExplosion {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_EXPLOSION);
-		serializer.writeFloat(x);
-		serializer.writeFloat(y);
-		serializer.writeFloat(z);
-		serializer.writeFloat(radius);
-		serializer.writeInt(blocks.length);
+	public void writeToClient() {
+		ClientBoundPacketData explosion = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_EXPLOSION);
+		explosion.writeFloat(x);
+		explosion.writeFloat(y);
+		explosion.writeFloat(z);
+		explosion.writeFloat(radius);
+		explosion.writeInt(blocks.length);
 		for (Position block : blocks) {
-			serializer.writeByte(block.getX());
-			serializer.writeByte(block.getY());
-			serializer.writeByte(block.getZ());
+			explosion.writeByte(block.getX());
+			explosion.writeByte(block.getY());
+			explosion.writeByte(block.getZ());
 		}
-		serializer.writeFloat(pMotX);
-		serializer.writeFloat(pMotY);
-		serializer.writeFloat(pMotZ);
-		return RecyclableSingletonList.create(serializer);
+		explosion.writeFloat(pMotX);
+		explosion.writeFloat(pMotY);
+		explosion.writeFloat(pMotZ);
+		codec.write(explosion);
 	}
 
 }

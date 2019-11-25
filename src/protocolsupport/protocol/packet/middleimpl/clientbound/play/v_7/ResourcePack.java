@@ -5,11 +5,8 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleResourcePack;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class ResourcePack extends MiddleResourcePack {
 
@@ -18,11 +15,11 @@ public class ResourcePack extends MiddleResourcePack {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
-		StringSerializer.writeVarIntUTF8String(serializer, "MC|RPack");
-		ArraySerializer.writeShortByteArray(serializer, to -> ByteBufUtil.writeUtf8(to, url));
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData resourcepack = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
+		StringSerializer.writeVarIntUTF8String(resourcepack, "MC|RPack");
+		ArraySerializer.writeShortByteArray(resourcepack, to -> ByteBufUtil.writeUtf8(to, url));
+		codec.write(resourcepack);
 	}
 
 }

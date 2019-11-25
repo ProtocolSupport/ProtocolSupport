@@ -1,20 +1,20 @@
 package protocolsupport.protocol.typeremapper.packet;
 
-import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.ConnectionImpl.ServerboundPacketProcessor;
+import protocolsupport.protocol.packet.PacketData;
+import protocolsupport.protocol.packet.PacketDataCodec;
+import protocolsupport.protocol.packet.PacketDataCodec.ServerBoundPacketDataProcessor;
 import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 
-public class AnimatePacketReorderer extends ServerboundPacketProcessor {
+public class AnimatePacketReorderer extends ServerBoundPacketDataProcessor {
 
-	public AnimatePacketReorderer(ConnectionImpl connection) {
-		super(connection);
+	public AnimatePacketReorderer(PacketDataCodec codec) {
+		super(codec);
 	}
 
-	protected IPacketData animatePacket;
+	protected PacketData<?> animatePacket;
 
 	@Override
-	public void process(IPacketData packet) {
+	public void process(PacketData<?> packet) {
 		PacketType packetType = packet.getPacketType();
 
 		if (animatePacket != null) {
@@ -39,7 +39,7 @@ public class AnimatePacketReorderer extends ServerboundPacketProcessor {
 	@Override
 	public void release() {
 		if (animatePacket != null) {
-			animatePacket.recycle();
+			animatePacket.release();
 		}
 	}
 

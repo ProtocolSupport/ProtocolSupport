@@ -5,12 +5,9 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class InventoryOpen extends MiddleInventoryOpen {
 
@@ -19,12 +16,12 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData0() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
-		VarNumberSerializer.writeVarInt(serializer, windowId);
-		MiscSerializer.writeVarIntEnum(serializer, windowRemapper.toClientWindowType(type));
-		StringSerializer.writeVarIntUTF8String(serializer, ChatAPI.toJSON(title));
-		return RecyclableSingletonList.create(serializer);
+	protected void writeToClient0() {
+		ClientBoundPacketData windowopen = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
+		VarNumberSerializer.writeVarInt(windowopen, windowId);
+		MiscSerializer.writeVarIntEnum(windowopen, windowRemapper.toClientWindowType(type));
+		StringSerializer.writeVarIntUTF8String(windowopen, ChatAPI.toJSON(title));
+		codec.write(windowopen);
 	}
 
 }

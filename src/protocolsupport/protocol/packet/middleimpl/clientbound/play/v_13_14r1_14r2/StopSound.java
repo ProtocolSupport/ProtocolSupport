@@ -4,11 +4,8 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleStopSound;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class StopSound extends MiddleStopSound {
 
@@ -17,16 +14,16 @@ public class StopSound extends MiddleStopSound {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_STOP_SOUND);
-		serializer.writeByte((source != -1 ? FLAG_SOURCE : 0) | (name != null ? FLAG_NAME : 0));
+	public void writeToClient() {
+		ClientBoundPacketData stopsound = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_STOP_SOUND);
+		stopsound.writeByte((source != -1 ? FLAG_SOURCE : 0) | (name != null ? FLAG_NAME : 0));
 		if (source != -1) {
-			VarNumberSerializer.writeVarInt(serializer, source);
+			VarNumberSerializer.writeVarInt(stopsound, source);
 		}
 		if (name != null) {
-			StringSerializer.writeVarIntUTF8String(serializer, name);
+			StringSerializer.writeVarIntUTF8String(stopsound, name);
 		}
-		return RecyclableSingletonList.create(serializer);
+		codec.write(stopsound);
 	}
 
 }

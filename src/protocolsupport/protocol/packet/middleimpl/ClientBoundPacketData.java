@@ -1,13 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.UnpooledHeapByteBuf;
+import java.util.function.BiConsumer;
+
 import io.netty.util.Recycler;
 import io.netty.util.Recycler.Handle;
+import protocolsupport.protocol.packet.PacketData;
 import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.utils.recyclable.Recyclable;
 
-public class ClientBoundPacketData extends UnpooledHeapByteBuf implements Recyclable, IPacketData {
+public class ClientBoundPacketData extends PacketData<ClientBoundPacketData> {
 
 	protected static final Recycler<ClientBoundPacketData> recycler = new Recycler<ClientBoundPacketData>() {
 		@Override
@@ -16,49 +16,23 @@ public class ClientBoundPacketData extends UnpooledHeapByteBuf implements Recycl
 		}
 	};
 
-	public static ClientBoundPacketData create(PacketType packetType) {
-		ClientBoundPacketData packetdata = recycler.get();
-		packetdata.packetType = packetType;
-		return packetdata;
-	}
-
-	private final Handle<ClientBoundPacketData> handle;
-	private ClientBoundPacketData(Handle<ClientBoundPacketData> handle) {
-		super(ALLOCATOR, 1024, Integer.MAX_VALUE);
-		this.handle = handle;
-	}
-
-	private PacketType packetType;
-
-	@Override
-	public void recycle() {
-		clear();
-		packetType = null;
-		handle.recycle(this);
+	protected ClientBoundPacketData(Handle<ClientBoundPacketData> handle) {
+		super(handle);
 	}
 
 	@Override
-	public PacketType getPacketType() {
-		return packetType;
+	protected ClientBoundPacketData newInstance() {
+		return recycler.get();
 	}
 
-	@Override
-	public int getDataLength() {
-		return readableBytes();
+	public static ClientBoundPacketData create(PacketType packetType, BiConsumer<ClientBoundPacketData, PacketType> packetIdWriter) {
+		return recycler.get().init(packetType, packetIdWriter);
 	}
 
-	@Override
-	public void writeData(ByteBuf to) {
-		to.writeBytes(this);
-	}
-
-	@Override
-	public ClientBoundPacketData clone() {
-		ClientBoundPacketData packetdata = ClientBoundPacketData.create(getPacketType());
-		markReaderIndex();
-		packetdata.writeBytes(this);
-		resetReaderIndex();
-		return packetdata;
+	protected ClientBoundPacketData init(PacketType packetType, BiConsumer<ClientBoundPacketData, PacketType> packetIdWriter) {
+		this.packetType = packetType;
+		packetIdWriter.accept(this, packetType);
+		return this;
 	}
 
 }

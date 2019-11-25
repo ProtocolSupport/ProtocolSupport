@@ -4,10 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleAdvancementsTab;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class AdvancementsTab extends MiddleAdvancementsTab {
 
@@ -16,15 +13,15 @@ public class AdvancementsTab extends MiddleAdvancementsTab {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ADVANCEMENTS_TAB);
+	public void writeToClient() {
+		ClientBoundPacketData advanvementstab = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ADVANCEMENTS_TAB);
 		if (identifier != null) {
-			serializer.writeBoolean(true);
-			StringSerializer.writeVarIntUTF8String(serializer, identifier);
+			advanvementstab.writeBoolean(true);
+			StringSerializer.writeVarIntUTF8String(advanvementstab, identifier);
 		} else {
-			serializer.writeBoolean(false);
+			advanvementstab.writeBoolean(false);
 		}
-		return RecyclableSingletonList.create(serializer);
+		codec.write(advanvementstab);
 	}
 
 }

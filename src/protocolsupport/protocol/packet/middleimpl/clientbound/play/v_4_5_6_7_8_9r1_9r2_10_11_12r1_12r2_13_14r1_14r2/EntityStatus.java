@@ -4,9 +4,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityStatus;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityStatus extends MiddleEntityStatus {
 
@@ -15,11 +12,11 @@ public class EntityStatus extends MiddleEntityStatus {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_STATUS);
-		serializer.writeInt(entityId);
-		serializer.writeByte(status);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData entitystatus = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_STATUS);
+		entitystatus.writeInt(entityId);
+		entitystatus.writeByte(status);
+		codec.write(entitystatus);
 	}
 
 }

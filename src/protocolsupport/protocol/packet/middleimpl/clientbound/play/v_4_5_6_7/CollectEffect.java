@@ -4,9 +4,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCollectEffect;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class CollectEffect extends MiddleCollectEffect {
 
@@ -15,11 +12,11 @@ public class CollectEffect extends MiddleCollectEffect {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_COLLECT_EFFECT);
-		serializer.writeInt(entityId);
-		serializer.writeInt(collectorId);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData collecteffect = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_COLLECT_EFFECT);
+		collecteffect.writeInt(entityId);
+		collecteffect.writeInt(collectorId);
+		codec.write(collecteffect);
 	}
 
 }

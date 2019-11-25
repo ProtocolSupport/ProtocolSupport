@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet;
 
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupportbuildprocessor.Preload;
 
@@ -167,8 +166,6 @@ public class PacketType {
 
 	public static final PacketType CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN_ID = new PacketType(Direction.CLIENTBOUND, -1);
 	public static final PacketType CLIENTBOUND_LEGACY_PLAY_USE_BED_ID = new PacketType(Direction.CLIENTBOUND, -1);
-
-	public static final int MAX_PACKET_ID_LENGTH = Math.max(VarNumberSerializer.MAX_LENGTH, Byte.BYTES);
 
 	private final Direction direction;
 	private final int id;

@@ -5,11 +5,8 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardObjective;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class ScoreboardObjective extends MiddleScoreboardObjective {
 
@@ -18,15 +15,15 @@ public class ScoreboardObjective extends MiddleScoreboardObjective {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_OBJECTIVE);
-		StringSerializer.writeVarIntUTF8String(serializer, name);
-		serializer.writeByte(mode.ordinal());
+	public void writeToClient() {
+		ClientBoundPacketData scoreboardobjective = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_OBJECTIVE);
+		StringSerializer.writeVarIntUTF8String(scoreboardobjective, name);
+		scoreboardobjective.writeByte(mode.ordinal());
 		if (mode != Mode.REMOVE) {
-			StringSerializer.writeVarIntUTF8String(serializer, ChatAPI.toJSON(value));
-			MiscSerializer.writeVarIntEnum(serializer, type);
+			StringSerializer.writeVarIntUTF8String(scoreboardobjective, ChatAPI.toJSON(value));
+			MiscSerializer.writeVarIntEnum(scoreboardobjective, type);
 		}
-		return RecyclableSingletonList.create(serializer);
+		codec.write(scoreboardobjective);
 	}
 
 }

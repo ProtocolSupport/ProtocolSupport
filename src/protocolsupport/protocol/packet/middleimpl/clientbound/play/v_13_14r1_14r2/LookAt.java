@@ -4,9 +4,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleLookAt;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class LookAt extends MiddleLookAt {
 
@@ -15,10 +12,10 @@ public class LookAt extends MiddleLookAt {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_LOOK_AT);
-		serializer.writeBytes(data);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData lookat = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_LOOK_AT);
+		lookat.writeBytes(data);
+		codec.write(lookat);
 	}
 
 }

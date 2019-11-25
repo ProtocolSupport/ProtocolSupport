@@ -4,9 +4,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.status.MiddlePong;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Pong extends MiddlePong {
 
@@ -15,10 +12,10 @@ public class Pong extends MiddlePong {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_STATUS_PONG);
-		serializer.writeLong(pingId);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData pong = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_STATUS_PONG);
+		pong.writeLong(pingId);
+		codec.write(pong);
 	}
 
 }

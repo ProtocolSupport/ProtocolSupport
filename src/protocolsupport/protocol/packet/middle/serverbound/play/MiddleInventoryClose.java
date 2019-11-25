@@ -3,11 +3,8 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
 
@@ -20,9 +17,10 @@ public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
 	protected byte windowId;
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toNative() {
+	public void writeToServer() {
 		windowCache.closeWindow();
-		return RecyclableSingletonList.create(create(windowId));
+
+		codec.read(create(windowId));
 	}
 
 	public static ServerBoundPacketData create(int windowId) {

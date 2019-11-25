@@ -3,10 +3,7 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleMove extends ServerBoundMiddlePacket {
 
@@ -20,13 +17,13 @@ public abstract class MiddleMove extends ServerBoundMiddlePacket {
 	protected boolean onGround;
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toNative() {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_POSITION);
-		creator.writeDouble(x);
-		creator.writeDouble(y);
-		creator.writeDouble(z);
-		creator.writeBoolean(onGround);
-		return RecyclableSingletonList.create(creator);
+	public void writeToServer() {
+		ServerBoundPacketData move = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_POSITION);
+		move.writeDouble(x);
+		move.writeDouble(y);
+		move.writeDouble(z);
+		move.writeBoolean(onGround);
+		codec.read(move);
 	}
 
 }

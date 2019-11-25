@@ -4,10 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityEffectAdd;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityEffectAdd extends MiddleEntityEffectAdd {
 
@@ -16,14 +13,14 @@ public class EntityEffectAdd extends MiddleEntityEffectAdd {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_EFFECT_ADD);
-		VarNumberSerializer.writeVarInt(serializer, entityId);
-		serializer.writeByte(effectId);
-		serializer.writeByte(amplifier);
-		VarNumberSerializer.writeVarInt(serializer, duration);
-		serializer.writeByte(flags);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData effectadd = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_EFFECT_ADD);
+		VarNumberSerializer.writeVarInt(effectadd, entityId);
+		effectadd.writeByte(effectId);
+		effectadd.writeByte(amplifier);
+		VarNumberSerializer.writeVarInt(effectadd, duration);
+		effectadd.writeByte(flags);
+		codec.write(effectadd);
 	}
 
 }

@@ -4,13 +4,9 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldSound;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.SoundRemapper;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class WorldSound extends MiddleWorldSound {
 
@@ -19,20 +15,19 @@ public class WorldSound extends MiddleWorldSound {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
+	public void writeToClient() {
 		String soundname = SoundRemapper.getSoundName(version, id);
-		if (soundname == null) {
-			return RecyclableEmptyList.get();
+		if (soundname != null) {
+			ClientBoundPacketData worldsound = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND);
+			StringSerializer.writeVarIntUTF8String(worldsound, soundname);
+			VarNumberSerializer.writeVarInt(worldsound, category);
+			worldsound.writeInt(x);
+			worldsound.writeInt(y);
+			worldsound.writeInt(z);
+			worldsound.writeFloat(volume);
+			worldsound.writeByte((int) (pitch * 63.5));
+			codec.write(worldsound);
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND);
-		StringSerializer.writeVarIntUTF8String(serializer, soundname);
-		VarNumberSerializer.writeVarInt(serializer, category);
-		serializer.writeInt(x);
-		serializer.writeInt(y);
-		serializer.writeInt(z);
-		serializer.writeFloat(volume);
-		serializer.writeByte((int) (pitch * 63.5));
-		return RecyclableSingletonList.create(serializer);
 	}
 
 }

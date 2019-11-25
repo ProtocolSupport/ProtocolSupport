@@ -2,15 +2,12 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryData;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.storage.netcache.window.WindowEnchantmentCache;
 import protocolsupport.protocol.storage.netcache.window.WindowFurnaceCache;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class InventoryData extends MiddleInventoryData {
 
@@ -31,19 +28,17 @@ public class InventoryData extends MiddleInventoryData {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
+	public void writeToClient() {
 		switch (windowCache.getOpenedWindowType()) {
 			case ENCHANTMENT: {
 				if (version.isBetween(ProtocolVersion.MINECRAFT_1_9_4, ProtocolVersion.MINECRAFT_1_8)) {
 					WindowEnchantmentCache enchantmentCache = (WindowEnchantmentCache) windowCache.getOpenedWindowMetadata();
 					if ((type >= ENCHANTMENT_TYPE_ID_TOP) && (type <= ENCHANTMENT_TYPE_ID_BOTTOM)) {
-						return RecyclableSingletonList.create(create(
-							windowId, type, enchantmentCache.updateEnchantmentId(type - ENCHANTMENT_TYPE_ID_TOP, value)
-						));
+						codec.write(create(codec, windowId, type, enchantmentCache.updateEnchantmentId(type - ENCHANTMENT_TYPE_ID_TOP, value)));
+						return;
 					} else if ((type >= ENCHANTMENT_TYPE_LEVEL_TOP) && (type <= EHCNAHTMENT_TYPE_LEVEL_BOTTOM)) {
-						return RecyclableSingletonList.create(create(
-							windowId, type - 3, enchantmentCache.updateEnchantmentLevel(type - ENCHANTMENT_TYPE_LEVEL_TOP, value)
-						));
+						codec.write(create(codec, windowId, type - 3, enchantmentCache.updateEnchantmentLevel(type - ENCHANTMENT_TYPE_LEVEL_TOP, value)));
+						return;
 					}
 				}
 				break;
@@ -53,18 +48,20 @@ public class InventoryData extends MiddleInventoryData {
 					WindowFurnaceCache furnaceCache = (WindowFurnaceCache) windowCache.getOpenedWindowMetadata();
 					switch (type) {
 						case FURNACE_TYPE_FUEL_TIME_CURRENT: {
-							return RecyclableSingletonList.create(create(windowId, 1, furnaceCache.scaleCurrentFuelBurnTime(value)));
+							codec.write(create(codec, windowId, 1, furnaceCache.scaleCurrentFuelBurnTime(value)));
+							return;
 						}
 						case FURNACE_TYPE_FUEL_TIME_MAX: {
 							furnaceCache.setMaxFuelBurnTime(value);
-							return RecyclableEmptyList.get();
+							return;
 						}
 						case FURNACE_TYPE_PROGRESS_CURRENT: {
-							return RecyclableSingletonList.create(create(windowId, 0, furnaceCache.scaleCurrentCurrentProgress(value)));
+							codec.write(create(codec, windowId, 0, furnaceCache.scaleCurrentCurrentProgress(value)));
+							return;
 						}
 						case FURNACE_TYPE_PROGRESS_MAX: {
 							furnaceCache.setMaxProgress(value);
-							return RecyclableEmptyList.get();
+							return;
 						}
 					}
 				}
@@ -74,15 +71,15 @@ public class InventoryData extends MiddleInventoryData {
 				break;
 			}
 		}
-		return RecyclableSingletonList.create(create(windowId, type, value));
+		codec.write(create(codec, windowId, type, value));
 	}
 
-	protected static ClientBoundPacketData create(byte windowId, int type, int value) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_DATA);
-		serializer.writeByte(windowId);
-		serializer.writeShort(type);
-		serializer.writeShort(value);
-		return serializer;
+	protected static ClientBoundPacketData create(PacketDataCodec codec, byte windowId, int type, int value) {
+		ClientBoundPacketData windowdata = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WINDOW_DATA);
+		windowdata.writeByte(windowId);
+		windowdata.writeShort(type);
+		windowdata.writeShort(value);
+		return windowdata;
 	}
 
 }

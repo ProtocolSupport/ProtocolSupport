@@ -4,9 +4,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleVehicleMove;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class VehicleMove extends MiddleVehicleMove {
 
@@ -15,14 +12,14 @@ public class VehicleMove extends MiddleVehicleMove {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_VEHICLE_MOVE);
-		serializer.writeDouble(x);
-		serializer.writeDouble(y);
-		serializer.writeDouble(z);
-		serializer.writeFloat(yaw);
-		serializer.writeFloat(pitch);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData vehiclemove = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_VEHICLE_MOVE);
+		vehiclemove.writeDouble(x);
+		vehiclemove.writeDouble(y);
+		vehiclemove.writeDouble(z);
+		vehiclemove.writeFloat(yaw);
+		vehiclemove.writeFloat(pitch);
+		codec.write(vehiclemove);
 	}
 
 }

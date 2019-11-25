@@ -4,12 +4,11 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.pipeline.IPacketCodec;
 import protocolsupport.protocol.pipeline.version.util.MiddlePacketRegistry;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.zplatform.ServerPlatform;
@@ -17,19 +16,25 @@ import protocolsupport.zplatform.ServerPlatform;
 public abstract class AbstractPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	protected final ConnectionImpl connection;
-	protected final IPacketCodec codec;
 	protected final MiddlePacketRegistry<ServerBoundMiddlePacket> registry;
 
-	public AbstractPacketDecoder(ConnectionImpl connection, IPacketCodec codec) {
+	public AbstractPacketDecoder(ConnectionImpl connection) {
 		this.connection = connection;
-		this.codec = codec;
 		this.registry = new MiddlePacketRegistry<>(connection);
 	}
 
-	protected void decodeAndTransform(ChannelHandlerContext ctx, ByteBuf input) {
+	protected PacketDataCodec codec;
+
+	public void init(PacketDataCodec codec) {
+		this.codec = codec;
+	}
+
+	protected void decodeAndTransform(ByteBuf input) {
 		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(connection.getNetworkState(), codec.readPacketId(input));
+
 		packetTransformer.readFromClientData(input);
-		connection.readServerboundPackets(packetTransformer.toNative(), false);
+
+		packetTransformer.writeToServer();
 	}
 
 	protected void throwFailedTransformException(Exception exception, ByteBuf data) throws Exception {

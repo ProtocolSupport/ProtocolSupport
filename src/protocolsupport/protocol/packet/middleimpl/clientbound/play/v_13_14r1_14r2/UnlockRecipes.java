@@ -4,11 +4,8 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleUnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class UnlockRecipes extends MiddleUnlockRecipes {
 
@@ -17,18 +14,18 @@ public class UnlockRecipes extends MiddleUnlockRecipes {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UNLOCK_RECIPES);
-		MiscSerializer.writeVarIntEnum(serializer, action);
-		serializer.writeBoolean(craftRecipeBookOpen);
-		serializer.writeBoolean(craftRecipeBookFiltering);
-		serializer.writeBoolean(smeltingRecipeBookOpen);
-		serializer.writeBoolean(smeltingRecipeBookFiltering);
-		ArraySerializer.writeVarIntVarIntUTF8StringArray(serializer, recipes1);
+	public void writeToClient() {
+		ClientBoundPacketData unlockrecipes = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_UNLOCK_RECIPES);
+		MiscSerializer.writeVarIntEnum(unlockrecipes, action);
+		unlockrecipes.writeBoolean(craftRecipeBookOpen);
+		unlockrecipes.writeBoolean(craftRecipeBookFiltering);
+		unlockrecipes.writeBoolean(smeltingRecipeBookOpen);
+		unlockrecipes.writeBoolean(smeltingRecipeBookFiltering);
+		ArraySerializer.writeVarIntVarIntUTF8StringArray(unlockrecipes, recipes1);
 		if (action == Action.INIT) {
-			ArraySerializer.writeVarIntVarIntUTF8StringArray(serializer, recipes2);
+			ArraySerializer.writeVarIntVarIntUTF8StringArray(unlockrecipes, recipes2);
 		}
-		return RecyclableSingletonList.create(serializer);
+		codec.write(unlockrecipes);
 	}
 
 }

@@ -5,13 +5,10 @@ import org.bukkit.inventory.MainHand;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookups;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 
@@ -27,9 +24,10 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 	protected MainHand mainHand;
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toNative() {
+	public void writeToServer() {
 		cache.getAttributesCache().setLocale(locale);
-		return RecyclableSingletonList.create(create(locale, viewDist, chatMode, chatColors, skinFlags, mainHand));
+
+		codec.read(create(locale, viewDist, chatMode, chatColors, skinFlags, mainHand));
 	}
 
 	public static ServerBoundPacketData create(String locale, int viewDist, ChatMode chatMode, boolean chatColors, int skinFlags, MainHand mainHand) {

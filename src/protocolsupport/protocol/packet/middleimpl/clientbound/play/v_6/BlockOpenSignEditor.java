@@ -5,11 +5,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockOpenSignEditor;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BlockOpenSignEditor extends MiddleBlockOpenSignEditor {
 
@@ -18,14 +14,12 @@ public class BlockOpenSignEditor extends MiddleBlockOpenSignEditor {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		if (version == ProtocolVersion.MINECRAFT_1_6_1) {
-			return RecyclableEmptyList.get();
+	public void writeToClient() {
+		if (version.isAfter(ProtocolVersion.MINECRAFT_1_6_1)) {
+			ClientBoundPacketData blockopensigneditor = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SIGN_EDITOR);
+			blockopensigneditor.writeByte(0);
+			PositionSerializer.writeLegacyPositionI(blockopensigneditor, position);
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SIGN_EDITOR);
-		serializer.writeByte(0);
-		PositionSerializer.writeLegacyPositionI(serializer, position);
-		return RecyclableSingletonList.create(serializer);
 	}
 
 }

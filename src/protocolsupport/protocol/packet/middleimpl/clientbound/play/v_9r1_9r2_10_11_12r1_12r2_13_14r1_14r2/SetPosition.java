@@ -4,10 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPosition;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SetPosition extends MiddleSetPosition {
 
@@ -16,16 +13,16 @@ public class SetPosition extends MiddleSetPosition {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_POSITION);
-		serializer.writeDouble(xOrig);
-		serializer.writeDouble(yOrig);
-		serializer.writeDouble(zOrig);
-		serializer.writeFloat(yawOrig);
-		serializer.writeFloat(pitchOrig);
-		serializer.writeByte(flags);
-		VarNumberSerializer.writeVarInt(serializer, teleportConfirmId);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData setposition = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_POSITION);
+		setposition.writeDouble(xOrig);
+		setposition.writeDouble(yOrig);
+		setposition.writeDouble(zOrig);
+		setposition.writeFloat(yawOrig);
+		setposition.writeFloat(pitchOrig);
+		setposition.writeByte(flags);
+		VarNumberSerializer.writeVarInt(setposition, teleportConfirmId);
+		codec.write(setposition);
 	}
 
 }

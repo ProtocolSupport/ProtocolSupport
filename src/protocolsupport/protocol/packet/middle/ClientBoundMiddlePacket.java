@@ -2,8 +2,6 @@ package protocolsupport.protocol.packet.middle;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public abstract class ClientBoundMiddlePacket extends MiddlePacket {
 
@@ -17,7 +15,7 @@ public abstract class ClientBoundMiddlePacket extends MiddlePacket {
 		return true;
 	}
 
-	public abstract RecyclableCollection<? extends IPacketData> toData();
+	public abstract void writeToClient();
 
 	public void postHandle() {
 	}

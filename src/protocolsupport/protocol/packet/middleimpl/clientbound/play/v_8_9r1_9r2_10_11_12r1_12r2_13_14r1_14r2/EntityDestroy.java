@@ -4,10 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityDestroy extends MiddleEntityDestroy {
 
@@ -16,10 +13,10 @@ public class EntityDestroy extends MiddleEntityDestroy {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY);
-		ArraySerializer.writeVarIntVarIntArray(serializer, entityIds);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData entitydestory = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY);
+		ArraySerializer.writeVarIntVarIntArray(entitydestory, entityIds);
+		codec.write(entitydestory);
 	}
 
 }

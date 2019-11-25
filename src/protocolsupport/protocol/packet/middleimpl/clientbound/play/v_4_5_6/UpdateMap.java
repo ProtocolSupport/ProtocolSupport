@@ -6,13 +6,10 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleUpdateMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyMap;
 import protocolsupport.protocol.typeremapper.legacy.LegacyMap.ColumnEntry;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class UpdateMap extends MiddleUpdateMap {
 
@@ -24,17 +21,17 @@ public class UpdateMap extends MiddleUpdateMap {
 	private static final int mapId = Material.LEGACY_MAP.getId();
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		RecyclableCollection<ClientBoundPacketData> datas = RecyclableArrayList.create();
-		ClientBoundPacketData scaledata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
+	public void writeToClient() {
+		ClientBoundPacketData scaledata = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 		scaledata.writeShort(mapId);
 		scaledata.writeShort(id);
 		scaledata.writeShort(2);
 		scaledata.writeByte(2);
 		scaledata.writeByte(scale);
-		datas.add(scaledata);
+		codec.write(scaledata);
+
 		if (icons.length > 0) {
-			ClientBoundPacketData iconsdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
+			ClientBoundPacketData iconsdata = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 			iconsdata.writeShort(mapId);
 			iconsdata.writeShort(id);
 			iconsdata.writeShort((icons.length * 3) + 1);
@@ -44,14 +41,15 @@ public class UpdateMap extends MiddleUpdateMap {
 				iconsdata.writeByte(icon.x);
 				iconsdata.writeByte(icon.z);
 			}
-			datas.add(iconsdata);
+			codec.write(iconsdata);
 		}
+
 		if (columns > 0) {
 			LegacyMap maptransformer = new LegacyMap();
 			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, colors);
 			ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(version);
 			for (ColumnEntry entry : maptransformer.toPre18MapData()) {
-				ClientBoundPacketData mapdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
+				ClientBoundPacketData mapdata = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 				mapdata.writeShort(mapId);
 				mapdata.writeShort(id);
 				mapdata.writeShort(3 + entry.getColors().length);
@@ -63,10 +61,9 @@ public class UpdateMap extends MiddleUpdateMap {
 					colors[i] = (byte) colorRemapper.getRemap(colors[i] & 0xFF);
 				}
 				mapdata.writeBytes(colors);
-				datas.add(mapdata);
+				codec.write(mapdata);
 			}
 		}
-		return datas;
 	}
 
 }

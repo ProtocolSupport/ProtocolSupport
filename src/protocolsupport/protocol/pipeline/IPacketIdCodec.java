@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.PacketType;
 
-public abstract class IPacketCodec {
+public abstract class IPacketIdCodec {
 
 	protected final PacketIdTransformerRegistry registry = new PacketIdTransformerRegistry();
 

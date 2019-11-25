@@ -4,9 +4,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class PlayerAbilities extends MiddlePlayerAbilities {
 
@@ -15,12 +12,12 @@ public class PlayerAbilities extends MiddlePlayerAbilities {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_PLAYER_ABILITIES);
-		serializer.writeByte(flags);
-		serializer.writeFloat(flyspeed);
-		serializer.writeFloat(walkspeed);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData playerabilities = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_PLAYER_ABILITIES);
+		playerabilities.writeByte(flags);
+		playerabilities.writeFloat(flyspeed);
+		playerabilities.writeFloat(walkspeed);
+		codec.write(playerabilities);
 	}
 
 }

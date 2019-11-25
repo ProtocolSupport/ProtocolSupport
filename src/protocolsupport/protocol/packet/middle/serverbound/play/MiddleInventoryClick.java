@@ -3,14 +3,10 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
 import protocolsupport.protocol.types.NetworkItemStack;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 
@@ -30,11 +26,9 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 	protected NetworkItemStack itemstack;
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toNative() {
+	public void writeToServer() {
 		if (mode != MODE_NOOP) {
-			return RecyclableSingletonList.create(create(windowId, actionNumber, mode, button, slot, itemstack));
-		} else {
-			return RecyclableEmptyList.get();
+			codec.read(create(windowId, actionNumber, mode, button, slot, itemstack));
 		}
 	}
 

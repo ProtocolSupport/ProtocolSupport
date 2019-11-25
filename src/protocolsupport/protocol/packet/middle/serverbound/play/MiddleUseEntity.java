@@ -5,14 +5,11 @@ import org.bukkit.util.Vector;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.UsedHand;
 import protocolsupport.protocol.utils.EnumConstantLookups;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 
@@ -26,8 +23,8 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 	protected UsedHand hand;
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toNative() {
-		return RecyclableSingletonList.create(create(entityId, action, interactedAt, hand));
+	public void writeToServer() {
+		codec.read(create(entityId, action, interactedAt, hand));
 	}
 
 	public static ServerBoundPacketData create(int entityId, Action action, Vector interactedAt, UsedHand hand) {

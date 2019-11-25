@@ -4,9 +4,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityLeash;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityLeash extends MiddleEntityLeash {
 
@@ -15,11 +12,11 @@ public class EntityLeash extends MiddleEntityLeash {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_LEASH);
-		serializer.writeInt(entityId);
-		serializer.writeInt(vehicleId);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData entityleash = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_LEASH);
+		entityleash.writeInt(entityId);
+		entityleash.writeInt(vehicleId);
+		codec.write(entityleash);
 	}
 
 }

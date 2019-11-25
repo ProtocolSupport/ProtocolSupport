@@ -4,7 +4,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -15,8 +14,6 @@ import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVaries;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Chunk extends MiddleChunk {
 
@@ -29,13 +26,13 @@ public class Chunk extends MiddleChunk {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
-		PositionSerializer.writeIntChunkCoord(serializer, coord);
-		serializer.writeBoolean(full);
-		VarNumberSerializer.writeVarInt(serializer, blockMask);
-		ItemStackSerializer.writeDirectTag(serializer, heightmaps);
-		ArraySerializer.writeVarIntByteArray(serializer, to -> {
+	public void writeToClient() {
+		ClientBoundPacketData chunkdata = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
+		chunkdata.writeBoolean(full);
+		VarNumberSerializer.writeVarInt(chunkdata, blockMask);
+		ItemStackSerializer.writeDirectTag(chunkdata, heightmaps);
+		ArraySerializer.writeVarIntByteArray(chunkdata, to -> {
 			ChunkWriterVaries.writeSections(
 				to, blockMask, 14,
 				blockDataRemappingTable,
@@ -49,11 +46,11 @@ public class Chunk extends MiddleChunk {
 			}
 		});
 		ArraySerializer.writeVarIntTArray(
-			serializer,
+			chunkdata,
 			tiles,
 			(to, tile) -> ItemStackSerializer.writeDirectTag(to, tileRemapper.remap(tile).getNBT())
 		);
-		return RecyclableSingletonList.create(serializer);
+		codec.write(chunkdata);
 	}
 
 }

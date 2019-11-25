@@ -4,10 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetHealth;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SetHealth extends MiddleSetHealth {
 
@@ -16,12 +13,12 @@ public class SetHealth extends MiddleSetHealth {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SET_HEALTH);
-		serializer.writeFloat(health);
-		VarNumberSerializer.writeVarInt(serializer, food);
-		serializer.writeFloat(saturation);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData sethealth = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SET_HEALTH);
+		sethealth.writeFloat(health);
+		VarNumberSerializer.writeVarInt(sethealth, food);
+		sethealth.writeFloat(saturation);
+		codec.write(sethealth);
 	}
 
 }

@@ -5,9 +5,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTimeUpdate;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class TimeUpdate extends MiddleTimeUpdate {
 
@@ -16,14 +13,14 @@ public class TimeUpdate extends MiddleTimeUpdate {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_TIME);
+	public void writeToClient() {
+		ClientBoundPacketData timeupdate = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_UPDATE_TIME);
 		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)) {
 			timeOfDay = Math.abs(timeOfDay);
 		}
-		serializer.writeLong(worldAge);
-		serializer.writeLong(timeOfDay);
-		return RecyclableSingletonList.create(serializer);
+		timeupdate.writeLong(worldAge);
+		timeupdate.writeLong(timeOfDay);
+		codec.write(timeupdate);
 	}
 
 }

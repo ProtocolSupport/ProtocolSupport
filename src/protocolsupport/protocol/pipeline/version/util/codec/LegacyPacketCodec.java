@@ -1,9 +1,9 @@
 package protocolsupport.protocol.pipeline.version.util.codec;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.pipeline.IPacketCodec;
+import protocolsupport.protocol.pipeline.IPacketIdCodec;
 
-public abstract class LegacyPacketCodec extends IPacketCodec {
+public abstract class LegacyPacketCodec extends IPacketIdCodec {
 
 	@Override
 	public int readPacketId(ByteBuf from) {

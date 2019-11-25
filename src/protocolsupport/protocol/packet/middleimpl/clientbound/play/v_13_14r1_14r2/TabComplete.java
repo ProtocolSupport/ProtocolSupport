@@ -4,12 +4,9 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTabComplete;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class TabComplete extends MiddleTabComplete {
 
@@ -18,19 +15,19 @@ public class TabComplete extends MiddleTabComplete {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_TAB_COMPLETE);
-		VarNumberSerializer.writeVarInt(serializer, id);
-		VarNumberSerializer.writeVarInt(serializer, start);
-		VarNumberSerializer.writeVarInt(serializer, length);
-		ArraySerializer.writeVarIntTArray(serializer, matches, (data, match) -> {
-			StringSerializer.writeVarIntUTF8String(serializer, match.getMatch());
-			serializer.writeBoolean(match.hasTooltip());
+	public void writeToClient() {
+		ClientBoundPacketData tabcomplete = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_TAB_COMPLETE);
+		VarNumberSerializer.writeVarInt(tabcomplete, id);
+		VarNumberSerializer.writeVarInt(tabcomplete, start);
+		VarNumberSerializer.writeVarInt(tabcomplete, length);
+		ArraySerializer.writeVarIntTArray(tabcomplete, matches, (data, match) -> {
+			StringSerializer.writeVarIntUTF8String(tabcomplete, match.getMatch());
+			tabcomplete.writeBoolean(match.hasTooltip());
 			if (match.hasTooltip()) {
-				StringSerializer.writeVarIntUTF8String(serializer, match.getTooltip());
+				StringSerializer.writeVarIntUTF8String(tabcomplete, match.getTooltip());
 			}
 		});
-		return RecyclableSingletonList.create(serializer);
+		codec.write(tabcomplete);
 	}
 
 }

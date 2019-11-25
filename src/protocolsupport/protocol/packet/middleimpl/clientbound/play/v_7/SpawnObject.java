@@ -3,15 +3,12 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.AbstractLocationOffsetSpawnObject;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry;
 import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry.ObjectDataRemappingTable;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SpawnObject extends AbstractLocationOffsetSpawnObject {
 
@@ -22,7 +19,7 @@ public class SpawnObject extends AbstractLocationOffsetSpawnObject {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
+	public void writeToClient() {
 		NetworkEntityType type = entityRemapper.getRemappedEntityType();
 		if (type.isOfType(NetworkEntityType.MINECART)) {
 			objectdata = LegacyEntityId.getMinecartObjectData(type);
@@ -57,21 +54,21 @@ public class SpawnObject extends AbstractLocationOffsetSpawnObject {
 			}
 		}
 
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
-		VarNumberSerializer.writeVarInt(serializer, entity.getId());
-		serializer.writeByte(LegacyEntityId.getObjectIntId(type));
-		serializer.writeInt((int) x);
-		serializer.writeInt((int) y);
-		serializer.writeInt((int) z);
-		serializer.writeByte(pitch);
-		serializer.writeByte(yaw);
-		serializer.writeInt(objectdata);
+		ClientBoundPacketData spawnobject = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
+		VarNumberSerializer.writeVarInt(spawnobject, entity.getId());
+		spawnobject.writeByte(LegacyEntityId.getObjectIntId(type));
+		spawnobject.writeInt((int) x);
+		spawnobject.writeInt((int) y);
+		spawnobject.writeInt((int) z);
+		spawnobject.writeByte(pitch);
+		spawnobject.writeByte(yaw);
+		spawnobject.writeInt(objectdata);
 		if (objectdata > 0) {
-			serializer.writeShort(motX);
-			serializer.writeShort(motY);
-			serializer.writeShort(motZ);
+			spawnobject.writeShort(motX);
+			spawnobject.writeShort(motY);
+			spawnobject.writeShort(motZ);
 		}
-		return RecyclableSingletonList.create(serializer);
+		codec.write(spawnobject);
 	}
 
 }

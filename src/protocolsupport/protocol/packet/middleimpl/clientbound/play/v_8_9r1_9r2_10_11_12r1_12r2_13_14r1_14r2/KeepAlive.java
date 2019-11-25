@@ -5,10 +5,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleKeepAlive;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class KeepAlive extends MiddleKeepAlive {
 
@@ -17,14 +14,14 @@ public class KeepAlive extends MiddleKeepAlive {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_KEEP_ALIVE);
+	public void writeToClient() {
+		ClientBoundPacketData keepalive = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_KEEP_ALIVE);
 		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_12_1)) {
-			VarNumberSerializer.writeVarInt(serializer, keepAliveId);
+			VarNumberSerializer.writeVarInt(keepalive, keepAliveId);
 		} else {
-			serializer.writeLong(keepAliveId);
+			keepalive.writeLong(keepAliveId);
 		}
-		return RecyclableSingletonList.create(serializer);
+		codec.write(keepalive);
 	}
 
 }

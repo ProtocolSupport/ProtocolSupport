@@ -5,17 +5,15 @@ import java.util.function.Consumer;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.storage.netcache.CustomPayloadChannelsCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class CustomPayload extends MiddleCustomPayload {
 
@@ -26,24 +24,22 @@ public class CustomPayload extends MiddleCustomPayload {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		return RecyclableSingletonList.create(create(
-			version, Utils.clampString(channelsCache.getLegacyName(LegacyCustomPayloadChannelName.toPre13(tag)), 20), data
-		));
+	public void writeToClient() {
+		codec.write(create(codec, version, Utils.clampString(channelsCache.getLegacyName(LegacyCustomPayloadChannelName.toPre13(tag)), 20), data));
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, String tag, Consumer<ByteBuf> dataWriter) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
-		StringSerializer.writeString(serializer, version, tag);
-		ArraySerializer.writeShortByteArray(serializer, dataWriter);
-		return serializer;
+	public static ClientBoundPacketData create(PacketDataCodec codec, ProtocolVersion version, String tag, Consumer<ByteBuf> dataWriter) {
+		ClientBoundPacketData custompayload = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
+		StringSerializer.writeString(custompayload, version, tag);
+		ArraySerializer.writeShortByteArray(custompayload, dataWriter);
+		return custompayload;
 	}
 
-	public static ClientBoundPacketData create(ProtocolVersion version, String tag, ByteBuf data) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
-		StringSerializer.writeString(serializer, version, tag);
-		ArraySerializer.writeShortByteArray(serializer, data);
-		return serializer;
+	public static ClientBoundPacketData create(PacketDataCodec codec, ProtocolVersion version, String tag, ByteBuf data) {
+		ClientBoundPacketData custompayload = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
+		StringSerializer.writeString(custompayload, version, tag);
+		ArraySerializer.writeShortByteArray(custompayload, data);
+		return custompayload;
 	}
 
 }

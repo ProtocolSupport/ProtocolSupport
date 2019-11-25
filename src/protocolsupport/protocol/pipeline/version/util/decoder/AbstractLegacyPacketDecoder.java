@@ -4,18 +4,21 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.pipeline.IPacketCodec;
+import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.typeremapper.packet.AnimatePacketReorderer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer;
 import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 
 public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 
-	protected final AnimatePacketReorderer animateReorderer = new AnimatePacketReorderer(connection);
+	public AbstractLegacyPacketDecoder(ConnectionImpl connection) {
+		super(connection);
+	}
 
-	public AbstractLegacyPacketDecoder(ConnectionImpl connection, IPacketCodec codec) {
-		super(connection, codec);
-		connection.addServerboundPacketProcessor(animateReorderer);
+	@Override
+	public void init(PacketDataCodec codec) {
+		super.init(codec);
+		codec.addServerboundPacketProcessor(new AnimatePacketReorderer(codec));
 	}
 
 	protected final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer(Unpooled.buffer());
@@ -29,7 +32,7 @@ public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder 
 		while (buffer.isReadable()) {
 			buffer.markReaderIndex();
 			try {
-				decodeAndTransform(ctx, buffer);
+				decodeAndTransform(buffer);
 			} catch (EOFSignal signal) {
 				buffer.resetReaderIndex();
 				break;

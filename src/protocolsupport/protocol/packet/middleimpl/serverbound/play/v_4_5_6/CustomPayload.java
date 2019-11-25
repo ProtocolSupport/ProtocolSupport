@@ -3,13 +3,11 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.storage.netcache.CustomPayloadChannelsCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class CustomPayload extends ServerBoundMiddlePacket {
 
@@ -29,35 +27,44 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toNative() {
+	public void writeToServer() {
 		switch (tag) {
 			case LegacyCustomPayloadChannelName.LEGACY_REGISTER: {
-				return LegacyCustomPayloadData.transformRegisterUnregister(channelsCache, tag, data, true);
+				LegacyCustomPayloadData.transformAndWriteRegisterUnregister(codec, channelsCache, tag, data, true);
+				break;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_UNREGISTER: {
-				return LegacyCustomPayloadData.transformRegisterUnregister(channelsCache, tag, data, false);
+				LegacyCustomPayloadData.transformAndWriteRegisterUnregister(codec, channelsCache, tag, data, false);
+				break;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_BOOK_EDIT: {
-				return LegacyCustomPayloadData.transformBookEdit(version, data);
+				LegacyCustomPayloadData.transformAndWriteBookEdit(codec, version, data);
+				break;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_BOOK_SIGN: {
-				return LegacyCustomPayloadData.transformBookSign(version, data);
+				LegacyCustomPayloadData.transformAndWriteBookSign(codec, version, data);
+				break;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_SET_BEACON: {
-				return LegacyCustomPayloadData.transformSetBeaconEffect(data);
+				LegacyCustomPayloadData.transformAndWriteSetBeaconEffect(codec, data);
+				break;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_NAME_ITEM: {
-				return LegacyCustomPayloadData.transformNameItemDString(data);
+				LegacyCustomPayloadData.transformAndWriteNameItemDString(codec, data);
+				break;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_TRADE_SELECT: {
-				return LegacyCustomPayloadData.transformTradeSelect(data);
+				LegacyCustomPayloadData.transformAndWriteTradeSelect(codec, data);
+				break;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_RIGHT_NAME:
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_TYPO_NAME: {
-				return LegacyCustomPayloadData.transformBasicCommandBlockEdit(data);
+				LegacyCustomPayloadData.transformAndWriteBasicCommandBlockEdit(codec, data);
+				break;
 			}
 			default: {
-				return LegacyCustomPayloadData.transformCustomPayload(tag, data);
+				LegacyCustomPayloadData.transformAndWriteCustomPayload(codec, tag, data);
+				break;
 			}
 		}
 	}

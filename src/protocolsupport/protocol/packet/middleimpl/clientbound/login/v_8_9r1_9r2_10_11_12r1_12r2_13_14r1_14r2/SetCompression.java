@@ -4,10 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.login.MiddleSetCompression;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SetCompression extends MiddleSetCompression {
 
@@ -16,10 +13,10 @@ public class SetCompression extends MiddleSetCompression {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LOGIN_SET_COMPRESSION);
+	public void writeToClient() {
+		ClientBoundPacketData serializer = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_LOGIN_SET_COMPRESSION);
 		VarNumberSerializer.writeVarInt(serializer, threshold);
-		return RecyclableSingletonList.create(serializer);
+		codec.write(serializer);
 	}
 
 }

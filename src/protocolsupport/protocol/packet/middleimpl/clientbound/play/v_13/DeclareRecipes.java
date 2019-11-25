@@ -9,7 +9,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleDeclareRecipes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -23,8 +22,6 @@ import protocolsupport.protocol.types.recipe.ShapelessRecipe;
 import protocolsupport.protocol.types.recipe.SmeltingRecipe;
 import protocolsupport.protocol.utils.NamespacedKeyUtils;
 import protocolsupport.protocol.utils.i18n.I18NData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class DeclareRecipes extends MiddleDeclareRecipes {
 
@@ -106,9 +103,9 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_DECLARE_RECIPES);
-		ArraySerializer.writeVarIntTArray(serializer, to -> {
+	public void writeToClient() {
+		ClientBoundPacketData declarerecipes = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_DECLARE_RECIPES);
+		ArraySerializer.writeVarIntTArray(declarerecipes, to -> {
 			int writtenRecipeCount = 0;
 			for (Recipe recipe : recipes) {
 				@SuppressWarnings("unchecked")
@@ -120,7 +117,7 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 			}
 			return writtenRecipeCount;
 		});
-		return RecyclableSingletonList.create(serializer);
+		codec.write(declarerecipes);
 	}
 
 }

@@ -7,14 +7,11 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 
@@ -23,46 +20,46 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_PLAYER_INFO);
-		VarNumberSerializer.writeVarInt(serializer, action.ordinal());
-		VarNumberSerializer.writeVarInt(serializer, infos.size());
+	public void writeToClient() {
+		ClientBoundPacketData playerlistsetentry = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_PLAYER_INFO);
+		VarNumberSerializer.writeVarInt(playerlistsetentry, action.ordinal());
+		VarNumberSerializer.writeVarInt(playerlistsetentry, infos.size());
 		for (Entry<UUID, PlayerListOldNewEntry> entry : infos.entrySet()) {
-			MiscSerializer.writeUUID(serializer, entry.getKey());
+			MiscSerializer.writeUUID(playerlistsetentry, entry.getKey());
 			PlayerListEntry currentEntry = entry.getValue().getNewEntry();
 			switch (action) {
 				case ADD: {
-					StringSerializer.writeVarIntUTF8String(serializer, currentEntry.getUserName());
-					ArraySerializer.writeVarIntTArray(serializer, currentEntry.getProperties(false), (to, property) -> {
-						StringSerializer.writeVarIntUTF8String(serializer, property.getName());
-						StringSerializer.writeVarIntUTF8String(serializer, property.getValue());
-						serializer.writeBoolean(property.hasSignature());
+					StringSerializer.writeVarIntUTF8String(playerlistsetentry, currentEntry.getUserName());
+					ArraySerializer.writeVarIntTArray(playerlistsetentry, currentEntry.getProperties(false), (to, property) -> {
+						StringSerializer.writeVarIntUTF8String(playerlistsetentry, property.getName());
+						StringSerializer.writeVarIntUTF8String(playerlistsetentry, property.getValue());
+						playerlistsetentry.writeBoolean(property.hasSignature());
 						if (property.hasSignature()) {
-							StringSerializer.writeVarIntUTF8String(serializer, property.getSignature());
+							StringSerializer.writeVarIntUTF8String(playerlistsetentry, property.getSignature());
 						}
 					});
-					VarNumberSerializer.writeVarInt(serializer, currentEntry.getGameMode().getId());
-					VarNumberSerializer.writeVarInt(serializer, currentEntry.getPing());
+					VarNumberSerializer.writeVarInt(playerlistsetentry, currentEntry.getGameMode().getId());
+					VarNumberSerializer.writeVarInt(playerlistsetentry, currentEntry.getPing());
 					String displayNameJson = currentEntry.getDisplayNameJson();
-					serializer.writeBoolean(displayNameJson != null);
+					playerlistsetentry.writeBoolean(displayNameJson != null);
 					if (displayNameJson != null) {
-						StringSerializer.writeVarIntUTF8String(serializer, displayNameJson);
+						StringSerializer.writeVarIntUTF8String(playerlistsetentry, displayNameJson);
 					}
 					break;
 				}
 				case GAMEMODE: {
-					VarNumberSerializer.writeVarInt(serializer, currentEntry.getGameMode().getId());
+					VarNumberSerializer.writeVarInt(playerlistsetentry, currentEntry.getGameMode().getId());
 					break;
 				}
 				case PING: {
-					VarNumberSerializer.writeVarInt(serializer, currentEntry.getPing());
+					VarNumberSerializer.writeVarInt(playerlistsetentry, currentEntry.getPing());
 					break;
 				}
 				case DISPLAY_NAME: {
 					String displayNameJson = currentEntry.getDisplayNameJson();
-					serializer.writeBoolean(displayNameJson != null);
+					playerlistsetentry.writeBoolean(displayNameJson != null);
 					if (displayNameJson != null) {
-						StringSerializer.writeVarIntUTF8String(serializer, displayNameJson);
+						StringSerializer.writeVarIntUTF8String(playerlistsetentry, displayNameJson);
 					}
 					break;
 				}
@@ -71,7 +68,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 				}
 			}
 		}
-		return RecyclableSingletonList.create(serializer);
+		codec.write(playerlistsetentry);
 	}
 
 }

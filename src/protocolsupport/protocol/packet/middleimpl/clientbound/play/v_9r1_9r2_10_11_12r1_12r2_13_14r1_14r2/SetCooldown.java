@@ -4,10 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetCooldown;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SetCooldown extends MiddleSetCooldown {
 
@@ -16,11 +13,11 @@ public class SetCooldown extends MiddleSetCooldown {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SET_COOLDOWN);
-		VarNumberSerializer.writeVarInt(serializer, itemId);
-		VarNumberSerializer.writeVarInt(serializer, cooldown);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData setcooldown = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SET_COOLDOWN);
+		VarNumberSerializer.writeVarInt(setcooldown, itemId);
+		VarNumberSerializer.writeVarInt(setcooldown, cooldown);
+		codec.write(setcooldown);
 	}
 
 }

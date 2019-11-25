@@ -5,12 +5,9 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTitle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Title extends MiddleTitle {
 
@@ -19,8 +16,8 @@ public class Title extends MiddleTitle {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_TITLE);
+	public void writeToClient() {
+		ClientBoundPacketData serializer = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_TITLE);
 		VarNumberSerializer.writeVarInt(serializer, action.ordinal());
 		switch (action) {
 			case SET_TITLE:
@@ -40,7 +37,7 @@ public class Title extends MiddleTitle {
 				break;
 			}
 		}
-		return RecyclableSingletonList.create(serializer);
+		codec.write(serializer);
 	}
 
 }

@@ -4,9 +4,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleQueryNBTResponse;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class QueryNBTResponse extends MiddleQueryNBTResponse {
 
@@ -15,10 +12,10 @@ public class QueryNBTResponse extends MiddleQueryNBTResponse {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_QUERY_NBT_RESPONSE);
-		serializer.writeBytes(data);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData querynbtresponse = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_QUERY_NBT_RESPONSE);
+		querynbtresponse.writeBytes(data);
+		codec.write(querynbtresponse);
 	}
 
 }

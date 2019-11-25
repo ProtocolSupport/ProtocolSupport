@@ -4,10 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCamera;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Camera extends MiddleCamera {
 
@@ -16,10 +13,10 @@ public class Camera extends MiddleCamera {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CAMERA);
-		VarNumberSerializer.writeVarInt(serializer, entityId);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData camera = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_CAMERA);
+		VarNumberSerializer.writeVarInt(camera, entityId);
+		codec.write(camera);
 	}
 
 }

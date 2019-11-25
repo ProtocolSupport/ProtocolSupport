@@ -5,21 +5,13 @@ import java.util.function.Function;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class PrepareCraftingGrid extends ServerBoundMiddlePacket {
 
 	public PrepareCraftingGrid(ConnectionImpl connection) {
 		super(connection);
-	}
-
-	@Override
-	public RecyclableCollection<? extends IPacketData> toNative() {
-		return RecyclableEmptyList.get();
 	}
 
 	@Override
@@ -34,6 +26,10 @@ public class PrepareCraftingGrid extends ServerBoundMiddlePacket {
 		};
 		ArraySerializer.readShortTArray(clientdata, Void.class, elementReader);
 		ArraySerializer.readShortTArray(clientdata, Void.class, elementReader);
+	}
+
+	@Override
+	public void writeToServer() {
 	}
 
 }

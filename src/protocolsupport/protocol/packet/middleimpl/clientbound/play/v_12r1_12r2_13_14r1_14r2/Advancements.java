@@ -7,14 +7,11 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleAdvancements;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Advancements extends MiddleAdvancements {
 
@@ -23,19 +20,19 @@ public class Advancements extends MiddleAdvancements {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ADVANCEMENTS);
-		serializer.writeBoolean(reset);
-		ArraySerializer.writeVarIntTArray(serializer, advancementsMapping, (to, element) -> {
+	public void writeToClient() {
+		ClientBoundPacketData advancements = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ADVANCEMENTS);
+		advancements.writeBoolean(reset);
+		ArraySerializer.writeVarIntTArray(advancements, advancementsMapping, (to, element) -> {
 			StringSerializer.writeVarIntUTF8String(to, element.getObj1());
 			writeAdvanvement(to, version, cache.getAttributesCache().getLocale(), element.getObj2());
 		});
-		ArraySerializer.writeVarIntVarIntUTF8StringArray(serializer, removeAdvancements);
-		ArraySerializer.writeVarIntTArray(serializer, advancementsProgress, (to, element) -> {
+		ArraySerializer.writeVarIntVarIntUTF8StringArray(advancements, removeAdvancements);
+		ArraySerializer.writeVarIntTArray(advancements, advancementsProgress, (to, element) -> {
 			StringSerializer.writeVarIntUTF8String(to, element.getObj1());
 			wrtieAdvancementProgress(to, element.getObj2());
 		});
-		return RecyclableSingletonList.create(serializer);
+		codec.write(advancements);
 	}
 
 	protected static void writeAdvanvement(ByteBuf to, ProtocolVersion version, String locale, Advancement advancement) {

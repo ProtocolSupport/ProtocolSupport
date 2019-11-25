@@ -4,14 +4,11 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SpawnNamed extends MiddleSpawnNamed {
 
@@ -22,19 +19,19 @@ public class SpawnNamed extends MiddleSpawnNamed {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
-		serializer.writeInt(entity.getId());
+	public void writeToClient() {
+		ClientBoundPacketData spawnnamed = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
+		spawnnamed.writeInt(entity.getId());
 		PlayerListEntry entry = playerlistCache.getEntry(entity.getUUID());
-		StringSerializer.writeShortUTF16BEString(serializer, entry != null ? Utils.clampString(entry.getUserName(), 16) : "UNKNOWN");
-		serializer.writeInt((int) (x * 32));
-		serializer.writeInt((int) (y * 32));
-		serializer.writeInt((int) (z * 32));
-		serializer.writeByte(yaw);
-		serializer.writeByte(pitch);
-		serializer.writeShort(0);
-		NetworkEntityMetadataSerializer.writeLegacyData(serializer, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
-		return RecyclableSingletonList.create(serializer);
+		StringSerializer.writeShortUTF16BEString(spawnnamed, entry != null ? Utils.clampString(entry.getUserName(), 16) : "UNKNOWN");
+		spawnnamed.writeInt((int) (x * 32));
+		spawnnamed.writeInt((int) (y * 32));
+		spawnnamed.writeInt((int) (z * 32));
+		spawnnamed.writeByte(yaw);
+		spawnnamed.writeByte(pitch);
+		spawnnamed.writeShort(0);
+		NetworkEntityMetadataSerializer.writeLegacyData(spawnnamed, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
+		codec.write(spawnnamed);
 	}
 
 }

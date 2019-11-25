@@ -4,10 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldBorder;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class WorldBorder extends MiddleWorldBorder {
 
@@ -16,46 +13,46 @@ public class WorldBorder extends MiddleWorldBorder {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_BORDER);
-		VarNumberSerializer.writeVarInt(serializer, action.ordinal());
+	public void writeToClient() {
+		ClientBoundPacketData worldborder = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WORLD_BORDER);
+		VarNumberSerializer.writeVarInt(worldborder, action.ordinal());
 		switch (action) {
 			case SET_SIZE: {
-				serializer.writeDouble(radius);
+				worldborder.writeDouble(radius);
 				break;
 			}
 			case LERP_SIZE: {
-				serializer.writeDouble(oldRadius);
-				serializer.writeDouble(newRadius);
-				VarNumberSerializer.writeVarLong(serializer, speed);
+				worldborder.writeDouble(oldRadius);
+				worldborder.writeDouble(newRadius);
+				VarNumberSerializer.writeVarLong(worldborder, speed);
 				break;
 			}
 			case SET_CENTER: {
-				serializer.writeDouble(x);
-				serializer.writeDouble(z);
+				worldborder.writeDouble(x);
+				worldborder.writeDouble(z);
 				break;
 			}
 			case INIT: {
-				serializer.writeDouble(x);
-				serializer.writeDouble(z);
-				serializer.writeDouble(oldRadius);
-				serializer.writeDouble(newRadius);
-				VarNumberSerializer.writeVarLong(serializer, speed);
-				VarNumberSerializer.writeVarInt(serializer, teleportBound);
-				VarNumberSerializer.writeVarInt(serializer, warnTime);
-				VarNumberSerializer.writeVarInt(serializer, warnBlocks);
+				worldborder.writeDouble(x);
+				worldborder.writeDouble(z);
+				worldborder.writeDouble(oldRadius);
+				worldborder.writeDouble(newRadius);
+				VarNumberSerializer.writeVarLong(worldborder, speed);
+				VarNumberSerializer.writeVarInt(worldborder, teleportBound);
+				VarNumberSerializer.writeVarInt(worldborder, warnTime);
+				VarNumberSerializer.writeVarInt(worldborder, warnBlocks);
 				break;
 			}
 			case SET_WARN_TIME: {
-				VarNumberSerializer.writeVarInt(serializer, warnTime);
+				VarNumberSerializer.writeVarInt(worldborder, warnTime);
 				break;
 			}
 			case SET_WARN_BLOCKS: {
-				VarNumberSerializer.writeVarInt(serializer, warnBlocks);
+				VarNumberSerializer.writeVarInt(worldborder, warnBlocks);
 				break;
 			}
 		}
-		return RecyclableSingletonList.create(serializer);
+		codec.write(worldborder);
 	}
 
 }

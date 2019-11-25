@@ -4,9 +4,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetExperience;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SetExperience extends MiddleSetExperience {
 
@@ -15,12 +12,12 @@ public class SetExperience extends MiddleSetExperience {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SET_EXPERIENCE);
-		serializer.writeFloat(exp);
-		serializer.writeShort(level);
-		serializer.writeShort(totalExp);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData setexperience = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SET_EXPERIENCE);
+		setexperience.writeFloat(exp);
+		setexperience.writeShort(level);
+		setexperience.writeShort(totalExp);
+		codec.write(setexperience);
 	}
 
 }

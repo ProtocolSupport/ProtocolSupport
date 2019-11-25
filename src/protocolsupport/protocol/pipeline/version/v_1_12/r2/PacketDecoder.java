@@ -45,7 +45,7 @@ import protocolsupport.protocol.pipeline.version.util.decoder.AbstractModernPack
 public class PacketDecoder extends AbstractModernPacketDecoder {
 
 	public PacketDecoder(ConnectionImpl connection) {
-		super(connection, PacketCodec.instance);
+		super(connection);
 	}
 
 	{

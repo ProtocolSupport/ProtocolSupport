@@ -4,12 +4,9 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SpawnNamed extends MiddleSpawnNamed {
 
@@ -18,17 +15,17 @@ public class SpawnNamed extends MiddleSpawnNamed {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
-		VarNumberSerializer.writeVarInt(serializer, entity.getId());
-		MiscSerializer.writeUUID(serializer, entity.getUUID());
-		serializer.writeDouble(x);
-		serializer.writeDouble(y);
-		serializer.writeDouble(z);
-		serializer.writeByte(yaw);
-		serializer.writeByte(pitch);
-		NetworkEntityMetadataSerializer.writeData(serializer, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData spawnnamed = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
+		VarNumberSerializer.writeVarInt(spawnnamed, entity.getId());
+		MiscSerializer.writeUUID(spawnnamed, entity.getUUID());
+		spawnnamed.writeDouble(x);
+		spawnnamed.writeDouble(y);
+		spawnnamed.writeDouble(z);
+		spawnnamed.writeByte(yaw);
+		spawnnamed.writeByte(pitch);
+		NetworkEntityMetadataSerializer.writeData(spawnnamed, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
+		codec.write(spawnnamed);
 	}
 
 }

@@ -39,6 +39,13 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 		);
 	}
 
+	@Override
+	public void postHandle() {
+		advancementsMapping = null;
+		removeAdvancements = null;
+		advancementsProgress = null;
+	}
+
 	protected static class Advancement {
 
 		protected static Advancement read(ByteBuf from) {
@@ -116,6 +123,7 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 		public AdvancementProgress(Any<String, Long>[] criterionsProgress) {
 			this.criterionsProgress = criterionsProgress;
 		}
+
 	}
 
 }

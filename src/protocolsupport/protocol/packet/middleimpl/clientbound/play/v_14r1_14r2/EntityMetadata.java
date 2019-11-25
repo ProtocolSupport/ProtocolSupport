@@ -4,11 +4,8 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityMetadata extends MiddleEntityMetadata {
 
@@ -17,11 +14,11 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData entitymetadata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
+	public void writeToClient() {
+		ClientBoundPacketData entitymetadata = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
 		VarNumberSerializer.writeVarInt(entitymetadata, entityId);
 		NetworkEntityMetadataSerializer.writeData(entitymetadata, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
-		return RecyclableSingletonList.create(entitymetadata);
+		codec.write(entitymetadata);
 	}
 
 }

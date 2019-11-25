@@ -2,18 +2,15 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySetItems;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper.ClientItems;
 import protocolsupport.protocol.types.NetworkItemStack;
-import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class InventorySetItems extends MiddleInventorySetItems {
 
@@ -22,28 +19,20 @@ public class InventorySetItems extends MiddleInventorySetItems {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
+	public void writeToClient() {
 		WindowRemapper remapper = windowId == WINDOW_ID_PLAYER_INVENTORY ? windowCache.getPlayerWindowRemapper() : windowCache.getOpenedWindowRemapper();
 
-		ClientItems[] windowitemsarray = remapper.toClientItems(windowId, items);
-		if (windowitemsarray.length == 1) {
-			ClientItems windowitems = windowitemsarray[0];
-			return RecyclableSingletonList.create(create(version, cache.getAttributesCache().getLocale(), windowitems.getWindowId(), windowitems.getItems()));
-		} else {
-			String locale = cache.getAttributesCache().getLocale();
-			RecyclableArrayList<IPacketData> packets = RecyclableArrayList.create();
-			for (ClientItems windowitems : windowitemsarray) {
-				packets.add(create(version, locale, windowitems.getWindowId(), windowitems.getItems()));
-			}
-			return packets;
+		String locale = cache.getAttributesCache().getLocale();
+		for (ClientItems windowitems : remapper.toClientItems(windowId, items)) {
+			codec.write(create(codec, version, locale, windowitems.getWindowId(), windowitems.getItems()));
 		}
 	}
 
-	protected static ClientBoundPacketData create(ProtocolVersion version, String locale, byte windowId, NetworkItemStack[] items) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_SET_ITEMS);
-		serializer.writeByte(windowId);
-		ArraySerializer.writeShortTArray(serializer, items, (lTo, item) -> ItemStackSerializer.writeItemStack(lTo, version, locale, item));
-		return serializer;
+	protected static ClientBoundPacketData create(PacketDataCodec codec, ProtocolVersion version, String locale, byte windowId, NetworkItemStack[] items) {
+		ClientBoundPacketData windowitems = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WINDOW_SET_ITEMS);
+		windowitems.writeByte(windowId);
+		ArraySerializer.writeShortTArray(windowitems, items, (lTo, item) -> ItemStackSerializer.writeItemStack(lTo, version, locale, item));
+		return windowitems;
 	}
 
 }

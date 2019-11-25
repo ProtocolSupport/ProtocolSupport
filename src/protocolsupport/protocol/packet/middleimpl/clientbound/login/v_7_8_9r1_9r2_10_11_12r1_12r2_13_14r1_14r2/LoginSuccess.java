@@ -5,10 +5,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.login.MiddleLoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class LoginSuccess extends MiddleLoginSuccess {
 
@@ -17,14 +14,14 @@ public class LoginSuccess extends MiddleLoginSuccess {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
+	public void writeToClient() {
 		if (version == ProtocolVersion.MINECRAFT_1_7_5) {
 			uuidstring = uuidstring.replace("-", "");
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LOGIN_SUCCESS);
+		ClientBoundPacketData serializer = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_LOGIN_SUCCESS);
 		StringSerializer.writeVarIntUTF8String(serializer, uuidstring);
 		StringSerializer.writeVarIntUTF8String(serializer, name);
-		return RecyclableSingletonList.create(serializer);
+		codec.write(serializer);
 	}
 
 }

@@ -4,11 +4,8 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 
@@ -20,8 +17,8 @@ public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 	protected ByteBuf data;
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toNative() {
-		return RecyclableSingletonList.create(create(tag, data));
+	public void writeToServer() {
+		codec.read(create(tag, data));
 	}
 
 	public static ServerBoundPacketData create(String tag) {

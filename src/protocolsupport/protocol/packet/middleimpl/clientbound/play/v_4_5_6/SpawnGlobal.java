@@ -4,9 +4,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnGlobal;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SpawnGlobal extends MiddleSpawnGlobal {
 
@@ -15,14 +12,14 @@ public class SpawnGlobal extends MiddleSpawnGlobal {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_GLOBAL);
-		serializer.writeInt(entity.getId());
-		serializer.writeByte(entity.getType().getNetworkTypeId());
-		serializer.writeInt((int) (x * 32));
-		serializer.writeInt((int) (y * 32));
-		serializer.writeInt((int) (z * 32));
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData spawnglobal = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SPAWN_GLOBAL);
+		spawnglobal.writeInt(entity.getId());
+		spawnglobal.writeByte(entity.getType().getNetworkTypeId());
+		spawnglobal.writeInt((int) (x * 32));
+		spawnglobal.writeInt((int) (y * 32));
+		spawnglobal.writeInt((int) (z * 32));
+		codec.write(spawnglobal);
 	}
 
 }

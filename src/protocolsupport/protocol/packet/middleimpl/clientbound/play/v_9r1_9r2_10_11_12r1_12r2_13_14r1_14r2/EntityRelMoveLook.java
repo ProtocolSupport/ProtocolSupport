@@ -4,10 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityRelMoveLook;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityRelMoveLook extends MiddleEntityRelMoveLook {
 
@@ -16,16 +13,16 @@ public class EntityRelMoveLook extends MiddleEntityRelMoveLook {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE_LOOK);
-		VarNumberSerializer.writeVarInt(serializer, entityId);
-		serializer.writeShort(relX);
-		serializer.writeShort(relY);
-		serializer.writeShort(relZ);
-		serializer.writeByte(yaw);
-		serializer.writeByte(pitch);
-		serializer.writeBoolean(onGround);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData entityrelmovelook = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE_LOOK);
+		VarNumberSerializer.writeVarInt(entityrelmovelook, entityId);
+		entityrelmovelook.writeShort(relX);
+		entityrelmovelook.writeShort(relY);
+		entityrelmovelook.writeShort(relZ);
+		entityrelmovelook.writeByte(yaw);
+		entityrelmovelook.writeByte(pitch);
+		entityrelmovelook.writeBoolean(onGround);
+		codec.write(entityrelmovelook);
 	}
 
 }

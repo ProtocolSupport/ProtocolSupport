@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
 
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractBlockChangeSingle;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
@@ -11,8 +11,6 @@ import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.types.Position;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BlockChangeSingle extends AbstractBlockChangeSingle {
 
@@ -23,17 +21,16 @@ public class BlockChangeSingle extends AbstractBlockChangeSingle {
 	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		return RecyclableSingletonList.create(create(blockDataRemappingTable, position, id));
+	public void writeToClient() {
+		codec.write(create(codec, position, BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, id)));
 	}
 
-	public static ClientBoundPacketData create(ArrayBasedIdRemappingTable blockDataRemappingTable, Position position, int id) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE);
-		PositionSerializer.writeLegacyPositionB(serializer, position);
-		int lId = BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, id);
-		serializer.writeShort(PreFlatteningBlockIdData.getIdFromCombinedId(lId));
-		serializer.writeByte(PreFlatteningBlockIdData.getDataFromCombinedId(lId));
-		return serializer;
+	public static ClientBoundPacketData create(PacketDataCodec codec, Position position, int id) {
+		ClientBoundPacketData blockchangesingle = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE);
+		PositionSerializer.writeLegacyPositionB(blockchangesingle, position);
+		blockchangesingle.writeShort(PreFlatteningBlockIdData.getIdFromCombinedId(id));
+		blockchangesingle.writeByte(PreFlatteningBlockIdData.getDataFromCombinedId(id));
+		return blockchangesingle;
 	}
 
 }

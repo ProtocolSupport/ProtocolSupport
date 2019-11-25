@@ -5,11 +5,8 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleDeclareTags;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class DeclareTags extends MiddleDeclareTags {
 
@@ -18,13 +15,13 @@ public class DeclareTags extends MiddleDeclareTags {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_DECLARE_TAGS);
-		writeTags(serializer, blocks);
-		writeTags(serializer, items);
-		writeTags(serializer, fluids);
-		writeTags(serializer, entities);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData declaretags = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_DECLARE_TAGS);
+		writeTags(declaretags, blocks);
+		writeTags(declaretags, items);
+		writeTags(declaretags, fluids);
+		writeTags(declaretags, entities);
+		codec.write(declaretags);
 	}
 
 	protected static void writeTags(ByteBuf to, Tag[] tags) {

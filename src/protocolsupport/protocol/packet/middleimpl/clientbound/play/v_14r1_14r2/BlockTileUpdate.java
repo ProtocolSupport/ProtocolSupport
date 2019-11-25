@@ -4,13 +4,9 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockTileUpdate;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
-import protocolsupport.protocol.types.TileEntity;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BlockTileUpdate extends MiddleBlockTileUpdate {
 
@@ -21,16 +17,14 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		return RecyclableSingletonList.create(create(tileRemapper.remap(tile)));
-	}
+	public void writeToClient() {
+		tile = tileRemapper.remap(tile);
 
-	public static ClientBoundPacketData create(TileEntity tile) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_TILE);
-		PositionSerializer.writePosition(serializer, tile.getPosition());
-		serializer.writeByte(tile.getType().getNetworkId());
-		ItemStackSerializer.writeDirectTag(serializer, tile.getNBT());
-		return serializer;
+		ClientBoundPacketData blocktileupdate = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_BLOCK_TILE);
+		PositionSerializer.writePosition(blocktileupdate, tile.getPosition());
+		blocktileupdate.writeByte(tile.getType().getNetworkId());
+		ItemStackSerializer.writeDirectTag(blocktileupdate, tile.getNBT());
+		codec.write(blocktileupdate);
 	}
 
 }

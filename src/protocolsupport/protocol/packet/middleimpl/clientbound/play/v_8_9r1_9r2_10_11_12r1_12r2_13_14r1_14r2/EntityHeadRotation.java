@@ -4,10 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityHeadRotation;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityHeadRotation extends MiddleEntityHeadRotation {
 
@@ -16,11 +13,11 @@ public class EntityHeadRotation extends MiddleEntityHeadRotation {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_HEAD_ROTATION);
-		VarNumberSerializer.writeVarInt(serializer, entityId);
-		serializer.writeByte(headRot);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData entityheadrotation = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_HEAD_ROTATION);
+		VarNumberSerializer.writeVarInt(entityheadrotation, entityId);
+		entityheadrotation.writeByte(headRot);
+		codec.write(entityheadrotation);
 	}
 
 }

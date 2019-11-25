@@ -3,11 +3,8 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleSetBeaconEffect extends ServerBoundMiddlePacket {
 
@@ -19,8 +16,8 @@ public abstract class MiddleSetBeaconEffect extends ServerBoundMiddlePacket {
 	protected int secondary;
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toNative() {
-		return RecyclableSingletonList.create(create(primary, secondary));
+	public void writeToServer() {
+		codec.read(create(primary, secondary));
 	}
 
 	public static ServerBoundPacketData create(int primary, int secondary) {

@@ -4,12 +4,9 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SpawnLiving extends MiddleSpawnLiving {
 
@@ -18,21 +15,21 @@ public class SpawnLiving extends MiddleSpawnLiving {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_LIVING);
-		VarNumberSerializer.writeVarInt(serializer, entity.getId());
-		serializer.writeByte(LegacyEntityId.getIntId(entityRemapper.getRemappedEntityType()));
-		serializer.writeInt((int) (x * 32));
-		serializer.writeInt((int) (y * 32));
-		serializer.writeInt((int) (z * 32));
-		serializer.writeByte(yaw);
-		serializer.writeByte(pitch);
-		serializer.writeByte(headPitch);
-		serializer.writeShort(motX);
-		serializer.writeShort(motY);
-		serializer.writeShort(motZ);
-		NetworkEntityMetadataSerializer.writeLegacyData(serializer, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData spawnliving = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SPAWN_LIVING);
+		VarNumberSerializer.writeVarInt(spawnliving, entity.getId());
+		spawnliving.writeByte(LegacyEntityId.getIntId(entityRemapper.getRemappedEntityType()));
+		spawnliving.writeInt((int) (x * 32));
+		spawnliving.writeInt((int) (y * 32));
+		spawnliving.writeInt((int) (z * 32));
+		spawnliving.writeByte(yaw);
+		spawnliving.writeByte(pitch);
+		spawnliving.writeByte(headPitch);
+		spawnliving.writeShort(motX);
+		spawnliving.writeShort(motY);
+		spawnliving.writeShort(motZ);
+		NetworkEntityMetadataSerializer.writeLegacyData(spawnliving, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
+		codec.write(spawnliving);
 	}
 
 }

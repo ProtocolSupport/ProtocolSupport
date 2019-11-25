@@ -4,10 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListHeaderFooter;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class PlayerListHeaderFooter extends MiddlePlayerListHeaderFooter {
 
@@ -16,11 +13,11 @@ public class PlayerListHeaderFooter extends MiddlePlayerListHeaderFooter {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_PLAYER_LIST_HEADER_FOOTER);
-		StringSerializer.writeVarIntUTF8String(serializer, headerJson);
-		StringSerializer.writeVarIntUTF8String(serializer, footerJson);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData playerlistheaderfooter = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_PLAYER_LIST_HEADER_FOOTER);
+		StringSerializer.writeVarIntUTF8String(playerlistheaderfooter, headerJson);
+		StringSerializer.writeVarIntUTF8String(playerlistheaderfooter, footerJson);
+		codec.write(playerlistheaderfooter);
 	}
 
 }

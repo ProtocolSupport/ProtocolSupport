@@ -1,10 +1,10 @@
 package protocolsupport.protocol.pipeline.version.util.codec;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.pipeline.IPacketCodec;
+import protocolsupport.protocol.pipeline.IPacketIdCodec;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public abstract class ModernPacketCodec extends IPacketCodec {
+public abstract class ModernPacketCodec extends IPacketIdCodec {
 
 	@Override
 	public int readPacketId(ByteBuf from) {

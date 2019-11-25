@@ -3,15 +3,12 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleUpdateCommandBlock extends ServerBoundMiddlePacket {
 
@@ -29,8 +26,8 @@ public abstract class MiddleUpdateCommandBlock extends ServerBoundMiddlePacket {
 	protected int flags;
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toNative() {
-		return RecyclableSingletonList.create(create(position, command, mode, flags));
+	public void writeToServer() {
+		codec.read(create(position, command, mode, flags));
 	}
 
 	public static enum Mode {

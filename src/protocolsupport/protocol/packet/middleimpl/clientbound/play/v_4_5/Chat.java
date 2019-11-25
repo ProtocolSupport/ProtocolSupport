@@ -4,10 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChat;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Chat extends MiddleChat {
 
@@ -16,10 +13,10 @@ public class Chat extends MiddleChat {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHAT);
-		StringSerializer.writeShortUTF16BEString(serializer, message.toLegacyText(cache.getAttributesCache().getLocale()));
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData chat = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_CHAT);
+		StringSerializer.writeShortUTF16BEString(chat, message.toLegacyText(cache.getAttributesCache().getLocale()));
+		codec.write(chat);
 	}
 
 }

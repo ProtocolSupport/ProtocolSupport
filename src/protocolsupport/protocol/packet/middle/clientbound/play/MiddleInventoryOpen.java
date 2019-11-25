@@ -6,7 +6,6 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClose;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -17,8 +16,6 @@ import protocolsupport.protocol.typeremapper.window.AbstractWindowsRemapper;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper;
 import protocolsupport.protocol.typeremapper.window.WindowsRemappersRegistry;
 import protocolsupport.protocol.types.WindowType;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 
@@ -45,16 +42,16 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
+	public void writeToClient() {
 		if (windowSkipper.shouldSkip(type)) {
-			return RecyclableSingletonList.create(MiddleInventoryClose.create(windowId));
+			codec.readAndComplete(MiddleInventoryClose.create(windowId));
 		} else {
 			windowRemapper = windowsRemapper.get(type, 0);
 			windowCache.setOpenedWindow(windowId, type, windowRemapper);
-			return toData0();
+			writeToClient0();
 		}
 	}
 
-	protected abstract RecyclableCollection<? extends IPacketData> toData0();
+	protected abstract void writeToClient0();
 
 }

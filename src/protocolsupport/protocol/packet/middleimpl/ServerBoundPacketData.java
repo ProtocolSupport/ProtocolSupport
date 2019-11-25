@@ -1,13 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.UnpooledHeapByteBuf;
 import io.netty.util.Recycler;
 import io.netty.util.Recycler.Handle;
+import protocolsupport.protocol.packet.PacketData;
 import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.utils.recyclable.Recyclable;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public class ServerBoundPacketData extends UnpooledHeapByteBuf implements Recyclable, IPacketData {
+public class ServerBoundPacketData extends PacketData<ServerBoundPacketData> {
 
 	protected static final Recycler<ServerBoundPacketData> recycler = new Recycler<ServerBoundPacketData>() {
 		@Override
@@ -16,49 +15,23 @@ public class ServerBoundPacketData extends UnpooledHeapByteBuf implements Recycl
 		}
 	};
 
-	public static ServerBoundPacketData create(PacketType packet) {
-		ServerBoundPacketData packetdata = recycler.get();
-		packetdata.packet = packet;
-		return packetdata;
-	}
-
-	private final Handle<ServerBoundPacketData> handle;
-	private ServerBoundPacketData(Handle<ServerBoundPacketData> handle) {
-		super(ALLOCATOR, 1024, Integer.MAX_VALUE);
-		this.handle = handle;
-	}
-
-	private PacketType packet;
-
-	@Override
-	public void recycle() {
-		clear();
-		packet = null;
-		handle.recycle(this);
+	protected ServerBoundPacketData(Handle<ServerBoundPacketData> handle) {
+		super(handle);
 	}
 
 	@Override
-	public PacketType getPacketType() {
-		return packet;
+	protected ServerBoundPacketData newInstance() {
+		return recycler.get();
 	}
 
-	@Override
-	public int getDataLength() {
-		return readableBytes();
+	public static ServerBoundPacketData create(PacketType packetType) {
+		return recycler.get().init(packetType);
 	}
 
-	@Override
-	public void writeData(ByteBuf to) {
-		to.writeBytes(this);
-	}
-
-	@Override
-	public ServerBoundPacketData clone() {
-		ServerBoundPacketData packetdata = ServerBoundPacketData.create(getPacketType());
-		markReaderIndex();
-		packetdata.writeBytes(this);
-		resetReaderIndex();
-		return packetdata;
+	protected ServerBoundPacketData init(PacketType packetType) {
+		this.packetType = packetType;
+		VarNumberSerializer.writeVarInt(this, packetType.getId());
+		return this;
 	}
 
 }

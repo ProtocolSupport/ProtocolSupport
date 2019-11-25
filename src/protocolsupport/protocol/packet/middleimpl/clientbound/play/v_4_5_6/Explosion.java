@@ -3,11 +3,8 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractMiddleExplosion;
 import protocolsupport.protocol.types.Position;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Explosion extends AbstractMiddleExplosion {
 
@@ -16,22 +13,22 @@ public class Explosion extends AbstractMiddleExplosion {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_EXPLOSION);
-		serializer.writeDouble(x);
-		serializer.writeDouble(y);
-		serializer.writeDouble(z);
-		serializer.writeFloat(radius);
-		serializer.writeInt(blocks.length);
+	public void writeToClient() {
+		ClientBoundPacketData explosion = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_EXPLOSION);
+		explosion.writeDouble(x);
+		explosion.writeDouble(y);
+		explosion.writeDouble(z);
+		explosion.writeFloat(radius);
+		explosion.writeInt(blocks.length);
 		for (Position block : blocks) {
-			serializer.writeByte(block.getX());
-			serializer.writeByte(block.getY());
-			serializer.writeByte(block.getZ());
+			explosion.writeByte(block.getX());
+			explosion.writeByte(block.getY());
+			explosion.writeByte(block.getZ());
 		}
-		serializer.writeFloat(pMotX);
-		serializer.writeFloat(pMotY);
-		serializer.writeFloat(pMotZ);
-		return RecyclableSingletonList.create(serializer);
+		explosion.writeFloat(pMotX);
+		explosion.writeFloat(pMotY);
+		explosion.writeFloat(pMotZ);
+		codec.write(explosion);
 	}
 
 }

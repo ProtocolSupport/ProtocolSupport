@@ -2,6 +2,7 @@ package protocolsupport.protocol.pipeline.version.v_1_8;
 
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.LoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2.LoginSuccess;
@@ -106,11 +107,14 @@ import protocolsupport.protocol.typeremapper.packet.ChunkSendIntervalPacketQueue
 
 public class PacketEncoder extends AbstractPacketEncoder {
 
-	protected final ChunkSendIntervalPacketQueue chunkqueue = new ChunkSendIntervalPacketQueue(connection);
-
 	public PacketEncoder(ConnectionImpl connection) {
 		super(connection);
-		connection.addClientboundPacketProcessor(chunkqueue);
+	}
+
+	@Override
+	public void init(PacketDataCodec codec) {
+		super.init(codec);
+		codec.addClientboundPacketProcessor(new ChunkSendIntervalPacketQueue(codec));
 	}
 
 	{

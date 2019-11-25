@@ -4,11 +4,8 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.login.MiddleLoginCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class LoginCustomPayload extends MiddleLoginCustomPayload {
 
@@ -17,12 +14,12 @@ public class LoginCustomPayload extends MiddleLoginCustomPayload {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LOGIN_CUSTOM_PAYLOAD);
-		VarNumberSerializer.writeVarInt(serializer, id);
-		StringSerializer.writeVarIntUTF8String(serializer, tag);
-		serializer.writeBytes(data);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData logincustompayload = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_LOGIN_CUSTOM_PAYLOAD);
+		VarNumberSerializer.writeVarInt(logincustompayload, id);
+		StringSerializer.writeVarIntUTF8String(logincustompayload, tag);
+		logincustompayload.writeBytes(data);
+		codec.write(logincustompayload);
 	}
 
 }

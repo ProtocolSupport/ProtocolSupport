@@ -3,10 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 import io.netty.buffer.Unpooled;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBookOpen;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BookOpen extends MiddleBookOpen {
 
@@ -15,8 +12,8 @@ public class BookOpen extends MiddleBookOpen {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		return RecyclableSingletonList.create(CustomPayload.create(version, LegacyCustomPayloadChannelName.LEGACY_BOOK_OPEN, Unpooled.EMPTY_BUFFER));
+	public void writeToClient() {
+		codec.write(CustomPayload.create(codec, version, LegacyCustomPayloadChannelName.LEGACY_BOOK_OPEN, Unpooled.EMPTY_BUFFER));
 	}
 
 }

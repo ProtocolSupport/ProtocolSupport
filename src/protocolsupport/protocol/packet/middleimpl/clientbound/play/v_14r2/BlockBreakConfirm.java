@@ -4,7 +4,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockBreakConfirm;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
@@ -12,8 +11,6 @@ import protocolsupport.protocol.typeremapper.block.FlatteningBlockData;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class BlockBreakConfirm extends MiddleBlockBreakConfirm {
 
@@ -25,13 +22,13 @@ public class BlockBreakConfirm extends MiddleBlockBreakConfirm {
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_CONFIRM);
-		PositionSerializer.writePosition(serializer, position);
-		VarNumberSerializer.writeVarInt(serializer, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, blockId));
-		VarNumberSerializer.writeVarInt(serializer, status);
-		serializer.writeBoolean(successful);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData blockbreakconfirm = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_CONFIRM);
+		PositionSerializer.writePosition(blockbreakconfirm, position);
+		VarNumberSerializer.writeVarInt(blockbreakconfirm, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, blockId));
+		VarNumberSerializer.writeVarInt(blockbreakconfirm, status);
+		blockbreakconfirm.writeBoolean(successful);
+		codec.write(blockbreakconfirm);
 	}
 
 }

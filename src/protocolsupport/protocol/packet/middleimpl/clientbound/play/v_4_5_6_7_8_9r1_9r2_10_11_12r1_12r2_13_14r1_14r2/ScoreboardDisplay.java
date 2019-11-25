@@ -4,10 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardDisplay;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class ScoreboardDisplay extends MiddleScoreboardDisplay {
 
@@ -16,11 +13,11 @@ public class ScoreboardDisplay extends MiddleScoreboardDisplay {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_DISPLAY_SLOT);
-		serializer.writeByte(position);
-		StringSerializer.writeString(serializer, version, name);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData scoreboarddisplay = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_DISPLAY_SLOT);
+		scoreboarddisplay.writeByte(position);
+		StringSerializer.writeString(scoreboarddisplay, version, name);
+		codec.write(scoreboarddisplay);
 	}
 
 }
