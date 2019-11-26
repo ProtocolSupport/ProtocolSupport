@@ -24,6 +24,7 @@ public class StartGame extends MiddleStartGame {
 		MiscSerializer.writeByteEnum(startgame, Difficulty.HARD);
 		startgame.writeByte(0);
 		startgame.writeByte(maxplayers);
+		codec.write(startgame);
 	}
 
 }
