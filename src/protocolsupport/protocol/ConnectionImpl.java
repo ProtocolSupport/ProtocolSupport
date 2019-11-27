@@ -54,7 +54,9 @@ public class ConnectionImpl extends Connection {
 		if (listener instanceof IPacketListener) {
 			((IPacketListener) listener).destroy();
 		}
-		codec.release();
+		if (codec != null) {
+			codec.release();
+		}
 	}
 
 
