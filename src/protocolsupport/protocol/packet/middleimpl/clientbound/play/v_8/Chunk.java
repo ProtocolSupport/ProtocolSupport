@@ -28,7 +28,7 @@ public class Chunk extends AbstractChunk {
 	public void writeToClient() {
 		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 
-		ClientBoundPacketData chunkdata = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(full);
 		if ((blockMask == 0) && full) {
@@ -49,7 +49,7 @@ public class Chunk extends AbstractChunk {
 
 		for (Map<Position, TileEntity> sectionTiles : cachedChunk.getTiles()) {
 			for (TileEntity tile : sectionTiles.values()) {
-				codec.write(BlockTileUpdate.create(codec, version, tile));
+				codec.write(BlockTileUpdate.create(version, tile));
 			}
 		}
 	}

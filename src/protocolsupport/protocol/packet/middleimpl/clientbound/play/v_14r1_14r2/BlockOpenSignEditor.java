@@ -14,7 +14,7 @@ public class BlockOpenSignEditor extends MiddleBlockOpenSignEditor {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData blockopensigneditor = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SIGN_EDITOR);
+		ClientBoundPacketData blockopensigneditor = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SIGN_EDITOR);
 		PositionSerializer.writePosition(blockopensigneditor, position);
 		codec.write(blockopensigneditor);
 	}

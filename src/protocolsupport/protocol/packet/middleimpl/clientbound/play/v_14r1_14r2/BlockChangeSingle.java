@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -25,11 +24,11 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 
 	@Override
 	public void writeToClient() {
-		codec.write(create(codec, position, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, id)));
+		codec.write(create(position, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, id)));
 	}
 
-	public static ClientBoundPacketData create(PacketDataCodec codec, Position position, int id) {
-		ClientBoundPacketData blockchangesingle = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE);
+	public static ClientBoundPacketData create(Position position, int id) {
+		ClientBoundPacketData blockchangesingle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE);
 		PositionSerializer.writePosition(blockchangesingle, position);
 		VarNumberSerializer.writeVarInt(blockchangesingle, id);
 		return blockchangesingle;

@@ -14,7 +14,7 @@ public class ServerDifficulty extends MiddleServerDifficulty {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData serverdifficulty = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SERVER_DIFFICULTY);
+		ClientBoundPacketData serverdifficulty = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SERVER_DIFFICULTY);
 		MiscSerializer.writeByteEnum(serverdifficulty, difficulty);
 		codec.write(serverdifficulty);
 	}

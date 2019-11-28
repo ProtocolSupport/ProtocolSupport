@@ -17,7 +17,7 @@ public class Title extends MiddleTitle {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData serializer = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_TITLE);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_TITLE);
 		VarNumberSerializer.writeVarInt(serializer, action.ordinal());
 		switch (action) {
 			case SET_TITLE:

@@ -13,7 +13,7 @@ public class EntityEffectRemove extends MiddleEntityEffectRemove {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData entityeffectremove = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_EFFECT_REMOVE);
+		ClientBoundPacketData entityeffectremove = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_EFFECT_REMOVE);
 		entityeffectremove.writeInt(entityId);
 		entityeffectremove.writeByte(effectId);
 		codec.write(entityeffectremove);

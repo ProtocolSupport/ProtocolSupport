@@ -25,7 +25,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData spawnnamed = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
+		ClientBoundPacketData spawnnamed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
 		VarNumberSerializer.writeVarInt(spawnnamed, entity.getId());
 		UUID uuid = entity.getUUID();
 		StringSerializer.writeVarIntUTF8String(spawnnamed, version == ProtocolVersion.MINECRAFT_1_7_10 ? uuid.toString() : uuid.toString().replace("-", ""));

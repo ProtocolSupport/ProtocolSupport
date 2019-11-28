@@ -21,7 +21,7 @@ public class WorldParticle extends MiddleWorldParticle {
 	public void writeToClient() {
 		particle = remapper.getRemap(particle.getClass()).apply(particle);
 		if (particle != null) {
-			ClientBoundPacketData spawnparticle = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
+			ClientBoundPacketData spawnparticle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
 			spawnparticle.writeInt(LegacyParticle.IntId.getId(particle));
 			spawnparticle.writeBoolean(longdist);
 			spawnparticle.writeFloat(x);

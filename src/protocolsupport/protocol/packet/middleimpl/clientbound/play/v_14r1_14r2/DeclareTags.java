@@ -16,7 +16,7 @@ public class DeclareTags extends MiddleDeclareTags {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData declaretags = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_DECLARE_TAGS);
+		ClientBoundPacketData declaretags = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_DECLARE_TAGS);
 		writeTags(declaretags, blocks);
 		writeTags(declaretags, items);
 		writeTags(declaretags, fluids);

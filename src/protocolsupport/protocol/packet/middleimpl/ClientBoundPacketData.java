@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl;
 
-import java.util.function.BiConsumer;
-
 import io.netty.util.Recycler;
 import io.netty.util.Recycler.Handle;
 import protocolsupport.protocol.packet.PacketData;
@@ -25,14 +23,8 @@ public class ClientBoundPacketData extends PacketData<ClientBoundPacketData> {
 		return recycler.get();
 	}
 
-	public static ClientBoundPacketData create(PacketType packetType, BiConsumer<ClientBoundPacketData, PacketType> packetIdWriter) {
-		return recycler.get().init(packetType, packetIdWriter);
-	}
-
-	protected ClientBoundPacketData init(PacketType packetType, BiConsumer<ClientBoundPacketData, PacketType> packetIdWriter) {
-		this.packetType = packetType;
-		packetIdWriter.accept(this, packetType);
-		return this;
+	public static ClientBoundPacketData create(PacketType packetType) {
+		return recycler.get().init(packetType);
 	}
 
 }

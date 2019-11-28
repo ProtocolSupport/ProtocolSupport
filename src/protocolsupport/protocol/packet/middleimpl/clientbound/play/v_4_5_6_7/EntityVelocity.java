@@ -13,7 +13,7 @@ public class EntityVelocity extends MiddleEntityVelocity {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData entityvelocity = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_VELOCITY);
+		ClientBoundPacketData entityvelocity = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_VELOCITY);
 		entityvelocity.writeInt(entityId);
 		entityvelocity.writeShort(motX);
 		entityvelocity.writeShort(motY);

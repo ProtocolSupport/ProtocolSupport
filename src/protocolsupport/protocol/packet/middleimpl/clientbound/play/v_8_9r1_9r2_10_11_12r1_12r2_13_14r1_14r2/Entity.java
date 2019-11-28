@@ -14,7 +14,7 @@ public class Entity extends MiddleEntity {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData entitynoop = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_NOOP);
+		ClientBoundPacketData entitynoop = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_NOOP);
 		VarNumberSerializer.writeVarInt(entitynoop, entityId);
 		codec.write(entitynoop);
 	}

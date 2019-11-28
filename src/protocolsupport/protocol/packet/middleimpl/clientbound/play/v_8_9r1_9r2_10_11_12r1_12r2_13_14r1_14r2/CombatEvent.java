@@ -16,7 +16,7 @@ public class CombatEvent extends MiddleCombatEvent {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData combatevent = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_COMBAT_EVENT);
+		ClientBoundPacketData combatevent = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_COMBAT_EVENT);
 		MiscSerializer.writeVarIntEnum(combatevent, type);
 		switch (type) {
 			case ENTER_COMBAT: {

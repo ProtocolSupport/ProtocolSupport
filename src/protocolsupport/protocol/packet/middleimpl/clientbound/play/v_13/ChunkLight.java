@@ -34,7 +34,7 @@ public class ChunkLight extends AbstractChunkLight {
 		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 		List<Collection<TileEntity>> resendTiles = new ArrayList<>();
 
-		ClientBoundPacketData chunkdata = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(false); //full
 		VarNumberSerializer.writeVarInt(chunkdata, blockMask);

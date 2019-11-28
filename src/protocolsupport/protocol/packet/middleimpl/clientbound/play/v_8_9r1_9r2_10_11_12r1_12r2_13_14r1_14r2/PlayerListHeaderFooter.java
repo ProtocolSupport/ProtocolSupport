@@ -14,7 +14,7 @@ public class PlayerListHeaderFooter extends MiddlePlayerListHeaderFooter {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData playerlistheaderfooter = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_PLAYER_LIST_HEADER_FOOTER);
+		ClientBoundPacketData playerlistheaderfooter = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_PLAYER_LIST_HEADER_FOOTER);
 		StringSerializer.writeVarIntUTF8String(playerlistheaderfooter, headerJson);
 		StringSerializer.writeVarIntUTF8String(playerlistheaderfooter, footerJson);
 		codec.write(playerlistheaderfooter);

@@ -16,7 +16,7 @@ public class BlockBreakConfirm extends AbstractBlockBreakConfirm {
 
 	@Override
 	public void writeToClient() {
-		codec.write(BlockChangeSingle.create(codec, position, BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, blockId)));
+		codec.write(BlockChangeSingle.create(position, BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, blockId)));
 	}
 
 }

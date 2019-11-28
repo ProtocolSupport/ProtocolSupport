@@ -20,7 +20,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData spawnliving = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SPAWN_LIVING);
+		ClientBoundPacketData spawnliving = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_LIVING);
 		VarNumberSerializer.writeVarInt(spawnliving, entity.getId());
 		MiscSerializer.writeUUID(spawnliving, entity.getUUID());
 		VarNumberSerializer.writeVarInt(spawnliving, flatteningEntityIdTable.getRemap(entityRemapper.getRemappedEntityType().getNetworkTypeId()));

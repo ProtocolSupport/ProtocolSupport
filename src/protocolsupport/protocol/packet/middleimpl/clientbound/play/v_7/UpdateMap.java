@@ -18,7 +18,7 @@ public class UpdateMap extends MiddleUpdateMap {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData scaledata = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
+		ClientBoundPacketData scaledata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 		VarNumberSerializer.writeVarInt(scaledata, id);
 		scaledata.writeShort(2);
 		scaledata.writeByte(2);
@@ -26,7 +26,7 @@ public class UpdateMap extends MiddleUpdateMap {
 		codec.write(scaledata);
 
 		if (icons.length > 0) {
-			ClientBoundPacketData iconsdata = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
+			ClientBoundPacketData iconsdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 			VarNumberSerializer.writeVarInt(iconsdata, id);
 			iconsdata.writeShort((icons.length * 3) + 1);
 			iconsdata.writeByte(1);
@@ -43,7 +43,7 @@ public class UpdateMap extends MiddleUpdateMap {
 			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, colors);
 			ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(version);
 			for (ColumnEntry entry : maptransformer.toPre18MapData()) {
-				ClientBoundPacketData mapdata = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
+				ClientBoundPacketData mapdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 				VarNumberSerializer.writeVarInt(mapdata, id);
 				mapdata.writeShort(3 + entry.getColors().length);
 				mapdata.writeByte(0);

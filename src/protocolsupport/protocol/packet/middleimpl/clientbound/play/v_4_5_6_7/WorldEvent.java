@@ -27,7 +27,7 @@ public class WorldEvent extends MiddleWorldEvent {
 			data = PreFlatteningBlockIdData.getIdFromCombinedId(BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, data));
 		}
 		effectId = legacyEffectId.getRemap(effectId);
-		ClientBoundPacketData worldevent = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WORLD_EVENT);
+		ClientBoundPacketData worldevent = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_EVENT);
 		worldevent.writeInt(effectId);
 		PositionSerializer.writeLegacyPositionB(worldevent, position);
 		worldevent.writeInt(data);

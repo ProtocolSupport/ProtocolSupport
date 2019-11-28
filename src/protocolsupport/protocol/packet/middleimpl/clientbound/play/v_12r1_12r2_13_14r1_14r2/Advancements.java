@@ -21,7 +21,7 @@ public class Advancements extends MiddleAdvancements {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData advancements = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ADVANCEMENTS);
+		ClientBoundPacketData advancements = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ADVANCEMENTS);
 		advancements.writeBoolean(reset);
 		ArraySerializer.writeVarIntTArray(advancements, advancementsMapping, (to, element) -> {
 			StringSerializer.writeVarIntUTF8String(to, element.getObj1());

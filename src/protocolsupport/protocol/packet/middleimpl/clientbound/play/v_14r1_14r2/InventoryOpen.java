@@ -17,7 +17,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 
 	@Override
 	protected void writeToClient0() {
-		ClientBoundPacketData windowopen = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
+		ClientBoundPacketData windowopen = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
 		VarNumberSerializer.writeVarInt(windowopen, windowId);
 		MiscSerializer.writeVarIntEnum(windowopen, windowRemapper.toClientWindowType(type));
 		StringSerializer.writeVarIntUTF8String(windowopen, ChatAPI.toJSON(title));

@@ -20,7 +20,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	@Override
 	public void writeToClient0() {
 		LegacyWindowData wdata = LegacyWindowType.getData(windowRemapper.toClientWindowType(type));
-		ClientBoundPacketData windowopen = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
+		ClientBoundPacketData windowopen = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
 		writeData(
 			windowopen,
 			windowId, wdata.getStringId(),

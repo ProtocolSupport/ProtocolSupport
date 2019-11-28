@@ -16,7 +16,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData spawnnamed = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
+		ClientBoundPacketData spawnnamed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
 		VarNumberSerializer.writeVarInt(spawnnamed, entity.getId());
 		MiscSerializer.writeUUID(spawnnamed, entity.getUUID());
 		spawnnamed.writeInt((int) (x * 32));

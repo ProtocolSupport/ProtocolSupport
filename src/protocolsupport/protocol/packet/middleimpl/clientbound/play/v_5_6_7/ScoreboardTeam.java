@@ -18,7 +18,7 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData scoreboardteam = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_TEAM);
+		ClientBoundPacketData scoreboardteam = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_TEAM);
 		StringSerializer.writeString(scoreboardteam, version, name);
 		MiscSerializer.writeByteEnum(scoreboardteam, mode);
 		if ((mode == Mode.CREATE) || (mode == Mode.UPDATE)) {

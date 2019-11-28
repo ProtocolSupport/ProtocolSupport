@@ -17,7 +17,7 @@ public class UpdateMap extends MiddleUpdateMap {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData updatemap = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
+		ClientBoundPacketData updatemap = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 		VarNumberSerializer.writeVarInt(updatemap, id);
 		updatemap.writeByte(scale);
 		ArraySerializer.writeVarIntTArray(updatemap, icons, (to, icon) -> {

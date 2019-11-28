@@ -14,7 +14,7 @@ public class Chat extends MiddleChat {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData chat = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_CHAT);
+		ClientBoundPacketData chat = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHAT);
 		StringSerializer.writeShortUTF16BEString(chat, message.toLegacyText(cache.getAttributesCache().getLocale()));
 		codec.write(chat);
 	}

@@ -53,7 +53,7 @@ public class SpawnObject extends AbstractLocationOffsetSpawnObject {
 			}
 		}
 
-		ClientBoundPacketData spawnobject = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
+		ClientBoundPacketData spawnobject = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		spawnobject.writeInt(entity.getId());
 		spawnobject.writeByte(LegacyEntityId.getObjectIntId(type));
 		spawnobject.writeInt((int) x);

@@ -15,7 +15,7 @@ public class BlockBreakAnimation extends MiddleBlockBreakAnimation {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData blockbreakanimation = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_ANIMATION);
+		ClientBoundPacketData blockbreakanimation = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_ANIMATION);
 		VarNumberSerializer.writeVarInt(blockbreakanimation, entityId);
 		PositionSerializer.writePosition(blockbreakanimation, position);
 		blockbreakanimation.writeByte(stage);

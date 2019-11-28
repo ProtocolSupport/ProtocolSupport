@@ -14,7 +14,7 @@ public class InventoryHorseOpen extends MiddleInventoryHorseOpen {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData inventoryopen = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
+		ClientBoundPacketData inventoryopen = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
 		InventoryOpen.writeData(inventoryopen, windowId, "EntityHorse", new TextComponent("Horse"), slots);
 		inventoryopen.writeInt(entityId);
 		codec.write(inventoryopen);

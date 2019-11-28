@@ -14,7 +14,7 @@ public class SetCompression extends MiddleSetCompression {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData serializer = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_LOGIN_SET_COMPRESSION);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LOGIN_SET_COMPRESSION);
 		VarNumberSerializer.writeVarInt(serializer, threshold);
 		codec.write(serializer);
 	}

@@ -13,7 +13,7 @@ public class PlayerAbilities extends MiddlePlayerAbilities {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData abilities = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_PLAYER_ABILITIES);
+		ClientBoundPacketData abilities = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_PLAYER_ABILITIES);
 		abilities.writeByte(flags);
 		abilities.writeByte((int) (flyspeed * 255.0F));
 		abilities.writeByte((int) (walkspeed * 255.0F));

@@ -14,7 +14,7 @@ public class EntityRelMoveLook extends MiddleEntityRelMoveLook {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData entityrelmovelook = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE_LOOK);
+		ClientBoundPacketData entityrelmovelook = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE_LOOK);
 		VarNumberSerializer.writeVarInt(entityrelmovelook, entityId);
 		entityrelmovelook.writeShort(relX);
 		entityrelmovelook.writeShort(relY);

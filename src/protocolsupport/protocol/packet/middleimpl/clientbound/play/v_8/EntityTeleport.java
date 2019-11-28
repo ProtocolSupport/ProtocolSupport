@@ -14,7 +14,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData entityteleport = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_TELEPORT);
+		ClientBoundPacketData entityteleport = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_TELEPORT);
 		VarNumberSerializer.writeVarInt(entityteleport, entityId);
 		entityteleport.writeInt((int) (x * 32));
 		entityteleport.writeInt((int) (y * 32));

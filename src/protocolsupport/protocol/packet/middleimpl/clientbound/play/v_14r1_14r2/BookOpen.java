@@ -14,7 +14,7 @@ public class BookOpen extends MiddleBookOpen {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData bookopen = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_BOOK_OPEN);
+		ClientBoundPacketData bookopen = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BOOK_OPEN);
 		MiscSerializer.writeVarIntEnum(bookopen, hand);
 		codec.write(bookopen);
 	}

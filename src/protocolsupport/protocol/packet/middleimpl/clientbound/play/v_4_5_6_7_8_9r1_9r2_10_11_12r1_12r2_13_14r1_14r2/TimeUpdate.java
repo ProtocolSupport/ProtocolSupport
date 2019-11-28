@@ -14,7 +14,7 @@ public class TimeUpdate extends MiddleTimeUpdate {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData timeupdate = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_UPDATE_TIME);
+		ClientBoundPacketData timeupdate = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_TIME);
 		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)) {
 			timeOfDay = Math.abs(timeOfDay);
 		}

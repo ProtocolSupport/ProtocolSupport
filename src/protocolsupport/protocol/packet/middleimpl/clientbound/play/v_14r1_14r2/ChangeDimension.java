@@ -14,7 +14,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData changedimension = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_RESPAWN);
+		ClientBoundPacketData changedimension = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_RESPAWN);
 		changedimension.writeInt(dimension.getId());
 		changedimension.writeByte(gamemode.getId());
 		StringSerializer.writeVarIntUTF8String(changedimension, leveltype);

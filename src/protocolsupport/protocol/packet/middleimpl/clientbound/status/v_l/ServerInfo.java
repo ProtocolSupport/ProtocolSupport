@@ -18,7 +18,7 @@ public class ServerInfo extends MiddleServerInfo {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData serverinfo = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_STATUS_SERVER_INFO);
+		ClientBoundPacketData serverinfo = ClientBoundPacketData.create(PacketType.CLIENTBOUND_STATUS_SERVER_INFO);
 		String response = new StringJoiner("§")
 		.add(ChatColor.stripColor(ping.getMotd().toLegacyText(cache.getAttributesCache().getLocale())).replace("§", ""))
 		.add(String.valueOf(ping.getPlayers().getOnline()))

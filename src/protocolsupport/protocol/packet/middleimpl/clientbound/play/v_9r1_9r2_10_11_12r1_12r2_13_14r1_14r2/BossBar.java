@@ -18,7 +18,7 @@ public class BossBar extends MiddleBossBar {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData bossbar = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_BOSS_BAR);
+		ClientBoundPacketData bossbar = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BOSS_BAR);
 		MiscSerializer.writeUUID(bossbar, uuid);
 		MiscSerializer.writeVarIntEnum(bossbar, action);
 		switch (action) {

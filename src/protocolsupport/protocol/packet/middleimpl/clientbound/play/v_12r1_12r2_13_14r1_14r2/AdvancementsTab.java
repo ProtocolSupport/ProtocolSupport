@@ -14,7 +14,7 @@ public class AdvancementsTab extends MiddleAdvancementsTab {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData advanvementstab = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ADVANCEMENTS_TAB);
+		ClientBoundPacketData advanvementstab = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ADVANCEMENTS_TAB);
 		if (identifier != null) {
 			advanvementstab.writeBoolean(true);
 			StringSerializer.writeVarIntUTF8String(advanvementstab, identifier);

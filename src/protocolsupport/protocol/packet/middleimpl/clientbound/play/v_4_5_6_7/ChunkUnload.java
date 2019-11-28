@@ -14,7 +14,7 @@ public class ChunkUnload extends AbstractChunkUnload {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData chunkunload = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+		ClientBoundPacketData chunkunload = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkunload, chunk);
 		chunkunload.writeBoolean(true);
 		chunkunload.writeShort(0);

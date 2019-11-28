@@ -14,7 +14,7 @@ public class Explosion extends AbstractMiddleExplosion {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData explosion = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_EXPLOSION);
+		ClientBoundPacketData explosion = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_EXPLOSION);
 		explosion.writeFloat(x);
 		explosion.writeFloat(y);
 		explosion.writeFloat(z);

@@ -19,7 +19,7 @@ public class EntityRelMoveLook extends MiddleEntityRelMoveLook {
 		int relMoveY = relY / 128;
 		int relMoveZ = relZ / 128;
 		for (RelMove relMove : LegacyRelMoveConverter.getRelMoves(new RelMove(relMoveX, relMoveY, relMoveZ), 127)) {
-			ClientBoundPacketData entityrelmovelook = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE_LOOK);
+			ClientBoundPacketData entityrelmovelook = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE_LOOK);
 			entityrelmovelook.writeInt(entityId);
 			entityrelmovelook.writeByte(relMove.getX());
 			entityrelmovelook.writeByte(relMove.getY());

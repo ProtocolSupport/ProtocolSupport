@@ -4,7 +4,6 @@ import io.netty.util.Recycler;
 import io.netty.util.Recycler.Handle;
 import protocolsupport.protocol.packet.PacketData;
 import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class ServerBoundPacketData extends PacketData<ServerBoundPacketData> {
 
@@ -26,12 +25,6 @@ public class ServerBoundPacketData extends PacketData<ServerBoundPacketData> {
 
 	public static ServerBoundPacketData create(PacketType packetType) {
 		return recycler.get().init(packetType);
-	}
-
-	protected ServerBoundPacketData init(PacketType packetType) {
-		this.packetType = packetType;
-		VarNumberSerializer.writeVarInt(this, packetType.getId());
-		return this;
 	}
 
 }

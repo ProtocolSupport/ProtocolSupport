@@ -21,7 +21,7 @@ public class BlockChangeMulti extends AbstractBlockChangeMulti {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData blockchangemulti = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI);
+		ClientBoundPacketData blockchangemulti = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI);
 		PositionSerializer.writeIntChunkCoord(blockchangemulti, chunkCoord);
 		ArraySerializer.writeVarIntTArray(blockchangemulti, records, (to, record) -> {
 			blockchangemulti.writeShort(record.coord);

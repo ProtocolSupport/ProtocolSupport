@@ -20,7 +20,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 	public void writeToClient() {
 		tile = tileRemapper.remap(tile);
 
-		ClientBoundPacketData blocktileupdate = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_BLOCK_TILE);
+		ClientBoundPacketData blocktileupdate = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_TILE);
 		PositionSerializer.writePosition(blocktileupdate, tile.getPosition());
 		blocktileupdate.writeByte(tile.getType().getNetworkId());
 		ItemStackSerializer.writeDirectTag(blocktileupdate, tile.getNBT());

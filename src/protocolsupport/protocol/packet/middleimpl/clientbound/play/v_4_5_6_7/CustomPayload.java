@@ -5,7 +5,6 @@ import java.util.function.Consumer;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -25,18 +24,18 @@ public class CustomPayload extends MiddleCustomPayload {
 
 	@Override
 	public void writeToClient() {
-		codec.write(create(codec, version, Utils.clampString(channelsCache.getLegacyName(LegacyCustomPayloadChannelName.toPre13(tag)), 20), data));
+		codec.write(create(version, Utils.clampString(channelsCache.getLegacyName(LegacyCustomPayloadChannelName.toPre13(tag)), 20), data));
 	}
 
-	public static ClientBoundPacketData create(PacketDataCodec codec, ProtocolVersion version, String tag, Consumer<ByteBuf> dataWriter) {
-		ClientBoundPacketData custompayload = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
+	public static ClientBoundPacketData create(ProtocolVersion version, String tag, Consumer<ByteBuf> dataWriter) {
+		ClientBoundPacketData custompayload = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeString(custompayload, version, tag);
 		ArraySerializer.writeShortByteArray(custompayload, dataWriter);
 		return custompayload;
 	}
 
-	public static ClientBoundPacketData create(PacketDataCodec codec, ProtocolVersion version, String tag, ByteBuf data) {
-		ClientBoundPacketData custompayload = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
+	public static ClientBoundPacketData create(ProtocolVersion version, String tag, ByteBuf data) {
+		ClientBoundPacketData custompayload = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeString(custompayload, version, tag);
 		ArraySerializer.writeShortByteArray(custompayload, data);
 		return custompayload;

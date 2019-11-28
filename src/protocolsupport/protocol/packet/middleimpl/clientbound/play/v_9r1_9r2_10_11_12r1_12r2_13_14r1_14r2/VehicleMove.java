@@ -13,7 +13,7 @@ public class VehicleMove extends MiddleVehicleMove {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData vehiclemove = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_VEHICLE_MOVE);
+		ClientBoundPacketData vehiclemove = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_VEHICLE_MOVE);
 		vehiclemove.writeDouble(x);
 		vehiclemove.writeDouble(y);
 		vehiclemove.writeDouble(z);

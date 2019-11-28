@@ -23,7 +23,7 @@ public class BlockAction extends MiddleBlockAction {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData blockaction = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_BLOCK_ACTION);
+		ClientBoundPacketData blockaction = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_ACTION);
 		PositionSerializer.writeLegacyPositionL(blockaction, position);
 		blockaction.writeByte(actionId);
 		blockaction.writeByte(actionParam);

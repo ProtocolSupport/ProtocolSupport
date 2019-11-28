@@ -27,7 +27,7 @@ public class WorldParticle extends MiddleWorldParticle {
 	public void writeToClient() {
 		particle = remapper.getRemap(particle.getClass()).apply(particle);
 		if (particle != null) {
-			ClientBoundPacketData serializer = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
+			ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
 			serializer.writeInt(flatteningIdTable.getRemap(ParticleRegistry.getId(particle)));
 			serializer.writeBoolean(longdist);
 			serializer.writeFloat(x);

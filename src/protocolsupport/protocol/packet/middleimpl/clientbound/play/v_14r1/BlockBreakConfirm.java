@@ -20,9 +20,7 @@ public class BlockBreakConfirm extends MiddleBlockBreakConfirm {
 
 	@Override
 	public void writeToClient() {
-		codec.write(BlockChangeSingle.create(
-			codec, position, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, blockId)
-		));
+		codec.write(BlockChangeSingle.create(position, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, blockId)));
 	}
 
 }

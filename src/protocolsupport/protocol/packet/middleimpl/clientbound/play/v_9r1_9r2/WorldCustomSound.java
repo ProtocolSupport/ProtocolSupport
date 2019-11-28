@@ -16,7 +16,7 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData worldcustomsound = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND);
+		ClientBoundPacketData worldcustomsound = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND);
 		StringSerializer.writeVarIntUTF8String(worldcustomsound, SoundRemapper.getSoundName(version, id));
 		VarNumberSerializer.writeVarInt(worldcustomsound, category);
 		worldcustomsound.writeInt(x);

@@ -29,7 +29,7 @@ public class ChunkLight extends AbstractChunkLight {
 		String locale = cache.getAttributesCache().getLocale();
 		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 
-		ClientBoundPacketData chunkdata = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(false); //full
 		chunkdata.writeShort(blockMask);
@@ -38,7 +38,7 @@ public class ChunkLight extends AbstractChunkLight {
 			blockMask, blockDataRemappingTable, cachedChunk, hasSkyLight, null,
 			sectionNumber ->
 				cachedChunk.getTiles(sectionNumber).values()
-				.forEach(tile -> blocktileupdates.add(BlockTileUpdate.create(codec, version, locale, tile)))
+				.forEach(tile -> blocktileupdates.add(BlockTileUpdate.create(version, locale, tile)))
 		));
 		chunkdata.writeInt(compressed.length);
 		chunkdata.writeBytes(compressed);

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.packet.PacketData;
 import protocolsupport.protocol.packet.PacketType;
 
 public abstract class IPacketIdCodec {
@@ -12,10 +13,14 @@ public abstract class IPacketIdCodec {
 
 	public abstract int readPacketId(ByteBuf from);
 
-	protected abstract void writePacketId(ByteBuf to, int packetId);
+	protected abstract void writePacketId(PacketData<?> to, int packetId);
 
-	public void writePacketId(ByteBuf to, PacketType type) {
-		writePacketId(to, registry.getPacketId(type));
+	public void writerServerBoundPacketId(PacketData<?> to) {
+		writePacketId(to, to.getPacketType().getId());
+	}
+
+	public void writeClientBoundPacketId(PacketData<?> to) {
+		writePacketId(to, registry.getPacketId(to.getPacketType()));
 	}
 
 

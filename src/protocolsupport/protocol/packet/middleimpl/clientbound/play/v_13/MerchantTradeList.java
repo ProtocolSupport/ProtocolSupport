@@ -19,7 +19,7 @@ public class MerchantTradeList extends MiddleMerchantTradeList {
 	@Override
 	public void writeToClient() {
 		MerchantDataSerializer.writeMerchantData(buffer, version, cache.getAttributesCache().getLocale(), merchantData);
-		codec.write(CustomPayload.create(codec, LegacyCustomPayloadChannelName.MODERN_TRADE_LIST, buffer));
+		codec.write(CustomPayload.create(LegacyCustomPayloadChannelName.MODERN_TRADE_LIST, buffer));
 	}
 
 	@Override

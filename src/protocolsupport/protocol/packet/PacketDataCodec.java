@@ -29,10 +29,6 @@ public class PacketDataCodec {
 		return connection;
 	}
 
-	public ClientBoundPacketData allocClientBoundPacketData(PacketType type) {
-		return ClientBoundPacketData.create(type, packetIdCodec::writePacketId);
-	}
-
 	public int readPacketId(ByteBuf from) {
 		return packetIdCodec.readPacketId(from);
 	}
@@ -107,6 +103,7 @@ public class PacketDataCodec {
 
 	protected void write0(PacketData<?> packetdata) {
 		try {
+			packetIdCodec.writeClientBoundPacketId(packetdata);
 			if (transformerEncoderCurrentRealChannelPromise != null) {
 				ChannelPromise promise = transformerEncoderCurrentRealChannelPromise;
 				transformerEncoderCurrentRealChannelPromise = null;
@@ -122,6 +119,7 @@ public class PacketDataCodec {
 
 	protected void read0(PacketData<?> packetdata) {
 		try {
+			packetIdCodec.writerServerBoundPacketId(packetdata);
 			transformerDecoderCtx.fireChannelRead(packetdata);
 		} catch (Throwable t) {
 			ReferenceCountUtil.safeRelease(packetdata);

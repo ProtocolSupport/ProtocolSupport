@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryData;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -34,10 +33,10 @@ public class InventoryData extends MiddleInventoryData {
 				if (version.isBetween(ProtocolVersion.MINECRAFT_1_9_4, ProtocolVersion.MINECRAFT_1_8)) {
 					WindowEnchantmentCache enchantmentCache = (WindowEnchantmentCache) windowCache.getOpenedWindowMetadata();
 					if ((type >= ENCHANTMENT_TYPE_ID_TOP) && (type <= ENCHANTMENT_TYPE_ID_BOTTOM)) {
-						codec.write(create(codec, windowId, type, enchantmentCache.updateEnchantmentId(type - ENCHANTMENT_TYPE_ID_TOP, value)));
+						codec.write(create(windowId, type, enchantmentCache.updateEnchantmentId(type - ENCHANTMENT_TYPE_ID_TOP, value)));
 						return;
 					} else if ((type >= ENCHANTMENT_TYPE_LEVEL_TOP) && (type <= EHCNAHTMENT_TYPE_LEVEL_BOTTOM)) {
-						codec.write(create(codec, windowId, type - 3, enchantmentCache.updateEnchantmentLevel(type - ENCHANTMENT_TYPE_LEVEL_TOP, value)));
+						codec.write(create(windowId, type - 3, enchantmentCache.updateEnchantmentLevel(type - ENCHANTMENT_TYPE_LEVEL_TOP, value)));
 						return;
 					}
 				}
@@ -48,7 +47,7 @@ public class InventoryData extends MiddleInventoryData {
 					WindowFurnaceCache furnaceCache = (WindowFurnaceCache) windowCache.getOpenedWindowMetadata();
 					switch (type) {
 						case FURNACE_TYPE_FUEL_TIME_CURRENT: {
-							codec.write(create(codec, windowId, 1, furnaceCache.scaleCurrentFuelBurnTime(value)));
+							codec.write(create(windowId, 1, furnaceCache.scaleCurrentFuelBurnTime(value)));
 							return;
 						}
 						case FURNACE_TYPE_FUEL_TIME_MAX: {
@@ -56,7 +55,7 @@ public class InventoryData extends MiddleInventoryData {
 							return;
 						}
 						case FURNACE_TYPE_PROGRESS_CURRENT: {
-							codec.write(create(codec, windowId, 0, furnaceCache.scaleCurrentCurrentProgress(value)));
+							codec.write(create(windowId, 0, furnaceCache.scaleCurrentCurrentProgress(value)));
 							return;
 						}
 						case FURNACE_TYPE_PROGRESS_MAX: {
@@ -71,11 +70,11 @@ public class InventoryData extends MiddleInventoryData {
 				break;
 			}
 		}
-		codec.write(create(codec, windowId, type, value));
+		codec.write(create(windowId, type, value));
 	}
 
-	protected static ClientBoundPacketData create(PacketDataCodec codec, byte windowId, int type, int value) {
-		ClientBoundPacketData windowdata = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WINDOW_DATA);
+	protected static ClientBoundPacketData create(byte windowId, int type, int value) {
+		ClientBoundPacketData windowdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_DATA);
 		windowdata.writeByte(windowId);
 		windowdata.writeShort(type);
 		windowdata.writeShort(value);

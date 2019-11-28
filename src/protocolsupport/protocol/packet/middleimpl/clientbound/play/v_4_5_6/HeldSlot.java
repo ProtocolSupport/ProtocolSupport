@@ -13,7 +13,7 @@ public class HeldSlot extends MiddleHeldSlot {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData heldslot = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_HELD_SLOT);
+		ClientBoundPacketData heldslot = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_HELD_SLOT);
 		heldslot.writeShort(slot);
 		codec.write(heldslot);
 	}

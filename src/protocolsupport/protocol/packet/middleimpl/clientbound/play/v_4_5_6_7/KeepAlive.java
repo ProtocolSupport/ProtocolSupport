@@ -13,7 +13,7 @@ public class KeepAlive extends MiddleKeepAlive {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData keepalive = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_KEEP_ALIVE);
+		ClientBoundPacketData keepalive = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_KEEP_ALIVE);
 		keepalive.writeInt(keepAliveId);
 		codec.write(keepalive);
 	}

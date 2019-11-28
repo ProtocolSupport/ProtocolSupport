@@ -28,7 +28,7 @@ public class SpawnObject extends MiddleSpawnObject {
 			objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
 		}
 
-		ClientBoundPacketData spawnobject = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
+		ClientBoundPacketData spawnobject = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		VarNumberSerializer.writeVarInt(spawnobject, entity.getId());
 		MiscSerializer.writeUUID(spawnobject, entity.getUUID());
 		spawnobject.writeByte(LegacyEntityId.getObjectIntId(type));

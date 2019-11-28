@@ -22,7 +22,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData entitymetadata = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
+		ClientBoundPacketData entitymetadata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
 		VarNumberSerializer.writeVarInt(entitymetadata, entityId);
 		NetworkEntityMetadataSerializer.writeData(entitymetadata, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
 		codec.write(entitymetadata);
@@ -32,7 +32,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 			if (bedpositionObject.isPresent()) {
 				Position bedposition = bedpositionObject.get().getValue();
 				if (bedposition != null) {
-					ClientBoundPacketData usebed = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED_ID);
+					ClientBoundPacketData usebed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED_ID);
 					VarNumberSerializer.writeVarInt(usebed, entityId);
 					PositionSerializer.writeLegacyPositionL(usebed, bedposition);
 					codec.write(usebed);

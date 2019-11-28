@@ -19,7 +19,7 @@ public class EntityRelMove extends MiddleEntityRelMove {
 		int relMoveY = relY / 128;
 		int relMoveZ = relZ / 128;
 		for (RelMove relMove : LegacyRelMoveConverter.getRelMoves(new RelMove(relMoveX, relMoveY, relMoveZ), 127)) {
-			ClientBoundPacketData entityrelmove = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE);
+			ClientBoundPacketData entityrelmove = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE);
 			entityrelmove.writeInt(entityId);
 			entityrelmove.writeByte(relMove.getX());
 			entityrelmove.writeByte(relMove.getY());

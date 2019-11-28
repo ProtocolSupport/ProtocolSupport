@@ -14,7 +14,7 @@ public class EntitySound extends MiddleEntitySound {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData entitysound = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_SOUND);
+		ClientBoundPacketData entitysound = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_SOUND);
 		VarNumberSerializer.writeVarInt(entitysound, id);
 		VarNumberSerializer.writeVarInt(entitysound, category);
 		VarNumberSerializer.writeVarInt(entitysound, entityId);

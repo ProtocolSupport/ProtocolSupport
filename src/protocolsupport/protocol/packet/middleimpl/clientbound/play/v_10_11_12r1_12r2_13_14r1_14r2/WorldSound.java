@@ -18,7 +18,7 @@ public class WorldSound extends MiddleWorldSound {
 	public void writeToClient() {
 		String soundname = SoundRemapper.getSoundName(version, id);
 		if (soundname != null) {
-			ClientBoundPacketData worldsound = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND);
+			ClientBoundPacketData worldsound = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND);
 			StringSerializer.writeVarIntUTF8String(worldsound, soundname);
 			VarNumberSerializer.writeVarInt(worldsound, category);
 			worldsound.writeInt(x);

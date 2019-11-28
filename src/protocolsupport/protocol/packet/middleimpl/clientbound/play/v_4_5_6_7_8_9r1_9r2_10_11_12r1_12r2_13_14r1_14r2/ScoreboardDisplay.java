@@ -14,7 +14,7 @@ public class ScoreboardDisplay extends MiddleScoreboardDisplay {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData scoreboarddisplay = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_DISPLAY_SLOT);
+		ClientBoundPacketData scoreboarddisplay = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_DISPLAY_SLOT);
 		scoreboarddisplay.writeByte(position);
 		StringSerializer.writeString(scoreboarddisplay, version, name);
 		codec.write(scoreboarddisplay);

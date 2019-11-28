@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySetItems;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -24,12 +23,12 @@ public class InventorySetItems extends MiddleInventorySetItems {
 
 		String locale = cache.getAttributesCache().getLocale();
 		for (ClientItems windowitems : remapper.toClientItems(windowId, items)) {
-			codec.write(create(codec, version, locale, windowitems.getWindowId(), windowitems.getItems()));
+			codec.write(create(version, locale, windowitems.getWindowId(), windowitems.getItems()));
 		}
 	}
 
-	protected static ClientBoundPacketData create(PacketDataCodec codec, ProtocolVersion version, String locale, byte windowId, NetworkItemStack[] items) {
-		ClientBoundPacketData windowitems = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WINDOW_SET_ITEMS);
+	protected static ClientBoundPacketData create(ProtocolVersion version, String locale, byte windowId, NetworkItemStack[] items) {
+		ClientBoundPacketData windowitems = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_SET_ITEMS);
 		windowitems.writeByte(windowId);
 		ArraySerializer.writeShortTArray(windowitems, items, (lTo, item) -> ItemStackSerializer.writeItemStack(lTo, version, locale, item));
 		return windowitems;

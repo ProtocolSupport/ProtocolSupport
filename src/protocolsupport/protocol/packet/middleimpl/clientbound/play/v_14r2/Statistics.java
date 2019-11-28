@@ -15,7 +15,7 @@ public class Statistics extends MiddleStatistics {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData statisticsupdate = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_STATISTICS);
+		ClientBoundPacketData statisticsupdate = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_STATISTICS);
 		ArraySerializer.writeVarIntTArray(statisticsupdate, statistics, (to, statistic) -> {
 			VarNumberSerializer.writeVarInt(to, statistic.category);
 			VarNumberSerializer.writeVarInt(to, statistic.id);

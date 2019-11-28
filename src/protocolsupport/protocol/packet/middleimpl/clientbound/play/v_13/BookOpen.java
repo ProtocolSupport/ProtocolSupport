@@ -19,7 +19,7 @@ public class BookOpen extends MiddleBookOpen {
 	@Override
 	public void writeToClient() {
 		MiscSerializer.writeVarIntEnum(buffer, hand);
-		codec.write(CustomPayload.create(codec, LegacyCustomPayloadChannelName.MODERN_BOOK_OPEN, buffer));
+		codec.write(CustomPayload.create(LegacyCustomPayloadChannelName.MODERN_BOOK_OPEN, buffer));
 	}
 
 	@Override

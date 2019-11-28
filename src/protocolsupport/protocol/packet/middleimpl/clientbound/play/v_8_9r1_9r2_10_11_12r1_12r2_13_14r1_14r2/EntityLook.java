@@ -14,7 +14,7 @@ public class EntityLook extends MiddleEntityLook {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData entitylook = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_LOOK);
+		ClientBoundPacketData entitylook = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_LOOK);
 		VarNumberSerializer.writeVarInt(entitylook, entityId);
 		entitylook.writeByte(yaw);
 		entitylook.writeByte(pitch);

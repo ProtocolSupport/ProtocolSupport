@@ -34,7 +34,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 				break;
 			}
 		}
-		ClientBoundPacketData spawnpainting = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SPAWN_PAINTING);
+		ClientBoundPacketData spawnpainting = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_PAINTING);
 		spawnpainting.writeInt(entity.getId());
 		StringSerializer.writeShortUTF16BEString(spawnpainting, LegacyPainting.getName(type));
 		PositionSerializer.writeLegacyPositionI(spawnpainting, position);

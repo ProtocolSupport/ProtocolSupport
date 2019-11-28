@@ -14,7 +14,7 @@ public class Camera extends MiddleCamera {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData camera = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_CAMERA);
+		ClientBoundPacketData camera = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CAMERA);
 		VarNumberSerializer.writeVarInt(camera, entityId);
 		codec.write(camera);
 	}

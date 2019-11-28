@@ -13,7 +13,7 @@ public class InventoryConfirmTransaction extends MiddleInventoryConfirmTransacti
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData serializer = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WINDOW_TRANSACTION);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_TRANSACTION);
 		serializer.writeByte(windowId);
 		serializer.writeShort(actionNumber);
 		serializer.writeBoolean(accepted);

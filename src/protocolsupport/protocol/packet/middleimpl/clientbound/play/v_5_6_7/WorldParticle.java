@@ -22,7 +22,7 @@ public class WorldParticle extends MiddleWorldParticle {
 	public void writeToClient() {
 		particle = remapper.getRemap(particle.getClass()).apply(particle);
 		if (particle != null) {
-			ClientBoundPacketData worldparticle = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
+			ClientBoundPacketData worldparticle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
 			int count = particle.getCount();
 			if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) && (count == 0)) {
 				count = 1;

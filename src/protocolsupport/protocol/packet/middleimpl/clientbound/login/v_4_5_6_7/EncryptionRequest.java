@@ -15,7 +15,7 @@ public class EncryptionRequest extends MiddleEncryptionRequest {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData encryptionrequest = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_LOGIN_ENCRYPTION_BEGIN);
+		ClientBoundPacketData encryptionrequest = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LOGIN_ENCRYPTION_BEGIN);
 		StringSerializer.writeString(encryptionrequest, version, serverId);
 		ArraySerializer.writeShortByteArray(encryptionrequest, publicKey);
 		ArraySerializer.writeShortByteArray(encryptionrequest, verifyToken);

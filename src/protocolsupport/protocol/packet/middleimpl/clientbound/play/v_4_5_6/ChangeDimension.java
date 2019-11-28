@@ -16,7 +16,7 @@ public class ChangeDimension extends AbstractChangeDimension {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData changedimension = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_RESPAWN);
+		ClientBoundPacketData changedimension = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_RESPAWN);
 		changedimension.writeInt(dimension.getId());
 		MiscSerializer.writeByteEnum(changedimension, Difficulty.HARD);
 		changedimension.writeByte(gamemode.getId());

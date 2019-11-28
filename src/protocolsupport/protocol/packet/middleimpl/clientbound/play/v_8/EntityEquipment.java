@@ -16,7 +16,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 	@Override
 	public void writeToClient() {
 		if (slot != 1) {
-			ClientBoundPacketData entityequipment = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_EQUIPMENT);
+			ClientBoundPacketData entityequipment = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_EQUIPMENT);
 			VarNumberSerializer.writeVarInt(entityequipment, entityId);
 			entityequipment.writeShort(slot == 0 ? slot : slot - 1);
 			ItemStackSerializer.writeItemStack(entityequipment, version, cache.getAttributesCache().getLocale(), itemstack);

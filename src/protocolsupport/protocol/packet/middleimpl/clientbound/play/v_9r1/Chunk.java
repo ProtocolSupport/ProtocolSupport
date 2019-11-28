@@ -26,7 +26,7 @@ public class Chunk extends AbstractChunk {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData chunksingle = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+		ClientBoundPacketData chunksingle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunksingle, coord);
 		chunksingle.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(chunksingle, blockMask);
@@ -48,7 +48,7 @@ public class Chunk extends AbstractChunk {
 
 		for (Map<Position, TileEntity> sectionTiles : cachedChunk.getTiles()) {
 			for (TileEntity tile : sectionTiles.values()) {
-				codec.write(BlockTileUpdate.create(codec, version, tile));
+				codec.write(BlockTileUpdate.create(version, tile));
 			}
 		}
 	}

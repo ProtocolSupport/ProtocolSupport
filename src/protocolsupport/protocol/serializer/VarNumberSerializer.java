@@ -2,18 +2,26 @@ package protocolsupport.protocol.serializer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
+import io.netty.handler.codec.EncoderException;
 
 public class VarNumberSerializer {
 
 	public static final int MAX_LENGTH = 5;
 
 	public static void writeFixedSizeVarInt(ByteBuf to, int i) {
+		writeFixedSizeVarInt(to, i, MAX_LENGTH);
+	}
+
+	public static void writeFixedSizeVarInt(ByteBuf to, int i, int length) {
 		int writerIndex = to.writerIndex();
 		while ((i & 0xFFFFFF80) != 0x0) {
 			to.writeByte(i | 0x80);
 			i >>>= 7;
 		}
-		int paddingBytes = MAX_LENGTH - (to.writerIndex() - writerIndex) - 1;
+		int paddingBytes = length - (to.writerIndex() - writerIndex) - 1;
+		if (paddingBytes < 0) {
+			throw new EncoderException("Fixed size VarInt too big");
+		}
 		if (paddingBytes == 0) {
 			to.writeByte(i);
 		} else {
@@ -55,7 +63,7 @@ public class VarNumberSerializer {
 			part = from.readByte();
 			varlong |= (part & 0x7F) << (length++ * 7);
 			if (length > 10) {
-				throw new RuntimeException("VarLong too big");
+				throw new DecoderException("VarLong too big");
 			}
 		} while ((part & 0x80) == 0x80);
 		return varlong;

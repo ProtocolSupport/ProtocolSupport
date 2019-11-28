@@ -26,7 +26,7 @@ public class GameStateChange extends MiddleGameStateChange {
 				break;
 			}
 		}
-		ClientBoundPacketData gamestatechange = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_GAME_STATE_CHANGE);
+		ClientBoundPacketData gamestatechange = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_GAME_STATE_CHANGE);
 		gamestatechange.writeByte(type);
 		gamestatechange.writeByte((int) value);
 		codec.write(gamestatechange);

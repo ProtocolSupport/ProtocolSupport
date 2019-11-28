@@ -15,7 +15,7 @@ public class UnlockRecipes extends MiddleUnlockRecipes {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData unlockrecipes = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_UNLOCK_RECIPES);
+		ClientBoundPacketData unlockrecipes = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UNLOCK_RECIPES);
 		MiscSerializer.writeVarIntEnum(unlockrecipes, action);
 		unlockrecipes.writeBoolean(craftRecipeBookOpen);
 		unlockrecipes.writeBoolean(craftRecipeBookFiltering);

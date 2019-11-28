@@ -30,7 +30,7 @@ public class WorldEvent extends MiddleWorldEvent {
 			}
 		}
 		effectId = legacyEffectId.getRemap(effectId);
-		ClientBoundPacketData worldevent = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_WORLD_EVENT);
+		ClientBoundPacketData worldevent = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_EVENT);
 		worldevent.writeInt(effectId);
 		PositionSerializer.writeLegacyPositionL(worldevent, position);
 		worldevent.writeInt(data);

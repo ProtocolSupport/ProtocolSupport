@@ -22,7 +22,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData entitymetadata = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
+		ClientBoundPacketData entitymetadata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
 		entitymetadata.writeInt(entityId);
 		NetworkEntityMetadataSerializer.writeLegacyData(entitymetadata, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
 		codec.write(entitymetadata);
@@ -32,7 +32,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 			if (bedpositionObject.isPresent()) {
 				Position bedposition = bedpositionObject.get().getValue();
 				if (bedposition != null) {
-					ClientBoundPacketData usebed = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED_ID);
+					ClientBoundPacketData usebed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED_ID);
 					usebed.writeInt(entityId);
 					if (version.isBefore(ProtocolVersion.MINECRAFT_1_7_5)) {
 						usebed.writeByte(0);

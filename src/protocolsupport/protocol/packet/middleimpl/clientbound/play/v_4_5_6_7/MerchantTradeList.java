@@ -13,7 +13,7 @@ public class MerchantTradeList extends MiddleMerchantTradeList {
 
 	@Override
 	public void writeToClient() {
-		codec.write(CustomPayload.create(codec, version, LegacyCustomPayloadChannelName.LEGACY_TRADE_LIST, to -> {
+		codec.write(CustomPayload.create(version, LegacyCustomPayloadChannelName.LEGACY_TRADE_LIST, to -> {
 			MerchantDataSerializer.writeMerchantData(to, version, cache.getAttributesCache().getLocale(), merchantData);
 		}));
 	}

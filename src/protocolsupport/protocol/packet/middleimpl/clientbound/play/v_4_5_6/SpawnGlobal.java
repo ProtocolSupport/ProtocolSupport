@@ -13,7 +13,7 @@ public class SpawnGlobal extends MiddleSpawnGlobal {
 
 	@Override
 	public void writeToClient() {
-		ClientBoundPacketData spawnglobal = codec.allocClientBoundPacketData(PacketType.CLIENTBOUND_PLAY_SPAWN_GLOBAL);
+		ClientBoundPacketData spawnglobal = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_GLOBAL);
 		spawnglobal.writeInt(entity.getId());
 		spawnglobal.writeByte(entity.getType().getNetworkTypeId());
 		spawnglobal.writeInt((int) (x * 32));
