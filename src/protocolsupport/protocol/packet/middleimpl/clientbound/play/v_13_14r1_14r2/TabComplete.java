@@ -20,11 +20,11 @@ public class TabComplete extends MiddleTabComplete {
 		VarNumberSerializer.writeVarInt(tabcomplete, id);
 		VarNumberSerializer.writeVarInt(tabcomplete, start);
 		VarNumberSerializer.writeVarInt(tabcomplete, length);
-		ArraySerializer.writeVarIntTArray(tabcomplete, matches, (data, match) -> {
-			StringSerializer.writeVarIntUTF8String(tabcomplete, match.getMatch());
-			tabcomplete.writeBoolean(match.hasTooltip());
+		ArraySerializer.writeVarIntTArray(tabcomplete, matches, (to, match) -> {
+			StringSerializer.writeVarIntUTF8String(to, match.getMatch());
+			to.writeBoolean(match.hasTooltip());
 			if (match.hasTooltip()) {
-				StringSerializer.writeVarIntUTF8String(tabcomplete, match.getTooltip());
+				StringSerializer.writeVarIntUTF8String(to, match.getTooltip());
 			}
 		});
 		codec.write(tabcomplete);

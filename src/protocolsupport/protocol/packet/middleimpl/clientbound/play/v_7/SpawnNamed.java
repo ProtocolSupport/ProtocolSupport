@@ -34,9 +34,9 @@ public class SpawnNamed extends MiddleSpawnNamed {
 			StringSerializer.writeVarIntUTF8String(spawnnamed, Utils.clampString(entry.getUserName(), 16));
 			if (version == ProtocolVersion.MINECRAFT_1_7_10) {
 				ArraySerializer.writeVarIntTArray(spawnnamed, entry.getProperties(true), (to, property) -> {
-					StringSerializer.writeVarIntUTF8String(spawnnamed, property.getName());
-					StringSerializer.writeVarIntUTF8String(spawnnamed, property.getValue());
-					StringSerializer.writeVarIntUTF8String(spawnnamed, property.getSignature());
+					StringSerializer.writeVarIntUTF8String(to, property.getName());
+					StringSerializer.writeVarIntUTF8String(to, property.getValue());
+					StringSerializer.writeVarIntUTF8String(to, property.getSignature());
 				});
 			}
 		} else {

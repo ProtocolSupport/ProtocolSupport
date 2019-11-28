@@ -67,13 +67,13 @@ public class Advancements extends MiddleAdvancements {
 
 
 	protected void wrtieAdvancementProgress(ByteBuf to, AdvancementProgress obj2) {
-		ArraySerializer.writeVarIntTArray(to, obj2.criterionsProgress, (toi, element) -> {
-			StringSerializer.writeVarIntUTF8String(toi, element.getObj1());
+		ArraySerializer.writeVarIntTArray(to, obj2.criterionsProgress, (lTo, element) -> {
+			StringSerializer.writeVarIntUTF8String(lTo, element.getObj1());
 			if (element.getObj2() != null) {
-				toi.writeBoolean(true);
-				toi.writeLong(element.getObj2());
+				lTo.writeBoolean(true);
+				lTo.writeLong(element.getObj2());
 			} else {
-				toi.writeBoolean(false);
+				lTo.writeBoolean(false);
 			}
 		});
 	}

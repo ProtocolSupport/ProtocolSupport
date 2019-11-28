@@ -31,11 +31,11 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 				case ADD: {
 					StringSerializer.writeVarIntUTF8String(playerlistsetentry, currentEntry.getUserName());
 					ArraySerializer.writeVarIntTArray(playerlistsetentry, currentEntry.getProperties(false), (to, property) -> {
-						StringSerializer.writeVarIntUTF8String(playerlistsetentry, property.getName());
-						StringSerializer.writeVarIntUTF8String(playerlistsetentry, property.getValue());
-						playerlistsetentry.writeBoolean(property.hasSignature());
+						StringSerializer.writeVarIntUTF8String(to, property.getName());
+						StringSerializer.writeVarIntUTF8String(to, property.getValue());
+						to.writeBoolean(property.hasSignature());
 						if (property.hasSignature()) {
-							StringSerializer.writeVarIntUTF8String(playerlistsetentry, property.getSignature());
+							StringSerializer.writeVarIntUTF8String(to, property.getSignature());
 						}
 					});
 					VarNumberSerializer.writeVarInt(playerlistsetentry, currentEntry.getGameMode().getId());

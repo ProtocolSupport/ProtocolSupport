@@ -1,5 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2;
 
+import java.util.function.Consumer;
+
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
@@ -18,11 +20,18 @@ public class CustomPayload extends MiddleCustomPayload {
 		codec.write(create(tag, data));
 	}
 
+	public static ClientBoundPacketData create(String tag, Consumer<ByteBuf> dataWriter) {
+		ClientBoundPacketData custompayload = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
+		StringSerializer.writeVarIntUTF8String(custompayload, tag);
+		dataWriter.accept(custompayload);
+		return custompayload;
+	}
+
 	public static ClientBoundPacketData create(String tag, ByteBuf data) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
-		StringSerializer.writeVarIntUTF8String(serializer, tag);
-		serializer.writeBytes(data);
-		return serializer;
+		ClientBoundPacketData custompayload = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
+		StringSerializer.writeVarIntUTF8String(custompayload, tag);
+		custompayload.writeBytes(data);
+		return custompayload;
 	}
 
 }

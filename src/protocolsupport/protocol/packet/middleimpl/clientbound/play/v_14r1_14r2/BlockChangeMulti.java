@@ -27,7 +27,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		ClientBoundPacketData blockchangemulti = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI);
 		PositionSerializer.writeIntChunkCoord(blockchangemulti, chunkCoord);
 		ArraySerializer.writeVarIntTArray(blockchangemulti, records, (to, record) -> {
-			blockchangemulti.writeShort(record.coord);
+			to.writeShort(record.coord);
 			VarNumberSerializer.writeVarInt(to, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, record.id));
 		});
 		codec.write(blockchangemulti);
