@@ -67,10 +67,10 @@ public abstract class AbstractPacketEncoder extends ChannelOutboundHandlerAdapte
 			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 				input.readerIndex(0);
 				throw new EncoderException(MessageFormat.format(
-					"Unable to transform or read middle packet(type {0}, data {1})",
+					"Unable to transform or read clientbound middle packet(type {0}, data {1})",
 					packetTransformer != null ? packetTransformer.getClass().getName() : "unknown",
-					Arrays.toString(MiscSerializer.readAllBytes(input)
-				)), exception);
+					Arrays.toString(MiscSerializer.readAllBytes(input))
+				), exception);
 			} else {
 				throw exception;
 			}

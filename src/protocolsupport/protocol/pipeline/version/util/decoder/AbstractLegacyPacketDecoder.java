@@ -37,6 +37,7 @@ public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder 
 				buffer.resetReaderIndex();
 				break;
 			} catch (Exception e) {
+				buffer.resetReaderIndex();
 				throwFailedTransformException(e, buffer);
 			}
 		}

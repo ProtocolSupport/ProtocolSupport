@@ -7,6 +7,10 @@ import protocolsupport.protocol.packet.PacketType;
 
 public class ClientBoundPacketData extends PacketData<ClientBoundPacketData> {
 
+	public static ClientBoundPacketData create(PacketType packetType) {
+		return recycler.get().init(packetType);
+	}
+
 	protected static final Recycler<ClientBoundPacketData> recycler = new Recycler<ClientBoundPacketData>() {
 		@Override
 		protected ClientBoundPacketData newObject(Handle<ClientBoundPacketData> handle) {
@@ -19,12 +23,10 @@ public class ClientBoundPacketData extends PacketData<ClientBoundPacketData> {
 	}
 
 	@Override
-	protected ClientBoundPacketData newInstance() {
-		return recycler.get();
-	}
-
-	public static ClientBoundPacketData create(PacketType packetType) {
-		return recycler.get().init(packetType);
+	public ClientBoundPacketData clone() {
+		ClientBoundPacketData clone = recycler.get().init(packetType);
+		getBytes(readerIndex(), clone);
+		return clone;
 	}
 
 }

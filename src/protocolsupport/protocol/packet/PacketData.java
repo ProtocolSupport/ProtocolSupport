@@ -55,16 +55,7 @@ public abstract class PacketData<T extends PacketData<T>> extends UnpooledHeapBy
 		handle.recycle((T) this);
 	}
 
-	protected abstract T newInstance();
-
 	@Override
-	public T clone() {
-		T clone = newInstance();
-		clone.init(packetType);
-		markReaderIndex();
-		clone.writeBytes(this);
-		resetReaderIndex();
-		return clone;
-	}
+	public abstract T clone();
 
 }

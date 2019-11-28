@@ -37,11 +37,11 @@ public abstract class AbstractPacketDecoder extends SimpleChannelInboundHandler<
 		packetTransformer.writeToServer();
 	}
 
-	protected void throwFailedTransformException(Exception exception, ByteBuf data) throws Exception {
+	protected void throwFailedTransformException(Exception exception, ByteBuf input) throws Exception {
 		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
-			data.readerIndex(0);
 			throw new DecoderException(MessageFormat.format(
-				"Unable to transform or read packet data {0}", Arrays.toString(MiscSerializer.readAllBytes(data))
+				"Unable to transform or read serverbound middle packet(data {0})",
+				Arrays.toString(MiscSerializer.readAllBytes(input))
 			), exception);
 		} else {
 			throw exception;

@@ -7,6 +7,10 @@ import protocolsupport.protocol.packet.PacketType;
 
 public class ServerBoundPacketData extends PacketData<ServerBoundPacketData> {
 
+	public static ServerBoundPacketData create(PacketType packetType) {
+		return recycler.get().init(packetType);
+	}
+
 	protected static final Recycler<ServerBoundPacketData> recycler = new Recycler<ServerBoundPacketData>() {
 		@Override
 		protected ServerBoundPacketData newObject(Handle<ServerBoundPacketData> handle) {
@@ -19,12 +23,10 @@ public class ServerBoundPacketData extends PacketData<ServerBoundPacketData> {
 	}
 
 	@Override
-	protected ServerBoundPacketData newInstance() {
-		return recycler.get();
-	}
-
-	public static ServerBoundPacketData create(PacketType packetType) {
-		return recycler.get().init(packetType);
+	public ServerBoundPacketData clone() {
+		ServerBoundPacketData clone = recycler.get().init(packetType);
+		getBytes(readerIndex(), clone);
+		return clone;
 	}
 
 }
