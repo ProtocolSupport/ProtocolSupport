@@ -15,7 +15,7 @@ public abstract class IPacketIdCodec {
 
 	protected abstract void writePacketId(PacketData<?> to, int packetId);
 
-	public void writerServerBoundPacketId(PacketData<?> to) {
+	public void writeServerBoundPacketId(PacketData<?> to) {
 		writePacketId(to, to.getPacketType().getId());
 	}
 

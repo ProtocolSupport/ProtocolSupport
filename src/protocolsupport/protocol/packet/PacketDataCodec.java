@@ -119,7 +119,7 @@ public class PacketDataCodec {
 
 	protected void read0(PacketData<?> packetdata) {
 		try {
-			packetIdCodec.writerServerBoundPacketId(packetdata);
+			packetIdCodec.writeServerBoundPacketId(packetdata);
 			transformerDecoderCtx.fireChannelRead(packetdata);
 		} catch (Throwable t) {
 			ReferenceCountUtil.safeRelease(packetdata);
