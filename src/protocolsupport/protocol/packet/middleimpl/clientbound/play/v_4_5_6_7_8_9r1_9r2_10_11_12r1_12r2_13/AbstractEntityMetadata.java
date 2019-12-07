@@ -17,11 +17,11 @@ public abstract class AbstractEntityMetadata extends MiddleEntityMetadata {
 	}
 
 	@Override
-	public void writeToClient() {
+	public void writeToClient0() {
 		codec.write(createEntityMetadata());
 
 		if (entity.getType() == NetworkEntityType.PLAYER) {
-			Optional<NetworkEntityMetadataObjectOptionalPosition> bedpositionObject = NetworkEntityMetadataObjectIndex.EntityLiving.BED_LOCATION.getValue(entityRemapper.getOriginalMetadata());
+			Optional<NetworkEntityMetadataObjectOptionalPosition> bedpositionObject = NetworkEntityMetadataObjectIndex.EntityLiving.BED_LOCATION.getValue(metadata);
 			if (bedpositionObject.isPresent()) {
 				Position bedposition = bedpositionObject.get().getValue();
 				if (bedposition != null) {

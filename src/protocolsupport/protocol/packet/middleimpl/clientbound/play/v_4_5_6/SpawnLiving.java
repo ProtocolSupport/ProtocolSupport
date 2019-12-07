@@ -14,7 +14,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 	}
 
 	@Override
-	public void writeToClient() {
+	public void writeToClient0() {
 		ClientBoundPacketData spawnliving = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_LIVING);
 		spawnliving.writeInt(entity.getId());
 		spawnliving.writeByte(LegacyEntityId.getIntId(entityRemapper.getRemappedEntityType()));

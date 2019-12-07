@@ -6,14 +6,19 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
-import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
+import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
+import protocolsupport.protocol.typeremapper.entity.EntityRemappingHelper;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
+import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 
-	protected final EntityRemapper entityRemapper = connection.getEntityRemapper();
+	protected final WatchedEntityCache entityCache = cache.getWatchedEntityCache();
 
 	public MiddleSpawnLiving(ConnectionImpl connection) {
 		super(connection);
@@ -29,6 +34,7 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 	protected int motX;
 	protected int motY;
 	protected int motZ;
+	protected final ArrayMap<NetworkEntityMetadataObject<?>> metadata = new ArrayMap<>(EntityRemappersRegistry.MAX_METADATA_INDEX + 1);
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
@@ -45,18 +51,26 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 		motX = serverdata.readShort();
 		motY = serverdata.readShort();
 		motZ = serverdata.readShort();
-		entityRemapper.readEntityWithMetadata(entity, serverdata);
+		NetworkEntityMetadataSerializer.readDataTo(serverdata, metadata);
 	}
 
+	protected final EntityRemappingHelper entityRemapper = new EntityRemappingHelper(EntityRemappersRegistry.REGISTRY.getTable(version));
+
 	@Override
-	public boolean postFromServerRead() {
+	public void writeToClient() {
 		if (!GenericIdSkipper.ENTITY.getTable(version).shouldSkip(entity.getType())) {
-			cache.getWatchedEntityCache().addWatchedEntity(entity);
-			entityRemapper.remap(true);
-			return true;
-		} else {
-			return false;
+			entityCache.addWatchedEntity(entity);
+			entityRemapper.remap(entity, metadata);
+			writeToClient0();
 		}
+	}
+
+	protected abstract void writeToClient0();
+
+	@Override
+	public void postHandle() {
+		metadata.clear();
+		entityRemapper.clear();
 	}
 
 }

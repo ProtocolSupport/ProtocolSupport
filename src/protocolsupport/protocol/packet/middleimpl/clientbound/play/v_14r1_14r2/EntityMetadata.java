@@ -14,7 +14,7 @@ public class EntityMetadata extends MiddleEntityMetadata {
 	}
 
 	@Override
-	public void writeToClient() {
+	public void writeToClient0() {
 		ClientBoundPacketData entitymetadata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
 		VarNumberSerializer.writeVarInt(entitymetadata, entityId);
 		NetworkEntityMetadataSerializer.writeData(entitymetadata, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());

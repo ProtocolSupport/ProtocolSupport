@@ -18,7 +18,7 @@ public abstract class AbstractLocationOffsetSpawnObject extends MiddleSpawnObjec
 		if (!allow) {
 			return false;
 		}
-		EntityLocationOffset.Offset offset = entityOffsetRemapper.get(entityRemapper.getRemappedEntityType());
+		EntityLocationOffset.Offset offset = entityOffsetRemapper.get(entityRemappedType);
 		if (offset != null) {
 			x += offset.getX();
 			y += offset.getY();

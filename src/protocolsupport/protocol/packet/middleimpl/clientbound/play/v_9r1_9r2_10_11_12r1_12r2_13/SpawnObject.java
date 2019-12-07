@@ -20,18 +20,17 @@ public class SpawnObject extends MiddleSpawnObject {
 	}
 
 	@Override
-	public void writeToClient() {
-		NetworkEntityType type = entityRemapper.getRemappedEntityType();
-		if (type.isOfType(NetworkEntityType.MINECART)) {
-			objectdata = LegacyEntityId.getMinecartObjectData(type);
+	public void writeToClient0() {
+		if (entityRemappedType.isOfType(NetworkEntityType.MINECART)) {
+			objectdata = LegacyEntityId.getMinecartObjectData(entityRemappedType);
 		} else {
-			objectdata = entityObjectDataRemappingTable.getRemap(type).applyAsInt(objectdata);
+			objectdata = entityObjectDataRemappingTable.getRemap(entityRemappedType).applyAsInt(objectdata);
 		}
 
 		ClientBoundPacketData spawnobject = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		VarNumberSerializer.writeVarInt(spawnobject, entity.getId());
 		MiscSerializer.writeUUID(spawnobject, entity.getUUID());
-		spawnobject.writeByte(LegacyEntityId.getObjectIntId(type));
+		spawnobject.writeByte(LegacyEntityId.getObjectIntId(entityRemappedType));
 		spawnobject.writeDouble(x);
 		spawnobject.writeDouble(y);
 		spawnobject.writeDouble(z);

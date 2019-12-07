@@ -19,7 +19,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 	}
 
 	@Override
-	public void writeToClient() {
+	public void writeToClient0() {
 		ClientBoundPacketData spawnliving = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_LIVING);
 		VarNumberSerializer.writeVarInt(spawnliving, entity.getId());
 		MiscSerializer.writeUUID(spawnliving, entity.getUUID());

@@ -37,13 +37,19 @@ public class PacketDataCodec {
 
 	public <T> void channelWrite(ChannelPromise promise, T t, Consumer<T> consumerT) {
 		transformerEncoderCurrentRealChannelPromise = promise;
+		boolean success = false;
 		try {
 			consumerT.accept(t);
+			success = true;
 		} finally {
 			if (transformerEncoderCurrentRealChannelPromise != null) {
-				ChannelPromise lPromise = transformerEncoderCurrentRealChannelPromise;
-				transformerEncoderCurrentRealChannelPromise = null;
-				lPromise.setSuccess();
+				if (success) {
+					ChannelPromise lPromise = transformerEncoderCurrentRealChannelPromise;
+					transformerEncoderCurrentRealChannelPromise = null;
+					lPromise.setSuccess();
+				} else {
+					transformerEncoderCurrentRealChannelPromise = null;
+				}
 			}
 		}
 	}

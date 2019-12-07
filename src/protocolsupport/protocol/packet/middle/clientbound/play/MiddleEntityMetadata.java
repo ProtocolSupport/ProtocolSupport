@@ -2,38 +2,50 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
+import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
+import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
+import protocolsupport.protocol.typeremapper.entity.EntityRemappingHelper;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
+import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public abstract class MiddleEntityMetadata extends MiddleEntity {
 
-	protected EntityRemapper entityRemapper = connection.getEntityRemapper();
+	protected final WatchedEntityCache entityCache = cache.getWatchedEntityCache();
 
 	public MiddleEntityMetadata(ConnectionImpl connection) {
 		super(connection);
 	}
 
 	protected NetworkEntity entity;
+	protected final ArrayMap<NetworkEntityMetadataObject<?>> metadata = new ArrayMap<>(EntityRemappersRegistry.MAX_METADATA_INDEX + 1);
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		super.readFromServerData(serverdata);
-		entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
-		if (entity != null) {
-			entityRemapper.readEntityWithMetadata(entity, serverdata);
-		} else {
-			serverdata.skipBytes(serverdata.readableBytes());
-		}
+		entity = entityCache.getWatchedEntity(entityId);
+		NetworkEntityMetadataSerializer.readDataTo(serverdata, metadata);
 	}
 
+	protected final EntityRemappingHelper entityRemapper = new EntityRemappingHelper(EntityRemappersRegistry.REGISTRY.getTable(version));
+
 	@Override
-	public boolean postFromServerRead() {
-		if (entity != null) {
-			entityRemapper.remap(true);
-			return true;
-		} else {
-			return false;
+	public void writeToClient() {
+		if (entity == null) {
+			return;
 		}
+
+		entityRemapper.remap(entity, metadata);
+		writeToClient0();
+	}
+
+	protected abstract void writeToClient0();
+
+	@Override
+	public void postHandle() {
+		metadata.clear();
+		entityRemapper.clear();
 	}
 
 }

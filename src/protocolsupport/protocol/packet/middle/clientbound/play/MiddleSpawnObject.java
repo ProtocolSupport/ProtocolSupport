@@ -7,13 +7,18 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
-import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
+import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
+import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 
-	protected final EntityRemapper entityRemapper = connection.getEntityRemapper();
+	protected final WatchedEntityCache entityCache = cache.getWatchedEntityCache();
+
+	protected final EntityRemappingTable entityRemappingTable = EntityRemappersRegistry.REGISTRY.getTable(version);
 
 	public MiddleSpawnObject(ConnectionImpl connection) {
 		super(connection);
@@ -45,18 +50,20 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 		motY = serverdata.readShort();
 		motZ = serverdata.readShort();
 		entity = NetworkEntity.createObject(uuid, entityId, typeId);
-		entityRemapper.readEntity(entity);
 	}
 
+
+	protected NetworkEntityType entityRemappedType;
+
 	@Override
-	public boolean postFromServerRead() {
+	public void writeToClient() {
 		if (!GenericIdSkipper.ENTITY.getTable(version).shouldSkip(entity.getType())) {
-			cache.getWatchedEntityCache().addWatchedEntity(entity);
-			entityRemapper.remap(false);
-			return true;
-		} else {
-			return false;
+			entityCache.addWatchedEntity(entity);
+			entityRemappedType = entityRemappingTable.getRemap(entity.getType()).getLeft();
+			writeToClient0();
 		}
 	}
+
+	protected abstract void writeToClient0();
 
 }
