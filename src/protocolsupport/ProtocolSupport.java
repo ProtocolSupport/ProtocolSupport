@@ -81,10 +81,10 @@ public class ProtocolSupport extends JavaPlugin {
 		Logger logger = getLogger();
 		logger.severe("╔══════════════════════════════════════════════════════════════════╗");
 		logger.severe("║                               ERROR                               ");
-		logger.severe("║   " + message);
+		logger.severe("║   " + message                                                      );
 		logger.severe("║                                                                   ");
-		logger.severe("║   This version of plugin only supports");
-		logger.severe("║   server minecraft version " + supported_platform_version);
+		logger.severe("║   This version of plugin only supports                            ");
+		logger.severe("║   server minecraft version " + supported_platform_version          );
 		logger.severe("║   and following platforms:                                        ");
 		logger.severe("║   - Spigot (https://www.spigotmc.org/)                            ");
 		logger.severe("║   - Paper (https://papermc.io/)                                   ");
@@ -122,6 +122,10 @@ public class ProtocolSupport extends JavaPlugin {
 
 	public static void logWarning(String message) {
 		ProtocolSupport.getInstance().getLogger().warning(message);
+	}
+
+	public static void logError(String message, Throwable t) {
+		ProtocolSupport.getInstance().getLogger().log(Level.SEVERE, message, t);
 	}
 
 	public static class BuildInfo {

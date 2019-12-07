@@ -1,7 +1,5 @@
 package protocolsupport.zplatform.impl.spigot.entitytracker;
 
-import java.util.logging.Level;
-
 import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 import net.minecraft.server.v1_14_R1.EntityTypes;
@@ -27,7 +25,7 @@ public class SpigotEntityTrackerEntryInjectorMap extends Int2ObjectOpenHashMap<E
 				);
 			});
 		} catch (Throwable e) {
-			ProtocolSupport.getInstance().getLogger().log(Level.SEVERE, e, () -> "Failed to inject entity tracker instance");
+			ProtocolSupport.logError("Failed to inject entity tracker instance", e);
 		}
 		return super.put(k, v);
 	}
