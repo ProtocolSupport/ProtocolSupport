@@ -5,6 +5,7 @@ import java.util.Optional;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
@@ -17,8 +18,8 @@ public abstract class AbstractEntityMetadata extends MiddleEntityMetadata {
 	}
 
 	@Override
-	public void writeToClient0() {
-		codec.write(createEntityMetadata());
+	public void writeToClient0(NetworkEntityMetadataList remappedMetadata) {
+		codec.write(createEntityMetadata(remappedMetadata));
 
 		if (entity.getType() == NetworkEntityType.PLAYER) {
 			Optional<NetworkEntityMetadataObjectOptionalPosition> bedpositionObject = NetworkEntityMetadataObjectIndex.EntityLiving.BED_LOCATION.getValue(metadata);
@@ -31,7 +32,7 @@ public abstract class AbstractEntityMetadata extends MiddleEntityMetadata {
 		}
 	}
 
-	protected abstract ClientBoundPacketData createEntityMetadata();
+	protected abstract ClientBoundPacketData createEntityMetadata(NetworkEntityMetadataList remappedMetadata);
 
 	protected abstract ClientBoundPacketData createUseBed(Position position);
 

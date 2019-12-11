@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
 import protocolsupport.protocol.typeremapper.entity.EntityLocationOffset;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class AbstractLocationOffsetSpawnObject extends MiddleSpawnObject {
 
@@ -13,12 +14,8 @@ public abstract class AbstractLocationOffsetSpawnObject extends MiddleSpawnObjec
 	}
 
 	@Override
-	public boolean postFromServerRead() {
-		boolean allow = super.postFromServerRead();
-		if (!allow) {
-			return false;
-		}
-		EntityLocationOffset.Offset offset = entityOffsetRemapper.get(entityRemappedType);
+	protected void writeToClient0(NetworkEntityType remappedEntityType) {
+		EntityLocationOffset.Offset offset = entityOffsetRemapper.get(remappedEntityType);
 		if (offset != null) {
 			x += offset.getX();
 			y += offset.getY();
@@ -26,7 +23,9 @@ public abstract class AbstractLocationOffsetSpawnObject extends MiddleSpawnObjec
 			yaw += offset.getYaw();
 			pitch += offset.getPitch();
 		}
-		return true;
+		writeToClientAfterOffset(remappedEntityType);
 	}
+
+	protected abstract void writeToClientAfterOffset(NetworkEntityType remappedEntityType);
 
 }

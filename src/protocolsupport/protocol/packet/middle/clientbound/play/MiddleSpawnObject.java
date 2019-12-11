@@ -52,18 +52,14 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 		entity = NetworkEntity.createObject(uuid, entityId, typeId);
 	}
 
-
-	protected NetworkEntityType entityRemappedType;
-
 	@Override
 	public void writeToClient() {
 		if (!GenericIdSkipper.ENTITY.getTable(version).shouldSkip(entity.getType())) {
 			entityCache.addWatchedEntity(entity);
-			entityRemappedType = entityRemappingTable.getRemap(entity.getType()).getLeft();
-			writeToClient0();
+			writeToClient0(entityRemappingTable.getRemap(entity.getType()).getLeft());
 		}
 	}
 
-	protected abstract void writeToClient0();
+	protected abstract void writeToClient0(NetworkEntityType remappedEntityType);
 
 }

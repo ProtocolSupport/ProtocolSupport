@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappingHelper;
@@ -37,10 +38,10 @@ public abstract class MiddleEntityMetadata extends MiddleEntity {
 		}
 
 		entityRemapper.remap(entity, metadata);
-		writeToClient0();
+		writeToClient0(entityRemapper.getRemappedMetadata());
 	}
 
-	protected abstract void writeToClient0();
+	protected abstract void writeToClient0(NetworkEntityMetadataList remappedMetadata);
 
 	@Override
 	public void postHandle() {

@@ -6,9 +6,11 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnLiving
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.entity.FlatteningEntityId;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public class SpawnLiving extends MiddleSpawnLiving {
 
@@ -19,11 +21,11 @@ public class SpawnLiving extends MiddleSpawnLiving {
 	}
 
 	@Override
-	public void writeToClient0() {
+	public void writeToClient0(NetworkEntityType remappedEntityType, NetworkEntityMetadataList remappedMetadata) {
 		ClientBoundPacketData spawnliving = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_LIVING);
 		VarNumberSerializer.writeVarInt(spawnliving, entity.getId());
 		MiscSerializer.writeUUID(spawnliving, entity.getUUID());
-		VarNumberSerializer.writeVarInt(spawnliving, flatteningEntityIdTable.getRemap(entityRemapper.getRemappedEntityType().getNetworkTypeId()));
+		VarNumberSerializer.writeVarInt(spawnliving, flatteningEntityIdTable.getRemap(remappedEntityType.getNetworkTypeId()));
 		spawnliving.writeDouble(x);
 		spawnliving.writeDouble(y);
 		spawnliving.writeDouble(z);
@@ -33,7 +35,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		spawnliving.writeShort(motX);
 		spawnliving.writeShort(motY);
 		spawnliving.writeShort(motZ);
-		NetworkEntityMetadataSerializer.writeData(spawnliving, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
+		NetworkEntityMetadataSerializer.writeData(spawnliving, version, cache.getAttributesCache().getLocale(), remappedMetadata);
 		codec.write(spawnliving);
 	}
 

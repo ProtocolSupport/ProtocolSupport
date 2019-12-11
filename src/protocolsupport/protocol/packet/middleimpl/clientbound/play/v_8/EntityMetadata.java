@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.types.Position;
 
 public class EntityMetadata extends AbstractEntityMetadata {
@@ -16,10 +17,10 @@ public class EntityMetadata extends AbstractEntityMetadata {
 	}
 
 	@Override
-	protected ClientBoundPacketData createEntityMetadata() {
+	protected ClientBoundPacketData createEntityMetadata(NetworkEntityMetadataList remappedMetadata) {
 		ClientBoundPacketData entitymetadata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
 		VarNumberSerializer.writeVarInt(entitymetadata, entityId);
-		NetworkEntityMetadataSerializer.writeLegacyData(entitymetadata, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
+		NetworkEntityMetadataSerializer.writeLegacyData(entitymetadata, version, cache.getAttributesCache().getLocale(), remappedMetadata);
 		return entitymetadata;
 	}
 

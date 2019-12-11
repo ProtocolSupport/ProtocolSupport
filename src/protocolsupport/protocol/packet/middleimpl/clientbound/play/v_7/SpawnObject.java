@@ -19,16 +19,16 @@ public class SpawnObject extends AbstractLocationOffsetSpawnObject {
 	}
 
 	@Override
-	public void writeToClient0() {
-		if (entityRemappedType.isOfType(NetworkEntityType.MINECART)) {
-			objectdata = LegacyEntityId.getMinecartObjectData(entityRemappedType);
+	public void writeToClientAfterOffset(NetworkEntityType remappedEntityType) {
+		if (remappedEntityType.isOfType(NetworkEntityType.MINECART)) {
+			objectdata = LegacyEntityId.getMinecartObjectData(remappedEntityType);
 		} else {
-			objectdata = entityObjectDataRemappingTable.getRemap(entityRemappedType).applyAsInt(objectdata);
+			objectdata = entityObjectDataRemappingTable.getRemap(remappedEntityType).applyAsInt(objectdata);
 		}
 		x *= 32;
 		y *= 32;
 		z *= 32;
-		if (entityRemappedType == NetworkEntityType.ITEM_FRAME) {
+		if (remappedEntityType == NetworkEntityType.ITEM_FRAME) {
 			switch (objectdata) {
 				case 0: {
 					z -= 32;
@@ -55,7 +55,7 @@ public class SpawnObject extends AbstractLocationOffsetSpawnObject {
 
 		ClientBoundPacketData spawnobject = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		VarNumberSerializer.writeVarInt(spawnobject, entity.getId());
-		spawnobject.writeByte(LegacyEntityId.getObjectIntId(entityRemappedType));
+		spawnobject.writeByte(LegacyEntityId.getObjectIntId(remappedEntityType));
 		spawnobject.writeInt((int) x);
 		spawnobject.writeInt((int) y);
 		spawnobject.writeInt((int) z);

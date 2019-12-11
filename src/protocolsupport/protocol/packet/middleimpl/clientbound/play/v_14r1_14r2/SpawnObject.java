@@ -8,6 +8,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry;
 import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry.ObjectDataRemappingTable;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public class SpawnObject extends MiddleSpawnObject {
 
@@ -18,12 +19,12 @@ public class SpawnObject extends MiddleSpawnObject {
 	}
 
 	@Override
-	public void writeToClient0() {
-		objectdata = entityObjectDataRemappingTable.getRemap(entityRemappedType).applyAsInt(objectdata);
+	public void writeToClient0(NetworkEntityType remappedEntityType) {
+		objectdata = entityObjectDataRemappingTable.getRemap(remappedEntityType).applyAsInt(objectdata);
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		MiscSerializer.writeUUID(serializer, entity.getUUID());
-		serializer.writeByte(entityRemappedType.getNetworkTypeId());
+		serializer.writeByte(remappedEntityType.getNetworkTypeId());
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);
 		serializer.writeDouble(z);

@@ -8,11 +8,13 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappingHelper;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
@@ -61,11 +63,11 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 		if (!GenericIdSkipper.ENTITY.getTable(version).shouldSkip(entity.getType())) {
 			entityCache.addWatchedEntity(entity);
 			entityRemapper.remap(entity, metadata);
-			writeToClient0();
+			writeToClient0(entityRemapper.getRemappedEntityType(), entityRemapper.getRemappedMetadata());
 		}
 	}
 
-	protected abstract void writeToClient0();
+	protected abstract void writeToClient0(NetworkEntityType remappedEntityType, NetworkEntityMetadataList remappedMetadata);
 
 	@Override
 	public void postHandle() {
