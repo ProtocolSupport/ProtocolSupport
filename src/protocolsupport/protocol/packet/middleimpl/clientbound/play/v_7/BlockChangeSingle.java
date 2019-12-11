@@ -21,7 +21,7 @@ public class BlockChangeSingle extends AbstractBlockChangeSingle {
 	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	@Override
-	public void writeToClient() {
+	public void writeToClient0() {
 		codec.write(create(position, BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, id)));
 	}
 

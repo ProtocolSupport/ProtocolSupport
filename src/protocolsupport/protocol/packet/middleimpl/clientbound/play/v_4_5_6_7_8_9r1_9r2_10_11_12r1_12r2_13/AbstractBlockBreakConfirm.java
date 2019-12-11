@@ -15,20 +15,23 @@ public abstract class AbstractBlockBreakConfirm extends MiddleBlockBreakConfirm 
 	}
 
 	@Override
-	public boolean postFromServerRead() {
+	public void writeToClient() {
 		int y = position.getY();
 		if (y >= 256) {
-			return false;
+			return;
 		}
+
 		int x = position.getX();
 		int z = position.getZ();
 		CachedChunk cachedChunk = chunkCache.get(ChunkCoord.fromGlobal(x, z));
-		if (cachedChunk != null) {
-			cachedChunk.setBlock(y >> 4, CachedChunk.getBlockIndex(x & 0xF, y & 0xF, z & 0xF), (short) blockId);
-			return true;
-		} else {
-			return false;
+		if (cachedChunk == null) {
+			return;
 		}
+
+		cachedChunk.setBlock(y >> 4, CachedChunk.getBlockIndex(x & 0xF, y & 0xF, z & 0xF), (short) blockId);
+		writeToClient0();
 	}
+
+	protected abstract void writeToClient0();
 
 }

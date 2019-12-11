@@ -23,7 +23,7 @@ public class BlockChangeSingle extends AbstractBlockChangeSingle {
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 
 	@Override
-	public void writeToClient() {
+	public void writeToClient0() {
 		codec.write(create(position, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, id)));
 	}
 

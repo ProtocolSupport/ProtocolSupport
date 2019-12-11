@@ -15,7 +15,7 @@ public class BlockBreakConfirm extends AbstractBlockBreakConfirm {
 	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	@Override
-	public void writeToClient() {
+	public void writeToClient0() {
 		codec.write(BlockChangeSingle.create(position, BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, blockId)));
 	}
 
