@@ -6,21 +6,19 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
-import protocolsupport.protocol.typeremapper.entity.EntityRemappingHelper;
+import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
-import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
-import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 
 	protected final WatchedEntityCache entityCache = cache.getWatchedEntityCache();
+
+	protected final EntityRemappingTable entityRemappingTable = EntityRemappersRegistry.REGISTRY.getTable(version);
 
 	public MiddleSpawnLiving(ConnectionImpl connection) {
 		super(connection);
@@ -36,7 +34,6 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 	protected int motX;
 	protected int motY;
 	protected int motZ;
-	protected final ArrayMap<NetworkEntityMetadataObject<?>> metadata = new ArrayMap<>(EntityRemappersRegistry.MAX_METADATA_INDEX + 1);
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
@@ -53,26 +50,16 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 		motX = serverdata.readShort();
 		motY = serverdata.readShort();
 		motZ = serverdata.readShort();
-		NetworkEntityMetadataSerializer.readDataTo(serverdata, metadata);
 	}
-
-	protected final EntityRemappingHelper entityRemapper = new EntityRemappingHelper(EntityRemappersRegistry.REGISTRY.getTable(version));
 
 	@Override
 	public void writeToClient() {
 		if (!GenericIdSkipper.ENTITY.getTable(version).shouldSkip(entity.getType())) {
 			entityCache.addWatchedEntity(entity);
-			entityRemapper.remap(entity, metadata);
-			writeToClient0(entityRemapper.getRemappedEntityType(), entityRemapper.getRemappedMetadata());
+			writeToClient0(entityRemappingTable.getRemap(entity.getType()).getLeft());
 		}
 	}
 
-	protected abstract void writeToClient0(NetworkEntityType remappedEntityType, NetworkEntityMetadataList remappedMetadata);
-
-	@Override
-	public void postHandle() {
-		metadata.clear();
-		entityRemapper.clear();
-	}
+	protected abstract void writeToClient0(NetworkEntityType remappedEntityType);
 
 }

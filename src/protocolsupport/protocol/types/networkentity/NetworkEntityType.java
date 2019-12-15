@@ -43,6 +43,7 @@ public enum NetworkEntityType {
 	SHEEP(EType.MOB, EntityType.SHEEP),
 	POLAR_BEAR(EType.MOB, EntityType.POLAR_BEAR),
 	VILLAGER(EType.MOB, EntityType.VILLAGER),
+	BEE(EType.MOB, EntityType.BEE),
 	ENDERMAN(EType.MOB, EntityType.ENDERMAN),
 	GIANT(EType.MOB, EntityType.GIANT),
 	SILVERFISH(EType.MOB, EntityType.SILVERFISH),

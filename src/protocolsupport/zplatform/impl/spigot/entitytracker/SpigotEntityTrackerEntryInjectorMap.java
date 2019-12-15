@@ -2,9 +2,9 @@ package protocolsupport.zplatform.impl.spigot.entitytracker;
 
 import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
-import net.minecraft.server.v1_14_R1.EntityTypes;
-import net.minecraft.server.v1_14_R1.PlayerChunkMap.EntityTracker;
-import net.minecraft.server.v1_14_R1.WorldServer;
+import net.minecraft.server.v1_15_R1.EntityTypes;
+import net.minecraft.server.v1_15_R1.PlayerChunkMap.EntityTracker;
+import net.minecraft.server.v1_15_R1.WorldServer;
 import protocolsupport.ProtocolSupport;
 
 public class SpigotEntityTrackerEntryInjectorMap extends Int2ObjectOpenHashMap<EntityTracker> {

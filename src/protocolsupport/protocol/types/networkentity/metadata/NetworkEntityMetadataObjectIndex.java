@@ -73,6 +73,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> POTION_COLOR = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> POTION_AMBIENT = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> ARROWS_IN = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> ABSORBTION_HEALTH = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectOptionalPosition> BED_LOCATION = takeNextIndex(NetworkEntityMetadataObjectOptionalPosition.class);
 	}
 
@@ -140,7 +141,6 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 	}
 
 	public static class Wolf extends Tameable {
-		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectFloat> DAMAGE_TAKEN = takeNextIndex(NetworkEntityMetadataObjectFloat.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> BEGGING = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> COLLAR_COLOR = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
 	}
@@ -206,9 +206,15 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> TRAVELING = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 	}
 
+	public static class Bee extends Insentient {
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> BEE_FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> ANGER = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
+	}
+
 	public static class Enderman extends Insentient {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBlockData> CARRIED_BLOCK = takeNextIndex(NetworkEntityMetadataObjectBlockData.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> SCREAMING = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> STARED_AT = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 	}
 
 	public static class EnderDragon extends Insentient {
@@ -371,6 +377,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 
 	public static class Trident extends Arrow {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> LOYALTY = takeNextIndex(NetworkEntityMetadataObjectByte.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> HAS_GLINT = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 	}
 
 	public static class Firework extends Entity {

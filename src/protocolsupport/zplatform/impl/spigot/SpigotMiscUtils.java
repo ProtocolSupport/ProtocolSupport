@@ -13,12 +13,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_14_R1.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_14_R1.util.CraftIconCache;
-import org.bukkit.craftbukkit.v1_14_R1.util.CraftMagicNumbers;
+import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_15_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_15_R1.util.CraftIconCache;
+import org.bukkit.craftbukkit.v1_15_R1.util.CraftMagicNumbers;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -35,21 +35,21 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelPipeline;
-import net.minecraft.server.v1_14_R1.AxisAlignedBB;
-import net.minecraft.server.v1_14_R1.Block;
-import net.minecraft.server.v1_14_R1.DedicatedServer;
-import net.minecraft.server.v1_14_R1.DedicatedServerProperties;
-import net.minecraft.server.v1_14_R1.EntityPlayer;
-import net.minecraft.server.v1_14_R1.EntityTypes;
-import net.minecraft.server.v1_14_R1.EnumProtocol;
-import net.minecraft.server.v1_14_R1.IRegistry;
-import net.minecraft.server.v1_14_R1.Item;
-import net.minecraft.server.v1_14_R1.MinecraftServer;
-import net.minecraft.server.v1_14_R1.MojangsonParser;
-import net.minecraft.server.v1_14_R1.NBTCompressedStreamTools;
-import net.minecraft.server.v1_14_R1.NBTReadLimiter;
-import net.minecraft.server.v1_14_R1.NBTTagCompound;
-import net.minecraft.server.v1_14_R1.WorldServer;
+import net.minecraft.server.v1_15_R1.AxisAlignedBB;
+import net.minecraft.server.v1_15_R1.Block;
+import net.minecraft.server.v1_15_R1.DedicatedServer;
+import net.minecraft.server.v1_15_R1.DedicatedServerProperties;
+import net.minecraft.server.v1_15_R1.EntityPlayer;
+import net.minecraft.server.v1_15_R1.EntityTypes;
+import net.minecraft.server.v1_15_R1.EnumProtocol;
+import net.minecraft.server.v1_15_R1.IRegistry;
+import net.minecraft.server.v1_15_R1.Item;
+import net.minecraft.server.v1_15_R1.MinecraftServer;
+import net.minecraft.server.v1_15_R1.MojangsonParser;
+import net.minecraft.server.v1_15_R1.NBTCompressedStreamTools;
+import net.minecraft.server.v1_15_R1.NBTReadLimiter;
+import net.minecraft.server.v1_15_R1.NBTTagCompound;
+import net.minecraft.server.v1_15_R1.WorldServer;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
@@ -177,7 +177,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public ItemStack createItemStackFromNetwork(NetworkItemStack stack) {
-		net.minecraft.server.v1_14_R1.ItemStack nmsitemstack = new net.minecraft.server.v1_14_R1.ItemStack(Item.getById(stack.getTypeId()), stack.getAmount());
+		net.minecraft.server.v1_15_R1.ItemStack nmsitemstack = new net.minecraft.server.v1_15_R1.ItemStack(Item.getById(stack.getTypeId()), stack.getAmount());
 		NBTCompound rootTag = stack.getNBT();
 		if (rootTag != null) {
 			//TODO: a faster way to do that
@@ -195,7 +195,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public ItemStack deserializeItemStackFromNBTJson(String json) {
 		try {
-			return CraftItemStack.asCraftMirror(net.minecraft.server.v1_14_R1.ItemStack.a(MojangsonParser.parse(json)));
+			return CraftItemStack.asCraftMirror(net.minecraft.server.v1_15_R1.ItemStack.a(MojangsonParser.parse(json)));
 		} catch (CommandSyntaxException e) {
 			throw new RuntimeException(e);
 		}
@@ -203,7 +203,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public String serializeItemStackToNBTJson(ItemStack itemstack) {
-		net.minecraft.server.v1_14_R1.ItemStack nmsitemstack = CraftItemStack.asNMSCopy(itemstack);
+		net.minecraft.server.v1_15_R1.ItemStack nmsitemstack = CraftItemStack.asNMSCopy(itemstack);
 		NBTTagCompound compound = new NBTTagCompound();
 		nmsitemstack.save(compound);
 		return compound.toString();
@@ -236,7 +236,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public boolean isProxyPreventionEnabled() {
-		return getServer().U();
+		return getServer().X();
 	}
 
 	@Override

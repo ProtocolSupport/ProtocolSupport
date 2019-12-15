@@ -21,7 +21,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 	}
 
 	@Override
-	public void writeToClient0(NetworkEntityType remappedEntityType, NetworkEntityMetadataList remappedMetadata) {
+	public void writeToClient0(NetworkEntityType remappedEntityType) {
 		ClientBoundPacketData spawnliving = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_LIVING);
 		VarNumberSerializer.writeVarInt(spawnliving, entity.getId());
 		MiscSerializer.writeUUID(spawnliving, entity.getUUID());
@@ -35,7 +35,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		spawnliving.writeShort(motX);
 		spawnliving.writeShort(motY);
 		spawnliving.writeShort(motZ);
-		NetworkEntityMetadataSerializer.writeData(spawnliving, version, cache.getAttributesCache().getLocale(), remappedMetadata);
+		NetworkEntityMetadataSerializer.writeData(spawnliving, version, cache.getAttributesCache().getLocale(), NetworkEntityMetadataList.EMPTY);
 		codec.write(spawnliving);
 	}
 

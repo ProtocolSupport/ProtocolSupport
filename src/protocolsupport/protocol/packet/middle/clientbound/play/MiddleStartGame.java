@@ -22,10 +22,12 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 	protected GameMode gamemode;
 	protected boolean hardcore;
 	protected Environment dimension;
+	protected long hashedSeed;
 	protected int maxplayers;
 	protected String leveltype;
 	protected int renderDistance;
 	protected boolean reducedDebugInfo;
+	protected boolean enableRespawnScreen;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
@@ -34,11 +36,13 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 		gamemode = GameMode.getById(gmdata & 0xFFFFFFF7);
 		hardcore = (gmdata & 0x8) == 0x8;
 		dimension = Environment.getById(serverdata.readInt());
+		hashedSeed = serverdata.readLong();
 		serverdata.readByte();
 		maxplayers = TabAPI.getMaxTabSize();
 		leveltype = StringSerializer.readVarIntUTF8String(serverdata);
 		renderDistance = VarNumberSerializer.readVarInt(serverdata);
 		reducedDebugInfo = serverdata.readBoolean();
+		enableRespawnScreen = serverdata.readBoolean();
 	}
 
 	@Override

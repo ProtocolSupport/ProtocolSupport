@@ -30,6 +30,8 @@ public class ProtocolVersionsHelper {
 
 	public static final ProtocolVersion[] UP_1_14_1 = ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_14_1);
 
+	public static final ProtocolVersion[] UP_1_15 = ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_15);
+
 	public static final ProtocolVersion[] BEFORE_1_5 = ProtocolVersion.getAllBeforeE(ProtocolVersion.MINECRAFT_1_5_1);
 
 	public static final ProtocolVersion[] BEFORE_1_6 = ProtocolVersion.getAllBeforeE(ProtocolVersion.MINECRAFT_1_6_1);
@@ -56,7 +58,11 @@ public class ProtocolVersionsHelper {
 
 	public static final ProtocolVersion[] BEFORE_1_14 = ProtocolVersion.getAllBeforeE(ProtocolVersion.MINECRAFT_1_14);
 
+	public static final ProtocolVersion[] BEFORE_1_15 = ProtocolVersion.getAllBeforeE(ProtocolVersion.MINECRAFT_1_15);
+
 	public static final ProtocolVersion[] ALL_PC = ProtocolVersion.getAllBetween(ProtocolVersion.getOldest(ProtocolType.PC), LATEST_PC);
+
+	public static final ProtocolVersion[] ALL_1_14 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_14, ProtocolVersion.MINECRAFT_1_14_4);
 
 	public static final ProtocolVersion[] ALL_1_13 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_13, ProtocolVersion.MINECRAFT_1_13_2);
 

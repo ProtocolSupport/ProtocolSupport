@@ -49,7 +49,8 @@ public class LivingEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 		addRemap(new IndexValueRemapperNumberToByte(NetworkEntityMetadataObjectIndex.EntityLiving.ARROWS_IN, 9), ProtocolVersionsHelper.RANGE__1_6__1_8);
 		addRemap(new IndexValueRemapperNumberToByte(NetworkEntityMetadataObjectIndex.EntityLiving.ARROWS_IN, 10), ProtocolVersionsHelper.BEFORE_1_6);
 
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.EntityLiving.BED_LOCATION, 12), ProtocolVersionsHelper.UP_1_14);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.EntityLiving.BED_LOCATION, 13), ProtocolVersionsHelper.UP_1_15);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.EntityLiving.BED_LOCATION, 12), ProtocolVersionsHelper.ALL_1_14);
 	}
 
 }

@@ -14,35 +14,35 @@ import org.bukkit.util.Vector;
 
 import com.google.common.collect.Maps;
 
-import net.minecraft.server.v1_14_R1.AttributeInstance;
-import net.minecraft.server.v1_14_R1.AttributeMapServer;
-import net.minecraft.server.v1_14_R1.DataWatcher;
-import net.minecraft.server.v1_14_R1.Entity;
-import net.minecraft.server.v1_14_R1.EntityArrow;
-import net.minecraft.server.v1_14_R1.EntityItemFrame;
-import net.minecraft.server.v1_14_R1.EntityLiving;
-import net.minecraft.server.v1_14_R1.EntityPlayer;
-import net.minecraft.server.v1_14_R1.EntityTrackerEntry;
-import net.minecraft.server.v1_14_R1.EnumItemSlot;
-import net.minecraft.server.v1_14_R1.ItemStack;
-import net.minecraft.server.v1_14_R1.ItemWorldMap;
-import net.minecraft.server.v1_14_R1.MathHelper;
-import net.minecraft.server.v1_14_R1.MobEffect;
-import net.minecraft.server.v1_14_R1.Packet;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntity;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntity.PacketPlayOutEntityLook;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEffect;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityEquipment;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityHeadRotation;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityMetadata;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityTeleport;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityVelocity;
-import net.minecraft.server.v1_14_R1.PacketPlayOutMount;
-import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
-import net.minecraft.server.v1_14_R1.PacketPlayOutUpdateAttributes;
-import net.minecraft.server.v1_14_R1.Vec3D;
-import net.minecraft.server.v1_14_R1.WorldMap;
-import net.minecraft.server.v1_14_R1.WorldServer;
+import net.minecraft.server.v1_15_R1.AttributeInstance;
+import net.minecraft.server.v1_15_R1.AttributeMapServer;
+import net.minecraft.server.v1_15_R1.DataWatcher;
+import net.minecraft.server.v1_15_R1.Entity;
+import net.minecraft.server.v1_15_R1.EntityArrow;
+import net.minecraft.server.v1_15_R1.EntityItemFrame;
+import net.minecraft.server.v1_15_R1.EntityLiving;
+import net.minecraft.server.v1_15_R1.EntityPlayer;
+import net.minecraft.server.v1_15_R1.EntityTrackerEntry;
+import net.minecraft.server.v1_15_R1.EnumItemSlot;
+import net.minecraft.server.v1_15_R1.ItemStack;
+import net.minecraft.server.v1_15_R1.ItemWorldMap;
+import net.minecraft.server.v1_15_R1.MathHelper;
+import net.minecraft.server.v1_15_R1.MobEffect;
+import net.minecraft.server.v1_15_R1.Packet;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntity;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntity.PacketPlayOutEntityLook;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntityEffect;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntityEquipment;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntityHeadRotation;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntityMetadata;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntityTeleport;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntityVelocity;
+import net.minecraft.server.v1_15_R1.PacketPlayOutMount;
+import net.minecraft.server.v1_15_R1.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.v1_15_R1.PacketPlayOutUpdateAttributes;
+import net.minecraft.server.v1_15_R1.Vec3D;
+import net.minecraft.server.v1_15_R1.WorldMap;
+import net.minecraft.server.v1_15_R1.WorldServer;
 
 public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 
@@ -145,7 +145,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 				this.updateRotationIfChanged();
 				this.storeTrackerLocation();
 			} else {
-				Vec3D locationDistance = (new Vec3D(this.tracker.locX, this.tracker.locY, this.tracker.locZ)).d(PacketPlayOutEntity.a(this.trackerX, this.trackerY, this.trackerZ));
+				Vec3D locationDistance = (new Vec3D(this.tracker.locX(), this.tracker.locY(), this.tracker.locZ())).d(PacketPlayOutEntity.a(this.trackerX, this.trackerY, this.trackerZ));
 				boolean needsLocationUpdate = locationDistance.g() >= 7.62939453125E-6D;
 				if (!needsLocationUpdate) {
 					this.updateRotationIfChanged();
@@ -218,7 +218,7 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 	@Override
 	public void a(Consumer<Packet<?>> consumer, EntityPlayer entityplayer) {
 		if (!this.tracker.dead) {
-			Packet<?> spawnPacket = this.tracker.N();
+			Packet<?> spawnPacket = this.tracker.L();
 			consumer.accept(spawnPacket);
 			consumer.accept(new PacketPlayOutEntityHeadRotation(this.tracker, this.trackerHeadYaw));
 
@@ -296,9 +296,9 @@ public class SpigotEntityTrackerEntry extends EntityTrackerEntry {
 	}
 
 	private void storeTrackerLocation() {
-		this.trackerX = PacketPlayOutEntity.a(this.tracker.locX);
-		this.trackerY = PacketPlayOutEntity.a(this.tracker.locY);
-		this.trackerZ = PacketPlayOutEntity.a(this.tracker.locZ);
+		this.trackerX = PacketPlayOutEntity.a(this.tracker.locX());
+		this.trackerY = PacketPlayOutEntity.a(this.tracker.locY());
+		this.trackerZ = PacketPlayOutEntity.a(this.tracker.locZ());
 	}
 
 	private void broadcastIncludingSelf(Packet<?> packet) {

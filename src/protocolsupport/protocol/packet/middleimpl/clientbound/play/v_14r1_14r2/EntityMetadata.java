@@ -5,8 +5,8 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class EntityMetadata extends MiddleEntityMetadata {
 

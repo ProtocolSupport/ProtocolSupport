@@ -9,6 +9,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
+import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache;
@@ -51,7 +52,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		spawnnamed.writeByte(yaw);
 		spawnnamed.writeByte(pitch);
 		spawnnamed.writeShort(0);
-		NetworkEntityMetadataSerializer.writeLegacyData(spawnnamed, version, cache.getAttributesCache().getLocale(), entityRemapper.getRemappedMetadata());
+		NetworkEntityMetadataSerializer.writeLegacyData(spawnnamed, version, cache.getAttributesCache().getLocale(), NetworkEntityMetadataList.EMPTY);
 		codec.write(spawnnamed);
 	}
 

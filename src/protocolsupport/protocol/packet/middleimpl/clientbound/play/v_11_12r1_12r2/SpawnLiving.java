@@ -6,8 +6,8 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnLiving
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
@@ -18,7 +18,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 	}
 
 	@Override
-	public void writeToClient0(NetworkEntityType remappedEntityType, NetworkEntityMetadataList remappedMetadata) {
+	public void writeToClient0(NetworkEntityType remappedEntityType) {
 		ClientBoundPacketData spawnliving = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_LIVING);
 		VarNumberSerializer.writeVarInt(spawnliving, entity.getId());
 		MiscSerializer.writeUUID(spawnliving, entity.getUUID());
@@ -32,7 +32,7 @@ public class SpawnLiving extends MiddleSpawnLiving {
 		spawnliving.writeShort(motX);
 		spawnliving.writeShort(motY);
 		spawnliving.writeShort(motZ);
-		NetworkEntityMetadataSerializer.writeData(spawnliving, version, cache.getAttributesCache().getLocale(), remappedMetadata);
+		NetworkEntityMetadataSerializer.writeData(spawnliving, version, cache.getAttributesCache().getLocale(), NetworkEntityMetadataList.EMPTY);
 		codec.write(spawnliving);
 	}
 

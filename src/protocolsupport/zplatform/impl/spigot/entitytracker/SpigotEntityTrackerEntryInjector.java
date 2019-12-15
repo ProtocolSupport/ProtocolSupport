@@ -4,9 +4,9 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.util.function.BiFunction;
 
-import net.minecraft.server.v1_14_R1.Entity;
-import net.minecraft.server.v1_14_R1.EntityTrackerEntry;
-import net.minecraft.server.v1_14_R1.PlayerChunkMap.EntityTracker;
+import net.minecraft.server.v1_15_R1.Entity;
+import net.minecraft.server.v1_15_R1.EntityTrackerEntry;
+import net.minecraft.server.v1_15_R1.PlayerChunkMap.EntityTracker;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupportbuildprocessor.Preload;
 

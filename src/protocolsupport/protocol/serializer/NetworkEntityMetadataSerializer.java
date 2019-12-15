@@ -115,6 +115,23 @@ public class NetworkEntityMetadataSerializer {
 
 	public static class NetworkEntityMetadataList {
 
+		public static final NetworkEntityMetadataList EMPTY = new NetworkEntityMetadataList() {
+			@Override
+			public int getSize() {
+				return 0;
+			}
+			@Override
+			public Entry get(int index) {
+				throw new IllegalArgumentException("Invalid index");
+			}
+			@Override
+			public void add(int index, NetworkEntityMetadataObject<?> object) {
+			}
+			@Override
+			public void clear() {
+			}
+		};
+
 		protected Entry[] array = new Entry[16];
 		protected int size;
 

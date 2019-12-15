@@ -42,9 +42,11 @@ public class Chunk extends AbstractChunk {
 				sectionNumber -> {}
 			);
 			if (full) {
-				for (int i = 0; i < biomeData.length; i++) {
-					to.writeInt(biomeData[i]);
-				}
+				//TODO: biomes
+				to.writeZero(Integer.BYTES * 256);
+//				for (int i = 0; i < biomeData.length; i++) {
+//					to.writeInt(biomeData[i]);
+//				}
 			}
 		});
 		ArraySerializer.writeVarIntTArray(chunkdata, lTo -> {

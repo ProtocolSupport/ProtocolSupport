@@ -4,31 +4,27 @@ import java.io.IOException;
 import java.security.PublicKey;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
-
-import com.google.common.collect.BiMap;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_14_R1.*;
-import net.minecraft.server.v1_14_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_14_R1.PacketPlayInFlying.PacketPlayInLook;
-import net.minecraft.server.v1_14_R1.PacketPlayInFlying.PacketPlayInPosition;
-import net.minecraft.server.v1_14_R1.PacketPlayInFlying.PacketPlayInPositionLook;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntity.PacketPlayOutEntityLook;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
-import net.minecraft.server.v1_14_R1.PacketPlayOutTitle.EnumTitleAction;
-import net.minecraft.server.v1_14_R1.ServerPing.ServerData;
-import net.minecraft.server.v1_14_R1.ServerPing.ServerPingPlayerSample;
+import net.minecraft.server.v1_15_R1.*;
+import net.minecraft.server.v1_15_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_15_R1.PacketPlayInFlying.PacketPlayInLook;
+import net.minecraft.server.v1_15_R1.PacketPlayInFlying.PacketPlayInPosition;
+import net.minecraft.server.v1_15_R1.PacketPlayInFlying.PacketPlayInPositionLook;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntity.PacketPlayOutEntityLook;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
+import net.minecraft.server.v1_15_R1.PacketPlayOutTitle.EnumTitleAction;
+import net.minecraft.server.v1_15_R1.ServerPing.ServerData;
+import net.minecraft.server.v1_15_R1.ServerPing.ServerPingPlayerSample;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.protocol.utils.authlib.GameProfile;
-import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.PlatformPacketFactory;
 
 public class SpigotPacketFactory implements PlatformPacketFactory {
@@ -137,7 +133,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public Object createFakeJoinGamePacket() {
-		return new PacketPlayOutLogin(0, EnumGamemode.SURVIVAL, false, DimensionManager.OVERWORLD, 60, WorldType.NORMAL, 4, false);
+		return new PacketPlayOutLogin(0, EnumGamemode.SURVIVAL, 0, false, DimensionManager.OVERWORLD, 60, WorldType.NORMAL, 4, false, true);
 	}
 
 	@Override
@@ -893,28 +889,21 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 
-	@SuppressWarnings("unchecked")
-	protected static Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>> getPacketIdMap(Class<?> packetClass) {
-		Map<Class<? extends Packet<?>>, EnumProtocol> protocolMap = null;
+	protected static int getPacketId(Class<?> packetClass, EnumProtocolDirection direction) {
 		try {
-			protocolMap = (Map<Class<? extends Packet<?>>, EnumProtocol>) ReflectionUtils.setAccessible(EnumProtocol.class.getDeclaredField("f")).get(null);
-		} catch (Throwable t) {
-			throw new RuntimeException("Unable to get packet id map", t);
-		}
-		EnumProtocol protocol = protocolMap.get(packetClass);
-		try {
-			return (Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>>) ReflectionUtils.setAccessible(EnumProtocol.class.getDeclaredField("h")).get(protocol);
-		} catch (Throwable t) {
-			throw new RuntimeException("Unable to get packet id map", t);
+			Packet<?> packet = (Packet<?>) packetClass.newInstance();
+			return EnumProtocol.a(packet).a(direction, packet);
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to get packet id");
 		}
 	}
 
 	protected static final int getOutId(Class<?> packetClass) {
-		return getPacketIdMap(packetClass).get(EnumProtocolDirection.CLIENTBOUND).inverse().get(packetClass);
+		return getPacketId(packetClass, EnumProtocolDirection.CLIENTBOUND);
 	}
 
 	protected static final int getInId(Class<?> packetClass) {
-		return getPacketIdMap(packetClass).get(EnumProtocolDirection.SERVERBOUND).inverse().get(packetClass);
+		return getPacketId(packetClass, EnumProtocolDirection.SERVERBOUND);
 	}
 
 }

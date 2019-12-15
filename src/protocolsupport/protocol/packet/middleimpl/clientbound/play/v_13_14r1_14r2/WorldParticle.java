@@ -30,9 +30,9 @@ public class WorldParticle extends MiddleWorldParticle {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
 			serializer.writeInt(flatteningIdTable.getRemap(ParticleRegistry.getId(particle)));
 			serializer.writeBoolean(longdist);
-			serializer.writeFloat(x);
-			serializer.writeFloat(y);
-			serializer.writeFloat(z);
+			serializer.writeFloat((float) x);
+			serializer.writeFloat((float) y);
+			serializer.writeFloat((float) z);
 			serializer.writeFloat(particle.getOffsetX());
 			serializer.writeFloat(particle.getOffsetY());
 			serializer.writeFloat(particle.getOffsetZ());

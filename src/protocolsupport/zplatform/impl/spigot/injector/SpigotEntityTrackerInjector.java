@@ -3,12 +3,12 @@ package protocolsupport.zplatform.impl.spigot.injector;
 import java.lang.reflect.Field;
 import java.util.function.Supplier;
 
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldInitEvent;
 
-import net.minecraft.server.v1_14_R1.PlayerChunkMap;
+import net.minecraft.server.v1_15_R1.PlayerChunkMap;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.impl.spigot.entitytracker.PaperSpigotEntityTrackerEntryInjectorMap;

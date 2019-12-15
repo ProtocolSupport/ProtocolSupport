@@ -28,9 +28,9 @@ public class WorldParticle extends MiddleWorldParticle {
 				count = 1;
 			}
 			StringSerializer.writeString(worldparticle, version, LegacyParticle.StringId.getIdData(particle));
-			worldparticle.writeFloat(x);
-			worldparticle.writeFloat(y);
-			worldparticle.writeFloat(z);
+			worldparticle.writeFloat((float) x);
+			worldparticle.writeFloat((float) y);
+			worldparticle.writeFloat((float) z);
 			worldparticle.writeFloat(particle.getOffsetX());
 			worldparticle.writeFloat(particle.getOffsetY());
 			worldparticle.writeFloat(particle.getOffsetZ());

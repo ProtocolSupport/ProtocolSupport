@@ -8,10 +8,13 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry;
 import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry.ObjectDataRemappingTable;
+import protocolsupport.protocol.typeremapper.entity.FlatteningEntityId;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public class SpawnObject extends MiddleSpawnObject {
 
+	protected final ArrayBasedIdRemappingTable flatteningEntityIdTable = FlatteningEntityId.REGISTRY.getTable(version);
 	protected final ObjectDataRemappingTable entityObjectDataRemappingTable = ObjectDataRemappersRegistry.REGISTRY.getTable(version);
 
 	public SpawnObject(ConnectionImpl connection) {
@@ -24,7 +27,7 @@ public class SpawnObject extends MiddleSpawnObject {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		MiscSerializer.writeUUID(serializer, entity.getUUID());
-		serializer.writeByte(remappedEntityType.getNetworkTypeId());
+		serializer.writeByte(flatteningEntityIdTable.getRemap(remappedEntityType.getNetworkTypeId()));
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);
 		serializer.writeDouble(z);

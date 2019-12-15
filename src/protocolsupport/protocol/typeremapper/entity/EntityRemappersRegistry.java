@@ -18,6 +18,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEnti
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.LivingEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.BatEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.BeeEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.BlazeEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.CreeperEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.EnderDragonEntityMetadataRemapper;
@@ -203,6 +204,11 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.VILLAGER)
 			.addMapping(NetworkEntityType.VILLAGER, new VillagerEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
+			.register();
+			new Mapping(NetworkEntityType.BEE)
+			.addMapping(NetworkEntityType.BEE, BeeEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_15)
+			.addMapping(NetworkEntityType.PARROT, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_13, ProtocolVersion.MINECRAFT_1_14_4))
+			.addMapping(NetworkEntityType.CHICKEN, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_12)
 			.register();
 			new Mapping(NetworkEntityType.ENDERMAN)
 			.addMapping(NetworkEntityType.ENDERMAN, new EndermanEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)

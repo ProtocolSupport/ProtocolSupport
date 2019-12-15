@@ -24,9 +24,9 @@ public class WorldParticle extends MiddleWorldParticle {
 			ClientBoundPacketData spawnparticle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
 			spawnparticle.writeInt(LegacyParticle.IntId.getId(particle));
 			spawnparticle.writeBoolean(longdist);
-			spawnparticle.writeFloat(x);
-			spawnparticle.writeFloat(y);
-			spawnparticle.writeFloat(z);
+			spawnparticle.writeFloat((float) x);
+			spawnparticle.writeFloat((float) y);
+			spawnparticle.writeFloat((float) z);
 			spawnparticle.writeFloat(particle.getOffsetX());
 			spawnparticle.writeFloat(particle.getOffsetY());
 			spawnparticle.writeFloat(particle.getOffsetZ());
