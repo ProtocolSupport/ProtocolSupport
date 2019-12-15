@@ -41,7 +41,7 @@ public class Chunk extends AbstractChunk {
 			chunkdata.writeShort(blockMask);
 			chunkdata.writeShort(0);
 			byte[] compressed = Compressor.compressStatic(ChunkWriterByte.serializeSectionsAndBiomes(
-				blockMask, blockDataRemappingTable, cachedChunk, hasSkyLight, full ? biomeData : null, sectionNumber -> {}
+				blockMask, blockDataRemappingTable, cachedChunk, hasSkyLight, full ? biomes : null, sectionNumber -> {}
 			));
 			chunkdata.writeInt(compressed.length);
 			chunkdata.writeBytes(compressed);

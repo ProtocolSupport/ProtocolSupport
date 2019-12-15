@@ -206,7 +206,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> TRAVELING = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 	}
 
-	public static class Bee extends Insentient {
+	public static class Bee extends Ageable {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> BEE_FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> ANGER = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
 	}

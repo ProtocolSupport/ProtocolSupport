@@ -14,7 +14,7 @@ import protocolsupportbuildprocessor.Preload;
 public enum ProtocolVersion {
 
 	MINECRAFT_FUTURE(-1, new OrderId(ProtocolType.PC, 29)),
-	MINECRAFT_1_15(574, new OrderId(ProtocolType.PC, 28), "1.15"),
+	MINECRAFT_1_15(573, new OrderId(ProtocolType.PC, 28), "1.15"),
 	MINECRAFT_1_14_4(498, new OrderId(ProtocolType.PC, 27), "1.14.4"),
 	MINECRAFT_1_14_3(490, new OrderId(ProtocolType.PC, 26), "1.14.3"),
 	MINECRAFT_1_14_2(485, new OrderId(ProtocolType.PC, 25), "1.14.2"),

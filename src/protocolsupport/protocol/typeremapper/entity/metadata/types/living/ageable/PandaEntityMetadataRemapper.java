@@ -8,12 +8,23 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 public class PandaEntityMetadataRemapper extends AgeableEntityMetadataRemapper {
 
 	public PandaEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.BREED_TIMER, 15), ProtocolVersionsHelper.UP_1_14);
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.SNEEZE_TIMER, 16), ProtocolVersionsHelper.UP_1_14);
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.EAT_TIMER, 17), ProtocolVersionsHelper.UP_1_14);
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.GENE_MAIN, 18), ProtocolVersionsHelper.UP_1_14);
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.GENE_HIDDEN, 19), ProtocolVersionsHelper.UP_1_14);
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.PANDA_FLAGS, 20), ProtocolVersionsHelper.UP_1_14);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.BREED_TIMER, 16), ProtocolVersionsHelper.UP_1_15);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.BREED_TIMER, 15), ProtocolVersionsHelper.ALL_1_14);
+
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.SNEEZE_TIMER, 16), ProtocolVersionsHelper.UP_1_15);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.SNEEZE_TIMER, 16), ProtocolVersionsHelper.ALL_1_14);
+
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.EAT_TIMER, 17), ProtocolVersionsHelper.UP_1_15);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.EAT_TIMER, 17), ProtocolVersionsHelper.ALL_1_14);
+
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.GENE_MAIN, 18), ProtocolVersionsHelper.UP_1_15);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.GENE_MAIN, 18), ProtocolVersionsHelper.ALL_1_14);
+
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.GENE_HIDDEN, 19), ProtocolVersionsHelper.UP_1_15);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.GENE_HIDDEN, 19), ProtocolVersionsHelper.ALL_1_14);
+
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.PANDA_FLAGS, 20), ProtocolVersionsHelper.UP_1_15);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.PANDA_FLAGS, 20), ProtocolVersionsHelper.ALL_1_14);
 	}
 
 }

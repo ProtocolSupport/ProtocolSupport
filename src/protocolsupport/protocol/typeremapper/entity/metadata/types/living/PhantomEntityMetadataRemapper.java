@@ -8,7 +8,8 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 public class PhantomEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
 	public PhantomEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Phantom.SIZE, 14), ProtocolVersionsHelper.UP_1_14);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Phantom.SIZE, 15), ProtocolVersionsHelper.UP_1_15);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Phantom.SIZE, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Phantom.SIZE, 12), ProtocolVersionsHelper.ALL_1_13);
 	}
 

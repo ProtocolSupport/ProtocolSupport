@@ -24,7 +24,7 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 	protected boolean full;
 	protected int blockMask;
 	protected NBTCompound heightmaps;
-	protected final int[] biomeData = new int[1024];
+	protected final int[] biomes = new int[1024];
 	protected final ChunkSectonBlockData[] sections = new ChunkSectonBlockData[ChunkConstants.SECTION_COUNT_BLOCKS];
 	protected TileEntity[] tiles;
 
@@ -35,8 +35,8 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 		blockMask = VarNumberSerializer.readVarInt(serverdata);
 		heightmaps = ItemStackSerializer.readDirectTag(serverdata);
 		if (full) {
-			for (int i = 0; i < biomeData.length; i++) {
-				biomeData[i] = serverdata.readInt();
+			for (int i = 0; i < biomes.length; i++) {
+				biomes[i] = serverdata.readInt();
 			}
 		}
 
@@ -53,7 +53,7 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 	}
 
 	protected int getBiomeId(int x, int y, int z) {
-		return biomeData[(((y >> 2) & 63) << 4) | (((z >> 2) & 3) << 2) | ((x >> 2) & 3)];
+		return biomes[(((y >> 2) & 63) << 4) | (((z >> 2) & 3) << 2) | ((x >> 2) & 3)];
 	}
 
 }
