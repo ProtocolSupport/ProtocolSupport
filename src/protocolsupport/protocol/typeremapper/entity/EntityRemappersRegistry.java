@@ -207,7 +207,7 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.BEE)
 			.addMapping(NetworkEntityType.BEE, BeeEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_15)
-			.addMapping(NetworkEntityType.PARROT, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_13, ProtocolVersion.MINECRAFT_1_14_4))
+			.addMapping(NetworkEntityType.PARROT, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_12, ProtocolVersion.MINECRAFT_1_14_4))
 			.addMapping(NetworkEntityType.CHICKEN, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_12)
 			.register();
 			new Mapping(NetworkEntityType.ENDERMAN)
