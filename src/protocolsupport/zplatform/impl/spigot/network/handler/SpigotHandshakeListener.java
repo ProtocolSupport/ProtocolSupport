@@ -27,8 +27,8 @@ public class SpigotHandshakeListener extends AbstractHandshakeListener implement
 	}
 
 	@Override
-	public AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager, String hostname) {
-		return new SpigotLoginListener(networkManager, hostname);
+	public AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager) {
+		return new SpigotLoginListener(networkManager);
 	}
 
 	@Override

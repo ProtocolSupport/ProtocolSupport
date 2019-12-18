@@ -75,8 +75,8 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 
 	protected static final MinecraftServer server = SpigotMiscUtils.getServer();
 
-	public SpigotLoginListenerPlay(NetworkManagerWrapper networkmanager, String hostname) {
-		super(networkmanager, hostname);
+	public SpigotLoginListenerPlay(NetworkManagerWrapper networkmanager) {
+		super(networkmanager);
 	}
 
 	@Override

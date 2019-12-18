@@ -77,8 +77,7 @@ public class PaperPingResponseHandler extends PingResponseHandler {
 
 		@Override
 		public InetSocketAddress getVirtualHost() {
-			//TODO: implement
-			return null;
+			return connection.getVirtualHost();
 		}
 
 	}

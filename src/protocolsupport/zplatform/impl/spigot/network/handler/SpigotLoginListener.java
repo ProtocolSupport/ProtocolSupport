@@ -18,8 +18,8 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotLoginListener extends AbstractLoginListener implements PacketLoginInListener {
 
-	public SpigotLoginListener(NetworkManagerWrapper networkmanager, String hostname) {
-		super(networkmanager, hostname);
+	public SpigotLoginListener(NetworkManagerWrapper networkmanager) {
+		super(networkmanager);
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class SpigotLoginListener extends AbstractLoginListener implements Packet
 
 	@Override
 	protected SpigotLoginListenerPlay getLoginListenerPlay() {
-		return new SpigotLoginListenerPlay(networkManager, hostname);
+		return new SpigotLoginListenerPlay(networkManager);
 	}
 
 	@Override

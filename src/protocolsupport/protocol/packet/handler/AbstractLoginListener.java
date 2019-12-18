@@ -59,17 +59,15 @@ public abstract class AbstractLoginListener implements IPacketListener {
 
 	protected final NetworkManagerWrapper networkManager;
 	protected final ConnectionImpl connection;
-	protected final String hostname;
 	protected final byte[] randomBytes = new byte[4];
 	protected LoginState state = LoginState.HELLO;
 
 	protected final Object timeoutTaskLock = new Object();
 	protected ScheduledFuture<?> timeoutTask;
 
-	public AbstractLoginListener(NetworkManagerWrapper networkmanager, String hostname) {
+	public AbstractLoginListener(NetworkManagerWrapper networkmanager) {
 		this.networkManager = networkmanager;
 		this.connection = ConnectionImpl.getFromChannel(networkmanager.getChannel());
-		this.hostname = hostname;
 		ThreadLocalRandom.current().nextBytes(randomBytes);
 
 		synchronized (timeoutTaskLock) {
@@ -114,7 +112,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 				GameProfile profile = connection.getProfile();
 				profile.setOriginalName(name);
 
-				PlayerLoginStartEvent event = new PlayerLoginStartEvent(connection, hostname);
+				PlayerLoginStartEvent event = new PlayerLoginStartEvent(connection);
 				Bukkit.getPluginManager().callEvent(event);
 				if (event.isLoginDenied()) {
 					AbstractLoginListener.this.disconnect(event.getDenyLoginMessage());

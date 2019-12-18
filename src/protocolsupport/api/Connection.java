@@ -47,6 +47,12 @@ public abstract class Connection {
 	public abstract void disconnect(String message);
 
 	/**
+	 * Returns address the player connected to/pinged
+	 * @return address the player connected to/pinged
+	 */
+	public abstract InetSocketAddress getVirtualHost();
+
+	/**
 	 * Returns real remote address
 	 * @return real remote address
 	 */

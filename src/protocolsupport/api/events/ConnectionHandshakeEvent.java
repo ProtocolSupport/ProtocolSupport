@@ -20,7 +20,7 @@ public class ConnectionHandshakeEvent extends ConnectionEvent {
 	}
 
 	/**
-	 * Returns the hostname to which client connects to
+	 * Returns the hostname to which client connects to<br>
 	 * This data can contain spoofed data
 	 * @return hostname
 	 */
@@ -29,7 +29,7 @@ public class ConnectionHandshakeEvent extends ConnectionEvent {
 	}
 
 	/**
-	 * Sets hostname to which client connects to
+	 * Sets hostname to which client connects to<br>
 	 * This data can contain spoofed data
 	 * @param hostname hostname
 	 */
@@ -38,7 +38,7 @@ public class ConnectionHandshakeEvent extends ConnectionEvent {
 	}
 
 	/**
-	 * Returns true if server should attempt hostname spoofed data parsing in case proxy is enabled
+	 * Returns true if server should attempt hostname spoofed data parsing in case proxy is enabled <br>
 	 * Returns true by default
 	 * @return true if server should attempt hostname spoofed data parsing in case proxy is enabled
 	 */

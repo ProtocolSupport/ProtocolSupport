@@ -94,6 +94,11 @@ public class ConnectionImpl extends Connection {
 	}
 
 	@Override
+	public InetSocketAddress getVirtualHost() {
+		return networkmanager.getVirtualHost();
+	}
+
+	@Override
 	public InetSocketAddress getRawAddress() {
 		return networkmanager.getRawAddress();
 	}

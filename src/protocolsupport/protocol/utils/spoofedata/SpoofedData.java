@@ -4,33 +4,35 @@ import java.util.Collection;
 import java.util.UUID;
 
 import protocolsupport.api.utils.ProfileProperty;
+import protocolsupport.utils.Utils;
 
 public class SpoofedData {
+
+	public static SpoofedData createFailed(String failmessage) {
+		return new SpoofedData(null, null, null, null, failmessage);
+	}
+
+	public static SpoofedData createEmpty(String hostname) {
+		return new SpoofedData(hostname, null, null, null, null);
+	}
+
+	public static SpoofedData create(String hostname, String address, UUID uuid, Collection<ProfileProperty> properties) {
+		return new SpoofedData(hostname, address, uuid, properties, null);
+	}
 
 	private final String hostname;
 	private final String address;
 	private final UUID uuid;
 	private final Collection<ProfileProperty> properties;
 
-	private final boolean failed;
 	private final String failMessage;
 
-	public SpoofedData(String hostname, String address, UUID uuid, Collection<ProfileProperty> properties) {
+	protected SpoofedData(String hostname, String address, UUID uuid, Collection<ProfileProperty> properties, String failmessage) {
 		this.hostname = hostname;
 		this.address = address;
 		this.uuid = uuid;
 		this.properties = properties;
-		this.failed = false;
-		this.failMessage = null;
-	}
-
-	public SpoofedData(String failMessage) {
-		this.hostname = null;
-		this.address = null;
-		this.uuid = null;
-		this.properties = null;
-		this.failed = true;
-		this.failMessage = failMessage;
+		this.failMessage = failmessage;
 	}
 
 	public String getHostname() {
@@ -50,11 +52,16 @@ public class SpoofedData {
 	}
 
 	public boolean isFailed() {
-		return failed;
+		return failMessage != null;
 	}
 
 	public String getFailMessage() {
 		return failMessage;
+	}
+
+	@Override
+	public String toString() {
+		return Utils.toStringAllFields(this);
 	}
 
 }
