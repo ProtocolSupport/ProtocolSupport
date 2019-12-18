@@ -31,10 +31,10 @@ task setupFolders(type: DefaultTask) {doLast{
 
 task updateSpigot(type: BuildLibraryTask) {
 	targetDirectory = librariesRuntimeDirectory
-	targetLibraryName = "spigot-1.15-1.jar"
-	builderUrl = "https://papermc.io/api/v1/paper/1.15/1/download"
+	targetLibraryName = "spigot-1.15.1-1.jar"
+	builderUrl = "https://papermc.io/api/v1/paper/1.15.1/22/download"
 	buildCommand = "java -Dpaperclip.patchonly=true -jar {BUILDER}"
-	builtLibraryName = ["cache", "patched_1.15.jar"]
+	builtLibraryName = ["cache", "patched_1.15.1.jar"]
 }
 
 task updateRuntimeLibraries(type: UpdateLibrariesTask) {
