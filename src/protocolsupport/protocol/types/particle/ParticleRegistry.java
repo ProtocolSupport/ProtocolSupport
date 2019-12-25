@@ -22,6 +22,7 @@ import protocolsupport.protocol.types.particle.types.ParticleCurrentDown;
 import protocolsupport.protocol.types.particle.types.ParticleDamageIndicator;
 import protocolsupport.protocol.types.particle.types.ParticleDolphin;
 import protocolsupport.protocol.types.particle.types.ParticleDragonBreath;
+import protocolsupport.protocol.types.particle.types.ParticleDrippingHoney;
 import protocolsupport.protocol.types.particle.types.ParticleDrippingLava;
 import protocolsupport.protocol.types.particle.types.ParticleDrippingWater;
 import protocolsupport.protocol.types.particle.types.ParticleDust;
@@ -34,7 +35,9 @@ import protocolsupport.protocol.types.particle.types.ParticleEntityEffect;
 import protocolsupport.protocol.types.particle.types.ParticleExplosion;
 import protocolsupport.protocol.types.particle.types.ParticleExplosionEmitter;
 import protocolsupport.protocol.types.particle.types.ParticleFallingDust;
+import protocolsupport.protocol.types.particle.types.ParticleFallingHoney;
 import protocolsupport.protocol.types.particle.types.ParticleFallingLava;
+import protocolsupport.protocol.types.particle.types.ParticleFallingNectar;
 import protocolsupport.protocol.types.particle.types.ParticleFallingWater;
 import protocolsupport.protocol.types.particle.types.ParticleFirework;
 import protocolsupport.protocol.types.particle.types.ParticleFishing;
@@ -46,6 +49,7 @@ import protocolsupport.protocol.types.particle.types.ParticleInstantEffect;
 import protocolsupport.protocol.types.particle.types.ParticleItem;
 import protocolsupport.protocol.types.particle.types.ParticleItemSlime;
 import protocolsupport.protocol.types.particle.types.ParticleItemSnowball;
+import protocolsupport.protocol.types.particle.types.ParticleLandingHoney;
 import protocolsupport.protocol.types.particle.types.ParticleLandingLava;
 import protocolsupport.protocol.types.particle.types.ParticleLargeSmoke;
 import protocolsupport.protocol.types.particle.types.ParticleLava;
@@ -139,6 +143,10 @@ public class ParticleRegistry {
 		register(ParticleDolphin::new);
 		register(ParticleCampfireCozySmoke::new);
 		register(ParticleCampfireSignalSmoke::new);
+		register(ParticleDrippingHoney::new);
+		register(ParticleFallingHoney::new);
+		register(ParticleLandingHoney::new);
+		register(ParticleFallingNectar::new);
 	}
 
 	public static Particle fromId(int id) {

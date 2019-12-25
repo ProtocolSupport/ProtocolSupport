@@ -26,18 +26,22 @@ import protocolsupport.protocol.types.particle.types.ParticleCurrentDown;
 import protocolsupport.protocol.types.particle.types.ParticleDamageIndicator;
 import protocolsupport.protocol.types.particle.types.ParticleDolphin;
 import protocolsupport.protocol.types.particle.types.ParticleDragonBreath;
+import protocolsupport.protocol.types.particle.types.ParticleDrippingHoney;
 import protocolsupport.protocol.types.particle.types.ParticleDrippingLava;
 import protocolsupport.protocol.types.particle.types.ParticleDrippingWater;
 import protocolsupport.protocol.types.particle.types.ParticleDust;
 import protocolsupport.protocol.types.particle.types.ParticleElderGuardian;
 import protocolsupport.protocol.types.particle.types.ParticleEndRod;
 import protocolsupport.protocol.types.particle.types.ParticleFallingDust;
+import protocolsupport.protocol.types.particle.types.ParticleFallingHoney;
 import protocolsupport.protocol.types.particle.types.ParticleFallingLava;
+import protocolsupport.protocol.types.particle.types.ParticleFallingNectar;
 import protocolsupport.protocol.types.particle.types.ParticleFallingWater;
 import protocolsupport.protocol.types.particle.types.ParticleFishing;
 import protocolsupport.protocol.types.particle.types.ParticleFlash;
 import protocolsupport.protocol.types.particle.types.ParticleHappyVillager;
 import protocolsupport.protocol.types.particle.types.ParticleItem;
+import protocolsupport.protocol.types.particle.types.ParticleLandingHoney;
 import protocolsupport.protocol.types.particle.types.ParticleLandingLava;
 import protocolsupport.protocol.types.particle.types.ParticleNautilus;
 import protocolsupport.protocol.types.particle.types.ParticlePoof;
@@ -189,6 +193,12 @@ public class ParticleRemapper {
 				),
 				ProtocolVersionsHelper.BEFORE_1_7
 			);
+
+			//TODO: remap honey/nectar instead of just skipping
+			registerSkip(ParticleDrippingHoney.class, ProtocolVersionsHelper.BEFORE_1_15);
+			registerSkip(ParticleFallingHoney.class, ProtocolVersionsHelper.BEFORE_1_15);
+			registerSkip(ParticleLandingHoney.class, ProtocolVersionsHelper.BEFORE_1_15);
+			registerSkip(ParticleFallingNectar.class, ProtocolVersionsHelper.BEFORE_1_15);
 
 			registerSkip(ParticleFlash.class, ProtocolVersionsHelper.BEFORE_1_14);
 			registerSkip(ParticleCampfireCozySmoke.class, ProtocolVersionsHelper.BEFORE_1_14);
