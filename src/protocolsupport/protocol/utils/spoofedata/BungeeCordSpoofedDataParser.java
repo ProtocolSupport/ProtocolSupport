@@ -7,7 +7,7 @@ import com.google.common.reflect.TypeToken;
 
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.utils.authlib.UUIDTypeAdapter;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.JsonUtils;
 
 public class BungeeCordSpoofedDataParser extends SpoofedDataParser {
 
@@ -24,7 +24,7 @@ public class BungeeCordSpoofedDataParser extends SpoofedDataParser {
 				return SpoofedData.create(split[0],
 					split[1],
 					UUIDTypeAdapter.fromString(split[2]),
-					split.length == 4 ? Utils.GSON.fromJson(split[3], properties_type) : null
+					split.length == 4 ? JsonUtils.GSON.fromJson(split[3], properties_type) : null
 				);
 			}
 		} else {

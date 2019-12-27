@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChat;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.JsonUtils;
 
 public class Chat extends MiddleChat {
 
@@ -25,7 +25,7 @@ public class Chat extends MiddleChat {
 	protected static String encode(String message) {
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("text", message);
-		return Utils.GSON.toJson(jsonObject);
+		return JsonUtils.GSON.toJson(jsonObject);
 	}
 
 }

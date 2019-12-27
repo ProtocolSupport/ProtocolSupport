@@ -9,7 +9,7 @@ import com.destroystokyo.paper.event.player.PlayerHandshakeEvent;
 import com.google.gson.reflect.TypeToken;
 
 import protocolsupport.api.utils.ProfileProperty;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.JsonUtils;
 
 public class PaperSpoofedDataParser extends SpoofedDataParser {
 
@@ -33,7 +33,7 @@ public class PaperSpoofedDataParser extends SpoofedDataParser {
 					handshakeEvent.getServerHostname(),
 					handshakeEvent.getSocketAddressHostname(),
 					handshakeEvent.getUniqueId(),
-					Utils.GSON.fromJson(handshakeEvent.getPropertiesJson(), properties_type)
+					JsonUtils.GSON.fromJson(handshakeEvent.getPropertiesJson(), properties_type)
 				);
 			}
 		}

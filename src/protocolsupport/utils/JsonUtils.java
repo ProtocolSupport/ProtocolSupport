@@ -1,5 +1,6 @@
 package protocolsupport.utils;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -117,5 +118,7 @@ public class JsonUtils {
 		}
 		return abbreviateMiddle;
 	}
+
+	public static final Gson GSON = new Gson();
 
 }
