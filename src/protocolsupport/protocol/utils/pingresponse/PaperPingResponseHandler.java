@@ -35,7 +35,8 @@ public class PaperPingResponseHandler extends PingResponseHandler {
 	public ServerPingResponseEvent createResponse(Connection connection) {
 		PaperServerListPingEvent bevent = new PaperServerListPingEvent(
 			new StatusClientImpl(connection),
-			Bukkit.getMotd(), Bukkit.getOnlinePlayers().size(), Bukkit.getMaxPlayers(),
+			Bukkit.getMotd(),
+			Bukkit.getOnlinePlayers().size(), Bukkit.getMaxPlayers(),
 			createServerVersionString(), connection.getVersion().getId(),
 			Bukkit.getServerIcon()
 		);
@@ -50,7 +51,8 @@ public class PaperPingResponseHandler extends PingResponseHandler {
 			connection,
 			new ProtocolInfo(bevent.getProtocolVersion(), bevent.getVersion()),
 			bevent.getServerIcon() != null ? ServerPlatform.get().getMiscUtils().convertBukkitIconToBase64(bevent.getServerIcon()) : null,
-			bevent.getMotd(), bevent.getMaxPlayers(),
+			bevent.getMotd(),
+			bevent.getNumPlayers(), bevent.getMaxPlayers(),
 			bevent.getPlayerSample().stream().map(PlayerProfile::getName).collect(Collectors.toList())
 		);
 		Bukkit.getPluginManager().callEvent(revent);

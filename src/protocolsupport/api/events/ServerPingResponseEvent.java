@@ -18,14 +18,16 @@ public class ServerPingResponseEvent extends ConnectionEvent {
 	protected ProtocolInfo info;
 	protected String motd;
 	protected String icon;
+	protected int onlinePlayers;
 	protected int maxPlayers;
 	protected List<String> players;
 
-	public ServerPingResponseEvent(Connection connection, ProtocolInfo info, String icon, String motd, int maxPlayers, List<String> players) {
+	public ServerPingResponseEvent(Connection connection, ProtocolInfo info, String icon, String motd, int onlinePlayers, int maxPlayers, List<String> players) {
 		super(connection);
 		setProtocolInfo(info);
 		setIcon(icon);
 		setMotd(motd);
+		this.onlinePlayers = onlinePlayers;
 		setMaxPlayers(maxPlayers);
 		setPlayers(players);
 	}
@@ -79,6 +81,23 @@ public class ServerPingResponseEvent extends ConnectionEvent {
 	 */
 	public void setMotd(String motd) {
 		this.motd = motd != null ? motd : "A minecraft server (ProtocolSupport)";
+	}
+
+	/**
+	 * Returns online players count
+	 * @return online players count
+	 */
+	public int getOnlinePlayers() {
+		return onlinePlayers;
+	}
+
+	/**
+	 * Decrements online players count <br>
+	 * The decrement is clamped to [0, {@link #getOnlinePlayers()}]
+	 * @param decrement player count decrement
+	 */
+	public void decrementOnlinePlayers(int decrement) {
+		onlinePlayers -= Math.min(Math.max(0, decrement), onlinePlayers);
 	}
 
 	/**

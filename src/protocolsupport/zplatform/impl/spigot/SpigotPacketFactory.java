@@ -101,8 +101,8 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	private final UUID profileUUID = UUID.randomUUID();
 	@Override
-	public Object createStausServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, String motd, int maxPlayers) {
-		ServerPingPlayerSample playerSample = new ServerPingPlayerSample(maxPlayers, profiles.size());
+	public Object createStausServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, String motd, int onlinePlayers, int maxPlayers) {
+		ServerPingPlayerSample playerSample = new ServerPingPlayerSample(maxPlayers, onlinePlayers);
 
 		Collections.shuffle(profiles);
 		com.mojang.authlib.GameProfile[] gprofiles = new com.mojang.authlib.GameProfile[profiles.size()];

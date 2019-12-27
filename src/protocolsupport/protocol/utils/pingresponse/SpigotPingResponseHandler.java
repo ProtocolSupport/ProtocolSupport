@@ -34,7 +34,8 @@ public class SpigotPingResponseHandler extends PingResponseHandler {
 			connection,
 			new ProtocolInfo(connection.getVersion(), createServerVersionString()),
 			bevent.getIcon() != null ? ServerPlatform.get().getMiscUtils().convertBukkitIconToBase64(bevent.getIcon()) : null,
-			bevent.getMotd(), bevent.getMaxPlayers(),
+			bevent.getMotd(),
+			bevent.getNumPlayers(), bevent.getMaxPlayers(),
 			bevent.players.stream()
 			.limit(SpigotConfig.playerSample)
 			.map(Player::getName)
