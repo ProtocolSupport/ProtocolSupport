@@ -116,7 +116,7 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 			event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, SpigotConfig.whitelistMessage);
 		} else if (playerlist.getIPBans().isBanned(socketaddress)) {
 			IpBanEntry ipban = playerlist.getIPBans().get(socketaddress);
-			if (profileban != null && !hasExpired(ipban)) {
+			if (ipban != null && !hasExpired(ipban)) {
 				String reason = "Your IP address is banned from this server!\nReason: " + ipban.getReason();
 				if (ipban.getExpires() != null) {
 					reason = reason + "\nYour ban will be removed on " + new SimpleDateFormat(BAN_DATE_FORMAT_STRING).format(ipban.getExpires());
