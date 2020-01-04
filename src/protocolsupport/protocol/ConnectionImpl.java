@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoop;
@@ -149,7 +150,7 @@ public class ConnectionImpl extends Connection {
 
 	@Override
 	public void sendPacket(Object packet) {
-		submitTaskToEventLoop(() -> networkmanager.getChannel().pipeline().context(ChannelHandlers.LOGIC).writeAndFlush(packet));
+		submitTaskToEventLoop(() -> networkmanager.getChannel().pipeline().context(ChannelHandlers.LOGIC).writeAndFlush(packet).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE));
 	}
 
 	@Override
