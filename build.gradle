@@ -11,7 +11,6 @@ defaultTasks 'build'
 
 group 'protocolsupport'
 version '4.29-dev'
-sourceCompatibility = JavaVersion.VERSION_1_8
 
 
 File librariesRuntimeDirectory = new File("libraries_runtime")
@@ -29,25 +28,8 @@ task setupFolders(type: DefaultTask) {doLast{
 	generatedResourcesDirectory.mkdirs()
 }}
 
-task updateSpigot(type: BuildLibraryTask) {
-	targetDirectory = librariesRuntimeDirectory
-	targetLibraryName = "spigot-1.15.1-1.jar"
-	builderUrl = "https://papermc.io/api/v1/paper/1.15.1/22/download"
-	buildCommand = "java -Dpaperclip.patchonly=true -jar {BUILDER}"
-	builtLibraryName = ["cache", "patched_1.15.1.jar"]
-}
 
-task updateRuntimeLibraries(type: UpdateLibrariesTask) {
-	directory = librariesRuntimeDirectory
-	libraries = []
-	manualLibraries = new HashSet<>(Arrays.asList(updateSpigot.targetLibraryName))
-}
-
-task updateShadeLibraries(type: UpdateLibrariesTask) {
-	directory = librariesShadeDirectory
-	libraries = []
-}
-
+sourceCompatibility = JavaVersion.VERSION_1_8
 
 sourceSets {
 	main {
@@ -68,6 +50,28 @@ sourceSets {
 repositories {
 	mavenCentral()
 	jcenter()
+	maven {
+		url 'https://papermc.io/repo/repository/maven-public/'
+	}
+}
+
+task updateSpigot(type: BuildLibraryTask) {
+	targetDirectory = librariesRuntimeDirectory
+	targetLibraryName = "spigot-1.15.1-1.jar"
+	builderUrl = "https://papermc.io/api/v1/paper/1.15.1/22/download"
+	buildCommand = "java -Dpaperclip.patchonly=true -jar {BUILDER}"
+	builtLibraryName = ["cache", "patched_1.15.1.jar"]
+}
+
+task updateRuntimeLibraries(type: UpdateLibrariesTask) {
+	directory = librariesRuntimeDirectory
+	libraries = []
+	manualLibraries = new HashSet<>(Arrays.asList(updateSpigot.targetLibraryName))
+}
+
+task updateShadeLibraries(type: UpdateLibrariesTask) {
+	directory = librariesShadeDirectory
+	libraries = []
 }
 
 dependencies {
@@ -75,6 +79,7 @@ dependencies {
 	compile group: 'it.unimi.dsi', name: 'fastutil', version: '8.2.2'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
 	compile fileTree(dir: librariesShadeDirectory, include: '*.jar')
+	shadow group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.15.1-R0.1-SNAPSHOT'
 	shadow fileTree(dir: librariesRuntimeDirectory, include: '*.jar')
 	shadow fileTree(dir: new File("libraries_runtime_manual"), include: '*.jar')
 
@@ -97,6 +102,7 @@ compileJava {
 	options.incremental = false
 	options.compilerArgs << ("-Aprotocolsupportbuildprocessor.generatedresourcesdirectory=" + newFile(generatedResourcesDirectory, resourcesDirectoryName, "preload").getAbsolutePath())
 }
+
 
 test {
     useJUnitPlatform()
@@ -171,6 +177,7 @@ task postprocessFatJar(type: Zip) {
 	}
 }
 
+
 task copyFinalJarToTarget(type: DefaultTask) {doLast{
 	java.nio.file.Files.copy(
 		postprocessFatJar.archivePath.getAbsoluteFile().toPath(),
@@ -178,6 +185,7 @@ task copyFinalJarToTarget(type: DefaultTask) {doLast{
 		java.nio.file.StandardCopyOption.REPLACE_EXISTING
 	)
 }}
+
 
 compileJava.dependsOn(clean)
 compileJava.dependsOn(setupFolders)
