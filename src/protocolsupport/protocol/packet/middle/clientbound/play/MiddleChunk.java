@@ -52,8 +52,4 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 		tiles = ArraySerializer.readVarIntTArray(serverdata, TileEntity.class, from -> new TileEntity(ItemStackSerializer.readDirectTag(serverdata)));
 	}
 
-	protected int getBiomeId(int x, int y, int z) {
-		return biomes[(((y >> 2) & 63) << 4) | (((z >> 2) & 3) << 2) | ((x >> 2) & 3)];
-	}
-
 }

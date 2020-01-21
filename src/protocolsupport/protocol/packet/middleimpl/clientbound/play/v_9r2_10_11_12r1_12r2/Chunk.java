@@ -12,6 +12,7 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
+import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
@@ -39,11 +40,10 @@ public class Chunk extends AbstractChunk {
 				sectionNumber -> {}
 			);
 			if (full) {
-				//TODO: biomes
-				to.writeZero(256);
-//				for (int i = 0; i < biomeData.length; i++) {
-//					to.writeByte(biomeData[i]);
-//				}
+				int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(biomes);
+				for (int biomeId : legacyBiomeData) {
+					to.writeByte(biomeId);
+				}
 			}
 		});
 		ArraySerializer.writeVarIntTArray(chunkdata, lTo -> {

@@ -12,6 +12,7 @@ import protocolsupport.protocol.typeremapper.block.FlatteningBlockData;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVaries;
+import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
@@ -40,11 +41,10 @@ public class Chunk extends MiddleChunk {
 				sections
 			);
 			if (full) {
-				//TODO: biomes
-				to.writeZero(Integer.BYTES * 256);
-//				for (int i = 0; i < biomeData.length; i++) {
-//					to.writeInt(biomeData[i]);
-//				}
+				int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(biomes);
+				for (int biomeId : legacyBiomeData) {
+					to.writeInt(biomeId);
+				}
 			}
 		});
 		ArraySerializer.writeVarIntTArray(
