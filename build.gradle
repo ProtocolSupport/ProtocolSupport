@@ -57,10 +57,10 @@ repositories {
 
 task updateSpigot(type: BuildLibraryTask) {
 	targetDirectory = librariesRuntimeDirectory
-	targetLibraryName = "spigot-1.15.1-1.jar"
-	builderUrl = "https://papermc.io/api/v1/paper/1.15.1/22/download"
+	targetLibraryName = "spigot-1.15.2-1.jar"
+	builderUrl = "https://papermc.io/api/v1/paper/1.15.2/65/download"
 	buildCommand = "java -Dpaperclip.patchonly=true -jar {BUILDER}"
-	builtLibraryName = ["cache", "patched_1.15.1.jar"]
+	builtLibraryName = ["cache", "patched_1.15.2.jar"]
 }
 
 task updateRuntimeLibraries(type: UpdateLibrariesTask) {

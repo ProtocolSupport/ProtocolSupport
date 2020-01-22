@@ -23,9 +23,9 @@ public class SpigotNettyInjector {
 		try {
 			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("pending")).get(serverConnection);
 		} catch (NoSuchFieldException e) {
-			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("listeningChannels")).get(serverConnection);
+			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("connectedChannels")).get(serverConnection);
 		}
-		Field connectionsListField = ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("f"));
+		Field connectionsListField = ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("listeningChannels"));
 		ChannelInjectList connectionsList = new ChannelInjectList(nmList, (List<ChannelFuture>) connectionsListField.get(serverConnection));
 		connectionsListField.set(serverConnection, connectionsList);
 		connectionsList.injectExisting();

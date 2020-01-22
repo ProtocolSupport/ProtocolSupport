@@ -37,7 +37,7 @@ public class ProtocolSupport extends JavaPlugin {
 		return buildinfo;
 	}
 
-	protected static final String supported_platform_version = "1.15.1";
+	protected static final String supported_platform_version = "1.15.2";
 
 
 	private boolean loaded = false;
@@ -51,7 +51,7 @@ public class ProtocolSupport extends JavaPlugin {
 			return;
 		}
 		if (!ServerPlatform.detect()) {
-			BIG_ERROR_THAT_ANYONE_CAN_SEE("Unsupported platform or version");
+			BIG_ERROR_THAT_ANYONE_CAN_SEE("Unsupported platform or version " + Bukkit.getVersion());
 			return;
 		} else {
 			getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get().getIdentifier().getName()));

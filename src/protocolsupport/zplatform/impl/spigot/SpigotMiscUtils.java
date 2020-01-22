@@ -236,7 +236,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public boolean isProxyPreventionEnabled() {
-		return getServer().X();
+		return getServer().Y();
 	}
 
 	@Override
@@ -264,7 +264,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public int getCompressionThreshold() {
-		return getServer().az();
+		return getServer().aA();
 	}
 
 	@Override
