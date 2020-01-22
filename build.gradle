@@ -51,6 +51,9 @@ repositories {
 	mavenCentral()
 	jcenter()
 	maven {
+		url 'https://oss.sonatype.org/content/repositories/snapshots/'
+	}
+	maven {
 		url 'https://papermc.io/repo/repository/maven-public/'
 	}
 }
