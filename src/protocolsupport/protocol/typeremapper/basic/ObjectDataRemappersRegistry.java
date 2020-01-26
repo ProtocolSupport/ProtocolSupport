@@ -14,8 +14,10 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 import protocolsupport.protocol.types.BlockDirection;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupportbuildprocessor.Preload;
 
 //TODO: move the position remappers here, so it will be the shared registry for remapping all entity object data
+@Preload
 public class ObjectDataRemappersRegistry {
 
 	public static final RemappingRegistry<ObjectDataRemappingTable> REGISTRY = new RemappingRegistry<ObjectDataRemappingTable>() {
