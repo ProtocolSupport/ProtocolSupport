@@ -13,6 +13,7 @@ public class CachedChunk {
 		return (y << 8) | (z << 4) | (x);
 	}
 
+	protected boolean full = false;
 	protected final CachedChunkSectionBlockStorage[] blocks = new CachedChunkSectionBlockStorage[ChunkConstants.SECTION_COUNT_BLOCKS];
 	protected final byte[][] skyLight = new byte[ChunkConstants.SECTION_COUNT_BLOCKS][];
 	protected final byte[][] blockLight = new byte[ChunkConstants.SECTION_COUNT_BLOCKS][];
@@ -24,6 +25,14 @@ public class CachedChunk {
 		for (int i = 0; i < tiles.length; i++) {
 			tiles[i] = new HashMap<>();
 		}
+	}
+
+	public boolean checkHadFull() {
+		if (!full) {
+			full = true;
+			return false;
+		}
+		return true;
 	}
 
 	public CachedChunkSectionBlockStorage getBlocksSection(int sectionNumber) {
@@ -56,6 +65,7 @@ public class CachedChunk {
 
 	public void setBlocksSection(int sectionNumber, CachedChunkSectionBlockStorage section) {
 		this.blocks[sectionNumber] = section;
+		this.tiles[sectionNumber].clear();
 	}
 
 	public void setSkyLightSection(int sectionNumber, byte[] skyLight) {
@@ -67,10 +77,11 @@ public class CachedChunk {
 	}
 
 	public void setBlock(int sectionNumber, int blockIndex, short blockdata) {
-		CachedChunkSectionBlockStorage section = blocks[sectionNumber];
+		//TODO: remove tile on block type change
+		CachedChunkSectionBlockStorage section = this.blocks[sectionNumber];
 		if (section == null) {
 			section = new CachedChunkSectionBlockStorage();
-			blocks[sectionNumber] = section;
+			this.blocks[sectionNumber] = section;
 		}
 		section.setBlockData(blockIndex, blockdata);
 	}

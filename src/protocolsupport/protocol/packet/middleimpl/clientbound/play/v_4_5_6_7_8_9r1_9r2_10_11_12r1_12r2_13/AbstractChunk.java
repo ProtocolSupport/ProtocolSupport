@@ -29,9 +29,15 @@ public abstract class AbstractChunk extends MiddleChunk {
 			cachedChunk = chunkCache.add(coord);
 		}
 
+		boolean fullRefresh = full && cachedChunk.checkHadFull();
+		if (fullRefresh) {
+			full = false;
+		}
 		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
 			if (BitUtils.isIBitSet(blockMask, sectionNumber)) {
 				cachedChunk.setBlocksSection(sectionNumber, new CachedChunkSectionBlockStorage(sections[sectionNumber]));
+			} else if (fullRefresh) {
+				cachedChunk.setBlocksSection(sectionNumber, null);
 			}
 		}
 
