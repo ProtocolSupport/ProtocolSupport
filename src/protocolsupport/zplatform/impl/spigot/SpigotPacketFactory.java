@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 
+import com.mojang.authlib.GameProfile;
+
 import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_15_R1.*;
 import net.minecraft.server.v1_15_R1.IChatBaseComponent.ChatSerializer;
@@ -24,7 +26,7 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
-import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.api.utils.Profile;
 import protocolsupport.zplatform.PlatformPacketFactory;
 
 public class SpigotPacketFactory implements PlatformPacketFactory {
@@ -121,8 +123,8 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public Object createLoginSuccessPacket(GameProfile profile) {
-		return new PacketLoginOutSuccess(SpigotMiscUtils.toMojangGameProfile(profile));
+	public Object createLoginSuccessPacket(Profile profile) {
+		return new PacketLoginOutSuccess(new GameProfile(profile.getUUID(), profile.getName()));
 	}
 
 	protected static final PacketDataSerializer emptyPDS = new PacketDataSerializer(Unpooled.EMPTY_BUFFER);

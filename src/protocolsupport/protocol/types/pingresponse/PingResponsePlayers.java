@@ -11,14 +11,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.protocol.utils.authlib.LoginProfile;
 import protocolsupport.utils.JsonUtils;
 
 public class PingResponsePlayers {
 
 	private int max;
 	private int online;
-	private GameProfile[] players;
+	private LoginProfile[] players;
 
 	public PingResponsePlayers() {
 	}
@@ -48,11 +48,11 @@ public class PingResponsePlayers {
 		return (players != null) && (players.length > 0);
 	}
 
-	public GameProfile[] getPlayers() {
+	public LoginProfile[] getPlayers() {
 		return players;
 	}
 
-	public void setPlayers(GameProfile[] players) {
+	public void setPlayers(LoginProfile[] players) {
 		this.players = players;
 	}
 
@@ -64,10 +64,10 @@ public class PingResponsePlayers {
 			if (JsonUtils.isJsonArray(jsonObject, "sample")) {
 				JsonArray jsonArray = JsonUtils.getJsonArray(jsonObject, "sample");
 				if (jsonArray.size() > 0) {
-					GameProfile[] array = new GameProfile[jsonArray.size()];
+					LoginProfile[] array = new LoginProfile[jsonArray.size()];
 					for (int i = 0; i < array.length; ++i) {
 						JsonObject playerJsonObject = JsonUtils.getAsJsonObject(jsonArray.get(i), "player[" + i + "]");
-						array[i] = new GameProfile(UUID.fromString(JsonUtils.getString(playerJsonObject, "id")), JsonUtils.getString(playerJsonObject, "name"));
+						array[i] = new LoginProfile(UUID.fromString(JsonUtils.getString(playerJsonObject, "id")), JsonUtils.getString(playerJsonObject, "name"));
 					}
 					players.setPlayers(array);
 				}
@@ -83,7 +83,7 @@ public class PingResponsePlayers {
 			if (players.hasPlayers()) {
 				JsonArray jsonArray = new JsonArray();
 				for (int i = 0; i < players.getPlayers().length; ++i) {
-					GameProfile player = players.getPlayers()[i];
+					LoginProfile player = players.getPlayers()[i];
 					JsonObject playerJsonObject = new JsonObject();
 					playerJsonObject.addProperty("id", (player.getUUID() == null) ? "" : player.getUUID().toString());
 					playerJsonObject.addProperty("name", player.getName());

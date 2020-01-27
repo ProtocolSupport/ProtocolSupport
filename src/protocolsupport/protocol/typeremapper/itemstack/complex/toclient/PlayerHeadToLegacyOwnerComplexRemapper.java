@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.utils.GameProfileSerializer;
-import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.protocol.utils.authlib.LoginProfile;
 
 public class PlayerHeadToLegacyOwnerComplexRemapper extends ItemStackNBTComplexRemapper {
 
@@ -20,7 +20,7 @@ public class PlayerHeadToLegacyOwnerComplexRemapper extends ItemStackNBTComplexR
 	public static void remap(NBTCompound tag, String tagname, String newtagname) {
 		NBTCompound gameprofileTag = tag.getTagOfType(tagname, NBTType.COMPOUND);
 		if (gameprofileTag != null) {
-			GameProfile gameprofile = GameProfileSerializer.deserialize(gameprofileTag);
+			LoginProfile gameprofile = GameProfileSerializer.deserialize(gameprofileTag);
 			if (gameprofile.getName() != null) {
 				tag.setTag(newtagname, new NBTString(gameprofile.getName()));
 			} else {

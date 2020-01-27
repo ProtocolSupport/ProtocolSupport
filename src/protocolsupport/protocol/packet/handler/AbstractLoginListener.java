@@ -32,7 +32,7 @@ import protocolsupport.api.events.PlayerProfileCompleteEvent;
 import protocolsupport.api.utils.Profile;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.utils.MinecraftEncryption;
-import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.protocol.utils.authlib.LoginProfile;
 import protocolsupport.protocol.utils.authlib.MinecraftSessionService;
 import protocolsupport.protocol.utils.authlib.MinecraftSessionService.AuthenticationUnavailableException;
 import protocolsupport.utils.JavaSystemProperty;
@@ -109,7 +109,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 		state = LoginState.ONLINEMODERESOLVE;
 		loginprocessor.execute(() -> {
 			try {
-				GameProfile profile = connection.getProfile();
+				LoginProfile profile = connection.getLoginProfile();
 				profile.setOriginalName(name);
 
 				PlayerLoginStartEvent event = new PlayerLoginStartEvent(connection);
@@ -172,7 +172,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 
 	public void loginOffline() {
 		try {
-			GameProfile profile = connection.getProfile();
+			LoginProfile profile = connection.getLoginProfile();
 			profile.setOriginalUUID(networkManager.getSpoofedUUID() != null ? networkManager.getSpoofedUUID() : Profile.generateOfflineModeUUID(profile.getName()));
 			networkManager.getSpoofedProperties().forEach(profile::addProperty);
 			finishLogin();
@@ -185,7 +185,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 	public void loginOnline(SecretKey key) {
 		try {
 			MinecraftSessionService.checkHasJoinedServerAndUpdateProfile(
-				connection.getProfile(),
+				connection.getLoginProfile(),
 				new BigInteger(MinecraftEncryption.createHash(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), key)).toString(16),
 				ServerPlatform.get().getMiscUtils().isProxyPreventionEnabled() ? networkManager.getAddress().getHostString() : null
 			);
@@ -206,7 +206,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 
 		cancelTimeoutTask();
 
-		GameProfile profile = connection.getProfile();
+		LoginProfile profile = connection.getLoginProfile();
 		InetSocketAddress saddress = networkManager.getAddress();
 
 		InetAddress address = saddress.getAddress();

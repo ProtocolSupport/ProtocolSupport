@@ -7,7 +7,7 @@ import org.bukkit.entity.Entity;
 
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
-import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.api.utils.Profile;
 
 public interface PlatformPacketFactory {
 
@@ -37,7 +37,7 @@ public interface PlatformPacketFactory {
 
 	public Object createStausServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, String motd, int onlinePlayers, int maxPlayers);
 
-	public Object createLoginSuccessPacket(GameProfile profile);
+	public Object createLoginSuccessPacket(Profile profile);
 
 	public Object createEmptyCustomPayloadPacket(String tag);
 

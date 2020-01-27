@@ -9,7 +9,7 @@ import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.GameProfileSerializer;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
-import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.protocol.utils.authlib.LoginProfile;
 import protocolsupport.protocol.utils.authlib.UUIDTypeAdapter;
 
 public class DragonHeadToDragonPlayerHeadComplexRemapper implements ItemStackComplexRemapper {
@@ -23,7 +23,7 @@ public class DragonHeadToDragonPlayerHeadComplexRemapper implements ItemStackCom
 		return itemstack;
 	}
 
-	private static final GameProfile dragonHeadGameProfile = new GameProfile(
+	private static final LoginProfile dragonHeadGameProfile = new LoginProfile(
 		UUIDTypeAdapter.fromString("d34aa2b831da4d269655e33c143f096c"),
 		"EnderDragon",
 		new ProfileProperty(

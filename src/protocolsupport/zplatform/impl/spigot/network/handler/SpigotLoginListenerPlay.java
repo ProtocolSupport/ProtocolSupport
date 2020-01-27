@@ -81,11 +81,10 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 
 	@Override
 	protected JoinData createJoinData() {
-		com.mojang.authlib.GameProfile mojangGameProfile = SpigotMiscUtils.toMojangGameProfile(connection.getProfile());
 		EntityPlayer entity = new EntityPlayer(
 			server,
 			server.getWorldServer(DimensionManager.OVERWORLD),
-			mojangGameProfile,
+			SpigotMiscUtils.toMojangGameProfile(connection.getLoginProfile()),
 			new PlayerInteractManager(server.getWorldServer(DimensionManager.OVERWORLD))
 		);
 		return new JoinData(entity.getBukkitEntity(), entity) {

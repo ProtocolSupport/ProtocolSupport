@@ -11,7 +11,7 @@ import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTList;
 import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.protocol.types.nbt.NBTType;
-import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.protocol.utils.authlib.LoginProfile;
 
 public class GameProfileSerializer {
 
@@ -21,7 +21,7 @@ public class GameProfileSerializer {
 	private static final String PROPERTY_VALUE_KEY = "Value";
 	private static final String PROPERTY_SIGNATURE_KEY = "Signature";
 
-	public static NBTCompound serialize(GameProfile gameProfile) {
+	public static NBTCompound serialize(LoginProfile gameProfile) {
 		NBTCompound tag = new NBTCompound();
 		if (!StringUtils.isEmpty(gameProfile.getName())) {
 			tag.setTag(NAME_KEY, new NBTString(gameProfile.getName()));
@@ -48,7 +48,7 @@ public class GameProfileSerializer {
 		return tag;
 	}
 
-	public static GameProfile deserialize(NBTCompound tag) {
+	public static LoginProfile deserialize(NBTCompound tag) {
 		String name = NBTString.getValueOrNull(tag.getTagOfType(NAME_KEY, NBTType.STRING));
 		UUID uuid = null;
 		try {
@@ -58,7 +58,7 @@ public class GameProfileSerializer {
 		if (StringUtils.isEmpty(name) && (uuid == null)) {
 			return null;
 		}
-		GameProfile gameProfile = new GameProfile(uuid, name);
+		LoginProfile gameProfile = new LoginProfile(uuid, name);
 		NBTCompound propertiesTag = tag.getTagOfType(PROPERTIES_KEY, NBTType.COMPOUND);
 		if (propertiesTag != null) {
 			for (String propertyName : propertiesTag.getTagNames()) {

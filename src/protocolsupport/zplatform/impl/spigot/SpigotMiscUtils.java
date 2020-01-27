@@ -1,7 +1,10 @@
 package protocolsupport.zplatform.impl.spigot;
 
 import java.security.KeyPair;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
@@ -16,6 +19,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_15_R1.util.CraftIconCache;
 import org.bukkit.craftbukkit.v1_15_R1.util.CraftMagicNumbers;
@@ -27,7 +31,9 @@ import org.spigotmc.SpigotConfig;
 
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import io.netty.buffer.ByteBuf;
@@ -51,6 +57,8 @@ import net.minecraft.server.v1_15_R1.NBTReadLimiter;
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
 import net.minecraft.server.v1_15_R1.WorldServer;
 import protocolsupport.api.utils.NetworkState;
+import protocolsupport.api.utils.Profile;
+import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
@@ -61,7 +69,7 @@ import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.serializer.DefaultNBTSerializer;
 import protocolsupport.protocol.utils.MinecraftEncryption;
-import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.protocol.utils.authlib.LoginProfile;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
@@ -118,9 +126,9 @@ public class SpigotMiscUtils implements PlatformUtils {
 		return ((CraftServer) Bukkit.getServer()).getServer();
 	}
 
-	public static com.mojang.authlib.GameProfile toMojangGameProfile(GameProfile profile) {
-		com.mojang.authlib.GameProfile mojangGameProfile = new com.mojang.authlib.GameProfile(profile.getUUID(), profile.getName());
-		com.mojang.authlib.properties.PropertyMap mojangProperties = mojangGameProfile.getProperties();
+	public static GameProfile toMojangGameProfile(LoginProfile profile) {
+		GameProfile mojangGameProfile = new GameProfile(profile.getUUID(), profile.getName());
+		PropertyMap mojangProperties = mojangGameProfile.getProperties();
 		profile.getProperties().entrySet().forEach(entry -> mojangProperties.putAll(
 			entry.getKey(),
 			entry.getValue().stream()
@@ -139,6 +147,37 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public int getEntityTypeNetworkId(EntityType type) {
 		return IRegistry.ENTITY_TYPE.a(EntityTypes.a(type.getName()).get());
+	}
+
+	@Override
+	public Profile createWrappedProfile(LoginProfile loginProfile, Player player) {
+		GameProfile mojangprofile = ((CraftPlayer) player).getHandle().getProfile();
+		return new Profile() {
+			{
+				onlineMode = loginProfile.isOnlineMode();
+				originalname = loginProfile.getOriginalName();
+				originaluuid = loginProfile.getOriginalUUID();
+			}
+			@Override
+			public String getName() {
+				return mojangprofile.getName();
+			}
+			@Override
+			public UUID getUUID() {
+				return mojangprofile.getId();
+			}
+			@Override
+			public Set<String> getPropertiesNames() {
+				return Collections.unmodifiableSet(mojangprofile.getProperties().keySet());
+			}
+			@Override
+			public Set<ProfileProperty> getProperties(String name) {
+				return
+					mojangprofile.getProperties().get(name).stream()
+					.map(mojangproperty -> new ProfileProperty(mojangproperty.getName(), mojangproperty.getValue(), mojangproperty.getSignature()))
+					.collect(Collectors.toSet());
+			}
+		};
 	}
 
 	@Override

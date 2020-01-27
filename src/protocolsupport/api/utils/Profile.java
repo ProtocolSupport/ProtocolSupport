@@ -1,11 +1,8 @@
 package protocolsupport.api.utils;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
@@ -30,10 +27,6 @@ public abstract class Profile {
 
 	protected volatile String originalname;
 	protected volatile UUID originaluuid;
-
-	protected volatile String name;
-	protected volatile UUID uuid;
-	protected final Map<String, Set<ProfileProperty>> properties = new ConcurrentHashMap<>();
 
 	/**
 	 * Returns true if this player logged in using online-mode
@@ -66,27 +59,21 @@ public abstract class Profile {
 	 * This name can be changed by {@link PlayerProfileCompleteEvent#setForcedName}
 	 * @return current name
 	 */
-	public String getName() {
-		return name;
-	}
+	public abstract String getName();
 
 	/**
 	 * Returns current uuid <br>
 	 * This uuid can be changed by {@link PlayerProfileCompleteEvent#setForcedUUID}
 	 * @return current uuid
 	 */
-	public UUID getUUID() {
-		return uuid;
-	}
+	public abstract UUID getUUID();
 
 	/**
 	 * Returns current properties <br>
 	 * These properties can be changed by {@link PlayerProfileCompleteEvent} property management methods
 	 * @return current properties
 	 */
-	public Set<String> getPropertiesNames() {
-		return Collections.unmodifiableSet(properties.keySet());
-	}
+	public abstract Set<String> getPropertiesNames();
 
 	/**
 	 * Returns current properties <br>
@@ -94,8 +81,6 @@ public abstract class Profile {
 	 * @param name property name
 	 * @return current properties
 	 */
-	public Set<ProfileProperty> getProperties(String name) {
-		return Collections.unmodifiableSet(properties.getOrDefault(name, Collections.emptySet()));
-	}
+	public abstract Set<ProfileProperty> getProperties(String name);
 
 }

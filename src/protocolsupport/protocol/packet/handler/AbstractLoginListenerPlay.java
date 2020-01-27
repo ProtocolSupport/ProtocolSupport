@@ -116,6 +116,8 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 
 		JoinData joindata = createJoinData();
 
+		connection.setWrappedProfile(joindata.player);
+
 		PlayerSyncLoginEvent syncloginevent = new PlayerSyncLoginEvent(connection, joindata.player);
 		Bukkit.getPluginManager().callEvent(syncloginevent);
 		if (syncloginevent.isLoginDenied()) {

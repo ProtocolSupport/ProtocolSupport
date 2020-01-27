@@ -11,15 +11,39 @@ import protocolsupport.api.utils.Profile;
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.utils.Utils;
 
-public class GameProfile extends Profile {
+public class LoginProfile extends Profile {
 
-	public GameProfile() {
+	protected volatile String name;
+	protected volatile UUID uuid;
+	protected final Map<String, Set<ProfileProperty>> properties = new ConcurrentHashMap<>();
+
+	public LoginProfile() {
 	}
 
-	public GameProfile(UUID uuid, String name, ProfileProperty... properties) {
+	public LoginProfile(UUID uuid, String name, ProfileProperty... properties) {
 		this.uuid = uuid;
 		this.name = name;
 		Arrays.stream(properties).forEach(this::addProperty);
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public UUID getUUID() {
+		return uuid;
+	}
+
+	@Override
+	public Set<String> getPropertiesNames() {
+		return Collections.unmodifiableSet(properties.keySet());
+	}
+
+	@Override
+	public Set<ProfileProperty> getProperties(String name) {
+		return Collections.unmodifiableSet(properties.getOrDefault(name, Collections.emptySet()));
 	}
 
 	public void setOnlineMode(boolean onlineMode) {

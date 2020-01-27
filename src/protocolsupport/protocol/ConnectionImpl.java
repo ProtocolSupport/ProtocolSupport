@@ -32,7 +32,8 @@ import protocolsupport.protocol.pipeline.version.util.decoder.AbstractPacketDeco
 import protocolsupport.protocol.pipeline.version.util.encoder.AbstractPacketEncoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
-import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.protocol.utils.authlib.LoginProfile;
+import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class ConnectionImpl extends Connection {
@@ -121,9 +122,12 @@ public class ConnectionImpl extends Connection {
 		return networkmanager.getBukkitPlayer();
 	}
 
-	@Override
-	public GameProfile getProfile() {
-		return (GameProfile) super.getProfile();
+	public LoginProfile getLoginProfile() {
+		return (LoginProfile) profile;
+	}
+
+	public void setWrappedProfile(Player player) {
+		profile = ServerPlatform.get().getMiscUtils().createWrappedProfile(getLoginProfile(), player);
 	}
 
 	@Override

@@ -16,10 +16,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
 import io.netty.channel.ChannelPipeline;
+import protocolsupport.api.utils.Profile;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
 import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.utils.authlib.LoginProfile;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public interface PlatformUtils {
@@ -81,5 +83,7 @@ public interface PlatformUtils {
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender);
 
 	public AbstractHandshakeListener createHandshakeListener(NetworkManagerWrapper networkmanager);
+
+	Profile createWrappedProfile(LoginProfile loginProfile, Player player);
 
 }
