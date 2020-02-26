@@ -18,15 +18,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEnti
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.LivingEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.*;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.BeeEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.FoxEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PandaEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PigEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PolarBearEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.RabbitEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.SheepEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.TurtleEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.VillagerEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.*;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.fish.FishEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.fish.PufferFishEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.fish.TropicalFishEntityMetadataRemapper;
@@ -124,7 +116,8 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
 			.register();
 			new Mapping(NetworkEntityType.MUSHROOM_COW)
-			.addMapping(NetworkEntityType.MUSHROOM_COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.MUSHROOM_COW, new MushroomCowEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)
+			.addMapping(NetworkEntityType.MUSHROOM_COW, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
 			.register();
 			new Mapping(NetworkEntityType.CHICKEN)
 			.addMapping(NetworkEntityType.CHICKEN, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
