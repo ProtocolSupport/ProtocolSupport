@@ -17,25 +17,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AgeableE
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.LivingEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.BatEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.BlazeEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.CreeperEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.EnderDragonEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.EndermanEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.GhastEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.GuardianEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.IllagerEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.IronGolemEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.PhantomEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.PillagerEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ShulkerEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.SlimeEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.SnowmanEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.SpellcasterIllagerEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.SpiderEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.VexEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.WitchEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.living.WitherEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.*;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.BeeEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.FoxEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PandaEntityMetadataRemapper;
@@ -299,7 +281,7 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.ELDER_GUARDIAN)
 			.addMapping(NetworkEntityType.ELDER_GUARDIAN, GuardianEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_11)
-			.addMapping(NetworkEntityType.GUARDIAN, GuardianEntityMetadataRemapper.INSTANCE, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_10, ProtocolVersion.MINECRAFT_1_8))
+			.addMapping(NetworkEntityType.GUARDIAN, new ElderGuardianEntityMetadataRemapper(), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_10, ProtocolVersion.MINECRAFT_1_8))
 			.addMapping(NetworkEntityType.SQUID, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_8)
 			.register();
 			new Mapping(NetworkEntityType.VINDICATOR)

@@ -2,6 +2,7 @@ package protocolsupport.protocol.typeremapper.entity.metadata.types.living;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperBooleanToByte;
 import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperNumberToInt;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
@@ -14,28 +15,28 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class GuardianEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
-	public static final GuardianEntityMetadataRemapper INSTANCE = new GuardianEntityMetadataRemapper();
+	public static final GuardianEntityMetadataRemapper INSTANCE = new GuardianEntityMetadataRemapper(false);
 
-	public GuardianEntityMetadataRemapper() {
+	public GuardianEntityMetadataRemapper(boolean isElder) {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Guardian.SPIKES, 15), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Guardian.SPIKES, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Guardian.SPIKES, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 		addRemap(new IndexValueRemapper<NetworkEntityMetadataObjectBoolean>(NetworkEntityMetadataObjectIndex.Guardian.SPIKES, 12) {
 			@Override
 			public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectBoolean object) {
-				return new NetworkEntityMetadataObjectByte(object.getValue() ? (byte) 2 : (byte) 0);
+				return new NetworkEntityMetadataObjectByte(isElder ? (byte) 4 :(byte) 2);
 			}
 		}, ProtocolVersion.MINECRAFT_1_10);
 		addRemap(new IndexValueRemapper<NetworkEntityMetadataObjectBoolean>(NetworkEntityMetadataObjectIndex.Guardian.SPIKES, 11) {
 			@Override
 			public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectBoolean object) {
-				return new NetworkEntityMetadataObjectByte(object.getValue() ? (byte) 2 : (byte) 0);
+				return new NetworkEntityMetadataObjectByte(isElder ? (byte) 4 :(byte) 2);
 			}
 		}, ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapper<NetworkEntityMetadataObjectBoolean>(NetworkEntityMetadataObjectIndex.Guardian.SPIKES, 16) {
 			@Override
 			public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectBoolean object) {
-				return new NetworkEntityMetadataObjectInt(object.getValue() ? (byte) 2 : (byte) 0);
+				return new NetworkEntityMetadataObjectInt(isElder ? 4 : 2);
 			}
 		}, ProtocolVersion.MINECRAFT_1_8);
 
@@ -45,5 +46,4 @@ public class GuardianEntityMetadataRemapper extends InsentientEntityMetadataRema
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Guardian.TARGET_ID, 12), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNumberToInt(NetworkEntityMetadataObjectIndex.Guardian.TARGET_ID, 17), ProtocolVersion.MINECRAFT_1_8);
 	}
-
 }
