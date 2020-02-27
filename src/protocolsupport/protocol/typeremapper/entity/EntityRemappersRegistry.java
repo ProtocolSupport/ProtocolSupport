@@ -12,11 +12,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.entity.metadata.object.NetworkEntityMetadataObjectRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.EntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AbstractMerchantEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AgeableEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.base.LivingEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.base.*;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.*;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.*;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.fish.FishEntityMetadataRemapper;
@@ -341,8 +337,8 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.SPIDER, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_10)
 			.register();
 			new Mapping(NetworkEntityType.CAT)
-			.addMapping(NetworkEntityType.CAT, new CatEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)
-			.addMapping(NetworkEntityType.OCELOT, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
+			.addMapping(NetworkEntityType.CAT, CatEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_14)
+			.addMapping(NetworkEntityType.OCELOT, CatEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_14)
 			.register();
 			new Mapping(NetworkEntityType.FOX)
 			.addMapping(NetworkEntityType.FOX, new FoxEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_14)
