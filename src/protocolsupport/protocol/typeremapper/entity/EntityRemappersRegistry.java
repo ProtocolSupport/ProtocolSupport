@@ -163,8 +163,8 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.PIG, new PigEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
 			.register();
 			new Mapping(NetworkEntityType.RABBIT)
-			.addMapping(NetworkEntityType.RABBIT, new RabbitEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_9)
-			.addMapping(NetworkEntityType.CHICKEN, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_9)
+			.addMapping(NetworkEntityType.RABBIT, new RabbitEntityMetadataRemapper(), ProtocolVersionsHelper.UP_1_8)
+			.addMapping(NetworkEntityType.CHICKEN, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_8)
 			.register();
 			new Mapping(NetworkEntityType.SHEEP)
 			.addMapping(NetworkEntityType.SHEEP, new SheepEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
