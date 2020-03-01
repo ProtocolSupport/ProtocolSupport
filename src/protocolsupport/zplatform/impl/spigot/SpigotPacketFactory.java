@@ -896,7 +896,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 			Packet<?> packet = (Packet<?>) packetClass.newInstance();
 			return EnumProtocol.a(packet).a(direction, packet);
 		} catch (Exception e) {
-			throw new RuntimeException("Unable to get packet id");
+			throw new RuntimeException("Unable to get packet id", e);
 		}
 	}
 
