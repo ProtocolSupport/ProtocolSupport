@@ -1,30 +1,26 @@
 package protocolsupport.protocol.packet.middleimpl;
 
-import io.netty.util.Recycler;
-import io.netty.util.Recycler.Handle;
 import protocolsupport.protocol.packet.PacketData;
 import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.utils.ThreadLocalObjectPool;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class ClientBoundPacketData extends PacketData<ClientBoundPacketData> {
 
+	protected static final ThreadLocalObjectPool<ClientBoundPacketData> pool = new ThreadLocalObjectPool<>(MAX_POOL_CAPACITY, ClientBoundPacketData::new);
+
 	public static ClientBoundPacketData create(PacketType packetType) {
-		return recycler.get().init(packetType);
+		return pool.get().init(packetType);
 	}
 
-	protected static final Recycler<ClientBoundPacketData> recycler = new Recycler<ClientBoundPacketData>() {
-		@Override
-		protected ClientBoundPacketData newObject(Handle<ClientBoundPacketData> handle) {
-			return new ClientBoundPacketData(handle);
-		}
-	};
-
-	protected ClientBoundPacketData(Handle<ClientBoundPacketData> handle) {
+	protected ClientBoundPacketData(ThreadLocalObjectPool.Handle<ClientBoundPacketData> handle) {
 		super(handle);
 	}
 
 	@Override
 	public ClientBoundPacketData clone() {
-		ClientBoundPacketData clone = recycler.get().init(packetType);
+		ClientBoundPacketData clone = pool.get().init(packetType);
 		getBytes(readerIndex(), clone);
 		return clone;
 	}

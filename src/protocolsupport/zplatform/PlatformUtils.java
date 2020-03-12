@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
 import io.netty.channel.ChannelPipeline;
+import io.netty.channel.MultithreadEventLoopGroup;
 import protocolsupport.api.utils.Profile;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
@@ -74,6 +75,8 @@ public interface PlatformUtils {
 
 	public String convertBukkitIconToBase64(CachedServerIcon icon);
 
+	public MultithreadEventLoopGroup getServerIOEventLoopGroup();
+
 	public String getReadTimeoutHandlerName();
 
 	public void enableCompression(ChannelPipeline pipeline, int compressionThreshold);
@@ -85,5 +88,6 @@ public interface PlatformUtils {
 	public AbstractHandshakeListener createHandshakeListener(NetworkManagerWrapper networkmanager);
 
 	Profile createWrappedProfile(LoginProfile loginProfile, Player player);
+
 
 }

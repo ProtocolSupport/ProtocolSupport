@@ -41,6 +41,8 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelPipeline;
+import io.netty.channel.MultithreadEventLoopGroup;
+import io.netty.channel.epoll.Epoll;
 import net.minecraft.server.v1_15_R1.AxisAlignedBB;
 import net.minecraft.server.v1_15_R1.Block;
 import net.minecraft.server.v1_15_R1.DedicatedServer;
@@ -55,6 +57,7 @@ import net.minecraft.server.v1_15_R1.MojangsonParser;
 import net.minecraft.server.v1_15_R1.NBTCompressedStreamTools;
 import net.minecraft.server.v1_15_R1.NBTReadLimiter;
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
+import net.minecraft.server.v1_15_R1.ServerConnection;
 import net.minecraft.server.v1_15_R1.WorldServer;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.api.utils.Profile;
@@ -337,6 +340,19 @@ public class SpigotMiscUtils implements PlatformUtils {
 			throw new IllegalArgumentException(icon + " was not created by " + CraftServer.class);
 		}
 		return ((CraftIconCache) icon).value;
+	}
+
+	@Override
+	public MultithreadEventLoopGroup getServerIOEventLoopGroup() {
+		try {
+			if (Epoll.isAvailable() && getServer().n()) {
+				return ServerConnection.b.a();
+			} else {
+				return ServerConnection.a.a();
+			}
+		} catch (SecurityException | IllegalArgumentException e) {
+			throw new RuntimeException("Unable to get event loop", e);
+		}
 	}
 
 	@Override
