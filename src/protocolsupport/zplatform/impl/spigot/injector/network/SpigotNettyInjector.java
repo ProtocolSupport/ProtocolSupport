@@ -19,11 +19,11 @@ public class SpigotNettyInjector {
 	@SuppressWarnings("unchecked")
 	public static void inject() throws IllegalAccessException, NoSuchFieldException {
 		ServerConnection serverConnection = SpigotMiscUtils.getServer().getServerConnection();
-		List<NetworkManager> nmList = null;
+		Collection<NetworkManager> nmList = null;
 		try {
-			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("pending")).get(serverConnection);
+			nmList = (Collection<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("pending")).get(serverConnection);
 		} catch (NoSuchFieldException e) {
-			nmList = (List<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("connectedChannels")).get(serverConnection);
+			nmList = (Collection<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("connectedChannels")).get(serverConnection);
 		}
 		Field connectionsListField = ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("listeningChannels"));
 		ChannelInjectList connectionsList = new ChannelInjectList(nmList, (List<ChannelFuture>) connectionsListField.get(serverConnection));
@@ -33,11 +33,11 @@ public class SpigotNettyInjector {
 
 	public static class ChannelInjectList implements List<ChannelFuture> {
 
-		private final List<NetworkManager> networkManagersList;
+		private final Collection<NetworkManager> networkManagers;
 		private final List<ChannelFuture> originalList;
-		public ChannelInjectList(List<NetworkManager> networkManagerList, List<ChannelFuture> originalList) {
+		public ChannelInjectList(Collection<NetworkManager> networkManagerList, List<ChannelFuture> originalList) {
 			this.originalList = originalList;
-			this.networkManagersList = networkManagerList;
+			this.networkManagers = networkManagerList;
 		}
 
 		public void injectExisting() {
@@ -87,8 +87,8 @@ public class SpigotNettyInjector {
 		protected void inject(ChannelFuture future) {
 			Channel channel = future.channel();
 			channel.pipeline().addFirst(new SpigotNettyServerChannelHandler());
-			synchronized (networkManagersList) {
-				for (NetworkManager nm : networkManagersList) {
+			synchronized (networkManagers) {
+				for (NetworkManager nm : networkManagers) {
 					if ((nm.channel != null) && nm.channel.localAddress().equals(channel.localAddress())) {
 						nm.close(new ChatComponentText("ProtocolSupport channel reset"));
 					}
