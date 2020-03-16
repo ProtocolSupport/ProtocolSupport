@@ -27,17 +27,17 @@ public abstract class IPacketIdCodec {
 	protected static class PacketIdTransformerRegistry {
 		protected static final int NO_ENTRY = -1;
 
-		protected final int[] registry = new int[PacketType.getCount()];
+		protected final int[] registry = new int[PacketType.getValuesCount()];
 		{
 			Arrays.fill(registry, NO_ENTRY);
 		}
 
 		public void register(PacketType type, int newPacketId) {
-			registry[type.getOrdinal()] = newPacketId;
+			registry[type.ordinal()] = newPacketId;
 		}
 
 		public int getPacketId(PacketType type) {
-			int id = registry[type.getOrdinal()];
+			int id = registry[type.ordinal()];
 			if (id == NO_ENTRY) {
 				throw new NoSuchElementException("No packet id found for and packet id " + type.getId());
 			}

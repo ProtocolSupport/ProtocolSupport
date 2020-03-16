@@ -1,9 +1,10 @@
 package protocolsupport.protocol.typeremapper.packet;
 
 import java.util.ArrayDeque;
+import java.util.EnumSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import protocolsupport.protocol.packet.PacketData;
 import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.PacketDataCodec.ClientBoundPacketDataProcessor;
@@ -16,15 +17,15 @@ public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor
 		super(codec);
 	}
 
-	protected static final IntOpenHashSet queuedPacketTypes = new IntOpenHashSet(new int[] {
-		PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE.getId(), PacketType.CLIENTBOUND_PLAY_CHUNK_UNLOAD.getId(),
-		PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE.getId(), PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI.getId(),
-		PacketType.CLIENTBOUND_PLAY_BLOCK_ACTION.getId(), PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_ANIMATION.getId(),
-		PacketType.CLIENTBOUND_PLAY_BLOCK_TILE.getId(), PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN_ID.getId(),
-		PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED_ID.getId()
-	});
+	protected static final Set<PacketType> queuedPacketTypes = EnumSet.of(
+		PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE, PacketType.CLIENTBOUND_PLAY_CHUNK_UNLOAD,
+		PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE, PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI,
+		PacketType.CLIENTBOUND_PLAY_BLOCK_ACTION, PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_ANIMATION,
+		PacketType.CLIENTBOUND_PLAY_BLOCK_TILE, PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN_ID,
+		PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED_ID
+	);
 	protected static boolean shouldQueue(PacketData<?> packet) {
-		return queuedPacketTypes.contains(packet.getPacketType().getId());
+		return queuedPacketTypes.contains(packet.getPacketType());
 	}
 	protected static boolean shouldLock(PacketData<?> packet) {
 		return packet.getPacketType() == PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE;
