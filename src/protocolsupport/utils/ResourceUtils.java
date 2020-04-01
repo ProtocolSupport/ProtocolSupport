@@ -24,7 +24,7 @@ public class ResourceUtils {
 
 	public static JsonObject getAsJson(String name) {
 		BufferedReader reader = getAsBufferedReader(name);
-		return reader != null ? Utils.GSON.fromJson(reader, JsonObject.class) : null;
+		return reader != null ? JsonUtils.GSON.fromJson(reader, JsonObject.class) : null;
 	}
 
 }

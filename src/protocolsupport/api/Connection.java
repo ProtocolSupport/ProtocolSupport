@@ -13,13 +13,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ReadOnlyByteBuf;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.api.utils.Profile;
-import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.protocol.utils.authlib.LoginProfile;
 
 @SuppressWarnings("deprecation")
 public abstract class Connection {
 
 	protected volatile ProtocolVersion version = ProtocolVersion.UNKNOWN;
-	protected final Profile profile = new GameProfile();
+	protected volatile Profile profile = new LoginProfile();
 
 	/**
 	 * Returns native network manager object <br>
@@ -45,6 +45,12 @@ public abstract class Connection {
 	 * @param message disconnect message
 	 */
 	public abstract void disconnect(String message);
+
+	/**
+	 * Returns address the player connected to/pinged
+	 * @return address the player connected to/pinged
+	 */
+	public abstract InetSocketAddress getVirtualHost();
 
 	/**
 	 * Returns real remote address

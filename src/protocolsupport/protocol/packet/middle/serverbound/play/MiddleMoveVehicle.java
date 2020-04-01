@@ -3,10 +3,7 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleMoveVehicle extends ServerBoundMiddlePacket {
 
@@ -21,8 +18,8 @@ public abstract class MiddleMoveVehicle extends ServerBoundMiddlePacket {
 	protected float pitch;
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toNative() {
-		return RecyclableSingletonList.create(create(x, y, z, yaw, pitch));
+	public void writeToServer() {
+		codec.read(create(x, y, z, yaw, pitch));
 	}
 
 	public static ServerBoundPacketData create(double x, double y, double z, float yaw, float pitch) {

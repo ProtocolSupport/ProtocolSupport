@@ -16,8 +16,8 @@ public class TabComplete extends MiddleTabComplete {
 	public void readFromClientData(ByteBuf clientdata) {
 		id = 0;
 		string = StringSerializer.readVarIntUTF8String(clientdata, 256);
-		if (string.startsWith("/")) {
-			string = string.substring(1);
+		if (string.equals("/")) {
+			string = "";
 		}
 		if (clientdata.readBoolean()) {
 			PositionSerializer.skipPosition(clientdata);

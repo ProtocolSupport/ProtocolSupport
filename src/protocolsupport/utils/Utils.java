@@ -9,11 +9,7 @@ import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 
-import com.google.gson.Gson;
-
 public class Utils {
-
-	public static final Gson GSON = new Gson();
 
 	public static String toStringAllFields(Object obj) {
 		StringJoiner joiner = new StringJoiner(", ");

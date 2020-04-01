@@ -5,8 +5,6 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleExplosion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.types.Position;
-import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class Explosion extends MiddleExplosion {
 
@@ -15,9 +13,7 @@ public class Explosion extends MiddleExplosion {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
-		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-
+	public void writeToClient() {
 		ClientBoundPacketData explosion = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_EXPLOSION);
 		explosion.writeDouble(x);
 		explosion.writeDouble(y);
@@ -29,11 +25,9 @@ public class Explosion extends MiddleExplosion {
 			explosion.writeByte(block.getY());
 			explosion.writeByte(block.getZ());
 		}
-		packets.add(explosion);
+		codec.write(explosion);
 
-		packets.add(EntityVelocity.create(cache.getWatchedEntityCache().getSelfPlayerEntityId(), (int) (pMotX * 8000), (int) (pMotY * 8000), (int) (pMotZ * 8000)));
-
-		return packets;
+		codec.write(EntityVelocity.create(cache.getWatchedEntityCache().getSelfPlayerEntityId(), (int) (pMotX * 8000), (int) (pMotY * 8000), (int) (pMotZ * 8000)));
 	}
 
 }

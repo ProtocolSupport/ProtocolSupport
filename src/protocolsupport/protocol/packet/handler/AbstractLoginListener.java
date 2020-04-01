@@ -32,7 +32,7 @@ import protocolsupport.api.events.PlayerProfileCompleteEvent;
 import protocolsupport.api.utils.Profile;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.utils.MinecraftEncryption;
-import protocolsupport.protocol.utils.authlib.GameProfile;
+import protocolsupport.protocol.utils.authlib.LoginProfile;
 import protocolsupport.protocol.utils.authlib.MinecraftSessionService;
 import protocolsupport.protocol.utils.authlib.MinecraftSessionService.AuthenticationUnavailableException;
 import protocolsupport.utils.JavaSystemProperty;
@@ -59,17 +59,15 @@ public abstract class AbstractLoginListener implements IPacketListener {
 
 	protected final NetworkManagerWrapper networkManager;
 	protected final ConnectionImpl connection;
-	protected final String hostname;
 	protected final byte[] randomBytes = new byte[4];
 	protected LoginState state = LoginState.HELLO;
 
 	protected final Object timeoutTaskLock = new Object();
 	protected ScheduledFuture<?> timeoutTask;
 
-	public AbstractLoginListener(NetworkManagerWrapper networkmanager, String hostname) {
+	public AbstractLoginListener(NetworkManagerWrapper networkmanager) {
 		this.networkManager = networkmanager;
 		this.connection = ConnectionImpl.getFromChannel(networkmanager.getChannel());
-		this.hostname = hostname;
 		ThreadLocalRandom.current().nextBytes(randomBytes);
 
 		synchronized (timeoutTaskLock) {
@@ -111,10 +109,10 @@ public abstract class AbstractLoginListener implements IPacketListener {
 		state = LoginState.ONLINEMODERESOLVE;
 		loginprocessor.execute(() -> {
 			try {
-				GameProfile profile = connection.getProfile();
+				LoginProfile profile = connection.getLoginProfile();
 				profile.setOriginalName(name);
 
-				PlayerLoginStartEvent event = new PlayerLoginStartEvent(connection, hostname);
+				PlayerLoginStartEvent event = new PlayerLoginStartEvent(connection);
 				Bukkit.getPluginManager().callEvent(event);
 				if (event.isLoginDenied()) {
 					AbstractLoginListener.this.disconnect(event.getDenyLoginMessage());
@@ -174,7 +172,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 
 	public void loginOffline() {
 		try {
-			GameProfile profile = connection.getProfile();
+			LoginProfile profile = connection.getLoginProfile();
 			profile.setOriginalUUID(networkManager.getSpoofedUUID() != null ? networkManager.getSpoofedUUID() : Profile.generateOfflineModeUUID(profile.getName()));
 			networkManager.getSpoofedProperties().forEach(profile::addProperty);
 			finishLogin();
@@ -187,7 +185,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 	public void loginOnline(SecretKey key) {
 		try {
 			MinecraftSessionService.checkHasJoinedServerAndUpdateProfile(
-				connection.getProfile(),
+				connection.getLoginProfile(),
 				new BigInteger(MinecraftEncryption.createHash(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), key)).toString(16),
 				ServerPlatform.get().getMiscUtils().isProxyPreventionEnabled() ? networkManager.getAddress().getHostString() : null
 			);
@@ -208,7 +206,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 
 		cancelTimeoutTask();
 
-		GameProfile profile = connection.getProfile();
+		LoginProfile profile = connection.getLoginProfile();
 		InetSocketAddress saddress = networkManager.getAddress();
 
 		InetAddress address = saddress.getAddress();

@@ -6,8 +6,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityAnimation;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityAnimation extends MiddleEntityAnimation {
 
@@ -22,11 +20,11 @@ public class EntityAnimation extends MiddleEntityAnimation {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public void writeToClient() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_ANIMATION);
 		serializer.writeInt(entityId);
 		serializer.writeByte(animationIds.getOrDefault(animation, 0));
-		return RecyclableSingletonList.create(serializer);
+		codec.write(serializer);
 	}
 
 }

@@ -9,7 +9,8 @@ public class SpellcasterIllagerEntityMetadataRemapper extends IllagerEntityMetad
 	public static final SpellcasterIllagerEntityMetadataRemapper INSTANCE = new SpellcasterIllagerEntityMetadataRemapper();
 
 	public SpellcasterIllagerEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.SpellcasterIllager.SPELL, 15), ProtocolVersionsHelper.UP_1_14);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.SpellcasterIllager.SPELL, 16), ProtocolVersionsHelper.UP_1_15);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.SpellcasterIllager.SPELL, 15), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.SpellcasterIllager.SPELL, 13), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 	}
 

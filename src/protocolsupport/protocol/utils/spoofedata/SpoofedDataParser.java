@@ -1,35 +1,25 @@
 package protocolsupport.protocol.utils.spoofedata;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
-
 import com.destroystokyo.paper.event.player.PlayerHandshakeEvent;
 
-public class SpoofedDataParser {
+public abstract class SpoofedDataParser {
 
-	private static final List<Function<String, SpoofedData>> parsers = new ArrayList<>();
+	protected static final SpoofedDataParser current = selectParser();
 
-	static {
+	protected static final SpoofedDataParser selectParser() {
+		BungeeCordSpoofedDataParser bungeecordparser = new BungeeCordSpoofedDataParser();
 		try {
 			Class.forName(PlayerHandshakeEvent.class.getName());
-			parsers.add(new PaperSpoofedDataParser());
+			return new PaperSpoofedDataParser(bungeecordparser);
 		} catch (Throwable e) {
 		}
-		parsers.add(new BungeeCordSpoofedDataParser());
+		return bungeecordparser;
 	}
 
-	public static SpoofedData tryParse(String data) {
-		for (Function<String, SpoofedData> parser : parsers) {
-			try {
-				SpoofedData result = parser.apply(data);
-				if (result != null) {
-					return result;
-				}
-			} catch (Exception e) {
-			}
-		}
-		return null;
+	public static SpoofedData tryParse(String data, boolean proxyEnabled) {
+		return current.parse(data, proxyEnabled);
 	}
+
+	protected abstract SpoofedData parse(String data, boolean proxyEnabled);
 
 }

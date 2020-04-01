@@ -2,8 +2,11 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChangeDimension;
+import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
 
 public abstract class AbstractChangeDimension extends MiddleChangeDimension {
+
+	protected final ChunkCache chunkCache = cache.getChunkCache();
 
 	public AbstractChangeDimension(ConnectionImpl connection) {
 		super(connection);
@@ -12,7 +15,7 @@ public abstract class AbstractChangeDimension extends MiddleChangeDimension {
 	@Override
 	public boolean postFromServerRead() {
 		super.postFromServerRead();
-		cache.getChunkCache().clear();
+		chunkCache.clear();
 		return true;
 	}
 

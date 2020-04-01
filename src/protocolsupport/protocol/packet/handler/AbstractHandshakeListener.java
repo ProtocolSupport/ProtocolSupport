@@ -59,22 +59,22 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 					return;
 				}
 				hostname = event.getHostname();
-				if (event.shouldParseHostname() && ServerPlatform.get().getMiscUtils().isProxyEnabled()) {
-					SpoofedData sdata = SpoofedDataParser.tryParse(hostname);
-					if (sdata == null) {
-						disconnect("Ip forwarding is enabled but spoofed data can't be decoded or is missing");
-						return;
+				boolean proxyEnabled = event.shouldParseHostname() && ServerPlatform.get().getMiscUtils().isProxyEnabled();
+				SpoofedData sdata = SpoofedDataParser.tryParse(hostname, proxyEnabled);
+				if (sdata.isFailed()) {
+					disconnect(sdata.getFailMessage());
+					return;
+				}
+				if (proxyEnabled) {
+					String spoofedRemoteAddress = sdata.getAddress();
+					if (spoofedRemoteAddress != null) {
+						connection.changeAddress(new InetSocketAddress(sdata.getAddress(), connection.getAddress().getPort()));
 					}
-					if (sdata.isFailed()) {
-						disconnect(sdata.getFailMessage());
-						return;
-					}
-					hostname = sdata.getHostname();
-					connection.changeAddress(new InetSocketAddress(sdata.getAddress(), connection.getAddress().getPort()));
 					networkManager.setSpoofedProfile(sdata.getUUID(), sdata.getProperties());
 				}
+				hostname = sdata.getHostname();
 
-				networkManager.setPacketListener(getLoginListener(networkManager, hostname + ":" + port));
+				networkManager.setPacketListener(getLoginListener(networkManager));
 				break;
 			}
 			case STATUS: {
@@ -85,6 +85,12 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 			default: {
 				throw new UnsupportedOperationException("Invalid intention " + nextState);
 			}
+		}
+
+		if (hostname != null) {
+			networkManager.setVirtualHost(InetSocketAddress.createUnresolved(hostname, port));
+		} else {
+			networkManager.setVirtualHost(InetSocketAddress.createUnresolved("127.0.0.1", port));
 		}
 	}
 
@@ -97,7 +103,7 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 		}
 	}
 
-	protected abstract AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager, String hostname);
+	protected abstract AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager);
 
 	protected abstract AbstractStatusListener getStatusListener(NetworkManagerWrapper networkManager);
 

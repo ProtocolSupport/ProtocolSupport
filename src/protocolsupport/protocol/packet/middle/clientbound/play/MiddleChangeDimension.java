@@ -14,12 +14,14 @@ public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
 	}
 
 	protected Environment dimension;
+	protected long hashedSeed;
 	protected GameMode gamemode;
 	protected String leveltype;
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		dimension = Environment.getById(serverdata.readInt());
+		hashedSeed = serverdata.readLong();
 		gamemode = GameMode.getById(serverdata.readByte());
 		leveltype = StringSerializer.readVarIntUTF8String(serverdata);
 	}

@@ -1,64 +1,28 @@
 package protocolsupport.protocol.packet.middleimpl;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.UnpooledHeapByteBuf;
-import io.netty.util.Recycler;
-import io.netty.util.Recycler.Handle;
+import protocolsupport.protocol.packet.PacketData;
 import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.utils.recyclable.Recyclable;
+import protocolsupport.utils.ThreadLocalObjectPool;
+import protocolsupportbuildprocessor.Preload;
 
-public class ClientBoundPacketData extends UnpooledHeapByteBuf implements Recyclable, IPacketData {
+@Preload
+public class ClientBoundPacketData extends PacketData<ClientBoundPacketData> {
 
-	protected static final Recycler<ClientBoundPacketData> recycler = new Recycler<ClientBoundPacketData>() {
-		@Override
-		protected ClientBoundPacketData newObject(Handle<ClientBoundPacketData> handle) {
-			return new ClientBoundPacketData(handle);
-		}
-	};
+	protected static final ThreadLocalObjectPool<ClientBoundPacketData> pool = new ThreadLocalObjectPool<>(MAX_POOL_CAPACITY, ClientBoundPacketData::new);
 
 	public static ClientBoundPacketData create(PacketType packetType) {
-		ClientBoundPacketData packetdata = recycler.get();
-		packetdata.packetType = packetType;
-		return packetdata;
+		return pool.get().init(packetType);
 	}
 
-	private final Handle<ClientBoundPacketData> handle;
-	private ClientBoundPacketData(Handle<ClientBoundPacketData> handle) {
-		super(ALLOCATOR, 1024, Integer.MAX_VALUE);
-		this.handle = handle;
-	}
-
-	private PacketType packetType;
-
-	@Override
-	public void recycle() {
-		clear();
-		packetType = null;
-		handle.recycle(this);
-	}
-
-	@Override
-	public PacketType getPacketType() {
-		return packetType;
-	}
-
-	@Override
-	public int getDataLength() {
-		return readableBytes();
-	}
-
-	@Override
-	public void writeData(ByteBuf to) {
-		to.writeBytes(this);
+	protected ClientBoundPacketData(ThreadLocalObjectPool.Handle<ClientBoundPacketData> handle) {
+		super(handle);
 	}
 
 	@Override
 	public ClientBoundPacketData clone() {
-		ClientBoundPacketData packetdata = ClientBoundPacketData.create(getPacketType());
-		markReaderIndex();
-		packetdata.writeBytes(this);
-		resetReaderIndex();
-		return packetdata;
+		ClientBoundPacketData clone = pool.get().init(packetType);
+		getBytes(readerIndex(), clone);
+		return clone;
 	}
 
 }

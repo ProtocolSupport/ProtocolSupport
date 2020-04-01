@@ -25,16 +25,14 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 public abstract class AbstractLoginListenerPlay implements IPacketListener {
 
 	protected final NetworkManagerWrapper networkManager;
-	protected final String hostname;
 	protected final ConnectionImpl connection;
 
 	protected final Object keepConnectionLock = new Object();
 	protected ScheduledFuture<?> keepConnectionTask;
 
-	protected AbstractLoginListenerPlay(NetworkManagerWrapper networkmanager, String hostname) {
+	protected AbstractLoginListenerPlay(NetworkManagerWrapper networkmanager) {
 		this.networkManager = networkmanager;
 		this.connection = ConnectionImpl.getFromChannel(networkmanager.getChannel());
-		this.hostname = hostname;
 
 		synchronized (keepConnectionLock) {
 			this.keepConnectionTask = connection.getEventLoop().scheduleWithFixedDelay(this::keepConnection, 4, 4, TimeUnit.SECONDS);
@@ -118,6 +116,8 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 
 		JoinData joindata = createJoinData();
 
+		connection.setWrappedProfile(joindata.player);
+
 		PlayerSyncLoginEvent syncloginevent = new PlayerSyncLoginEvent(connection, joindata.player);
 		Bukkit.getPluginManager().callEvent(syncloginevent);
 		if (syncloginevent.isLoginDenied()) {
@@ -126,7 +126,12 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 			return;
 		}
 
-		PlayerLoginEvent bukkitevent = new PlayerLoginEvent(joindata.player, hostname, networkManager.getAddress().getAddress(), networkManager.getRawAddress().getAddress());
+		PlayerLoginEvent bukkitevent = new PlayerLoginEvent(
+			joindata.player,
+			connection.getVirtualHost().toString(),
+			networkManager.getAddress().getAddress(),
+			networkManager.getRawAddress().getAddress()
+		);
 		checkBans(bukkitevent, joindata.data);
 		Bukkit.getPluginManager().callEvent(bukkitevent);
 		if (bukkitevent.getResult() != PlayerLoginEvent.Result.ALLOWED) {

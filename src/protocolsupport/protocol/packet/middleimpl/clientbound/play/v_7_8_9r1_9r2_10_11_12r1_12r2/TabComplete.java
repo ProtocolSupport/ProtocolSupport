@@ -4,11 +4,8 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTabComplete;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class TabComplete extends MiddleTabComplete {
 
@@ -17,11 +14,11 @@ public class TabComplete extends MiddleTabComplete {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		String prefix = start == 0 ? "/" : "";
+	public void writeToClient() {
+		String prefix = start <= 1 ? "/" : "";
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_TAB_COMPLETE);
 		ArraySerializer.writeVarIntTArray(serializer, matches, (to, match) -> StringSerializer.writeVarIntUTF8String(to, prefix + match.getMatch()));
-		return RecyclableSingletonList.create(serializer);
+		codec.write(serializer);
 	}
 
 }

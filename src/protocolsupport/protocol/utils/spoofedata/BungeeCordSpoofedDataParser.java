@@ -2,31 +2,34 @@ package protocolsupport.protocol.utils.spoofedata;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.function.Function;
 
 import com.google.common.reflect.TypeToken;
 
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.utils.authlib.UUIDTypeAdapter;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.JsonUtils;
 
-public class BungeeCordSpoofedDataParser implements Function<String, SpoofedData> {
+public class BungeeCordSpoofedDataParser extends SpoofedDataParser {
 
 	@SuppressWarnings("serial")
 	protected static final Type properties_type = new TypeToken<Collection<ProfileProperty>>() {}.getType();
 
 	@Override
-	public SpoofedData apply(String data) {
+	protected SpoofedData parse(String data, boolean proxyEnabled) {
 		final String[] split = data.split("\u0000");
-		if ((split.length != 3) && (split.length != 4)) {
-			return null;
+		if (proxyEnabled) {
+			if ((split.length != 3) && (split.length != 4)) {
+				return SpoofedData.createFailed("Ip forwarding is enabled but spoofed data can't be decoded or is missing");
+			} else {
+				return SpoofedData.create(split[0],
+					split[1],
+					UUIDTypeAdapter.fromString(split[2]),
+					split.length == 4 ? JsonUtils.GSON.fromJson(split[3], properties_type) : null
+				);
+			}
+		} else {
+			return SpoofedData.createEmpty(split[0]);
 		}
-		return new SpoofedData(
-			split[0],
-			split[1],
-			UUIDTypeAdapter.fromString(split[2]),
-			split.length == 4 ? Utils.GSON.fromJson(split[3], properties_type) : null
-		);
 	}
 
 }

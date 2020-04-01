@@ -10,6 +10,7 @@ import protocolsupport.protocol.types.ChunkCoord;
 public abstract class AbstractBlockTileUpdate extends MiddleBlockTileUpdate {
 
 	protected final ChunkCache chunkCache = cache.getChunkCache();
+
 	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
 	public AbstractBlockTileUpdate(ConnectionImpl connection) {

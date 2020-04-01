@@ -4,9 +4,6 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleKeepAlive;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class KeepAlive extends ClientBoundMiddlePacket {
 
@@ -22,8 +19,8 @@ public class KeepAlive extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public RecyclableCollection<IPacketData> toData() {
-		return RecyclableSingletonList.create(MiddleKeepAlive.create(keepAliveId));
+	public void writeToClient() {
+		codec.readAndComplete(MiddleKeepAlive.create(keepAliveId));
 	}
 
 }

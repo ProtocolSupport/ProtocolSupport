@@ -15,30 +15,40 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRe
 import protocolsupport.protocol.types.particle.Particle;
 import protocolsupport.protocol.types.particle.types.ParticleBarrier;
 import protocolsupport.protocol.types.particle.types.ParticleBlock;
+import protocolsupport.protocol.types.particle.types.ParticleBubble;
 import protocolsupport.protocol.types.particle.types.ParticleBubbleColumnUp;
 import protocolsupport.protocol.types.particle.types.ParticleBubblePop;
 import protocolsupport.protocol.types.particle.types.ParticleCampfireCozySmoke;
 import protocolsupport.protocol.types.particle.types.ParticleCampfireSignalSmoke;
+import protocolsupport.protocol.types.particle.types.ParticleCloud;
 import protocolsupport.protocol.types.particle.types.ParticleComposter;
 import protocolsupport.protocol.types.particle.types.ParticleCurrentDown;
 import protocolsupport.protocol.types.particle.types.ParticleDamageIndicator;
 import protocolsupport.protocol.types.particle.types.ParticleDolphin;
 import protocolsupport.protocol.types.particle.types.ParticleDragonBreath;
+import protocolsupport.protocol.types.particle.types.ParticleDrippingHoney;
+import protocolsupport.protocol.types.particle.types.ParticleDrippingLava;
+import protocolsupport.protocol.types.particle.types.ParticleDrippingWater;
 import protocolsupport.protocol.types.particle.types.ParticleDust;
 import protocolsupport.protocol.types.particle.types.ParticleElderGuardian;
 import protocolsupport.protocol.types.particle.types.ParticleEndRod;
 import protocolsupport.protocol.types.particle.types.ParticleFallingDust;
+import protocolsupport.protocol.types.particle.types.ParticleFallingHoney;
 import protocolsupport.protocol.types.particle.types.ParticleFallingLava;
+import protocolsupport.protocol.types.particle.types.ParticleFallingNectar;
 import protocolsupport.protocol.types.particle.types.ParticleFallingWater;
 import protocolsupport.protocol.types.particle.types.ParticleFishing;
 import protocolsupport.protocol.types.particle.types.ParticleFlash;
+import protocolsupport.protocol.types.particle.types.ParticleHappyVillager;
 import protocolsupport.protocol.types.particle.types.ParticleItem;
+import protocolsupport.protocol.types.particle.types.ParticleLandingHoney;
 import protocolsupport.protocol.types.particle.types.ParticleLandingLava;
 import protocolsupport.protocol.types.particle.types.ParticleNautilus;
 import protocolsupport.protocol.types.particle.types.ParticlePoof;
 import protocolsupport.protocol.types.particle.types.ParticleRain;
 import protocolsupport.protocol.types.particle.types.ParticleSneeze;
 import protocolsupport.protocol.types.particle.types.ParticleSpit;
+import protocolsupport.protocol.types.particle.types.ParticleSplash;
 import protocolsupport.protocol.types.particle.types.ParticleSquidInk;
 import protocolsupport.protocol.types.particle.types.ParticleSweepAttack;
 import protocolsupport.protocol.types.particle.types.ParticleTotemOfUndying;
@@ -49,6 +59,7 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class ParticleRemapper {
 
+	//TODO: single -> multiple particles
 	public static final RemappingRegistry<ParticleRemappingTable> REGISTRY = new RemappingRegistry<ParticleRemappingTable>() {
 		{
 			Arrays.stream(ProtocolVersion.getAllSupported())
@@ -71,40 +82,136 @@ public class ParticleRemapper {
 				));
 			});
 
-			registerRemap(ParticleDragonBreath.class, original -> new ParticlePoof(
-				original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
-				original.getData(), original.getCount()
-			), ProtocolVersionsHelper.BEFORE_1_13);
-			registerRemap(ParticleDust.class, original -> new ParticleDust(
-				original.getRed(), original.getGreen(), original.getBlue(), 1F, 0,
-				0, 0, 0, 0
-			), ProtocolVersionsHelper.BEFORE_1_13);
+			registerRemap(
+				ParticleFallingLava.class,
+				original -> new ParticleDrippingLava(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.BEFORE_1_14
+			);
+			registerRemap(
+				ParticleLandingLava.class,
+				original -> new ParticleDrippingLava(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.BEFORE_1_14
+			);
+			registerRemap(
+				ParticleFallingWater.class,
+				original -> new ParticleDrippingWater(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.BEFORE_1_14
+			);
+			registerRemap(
+				ParticleComposter.class,
+				original -> new ParticleHappyVillager(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.BEFORE_1_14
+			);
+			registerRemap(
+				ParticleSneeze.class,
+				original -> new ParticleCloud(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.BEFORE_1_14
+			); //TODO: remap to colored dust instead
+			registerRemap(
+				ParticleDragonBreath.class,
+				original -> new ParticlePoof(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			registerRemap(
+				ParticleDust.class,
+				original -> new ParticleDust(
+					original.getRed(), original.getGreen(), original.getBlue(), 1F, 0,
+					0, 0, 0, 0
+				),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			registerRemap(
+				ParticleSquidInk.class,
+				original -> new ParticleDust(
+					0, 0, 0, 1F, 0,
+					0, 0, 0, 0
+				), ProtocolVersionsHelper.BEFORE_1_13
+			);
+			registerRemap(
+				ParticleBubblePop.class,
+				original -> new ParticleBubble(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			registerRemap(
+				ParticleCurrentDown.class,
+				original -> new ParticleBubble(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			registerRemap(
+				ParticleBubbleColumnUp.class,
+				original -> new ParticleBubble(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.BEFORE_1_13
+			);
+			registerRemap(
+				ParticleSpit.class,
+				original -> new ParticleCloud(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.BEFORE_1_11
+			);
+			registerRemap(
+				ParticleRain.class,
+				original -> new ParticleSplash(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.BEFORE_1_8
+			);
+			registerRemap(
+				ParticleFishing.class,
+				original -> new ParticleSplash(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.BEFORE_1_7
+			);
 
-			//TODO: check if some of those particles can be mapped to another particle
-			registerSkip(ParticleFallingLava.class, ProtocolVersionsHelper.BEFORE_1_14);
-			registerSkip(ParticleLandingLava.class, ProtocolVersionsHelper.BEFORE_1_14);
-			registerSkip(ParticleFallingWater.class, ProtocolVersionsHelper.BEFORE_1_14);
+			//TODO: remap honey/nectar instead of just skipping
+			registerSkip(ParticleDrippingHoney.class, ProtocolVersionsHelper.BEFORE_1_15);
+			registerSkip(ParticleFallingHoney.class, ProtocolVersionsHelper.BEFORE_1_15);
+			registerSkip(ParticleLandingHoney.class, ProtocolVersionsHelper.BEFORE_1_15);
+			registerSkip(ParticleFallingNectar.class, ProtocolVersionsHelper.BEFORE_1_15);
+
 			registerSkip(ParticleFlash.class, ProtocolVersionsHelper.BEFORE_1_14);
-			registerSkip(ParticleComposter.class, ProtocolVersionsHelper.BEFORE_1_14);
-			registerSkip(ParticleSneeze.class, ProtocolVersionsHelper.BEFORE_1_14);
 			registerSkip(ParticleCampfireCozySmoke.class, ProtocolVersionsHelper.BEFORE_1_14);
 			registerSkip(ParticleCampfireSignalSmoke.class, ProtocolVersionsHelper.BEFORE_1_14);
-			registerSkip(ParticleSquidInk.class, ProtocolVersionsHelper.BEFORE_1_13);
-			registerSkip(ParticleBubblePop.class, ProtocolVersionsHelper.BEFORE_1_13);
-			registerSkip(ParticleCurrentDown.class, ProtocolVersionsHelper.BEFORE_1_13);
-			registerSkip(ParticleBubbleColumnUp.class, ProtocolVersionsHelper.BEFORE_1_13);
 			registerSkip(ParticleNautilus.class, ProtocolVersionsHelper.BEFORE_1_13);
 			registerSkip(ParticleDolphin.class, ProtocolVersionsHelper.BEFORE_1_13);
 			registerSkip(ParticleTotemOfUndying.class, ProtocolVersionsHelper.BEFORE_1_11);
-			registerSkip(ParticleSpit.class, ProtocolVersionsHelper.BEFORE_1_11);
-			registerSkip(ParticleFallingDust.class, ProtocolVersionsHelper.BEFORE_1_10);
+			registerSkip(ParticleFallingDust.class, ProtocolVersionsHelper.BEFORE_1_10); //TODO: actually remap to colored dust, after building blockdata -> color table
 			registerSkip(ParticleEndRod.class, ProtocolVersionsHelper.BEFORE_1_9);
 			registerSkip(ParticleDamageIndicator.class, ProtocolVersionsHelper.BEFORE_1_9);
 			registerSkip(ParticleSweepAttack.class, ProtocolVersionsHelper.BEFORE_1_9);
-			registerSkip(ParticleRain.class, ProtocolVersionsHelper.BEFORE_1_8);
 			registerSkip(ParticleElderGuardian.class, ProtocolVersionsHelper.BEFORE_1_8);
 			registerSkip(ParticleBarrier.class, ProtocolVersionsHelper.BEFORE_1_8);
-			registerSkip(ParticleFishing.class, ProtocolVersionsHelper.BEFORE_1_7);
 		}
 
 		@SuppressWarnings("unchecked")

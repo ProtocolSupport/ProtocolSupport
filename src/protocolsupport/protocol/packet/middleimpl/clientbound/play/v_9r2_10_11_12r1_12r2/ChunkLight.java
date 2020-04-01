@@ -7,7 +7,6 @@ import java.util.List;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkLight;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
@@ -17,8 +16,6 @@ import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.types.TileEntity;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class ChunkLight extends AbstractChunkLight {
 
@@ -29,16 +26,16 @@ public class ChunkLight extends AbstractChunkLight {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
+	public void writeToClient() {
 		int blockMask = ((setSkyLightMask | setBlockLightMask | emptySkyLightMask | emptyBlockLightMask) >> 1) & 0xFFFF;
 		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 		List<Collection<TileEntity>> resendTiles = new ArrayList<>();
 
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
-		PositionSerializer.writeIntChunkCoord(serializer, coord);
-		serializer.writeBoolean(false); //full
-		VarNumberSerializer.writeVarInt(serializer, blockMask);
-		ArraySerializer.writeVarIntByteArray(serializer, to -> {
+		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
+		chunkdata.writeBoolean(false); //full
+		VarNumberSerializer.writeVarInt(chunkdata, blockMask);
+		ArraySerializer.writeVarIntByteArray(chunkdata, to -> {
 			ChunkWriterVariesWithLight.writeSectionsPreFlattening(
 				to, blockMask, 13,
 				blockDataRemappingTable,
@@ -46,7 +43,7 @@ public class ChunkLight extends AbstractChunkLight {
 				sectionNumber -> resendTiles.add(cachedChunk.getTiles(sectionNumber).values())
 			);
 		});
-		ArraySerializer.writeVarIntTArray(serializer, lTo -> {
+		ArraySerializer.writeVarIntTArray(chunkdata, lTo -> {
 			int count = 0;
 			for (Collection<TileEntity> sectionTiles : resendTiles) {
 				for (TileEntity tile : sectionTiles) {
@@ -56,8 +53,7 @@ public class ChunkLight extends AbstractChunkLight {
 			}
 			return count;
 		});
-
-		return RecyclableSingletonList.create(serializer);
+		codec.write(chunkdata);
 	}
 
 }

@@ -2,14 +2,13 @@ package protocolsupport.zplatform.impl.spigot.injector;
 
 import java.lang.reflect.Field;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldInitEvent;
 
-import net.minecraft.server.v1_14_R1.PlayerChunkMap;
+import net.minecraft.server.v1_15_R1.PlayerChunkMap;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.impl.spigot.entitytracker.PaperSpigotEntityTrackerEntryInjectorMap;
@@ -38,7 +37,7 @@ public class SpigotEntityTrackerInjector implements Listener {
 				}
 			}
 		} catch (Throwable e) {
-			ProtocolSupport.getInstance().getLogger().log(Level.SEVERE, e, () -> "Failed to create entity tracker entry injector");
+			ProtocolSupport.logError("Failed to create entity tracker entry injector", e);
 		}
 		this.field = lField;
 		this.injectorMapSupplier = lInjectorMapSupplier;
@@ -53,7 +52,7 @@ public class SpigotEntityTrackerInjector implements Listener {
 		try {
 			field.set(chunkmap, injectorMapSupplier.get());
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			ProtocolSupport.getInstance().getLogger().log(Level.SEVERE, e, () -> "Failed to inject entity tracker entry injector");
+			ProtocolSupport.logError("Failed to inject entity tracker entry injector", e);
 		}
 	}
 

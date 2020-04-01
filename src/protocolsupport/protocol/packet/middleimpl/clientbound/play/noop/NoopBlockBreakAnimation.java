@@ -2,9 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.noop;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockBreakAnimation;
-import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class NoopBlockBreakAnimation extends MiddleBlockBreakAnimation {
 
@@ -13,8 +10,7 @@ public class NoopBlockBreakAnimation extends MiddleBlockBreakAnimation {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
-		return RecyclableEmptyList.get();
+	public void writeToClient() {
 	}
 
 }

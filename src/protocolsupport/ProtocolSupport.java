@@ -37,7 +37,7 @@ public class ProtocolSupport extends JavaPlugin {
 		return buildinfo;
 	}
 
-	protected static final String supported_platform_version = "1.14.4";
+	protected static final String supported_platform_version = "1.15.2";
 
 
 	private boolean loaded = false;
@@ -51,7 +51,7 @@ public class ProtocolSupport extends JavaPlugin {
 			return;
 		}
 		if (!ServerPlatform.detect()) {
-			BIG_ERROR_THAT_ANYONE_CAN_SEE("Unsupported platform or version");
+			BIG_ERROR_THAT_ANYONE_CAN_SEE("Unsupported platform or version " + Bukkit.getVersion());
 			return;
 		} else {
 			getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get().getIdentifier().getName()));
@@ -81,10 +81,10 @@ public class ProtocolSupport extends JavaPlugin {
 		Logger logger = getLogger();
 		logger.severe("╔══════════════════════════════════════════════════════════════════╗");
 		logger.severe("║                               ERROR                               ");
-		logger.severe("║   " + message);
+		logger.severe("║   " + message                                                      );
 		logger.severe("║                                                                   ");
-		logger.severe("║   This version of plugin only supports");
-		logger.severe("║   server minecraft version " + supported_platform_version);
+		logger.severe("║   This version of plugin only supports                            ");
+		logger.severe("║   server minecraft version " + supported_platform_version          );
 		logger.severe("║   and following platforms:                                        ");
 		logger.severe("║   - Spigot (https://www.spigotmc.org/)                            ");
 		logger.severe("║   - Paper (https://papermc.io/)                                   ");
@@ -122,6 +122,10 @@ public class ProtocolSupport extends JavaPlugin {
 
 	public static void logWarning(String message) {
 		ProtocolSupport.getInstance().getLogger().warning(message);
+	}
+
+	public static void logError(String message, Throwable t) {
+		ProtocolSupport.getInstance().getLogger().log(Level.SEVERE, message, t);
 	}
 
 	public static class BuildInfo {

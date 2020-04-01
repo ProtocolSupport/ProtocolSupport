@@ -1,6 +1,7 @@
 package protocolsupport.protocol.typeremapper.window;
 
 import java.util.Arrays;
+import java.util.function.Supplier;
 
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.WindowType;
@@ -8,8 +9,14 @@ import protocolsupport.protocol.types.WindowType;
 public class SingleWindowIdSkipSlotRemapper extends SingleWindowIdRemapper {
 
 	protected final int skipSlot;
+
 	public SingleWindowIdSkipSlotRemapper(WindowType clientWindowType, int clientSlots, int skipSlot) {
 		super(clientWindowType, clientSlots);
+		this.skipSlot = skipSlot;
+	}
+
+	public SingleWindowIdSkipSlotRemapper(WindowType clientWindowType, int clientSlots, Supplier<Object> windowMetadataCreator, int skipSlot) {
+		super(clientWindowType, clientSlots, windowMetadataCreator);
 		this.skipSlot = skipSlot;
 	}
 

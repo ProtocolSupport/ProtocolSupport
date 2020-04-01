@@ -7,12 +7,9 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.entity.EntityRemapper;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
-
-	protected final EntityRemapper entityRemapper = connection.getEntityRemapper();
 
 	public MiddleSpawnNamed(ConnectionImpl connection) {
 		super(connection);
@@ -35,14 +32,14 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 		z = serverdata.readDouble();
 		yaw = serverdata.readByte();
 		pitch = serverdata.readByte();
-		entityRemapper.readEntityWithMetadata(entity, serverdata);
 	}
 
 	@Override
-	public boolean postFromServerRead() {
+	public void writeToClient() {
 		cache.getWatchedEntityCache().addWatchedEntity(entity);
-		entityRemapper.remap(true);
-		return true;
+		writeToClient0();
 	}
+
+	protected abstract void writeToClient0();
 
 }

@@ -5,8 +5,6 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleStartGame;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class StartGame extends MiddleStartGame {
 
@@ -15,13 +13,13 @@ public class StartGame extends MiddleStartGame {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_START_GAME);
-		serializer.writeInt(player.getId());
-		StringSerializer.writeShortUTF16BEString(serializer, ""); //unused
-		serializer.writeLong(0); //seed
-		serializer.writeByte(ChangeDimension.remapDimension(dimension).getId());
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData startgame = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_START_GAME);
+		startgame.writeInt(player.getId());
+		StringSerializer.writeShortUTF16BEString(startgame, ""); //unused
+		startgame.writeLong(0); //seed
+		startgame.writeByte(ChangeDimension.remapDimension(dimension).getId());
+		codec.write(startgame);
 	}
 
 }

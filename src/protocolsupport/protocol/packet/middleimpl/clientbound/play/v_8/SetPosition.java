@@ -2,45 +2,34 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPosition;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractSetPosition;
 
-public class SetPosition extends MiddleSetPosition {
+public class SetPosition extends AbstractSetPosition {
 
 	public SetPosition(ConnectionImpl connection) {
 		super(connection);
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_POSITION);
+	public void writeToClient() {
+		ClientBoundPacketData setposition = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_POSITION);
 		if (teleportConfirmId == 0) {
-			serializer.writeDouble(xOrig);
-			serializer.writeDouble(yOrig);
-			serializer.writeDouble(zOrig);
-			serializer.writeFloat(yawOrig);
-			serializer.writeFloat(pitchOrig);
-			serializer.writeByte(flags);
+			setposition.writeDouble(xOrig);
+			setposition.writeDouble(yOrig);
+			setposition.writeDouble(zOrig);
+			setposition.writeFloat(yawOrig);
+			setposition.writeFloat(pitchOrig);
+			setposition.writeByte(flags);
 		} else {
-			serializer.writeDouble(x);
-			serializer.writeDouble(y);
-			serializer.writeDouble(z);
-			serializer.writeFloat(yaw);
-			serializer.writeFloat(pitch);
-			serializer.writeByte(0);
+			setposition.writeDouble(x);
+			setposition.writeDouble(y);
+			setposition.writeDouble(z);
+			setposition.writeFloat(yaw);
+			setposition.writeFloat(pitch);
+			setposition.writeByte(0);
 		}
-		return RecyclableSingletonList.create(serializer);
-	}
-
-	@Override
-	public boolean postFromServerRead() {
-		if (teleportConfirmId != 0) {
-			cache.getMovementCache().setTeleportLocation(x, y, z, teleportConfirmId);
-		}
-		return true;
+		codec.write(setposition);
 	}
 
 }

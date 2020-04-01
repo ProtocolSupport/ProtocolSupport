@@ -2,12 +2,11 @@ package protocolsupport.zplatform.impl.spigot.entitytracker;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.util.function.BiFunction;
 
-import net.minecraft.server.v1_14_R1.Entity;
-import net.minecraft.server.v1_14_R1.EntityTrackerEntry;
-import net.minecraft.server.v1_14_R1.EntityTypes;
-import net.minecraft.server.v1_14_R1.PlayerChunkMap.EntityTracker;
-import net.minecraft.server.v1_14_R1.WorldServer;
+import net.minecraft.server.v1_15_R1.Entity;
+import net.minecraft.server.v1_15_R1.EntityTrackerEntry;
+import net.minecraft.server.v1_15_R1.PlayerChunkMap.EntityTracker;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupportbuildprocessor.Preload;
 
@@ -33,17 +32,8 @@ public class SpigotEntityTrackerEntryInjector {
 		}
 	}
 
-	public static void injectEntry(EntityTracker tracker) throws Throwable {
-		Entity entity = (Entity) getEntityField.invokeExact(tracker);
-		EntityTypes<?> entitytypes = entity.getEntityType();
-		EntityTrackerEntry entry = new SpigotEntityTrackerEntry(
-			(WorldServer) entity.world, entity,
-			entitytypes.getUpdateInterval(),
-			entitytypes.isDeltaTracking(),
-			tracker::broadcast,
-			tracker.trackedPlayers
-		);
-		setTrackerEntryField.invokeExact(tracker, entry);
+	public static void injectEntry(EntityTracker tracker, BiFunction<EntityTracker, Entity, EntityTrackerEntry> newEntryFunc) throws Throwable {
+		setTrackerEntryField.invokeExact(tracker, newEntryFunc.apply(tracker, (Entity) getEntityField.invokeExact(tracker)));
 	}
 
 }

@@ -4,13 +4,10 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleUpdateMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class UpdateMap extends MiddleUpdateMap {
 
@@ -19,27 +16,27 @@ public class UpdateMap extends MiddleUpdateMap {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
-		VarNumberSerializer.writeVarInt(serializer, id);
-		serializer.writeByte(scale);
-		ArraySerializer.writeVarIntTArray(serializer, icons, (to, icon) -> {
+	public void writeToClient() {
+		ClientBoundPacketData updatemap = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
+		VarNumberSerializer.writeVarInt(updatemap, id);
+		updatemap.writeByte(scale);
+		ArraySerializer.writeVarIntTArray(updatemap, icons, (to, icon) -> {
 			to.writeByte(((icon.type <= 9 ? icon.type : 0) << 4) | icon.direction);
 			to.writeByte(icon.x);
 			to.writeByte(icon.z);
 		});
-		serializer.writeByte(columns);
+		updatemap.writeByte(columns);
 		if (columns > 0) {
 			ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(version);
 			for (int i = 0; i < colors.length; i++) {
 				colors[i] = (byte) colorRemapper.getRemap(colors[i] & 0xFF);
 			}
-			serializer.writeByte(rows);
-			serializer.writeByte(xstart);
-			serializer.writeByte(zstart);
-			ArraySerializer.writeVarIntByteArray(serializer, colors);
+			updatemap.writeByte(rows);
+			updatemap.writeByte(xstart);
+			updatemap.writeByte(zstart);
+			ArraySerializer.writeVarIntByteArray(updatemap, colors);
 		}
-		return RecyclableSingletonList.create(serializer);
+		codec.write(updatemap);
 	}
 
 }

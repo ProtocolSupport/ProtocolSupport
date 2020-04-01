@@ -26,6 +26,16 @@ public abstract class NetworkManagerWrapper {
 
 	public abstract Object unwrap();
 
+	protected InetSocketAddress virtualHost;
+
+	public InetSocketAddress getVirtualHost() {
+		return virtualHost;
+	}
+
+	public void setVirtualHost(InetSocketAddress virtualHost) {
+		this.virtualHost = virtualHost;
+	}
+
 	public abstract InetSocketAddress getAddress();
 
 	public InetSocketAddress getRawAddress() {

@@ -2,9 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.noop;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleLookAt;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class NoopLookAt extends MiddleLookAt {
 
@@ -13,8 +10,7 @@ public class NoopLookAt extends MiddleLookAt {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		return RecyclableEmptyList.get();
+	public void writeToClient() {
 	}
 
 }

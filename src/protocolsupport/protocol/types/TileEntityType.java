@@ -24,6 +24,7 @@ public enum TileEntityType {
 	BED(11, "bed"),
 	JIGSAW(12, "jigsaw"),
 	CAMPFIRE(13, "campfire"),
+	BEEHIVE(14, "beehive"),
 	FURNACE(-1, "furnace"),
 	CHEST(-1, "chest"),
 	TRAPPED_CHEST(-1, "trapped_chest"),

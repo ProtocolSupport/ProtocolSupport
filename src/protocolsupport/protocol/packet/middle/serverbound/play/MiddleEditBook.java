@@ -3,14 +3,11 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.UsedHand;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleEditBook extends ServerBoundMiddlePacket {
 
@@ -23,16 +20,16 @@ public abstract class MiddleEditBook extends ServerBoundMiddlePacket {
 	protected UsedHand hand;
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toNative() {
-		return RecyclableSingletonList.create(create(book, signing, hand));
+	public void writeToServer() {
+		codec.read(create(book, signing, hand));
 	}
 
 	public static ServerBoundPacketData create(NetworkItemStack book, boolean signing, UsedHand hand) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_EDIT_BOOK);
-		ItemStackSerializer.writeItemStack(creator, book);
-		creator.writeBoolean(signing);
-		MiscSerializer.writeVarIntEnum(creator, hand);
-		return creator;
+		ServerBoundPacketData editbook = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_EDIT_BOOK);
+		ItemStackSerializer.writeItemStack(editbook, book);
+		editbook.writeBoolean(signing);
+		MiscSerializer.writeVarIntEnum(editbook, hand);
+		return editbook;
 	}
 
 }

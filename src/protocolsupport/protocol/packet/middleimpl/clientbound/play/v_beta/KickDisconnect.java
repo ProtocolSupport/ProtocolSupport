@@ -6,8 +6,6 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleKickDisconn
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class KickDisconnect extends MiddleKickDisconnect {
 
@@ -16,10 +14,10 @@ public class KickDisconnect extends MiddleKickDisconnect {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_KICK_DISCONNECT);
-		StringSerializer.writeString(serializer, version, LegacyChat.clampLegacyText(message.toLegacyText(cache.getAttributesCache().getLocale()), 100));
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData kickdisconnect = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_KICK_DISCONNECT);
+		StringSerializer.writeString(kickdisconnect, version, LegacyChat.clampLegacyText(message.toLegacyText(cache.getAttributesCache().getLocale()), 100));
+		codec.write(kickdisconnect);
 	}
 
 }

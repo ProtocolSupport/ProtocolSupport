@@ -5,7 +5,6 @@ import java.util.Map;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunk;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -13,11 +12,10 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
+import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
-import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class Chunk extends AbstractChunk {
 
@@ -28,9 +26,7 @@ public class Chunk extends AbstractChunk {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-
+	public void writeToClient() {
 		ClientBoundPacketData chunksingle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunksingle, coord);
 		chunksingle.writeBoolean(full);
@@ -44,20 +40,19 @@ public class Chunk extends AbstractChunk {
 				sectionNumber -> {}
 			);
 			if (full) {
-				for (int i = 0; i < biomeData.length; i++) {
-					to.writeInt(biomeData[i]);
+				int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(biomes);
+				for (int biomeId : legacyBiomeData) {
+					to.writeByte(biomeId);
 				}
 			}
 		});
-		packets.add(chunksingle);
+		codec.write(chunksingle);
 
 		for (Map<Position, TileEntity> sectionTiles : cachedChunk.getTiles()) {
 			for (TileEntity tile : sectionTiles.values()) {
-				packets.add(BlockTileUpdate.create(version, tile));
+				codec.write(BlockTileUpdate.create(version, tile));
 			}
 		}
-
-		return packets;
 	}
 
 }

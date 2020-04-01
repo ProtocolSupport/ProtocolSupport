@@ -20,13 +20,14 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.KickDi
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.Look;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.Move;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.MoveLook;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.UpdateSign;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_beta.UseEntity;
 import protocolsupport.protocol.pipeline.version.util.decoder.AbstractLegacyPacketDecoder;
 
 public class PacketDecoder extends AbstractLegacyPacketDecoder {
 
 	public PacketDecoder(ConnectionImpl connection) {
-		super(connection, PacketCodec.instance);
+		super(connection);
 	}
 
 	{
@@ -48,7 +49,7 @@ public class PacketDecoder extends AbstractLegacyPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x65, InventoryClose::new);
 		registry.register(NetworkState.PLAY, 0x66, InventoryClick::new);
 		registry.register(NetworkState.PLAY, 0x6A, InventoryTransaction::new);
-//		registry.register(NetworkState.PLAY, 0x82, UpdateSign::new);
+		registry.register(NetworkState.PLAY, 0x82, UpdateSign::new);
 		registry.register(NetworkState.PLAY, 0xFF, KickDisconnect::new);
 	}
 

@@ -1,5 +1,7 @@
 package protocolsupport.api.events;
 
+import java.net.InetSocketAddress;
+
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 
@@ -10,21 +12,20 @@ import protocolsupport.api.Connection;
  */
 public class PlayerLoginStartEvent extends PlayerAbstractLoginEvent {
 
-	protected final String hostname;
 	protected boolean onlinemode;
 
-	public PlayerLoginStartEvent(Connection connection, String hostname) {
+	public PlayerLoginStartEvent(Connection connection) {
 		super(connection);
 		this.onlinemode = Bukkit.getOnlineMode();
-		this.hostname = hostname;
 	}
 
 	/**
-	 * Returns hostname which player used when connecting to server
+	 * Returns hostname which player used when connecting to server<br>
+	 * Is a shortcut to {@link Connection#getVirtualHost()}.{@link InetSocketAddress#toString() toString()}
 	 * @return hostname which player used when connecting to server
 	 */
 	public String getHostname() {
-		return hostname;
+		return connection.getVirtualHost().toString();
 	}
 
 	/**

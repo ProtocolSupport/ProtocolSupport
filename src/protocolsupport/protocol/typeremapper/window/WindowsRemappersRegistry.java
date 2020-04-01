@@ -7,6 +7,8 @@ import java.util.Map;
 import org.apache.commons.lang3.tuple.Pair;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.storage.netcache.window.WindowEnchantmentCache;
+import protocolsupport.protocol.storage.netcache.window.WindowFurnaceCache;
 import protocolsupport.protocol.typeremapper.window.WindowsRemapper.NonSlotCountBasedRemapperSelectFunction;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.WindowType;
@@ -51,14 +53,20 @@ public class WindowsRemappersRegistry {
 		);
 		register(remapper__11__13_2, ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 
-		WindowsRemapper remapper__9__10_2 = new WindowsRemapper(
+		WindowsRemapper remapper__10 = new WindowsRemapper(
 			remapper__11__13_2,
 			Pair.of(WindowType.SHULKER_BOX, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.GENERIC_9X3, 27)))
 		);
-		register(remapper__9__10_2, ProtocolVersionsHelper.RANGE__1_9__1_10);
+		register(remapper__10, ProtocolVersion.MINECRAFT_1_10);
+
+		WindowsRemapper remapper__9 = new WindowsRemapper(
+			remapper__10,
+			Pair.of(WindowType.ENCHANTMENT, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.ENCHANTMENT, 0, WindowEnchantmentCache::new)))
+		);
+		register(remapper__9, ProtocolVersionsHelper.ALL_1_9);
 
 		WindowsRemapper remapper__8 = new WindowsRemapper(
-			remapper__9__10_2,
+			remapper__9,
 			Pair.of(WindowType.PLAYER, new NonSlotCountBasedRemapperSelectFunction(new SingleWindowIdRemapper(WindowType.PLAYER, 0) {
 				@Override
 				public int toClientSlot(int slot) {
@@ -83,7 +91,8 @@ public class WindowsRemappersRegistry {
 
 		WindowsRemapper remapper__pre_8 = new WindowsRemapper(
 			remapper__8,
-			Pair.of(WindowType.ENCHANTMENT, new NonSlotCountBasedRemapperSelectFunction(new SingleWindowIdSkipSlotRemapper(WindowType.ENCHANTMENT, 0, 1)))
+			Pair.of(WindowType.ENCHANTMENT, new NonSlotCountBasedRemapperSelectFunction(new SingleWindowIdSkipSlotRemapper(WindowType.ENCHANTMENT, 0, 1))),
+			Pair.of(WindowType.FURNACE, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.FURNACE, 3, WindowFurnaceCache::new)))
 		);
 		register(remapper__pre_8, ProtocolVersionsHelper.BEFORE_1_8);
 	}

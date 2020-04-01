@@ -5,14 +5,16 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.EntityType;
 
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class MaterialAPI {
 
 	/**
-	 * Retunrs all possible block data states for this material
+	 * Returns all possible block data states for this material
 	 * @param material block material
 	 * @return all possible block data states
 	 */
@@ -96,6 +98,52 @@ public class MaterialAPI {
 	 */
 	public static Material getItemByNetworkId(int id) {
 		return ItemMaterialLookup.getByRuntimeId(id);
+	}
+
+	/**
+	 * Returns living entity type network id
+	 * @param type entity type
+	 * @return id
+	 */
+	public static int getEntityLivingTypeNetworkId(EntityType type) {
+		return NetworkEntityType.getByBukkitType(type).getNetworkTypeId();
+	}
+
+	/**
+	 * Returns object entity type network id
+	 * @param type entity type
+	 * @return id
+	 */
+	public static int getEntityObjectTypeNetworkId(EntityType type) {
+		return NetworkEntityType.getByBukkitType(type).getNetworkTypeId();
+	}
+
+	/**
+	 * Returns living entity type by network id <br>
+	 * Returns null if no entity type exists for this id
+	 * @param id entity network id
+	 * @return entity type
+	 */
+	public static EntityType getEntityLivingTypeByNetworkId(int id) {
+		try {
+			return NetworkEntityType.getMobByNetworkTypeId(id).getBukkitType();
+		} catch (IllegalArgumentException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns object entity type by network id <br>
+	 * Returns null if no entity type exists for this id
+	 * @param id entity network id
+	 * @return entity type
+	 */
+	public static EntityType getEntityObjectTypeByNetworkId(int id) {
+		try {
+			return NetworkEntityType.getObjectByNetworkTypeId(id).getBukkitType();
+		} catch (IllegalArgumentException e) {
+			return null;
+		}
 	}
 
 }

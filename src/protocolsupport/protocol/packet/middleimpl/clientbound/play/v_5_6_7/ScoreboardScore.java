@@ -4,11 +4,8 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardScore;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class ScoreboardScore extends MiddleScoreboardScore {
 
@@ -17,15 +14,15 @@ public class ScoreboardScore extends MiddleScoreboardScore {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_SCORE);
-		StringSerializer.writeString(serializer, version, Utils.clampString(name, 16));
-		serializer.writeByte(mode);
+	public void writeToClient() {
+		ClientBoundPacketData scoreboardscore = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_SCORE);
+		StringSerializer.writeString(scoreboardscore, version, Utils.clampString(name, 16));
+		scoreboardscore.writeByte(mode);
 		if (mode != 1) {
-			StringSerializer.writeString(serializer, version, objectiveName);
-			serializer.writeInt(value);
+			StringSerializer.writeString(scoreboardscore, version, objectiveName);
+			scoreboardscore.writeInt(value);
 		}
-		return RecyclableSingletonList.create(serializer);
+		codec.write(scoreboardscore);
 	}
 
 }

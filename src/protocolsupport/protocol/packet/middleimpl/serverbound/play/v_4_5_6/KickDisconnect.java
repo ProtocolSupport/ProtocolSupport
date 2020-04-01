@@ -3,10 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class KickDisconnect extends ServerBoundMiddlePacket {
 
@@ -20,8 +17,7 @@ public class KickDisconnect extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toNative() {
-		return RecyclableEmptyList.get();
+	public void writeToServer() {
 	}
 
 }

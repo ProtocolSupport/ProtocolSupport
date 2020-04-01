@@ -7,8 +7,6 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPainting;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class SpawnPainting extends MiddleSpawnPainting {
 
@@ -17,7 +15,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public void writeToClient() {
 		switch (direction) {
 			case 0: {
 				position.modifyZ(-1);
@@ -38,12 +36,12 @@ public class SpawnPainting extends MiddleSpawnPainting {
 				break;
 			}
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_PAINTING);
-		serializer.writeInt(entity.getId());
-		StringSerializer.writeString(serializer, version, LegacyPainting.getName(type));
-		PositionSerializer.writeLegacyPositionI(serializer, position);
-		serializer.writeInt(direction);
-		return RecyclableSingletonList.create(serializer);
+		ClientBoundPacketData spawnpainting = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_PAINTING);
+		spawnpainting.writeInt(entity.getId());
+		StringSerializer.writeString(spawnpainting, version, LegacyPainting.getName(type));
+		PositionSerializer.writeLegacyPositionI(spawnpainting, position);
+		spawnpainting.writeInt(direction);
+		codec.write(spawnpainting);
 	}
 
 }

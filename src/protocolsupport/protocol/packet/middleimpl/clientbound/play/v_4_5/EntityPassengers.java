@@ -5,11 +5,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityPassengers;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityPassengers extends MiddleEntityPassengers {
 
@@ -23,35 +18,33 @@ public class EntityPassengers extends MiddleEntityPassengers {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
+	public void writeToClient() {
 		if (cache.getWatchedEntityCache().getWatchedEntity(vehicleId) == null) {
-			return RecyclableEmptyList.get();
+			return;
 		}
+
 		if (passengersIds.length == 0) {
 			int passengerId = vehiclePassenger.remove(vehicleId);
 			if (passengerId != vehiclePassenger.defaultReturnValue()) {
-				return RecyclableSingletonList.create(create(passengerId, -1));
+				codec.write(create(passengerId, -1));
 			}
 		} else {
 			int newPassengerId = passengersIds[0];
 			int oldPassengerId = vehiclePassenger.put(vehicleId, newPassengerId);
 			if (oldPassengerId == vehiclePassenger.defaultReturnValue()) {
-				return RecyclableSingletonList.create(create(newPassengerId, vehicleId));
+				codec.write(create(newPassengerId, vehicleId));
 			} else if (newPassengerId != oldPassengerId) {
-				RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-				packets.add(create(oldPassengerId, -1));
-				packets.add(create(newPassengerId, vehicleId));
-				return packets;
+				codec.write(create(oldPassengerId, -1));
+				codec.write(create(newPassengerId, vehicleId));
 			}
 		}
-		return RecyclableEmptyList.get();
 	}
 
 	protected static ClientBoundPacketData create(int passengerId, int vehicleId) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_LEASH);
-		serializer.writeInt(passengerId);
-		serializer.writeInt(vehicleId);
-		return serializer;
+		ClientBoundPacketData entitypassengers = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_LEASH);
+		entitypassengers.writeInt(passengerId);
+		entitypassengers.writeInt(vehicleId);
+		return entitypassengers;
 	}
 
 }

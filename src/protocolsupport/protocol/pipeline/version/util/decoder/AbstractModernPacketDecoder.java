@@ -4,12 +4,11 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.pipeline.IPacketCodec;
 
 public abstract class AbstractModernPacketDecoder extends AbstractPacketDecoder {
 
-	public AbstractModernPacketDecoder(ConnectionImpl connection, IPacketCodec codec) {
-		super(connection, codec);
+	public AbstractModernPacketDecoder(ConnectionImpl connection) {
+		super(connection);
 	}
 
 	@Override
@@ -18,11 +17,12 @@ public abstract class AbstractModernPacketDecoder extends AbstractPacketDecoder 
 			return;
 		}
 		try {
-			decodeAndTransform(ctx, input);
+			decodeAndTransform(input);
 			if (input.isReadable()) {
-				throw new DecoderException("Did not read all data from packet, bytes left: " + input.readableBytes());
+				throw new DecoderException("Data not read fully, bytes left " + input.readableBytes());
 			}
 		} catch (Exception e) {
+			input.readerIndex(0);
 			throwFailedTransformException(e, input);
 		}
 	}

@@ -6,12 +6,9 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTitle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class Title extends MiddleTitle {
 
@@ -20,20 +17,20 @@ public class Title extends MiddleTitle {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_TITLE);
+	public void writeToClient() {
+		ClientBoundPacketData title = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_TITLE);
 		int actionId = action.ordinal();
-		VarNumberSerializer.writeVarInt(serializer, actionId > 2 ? actionId - 1 : actionId);
+		VarNumberSerializer.writeVarInt(title, actionId > 2 ? actionId - 1 : actionId);
 		switch (action) {
 			case SET_TITLE:
 			case SET_SUBTITLE: {
-				StringSerializer.writeVarIntUTF8String(serializer, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), message)));
+				StringSerializer.writeVarIntUTF8String(title, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), message)));
 				break;
 			}
 			case SET_TIMES: {
-				serializer.writeInt(fadeIn);
-				serializer.writeInt(stay);
-				serializer.writeInt(fadeOut);
+				title.writeInt(fadeIn);
+				title.writeInt(stay);
+				title.writeInt(fadeOut);
 				break;
 			}
 			case HIDE:
@@ -44,7 +41,7 @@ public class Title extends MiddleTitle {
 				throw new EncoderException("Should not reach here");
 			}
 		}
-		return RecyclableSingletonList.create(serializer);
+		codec.write(title);
 	}
 
 }

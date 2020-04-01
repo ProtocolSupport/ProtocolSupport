@@ -3,13 +3,10 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookups;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleRecipeBookData extends ServerBoundMiddlePacket {
 
@@ -29,27 +26,27 @@ public abstract class MiddleRecipeBookData extends ServerBoundMiddlePacket {
 	protected boolean smokingRecipeBookFiltering;
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toNative() {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_RECIPE_BOOK_DATA);
-		MiscSerializer.writeVarIntEnum(creator, type);
+	public void writeToServer() {
+		ServerBoundPacketData recipebookdata = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_RECIPE_BOOK_DATA);
+		MiscSerializer.writeVarIntEnum(recipebookdata, type);
 		switch (type) {
 			case DISPLAYED_RECIPE: {
-				StringSerializer.writeVarIntUTF8String(creator, recipeId);
+				StringSerializer.writeVarIntUTF8String(recipebookdata, recipeId);
 				break;
 			}
 			case RECIPE_BOOK_STATUS: {
-				creator.writeBoolean(craftRecipeBookOpen);
-				creator.writeBoolean(craftRecipeBookFiltering);
-				creator.writeBoolean(smeltingRecipeBookOpen);
-				creator.writeBoolean(smeltingRecipeBookFiltering);
-				creator.writeBoolean(blastingRecipeBookOpen);
-				creator.writeBoolean(blastingRecipeBookFiltering);
-				creator.writeBoolean(smokingRecipeBookOpen);
-				creator.writeBoolean(smokingRecipeBookFiltering);
+				recipebookdata.writeBoolean(craftRecipeBookOpen);
+				recipebookdata.writeBoolean(craftRecipeBookFiltering);
+				recipebookdata.writeBoolean(smeltingRecipeBookOpen);
+				recipebookdata.writeBoolean(smeltingRecipeBookFiltering);
+				recipebookdata.writeBoolean(blastingRecipeBookOpen);
+				recipebookdata.writeBoolean(blastingRecipeBookFiltering);
+				recipebookdata.writeBoolean(smokingRecipeBookOpen);
+				recipebookdata.writeBoolean(smokingRecipeBookFiltering);
 				break;
 			}
 		}
-		return RecyclableSingletonList.create(creator);
+		codec.read(recipebookdata);
 	}
 
 	public static enum Type {

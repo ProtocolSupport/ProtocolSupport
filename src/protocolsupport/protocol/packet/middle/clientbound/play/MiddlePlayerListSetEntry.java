@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.utils.Any;
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
@@ -20,23 +19,24 @@ import protocolsupport.utils.Utils;
 
 public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 
+	protected final PlayerListCache playerlistCache = cache.getPlayerListCache();
+
 	public MiddlePlayerListSetEntry(ConnectionImpl connection) {
 		super(connection);
 	}
 
 	protected Action action;
-	protected final HashMap<UUID, Any<PlayerListEntry, PlayerListEntry>> infos = new HashMap<>();
+	protected final HashMap<UUID, PlayerListOldNewEntry> infos = new HashMap<>();
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
 		infos.clear();
-		PlayerListCache plcache = cache.getPlayerListCache();
 		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		Utils.repeat(VarNumberSerializer.readVarInt(serverdata), () -> {
 			UUID uuid = MiscSerializer.readUUID(serverdata);
 			switch (action) {
 				case ADD: {
-					PlayerListEntry oldEntry = plcache.getEntry(uuid);
+					PlayerListEntry oldEntry = playerlistCache.getEntry(uuid);
 					if (oldEntry != null) {
 						oldEntry = oldEntry.clone();
 					}
@@ -58,27 +58,27 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 						displayNameJson = StringSerializer.readVarIntUTF8String(serverdata);
 					}
 					PlayerListEntry currentEntry = new PlayerListEntry(username, ping, gamemode, displayNameJson, properties);
-					plcache.addEntry(uuid, currentEntry);
-					infos.put(uuid, new Any<>(oldEntry, currentEntry));
+					playerlistCache.addEntry(uuid, currentEntry);
+					infos.put(uuid, new PlayerListOldNewEntry(oldEntry, currentEntry));
 					break;
 				}
 				case GAMEMODE: {
 					GameMode gamemode = GameMode.getById(VarNumberSerializer.readVarInt(serverdata));
-					PlayerListEntry currentEntry = plcache.getEntry(uuid);
+					PlayerListEntry currentEntry = playerlistCache.getEntry(uuid);
 					if (currentEntry != null) {
 						PlayerListEntry oldEntry = currentEntry.clone();
 						currentEntry.setGameMode(gamemode);
-						infos.put(uuid, new Any<>(oldEntry, currentEntry));
+						infos.put(uuid, new PlayerListOldNewEntry(oldEntry, currentEntry));
 					}
 					break;
 				}
 				case PING: {
 					int ping = VarNumberSerializer.readVarInt(serverdata);
-					PlayerListEntry currentEntry = plcache.getEntry(uuid);
+					PlayerListEntry currentEntry = playerlistCache.getEntry(uuid);
 					if (currentEntry != null) {
 						PlayerListEntry oldEntry = currentEntry.clone();
 						currentEntry.setPing(ping);
-						infos.put(uuid, new Any<>(oldEntry, currentEntry));
+						infos.put(uuid, new PlayerListOldNewEntry(oldEntry, currentEntry));
 					}
 					break;
 				}
@@ -87,18 +87,18 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 					if (serverdata.readBoolean()) {
 						displayNameJson = StringSerializer.readVarIntUTF8String(serverdata);
 					}
-					PlayerListEntry currentEntry = plcache.getEntry(uuid);
+					PlayerListEntry currentEntry = playerlistCache.getEntry(uuid);
 					if (currentEntry != null) {
 						PlayerListEntry oldEntry = currentEntry.clone();
 						currentEntry.setDisplayNameJson(displayNameJson);
-						infos.put(uuid, new Any<>(oldEntry, currentEntry));
+						infos.put(uuid, new PlayerListOldNewEntry(oldEntry, currentEntry));
 					}
 					break;
 				}
 				case REMOVE: {
-					PlayerListEntry oldEntry = plcache.removeEntry(uuid);
+					PlayerListEntry oldEntry = playerlistCache.removeEntry(uuid);
 					if (oldEntry != null) {
-						infos.put(uuid, new Any<>(oldEntry, null));
+						infos.put(uuid, new PlayerListOldNewEntry(oldEntry, null));
 					}
 					break;
 				}
@@ -109,6 +109,26 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 	@Override
 	public boolean postFromServerRead() {
 		return !infos.isEmpty();
+	}
+
+	protected static class PlayerListOldNewEntry {
+
+		protected final PlayerListEntry oldEntry;
+		protected final PlayerListEntry newEntry;
+
+		public PlayerListOldNewEntry(PlayerListEntry oldEntry, PlayerListEntry newEntry) {
+			this.oldEntry = oldEntry;
+			this.newEntry = newEntry;
+		}
+
+		public PlayerListEntry getOldEntry() {
+			return oldEntry;
+		}
+
+		public PlayerListEntry getNewEntry() {
+			return newEntry;
+		}
+
 	}
 
 	protected static enum Action {

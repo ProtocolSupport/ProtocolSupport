@@ -8,8 +8,6 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChat;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class Chat extends MiddleChat {
 
@@ -20,11 +18,9 @@ public class Chat extends MiddleChat {
 	protected static final int maxlength = 119;
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public void writeToClient() {
 		String legacyMessage = message.toLegacyText(cache.getAttributesCache().getLocale());
 		int legacyMessageLength = legacyMessage.length();
-
-		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
 
 		int splits = Utils.getSplitCount(legacyMessageLength, maxlength);
 		String lastColors = null;
@@ -39,12 +35,10 @@ public class Chat extends MiddleChat {
 				substring = lastColors + substring;
 			}
 			lastColors = ChatColor.getLastColors(substring);
-			ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHAT);
-			StringSerializer.writeShortUTF16BEString(serializer, substring);
-			packets.add(serializer);
+			ClientBoundPacketData chat = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHAT);
+			StringSerializer.writeShortUTF16BEString(chat, substring);
+			codec.write(chat);
 		}
-
-		return packets;
 	}
 
 }

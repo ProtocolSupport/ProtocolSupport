@@ -2,9 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.noop;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntitySound;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class NoopEntitySound extends MiddleEntitySound {
 
@@ -13,8 +10,7 @@ public class NoopEntitySound extends MiddleEntitySound {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		return RecyclableEmptyList.get();
+	public void writeToClient() {
 	}
 
 }

@@ -5,12 +5,9 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.basic.SoundRemapper;
 import protocolsupport.utils.Utils;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class WorldCustomSound extends MiddleWorldCustomSound {
 
@@ -19,19 +16,19 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND);
+	public void writeToClient() {
+		ClientBoundPacketData worldcustomsound = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND);
 		id = SoundRemapper.getSoundName(version, id);
 		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)) {
 			id = Utils.clampString(id, 32);
 		}
-		StringSerializer.writeString(serializer, version, id);
-		serializer.writeInt(x);
-		serializer.writeInt(y);
-		serializer.writeInt(z);
-		serializer.writeFloat(volume);
-		serializer.writeByte((int) (pitch * 63.5));
-		return RecyclableSingletonList.create(serializer);
+		StringSerializer.writeString(worldcustomsound, version, id);
+		worldcustomsound.writeInt(x);
+		worldcustomsound.writeInt(y);
+		worldcustomsound.writeInt(z);
+		worldcustomsound.writeFloat(volume);
+		worldcustomsound.writeByte((int) (pitch * 63.5));
+		codec.write(worldcustomsound);
 	}
 
 }

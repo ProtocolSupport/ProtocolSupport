@@ -2,9 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.noop;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleUnlockRecipes;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
 
 public class NoopUnlockRecipes extends MiddleUnlockRecipes {
 
@@ -13,13 +10,7 @@ public class NoopUnlockRecipes extends MiddleUnlockRecipes {
 	}
 
 	@Override
-	public boolean postFromServerRead() {
-		return false;
-	}
-
-	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
-		return RecyclableEmptyList.get();
+	public void writeToClient() {
 	}
 
 }

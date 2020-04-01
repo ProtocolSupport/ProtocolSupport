@@ -19,7 +19,7 @@ public class MinecraftSessionService {
 
 	private static final String hasJoinedUrl = "https://sessionserver.mojang.com/session/minecraft/hasJoined";
 
-	public static void checkHasJoinedServerAndUpdateProfile(GameProfile profile, String hash, String ip) throws AuthenticationUnavailableException, MalformedURLException {
+	public static void checkHasJoinedServerAndUpdateProfile(LoginProfile profile, String hash, String ip) throws AuthenticationUnavailableException, MalformedURLException {
 		final URL url = new URL(hasJoinedUrl + "?username=" + profile.getOriginalName() + "&serverId=" + hash + (ip != null ? "&ip=" + ip : ""));
 		try {
 			JsonObject root = new JsonParser().parse(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8)).getAsJsonObject();

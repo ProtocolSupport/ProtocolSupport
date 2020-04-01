@@ -5,9 +5,6 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.types.Environment;
-import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class ChangeDimension extends MiddleChangeDimension {
 
@@ -24,15 +21,11 @@ public class ChangeDimension extends MiddleChangeDimension {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public void writeToClient() {
 		if (!hadSkyLightInOldDimension && (dimension != Environment.OVERWORLD)) {
-			RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-			packets.add(create(Environment.OVERWORLD));
-			packets.add(create(remapDimension(dimension)));
-			return packets;
-		} else {
-			return RecyclableSingletonList.create(create(dimension));
+			codec.write(create(Environment.OVERWORLD));
 		}
+		codec.write(create(remapDimension(dimension)));
 	}
 
 	public static Environment remapDimension(Environment dimension) {

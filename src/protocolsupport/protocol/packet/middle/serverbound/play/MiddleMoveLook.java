@@ -3,10 +3,7 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public abstract class MiddleMoveLook extends ServerBoundMiddlePacket {
 
@@ -22,18 +19,18 @@ public abstract class MiddleMoveLook extends ServerBoundMiddlePacket {
 	protected boolean onGround;
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toNative() {
-		return RecyclableSingletonList.create(create(x, y, z, yaw, pitch, onGround));
+	public void writeToServer() {
+		codec.read(create(x, y, z, yaw, pitch, onGround));
 	}
 
 	public static ServerBoundPacketData create(double x, double y, double z, float yaw, float pitch, boolean onGround) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_POSITION_LOOK);
-		creator.writeDouble(x);
-		creator.writeDouble(y);
-		creator.writeDouble(z);
-		creator.writeFloat(yaw);
-		creator.writeFloat(pitch);
-		creator.writeBoolean(onGround);
-		return creator;
+		ServerBoundPacketData movelook = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_POSITION_LOOK);
+		movelook.writeDouble(x);
+		movelook.writeDouble(y);
+		movelook.writeDouble(z);
+		movelook.writeFloat(yaw);
+		movelook.writeFloat(pitch);
+		movelook.writeBoolean(onGround);
+		return movelook;
 	}
 }

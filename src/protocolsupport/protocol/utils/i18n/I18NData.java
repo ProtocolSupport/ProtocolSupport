@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 import com.google.gson.JsonObject;
 
+import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
-import protocolsupport.utils.Utils;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -45,7 +45,7 @@ public class I18NData {
 	public static I18N loadAndRegisterI18N(String locale, BufferedReader stream) {
 		I18N i18n = new I18N(
 			locale,
-			Utils.GSON.fromJson(stream, JsonObject.class).entrySet().stream()
+			JsonUtils.GSON.fromJson(stream, JsonObject.class).entrySet().stream()
 			.collect(Collectors.toMap(Entry::getKey, entry -> entry.getValue().getAsString()))
 		);
 		i18ns.put(locale, i18n);

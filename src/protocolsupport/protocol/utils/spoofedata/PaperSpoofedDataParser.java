@@ -2,7 +2,6 @@ package protocolsupport.protocol.utils.spoofedata;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.function.Function;
 
 import org.bukkit.Bukkit;
 
@@ -10,30 +9,36 @@ import com.destroystokyo.paper.event.player.PlayerHandshakeEvent;
 import com.google.gson.reflect.TypeToken;
 
 import protocolsupport.api.utils.ProfileProperty;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.JsonUtils;
 
-public class PaperSpoofedDataParser implements Function<String, SpoofedData> {
+public class PaperSpoofedDataParser extends SpoofedDataParser {
+
+	protected final BungeeCordSpoofedDataParser bungeecordparser;
+	public PaperSpoofedDataParser(BungeeCordSpoofedDataParser bungeecordparser) {
+		this.bungeecordparser = bungeecordparser;
+	}
 
 	protected static final Type properties_type = new TypeToken<Collection<ProfileProperty>>() {}.getType();
 
 	@Override
-	public SpoofedData apply(String hostname) {
+	protected SpoofedData parse(String data, boolean proxyEnabled) {
 		if (PlayerHandshakeEvent.getHandlerList().getRegisteredListeners().length != 0) {
-			PlayerHandshakeEvent handshakeEvent = new PlayerHandshakeEvent(hostname, false);
+			PlayerHandshakeEvent handshakeEvent = new PlayerHandshakeEvent(data, !proxyEnabled);
 			Bukkit.getPluginManager().callEvent(handshakeEvent);
 			if (!handshakeEvent.isCancelled()) {
 				if (handshakeEvent.isFailed()) {
-					return new SpoofedData(handshakeEvent.getFailMessage());
+					return SpoofedData.createFailed(handshakeEvent.getFailMessage());
 				}
-				return new SpoofedData(
+				return SpoofedData.create(
 					handshakeEvent.getServerHostname(),
 					handshakeEvent.getSocketAddressHostname(),
 					handshakeEvent.getUniqueId(),
-					Utils.GSON.fromJson(handshakeEvent.getPropertiesJson(), properties_type)
+					JsonUtils.GSON.fromJson(handshakeEvent.getPropertiesJson(), properties_type)
 				);
 			}
 		}
-		return null;
+
+		return bungeecordparser.parse(data, proxyEnabled);
 	}
 
 }

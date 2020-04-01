@@ -1,5 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_beta;
 
+import java.util.Map;
+
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -10,9 +12,10 @@ import protocolsupport.protocol.typeremapper.chunk.ChunkWriterBeta;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterBeta.ChunkUpdateData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.types.ChunkCoord;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.TileEntity;
+import protocolsupport.protocol.types.TileEntityType;
 import protocolsupport.utils.netty.Compressor;
-import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class Chunk extends AbstractChunk {
 
@@ -23,13 +26,12 @@ public class Chunk extends AbstractChunk {
 	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public void writeToClient() {
+		String locale = cache.getAttributesCache().getLocale();
 		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 
-		RecyclableArrayList<ClientBoundPacketData> packets = RecyclableArrayList.create();
-
 		if (full) {
-			packets.add(createPreChunk(coord, true));
+			codec.write(createPreChunk(coord, true));
 		}
 		for (ChunkUpdateData udata : ChunkWriterBeta.serializeChunk(
 			full, blockMask,
@@ -47,10 +49,16 @@ public class Chunk extends AbstractChunk {
 			byte[] compressed = Compressor.compressStatic(udata.getData());
 			chunkdata.writeInt(compressed.length);
 			chunkdata.writeBytes(compressed);
-			packets.add(chunkdata);
+			codec.write(chunkdata);
 		}
 
-		return packets;
+		for (Map<Position, TileEntity> sectionTiles : cachedChunk.getTiles()) {
+			for (TileEntity tile : sectionTiles.values()) {
+				if (tile.getType() == TileEntityType.SIGN) {
+					codec.write(BlockTileUpdate.createSignUpdate(version, locale, tile));
+				}
+			}
+		}
 	}
 
 	public static ClientBoundPacketData createPreChunk(ChunkCoord chunk, boolean load) {

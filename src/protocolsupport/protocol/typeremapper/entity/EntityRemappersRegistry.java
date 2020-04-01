@@ -17,7 +17,6 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AgeableE
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.LivingEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.base.TameableEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.BatEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.BlazeEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.CreeperEntityMetadataRemapper;
@@ -37,6 +36,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.living.Spider
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.VexEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.WitchEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.WitherEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.BeeEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.FoxEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PandaEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable.PigEntityMetadataRemapper;
@@ -89,6 +89,8 @@ import protocolsupportbuildprocessor.Preload;
 
 @Preload
 public class EntityRemappersRegistry {
+
+	public static final int MAX_METADATA_INDEX = 30;
 
 	public static class EntityRemappingTable extends RemappingTable {
 
@@ -183,7 +185,7 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.OCELOT)
 			.addMapping(NetworkEntityType.OCELOT, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
-			.addMapping(NetworkEntityType.WOLF, TameableEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
+			.addMapping(NetworkEntityType.WOLF, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
 			.register();
 			new Mapping(NetworkEntityType.WOLF)
 			.addMapping(NetworkEntityType.WOLF, new WolfEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
@@ -205,6 +207,11 @@ public class EntityRemappersRegistry {
 			new Mapping(NetworkEntityType.VILLAGER)
 			.addMapping(NetworkEntityType.VILLAGER, new VillagerEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
 			.addMapping(NetworkEntityType.ZOMBIE_PIGMAN, LivingEntityMetadataRemapper.INSTANCE, ProtocolVersion.MINECRAFT_BETA_1_7_3)
+			.register();
+			new Mapping(NetworkEntityType.BEE)
+			.addMapping(NetworkEntityType.BEE, BeeEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_15)
+			.addMapping(NetworkEntityType.PARROT, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_12, ProtocolVersion.MINECRAFT_1_14_4))
+			.addMapping(NetworkEntityType.CHICKEN, AgeableEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.BEFORE_1_12)
 			.register();
 			new Mapping(NetworkEntityType.ENDERMAN)
 			.addMapping(NetworkEntityType.ENDERMAN, new EndermanEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
@@ -441,7 +448,6 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.EXP_BOTTLE)
 			.addMapping(NetworkEntityType.EXP_BOTTLE, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
-			
 			.register();
 			new Mapping(NetworkEntityType.LEASH_KNOT)
 			.addMapping(NetworkEntityType.LEASH_KNOT, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_6)

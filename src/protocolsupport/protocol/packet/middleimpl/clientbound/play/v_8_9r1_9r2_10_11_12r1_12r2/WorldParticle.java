@@ -4,14 +4,10 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.IPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyParticle;
 import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
 import protocolsupport.protocol.typeremapper.particle.ParticleRemapper.ParticleRemappingTable;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableEmptyList;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class WorldParticle extends MiddleWorldParticle {
 
@@ -22,26 +18,25 @@ public class WorldParticle extends MiddleWorldParticle {
 	}
 
 	@Override
-	public RecyclableCollection<? extends IPacketData> toData() {
+	public void writeToClient() {
 		particle = remapper.getRemap(particle.getClass()).apply(particle);
-		if (particle == null) {
-			return RecyclableEmptyList.get();
+		if (particle != null) {
+			ClientBoundPacketData spawnparticle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
+			spawnparticle.writeInt(LegacyParticle.IntId.getId(particle));
+			spawnparticle.writeBoolean(longdist);
+			spawnparticle.writeFloat((float) x);
+			spawnparticle.writeFloat((float) y);
+			spawnparticle.writeFloat((float) z);
+			spawnparticle.writeFloat(particle.getOffsetX());
+			spawnparticle.writeFloat(particle.getOffsetY());
+			spawnparticle.writeFloat(particle.getOffsetZ());
+			spawnparticle.writeFloat(particle.getData());
+			spawnparticle.writeInt(particle.getCount());
+			for (int data : LegacyParticle.IntId.getData(particle)) {
+				VarNumberSerializer.writeVarInt(spawnparticle, data);
+			}
+			codec.write(spawnparticle);
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
-		serializer.writeInt(LegacyParticle.IntId.getId(particle));
-		serializer.writeBoolean(longdist);
-		serializer.writeFloat(x);
-		serializer.writeFloat(y);
-		serializer.writeFloat(z);
-		serializer.writeFloat(particle.getOffsetX());
-		serializer.writeFloat(particle.getOffsetY());
-		serializer.writeFloat(particle.getOffsetZ());
-		serializer.writeFloat(particle.getData());
-		serializer.writeInt(particle.getCount());
-		for (int data : LegacyParticle.IntId.getData(particle)) {
-			VarNumberSerializer.writeVarInt(serializer, data);
-		}
-		return RecyclableSingletonList.create(serializer);
 	}
 
 }

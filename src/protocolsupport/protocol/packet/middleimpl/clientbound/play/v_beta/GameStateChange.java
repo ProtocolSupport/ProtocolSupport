@@ -4,8 +4,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleGameStateChange;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class GameStateChange extends MiddleGameStateChange {
 
@@ -14,7 +12,7 @@ public class GameStateChange extends MiddleGameStateChange {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
+	public void writeToClient() {
 		switch (type) {
 			case 1: {
 				type = 2;
@@ -28,9 +26,9 @@ public class GameStateChange extends MiddleGameStateChange {
 				break;
 			}
 		}
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_GAME_STATE_CHANGE);
-		serializer.writeByte(type);
-		return RecyclableSingletonList.create(serializer);
+		ClientBoundPacketData gamestatechange = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_GAME_STATE_CHANGE);
+		gamestatechange.writeByte(type);
+		codec.write(gamestatechange);
 	}
 
 }

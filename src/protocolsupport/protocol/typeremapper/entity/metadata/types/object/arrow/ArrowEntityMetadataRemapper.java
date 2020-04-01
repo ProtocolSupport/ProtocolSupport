@@ -14,6 +14,11 @@ public class ArrowEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Arrow.CIRTICAL, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Arrow.CIRTICAL, 5), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Arrow.CIRTICAL, 15), ProtocolVersionsHelper.BEFORE_1_9);
+
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Arrow.SHOOTER, 8), ProtocolVersionsHelper.UP_1_14);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Arrow.SHOOTER, 7), ProtocolVersionsHelper.ALL_1_13);
+
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Arrow.PIERCING_LEVEL, 9), ProtocolVersionsHelper.UP_1_14);
 	}
 
 }

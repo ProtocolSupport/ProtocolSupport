@@ -10,8 +10,6 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyMap;
 import protocolsupport.protocol.typeremapper.legacy.LegacyMap.ColumnEntry;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.utils.recyclable.RecyclableArrayList;
-import protocolsupport.utils.recyclable.RecyclableCollection;
 
 public class UpdateMap extends MiddleUpdateMap {
 
@@ -23,8 +21,7 @@ public class UpdateMap extends MiddleUpdateMap {
 	protected static final int mapId = Material.LEGACY_MAP.getId();
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
-		RecyclableCollection<ClientBoundPacketData> datas = RecyclableArrayList.create();
+	public void writeToClient() {
 		if (icons.length > 0) {
 			ClientBoundPacketData iconsdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 			iconsdata.writeShort(mapId);
@@ -36,7 +33,7 @@ public class UpdateMap extends MiddleUpdateMap {
 				iconsdata.writeByte(icon.x);
 				iconsdata.writeByte(icon.z);
 			}
-			datas.add(iconsdata);
+			codec.write(iconsdata);
 		}
 		if (columns > 0) {
 			LegacyMap maptransformer = new LegacyMap();
@@ -55,10 +52,9 @@ public class UpdateMap extends MiddleUpdateMap {
 					colors[i] = (byte) colorRemapper.getRemap(colors[i] & 0xFF);
 				}
 				mapdata.writeBytes(colors);
-				datas.add(mapdata);
+				codec.write(mapdata);
 			}
 		}
-		return datas;
 	}
 
 }

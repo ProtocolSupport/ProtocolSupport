@@ -4,8 +4,6 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityLook;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.utils.recyclable.RecyclableCollection;
-import protocolsupport.utils.recyclable.RecyclableSingletonList;
 
 public class EntityLook extends MiddleEntityLook {
 
@@ -14,12 +12,12 @@ public class EntityLook extends MiddleEntityLook {
 	}
 
 	@Override
-	public RecyclableCollection<ClientBoundPacketData> toData() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_LOOK);
-		serializer.writeInt(entityId);
-		serializer.writeByte(yaw);
-		serializer.writeByte(pitch);
-		return RecyclableSingletonList.create(serializer);
+	public void writeToClient() {
+		ClientBoundPacketData entitylook = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_LOOK);
+		entitylook.writeInt(entityId);
+		entitylook.writeByte(yaw);
+		entitylook.writeByte(pitch);
+		codec.write(entitylook);
 	}
 
 }
