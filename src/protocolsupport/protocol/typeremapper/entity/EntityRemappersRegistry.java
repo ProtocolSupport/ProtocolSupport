@@ -90,8 +90,6 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class EntityRemappersRegistry {
 
-	public static final int MAX_METADATA_INDEX = 30;
-
 	public static class EntityRemappingTable extends RemappingTable {
 
 		protected final EnumMap<NetworkEntityType, Pair<NetworkEntityType, List<NetworkEntityMetadataObjectRemapper>>> table = new EnumMap<>(NetworkEntityType.class);

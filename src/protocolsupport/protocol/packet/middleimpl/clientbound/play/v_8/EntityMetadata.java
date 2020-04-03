@@ -26,7 +26,7 @@ public class EntityMetadata extends AbstractEntityMetadata {
 
 	@Override
 	protected ClientBoundPacketData createUseBed(Position position) {
-		ClientBoundPacketData usebed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED_ID);
+		ClientBoundPacketData usebed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED);
 		VarNumberSerializer.writeVarInt(usebed, entityId);
 		PositionSerializer.writeLegacyPositionL(usebed, position);
 		return usebed;

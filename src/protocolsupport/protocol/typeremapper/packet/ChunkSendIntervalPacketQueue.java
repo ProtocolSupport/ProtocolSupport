@@ -21,8 +21,8 @@ public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor
 		PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE, PacketType.CLIENTBOUND_PLAY_CHUNK_UNLOAD,
 		PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE, PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI,
 		PacketType.CLIENTBOUND_PLAY_BLOCK_ACTION, PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_ANIMATION,
-		PacketType.CLIENTBOUND_PLAY_BLOCK_TILE, PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN_ID,
-		PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED_ID
+		PacketType.CLIENTBOUND_PLAY_BLOCK_TILE, PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN,
+		PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED
 	);
 	protected static boolean shouldQueue(PacketData<?> packet) {
 		return queuedPacketTypes.contains(packet.getPacketType());

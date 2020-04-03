@@ -87,7 +87,6 @@ public interface PlatformUtils {
 
 	public AbstractHandshakeListener createHandshakeListener(NetworkManagerWrapper networkmanager);
 
-	Profile createWrappedProfile(LoginProfile loginProfile, Player player);
-
+	public Profile createWrappedProfile(LoginProfile loginProfile, Player player);
 
 }

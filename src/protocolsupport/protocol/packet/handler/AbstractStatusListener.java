@@ -48,7 +48,7 @@ public abstract class AbstractStatusListener {
 
 		statusprocessor.execute(() -> {
 			ServerPingResponseEvent revent = PingResponseHandlerProvider.get().createResponse(ConnectionImpl.getFromChannel(networkManager.getChannel()));
-			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createStausServerInfoPacket(
+			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createStatusServerInfoPacket(
 				revent.getPlayers(), revent.getProtocolInfo(),
 				revent.getIcon(), revent.getMotd(),
 				revent.getOnlinePlayers(), revent.getMaxPlayers()

@@ -25,7 +25,7 @@ public class BlockTileUpdate extends AbstractBlockTileUpdate {
 
 	public static ClientBoundPacketData create(ProtocolVersion version, TileEntity tile) {
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9_4) && (tile.getType() == TileEntityType.SIGN)) {
-			ClientBoundPacketData blocksignupdate = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN_ID);
+			ClientBoundPacketData blocksignupdate = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN);
 			PositionSerializer.writeLegacyPositionL(blocksignupdate, tile.getPosition());
 			for (String line : CommonNBT.getSignLines(tile.getNBT())) {
 				StringSerializer.writeVarIntUTF8String(blocksignupdate, line);

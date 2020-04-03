@@ -35,7 +35,7 @@ public interface PlatformPacketFactory {
 
 	public Object createStatusPongPacket(long pingId);
 
-	public Object createStausServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, String motd, int onlinePlayers, int maxPlayers);
+	public Object createStatusServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, String motd, int onlinePlayers, int maxPlayers);
 
 	public Object createLoginSuccessPacket(Profile profile);
 

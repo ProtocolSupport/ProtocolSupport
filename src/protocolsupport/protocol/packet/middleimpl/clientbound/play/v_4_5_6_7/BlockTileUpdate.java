@@ -28,7 +28,7 @@ public class BlockTileUpdate extends AbstractBlockTileUpdate {
 	public static ClientBoundPacketData create(ProtocolVersion version, String locale, TileEntity tile) {
 		TileEntityType type = tile.getType();
 		if (type == TileEntityType.SIGN) {
-			ClientBoundPacketData blocksignupdate = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN_ID);
+			ClientBoundPacketData blocksignupdate = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN);
 			PositionSerializer.writeLegacyPositionS(blocksignupdate, tile.getPosition());
 			for (String line : CommonNBT.getSignLines(tile.getNBT())) {
 				StringSerializer.writeString(blocksignupdate, version, LegacyChat.clampLegacyText(ChatAPI.fromJSON(line).toLegacyText(locale), 15));

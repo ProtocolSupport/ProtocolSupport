@@ -60,7 +60,7 @@ public class PacketCodec extends ModernPacketCodec {
 		registry.register(PacketType.CLIENTBOUND_PLAY_COMBAT_EVENT, 0x2C);
 		registry.register(PacketType.CLIENTBOUND_PLAY_PLAYER_INFO, 0x2D);
 		registry.register(PacketType.CLIENTBOUND_PLAY_POSITION, 0x2E);
-		registry.register(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED_ID, 0x2F);
+		registry.register(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED, 0x2F);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY, 0x30);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_EFFECT_REMOVE, 0x31);
 		registry.register(PacketType.CLIENTBOUND_PLAY_RESOURCE_PACK, 0x32);
@@ -83,7 +83,7 @@ public class PacketCodec extends ModernPacketCodec {
 		registry.register(PacketType.CLIENTBOUND_PLAY_SPAWN_POSITION, 0x43);
 		registry.register(PacketType.CLIENTBOUND_PLAY_UPDATE_TIME, 0x44);
 		registry.register(PacketType.CLIENTBOUND_PLAY_TITLE, 0x45);
-		registry.register(PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN_ID, 0x46);
+		registry.register(PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN, 0x46);
 		registry.register(PacketType.CLIENTBOUND_PLAY_PLAYER_LIST_HEADER_FOOTER, 0x48);
 		registry.register(PacketType.CLIENTBOUND_PLAY_COLLECT_EFFECT, 0x49);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_TELEPORT, 0x4A);

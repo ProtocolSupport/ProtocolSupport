@@ -29,7 +29,7 @@ public abstract class MiddleEntityMetadata extends MiddleEntity {
 	}
 
 	protected NetworkEntity entity;
-	protected final ArrayMap<NetworkEntityMetadataObject<?>> metadata = new ArrayMap<>(EntityRemappersRegistry.MAX_METADATA_INDEX + 1);
+	protected final ArrayMap<NetworkEntityMetadataObject<?>> metadata = new ArrayMap<>(31);
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {

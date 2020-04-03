@@ -24,7 +24,7 @@ public class PacketCodec extends ModernPacketCodec {
 		registry.register(PacketType.CLIENTBOUND_PLAY_RESPAWN, 0x34);
 		registry.register(PacketType.CLIENTBOUND_PLAY_POSITION, 0x2E);
 		registry.register(PacketType.CLIENTBOUND_PLAY_HELD_SLOT, 0x39);
-		registry.register(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED_ID, 0x2F);
+		registry.register(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED, 0x2F);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_ANIMATION, 0x6);
 		registry.register(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED, 0x5);
 		registry.register(PacketType.CLIENTBOUND_PLAY_COLLECT_EFFECT, 0x4A);

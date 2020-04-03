@@ -158,8 +158,8 @@ public enum PacketType {
 	CLIENTBOUND_PLAY_BOOK_OPEN(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayBookOpenPacketId()),
 	CLIENTBOUND_PLAY_BLOCK_BREAK_CONFIRM(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayAcknowledgePlayerDiggingId()),
 
-	CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN_ID(Direction.CLIENTBOUND, -1),
-	CLIENTBOUND_LEGACY_PLAY_USE_BED_ID(Direction.CLIENTBOUND, -1);
+	CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN(Direction.CLIENTBOUND, -1),
+	CLIENTBOUND_LEGACY_PLAY_USE_BED(Direction.CLIENTBOUND, -1);
 
 	private final Direction direction;
 	private final int id;

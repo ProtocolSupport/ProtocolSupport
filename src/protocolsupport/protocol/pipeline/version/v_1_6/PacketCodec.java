@@ -21,7 +21,7 @@ public class PacketCodec extends LegacyPacketCodec {
 		registry.register(PacketType.CLIENTBOUND_PLAY_RESPAWN, 0x09);
 		registry.register(PacketType.CLIENTBOUND_PLAY_POSITION, 0x0D);
 		registry.register(PacketType.CLIENTBOUND_PLAY_HELD_SLOT, 0x10);
-		registry.register(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED_ID, 0x11);
+		registry.register(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED, 0x11);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_ANIMATION, 0x12);
 		registry.register(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED, 0x14);
 		registry.register(PacketType.CLIENTBOUND_PLAY_COLLECT_EFFECT, 0x16);
@@ -61,7 +61,7 @@ public class PacketCodec extends LegacyPacketCodec {
 		registry.register(PacketType.CLIENTBOUND_PLAY_WINDOW_SET_ITEMS, 0x68);
 		registry.register(PacketType.CLIENTBOUND_PLAY_WINDOW_DATA, 0x69);
 		registry.register(PacketType.CLIENTBOUND_PLAY_WINDOW_TRANSACTION, 0x6A);
-		registry.register(PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN_ID, 0x82);
+		registry.register(PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN, 0x82);
 		registry.register(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP, 0x83);
 		registry.register(PacketType.CLIENTBOUND_PLAY_BLOCK_TILE, 0x84);
 		registry.register(PacketType.CLIENTBOUND_PLAY_SIGN_EDITOR, 0x85);

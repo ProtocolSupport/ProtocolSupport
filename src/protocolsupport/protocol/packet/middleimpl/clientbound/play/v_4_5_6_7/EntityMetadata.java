@@ -26,7 +26,7 @@ public class EntityMetadata extends AbstractEntityMetadata {
 
 	@Override
 	protected ClientBoundPacketData createUseBed(Position position) {
-		ClientBoundPacketData usebed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED_ID);
+		ClientBoundPacketData usebed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED);
 		usebed.writeInt(entityId);
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_7_5)) {
 			usebed.writeByte(0);
