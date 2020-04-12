@@ -3,8 +3,6 @@ package protocolsupport.protocol.typeremapper.utils;
 import java.util.EnumSet;
 import java.util.HashSet;
 
-import it.unimi.dsi.fastutil.ints.Int2ByteOpenHashMap;
-
 public class SkippingTable {
 
 	public abstract static class IntSkippingTable extends SkippingTable {
@@ -33,22 +31,6 @@ public class SkippingTable {
 		@Override
 		public boolean shouldSkip(int id) {
 			return table[id];
-		}
-
-	}
-
-	public static class HashMapBasedIntSkippingTable extends IntSkippingTable {
-
-		protected final Int2ByteOpenHashMap table = new Int2ByteOpenHashMap();
-
-		@Override
-		public void setSkip(int id) {
-			table.put(id, (byte) 1);
-		}
-
-		@Override
-		public boolean shouldSkip(int id) {
-			return table.containsKey(id);
 		}
 
 	}
