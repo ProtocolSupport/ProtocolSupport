@@ -1,6 +1,5 @@
 package protocolsupport.protocol.typeremapper.utils;
 
-import java.util.EnumMap;
 import java.util.HashMap;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
@@ -57,23 +56,6 @@ public class RemappingTable {
 		public int getRemap(int id) {
 			int r = table.get(id);
 			return r != table.defaultReturnValue() ? r : id;
-		}
-
-	}
-
-	public static class EnumRemappingTable<T extends Enum<T>> extends RemappingTable {
-
-		protected final EnumMap<T, T> table;
-		public EnumRemappingTable(Class<T> enumClazz) {
-			table = new EnumMap<>(enumClazz);
-		}
-
-		public void setRemap(T from, T to) {
-			table.put(from, to);
-		}
-
-		public T getRemap(T from) {
-			return table.getOrDefault(from, from);
 		}
 
 	}
