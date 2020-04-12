@@ -80,10 +80,6 @@ public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor
 		);
 	}
 
-	protected static enum State {
-		UNLOCKED, LOCKED;
-	}
-
 	@Override
 	public void release() {
 		queue.forEach(PacketData::release);
