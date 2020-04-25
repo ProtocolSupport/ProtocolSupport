@@ -14,6 +14,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.BannerFromLegacyComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.DisplayNameFromLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.EnchantFromLegacyIdComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.ItemDurabilityFromLegacyDataComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.LoreFromLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.MapFromLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.PotionFromLegacyIdComplexRemapper;
@@ -102,7 +103,7 @@ public class ItemStackComplexRemapperRegistry {
 
 		EnchantFilterNBTComplexRemapper enchantfilter = new EnchantFilterNBTComplexRemapper();
 		LoreToLegacyTextComplexRemapper loretolegacytext = new LoreToLegacyTextComplexRemapper();
-		ItemDurabilityToLegacyDataComplexRemapper durabilitymapper = new ItemDurabilityToLegacyDataComplexRemapper();
+		ItemDurabilityToLegacyDataComplexRemapper durabilitytolegacydata = new ItemDurabilityToLegacyDataComplexRemapper();
 		EnchantToLegacyIdComplexRemapper enchanttolegacyid = new EnchantToLegacyIdComplexRemapper();
 		DisplayNameToLegacyTextComplexRemapper dnametolegacytext = new DisplayNameToLegacyTextComplexRemapper();
 		MinecraftData.getItems()
@@ -110,7 +111,7 @@ public class ItemStackComplexRemapperRegistry {
 			registerToClient(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);
 			registerToClient(material, loretolegacytext, ProtocolVersionsHelper.BEFORE_1_14);
 			if (material.getMaxDurability() > 0) {
-				registerToClient(material, durabilitymapper, ProtocolVersionsHelper.BEFORE_1_13);
+				registerToClient(material, durabilitytolegacydata, ProtocolVersionsHelper.BEFORE_1_13);
 			}
 			registerToClient(material, enchanttolegacyid, ProtocolVersionsHelper.BEFORE_1_13);
 			registerToClient(material, dnametolegacytext, ProtocolVersionsHelper.BEFORE_1_13);
@@ -119,11 +120,15 @@ public class ItemStackComplexRemapperRegistry {
 
 	static {
 		LoreFromLegacyTextComplexRemapper lorefromlegacytext = new LoreFromLegacyTextComplexRemapper();
+		ItemDurabilityFromLegacyDataComplexRemapper durabilityfromlegacydata = new ItemDurabilityFromLegacyDataComplexRemapper();
 		EnchantFromLegacyIdComplexRemapper enchantfromlegacyid = new EnchantFromLegacyIdComplexRemapper();
 		DisplayNameFromLegacyTextComplexRemapper dnamefromlegacytext = new DisplayNameFromLegacyTextComplexRemapper();
 		MinecraftData.getItems()
 		.forEach(material -> {
 			registerFromClient(material, lorefromlegacytext, ProtocolVersionsHelper.BEFORE_1_14);
+			if (material.getMaxDurability() > 0) {
+				registerToClient(material, durabilityfromlegacydata, ProtocolVersionsHelper.BEFORE_1_13);
+			}
 			registerFromClient(material, enchantfromlegacyid, ProtocolVersionsHelper.BEFORE_1_13);
 			registerFromClient(material, dnamefromlegacytext, ProtocolVersionsHelper.BEFORE_1_13);
 		});
