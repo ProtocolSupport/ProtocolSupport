@@ -68,6 +68,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.object.AreaEf
 import protocolsupport.protocol.typeremapper.entity.metadata.types.object.BoatEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.object.EnderCrystalEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.object.FireworkEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.object.FishingFloatEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.object.ItemEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.object.ItemFrameEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.object.PotionEntityMetadataRemapper;
@@ -425,7 +426,7 @@ public class EntityRemappersRegistry {
 			.addMapping(NetworkEntityType.LEASH_KNOT, EntityMetadataRemapper.NOOP, ProtocolVersionsHelper.BEFORE_1_6)
 			.register();
 			new Mapping(NetworkEntityType.FISHING_FLOAT)
-			.addMapping(NetworkEntityType.FISHING_FLOAT, BaseEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
+			.addMapping(NetworkEntityType.FISHING_FLOAT, FishingFloatEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.ALL_PC)
 			.register();
 			new Mapping(NetworkEntityType.ITEM)
 			.addMapping(NetworkEntityType.ITEM, new ItemEntityMetadataRemapper(), ProtocolVersionsHelper.ALL_PC)
