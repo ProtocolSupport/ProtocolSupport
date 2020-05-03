@@ -1,10 +1,7 @@
 package protocolsupport.zplatform.impl.spigot;
 
 import java.security.KeyPair;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
@@ -61,7 +58,6 @@ import net.minecraft.server.v1_15_R1.ServerConnection;
 import net.minecraft.server.v1_15_R1.WorldServer;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.api.utils.Profile;
-import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
@@ -154,33 +150,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public Profile createWrappedProfile(LoginProfile loginProfile, Player player) {
-		GameProfile mojangprofile = ((CraftPlayer) player).getHandle().getProfile();
-		return new Profile() {
-			{
-				onlineMode = loginProfile.isOnlineMode();
-				originalname = loginProfile.getOriginalName();
-				originaluuid = loginProfile.getOriginalUUID();
-			}
-			@Override
-			public String getName() {
-				return mojangprofile.getName();
-			}
-			@Override
-			public UUID getUUID() {
-				return mojangprofile.getId();
-			}
-			@Override
-			public Set<String> getPropertiesNames() {
-				return Collections.unmodifiableSet(mojangprofile.getProperties().keySet());
-			}
-			@Override
-			public Set<ProfileProperty> getProperties(String name) {
-				return
-					mojangprofile.getProperties().get(name).stream()
-					.map(mojangproperty -> new ProfileProperty(mojangproperty.getName(), mojangproperty.getValue(), mojangproperty.getSignature()))
-					.collect(Collectors.toSet());
-			}
-		};
+		return new SpigotWrappedGameProfile(loginProfile, ((CraftPlayer) player).getHandle().getProfile());
 	}
 
 	@Override

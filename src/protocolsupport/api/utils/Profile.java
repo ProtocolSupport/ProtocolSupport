@@ -1,6 +1,7 @@
 package protocolsupport.api.utils;
 
 import java.nio.charset.StandardCharsets;
+import java.text.MessageFormat;
 import java.util.Set;
 import java.util.UUID;
 
@@ -82,5 +83,18 @@ public abstract class Profile {
 	 * @return current properties
 	 */
 	public abstract Set<ProfileProperty> getProperties(String name);
+
+
+	@Override
+	public String toString() {
+		return MessageFormat.format(
+			"{0}(name: {1}, originalName: {2}, uuid: {3}, originalUUID: {4})",
+			getClass().getName(),
+			getName(),
+			getOriginalName(),
+			getUUID(),
+			getOriginalUUID()
+		);
+	}
 
 }

@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import protocolsupport.api.utils.Profile;
 import protocolsupport.api.utils.ProfileProperty;
-import protocolsupport.utils.Utils;
 
 public class LoginProfile extends Profile {
 
@@ -78,11 +77,6 @@ public class LoginProfile extends Profile {
 
 	public void addProperty(ProfileProperty profileProperty) {
 		properties.computeIfAbsent(profileProperty.getName(), k -> Collections.newSetFromMap(new ConcurrentHashMap<>())).add(profileProperty);
-	}
-
-	@Override
-	public String toString() {
-		return Utils.toStringAllFields(this);
 	}
 
 }
