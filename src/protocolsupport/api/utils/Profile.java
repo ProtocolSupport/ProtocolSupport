@@ -88,12 +88,13 @@ public abstract class Profile {
 	@Override
 	public String toString() {
 		return MessageFormat.format(
-			"{0}(name: {1}, originalName: {2}, uuid: {3}, originalUUID: {4})",
+			"{0}(name: {1}, originalName: {2}, uuid: {3}, originalUUID: {4}, onlinemode: {5})",
 			getClass().getName(),
 			getName(),
 			getOriginalName(),
 			getUUID(),
-			getOriginalUUID()
+			getOriginalUUID(),
+			isOnlineMode()
 		);
 	}
 
