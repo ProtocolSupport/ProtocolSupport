@@ -14,7 +14,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class WolfEntityMetadataRemapper extends TameableEntityMetadataRemapper {
 
-	public WolfEntityMetadataRemapper() {
+	public static final WolfEntityMetadataRemapper INSTANCE = new WolfEntityMetadataRemapper();
+
+	protected WolfEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Wolf.BEGGING, 18), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Wolf.BEGGING, 18), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Wolf.BEGGING, 16), ProtocolVersionsHelper.RANGE__1_11__1_13_2);

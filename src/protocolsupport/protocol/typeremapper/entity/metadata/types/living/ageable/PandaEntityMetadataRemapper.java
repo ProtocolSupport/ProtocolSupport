@@ -7,7 +7,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class PandaEntityMetadataRemapper extends AgeableEntityMetadataRemapper {
 
-	public PandaEntityMetadataRemapper() {
+	public static final PandaEntityMetadataRemapper INSTANCE = new PandaEntityMetadataRemapper();
+
+	protected PandaEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.BREED_TIMER, 16), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Panda.BREED_TIMER, 15), ProtocolVersionsHelper.ALL_1_14);
 

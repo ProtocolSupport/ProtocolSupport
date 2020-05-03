@@ -7,7 +7,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class BlazeEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
-	public BlazeEntityMetadataRemapper() {
+	public static final BlazeEntityMetadataRemapper INSTANCE = new BlazeEntityMetadataRemapper();
+
+	protected BlazeEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Blaze.ON_FIRE, 15), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Blaze.ON_FIRE, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Blaze.ON_FIRE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

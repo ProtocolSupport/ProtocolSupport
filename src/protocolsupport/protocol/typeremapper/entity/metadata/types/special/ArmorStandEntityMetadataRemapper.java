@@ -9,7 +9,7 @@ public class ArmorStandEntityMetadataRemapper extends LivingEntityMetadataRemapp
 
 	public static final ArmorStandEntityMetadataRemapper INSTANCE = new ArmorStandEntityMetadataRemapper();
 
-	public ArmorStandEntityMetadataRemapper() {
+	protected ArmorStandEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ArmorStand.ARMORSTAND_FLAGS, 14), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ArmorStand.ARMORSTAND_FLAGS, 13), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ArmorStand.ARMORSTAND_FLAGS, 11), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

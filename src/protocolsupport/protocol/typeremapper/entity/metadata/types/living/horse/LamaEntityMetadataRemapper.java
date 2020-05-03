@@ -8,7 +8,7 @@ public class LamaEntityMetadataRemapper extends CargoHorseEntityMetadataRemapper
 
 	public static final LamaEntityMetadataRemapper INSTANCE = new LamaEntityMetadataRemapper();
 
-	public LamaEntityMetadataRemapper() {
+	protected LamaEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Lama.STRENGTH, 19), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Lama.STRENGTH, 18), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Lama.STRENGTH, 16), ProtocolVersionsHelper.RANGE__1_11__1_13_2);

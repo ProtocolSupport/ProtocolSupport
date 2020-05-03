@@ -7,7 +7,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class ShulkerEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
-	public ShulkerEntityMetadataRemapper() {
+	public static final ShulkerEntityMetadataRemapper INSTANCE = new ShulkerEntityMetadataRemapper();
+
+	protected ShulkerEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Shulker.DIRECTION, 15), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Shulker.DIRECTION, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Shulker.DIRECTION, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

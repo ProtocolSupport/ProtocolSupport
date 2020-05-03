@@ -15,7 +15,7 @@ public class AgeableEntityMetadataRemapper extends InsentientEntityMetadataRemap
 
 	public static final AgeableEntityMetadataRemapper INSTANCE = new AgeableEntityMetadataRemapper();
 
-	public AgeableEntityMetadataRemapper() {
+	protected AgeableEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Ageable.IS_BABY, 15), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Ageable.IS_BABY, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Ageable.IS_BABY, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

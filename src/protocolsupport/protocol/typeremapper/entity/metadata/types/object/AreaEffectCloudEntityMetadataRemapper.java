@@ -18,7 +18,9 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class AreaEffectCloudEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 
-	public AreaEffectCloudEntityMetadataRemapper() {
+	public static final AreaEffectCloudEntityMetadataRemapper INSTANCE = new AreaEffectCloudEntityMetadataRemapper();
+
+	protected AreaEffectCloudEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.AreaEffectCloud.RADIUS, 7), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.AreaEffectCloud.RADIUS, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.AreaEffectCloud.RADIUS, 5), ProtocolVersionsHelper.ALL_1_9);

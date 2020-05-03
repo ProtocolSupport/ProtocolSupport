@@ -8,7 +8,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class WitherEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
-	public WitherEntityMetadataRemapper() {
+	public static final WitherEntityMetadataRemapper INSTANCE = new WitherEntityMetadataRemapper();
+
+	protected WitherEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Wither.TARGET1, 15), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Wither.TARGET1, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Wither.TARGET1, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

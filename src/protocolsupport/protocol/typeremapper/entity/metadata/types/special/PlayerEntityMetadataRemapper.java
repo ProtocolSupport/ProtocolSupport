@@ -16,7 +16,9 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class PlayerEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 
-	public PlayerEntityMetadataRemapper() {
+	public static final PlayerEntityMetadataRemapper INSTANCE = new PlayerEntityMetadataRemapper();
+
+	protected PlayerEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.ADDITIONAL_HEARTS, 14), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.ADDITIONAL_HEARTS, 13), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.ADDITIONAL_HEARTS, 11), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

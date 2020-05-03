@@ -21,7 +21,7 @@ public class MinecartEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 
 	public static final MinecartEntityMetadataRemapper INSTANCE = new MinecartEntityMetadataRemapper();
 
-	public MinecartEntityMetadataRemapper() {
+	protected MinecartEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Minecart.SHAKING_POWER, 7), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Minecart.SHAKING_POWER, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Minecart.SHAKING_POWER, 5), ProtocolVersionsHelper.ALL_1_9);

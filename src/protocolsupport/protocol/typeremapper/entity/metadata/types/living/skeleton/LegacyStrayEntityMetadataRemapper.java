@@ -6,7 +6,9 @@ import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEnti
 
 public class LegacyStrayEntityMetadataRemapper extends LegacySkeletonEntityMetadataRemapper {
 
-	public LegacyStrayEntityMetadataRemapper() {
+	public static final LegacyStrayEntityMetadataRemapper INSTANCE = new LegacyStrayEntityMetadataRemapper();
+
+	protected LegacyStrayEntityMetadataRemapper() {
 		addRemap(new NetworkEntityMetadataFirstUpdateObjectAddRemapper(12, new NetworkEntityMetadataObjectVarInt(2)), ProtocolVersion.MINECRAFT_1_10);
 	}
 

@@ -9,7 +9,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class BoatEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 
-	public BoatEntityMetadataRemapper() {
+	public static final BoatEntityMetadataRemapper INSTANCE = new BoatEntityMetadataRemapper();
+
+	protected BoatEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Boat.TIME_SINCE_LAST_HIT, 7), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Boat.TIME_SINCE_LAST_HIT, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Boat.TIME_SINCE_LAST_HIT, 5), ProtocolVersionsHelper.ALL_1_9);

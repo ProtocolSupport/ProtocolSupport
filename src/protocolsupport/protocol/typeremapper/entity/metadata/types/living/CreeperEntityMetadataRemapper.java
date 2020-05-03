@@ -9,7 +9,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class CreeperEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
-	public CreeperEntityMetadataRemapper() {
+	public static final CreeperEntityMetadataRemapper INSTANCE = new CreeperEntityMetadataRemapper();
+
+	protected CreeperEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Creeper.STATE, 15), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Creeper.STATE, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Creeper.STATE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

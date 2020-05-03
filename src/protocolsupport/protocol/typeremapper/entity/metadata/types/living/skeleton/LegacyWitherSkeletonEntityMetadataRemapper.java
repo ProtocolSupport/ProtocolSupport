@@ -8,7 +8,10 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class LegacyWitherSkeletonEntityMetadataRemapper extends LegacySkeletonEntityMetadataRemapper {
 
-	public LegacyWitherSkeletonEntityMetadataRemapper() {
+	public static final LegacyWitherSkeletonEntityMetadataRemapper INSTANCE = new LegacyWitherSkeletonEntityMetadataRemapper();
+
+	protected LegacyWitherSkeletonEntityMetadataRemapper() {
+		//legacy skeleton type
 		addRemap(new NetworkEntityMetadataFirstUpdateObjectAddRemapper(12, new NetworkEntityMetadataObjectVarInt(1)), ProtocolVersion.MINECRAFT_1_10);
 		addRemap(new NetworkEntityMetadataFirstUpdateObjectAddRemapper(11, new NetworkEntityMetadataObjectVarInt(1)), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new NetworkEntityMetadataFirstUpdateObjectAddRemapper(13, new NetworkEntityMetadataObjectByte((byte) 1)), ProtocolVersionsHelper.BEFORE_1_9);

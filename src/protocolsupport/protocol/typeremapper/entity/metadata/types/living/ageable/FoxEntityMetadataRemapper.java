@@ -7,7 +7,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class FoxEntityMetadataRemapper extends AgeableEntityMetadataRemapper {
 
-	public FoxEntityMetadataRemapper() {
+	public static final FoxEntityMetadataRemapper INSTANCE = new FoxEntityMetadataRemapper();
+
+	protected FoxEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Fox.VARIANT, 16), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Fox.VARIANT, 15), ProtocolVersionsHelper.ALL_1_14);
 

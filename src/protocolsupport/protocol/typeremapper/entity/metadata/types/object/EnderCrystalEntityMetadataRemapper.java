@@ -7,7 +7,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class EnderCrystalEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 
-	public EnderCrystalEntityMetadataRemapper() {
+	public static final EnderCrystalEntityMetadataRemapper INSTANCE = new EnderCrystalEntityMetadataRemapper();
+
+	protected EnderCrystalEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.EnderCrystal.TARGET, 7), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.EnderCrystal.TARGET, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.EnderCrystal.TARGET, 5), ProtocolVersionsHelper.ALL_1_9);

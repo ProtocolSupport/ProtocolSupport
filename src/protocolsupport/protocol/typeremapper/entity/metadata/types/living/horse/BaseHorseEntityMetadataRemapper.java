@@ -10,7 +10,7 @@ public class BaseHorseEntityMetadataRemapper extends AgeableEntityMetadataRemapp
 
 	public static final BaseHorseEntityMetadataRemapper INSTANCE = new BaseHorseEntityMetadataRemapper();
 
-	public BaseHorseEntityMetadataRemapper() {
+	protected BaseHorseEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.BaseHorse.HORSE_FLAGS, 16), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.BaseHorse.HORSE_FLAGS, 15), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.BaseHorse.HORSE_FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

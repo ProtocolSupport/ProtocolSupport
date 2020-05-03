@@ -8,7 +8,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class PotionEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 
-	public PotionEntityMetadataRemapper() {
+	public static final PotionEntityMetadataRemapper INSTANCE = new PotionEntityMetadataRemapper();
+
+	protected PotionEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Potion.ITEM, 7), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Potion.ITEM, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Potion.ITEM, 7), ProtocolVersion.MINECRAFT_1_10);

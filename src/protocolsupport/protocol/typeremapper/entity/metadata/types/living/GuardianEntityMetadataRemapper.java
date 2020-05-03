@@ -16,7 +16,7 @@ public class GuardianEntityMetadataRemapper extends InsentientEntityMetadataRema
 
 	public static final GuardianEntityMetadataRemapper INSTANCE = new GuardianEntityMetadataRemapper();
 
-	public GuardianEntityMetadataRemapper() {
+	protected GuardianEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Guardian.SPIKES, 15), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Guardian.SPIKES, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Guardian.SPIKES, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_2);

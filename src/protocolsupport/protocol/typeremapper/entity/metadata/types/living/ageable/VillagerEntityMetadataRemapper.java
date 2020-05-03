@@ -13,6 +13,8 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class VillagerEntityMetadataRemapper extends AbstractMerchantEntityMetadataRemapper {
 
+	public static final VillagerEntityMetadataRemapper INSTANCE = new VillagerEntityMetadataRemapper();
+
 	public VillagerEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Villager.VDATA, 17), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Villager.VDATA, 16), ProtocolVersionsHelper.RANGE__1_14_1__1_14_4);

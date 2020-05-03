@@ -8,7 +8,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class PigEntityMetadataRemapper extends AgeableEntityMetadataRemapper {
 
-	public PigEntityMetadataRemapper() {
+	public static final PigEntityMetadataRemapper INSTANCE = new PigEntityMetadataRemapper();
+
+	protected PigEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Pig.HAS_SADLLE, 16), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Pig.HAS_SADLLE, 15), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Pig.HAS_SADLLE, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

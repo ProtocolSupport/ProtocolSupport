@@ -9,12 +9,10 @@ public class LegacySkeletonEntityMetadataRemapper extends InsentientEntityMetada
 
 	public static final LegacySkeletonEntityMetadataRemapper INSTANCE = new LegacySkeletonEntityMetadataRemapper();
 
-	public LegacySkeletonEntityMetadataRemapper() {
+	protected LegacySkeletonEntityMetadataRemapper() {
 		addRemap(new InsentientAttackingToLegacySwingingHadsIndexValesRemapper(12), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 		addRemap(new InsentientAttackingToLegacySwingingHadsIndexValesRemapper(13), ProtocolVersion.MINECRAFT_1_10);
 		addRemap(new InsentientAttackingToLegacySwingingHadsIndexValesRemapper(12), ProtocolVersionsHelper.ALL_1_9);
 	}
-
-
 
 }

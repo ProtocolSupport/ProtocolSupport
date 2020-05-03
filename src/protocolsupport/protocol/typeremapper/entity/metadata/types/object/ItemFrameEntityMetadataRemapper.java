@@ -13,7 +13,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class ItemFrameEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 
-	public ItemFrameEntityMetadataRemapper() {
+	public static final ItemFrameEntityMetadataRemapper INSTANCE = new ItemFrameEntityMetadataRemapper();
+
+	protected ItemFrameEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ItemFrame.ITEM, 7), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ItemFrame.ITEM, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ItemFrame.ITEM, 5), ProtocolVersionsHelper.ALL_1_9);

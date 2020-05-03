@@ -24,7 +24,9 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class EndermanEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
-	public EndermanEntityMetadataRemapper() {
+	public static final EndermanEntityMetadataRemapper INSTANCE = new EndermanEntityMetadataRemapper();
+
+	protected EndermanEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Enderman.CARRIED_BLOCK, 15), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Enderman.CARRIED_BLOCK, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemapPerVersion(version -> new IndexValueRemapper<NetworkEntityMetadataObjectBlockData>(NetworkEntityMetadataObjectIndex.Enderman.CARRIED_BLOCK, 12) {

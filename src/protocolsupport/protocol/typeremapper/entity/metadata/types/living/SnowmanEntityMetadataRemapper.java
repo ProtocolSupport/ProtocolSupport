@@ -7,7 +7,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class SnowmanEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
-	public SnowmanEntityMetadataRemapper() {
+	public static final SnowmanEntityMetadataRemapper INSTANCE = new SnowmanEntityMetadataRemapper();
+
+	protected SnowmanEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Snowman.NO_HAT, 15), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Snowman.NO_HAT, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Snowman.NO_HAT, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

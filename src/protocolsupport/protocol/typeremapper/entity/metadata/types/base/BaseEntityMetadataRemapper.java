@@ -12,7 +12,7 @@ public class BaseEntityMetadataRemapper extends EntityMetadataRemapper {
 
 	public static final BaseEntityMetadataRemapper INSTANCE = new BaseEntityMetadataRemapper();
 
-	public BaseEntityMetadataRemapper() {
+	protected BaseEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Entity.BASE_FLAGS, 0), ProtocolVersionsHelper.ALL_PC);
 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Entity.AIR, 1), ProtocolVersionsHelper.UP_1_9);

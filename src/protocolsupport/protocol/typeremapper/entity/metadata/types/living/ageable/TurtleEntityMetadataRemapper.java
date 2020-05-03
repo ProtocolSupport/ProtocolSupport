@@ -7,7 +7,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class TurtleEntityMetadataRemapper extends AgeableEntityMetadataRemapper {
 
-	public TurtleEntityMetadataRemapper() {
+	public static final TurtleEntityMetadataRemapper INSTANCE = new TurtleEntityMetadataRemapper();
+
+	protected TurtleEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Turtle.HOME_POS, 16), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Turtle.HOME_POS, 15), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Turtle.HOME_POS, 13), ProtocolVersionsHelper.ALL_1_13);

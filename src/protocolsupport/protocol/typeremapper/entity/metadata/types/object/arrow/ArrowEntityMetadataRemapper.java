@@ -9,7 +9,7 @@ public class ArrowEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 
 	public static final ArrowEntityMetadataRemapper INSTANCE = new ArrowEntityMetadataRemapper();
 
-	public ArrowEntityMetadataRemapper() {
+	protected ArrowEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Arrow.CIRTICAL, 7), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Arrow.CIRTICAL, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Arrow.CIRTICAL, 5), ProtocolVersionsHelper.ALL_1_9);

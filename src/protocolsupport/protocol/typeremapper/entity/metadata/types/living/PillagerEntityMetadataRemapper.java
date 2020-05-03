@@ -7,7 +7,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class PillagerEntityMetadataRemapper extends RaidParticipantEntityMetadataRemapper {
 
-	public PillagerEntityMetadataRemapper() {
+	public static final PillagerEntityMetadataRemapper INSTANCE = new PillagerEntityMetadataRemapper();
+
+	protected PillagerEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Pillager.USING_CROSSBOW, 16), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Pillager.USING_CROSSBOW, 15), ProtocolVersionsHelper.ALL_1_14);
 	}

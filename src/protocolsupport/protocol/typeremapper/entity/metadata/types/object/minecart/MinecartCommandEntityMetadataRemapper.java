@@ -8,7 +8,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class MinecartCommandEntityMetadataRemapper extends MinecartEntityMetadataRemapper {
 
-	public MinecartCommandEntityMetadataRemapper() {
+	public static final MinecartCommandEntityMetadataRemapper INSTANCE = new MinecartCommandEntityMetadataRemapper();
+
+	protected MinecartCommandEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.MinecartCommand.COMMAND, 13), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.MinecartCommand.COMMAND, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.MinecartCommand.COMMAND, 11), ProtocolVersionsHelper.ALL_1_9);

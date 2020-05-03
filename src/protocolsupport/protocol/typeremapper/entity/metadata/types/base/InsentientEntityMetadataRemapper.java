@@ -9,7 +9,7 @@ public class InsentientEntityMetadataRemapper extends LivingEntityMetadataRemapp
 
 	public static final InsentientEntityMetadataRemapper INSTANCE = new InsentientEntityMetadataRemapper();
 
-	public InsentientEntityMetadataRemapper() {
+	protected InsentientEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Insentient.INS_FLAGS, 14), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Insentient.INS_FLAGS, 13), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Insentient.INS_FLAGS, 11), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

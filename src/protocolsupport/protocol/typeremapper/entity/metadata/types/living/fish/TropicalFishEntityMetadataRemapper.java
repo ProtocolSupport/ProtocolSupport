@@ -6,7 +6,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class TropicalFishEntityMetadataRemapper extends FishEntityMetadataRemapper {
 
-	public TropicalFishEntityMetadataRemapper() {
+	public static final TropicalFishEntityMetadataRemapper INSTANCE = new TropicalFishEntityMetadataRemapper();
+
+	protected TropicalFishEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.TropicalFish.VARIANT, 16), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.TropicalFish.VARIANT, 15), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.TropicalFish.VARIANT, 13), ProtocolVersionsHelper.ALL_1_13);

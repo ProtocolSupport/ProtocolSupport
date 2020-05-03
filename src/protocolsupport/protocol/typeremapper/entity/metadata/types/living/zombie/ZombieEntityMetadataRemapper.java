@@ -12,7 +12,7 @@ public class ZombieEntityMetadataRemapper extends InsentientEntityMetadataRemapp
 
 	public static final ZombieEntityMetadataRemapper INSTANCE = new ZombieEntityMetadataRemapper();
 
-	public ZombieEntityMetadataRemapper() {
+	protected ZombieEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Zombie.BABY, 15), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Zombie.BABY, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Zombie.BABY, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

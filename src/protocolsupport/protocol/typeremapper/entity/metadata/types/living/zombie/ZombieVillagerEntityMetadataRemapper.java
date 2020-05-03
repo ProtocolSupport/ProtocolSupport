@@ -9,7 +9,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class ZombieVillagerEntityMetadataRemapper extends ZombieEntityMetadataRemapper {
 
-	public ZombieVillagerEntityMetadataRemapper() {
+	public static final ZombieVillagerEntityMetadataRemapper INSTANCE = new ZombieVillagerEntityMetadataRemapper();
+
+	protected ZombieVillagerEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ZombieVillager.CONVERTING, 18), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ZombieVillager.CONVERTING, 17), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ZombieVillager.CONVERTING, 15), ProtocolVersionsHelper.RANGE__1_11__1_13_2);

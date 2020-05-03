@@ -9,7 +9,7 @@ public class BeeEntityMetadataRemapper extends AgeableEntityMetadataRemapper {
 
 	public static final BeeEntityMetadataRemapper INSTANCE = new BeeEntityMetadataRemapper();
 
-	public BeeEntityMetadataRemapper() {
+	protected BeeEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Bee.BEE_FLAGS, 16), ProtocolVersionsHelper.UP_1_15);
 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Bee.ANGER, 17), ProtocolVersionsHelper.UP_1_15);

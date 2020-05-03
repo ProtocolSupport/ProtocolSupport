@@ -4,7 +4,9 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.base.RaidPart
 
 public class IllagerEntityMetadataRemapper extends RaidParticipantEntityMetadataRemapper {
 
-	public IllagerEntityMetadataRemapper() {
+	public static final IllagerEntityMetadataRemapper INSTANCE = new IllagerEntityMetadataRemapper();
+
+	protected IllagerEntityMetadataRemapper() {
 //TODO: from POSE?
 //		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Vindicator.HAS_TARGET, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 	}

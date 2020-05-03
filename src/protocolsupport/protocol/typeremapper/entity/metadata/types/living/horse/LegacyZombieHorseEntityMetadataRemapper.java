@@ -8,7 +8,10 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class LegacyZombieHorseEntityMetadataRemapper extends BattleHorseEntityMetadataRemapper {
 
-	public LegacyZombieHorseEntityMetadataRemapper() {
+	public static final LegacyZombieHorseEntityMetadataRemapper INSTANCE = new LegacyZombieHorseEntityMetadataRemapper();
+
+	protected LegacyZombieHorseEntityMetadataRemapper() {
+		//legacy horse type
 		addRemap(new NetworkEntityMetadataFirstUpdateObjectAddRemapper(14, new NetworkEntityMetadataObjectVarInt(3)), ProtocolVersion.MINECRAFT_1_10);
 		addRemap(new NetworkEntityMetadataFirstUpdateObjectAddRemapper(13, new NetworkEntityMetadataObjectVarInt(3)), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new NetworkEntityMetadataFirstUpdateObjectAddRemapper(19, new NetworkEntityMetadataObjectByte((byte) 3)), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_1, ProtocolVersion.MINECRAFT_1_8));

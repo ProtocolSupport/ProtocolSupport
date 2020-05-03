@@ -7,7 +7,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class IronGolemEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
-	public IronGolemEntityMetadataRemapper() {
+	public static final IronGolemEntityMetadataRemapper INSTANCE = new IronGolemEntityMetadataRemapper();
+
+	protected IronGolemEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.IronGolem.PLAYER_CREATED, 15), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.IronGolem.PLAYER_CREATED, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.IronGolem.PLAYER_CREATED, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

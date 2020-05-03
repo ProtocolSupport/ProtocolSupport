@@ -9,7 +9,7 @@ public class SpiderEntityMetadataRemapper extends InsentientEntityMetadataRemapp
 
 	public static final SpiderEntityMetadataRemapper INSTANCE = new SpiderEntityMetadataRemapper();
 
-	public SpiderEntityMetadataRemapper() {
+	protected SpiderEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Spider.CLIMBING, 15), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Spider.CLIMBING, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Spider.CLIMBING, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

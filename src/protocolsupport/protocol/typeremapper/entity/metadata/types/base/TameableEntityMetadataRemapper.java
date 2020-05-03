@@ -6,7 +6,7 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class TameableEntityMetadataRemapper extends AgeableEntityMetadataRemapper {
 
-	public TameableEntityMetadataRemapper() {
+	protected TameableEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Tameable.TAME_FLAGS, 16), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Tameable.TAME_FLAGS, 15), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Tameable.TAME_FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

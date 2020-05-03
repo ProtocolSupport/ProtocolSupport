@@ -8,7 +8,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class WitchEntityMetadataRemapper extends RaidParticipantEntityMetadataRemapper {
 
-	public WitchEntityMetadataRemapper() {
+	public static final WitchEntityMetadataRemapper INSTANCE = new WitchEntityMetadataRemapper();
+
+	protected WitchEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Witch.DRINKING_POTION, 15), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Witch.DRINKING_POTION, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Witch.DRINKING_POTION, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);

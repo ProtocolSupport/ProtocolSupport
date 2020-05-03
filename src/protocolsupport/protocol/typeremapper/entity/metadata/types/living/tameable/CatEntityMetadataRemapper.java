@@ -7,7 +7,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class CatEntityMetadataRemapper extends TameableEntityMetadataRemapper {
 
-	public CatEntityMetadataRemapper() {
+	public static final CatEntityMetadataRemapper INSTANCE = new CatEntityMetadataRemapper();
+
+	protected CatEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Cat.VARIANT, 18), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Cat.VARIANT, 17), ProtocolVersionsHelper.ALL_1_14);
 
