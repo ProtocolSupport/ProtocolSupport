@@ -37,14 +37,15 @@ public class ProtocolStorage {
 		return address != null ? secondaryStorage.get(address) : null;
 	}
 
-	public static ConnectionImpl removeConnection(SocketAddress address) {
+	public static void removeConnection(SocketAddress address) {
 		Validate.notNull(address, "Primary address cant be null");
 		Data dataentry = primaryStorage.remove(address);
-		for (SocketAddress aaddr : dataentry.addresses) {
-			secondaryStorage.remove(aaddr, dataentry.connection);
+		if (dataentry != null) {
+			for (SocketAddress aaddr : dataentry.addresses) {
+				secondaryStorage.remove(aaddr, dataentry.connection);
+			}
+			secondaryStorage.remove(address, dataentry.connection);
 		}
-		secondaryStorage.remove(address, dataentry.connection);
-		return dataentry.connection;
 	}
 
 	public static Collection<ConnectionImpl> getConnections() {
