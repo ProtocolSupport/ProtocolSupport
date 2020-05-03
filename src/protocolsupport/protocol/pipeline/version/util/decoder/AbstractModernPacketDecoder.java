@@ -22,8 +22,12 @@ public abstract class AbstractModernPacketDecoder extends AbstractPacketDecoder 
 				throw new DecoderException("Data not read fully, bytes left " + input.readableBytes());
 			}
 		} catch (Exception e) {
-			input.readerIndex(0);
-			throwFailedTransformException(e, input);
+			try {
+				input.readerIndex(0);
+				throwFailedTransformException(e, input);
+			} finally {
+				input.skipBytes(input.readableBytes());
+			}
 		}
 	}
 
