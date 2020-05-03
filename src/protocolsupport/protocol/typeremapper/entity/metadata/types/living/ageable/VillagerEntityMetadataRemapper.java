@@ -15,7 +15,7 @@ public class VillagerEntityMetadataRemapper extends AbstractMerchantEntityMetada
 
 	public static final VillagerEntityMetadataRemapper INSTANCE = new VillagerEntityMetadataRemapper();
 
-	public VillagerEntityMetadataRemapper() {
+	protected VillagerEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Villager.VDATA, 17), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Villager.VDATA, 16), ProtocolVersionsHelper.RANGE__1_14_1__1_14_4);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Villager.VDATA, 15), ProtocolVersion.MINECRAFT_1_14);
