@@ -28,7 +28,7 @@ public abstract class MiddleScoreboardObjective extends ClientBoundMiddlePacket 
 		name = StringSerializer.readVarIntUTF8String(serverdata);
 		mode = MiscSerializer.readByteEnum(serverdata, Mode.CONSTANT_LOOKUP);
 		if (mode != Mode.REMOVE) {
-			value = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
+			value = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 			type = MiscSerializer.readVarIntEnum(serverdata, Type.CONSTANT_LOOKUP);
 		}
 	}

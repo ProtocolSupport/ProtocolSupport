@@ -32,17 +32,36 @@ public class ChatAPI {
 	.create();
 
 	/**
-	 * Convers json string to chat component
+	 * Converts json string to chat component<br>
+	 * If json string is null, returns empty text component<br>
+	 * Actually calls {@link ChatAPI#fromJSON(String, boolean)} with lenient false
 	 * @param json json string
 	 * @return chat component
 	 * @throws JsonParseException if passed string is not in json format
 	 */
 	public static BaseComponent fromJSON(String json) {
+		return fromJSON(json, false);
+	}
+
+	/**
+	 * Converts json string to chat component<br>
+	 * If json string is null, returns empty text component<br>
+	 * If lenient is true and errors occurred while parsing returns text component containing input string json
+	 * @param json json string
+	 * @param lenient ignore errors
+	 * @return chat component
+	 * @throws JsonParseException if passed string is not in json format
+	 */
+	public static BaseComponent fromJSON(String json, boolean lenient) {
 		try {
 			BaseComponent result = gson.fromJson(json, BaseComponent.class);
 			return result != null ? result : new TextComponent("");
 		} catch (Exception e) {
-			throw new JsonParseException(json, e);
+			if (lenient) {
+				return new TextComponent(json);
+			} else {
+				throw new JsonParseException(json, e);
+			}
 		}
 	}
 

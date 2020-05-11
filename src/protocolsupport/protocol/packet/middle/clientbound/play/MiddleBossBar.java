@@ -32,7 +32,7 @@ public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		switch (action) {
 			case ADD: {
-				title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
+				title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 				percent = serverdata.readFloat();
 				color = VarNumberSerializer.readVarInt(serverdata);
 				divider = VarNumberSerializer.readVarInt(serverdata);
@@ -47,7 +47,7 @@ public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 				break;
 			}
 			case UPDATE_TITLE: {
-				title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
+				title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 				break;
 			}
 			case UPDATE_STYLE: {

@@ -73,8 +73,8 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 		public static final int flagHasBackgroundOffset = 0x1;
 
 		protected static AdvancementDisplay read(ByteBuf from) {
-			BaseComponent title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(from));
-			BaseComponent description = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(from));
+			BaseComponent title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(from), true);
+			BaseComponent description = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(from), true);
 			NetworkItemStack icon = ItemStackSerializer.readItemStack(from);
 			FrameType type = MiscSerializer.readVarIntEnum(from, FrameType.CONSTANT_LOOKUP);
 			int flags = from.readInt();

@@ -36,13 +36,13 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 		name = StringSerializer.readVarIntUTF8String(serverdata);
 		mode = MiscSerializer.readByteEnum(serverdata, Mode.CONSTANT_LOOKUP);
 		if ((mode == Mode.CREATE) || (mode == Mode.UPDATE)) {
-			displayName = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
+			displayName = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 			friendlyFire = serverdata.readUnsignedByte();
 			nameTagVisibility = StringSerializer.readVarIntUTF8String(serverdata);
 			collisionRule = StringSerializer.readVarIntUTF8String(serverdata);
 			color = VarNumberSerializer.readVarInt(serverdata);
-			prefix = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
-			suffix = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
+			prefix = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
+			suffix = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 		}
 		if ((mode == Mode.CREATE) || (mode == Mode.PLAYERS_ADD) || (mode == Mode.PLAYERS_REMOVE)) {
 			players = ArraySerializer.readVarIntVarIntUTF8StringArray(serverdata);

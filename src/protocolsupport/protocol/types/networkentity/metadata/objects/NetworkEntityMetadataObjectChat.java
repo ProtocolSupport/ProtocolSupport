@@ -11,7 +11,7 @@ public class NetworkEntityMetadataObjectChat extends ReadableNetworkEntityMetada
 
 	@Override
 	public void readFromStream(ByteBuf from) {
-		value = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(from));
+		value = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(from), true);
 	}
 
 	@Override

@@ -33,7 +33,7 @@ public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 			case SET_TITLE:
 			case SET_SUBTITLE:
 			case SET_ACTION_BAR: {
-				message = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
+				message = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 				break;
 			}
 			case SET_TIMES: {

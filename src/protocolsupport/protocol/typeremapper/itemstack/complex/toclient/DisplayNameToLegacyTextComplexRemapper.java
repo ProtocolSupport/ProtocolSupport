@@ -17,7 +17,7 @@ public class DisplayNameToLegacyTextComplexRemapper extends ItemStackNBTComplexR
 		if (displayTag != null) {
 			NBTString displayNameTag = displayTag.getTagOfType(CommonNBT.DISPLAY_NAME, NBTType.STRING);
 			if (displayNameTag != null) {
-				displayTag.setTag(CommonNBT.DISPLAY_NAME, new NBTString(ChatAPI.fromJSON(displayNameTag.getValue()).toLegacyText(locale)));
+				displayTag.setTag(CommonNBT.DISPLAY_NAME, new NBTString(ChatAPI.fromJSON(displayNameTag.getValue(), true).toLegacyText(locale)));
 			}
 		}
 		return tag;

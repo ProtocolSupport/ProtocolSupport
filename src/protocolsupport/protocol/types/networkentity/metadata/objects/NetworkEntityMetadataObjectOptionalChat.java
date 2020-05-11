@@ -12,7 +12,7 @@ public class NetworkEntityMetadataObjectOptionalChat extends ReadableNetworkEnti
 	@Override
 	public void readFromStream(ByteBuf from) {
 		if (from.readBoolean()) {
-			value = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(from));
+			value = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(from), true);
 		}
 	}
 

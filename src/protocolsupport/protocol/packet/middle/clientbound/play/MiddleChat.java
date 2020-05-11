@@ -23,7 +23,7 @@ public abstract class MiddleChat extends ClientBoundMiddlePacket {
 
 	@Override
 	public void readFromServerData(ByteBuf serverdata) {
-		message = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
+		message = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 		position = MiscSerializer.readByteEnum(serverdata, EnumConstantLookups.MESSAGE_POSITION);
 	}
 

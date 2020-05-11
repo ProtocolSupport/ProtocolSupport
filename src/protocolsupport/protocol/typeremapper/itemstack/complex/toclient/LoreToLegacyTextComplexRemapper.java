@@ -20,7 +20,7 @@ public class LoreToLegacyTextComplexRemapper extends ItemStackNBTComplexRemapper
 			if (loreTag != null) {
 				NBTList<NBTString> legacyLoreTag = new NBTList<>(NBTType.STRING);
 				for (NBTString modernTag : loreTag.getTags()) {
-					legacyLoreTag.addTag(new NBTString(ChatAPI.fromJSON(modernTag.getValue()).toLegacyText(locale)));
+					legacyLoreTag.addTag(new NBTString(ChatAPI.fromJSON(modernTag.getValue(), true).toLegacyText(locale)));
 				}
 				displayTag.setTag(CommonNBT.DISPLAY_LORE, legacyLoreTag);
 			}

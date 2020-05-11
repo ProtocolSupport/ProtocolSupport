@@ -17,7 +17,7 @@ public class BookPagesToLegacyTextComplexRemapper extends ItemStackNBTComplexRem
 		if (pages != null) {
 			NBTList<NBTString> newPages = new NBTList<>(NBTType.STRING);
 			for (NBTString page : pages.getTags()) {
-				newPages.addTag(new NBTString(ChatAPI.fromJSON(page.getValue()).toLegacyText(locale)));
+				newPages.addTag(new NBTString(ChatAPI.fromJSON(page.getValue(), true).toLegacyText(locale)));
 			}
 			tag.setTag("pages", newPages);
 		}

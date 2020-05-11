@@ -73,7 +73,7 @@ public class PlayerListCache {
 		}
 
 		public String getCurrentName(String locale) {
-			return displayNameJson != null ? ChatAPI.fromJSON(displayNameJson).toLegacyText(locale) : name;
+			return displayNameJson != null ? ChatAPI.fromJSON(displayNameJson, true).toLegacyText(locale) : name;
 		}
 
 		public void addProperty(ProfileProperty property) {

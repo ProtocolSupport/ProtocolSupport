@@ -38,7 +38,7 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 	public void readFromServerData(ByteBuf serverdata) {
 		windowId = (byte) VarNumberSerializer.readVarInt(serverdata);
 		type = MiscSerializer.readVarIntEnum(serverdata, WindowType.CONSTANT_LOOKUP);
-		title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata));
+		title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 	}
 
 	@Override
