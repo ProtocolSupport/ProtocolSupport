@@ -1,8 +1,6 @@
 package protocolsupport.protocol.typeremapper.packet;
 
 import java.util.ArrayDeque;
-import java.util.EnumSet;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import protocolsupport.protocol.packet.PacketData;
@@ -17,16 +15,6 @@ public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor
 		super(codec);
 	}
 
-	protected static final Set<PacketType> queuedPacketTypes = EnumSet.of(
-		PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE, PacketType.CLIENTBOUND_PLAY_CHUNK_UNLOAD,
-		PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE, PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI,
-		PacketType.CLIENTBOUND_PLAY_BLOCK_ACTION, PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_ANIMATION,
-		PacketType.CLIENTBOUND_PLAY_BLOCK_TILE, PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN,
-		PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED
-	);
-	protected static boolean shouldQueue(PacketData<?> packet) {
-		return queuedPacketTypes.contains(packet.getPacketType());
-	}
 	protected static boolean shouldLock(PacketData<?> packet) {
 		return packet.getPacketType() == PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE;
 	}
@@ -35,38 +23,48 @@ public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor
 	protected boolean locked = false;
 	protected final ArrayDeque<PacketData<?>> queue = new ArrayDeque<>(1024);
 
+	protected void clearQueue() {
+		queue.forEach(PacketData::release);
+		queue.clear();
+	}
+
 	@Override
 	public void process(PacketData<?> packet) {
 		if (locked) {
-			if (packet.getPacketType() == PacketType.CLIENTBOUND_PLAY_ENTITY_PASSENGERS) {
-				queue.add(packet.clone());
-				write(packet);
-			} else if (shouldQueue(packet)) {
-				queue.add(packet);
-			} else {
-				write(packet);
-			}
-			return;
-		}
-
-		write(packet);
-		if (shouldLock(packet)) {
-			lock();
-		}
-	}
-
-	protected boolean processQueue() {
-		if (!queue.isEmpty()) {
-			PacketData<?> qPacket = null;
-			while ((qPacket = queue.pollFirst()) != null) {
-				write(qPacket);
-				if (shouldLock(qPacket)) {
-					lock();
-					return true;
+			switch (packet.getPacketType()) {
+				case CLIENTBOUND_PLAY_RESPAWN: {
+					clearQueue();
+					write(packet);
+					break;
+				}
+				case CLIENTBOUND_PLAY_ENTITY_PASSENGERS: {
+					queue.add(packet.clone());
+					write(packet);
+					break;
+				}
+				case CLIENTBOUND_PLAY_CHUNK_SINGLE:
+				case CLIENTBOUND_PLAY_CHUNK_UNLOAD:
+				case CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE:
+				case CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI:
+				case CLIENTBOUND_PLAY_BLOCK_ACTION:
+				case CLIENTBOUND_PLAY_BLOCK_BREAK_ANIMATION:
+				case CLIENTBOUND_PLAY_BLOCK_TILE:
+				case CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN:
+				case CLIENTBOUND_LEGACY_PLAY_USE_BED: {
+					queue.add(packet);
+					break;
+				}
+				default: {
+					write(packet);
+					break;
 				}
 			}
+		} else {
+			write(packet);
+			if (shouldLock(packet)) {
+				lock();
+			}
 		}
-		return false;
 	}
 
 	protected void lock() {
@@ -74,7 +72,15 @@ public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor
 		codec.getConnection().getEventLoop().schedule(
 			() -> {
 				locked = false;
-				processQueue();
+				if (!queue.isEmpty()) {
+					PacketData<?> qPacket = null;
+					while ((qPacket = queue.pollFirst()) != null) {
+						write(qPacket);
+						if (shouldLock(qPacket)) {
+							lock();
+						}
+					}
+				}
 			},
 			chunkSendInterval, TimeUnit.NANOSECONDS
 		);
@@ -82,8 +88,7 @@ public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor
 
 	@Override
 	public void release() {
-		queue.forEach(PacketData::release);
-		queue.clear();
+		clearQueue();
 	}
 
 }
