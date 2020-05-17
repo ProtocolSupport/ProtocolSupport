@@ -17,18 +17,26 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 
 	@Override
 	public void writeToClient() {
+		codec.write(create(version, x, y, z, id, volume, pitch));
+	}
+
+	public static ClientBoundPacketData create(
+		ProtocolVersion version,
+		int x, int y, int z,
+		String sound, float volume, float pitch
+	) {
 		ClientBoundPacketData worldcustomsound = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND);
-		id = SoundRemapper.getSoundName(version, id);
+		sound = SoundRemapper.getSoundName(version, sound);
 		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)) {
-			id = Utils.clampString(id, 32);
+			sound = Utils.clampString(sound, 32);
 		}
-		StringSerializer.writeString(worldcustomsound, version, id);
+		StringSerializer.writeString(worldcustomsound, version, sound);
 		worldcustomsound.writeInt(x);
 		worldcustomsound.writeInt(y);
 		worldcustomsound.writeInt(z);
 		worldcustomsound.writeFloat(volume);
 		worldcustomsound.writeByte((int) (pitch * 63.5));
-		codec.write(worldcustomsound);
+		return worldcustomsound;
 	}
 
 }
