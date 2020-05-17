@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
@@ -19,13 +19,14 @@ public class Explosion extends AbstractMiddleExplosion {
 		codec.write(WorldCustomSound.create(
 			version,
 			(int) (x * 8), (int) (y * 8), (int) (z * 8),
-			"entity.generic.explode", 4.0F, SoundRemapper.createEntityGenericExplodePitch()
+			"entity.generic.explode",
+			4.0F, SoundRemapper.createEntityGenericExplodePitch()
 		));
 
 		ClientBoundPacketData explosion = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_EXPLOSION);
-		explosion.writeDouble(x);
-		explosion.writeDouble(y);
-		explosion.writeDouble(z);
+		explosion.writeFloat(x);
+		explosion.writeFloat(y);
+		explosion.writeFloat(z);
 		explosion.writeFloat(radius);
 		explosion.writeInt(blocks.length);
 		for (Position block : blocks) {

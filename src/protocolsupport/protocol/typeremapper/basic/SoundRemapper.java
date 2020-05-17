@@ -1,5 +1,7 @@
 package protocolsupport.protocol.typeremapper.basic;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.NamespacedKey;
 
 import protocolsupport.api.ProtocolVersion;
@@ -581,6 +583,10 @@ public class SoundRemapper {
 
 	public static String getSoundName(ProtocolVersion version, int id) {
 		return getSoundName(version, MinecraftSoundData.getNameById(id));
+	}
+
+	public static float createEntityGenericExplodePitch() {
+		return (1.0F + ((ThreadLocalRandom.current().nextFloat() - ThreadLocalRandom.current().nextFloat()) * 0.2F)) * 0.7F;
 	}
 
 }

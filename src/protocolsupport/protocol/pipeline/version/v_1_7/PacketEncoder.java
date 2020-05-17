@@ -89,12 +89,12 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SpawnPain
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SpawnPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.StartGame;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.UpdateMap;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8.Explosion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8.SpawnExpOrb;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8.SpawnGlobal;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8.SpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.TabComplete;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13.ChangeDimension;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13.Explosion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.EntityAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.GameStateChange;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.HeldSlot;

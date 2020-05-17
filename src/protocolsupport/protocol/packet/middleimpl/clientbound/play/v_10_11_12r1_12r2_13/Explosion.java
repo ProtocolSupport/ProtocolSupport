@@ -1,10 +1,13 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12r1_12r2_13;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12r1_12r2_13_14r1_14r2_15.WorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractMiddleExplosion;
+import protocolsupport.protocol.typeremapper.basic.SoundRemapper;
 import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.SoundCategory;
 
 public class Explosion extends AbstractMiddleExplosion {
 
@@ -13,7 +16,14 @@ public class Explosion extends AbstractMiddleExplosion {
 	}
 
 	@Override
-	public void writeToClient() {
+	public void writeToClient0() {
+		codec.write(WorldCustomSound.create(
+			version,
+			(int) (x * 8), (int) (y * 8), (int) (z * 8),
+			"entity.generic.explode", SoundCategory.BLOCKS,
+			4.0F, SoundRemapper.createEntityGenericExplodePitch()
+		));
+
 		ClientBoundPacketData explosion = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_EXPLOSION);
 		explosion.writeFloat(x);
 		explosion.writeFloat(y);

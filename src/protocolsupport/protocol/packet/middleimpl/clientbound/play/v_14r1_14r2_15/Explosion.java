@@ -1,10 +1,14 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_15;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleExplosion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12r1_12r2_13_14r1_14r2_15.WorldCustomSound;
+import protocolsupport.protocol.typeremapper.basic.SoundRemapper;
 import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.SoundCategory;
 
 public class Explosion extends MiddleExplosion {
 
@@ -14,6 +18,15 @@ public class Explosion extends MiddleExplosion {
 
 	@Override
 	public void writeToClient() {
+		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_14_4)) {
+			codec.write(WorldCustomSound.create(
+				version,
+				(int) (x * 8), (int) (y * 8), (int) (z * 8),
+				"entity.generic.explode", SoundCategory.BLOCKS,
+				4.0F, SoundRemapper.createEntityGenericExplodePitch()
+			));
+		}
+
 		ClientBoundPacketData explosion = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_EXPLOSION);
 		explosion.writeFloat(x);
 		explosion.writeFloat(y);

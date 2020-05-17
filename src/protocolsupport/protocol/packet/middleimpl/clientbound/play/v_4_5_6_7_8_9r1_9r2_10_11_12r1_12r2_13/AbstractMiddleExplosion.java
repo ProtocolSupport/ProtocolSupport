@@ -18,7 +18,7 @@ public abstract class AbstractMiddleExplosion extends MiddleExplosion {
 	}
 
 	@Override
-	public boolean postFromServerRead() {
+	public void writeToClient() {
 		int xOrigin = NumberConversions.floor(x);
 		x = xOrigin;
 		int yOrigin = NumberConversions.floor(y);
@@ -34,7 +34,9 @@ public abstract class AbstractMiddleExplosion extends MiddleExplosion {
 				chunk.setBlock(yB >> 4, CachedChunk.getBlockIndex(xB & 0xF, yB & 0xF, zB & 0xF), (short) 0);
 			}
 		}
-		return true;
+		writeToClient0();
 	}
+
+	protected abstract void writeToClient0();
 
 }
