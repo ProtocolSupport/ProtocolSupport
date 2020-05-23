@@ -5,6 +5,7 @@ import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedId
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupportbuildprocessor.Preload;
 
+//TODO: move effect legacy data remaps here too
 @Preload
 public class LegacyEffect {
 

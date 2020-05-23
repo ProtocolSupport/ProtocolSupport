@@ -8,6 +8,7 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
+import protocolsupport.protocol.typeremapper.itemstack.PreFlatteningItemIdData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEffect;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
@@ -25,8 +26,11 @@ public class WorldEvent extends MiddleWorldEvent {
 	public void writeToClient() {
 		if (effectId == 2001) {
 			data = PreFlatteningBlockIdData.getIdFromCombinedId(BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, data));
+		} else if ((effectId == 1010) && (data != 0)) {
+			data = PreFlatteningItemIdData.getIdFromLegacyCombinedId(PreFlatteningItemIdData.getLegacyCombinedIdByModernId(data));
 		}
 		effectId = legacyEffectId.getRemap(effectId);
+
 		ClientBoundPacketData worldevent = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_EVENT);
 		worldevent.writeInt(effectId);
 		PositionSerializer.writeLegacyPositionB(worldevent, position);
