@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.handler;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -10,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerLoginEvent;
 
-import io.netty.util.concurrent.ScheduledFuture;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
@@ -35,7 +35,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 		this.connection = ConnectionImpl.getFromChannel(networkmanager.getChannel());
 
 		synchronized (keepConnectionLock) {
-			this.keepConnectionTask = connection.getEventLoop().scheduleWithFixedDelay(this::keepConnection, 4, 4, TimeUnit.SECONDS);
+			this.keepConnectionTask = connection.getIOExecutor().scheduleWithFixedDelay(this::keepConnection, 4, 4, TimeUnit.SECONDS);
 		}
 	}
 
@@ -158,7 +158,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 				//first send join game that will make client actually switch to game state
 				networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createFakeJoinGamePacket());
 				//send disconnect with a little delay
-				connection.getEventLoop().schedule(() -> disconnect0(s), 50, TimeUnit.MILLISECONDS);
+				connection.getIOExecutor().schedule(() -> disconnect0(s), 50, TimeUnit.MILLISECONDS);
 			} else {
 				disconnect0(s);
 			}

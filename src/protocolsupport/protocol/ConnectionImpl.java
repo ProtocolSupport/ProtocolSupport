@@ -41,6 +41,7 @@ public class ConnectionImpl extends Connection {
 	protected static final AttributeKey<ConnectionImpl> key = AttributeKey.valueOf("PSConnectionImpl");
 
 	protected final NetworkManagerWrapper networkmanager;
+
 	public ConnectionImpl(NetworkManagerWrapper networkmanager) {
 		this.networkmanager = networkmanager;
 		this.networkmanager.getChannel().attr(key).set(this);
@@ -135,12 +136,13 @@ public class ConnectionImpl extends Connection {
 		return networkmanager.getNetworkState();
 	}
 
-	public EventLoop getEventLoop() {
+	@Override
+	public EventLoop getIOExecutor() {
 		return networkmanager.getChannel().eventLoop();
 	}
 
 	public void submitTaskToEventLoop(Runnable task) {
-		getEventLoop().submit(() -> {
+		getIOExecutor().submit(() -> {
 			try {
 				if (!isConnected()) {
 					return;
@@ -186,11 +188,11 @@ public class ConnectionImpl extends Connection {
 		this.version = version;
 	}
 
-	protected PacketDataCodec codec;
+	protected PacketDataCodecImpl codec;
 
 	public void initPacketDataCodec(IPacketIdCodec packetIdCodec, AbstractPacketEncoder encoder, AbstractPacketDecoder decoder) {
 		ChannelPipeline pipeline = getNetworkManagerWrapper().getChannel().pipeline();
-		this.codec = new PacketDataCodec(this, packetIdCodec, pipeline.context(encoder), pipeline.context(decoder));
+		this.codec = new PacketDataCodecImpl(this, packetIdCodec, pipeline.context(encoder), pipeline.context(decoder));
 		encoder.init(codec);
 		decoder.init(codec);
 	}

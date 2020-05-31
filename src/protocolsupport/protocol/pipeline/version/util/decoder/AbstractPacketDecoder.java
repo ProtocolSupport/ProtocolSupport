@@ -7,7 +7,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.PacketDataCodec;
+import protocolsupport.protocol.PacketDataCodecImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.pipeline.version.util.MiddlePacketRegistry;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -17,17 +17,17 @@ public abstract class AbstractPacketDecoder extends SimpleChannelInboundHandler<
 
 	protected final ConnectionImpl connection;
 	protected final MiddlePacketRegistry<ServerBoundMiddlePacket> registry;
+	protected PacketDataCodecImpl codec;
 
 	public AbstractPacketDecoder(ConnectionImpl connection) {
 		this.connection = connection;
 		this.registry = new MiddlePacketRegistry<>(connection);
 	}
 
-	protected PacketDataCodec codec;
-
-	public void init(PacketDataCodec codec) {
+	public void init(PacketDataCodecImpl codec) {
 		this.codec = codec;
 	}
+
 
 	protected void decodeAndTransform(ByteBuf input) {
 		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(connection.getNetworkState(), codec.readPacketId(input));

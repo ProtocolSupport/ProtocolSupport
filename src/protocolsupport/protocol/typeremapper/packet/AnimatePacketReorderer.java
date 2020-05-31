@@ -1,15 +1,10 @@
 package protocolsupport.protocol.typeremapper.packet;
 
+import protocolsupport.protocol.PacketDataCodecImpl.ServerBoundPacketDataProcessor;
 import protocolsupport.protocol.packet.PacketData;
-import protocolsupport.protocol.packet.PacketDataCodec;
-import protocolsupport.protocol.packet.PacketDataCodec.ServerBoundPacketDataProcessor;
 import protocolsupport.protocol.packet.PacketType;
 
 public class AnimatePacketReorderer extends ServerBoundPacketDataProcessor {
-
-	public AnimatePacketReorderer(PacketDataCodec codec) {
-		super(codec);
-	}
 
 	protected PacketData<?> animatePacket;
 

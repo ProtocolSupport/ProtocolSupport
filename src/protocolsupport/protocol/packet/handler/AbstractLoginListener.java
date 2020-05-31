@@ -10,6 +10,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -23,7 +24,6 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
 
 import io.netty.channel.ChannelPipeline;
-import io.netty.util.concurrent.ScheduledFuture;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
@@ -71,7 +71,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 		ThreadLocalRandom.current().nextBytes(randomBytes);
 
 		synchronized (timeoutTaskLock) {
-			this.timeoutTask = connection.getEventLoop().schedule(() -> disconnect("Took too long to log in"), 30, TimeUnit.SECONDS);
+			this.timeoutTask = connection.getIOExecutor().schedule(() -> disconnect("Took too long to log in"), 30, TimeUnit.SECONDS);
 		}
 	}
 

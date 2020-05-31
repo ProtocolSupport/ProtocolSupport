@@ -3,17 +3,12 @@ package protocolsupport.protocol.typeremapper.packet;
 import java.util.ArrayDeque;
 import java.util.concurrent.TimeUnit;
 
+import protocolsupport.protocol.PacketDataCodecImpl.ClientBoundPacketDataProcessor;
 import protocolsupport.protocol.packet.PacketData;
-import protocolsupport.protocol.packet.PacketDataCodec;
-import protocolsupport.protocol.packet.PacketDataCodec.ClientBoundPacketDataProcessor;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.utils.JavaSystemProperty;
 
 public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor {
-
-	public ChunkSendIntervalPacketQueue(PacketDataCodec codec) {
-		super(codec);
-	}
 
 	protected static boolean shouldLock(PacketData<?> packet) {
 		return packet.getPacketType() == PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE;
@@ -69,7 +64,7 @@ public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor
 
 	protected void lock() {
 		locked = true;
-		codec.getConnection().getEventLoop().schedule(
+		getIOExecutor().schedule(
 			() -> {
 				locked = false;
 				if (!queue.isEmpty()) {

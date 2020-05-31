@@ -1,5 +1,6 @@
 package protocolsupport.protocol.packet.middle;
 
+import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketDataCodec;
@@ -8,10 +9,11 @@ import protocolsupport.utils.Utils;
 
 public abstract class MiddlePacket {
 
-	protected final ConnectionImpl connection;
+	protected final Connection connection;
 	protected final PacketDataCodec codec;
 	protected final NetworkDataCache cache;
 	protected final ProtocolVersion version;
+
 	public MiddlePacket(ConnectionImpl connection) {
 		this.connection = connection;
 		this.codec = connection.getCodec();

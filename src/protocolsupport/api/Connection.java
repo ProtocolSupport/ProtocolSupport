@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.BiFunction;
 
 import org.bukkit.entity.Player;
@@ -94,6 +95,13 @@ public abstract class Connection {
 	public ProtocolVersion getVersion() {
 		return version;
 	}
+
+	/**
+	 * Returns native network i/o scheduled executor <br>
+	 * This can be anything, but it's EventLoop on netty based servers
+	 * @return {@link ScheduledExecutorService} which executes tasks in network i/o threads
+	 */
+	public abstract ScheduledExecutorService getIOExecutor();
 
 	/**
 	 * Receives packet from client <br>

@@ -1,7 +1,7 @@
 package protocolsupport.protocol.pipeline.version.util.decoder;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.PacketDataCodec;
+import protocolsupport.protocol.PacketDataCodecImpl;
 import protocolsupport.protocol.typeremapper.packet.AnimatePacketReorderer;
 
 public class AbstractModernWithReorderPacketDecoder extends AbstractModernPacketDecoder {
@@ -11,9 +11,9 @@ public class AbstractModernWithReorderPacketDecoder extends AbstractModernPacket
 	}
 
 	@Override
-	public void init(PacketDataCodec codec) {
+	public void init(PacketDataCodecImpl codec) {
 		super.init(codec);
-		codec.addServerboundPacketProcessor(new AnimatePacketReorderer(codec));
+		codec.addServerboundPacketProcessor(new AnimatePacketReorderer());
 	}
 
 }
