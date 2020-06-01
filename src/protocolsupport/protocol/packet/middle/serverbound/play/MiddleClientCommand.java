@@ -17,13 +17,17 @@ public abstract class MiddleClientCommand extends ServerBoundMiddlePacket {
 	@Override
 	public void writeToServer() {
 		if (command != null) {
-			ServerBoundPacketData clientcommand = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_CLIENT_COMMAND);
-			MiscSerializer.writeVarIntEnum(clientcommand, command);
-			codec.read(clientcommand);
+			codec.read(create(command));
 		}
 	}
 
-	protected static enum Command {
+	public static ServerBoundPacketData create(Command command) {
+		ServerBoundPacketData clientcommand = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_CLIENT_COMMAND);
+		MiscSerializer.writeVarIntEnum(clientcommand, command);
+		return clientcommand;
+	}
+
+	public static enum Command {
 		REQUEST_RESPAWN, GET_STATS
 	}
 

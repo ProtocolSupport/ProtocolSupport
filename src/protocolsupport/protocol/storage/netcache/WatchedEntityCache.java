@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.utils.Utils;
 
+//TODO: rename to NetworkEntityCache
 public class WatchedEntityCache {
 
 	protected final Int2ObjectOpenHashMap<NetworkEntity> watchedEntities = new Int2ObjectOpenHashMap<>();

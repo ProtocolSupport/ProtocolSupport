@@ -4,7 +4,18 @@ import protocolsupport.protocol.types.Environment;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.Utils;
 
+//TODO: rename to ClientCache
 public class AttributesCache {
+
+	protected boolean respawnScreenEnabled;
+
+	public void setRespawnScreenEnabled(boolean enableRespawnScreen) {
+		this.respawnScreenEnabled = enableRespawnScreen;
+	}
+
+	public boolean isRespawnScreenEnabled() {
+		return respawnScreenEnabled;
+	}
 
 	protected Environment dimension;
 

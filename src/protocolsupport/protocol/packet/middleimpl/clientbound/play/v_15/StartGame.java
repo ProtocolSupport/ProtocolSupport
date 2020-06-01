@@ -24,7 +24,7 @@ public class StartGame extends MiddleStartGame {
 		StringSerializer.writeVarIntUTF8String(startgame, leveltype);
 		VarNumberSerializer.writeVarInt(startgame, renderDistance);
 		startgame.writeBoolean(reducedDebugInfo);
-		startgame.writeBoolean(enableRespawnScreen);
+		startgame.writeBoolean(respawnScreenEnabled);
 		codec.write(startgame);
 	}
 
