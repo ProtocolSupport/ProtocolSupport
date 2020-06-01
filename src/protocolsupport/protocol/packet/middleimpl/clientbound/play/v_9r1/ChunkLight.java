@@ -44,7 +44,11 @@ public class ChunkLight extends AbstractChunkLight {
 					.forEach(tile -> blocktileupdates.add(BlockTileUpdate.create(version, tile)))
 			);
 		});
+
 		codec.write(chunkdata);
+		for (ClientBoundPacketData blocktileupdate : blocktileupdates) {
+			codec.write(blocktileupdate);
+		}
 	}
 
 	@Override
