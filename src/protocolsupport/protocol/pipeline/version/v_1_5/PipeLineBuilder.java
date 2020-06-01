@@ -15,7 +15,7 @@ public class PipeLineBuilder extends AbstractNoopFramingPipeLineBuilder {
 		PacketEncoder encoder = new PacketEncoder(connection);
 		pipeline.addAfter(ChannelHandlers.RAW_CAPTURE_RECEIVE, ChannelHandlers.DECODER_TRANSFORMER, decoder);
 		pipeline.addAfter(ChannelHandlers.RAW_CAPTURE_SEND, ChannelHandlers.ENCODER_TRANSFORMER, encoder);
-		connection.initPacketDataCodec(PacketCodec.instance, encoder, decoder);
+		connection.initCodec(PacketCodec.instance, encoder, decoder);
 	}
 
 }

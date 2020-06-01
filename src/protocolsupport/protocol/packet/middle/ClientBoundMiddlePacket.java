@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middle;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.handler.codec.DecoderException;
 import protocolsupport.protocol.ConnectionImpl;
 
 public abstract class ClientBoundMiddlePacket extends MiddlePacket {
@@ -9,15 +10,26 @@ public abstract class ClientBoundMiddlePacket extends MiddlePacket {
 		super(connection);
 	}
 
-	public abstract void readFromServerData(ByteBuf serverdata);
+	public void encode(ByteBuf serverdata) {
+		readFromServerData(serverdata);
+		if (serverdata.isReadable()) {
+			throw new DecoderException("Data not read fully, bytes left " + serverdata.readableBytes());
+		}
+		if (postFromServerRead()) {
+			writeToClient();
+		}
+		postHandle();
+	}
 
-	public boolean postFromServerRead() {
+	protected abstract void readFromServerData(ByteBuf serverdata);
+
+	protected boolean postFromServerRead() {
 		return true;
 	}
 
-	public abstract void writeToClient();
+	protected abstract void writeToClient();
 
-	public void postHandle() {
+	protected void postHandle() {
 	}
 
 }

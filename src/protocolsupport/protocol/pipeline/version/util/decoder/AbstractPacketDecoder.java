@@ -30,11 +30,7 @@ public abstract class AbstractPacketDecoder extends SimpleChannelInboundHandler<
 
 
 	protected void decodeAndTransform(ByteBuf input) {
-		ServerBoundMiddlePacket packetTransformer = registry.getTransformer(connection.getNetworkState(), codec.readPacketId(input));
-
-		packetTransformer.readFromClientData(input);
-
-		packetTransformer.writeToServer();
+		registry.getTransformer(connection.getNetworkState(), codec.readPacketId(input)).decode(input);
 	}
 
 	protected void throwFailedTransformException(Exception exception, ByteBuf input) throws Exception {

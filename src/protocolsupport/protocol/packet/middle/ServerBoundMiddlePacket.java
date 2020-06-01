@@ -9,8 +9,13 @@ public abstract class ServerBoundMiddlePacket extends MiddlePacket {
 		super(connection);
 	}
 
-	public abstract void readFromClientData(ByteBuf clientdata);
+	public void decode(ByteBuf clientdata) {
+		readFromClientData(clientdata);
+		writeToServer();
+	}
 
-	public abstract void writeToServer();
+	protected abstract void readFromClientData(ByteBuf clientdata);
+
+	protected abstract void writeToServer();
 
 }

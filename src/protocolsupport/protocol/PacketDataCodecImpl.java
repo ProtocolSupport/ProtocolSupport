@@ -1,7 +1,7 @@
 package protocolsupport.protocol;
 
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -34,10 +34,10 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 
 	protected ChannelPromise transformerEncoderCurrentRealChannelPromise;
 
-	public <T> void channelWrite(ChannelPromise promise, T t, Consumer<T> consumerT) {
+	public <T, V> void channelWrite(ChannelPromise promise, T t, V v, BiConsumer<T, V> consumer) {
 		transformerEncoderCurrentRealChannelPromise = promise;
 		try {
-			consumerT.accept(t);
+			consumer.accept(t, v);
 			if (transformerEncoderCurrentRealChannelPromise != null) {
 				promise.setSuccess();
 			}

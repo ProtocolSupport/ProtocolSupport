@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoop;
@@ -24,7 +23,6 @@ import protocolsupport.api.Connection.PacketListener.PacketEvent;
 import protocolsupport.api.Connection.PacketListener.RawPacketEvent;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.NetworkState;
-import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.handler.IPacketListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPacketIdCodec;
@@ -61,6 +59,9 @@ public class ConnectionImpl extends Connection {
 		}
 	}
 
+	public void setVersion(ProtocolVersion version) {
+		this.version = version;
+	}
 
 	public NetworkManagerWrapper getNetworkManagerWrapper() {
 		return networkmanager;
@@ -141,7 +142,7 @@ public class ConnectionImpl extends Connection {
 		return networkmanager.getChannel().eventLoop();
 	}
 
-	public void submitTaskToEventLoop(Runnable task) {
+	public void submitIOTask(Runnable task) {
 		getIOExecutor().submit(() -> {
 			try {
 				if (!isConnected()) {
@@ -154,51 +155,51 @@ public class ConnectionImpl extends Connection {
 		});
 	}
 
+	protected PacketDataCodecImpl codec;
+	protected ChannelHandlerContext logicCtx;
+	protected ChannelHandlerContext rawSendCtx;
+	protected ChannelHandlerContext rawRecvCtx;
+
+	public PacketDataCodecImpl getCodec() {
+		return codec;
+	}
+
+	public void initCodec(IPacketIdCodec packetIdCodec, AbstractPacketEncoder encoder, AbstractPacketDecoder decoder) {
+		ChannelPipeline pipeline = networkmanager.getChannel().pipeline();
+		this.logicCtx = pipeline.context(ChannelHandlers.LOGIC);
+		this.rawSendCtx = pipeline.context(ChannelHandlers.RAW_CAPTURE_SEND);
+		this.rawRecvCtx = pipeline.context(ChannelHandlers.RAW_CAPTURE_RECEIVE);
+		this.codec = new PacketDataCodecImpl(this, packetIdCodec, pipeline.context(encoder), pipeline.context(decoder));
+		encoder.init(codec);
+		decoder.init(codec);
+	}
+
 	@Override
 	public void sendPacket(Object packet) {
-		submitTaskToEventLoop(() -> networkmanager.getChannel().pipeline().context(ChannelHandlers.LOGIC).writeAndFlush(packet).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE));
+		submitIOTask(() -> logicCtx.writeAndFlush(packet, logicCtx.voidPromise()));
 	}
 
 	@Override
 	public void receivePacket(Object packet) {
-		submitTaskToEventLoop(() -> {
-			ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.LOGIC);
-			ctx.fireChannelRead(packet);
-			ctx.fireChannelReadComplete();
+		submitIOTask(() -> {
+			logicCtx.fireChannelRead(packet);
+			logicCtx.fireChannelReadComplete();
 		});
 	}
 
 	@Override
 	public void sendRawPacket(byte[] data) {
 		ByteBuf dataInst = Unpooled.wrappedBuffer(data);
-		submitTaskToEventLoop(() -> networkmanager.getChannel().pipeline().context(ChannelHandlers.RAW_CAPTURE_SEND).writeAndFlush(dataInst));
+		submitIOTask(() -> rawSendCtx.writeAndFlush(dataInst));
 	}
 
 	@Override
 	public void receiveRawPacket(byte[] data) {
 		ByteBuf dataInst = Unpooled.wrappedBuffer(data);
-		submitTaskToEventLoop(() -> {
-			ChannelHandlerContext ctx = networkmanager.getChannel().pipeline().context(ChannelHandlers.RAW_CAPTURE_RECEIVE);
-			ctx.fireChannelRead(dataInst);
-			ctx.fireChannelReadComplete();
+		submitIOTask(() -> {
+			rawRecvCtx.fireChannelRead(dataInst);
+			rawRecvCtx.fireChannelReadComplete();
 		});
-	}
-
-	public void setVersion(ProtocolVersion version) {
-		this.version = version;
-	}
-
-	protected PacketDataCodecImpl codec;
-
-	public void initPacketDataCodec(IPacketIdCodec packetIdCodec, AbstractPacketEncoder encoder, AbstractPacketDecoder decoder) {
-		ChannelPipeline pipeline = getNetworkManagerWrapper().getChannel().pipeline();
-		this.codec = new PacketDataCodecImpl(this, packetIdCodec, pipeline.context(encoder), pipeline.context(decoder));
-		encoder.init(codec);
-		decoder.init(codec);
-	}
-
-	public PacketDataCodec getCodec() {
-		return codec;
 	}
 
 

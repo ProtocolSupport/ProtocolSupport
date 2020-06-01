@@ -253,7 +253,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 			int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
 			if (threshold >= 0) {
 				CountDownLatch waitpacketsend = new CountDownLatch(1);
-				connection.submitTaskToEventLoop(() -> networkManager.sendPacket(
+				connection.submitIOTask(() -> networkManager.sendPacket(
 					ServerPlatform.get().getPacketFactory().createSetCompressionPacket(threshold),
 					future -> {
 						ServerPlatform.get().getMiscUtils().enableCompression(networkManager.getChannel().pipeline(), threshold);
