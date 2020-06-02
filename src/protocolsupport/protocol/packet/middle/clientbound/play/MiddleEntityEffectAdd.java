@@ -27,7 +27,7 @@ public abstract class MiddleEntityEffectAdd extends MiddleEntity {
 	}
 
 	@Override
-	public void handleReadData() {
+	protected void handleReadData() {
 		if (GenericIdSkipper.EFFECT.getTable(version).shouldSkip(effectId)) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}

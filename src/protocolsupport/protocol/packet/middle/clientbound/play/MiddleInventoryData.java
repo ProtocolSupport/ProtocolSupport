@@ -21,11 +21,12 @@ public abstract class MiddleInventoryData extends ClientBoundMiddlePacket {
 	@Override
 	public void readServerData(ByteBuf serverdata) {
 		windowId = serverdata.readByte();
+		type = serverdata.readShort();
+		value = serverdata.readShort();
+
 		if (!windowCache.isValidWindowId(windowId)) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
-		type = serverdata.readShort();
-		value = serverdata.readShort();
 	}
 
 }

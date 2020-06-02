@@ -15,7 +15,7 @@ public abstract class AbstractChunkCacheBlockChangeMulti extends MiddleBlockChan
 	}
 
 	@Override
-	public void handleReadData() {
+	protected void handleReadData() {
 		CachedChunk cachedChunk = chunkCache.get(chunkCoord);
 
 		if (cachedChunk == null) {

@@ -29,7 +29,7 @@ public abstract class MiddleChat extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void handleReadData() {
+	protected void handleReadData() {
 		//TODO: should this really be here?
 		if (
 			(position == MessagePosition.HOTBAR) &&

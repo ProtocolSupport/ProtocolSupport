@@ -51,7 +51,7 @@ public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void handleReadData() {
+	protected void handleReadData() {
 		//TODO: actually send this from impls
 		if (
 			(action == Action.SET_ACTION_BAR) &&

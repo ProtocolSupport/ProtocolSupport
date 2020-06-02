@@ -19,7 +19,7 @@ public abstract class AbstractChunkLight extends MiddleChunkLight {
 	protected CachedChunk cachedChunk;
 
 	@Override
-	public void handleReadData() {
+	protected void handleReadData() {
 		boolean chunkLoaded = false;
 		cachedChunk = chunkCache.get(coord);
 		if (cachedChunk != null) {

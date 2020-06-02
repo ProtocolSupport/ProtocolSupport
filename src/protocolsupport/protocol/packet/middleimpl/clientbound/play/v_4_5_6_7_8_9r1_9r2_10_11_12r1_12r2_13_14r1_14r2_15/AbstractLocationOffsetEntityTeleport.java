@@ -23,7 +23,7 @@ public abstract class AbstractLocationOffsetEntityTeleport extends MiddleEntityT
 	protected NetworkEntity entity;
 
 	@Override
-	public void handleReadData() {
+	protected void handleReadData() {
 		entity = entityCache.getWatchedEntity(entityId);
 		if (entity == null) {
 			throw CancelMiddlePacketException.INSTANCE;

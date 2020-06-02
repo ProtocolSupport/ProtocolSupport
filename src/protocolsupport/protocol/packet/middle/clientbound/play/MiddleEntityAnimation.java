@@ -21,6 +21,7 @@ public abstract class MiddleEntityAnimation extends ClientBoundMiddlePacket {
 	public void readServerData(ByteBuf serverdata) {
 		entityId = VarNumberSerializer.readVarInt(serverdata);
 		animation = Animation.BY_ID.get(serverdata.readUnsignedByte());
+
 		if (animation == null) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}

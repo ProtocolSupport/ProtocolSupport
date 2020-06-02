@@ -25,10 +25,11 @@ public abstract class MiddleInventorySetItems extends ClientBoundMiddlePacket {
 	@Override
 	public void readServerData(ByteBuf serverdata) {
 		windowId = serverdata.readByte();
+		items = ArraySerializer.readShortTArray(serverdata, NetworkItemStack.class, ItemStackSerializer::readItemStack);
+
 		if (!windowCache.isValidWindowId(windowId) && (windowId != WINDOW_ID_PLAYER_INVENTORY)) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
-		items = ArraySerializer.readShortTArray(serverdata, NetworkItemStack.class, ItemStackSerializer::readItemStack);
 	}
 
 }

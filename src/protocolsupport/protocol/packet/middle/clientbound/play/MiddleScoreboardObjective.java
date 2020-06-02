@@ -30,6 +30,10 @@ public abstract class MiddleScoreboardObjective extends ClientBoundMiddlePacket 
 	public void readServerData(ByteBuf serverdata) {
 		name = StringSerializer.readVarIntUTF8String(serverdata);
 		mode = MiscSerializer.readByteEnum(serverdata, Mode.CONSTANT_LOOKUP);
+		if (mode != Mode.REMOVE) {
+			value = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
+			type = MiscSerializer.readVarIntEnum(serverdata, Type.CONSTANT_LOOKUP);
+		}
 
 		switch (mode) {
 			case CREATE: {
@@ -50,11 +54,6 @@ public abstract class MiddleScoreboardObjective extends ClientBoundMiddlePacket 
 				}
 				break;
 			}
-		}
-
-		if (mode != Mode.REMOVE) {
-			value = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
-			type = MiscSerializer.readVarIntEnum(serverdata, Type.CONSTANT_LOOKUP);
 		}
 	}
 
