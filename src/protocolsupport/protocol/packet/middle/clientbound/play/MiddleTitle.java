@@ -1,19 +1,13 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
-import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
-import protocolsupport.api.chat.ChatAPI.MessagePosition;
 import protocolsupport.api.chat.components.BaseComponent;
-import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookups;
-import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 
@@ -47,22 +41,6 @@ public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 			case RESET: {
 				break;
 			}
-		}
-	}
-
-	@Override
-	protected void handleReadData() {
-		//TODO: actually send this from impls
-		if (
-			(action == Action.SET_ACTION_BAR) &&
-			(version.getProtocolType() == ProtocolType.PC) &&
-			version.isBefore(ProtocolVersion.MINECRAFT_1_11)
-		) {
-			connection.sendPacket(ServerPlatform.get().getPacketFactory().createOutboundChatPacket(
-				ChatAPI.toJSON(new TextComponent(message.toLegacyText(cache.getAttributesCache().getLocale()))),
-				MessagePosition.HOTBAR.ordinal()
-			));
-			throw CancelMiddlePacketException.INSTANCE;
 		}
 	}
 
