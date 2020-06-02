@@ -17,7 +17,7 @@ public abstract class MiddleVehicleMove extends ClientBoundMiddlePacket {
 	protected float pitch;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();
 		z = serverdata.readDouble();

@@ -13,11 +13,10 @@ public abstract class AbstractSetPosition extends MiddleSetPosition {
 	}
 
 	@Override
-	public boolean postFromServerRead() {
+	public void handleReadData() {
 		if (teleportConfirmId != 0) {
-			cache.getMovementCache().setTeleportLocation(x, y, z, teleportConfirmId);
+			movementCache.setTeleportLocation(x, y, z, teleportConfirmId);
 		}
-		return true;
 	}
 
 }

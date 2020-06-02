@@ -11,7 +11,7 @@ public class HeldSlot extends MiddleHeldSlot {
 	}
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		slot = clientdata.readShort();
 	}
 

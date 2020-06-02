@@ -12,7 +12,7 @@ public class UseEntity extends MiddleUseEntity {
 	}
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		clientdata.readInt();
 		entityId = clientdata.readInt();
 		action = clientdata.readBoolean() ? Action.ATTACK : Action.INTERACT;

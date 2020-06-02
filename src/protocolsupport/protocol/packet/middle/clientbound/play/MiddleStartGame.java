@@ -40,7 +40,7 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 	protected boolean respawnScreenEnabled;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		player = NetworkEntity.createPlayer(serverdata.readInt());
 		int gmdata = serverdata.readByte();
 		gamemode = GameMode.getById(gmdata & 0xFFFFFFF7);
@@ -53,7 +53,10 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 		renderDistance = VarNumberSerializer.readVarInt(serverdata);
 		reducedDebugInfo = serverdata.readBoolean();
 		respawnScreenEnabled = serverdata.readBoolean();
+	}
 
+	@Override
+	protected void handleReadData() {
 		clientCache.setCurrentDimension(dimension);
 		clientCache.setRespawnScreenEnabled(respawnScreenEnabled);
 		entityCache.clearWatchedEntities();

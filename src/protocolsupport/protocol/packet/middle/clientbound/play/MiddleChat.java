@@ -7,6 +7,7 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.ChatAPI.MessagePosition;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -22,21 +23,21 @@ public abstract class MiddleChat extends ClientBoundMiddlePacket {
 	protected MessagePosition position;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		message = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 		position = MiscSerializer.readByteEnum(serverdata, EnumConstantLookups.MESSAGE_POSITION);
 	}
 
 	@Override
-	public boolean postFromServerRead() {
+	public void handleReadData() {
+		//TODO: should this really be here?
 		if (
 			(position == MessagePosition.HOTBAR) &&
 			(version.getProtocolType() == ProtocolType.PC) &&
 			version.isBefore(ProtocolVersion.MINECRAFT_1_8)
 		) {
-			return false;
+			throw CancelMiddlePacketException.INSTANCE;
 		}
-		return true;
 	}
 
 }

@@ -15,7 +15,7 @@ public abstract class MiddleResourcePack extends ClientBoundMiddlePacket {
 	protected String hash;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		url = StringSerializer.readVarIntUTF8String(serverdata);
 		hash = StringSerializer.readVarIntUTF8String(serverdata);
 	}

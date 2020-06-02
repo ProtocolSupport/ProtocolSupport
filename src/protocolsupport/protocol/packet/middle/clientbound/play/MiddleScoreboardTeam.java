@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -20,6 +21,8 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 		super(connection);
 	}
 
+	protected final Set<String> teams = new HashSet<>();
+
 	protected String name;
 	protected Mode mode;
 	protected BaseComponent displayName;
@@ -32,9 +35,31 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 	protected String[] players;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		name = StringSerializer.readVarIntUTF8String(serverdata);
 		mode = MiscSerializer.readByteEnum(serverdata, Mode.CONSTANT_LOOKUP);
+
+		switch (mode) {
+			case CREATE: {
+				if (!teams.add(name)) {
+					throw CancelMiddlePacketException.INSTANCE;
+				}
+				break;
+			}
+			case REMOVE: {
+				if (!teams.remove(name)) {
+					throw CancelMiddlePacketException.INSTANCE;
+				}
+				break;
+			}
+			default: {
+				if (!teams.contains(name)) {
+					throw CancelMiddlePacketException.INSTANCE;
+				}
+				break;
+			}
+		}
+
 		if ((mode == Mode.CREATE) || (mode == Mode.UPDATE)) {
 			displayName = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 			friendlyFire = serverdata.readUnsignedByte();
@@ -46,23 +71,6 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 		}
 		if ((mode == Mode.CREATE) || (mode == Mode.PLAYERS_ADD) || (mode == Mode.PLAYERS_REMOVE)) {
 			players = ArraySerializer.readVarIntVarIntUTF8StringArray(serverdata);
-		}
-	}
-
-	protected final Set<String> teams = new HashSet<>();
-
-	@Override
-	public boolean postFromServerRead() {
-		switch (mode) {
-			case CREATE: {
-				return teams.add(name);
-			}
-			case REMOVE: {
-				return teams.remove(name);
-			}
-			default: {
-				return teams.contains(name);
-			}
 		}
 	}
 

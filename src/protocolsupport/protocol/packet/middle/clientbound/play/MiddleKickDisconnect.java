@@ -16,7 +16,7 @@ public abstract class MiddleKickDisconnect extends ClientBoundMiddlePacket {
 	protected BaseComponent message;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		message = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 	}
 

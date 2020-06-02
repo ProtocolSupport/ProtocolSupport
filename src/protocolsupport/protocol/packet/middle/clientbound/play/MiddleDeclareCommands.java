@@ -15,7 +15,7 @@ public abstract class MiddleDeclareCommands extends ClientBoundMiddlePacket {
 	protected ByteBuf data;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		data = MiscSerializer.readAllBytesSlice(serverdata);
 	}
 

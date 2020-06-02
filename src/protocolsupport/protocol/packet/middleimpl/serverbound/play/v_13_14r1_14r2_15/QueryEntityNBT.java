@@ -12,7 +12,7 @@ public class QueryEntityNBT extends MiddleQueryEntityNBT {
 	}
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		id = VarNumberSerializer.readVarInt(clientdata);
 		entityId = VarNumberSerializer.readVarInt(clientdata);
 	}

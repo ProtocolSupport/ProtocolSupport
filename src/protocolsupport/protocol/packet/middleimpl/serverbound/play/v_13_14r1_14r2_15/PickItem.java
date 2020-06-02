@@ -12,7 +12,7 @@ public class PickItem extends MiddlePickItem {
 	}
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		slot = VarNumberSerializer.readVarInt(clientdata);
 	}
 

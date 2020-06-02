@@ -20,7 +20,7 @@ public class EntityAction extends MiddleEntityAction {
 	);
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		entityId = clientdata.readInt();
 		action = actionById.get(clientdata.readByte());
 		jumpBoost = clientdata.readInt();

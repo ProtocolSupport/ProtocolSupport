@@ -11,25 +11,31 @@ public abstract class ClientBoundMiddlePacket extends MiddlePacket {
 	}
 
 	public void encode(ByteBuf serverdata) {
-		readFromServerData(serverdata);
-		if (serverdata.isReadable()) {
-			throw new DecoderException("Data not read fully, bytes left " + serverdata.readableBytes());
-		}
-		if (postFromServerRead()) {
-			writeToClient();
-		}
-		postHandle();
+		encode0(serverdata);
+		cleanup();
 	}
 
-	protected abstract void readFromServerData(ByteBuf serverdata);
+	private void encode0(ByteBuf serverdata) {
+		try {
+			readServerData(serverdata);
+			if (serverdata.isReadable()) {
+				throw new DecoderException("Data not read fully, bytes left " + serverdata.readableBytes());
+			}
+			handleReadData();
+		} catch (CancelMiddlePacketException e) {
+			return;
+		}
+		writeToClient();
+	}
 
-	protected boolean postFromServerRead() {
-		return true;
+	protected abstract void readServerData(ByteBuf serverdata);
+
+	protected void handleReadData() {
 	}
 
 	protected abstract void writeToClient();
 
-	protected void postHandle() {
+	protected void cleanup() {
 	}
 
 }

@@ -4,9 +4,12 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleSpawnGlobal extends ClientBoundMiddlePacket {
+
+	protected final WatchedEntityCache entityCache = cache.getWatchedEntityCache();
 
 	public MiddleSpawnGlobal(ConnectionImpl connection) {
 		super(connection);
@@ -18,7 +21,7 @@ public abstract class MiddleSpawnGlobal extends ClientBoundMiddlePacket {
 	protected double z;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		int entityId = VarNumberSerializer.readVarInt(serverdata);
 		int typeId = serverdata.readUnsignedByte();
 		entity = NetworkEntity.createGlobal(entityId, typeId);
@@ -28,9 +31,8 @@ public abstract class MiddleSpawnGlobal extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public boolean postFromServerRead() {
-		cache.getWatchedEntityCache().addWatchedEntity(entity);
-		return true;
+	public void handleReadData() {
+		entityCache.addWatchedEntity(entity);
 	}
 
 }

@@ -14,7 +14,7 @@ public abstract class MiddleEntityLeash extends ClientBoundMiddlePacket {
 	protected int vehicleId;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		entityId = serverdata.readInt();
 		vehicleId = serverdata.readInt();
 	}

@@ -50,7 +50,7 @@ public class ChunkLight extends AbstractChunkLight {
 	}
 
 	@Override
-	public void postHandle() {
+	public void cleanup() {
 		blocktileupdates.clear();
 	}
 

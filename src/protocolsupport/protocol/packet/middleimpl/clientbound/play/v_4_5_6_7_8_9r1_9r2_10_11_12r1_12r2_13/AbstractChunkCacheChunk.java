@@ -11,19 +11,19 @@ import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.utils.BitUtils;
 
-public abstract class AbstractChunk extends MiddleChunk {
+public abstract class AbstractChunkCacheChunk extends MiddleChunk {
 
 	protected final ChunkCache chunkCache = cache.getChunkCache();
 	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
-	public AbstractChunk(ConnectionImpl connection) {
+	public AbstractChunkCacheChunk(ConnectionImpl connection) {
 		super(connection);
 	}
 
 	protected CachedChunk cachedChunk;
 
 	@Override
-	public boolean postFromServerRead() {
+	public void handleReadData() {
 		cachedChunk = chunkCache.get(coord);
 		if (cachedChunk == null) {
 			cachedChunk = chunkCache.add(coord);
@@ -50,10 +50,8 @@ public abstract class AbstractChunk extends MiddleChunk {
 			} else {
 				tile = tileRemapper.remap(tile);
 			}
-			cachedChunk.getTiles(sectionNumber).put(tile.getPosition(), tile);
+			cachedChunk.getTiles(sectionNumber).put(position, tile);
 		}
-
-		return true;
 	}
 
 }

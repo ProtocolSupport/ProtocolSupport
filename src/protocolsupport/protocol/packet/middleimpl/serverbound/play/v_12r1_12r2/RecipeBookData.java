@@ -13,7 +13,7 @@ public class RecipeBookData extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		MiddleRecipeBookData.Type type = MiscSerializer.readVarIntEnum(clientdata, MiddleRecipeBookData.Type.CONSTANT_LOOKUP);
 		switch (type) {
 			case DISPLAYED_RECIPE: {

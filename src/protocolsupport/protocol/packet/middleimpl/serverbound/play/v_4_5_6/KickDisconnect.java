@@ -12,7 +12,7 @@ public class KickDisconnect extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		StringSerializer.readShortUTF16BEString(clientdata, 32);
 	}
 

@@ -18,7 +18,7 @@ public class Ping extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		clientdata.readUnsignedByte();
 	}
 

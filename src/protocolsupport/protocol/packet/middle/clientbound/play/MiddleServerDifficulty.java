@@ -16,7 +16,7 @@ public abstract class MiddleServerDifficulty extends ClientBoundMiddlePacket {
 	protected boolean locked;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		difficulty = MiscSerializer.readByteEnum(serverdata, Difficulty.CONSTANT_LOOKUP);
 		locked = serverdata.readBoolean();
 	}

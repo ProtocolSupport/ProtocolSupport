@@ -13,7 +13,7 @@ public class ResourcePackStatus extends MiddleResourcePackStatus {
 	}
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		StringSerializer.readVarIntUTF8String(clientdata, 40);
 		result = VarNumberSerializer.readVarInt(clientdata);
 	}

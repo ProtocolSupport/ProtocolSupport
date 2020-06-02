@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
@@ -22,14 +23,12 @@ public abstract class MiddleInventorySetItems extends ClientBoundMiddlePacket {
 	protected NetworkItemStack[] items;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		windowId = serverdata.readByte();
+		if (!windowCache.isValidWindowId(windowId) && (windowId != WINDOW_ID_PLAYER_INVENTORY)) {
+			throw CancelMiddlePacketException.INSTANCE;
+		}
 		items = ArraySerializer.readShortTArray(serverdata, NetworkItemStack.class, ItemStackSerializer::readItemStack);
-	}
-
-	@Override
-	public boolean postFromServerRead() {
-		return windowCache.isValidWindowId(windowId) || (windowId == WINDOW_ID_PLAYER_INVENTORY);
 	}
 
 }

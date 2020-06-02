@@ -16,14 +16,13 @@ public abstract class MiddleInventoryClose extends ClientBoundMiddlePacket {
 	protected byte windowId;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		windowId = serverdata.readByte();
 	}
 
 	@Override
-	public boolean postFromServerRead() {
+	public void handleReadData() {
 		windowCache.closeWindow();
-		return true;
 	}
 
 }

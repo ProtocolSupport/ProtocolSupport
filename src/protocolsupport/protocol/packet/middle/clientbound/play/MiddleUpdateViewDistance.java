@@ -14,7 +14,7 @@ public abstract class MiddleUpdateViewDistance extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		distance = VarNumberSerializer.readVarInt(serverdata);
 	}
 

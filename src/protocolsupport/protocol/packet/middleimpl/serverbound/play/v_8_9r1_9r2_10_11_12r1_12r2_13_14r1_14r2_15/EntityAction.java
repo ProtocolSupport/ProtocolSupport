@@ -22,7 +22,7 @@ public class EntityAction extends MiddleEntityAction {
 	);
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		entityId = VarNumberSerializer.readVarInt(clientdata);
 		int actionId = VarNumberSerializer.readVarInt(clientdata);
 		jumpBoost = VarNumberSerializer.readVarInt(clientdata);

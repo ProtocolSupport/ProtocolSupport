@@ -11,9 +11,9 @@ import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalPosition;
 
-public abstract class AbstractEntityMetadata extends MiddleEntityMetadata {
+public abstract class AbstractUseBedPacketEntityMetadata extends MiddleEntityMetadata {
 
-	public AbstractEntityMetadata(ConnectionImpl connection) {
+	public AbstractUseBedPacketEntityMetadata(ConnectionImpl connection) {
 		super(connection);
 	}
 

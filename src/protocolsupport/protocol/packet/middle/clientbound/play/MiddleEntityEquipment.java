@@ -18,7 +18,7 @@ public abstract class MiddleEntityEquipment extends ClientBoundMiddlePacket {
 	protected NetworkItemStack itemstack;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		entityId = VarNumberSerializer.readVarInt(serverdata);
 		slot = VarNumberSerializer.readVarInt(serverdata);
 		itemstack = ItemStackSerializer.readItemStack(serverdata);

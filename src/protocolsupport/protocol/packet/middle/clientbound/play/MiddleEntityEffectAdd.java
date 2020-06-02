@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 
@@ -17,8 +18,8 @@ public abstract class MiddleEntityEffectAdd extends MiddleEntity {
 	protected int flags;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
-		super.readFromServerData(serverdata);
+	public void readServerData(ByteBuf serverdata) {
+		super.readServerData(serverdata);
 		effectId = serverdata.readByte();
 		amplifier = serverdata.readByte();
 		duration = VarNumberSerializer.readVarInt(serverdata);
@@ -26,8 +27,10 @@ public abstract class MiddleEntityEffectAdd extends MiddleEntity {
 	}
 
 	@Override
-	public boolean postFromServerRead() {
-		return !GenericIdSkipper.EFFECT.getTable(version).shouldSkip(effectId);
+	public void handleReadData() {
+		if (GenericIdSkipper.EFFECT.getTable(version).shouldSkip(effectId)) {
+			throw CancelMiddlePacketException.INSTANCE;
+		}
 	}
 
 }

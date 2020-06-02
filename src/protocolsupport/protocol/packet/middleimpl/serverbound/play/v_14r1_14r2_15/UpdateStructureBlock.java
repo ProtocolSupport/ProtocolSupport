@@ -15,7 +15,7 @@ public class UpdateStructureBlock extends MiddleUpdateStructureBlock {
 	}
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		PositionSerializer.readPositionTo(clientdata, position);
 		action = MiscSerializer.readVarIntEnum(clientdata, Action.CONSTANT_LOOKUP);
 		mode = MiscSerializer.readVarIntEnum(clientdata, Mode.CONSTANT_LOOKUP);

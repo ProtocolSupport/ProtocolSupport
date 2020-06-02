@@ -4,8 +4,11 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
 
 public abstract class MiddleEntityDestroy extends ClientBoundMiddlePacket {
+
+	protected final WatchedEntityCache entityCache = cache.getWatchedEntityCache();
 
 	public MiddleEntityDestroy(ConnectionImpl connection) {
 		super(connection);
@@ -14,14 +17,13 @@ public abstract class MiddleEntityDestroy extends ClientBoundMiddlePacket {
 	protected int[] entityIds;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		entityIds = ArraySerializer.readVarIntVarIntArray(serverdata);
 	}
 
 	@Override
-	public boolean postFromServerRead() {
-		cache.getWatchedEntityCache().removeWatchedEntities(entityIds);
-		return true;
+	public void handleReadData() {
+		entityCache.removeWatchedEntities(entityIds);
 	}
 
 }

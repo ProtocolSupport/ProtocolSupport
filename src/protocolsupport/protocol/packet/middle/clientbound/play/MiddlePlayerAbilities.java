@@ -15,7 +15,7 @@ public abstract class MiddlePlayerAbilities extends ClientBoundMiddlePacket {
 	protected float walkspeed;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		flags = serverdata.readUnsignedByte();
 		flyspeed = serverdata.readFloat();
 		walkspeed = serverdata.readFloat();

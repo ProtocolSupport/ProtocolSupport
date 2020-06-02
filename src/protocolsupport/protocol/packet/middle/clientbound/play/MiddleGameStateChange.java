@@ -14,7 +14,7 @@ public abstract class MiddleGameStateChange extends ClientBoundMiddlePacket {
 	protected float value;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		type = serverdata.readByte();
 		value = serverdata.readFloat();
 	}

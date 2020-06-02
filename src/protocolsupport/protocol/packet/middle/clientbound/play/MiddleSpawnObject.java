@@ -36,7 +36,7 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 	protected int motZ;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		int entityId = VarNumberSerializer.readVarInt(serverdata);
 		UUID uuid = MiscSerializer.readUUID(serverdata);
 		int typeId = serverdata.readUnsignedByte();

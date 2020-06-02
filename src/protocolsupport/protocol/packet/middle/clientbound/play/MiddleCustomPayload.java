@@ -15,7 +15,7 @@ public abstract class MiddleCustomPayload extends ClientBoundMiddlePacket {
 	protected ByteBuf data;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		tag = StringSerializer.readVarIntUTF8String(serverdata);
 		data = serverdata.readSlice(serverdata.readableBytes());
 	}

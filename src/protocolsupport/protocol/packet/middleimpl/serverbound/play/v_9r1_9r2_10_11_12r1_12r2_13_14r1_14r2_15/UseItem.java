@@ -13,7 +13,7 @@ public class UseItem extends MiddleBlockPlace {
 	}
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		hand = MiscSerializer.readVarIntEnum(clientdata, UsedHand.CONSTANT_LOOKUP);
 		face = -1;
 	}

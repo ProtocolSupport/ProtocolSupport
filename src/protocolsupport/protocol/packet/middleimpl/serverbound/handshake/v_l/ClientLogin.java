@@ -20,7 +20,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	protected int port;
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		String[] data = StringSerializer.readShortUTF16BEString(clientdata, Short.MAX_VALUE).split("[;]");
 		String[] addrdata = data[1].split("[:]");
 		username = data[0];

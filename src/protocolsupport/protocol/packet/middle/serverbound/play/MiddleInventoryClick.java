@@ -16,8 +16,6 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected static final int MODE_NOOP = -1;
-
 	protected byte windowId;
 	protected int actionNumber;
 	protected int mode;
@@ -27,9 +25,7 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 
 	@Override
 	public void writeToServer() {
-		if (mode != MODE_NOOP) {
-			codec.read(create(windowId, actionNumber, mode, button, slot, itemstack));
-		}
+		codec.read(create(windowId, actionNumber, mode, button, slot, itemstack));
 	}
 
 	public static final int MODE_CLICK = 0;

@@ -14,7 +14,7 @@ public abstract class MiddleEntity extends ClientBoundMiddlePacket {
 	protected int entityId;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		entityId = VarNumberSerializer.readVarInt(serverdata);
 	}
 

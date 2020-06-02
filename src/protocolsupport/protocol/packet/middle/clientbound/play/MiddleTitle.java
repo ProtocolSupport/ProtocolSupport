@@ -8,6 +8,7 @@ import protocolsupport.api.chat.ChatAPI.MessagePosition;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -27,7 +28,7 @@ public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 	protected int fadeOut;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		switch (action) {
 			case SET_TITLE:
@@ -50,7 +51,8 @@ public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public boolean postFromServerRead() {
+	public void handleReadData() {
+		//TODO: actually send this from impls
 		if (
 			(action == Action.SET_ACTION_BAR) &&
 			(version.getProtocolType() == ProtocolType.PC) &&
@@ -60,9 +62,8 @@ public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 				ChatAPI.toJSON(new TextComponent(message.toLegacyText(cache.getAttributesCache().getLocale()))),
 				MessagePosition.HOTBAR.ordinal()
 			));
-			return false;
+			throw CancelMiddlePacketException.INSTANCE;
 		}
-		return true;
 	}
 
 	protected static enum Action {

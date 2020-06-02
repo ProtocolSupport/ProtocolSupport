@@ -19,7 +19,7 @@ public class Ping extends ServerBoundMiddlePacket {
 	protected int port;
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		clientdata.readUnsignedByte();
 		clientdata.readUnsignedByte();
 		StringSerializer.readShortUTF16BEString(clientdata, Short.MAX_VALUE);

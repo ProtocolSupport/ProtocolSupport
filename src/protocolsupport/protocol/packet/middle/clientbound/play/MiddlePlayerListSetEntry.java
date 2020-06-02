@@ -29,8 +29,7 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 	protected final HashMap<UUID, PlayerListOldNewEntry> infos = new HashMap<>();
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
-		infos.clear();
+	public void readServerData(ByteBuf serverdata) {
 		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		Utils.repeat(VarNumberSerializer.readVarInt(serverdata), () -> {
 			UUID uuid = MiscSerializer.readUUID(serverdata);
@@ -107,8 +106,8 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public boolean postFromServerRead() {
-		return !infos.isEmpty();
+	protected void cleanup() {
+		infos.clear();
 	}
 
 	protected static class PlayerListOldNewEntry {

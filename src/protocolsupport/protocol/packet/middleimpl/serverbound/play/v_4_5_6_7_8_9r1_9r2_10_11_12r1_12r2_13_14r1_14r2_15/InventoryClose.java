@@ -11,7 +11,7 @@ public class InventoryClose extends MiddleInventoryClose {
 	}
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		windowId = clientdata.readByte();
 	}
 

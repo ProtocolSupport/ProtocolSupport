@@ -49,7 +49,7 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 	protected ClientBoundPacketDataProcessor transformerEncoderHeadProcessor = new ClientBoundPacketDataProcessor() {
 		@Override
 		protected void write(PacketData<?> packet) {
-			write0(packet);	
+			write0(packet);
 		}
 	};
 	protected ServerBoundPacketDataProcessor transformerDecoderHeadProcessor = new ServerBoundPacketDataProcessor() {

@@ -4,10 +4,13 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class MiddleSpawnExpOrb extends ClientBoundMiddlePacket {
+
+	protected final WatchedEntityCache entityCache = cache.getWatchedEntityCache();
 
 	public MiddleSpawnExpOrb(ConnectionImpl connection) {
 		super(connection);
@@ -20,7 +23,7 @@ public abstract class MiddleSpawnExpOrb extends ClientBoundMiddlePacket {
 	protected int count;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		entity = new NetworkEntity(null, VarNumberSerializer.readVarInt(serverdata), NetworkEntityType.EXP_ORB);
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();
@@ -29,9 +32,8 @@ public abstract class MiddleSpawnExpOrb extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public boolean postFromServerRead() {
-		cache.getWatchedEntityCache().addWatchedEntity(entity);
-		return true;
+	public void handleReadData() {
+		entityCache.addWatchedEntity(entity);
 	}
 
 }

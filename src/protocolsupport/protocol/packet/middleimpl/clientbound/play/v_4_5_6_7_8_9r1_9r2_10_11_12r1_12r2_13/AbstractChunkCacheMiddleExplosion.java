@@ -9,16 +9,16 @@ import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
 import protocolsupport.protocol.types.ChunkCoord;
 import protocolsupport.protocol.types.Position;
 
-public abstract class AbstractMiddleExplosion extends MiddleExplosion {
+public abstract class AbstractChunkCacheMiddleExplosion extends MiddleExplosion {
 
 	protected final ChunkCache chunkCache = cache.getChunkCache();
 
-	public AbstractMiddleExplosion(ConnectionImpl connection) {
+	public AbstractChunkCacheMiddleExplosion(ConnectionImpl connection) {
 		super(connection);
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void handleReadData() {
 		int xOrigin = NumberConversions.floor(x);
 		x = xOrigin;
 		int yOrigin = NumberConversions.floor(y);
@@ -34,9 +34,6 @@ public abstract class AbstractMiddleExplosion extends MiddleExplosion {
 				chunk.setBlock(yB >> 4, CachedChunk.getBlockIndex(xB & 0xF, yB & 0xF, zB & 0xF), (short) 0);
 			}
 		}
-		writeToClient0();
 	}
-
-	protected abstract void writeToClient0();
 
 }

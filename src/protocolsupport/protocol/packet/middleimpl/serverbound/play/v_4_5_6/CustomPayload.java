@@ -21,7 +21,7 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 	protected ByteBuf data;
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		tag = StringSerializer.readShortUTF16BEString(clientdata, 20);
 		data = ArraySerializer.readShortByteArraySlice(clientdata, Short.MAX_VALUE);
 	}

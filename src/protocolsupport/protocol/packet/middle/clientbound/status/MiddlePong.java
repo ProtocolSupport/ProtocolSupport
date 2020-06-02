@@ -13,7 +13,7 @@ public abstract class MiddlePong extends ClientBoundMiddlePacket {
 	protected long pingId;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		pingId = serverdata.readLong();
 	}
 

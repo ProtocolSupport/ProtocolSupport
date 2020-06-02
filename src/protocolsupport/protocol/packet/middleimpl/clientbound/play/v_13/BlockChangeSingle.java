@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractBlockChangeSingle;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheBlockChangeSingle;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
@@ -13,7 +13,7 @@ import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.types.Position;
 
-public class BlockChangeSingle extends AbstractBlockChangeSingle {
+public class BlockChangeSingle extends AbstractChunkCacheBlockChangeSingle {
 
 	public BlockChangeSingle(ConnectionImpl connection) {
 		super(connection);
@@ -23,7 +23,7 @@ public class BlockChangeSingle extends AbstractBlockChangeSingle {
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 
 	@Override
-	public void writeToClient0() {
+	public void writeToClient() {
 		codec.write(create(position, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, id)));
 	}
 

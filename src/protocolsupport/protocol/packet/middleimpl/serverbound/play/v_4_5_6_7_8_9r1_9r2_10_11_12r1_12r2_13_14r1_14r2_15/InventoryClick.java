@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper.SlotDoesntExistException;
@@ -14,7 +15,7 @@ public class InventoryClick extends MiddleInventoryClick {
 	}
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		try {
 			windowId = clientdata.readByte();
 			slot = windowCache.getOpenedWindowRemapper().fromClientSlot(windowId, clientdata.readShort());
@@ -26,7 +27,7 @@ public class InventoryClick extends MiddleInventoryClick {
 				itemstack = NetworkItemStack.NULL;
 			}
 		} catch (SlotDoesntExistException e) {
-			mode = MODE_NOOP;
+			throw CancelMiddlePacketException.INSTANCE;
 		}
 	}
 

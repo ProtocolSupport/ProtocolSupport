@@ -15,7 +15,7 @@ public abstract class MiddleStatistics extends ClientBoundMiddlePacket {
 	protected Statistic[] statistics;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		statistics = ArraySerializer.readVarIntTArray(
 			serverdata, Statistic.class,
 			from -> new Statistic(VarNumberSerializer.readVarInt(from), VarNumberSerializer.readVarInt(from), VarNumberSerializer.readVarInt(from))
@@ -23,7 +23,7 @@ public abstract class MiddleStatistics extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void postHandle() {
+	public void cleanup() {
 		statistics = null;
 	}
 

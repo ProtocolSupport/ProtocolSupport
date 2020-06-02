@@ -15,13 +15,13 @@ public abstract class MiddleLoginSuccess extends ClientBoundMiddlePacket {
 	protected String name;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		uuidstring = StringSerializer.readVarIntUTF8String(serverdata);
 		name = StringSerializer.readVarIntUTF8String(serverdata);
 	}
 
 	@Override
-	public void postHandle() {
+	public void cleanup() {
 		uuidstring = null;
 		name = null;
 	}

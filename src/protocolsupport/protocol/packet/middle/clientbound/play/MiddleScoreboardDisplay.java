@@ -15,7 +15,7 @@ public abstract class MiddleScoreboardDisplay extends ClientBoundMiddlePacket {
 	protected String name;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		position = serverdata.readUnsignedByte();
 		name = StringSerializer.readVarIntUTF8String(serverdata);
 	}

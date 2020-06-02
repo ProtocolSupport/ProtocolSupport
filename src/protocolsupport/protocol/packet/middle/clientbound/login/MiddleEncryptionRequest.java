@@ -17,14 +17,14 @@ public abstract class MiddleEncryptionRequest extends ClientBoundMiddlePacket {
 	protected ByteBuf verifyToken;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		serverId = StringSerializer.readVarIntUTF8String(serverdata);
 		publicKey = ArraySerializer.readVarIntByteArraySlice(serverdata);
 		verifyToken = ArraySerializer.readVarIntByteArraySlice(serverdata);
 	}
 
 	@Override
-	public void postHandle() {
+	public void cleanup() {
 		serverId = null;
 		publicKey = null;
 		verifyToken = null;

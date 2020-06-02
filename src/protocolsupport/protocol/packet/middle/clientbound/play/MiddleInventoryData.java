@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
 
@@ -18,15 +19,13 @@ public abstract class MiddleInventoryData extends ClientBoundMiddlePacket {
 	protected int value;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		windowId = serverdata.readByte();
+		if (!windowCache.isValidWindowId(windowId)) {
+			throw CancelMiddlePacketException.INSTANCE;
+		}
 		type = serverdata.readShort();
 		value = serverdata.readShort();
-	}
-
-	@Override
-	public boolean postFromServerRead() {
-		return windowCache.isValidWindowId(windowId);
 	}
 
 }

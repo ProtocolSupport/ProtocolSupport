@@ -17,9 +17,12 @@ public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
 	protected byte windowId;
 
 	@Override
-	public void writeToServer() {
+	protected void handleReadData() {
 		windowCache.closeWindow();
+	}
 
+	@Override
+	public void writeToServer() {
 		codec.read(create(windowId));
 	}
 

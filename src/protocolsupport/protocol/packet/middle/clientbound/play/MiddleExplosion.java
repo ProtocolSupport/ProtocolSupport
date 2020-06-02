@@ -21,7 +21,7 @@ public abstract class MiddleExplosion extends ClientBoundMiddlePacket {
 	protected float pMotZ;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		x = serverdata.readFloat();
 		y = serverdata.readFloat();
 		z = serverdata.readFloat();

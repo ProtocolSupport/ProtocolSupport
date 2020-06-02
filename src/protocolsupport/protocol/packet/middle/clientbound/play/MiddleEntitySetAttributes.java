@@ -19,14 +19,17 @@ public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 	protected final LinkedHashMap<String, Attribute> attributes = new LinkedHashMap<>();
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
-		super.readFromServerData(serverdata);
+	public void readServerData(ByteBuf serverdata) {
+		super.readServerData(serverdata);
 		attributes.clear();
 		int attributesCount = serverdata.readInt();
 		for (int i = 0; i < attributesCount; i++) {
 			Attribute attribute = new Attribute();
 			attribute.key = StringSerializer.readVarIntUTF8String(serverdata);
 			attribute.value = serverdata.readDouble();
+			if (attribute.value == 0.0D) {
+				attribute.value = 0.00000001;
+			}
 			attribute.modifiers = new Modifier[VarNumberSerializer.readVarInt(serverdata)];
 			for (int j = 0; j < attribute.modifiers.length; j++) {
 				Modifier modifier = new Modifier();
@@ -40,19 +43,13 @@ public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 	}
 
 	@Override
-	public boolean postFromServerRead() {
-		for (Attribute attr : attributes.values()) {
-			if (attr.value == 0.0D) {
-				attr.value = 0.00000001;
-			}
-		}
+	public void handleReadData() {
 		if (entityId == cache.getWatchedEntityCache().getSelfPlayerEntityId()) {
 			Attribute attr = attributes.get("generic.maxHealth");
 			if (attr != null) {
 				cache.getAttributesCache().setMaxHealth((float) attr.value);
 			}
 		}
-		return true;
 	}
 
 	protected static class Attribute {

@@ -24,14 +24,15 @@ public abstract class MiddleCollectEffect extends ClientBoundMiddlePacket {
 	protected int itemCount;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		entityId = VarNumberSerializer.readVarInt(serverdata);
 		collectorId = VarNumberSerializer.readVarInt(serverdata);
 		itemCount = VarNumberSerializer.readVarInt(serverdata);
 	}
 
 	@Override
-	public boolean postFromServerRead() {
+	public void handleReadData() {
+		//TODO: send needed collect packets from middle packet itself after implementing serverside entity position cache
 		if (
 			(collectorId == cache.getWatchedEntityCache().getSelfPlayerEntityId()) &&
 			(version.getProtocolType() == ProtocolType.PC) &&
@@ -61,7 +62,6 @@ public abstract class MiddleCollectEffect extends ClientBoundMiddlePacket {
 				}
 			}
 		}
-		return true;
 	}
 
 }

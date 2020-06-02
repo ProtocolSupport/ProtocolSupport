@@ -4,10 +4,22 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.storage.netcache.AttributesCache;
+import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
+import protocolsupport.protocol.storage.netcache.window.WindowCache;
+import protocolsupport.protocol.typeremapper.window.AbstractWindowsRemapper;
+import protocolsupport.protocol.typeremapper.window.WindowsRemappersRegistry;
 import protocolsupport.protocol.types.Environment;
 import protocolsupport.protocol.types.GameMode;
+import protocolsupport.protocol.types.WindowType;
 
 public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
+
+	protected final AttributesCache clientCache = cache.getAttributesCache();
+	protected final WatchedEntityCache entityCache = cache.getWatchedEntityCache();
+	protected final WindowCache windowCache = cache.getWindowCache();
+
+	protected final AbstractWindowsRemapper windowRemapper = WindowsRemappersRegistry.get(version);
 
 	public MiddleChangeDimension(ConnectionImpl connection) {
 		super(connection);
@@ -19,7 +31,7 @@ public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
 	protected String leveltype;
 
 	@Override
-	public void readFromServerData(ByteBuf serverdata) {
+	public void readServerData(ByteBuf serverdata) {
 		dimension = Environment.getById(serverdata.readInt());
 		hashedSeed = serverdata.readLong();
 		gamemode = GameMode.getById(serverdata.readByte());
@@ -27,10 +39,10 @@ public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public boolean postFromServerRead() {
-		cache.getWatchedEntityCache().clearWatchedEntities();
-		cache.getAttributesCache().setCurrentDimension(dimension);
-		return true;
+	public void handleReadData() {
+		clientCache.setCurrentDimension(dimension);
+		entityCache.clearWatchedEntities();
+		windowCache.setPlayerWindow(windowRemapper.get(WindowType.PLAYER, 0));
 	}
 
 }

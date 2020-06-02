@@ -15,7 +15,7 @@ public class ClientSettings extends MiddleClientSettings {
 	}
 
 	@Override
-	public void readFromClientData(ByteBuf clientdata) {
+	public void readClientData(ByteBuf clientdata) {
 		locale = StringSerializer.readVarIntUTF8String(clientdata, 16);
 		viewDist = clientdata.readByte();
 		chatMode = MiscSerializer.readByteEnum(clientdata, ChatMode.CONSTANT_LOOKUP);
