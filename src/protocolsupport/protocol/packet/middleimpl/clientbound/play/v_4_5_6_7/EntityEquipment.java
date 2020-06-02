@@ -1,26 +1,36 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractNoOffhandEntityEquipment;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.storage.netcache.AttributesCache;
+import protocolsupport.protocol.types.NetworkItemStack;
 
-public class EntityEquipment extends MiddleEntityEquipment {
+public class EntityEquipment extends AbstractNoOffhandEntityEquipment {
+
+	protected final AttributesCache clientCache = cache.getAttributesCache();
 
 	public EntityEquipment(ConnectionImpl connection) {
 		super(connection);
 	}
 
 	@Override
-	public void writeToClient() {
-		if (slot != 1) {
-			ClientBoundPacketData entityequipment = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_EQUIPMENT);
-			entityequipment.writeInt(entityId);
-			entityequipment.writeShort(slot == 0 ? slot : slot - 1);
-			ItemStackSerializer.writeItemStack(entityequipment, version, cache.getAttributesCache().getLocale(), itemstack);
-			codec.write(entityequipment);
-		}
+	protected void writeToClient0() {
+		codec.write(create(version, clientCache.getLocale(), entityId, slot, itemstack));
+	}
+
+	public static ClientBoundPacketData create(
+		ProtocolVersion version, String locale,
+		int entityId, Slot slot, NetworkItemStack itemstack
+	) {
+		ClientBoundPacketData entityequipment = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_EQUIPMENT);
+		entityequipment.writeInt(entityId);
+		entityequipment.writeShort(getSlotId(slot));
+		ItemStackSerializer.writeItemStack(entityequipment, version, locale, itemstack);
+		return entityequipment;
 	}
 
 }
