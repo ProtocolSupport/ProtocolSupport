@@ -26,7 +26,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopUpda
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopVehicleMove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.WorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.WorldSound;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.EntityStatus;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.InventoryClose;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.InventoryConfirmTransaction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.InventoryData;
@@ -55,6 +54,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityEqu
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityRelMove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityRelMoveLook;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityStatus;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.ScoreboardTeam;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SetPosition;
