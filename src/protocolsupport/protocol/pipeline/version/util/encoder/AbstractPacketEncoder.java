@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
+import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.PacketDataCodecImpl;
@@ -49,6 +50,9 @@ public abstract class AbstractPacketEncoder extends ChannelOutboundHandlerAdapte
 		try {
 			packetTransformer = registry.getTransformer(connection.getNetworkState(), VarNumberSerializer.readVarInt(input));
 			codec.channelWrite(promise, packetTransformer, input, (transformer, data) -> transformer.encode(data));
+			if (input.isReadable()) {
+				throw new DecoderException("Data not read fully, bytes left " + input.readableBytes());
+			}
 		} catch (Exception exception) {
 			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 				input.readerIndex(0);
