@@ -13,7 +13,7 @@ public class Animation extends MiddleAnimation {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		hand = MiscSerializer.readVarIntEnum(clientdata, UsedHand.CONSTANT_LOOKUP);
 	}
 

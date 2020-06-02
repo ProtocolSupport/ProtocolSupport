@@ -26,7 +26,7 @@ public abstract class MiddleUpdateCommandBlock extends ServerBoundMiddlePacket {
 	protected int flags;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		codec.read(create(position, command, mode, flags));
 	}
 

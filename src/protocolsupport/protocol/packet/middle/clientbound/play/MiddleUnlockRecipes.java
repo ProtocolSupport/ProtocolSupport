@@ -22,7 +22,7 @@ public abstract class MiddleUnlockRecipes extends ClientBoundMiddlePacket {
 	protected String[] recipes2;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		craftRecipeBookOpen = serverdata.readBoolean();
 		craftRecipeBookFiltering = serverdata.readBoolean();

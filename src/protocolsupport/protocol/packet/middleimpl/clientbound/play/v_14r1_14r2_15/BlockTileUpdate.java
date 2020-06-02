@@ -17,7 +17,7 @@ public class BlockTileUpdate extends MiddleBlockTileUpdate {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		tile = tileRemapper.remap(tile);
 
 		ClientBoundPacketData blocktileupdate = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_TILE);

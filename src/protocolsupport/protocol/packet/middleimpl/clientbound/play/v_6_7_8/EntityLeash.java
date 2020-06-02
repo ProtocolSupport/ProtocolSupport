@@ -12,7 +12,7 @@ public class EntityLeash extends MiddleEntityLeash {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData entityleash = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_LEASH);
 		entityleash.writeInt(entityId);
 		entityleash.writeInt(vehicleId);

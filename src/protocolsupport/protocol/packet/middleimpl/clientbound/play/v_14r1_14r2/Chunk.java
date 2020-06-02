@@ -27,7 +27,7 @@ public class Chunk extends MiddleChunk {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(full);

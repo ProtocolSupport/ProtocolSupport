@@ -14,7 +14,7 @@ public abstract class MiddleSetCompression extends ClientBoundMiddlePacket {
 	protected int threshold;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		threshold = VarNumberSerializer.readVarInt(serverdata);
 	}
 

@@ -14,7 +14,7 @@ public class LoginCustomPayload extends MiddleLoginCustomPayload {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData logincustompayload = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LOGIN_CUSTOM_PAYLOAD);
 		VarNumberSerializer.writeVarInt(logincustompayload, id);
 		StringSerializer.writeVarIntUTF8String(logincustompayload, tag);

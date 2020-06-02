@@ -14,7 +14,7 @@ public class EntityRelMoveLook extends MiddleEntityRelMoveLook {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		int relMoveX = relX / 128;
 		int relMoveY = relY / 128;
 		int relMoveZ = relZ / 128;

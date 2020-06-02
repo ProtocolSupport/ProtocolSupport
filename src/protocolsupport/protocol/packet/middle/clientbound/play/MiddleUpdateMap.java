@@ -25,7 +25,7 @@ public abstract class MiddleUpdateMap extends ClientBoundMiddlePacket {
 	protected byte[] colors;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		id = VarNumberSerializer.readVarInt(serverdata);
 		scale = serverdata.readUnsignedByte();
 		showIcons = serverdata.readBoolean();

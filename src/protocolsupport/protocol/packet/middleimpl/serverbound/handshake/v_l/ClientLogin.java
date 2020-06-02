@@ -20,7 +20,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	protected int port;
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		String[] data = StringSerializer.readShortUTF16BEString(clientdata, Short.MAX_VALUE).split("[;]");
 		String[] addrdata = data[1].split("[:]");
 		username = data[0];
@@ -29,7 +29,7 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		ServerBoundPacketData setprotocol = ServerBoundPacketData.create(PacketType.SERVERBOUND_HANDSHAKE_START);
 		VarNumberSerializer.writeVarInt(setprotocol, ProtocolVersionsHelper.LATEST_PC.getId());
 		StringSerializer.writeVarIntUTF8String(setprotocol, hostname);

@@ -21,7 +21,7 @@ public class BlockChangeSingle extends AbstractChunkCacheBlockChangeSingle {
 	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		codec.write(create(position, BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, id)));
 	}
 

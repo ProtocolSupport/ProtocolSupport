@@ -16,7 +16,7 @@ public class UpdateMap extends MiddleUpdateMap {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData updatemap = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 		VarNumberSerializer.writeVarInt(updatemap, id);
 		updatemap.writeByte(scale);

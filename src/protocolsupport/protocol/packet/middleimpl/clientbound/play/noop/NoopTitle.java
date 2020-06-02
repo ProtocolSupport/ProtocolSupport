@@ -10,7 +10,7 @@ public class NoopTitle extends MiddleTitle {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 	}
 
 }

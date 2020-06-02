@@ -15,7 +15,7 @@ public abstract class MiddleSetViewCenter extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		chunk = PositionSerializer.readVarIntChunkCoord(serverdata);
 	}
 

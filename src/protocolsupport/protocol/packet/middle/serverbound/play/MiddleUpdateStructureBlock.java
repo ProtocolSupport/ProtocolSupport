@@ -35,7 +35,7 @@ public abstract class MiddleUpdateStructureBlock extends ServerBoundMiddlePacket
 	protected byte flags;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		codec.read(create(position, action, mode, name, offsetX, offsetY, offsetZ, sizeX, sizeY, sizeZ, mirror, rotation, metadata, integrity, seed, flags));
 	}
 

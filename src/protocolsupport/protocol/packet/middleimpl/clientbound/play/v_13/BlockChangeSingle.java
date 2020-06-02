@@ -23,7 +23,7 @@ public class BlockChangeSingle extends AbstractChunkCacheBlockChangeSingle {
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		codec.write(create(position, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, id)));
 	}
 

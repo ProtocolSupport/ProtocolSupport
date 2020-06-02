@@ -27,7 +27,7 @@ public abstract class MiddleSetPosition extends ClientBoundMiddlePacket {
 	protected int teleportConfirmId;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		xOrig = x = serverdata.readDouble();
 		yOrig = y = serverdata.readDouble();
 		zOrig = z = serverdata.readDouble();

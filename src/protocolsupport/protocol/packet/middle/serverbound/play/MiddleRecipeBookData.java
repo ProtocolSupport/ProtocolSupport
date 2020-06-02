@@ -26,7 +26,7 @@ public abstract class MiddleRecipeBookData extends ServerBoundMiddlePacket {
 	protected boolean smokingRecipeBookFiltering;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		ServerBoundPacketData recipebookdata = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_RECIPE_BOOK_DATA);
 		MiscSerializer.writeVarIntEnum(recipebookdata, type);
 		switch (type) {

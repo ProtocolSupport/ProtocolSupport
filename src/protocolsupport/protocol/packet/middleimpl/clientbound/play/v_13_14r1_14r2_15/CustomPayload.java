@@ -16,7 +16,7 @@ public class CustomPayload extends MiddleCustomPayload {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		codec.write(create(tag, data));
 	}
 

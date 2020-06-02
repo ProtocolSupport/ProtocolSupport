@@ -25,7 +25,7 @@ public class WorldEvent extends MiddleWorldEvent {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		if (effectId == 2001) {
 			data = blockDataRemappingTable.getRemap(data);
 			if (version.isBefore(ProtocolVersion.MINECRAFT_1_13)) {

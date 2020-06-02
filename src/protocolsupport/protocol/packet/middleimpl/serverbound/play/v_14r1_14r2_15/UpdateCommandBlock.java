@@ -14,7 +14,7 @@ public class UpdateCommandBlock extends MiddleUpdateCommandBlock {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		PositionSerializer.readPositionTo(clientdata, position);
 		command = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
 		mode = MiscSerializer.readVarIntEnum(clientdata, Mode.CONSTANT_LOOKUP);

@@ -14,7 +14,7 @@ public abstract class MiddleEntityVelocity extends MiddleEntity {
 	protected int motZ;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		super.readServerData(serverdata);
 		motX = serverdata.readShort();
 		motY = serverdata.readShort();

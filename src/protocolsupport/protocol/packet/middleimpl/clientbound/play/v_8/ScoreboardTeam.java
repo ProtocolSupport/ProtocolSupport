@@ -17,7 +17,7 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData scoreboardteam = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_TEAM);
 		StringSerializer.writeVarIntUTF8String(scoreboardteam, name);
 		MiscSerializer.writeByteEnum(scoreboardteam, mode);

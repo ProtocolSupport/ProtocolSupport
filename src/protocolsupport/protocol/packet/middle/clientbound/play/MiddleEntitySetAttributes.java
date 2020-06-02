@@ -19,7 +19,7 @@ public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 	protected final LinkedHashMap<String, Attribute> attributes = new LinkedHashMap<>();
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		super.readServerData(serverdata);
 		attributes.clear();
 		int attributesCount = serverdata.readInt();

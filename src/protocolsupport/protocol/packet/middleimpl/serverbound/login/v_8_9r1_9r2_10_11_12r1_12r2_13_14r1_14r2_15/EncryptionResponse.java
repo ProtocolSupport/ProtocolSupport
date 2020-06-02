@@ -12,7 +12,7 @@ public class EncryptionResponse extends MiddleEncryptionResponse {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		sharedSecret = ArraySerializer.readVarIntByteArraySlice(clientdata, 256);
 		verifyToken = ArraySerializer.readVarIntByteArraySlice(clientdata, 256);
 	}

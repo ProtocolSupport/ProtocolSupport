@@ -17,7 +17,7 @@ public class Title extends MiddleTitle {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData title = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_TITLE);
 		int actionId = action.ordinal();
 		VarNumberSerializer.writeVarInt(title, actionId > 2 ? actionId - 1 : actionId);

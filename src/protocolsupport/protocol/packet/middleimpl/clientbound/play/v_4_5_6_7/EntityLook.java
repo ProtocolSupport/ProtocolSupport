@@ -12,7 +12,7 @@ public class EntityLook extends MiddleEntityLook {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData entitylook = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_LOOK);
 		entitylook.writeInt(entityId);
 		entitylook.writeByte(yaw);

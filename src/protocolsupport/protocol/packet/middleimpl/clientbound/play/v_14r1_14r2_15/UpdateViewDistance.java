@@ -13,7 +13,7 @@ public class UpdateViewDistance extends MiddleUpdateViewDistance {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData updateviewdistance = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_VIEW_DISTANCE);
 		VarNumberSerializer.writeVarInt(updateviewdistance, distance);
 		codec.write(updateviewdistance);

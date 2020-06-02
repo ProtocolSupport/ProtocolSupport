@@ -10,7 +10,7 @@ public class NoopDeclareRecipes extends MiddleDeclareRecipes {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 	}
 
 }

@@ -17,7 +17,7 @@ public class ChunkLight extends MiddleChunkLight {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData chunklight = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_LIGHT);
 		PositionSerializer.writeVarIntChunkCoord(chunklight, coord);
 		VarNumberSerializer.writeVarInt(chunklight, setSkyLightMask);

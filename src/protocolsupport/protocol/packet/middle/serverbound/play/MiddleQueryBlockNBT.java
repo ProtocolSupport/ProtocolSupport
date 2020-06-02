@@ -18,7 +18,7 @@ public abstract class MiddleQueryBlockNBT extends ServerBoundMiddlePacket {
 	protected final Position position = new Position(0, 0, 0);
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		ServerBoundPacketData queryblocknbt = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_QUERY_BLOCK_NBT);
 		VarNumberSerializer.writeVarInt(queryblocknbt, id);
 		PositionSerializer.writePosition(queryblocknbt, position);

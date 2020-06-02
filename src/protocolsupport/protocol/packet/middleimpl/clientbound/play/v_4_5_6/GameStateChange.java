@@ -12,7 +12,7 @@ public class GameStateChange extends MiddleGameStateChange {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		switch (type) {
 			case 1: {
 				type = 2;

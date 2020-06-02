@@ -22,7 +22,7 @@ public abstract class MiddleEntityStatus extends ClientBoundMiddlePacket {
 	protected int status;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		entity = entityCache.getWatchedEntity(serverdata.readInt());
 		status = serverdata.readUnsignedByte();
 

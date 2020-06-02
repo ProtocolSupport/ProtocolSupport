@@ -19,7 +19,7 @@ public abstract class MiddleEntityAction extends ServerBoundMiddlePacket {
 	protected int jumpBoost;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		codec.read(MiddleEntityAction.create(entityId, action, jumpBoost));
 	}
 

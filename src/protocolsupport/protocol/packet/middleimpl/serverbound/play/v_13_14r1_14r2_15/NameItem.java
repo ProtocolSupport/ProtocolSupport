@@ -12,7 +12,7 @@ public class NameItem extends MiddleNameItem {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		name = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
 	}
 

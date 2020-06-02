@@ -19,7 +19,7 @@ public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 	protected double z;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		particle = ParticleRegistry.fromId(serverdata.readInt());
 		longdist = serverdata.readBoolean();
 		x = serverdata.readDouble();

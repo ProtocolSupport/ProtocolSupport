@@ -21,7 +21,7 @@ public abstract class MiddleSpawnGlobal extends ClientBoundMiddlePacket {
 	protected double z;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		int entityId = VarNumberSerializer.readVarInt(serverdata);
 		int typeId = serverdata.readUnsignedByte();
 		entity = NetworkEntity.createGlobal(entityId, typeId);

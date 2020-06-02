@@ -15,7 +15,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		switch (direction) {
 			case 0: {
 				position.modifyZ(-1);

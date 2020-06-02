@@ -11,7 +11,7 @@ public class SteerVehicle extends MiddleSteerVehicle {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		sideForce = clientdata.readFloat();
 		forwardForce = clientdata.readFloat();
 		flags = clientdata.readUnsignedByte();

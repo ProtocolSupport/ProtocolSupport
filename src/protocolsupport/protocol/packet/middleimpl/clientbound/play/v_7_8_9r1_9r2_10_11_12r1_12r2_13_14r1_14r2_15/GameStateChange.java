@@ -12,7 +12,7 @@ public class GameStateChange extends MiddleGameStateChange {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData gamestatechange = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_GAME_STATE_CHANGE);
 		gamestatechange.writeByte(type);
 		gamestatechange.writeFloat(value);

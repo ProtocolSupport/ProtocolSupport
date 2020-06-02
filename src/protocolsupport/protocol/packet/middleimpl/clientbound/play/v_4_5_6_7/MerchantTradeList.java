@@ -12,7 +12,7 @@ public class MerchantTradeList extends MiddleMerchantTradeList {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		codec.write(CustomPayload.create(
 			version,
 			LegacyCustomPayloadChannelName.LEGACY_TRADE_LIST,

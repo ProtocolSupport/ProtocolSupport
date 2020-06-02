@@ -21,7 +21,7 @@ public class UpdateMap extends MiddleUpdateMap {
 	private static final int mapId = Material.LEGACY_MAP.getId();
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData scaledata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 		scaledata.writeShort(mapId);
 		scaledata.writeShort(id);

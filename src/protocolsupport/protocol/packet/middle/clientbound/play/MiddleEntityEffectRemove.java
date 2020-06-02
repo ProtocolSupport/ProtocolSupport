@@ -14,7 +14,7 @@ public abstract class MiddleEntityEffectRemove extends MiddleEntity {
 	protected int effectId;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		super.readServerData(serverdata);
 		effectId = serverdata.readByte();
 	}

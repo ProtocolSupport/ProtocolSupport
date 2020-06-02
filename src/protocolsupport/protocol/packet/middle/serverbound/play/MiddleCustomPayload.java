@@ -17,7 +17,7 @@ public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 	protected ByteBuf data;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		codec.read(create(tag, data));
 	}
 

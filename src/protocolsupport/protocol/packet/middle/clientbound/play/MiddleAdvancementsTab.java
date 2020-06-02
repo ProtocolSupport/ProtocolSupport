@@ -14,7 +14,7 @@ public abstract class MiddleAdvancementsTab extends ClientBoundMiddlePacket {
 	protected String identifier;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		if (serverdata.readBoolean()) {
 			identifier = StringSerializer.readVarIntUTF8String(serverdata);
 		} else {

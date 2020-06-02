@@ -13,7 +13,7 @@ public class LoginCustomPayload extends MiddleLoginCustomPayload {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		id = VarNumberSerializer.readVarInt(clientdata);
 		if (clientdata.readBoolean()) {
 			data = MiscSerializer.readAllBytesSlice(clientdata, 1048576);

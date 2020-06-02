@@ -15,7 +15,7 @@ public abstract class MiddleInventoryConfirmTransaction extends ClientBoundMiddl
 	protected boolean accepted;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		windowId = serverdata.readUnsignedByte();
 		actionNumber = serverdata.readShort();
 		accepted = serverdata.readBoolean();

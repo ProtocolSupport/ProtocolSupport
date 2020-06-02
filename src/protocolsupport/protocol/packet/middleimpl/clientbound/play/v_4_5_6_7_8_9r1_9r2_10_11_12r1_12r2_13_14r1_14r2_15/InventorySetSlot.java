@@ -17,7 +17,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		String locale = cache.getAttributesCache().getLocale();
 		if (windowId == WINDOW_ID_PLAYER_CURSOR) {
 			codec.write(create(version, locale, windowId, slot, itemstack));

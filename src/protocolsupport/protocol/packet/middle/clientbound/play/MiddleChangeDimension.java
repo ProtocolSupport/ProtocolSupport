@@ -31,7 +31,7 @@ public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
 	protected String leveltype;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		dimension = Environment.getById(serverdata.readInt());
 		hashedSeed = serverdata.readLong();
 		gamemode = GameMode.getById(serverdata.readByte());

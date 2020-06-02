@@ -10,7 +10,7 @@ public class NoopUnlockRecipes extends MiddleUnlockRecipes {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 	}
 
 }

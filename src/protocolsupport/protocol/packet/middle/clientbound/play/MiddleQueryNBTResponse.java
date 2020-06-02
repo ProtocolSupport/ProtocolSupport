@@ -15,7 +15,7 @@ public abstract class MiddleQueryNBTResponse extends ClientBoundMiddlePacket {
 	protected ByteBuf data;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		data = MiscSerializer.readAllBytesSlice(serverdata);
 	}
 

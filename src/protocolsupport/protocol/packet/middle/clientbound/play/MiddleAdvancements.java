@@ -26,7 +26,7 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		reset = serverdata.readBoolean();
 		advancementsMapping = ArraySerializer.readVarIntTArray(
 			serverdata, Any.class,
@@ -40,7 +40,7 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void cleanup() {
+	protected void cleanup() {
 		advancementsMapping = null;
 		removeAdvancements = null;
 		advancementsProgress = null;

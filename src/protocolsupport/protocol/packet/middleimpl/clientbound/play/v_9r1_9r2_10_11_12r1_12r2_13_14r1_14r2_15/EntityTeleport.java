@@ -13,7 +13,7 @@ public class EntityTeleport extends MiddleEntityTeleport {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData entityteleport = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_TELEPORT);
 		VarNumberSerializer.writeVarInt(entityteleport, entityId);
 		entityteleport.writeDouble(x);

@@ -13,7 +13,7 @@ public class SetProtocol extends MiddleSetProtocol {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		VarNumberSerializer.readVarInt(clientdata);
 		hostname = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
 		port = clientdata.readUnsignedShort();

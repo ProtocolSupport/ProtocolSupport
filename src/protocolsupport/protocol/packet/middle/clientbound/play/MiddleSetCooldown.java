@@ -15,7 +15,7 @@ public abstract class MiddleSetCooldown extends ClientBoundMiddlePacket {
 	protected int cooldown;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		itemId = VarNumberSerializer.readVarInt(serverdata);
 		cooldown = VarNumberSerializer.readVarInt(serverdata);
 	}

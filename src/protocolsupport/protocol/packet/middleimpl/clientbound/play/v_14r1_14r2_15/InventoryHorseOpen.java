@@ -13,7 +13,7 @@ public class InventoryHorseOpen extends MiddleInventoryHorseOpen {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData windowhorseopen = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_HORSE_OPEN);
 		windowhorseopen.writeByte(windowId);
 		VarNumberSerializer.writeVarInt(windowhorseopen, slots);

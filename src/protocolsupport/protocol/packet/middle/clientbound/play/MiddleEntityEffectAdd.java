@@ -18,7 +18,7 @@ public abstract class MiddleEntityEffectAdd extends MiddleEntity {
 	protected int flags;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		super.readServerData(serverdata);
 		effectId = serverdata.readByte();
 		amplifier = serverdata.readByte();

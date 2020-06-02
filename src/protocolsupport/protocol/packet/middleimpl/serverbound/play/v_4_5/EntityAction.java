@@ -18,7 +18,7 @@ public class EntityAction extends MiddleEntityAction {
 	);
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		entityId = clientdata.readInt();
 		action = actionById.get(clientdata.readByte());
 	}

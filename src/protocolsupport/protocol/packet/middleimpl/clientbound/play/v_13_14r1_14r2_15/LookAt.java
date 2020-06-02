@@ -12,7 +12,7 @@ public class LookAt extends MiddleLookAt {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData lookat = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_LOOK_AT);
 		lookat.writeBytes(data);
 		codec.write(lookat);

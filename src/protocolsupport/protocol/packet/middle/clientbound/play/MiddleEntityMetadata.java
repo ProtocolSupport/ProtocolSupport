@@ -32,7 +32,7 @@ public abstract class MiddleEntityMetadata extends MiddleEntity {
 	protected final ArrayMap<NetworkEntityMetadataObject<?>> metadata = new ArrayMap<>(31);
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		super.readServerData(serverdata);
 		entity = entityCache.getWatchedEntity(entityId);
 		NetworkEntityMetadataSerializer.readDataTo(serverdata, metadata);
@@ -41,7 +41,7 @@ public abstract class MiddleEntityMetadata extends MiddleEntity {
 	protected final NetworkEntityMetadataList remappedMetadata = new NetworkEntityMetadataList();
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		if (entity == null) {
 			return;
 		}
@@ -61,7 +61,7 @@ public abstract class MiddleEntityMetadata extends MiddleEntity {
 	protected abstract void writeToClient0(NetworkEntityMetadataList remappedMetadata);
 
 	@Override
-	public void cleanup() {
+	protected void cleanup() {
 		metadata.clear();
 		remappedMetadata.clear();
 	}

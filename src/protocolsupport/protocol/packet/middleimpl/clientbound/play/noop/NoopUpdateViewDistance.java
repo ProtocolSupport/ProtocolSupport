@@ -10,7 +10,7 @@ public class NoopUpdateViewDistance extends MiddleUpdateViewDistance {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 	}
 
 }

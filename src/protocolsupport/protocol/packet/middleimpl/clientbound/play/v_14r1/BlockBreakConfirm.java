@@ -19,7 +19,7 @@ public class BlockBreakConfirm extends MiddleBlockBreakConfirm {
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		codec.write(BlockChangeSingle.create(position, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, blockId)));
 	}
 

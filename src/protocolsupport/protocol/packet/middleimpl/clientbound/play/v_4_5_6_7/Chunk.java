@@ -24,7 +24,7 @@ public class Chunk extends AbstractChunkCacheChunk {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		String locale = cache.getAttributesCache().getLocale();
 		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 

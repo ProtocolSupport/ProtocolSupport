@@ -16,7 +16,7 @@ public class UseEntity extends MiddleUseEntity {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		entityId = VarNumberSerializer.readVarInt(clientdata);
 		action = MiscSerializer.readVarIntEnum(clientdata, Action.CONSTANT_LOOKUP);
 		switch (action) {

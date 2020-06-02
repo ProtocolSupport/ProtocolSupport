@@ -11,7 +11,7 @@ public class MoveLook extends AbstractMoveLook {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		x = clientdata.readDouble();
 		y = clientdata.readDouble();
 		clientdata.readDouble();

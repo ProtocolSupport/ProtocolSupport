@@ -19,7 +19,7 @@ public class WorldParticle extends MiddleWorldParticle {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		particle = remapper.getRemap(particle.getClass()).apply(particle);
 		if (particle != null) {
 			ClientBoundPacketData worldparticle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);

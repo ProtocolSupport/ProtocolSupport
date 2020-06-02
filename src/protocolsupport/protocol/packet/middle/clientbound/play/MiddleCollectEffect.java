@@ -24,7 +24,7 @@ public abstract class MiddleCollectEffect extends ClientBoundMiddlePacket {
 	protected int itemCount;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		entityId = VarNumberSerializer.readVarInt(serverdata);
 		collectorId = VarNumberSerializer.readVarInt(serverdata);
 		itemCount = VarNumberSerializer.readVarInt(serverdata);

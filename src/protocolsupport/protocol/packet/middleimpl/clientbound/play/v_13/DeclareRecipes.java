@@ -103,7 +103,7 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData declarerecipes = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_DECLARE_RECIPES);
 		ArraySerializer.writeVarIntTArray(declarerecipes, to -> {
 			int writtenRecipeCount = 0;

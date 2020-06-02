@@ -11,7 +11,7 @@ public class PlayerAbilities extends MiddlePlayerAbilities {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		flags = clientdata.readUnsignedByte();
 		flySpeed = clientdata.readUnsignedByte() / 255.0F;
 		walkSpeed = clientdata.readUnsignedByte() / 255.0F;

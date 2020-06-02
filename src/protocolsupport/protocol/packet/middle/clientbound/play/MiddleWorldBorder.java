@@ -25,7 +25,7 @@ public abstract class MiddleWorldBorder extends ClientBoundMiddlePacket {
 	protected int warnBlocks;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		switch (action) {
 			case SET_SIZE: {

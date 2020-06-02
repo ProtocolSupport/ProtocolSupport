@@ -10,7 +10,7 @@ public class NoopEntitySetAttributes extends MiddleEntitySetAttributes {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 	}
 
 }

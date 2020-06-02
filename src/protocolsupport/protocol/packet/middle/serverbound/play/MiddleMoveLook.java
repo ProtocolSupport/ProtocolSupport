@@ -19,7 +19,7 @@ public abstract class MiddleMoveLook extends ServerBoundMiddlePacket {
 	protected boolean onGround;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		codec.read(create(x, y, z, yaw, pitch, onGround));
 	}
 

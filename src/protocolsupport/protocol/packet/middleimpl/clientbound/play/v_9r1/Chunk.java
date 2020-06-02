@@ -26,7 +26,7 @@ public class Chunk extends AbstractChunkCacheChunk {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData chunksingle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunksingle, coord);
 		chunksingle.writeBoolean(full);

@@ -16,7 +16,7 @@ public abstract class MiddleAnimation extends ServerBoundMiddlePacket {
 	protected UsedHand hand;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		codec.read(create(hand));
 	}
 

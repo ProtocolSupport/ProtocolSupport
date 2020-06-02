@@ -13,7 +13,7 @@ public class UseEntity extends MiddleUseEntity {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		entityId = clientdata.readInt();
 		action = MiscSerializer.readByteEnum(clientdata, Action.CONSTANT_LOOKUP);
 		hand = UsedHand.MAIN;

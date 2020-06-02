@@ -13,7 +13,7 @@ public class TabComplete extends MiddleTabComplete {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		id = VarNumberSerializer.readVarInt(clientdata);
 		string = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
 	}

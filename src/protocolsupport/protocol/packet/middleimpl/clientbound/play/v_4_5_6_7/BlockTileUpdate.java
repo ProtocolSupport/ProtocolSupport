@@ -21,7 +21,7 @@ public class BlockTileUpdate extends AbstractChunkCacheBlockTileUpdate {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		codec.write(create(version, cache.getAttributesCache().getLocale(), tile));
 	}
 

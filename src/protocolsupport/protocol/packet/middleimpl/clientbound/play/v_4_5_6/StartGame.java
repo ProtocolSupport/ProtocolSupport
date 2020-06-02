@@ -15,7 +15,7 @@ public class StartGame extends AbstractChunkCacheStartGame {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData startgame = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_START_GAME);
 		startgame.writeInt(player.getId());
 		StringSerializer.writeShortUTF16BEString(startgame, leveltype);

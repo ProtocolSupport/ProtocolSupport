@@ -24,7 +24,7 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 	protected NetworkItemStack itemstack;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		codec.read(create(windowId, actionNumber, mode, button, slot, itemstack));
 	}
 

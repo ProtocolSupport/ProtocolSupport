@@ -10,7 +10,7 @@ public class NoopResourcePack extends MiddleResourcePack {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 	}
 
 }

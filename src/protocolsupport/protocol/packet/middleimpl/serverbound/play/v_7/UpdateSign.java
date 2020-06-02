@@ -13,7 +13,7 @@ public class UpdateSign extends MiddleUpdateSign {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		PositionSerializer.readLegacyPositionSTo(clientdata, position);
 		for (int i = 0; i < lines.length; i++) {
 			lines[i] = StringSerializer.readVarIntUTF8String(clientdata, 15);

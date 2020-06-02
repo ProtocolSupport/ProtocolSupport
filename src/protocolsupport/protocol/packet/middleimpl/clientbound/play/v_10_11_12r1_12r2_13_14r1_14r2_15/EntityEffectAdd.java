@@ -13,7 +13,7 @@ public class EntityEffectAdd extends MiddleEntityEffectAdd {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData effectadd = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_EFFECT_ADD);
 		VarNumberSerializer.writeVarInt(effectadd, entityId);
 		effectadd.writeByte(effectId);

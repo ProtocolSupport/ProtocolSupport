@@ -26,7 +26,7 @@ public class ChunkLight extends AbstractChunkLight {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		int blockMask = ((setSkyLightMask | setBlockLightMask | emptySkyLightMask | emptyBlockLightMask) >> 1) & 0xFFFF;
 		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 		List<Collection<TileEntity>> resendTiles = new ArrayList<>();

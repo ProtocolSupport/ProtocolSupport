@@ -13,7 +13,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData changedimension = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_RESPAWN);
 		changedimension.writeInt(dimension.getId());
 		changedimension.writeLong(hashedSeed);

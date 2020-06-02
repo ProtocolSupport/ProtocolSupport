@@ -10,7 +10,7 @@ public class NoopBossBar extends MiddleBossBar {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 	}
 
 }

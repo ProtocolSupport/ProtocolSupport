@@ -17,7 +17,7 @@ public abstract class MiddleEntityRelMoveLook extends MiddleEntity {
 	protected boolean onGround;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		super.readServerData(serverdata);
 		relX = serverdata.readShort();
 		relY = serverdata.readShort();

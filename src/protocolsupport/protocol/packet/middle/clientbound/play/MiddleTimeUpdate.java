@@ -14,7 +14,7 @@ public abstract class MiddleTimeUpdate extends ClientBoundMiddlePacket {
 	protected long timeOfDay;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		worldAge = serverdata.readLong();
 		timeOfDay = serverdata.readLong();
 	}

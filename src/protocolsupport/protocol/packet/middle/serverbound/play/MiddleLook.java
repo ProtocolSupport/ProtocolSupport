@@ -16,7 +16,7 @@ public abstract class MiddleLook extends ServerBoundMiddlePacket {
 	protected boolean onGround;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		codec.read(create(yaw, pitch, onGround));
 	}
 

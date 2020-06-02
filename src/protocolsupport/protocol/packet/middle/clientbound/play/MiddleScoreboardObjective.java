@@ -27,7 +27,7 @@ public abstract class MiddleScoreboardObjective extends ClientBoundMiddlePacket 
 	protected Type type;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		name = StringSerializer.readVarIntUTF8String(serverdata);
 		mode = MiscSerializer.readByteEnum(serverdata, Mode.CONSTANT_LOOKUP);
 		if (mode != Mode.REMOVE) {

@@ -18,7 +18,7 @@ public class SetHealth extends MiddleSetHealth {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData sethealth = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SET_HEALTH);
 		sethealth.writeFloat(health);
 		VarNumberSerializer.writeVarInt(sethealth, food);

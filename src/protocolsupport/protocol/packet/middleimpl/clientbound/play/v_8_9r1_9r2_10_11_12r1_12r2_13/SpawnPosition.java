@@ -13,7 +13,7 @@ public class SpawnPosition extends MiddleSpawnPosition {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData spawnposition = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_POSITION);
 		PositionSerializer.writeLegacyPositionL(spawnposition, position);
 		codec.write(spawnposition);

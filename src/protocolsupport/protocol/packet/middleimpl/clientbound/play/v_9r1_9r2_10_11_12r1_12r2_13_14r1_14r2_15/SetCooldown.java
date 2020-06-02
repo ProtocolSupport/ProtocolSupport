@@ -13,7 +13,7 @@ public class SetCooldown extends MiddleSetCooldown {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData setcooldown = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SET_COOLDOWN);
 		VarNumberSerializer.writeVarInt(setcooldown, itemId);
 		VarNumberSerializer.writeVarInt(setcooldown, cooldown);

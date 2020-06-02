@@ -23,7 +23,7 @@ public abstract class MiddleSpawnExpOrb extends ClientBoundMiddlePacket {
 	protected int count;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		entity = new NetworkEntity(null, VarNumberSerializer.readVarInt(serverdata), NetworkEntityType.EXP_ORB);
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();

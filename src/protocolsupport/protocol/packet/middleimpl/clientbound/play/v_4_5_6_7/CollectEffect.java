@@ -12,7 +12,7 @@ public class CollectEffect extends MiddleCollectEffect {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData collecteffect = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_COLLECT_EFFECT);
 		collecteffect.writeInt(entityId);
 		collecteffect.writeInt(collectorId);

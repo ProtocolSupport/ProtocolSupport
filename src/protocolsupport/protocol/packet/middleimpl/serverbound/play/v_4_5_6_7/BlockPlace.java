@@ -16,7 +16,7 @@ public class BlockPlace extends MiddleBlockPlace {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		PositionSerializer.readLegacyPositionBTo(clientdata, position);
 		face = clientdata.readByte();
 		ItemStackSerializer.readItemStack(clientdata, version);

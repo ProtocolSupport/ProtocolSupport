@@ -12,7 +12,7 @@ public class SetExperience extends MiddleSetExperience {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData setexperience = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SET_EXPERIENCE);
 		setexperience.writeFloat(exp);
 		setexperience.writeShort(level);

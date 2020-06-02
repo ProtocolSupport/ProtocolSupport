@@ -10,7 +10,7 @@ public class NoopEntitySound extends MiddleEntitySound {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 	}
 
 }

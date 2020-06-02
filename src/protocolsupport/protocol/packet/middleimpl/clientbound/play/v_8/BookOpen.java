@@ -13,7 +13,7 @@ public class BookOpen extends MiddleBookOpen {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		codec.write(CustomPayload.create(LegacyCustomPayloadChannelName.LEGACY_BOOK_OPEN, Unpooled.EMPTY_BUFFER));
 	}
 

@@ -18,7 +18,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		WindowRemapper remapper = windowId == WINDOW_ID_PLAYER_INVENTORY ? windowCache.getPlayerWindowRemapper() : windowCache.getOpenedWindowRemapper();
 
 		String locale = cache.getAttributesCache().getLocale();

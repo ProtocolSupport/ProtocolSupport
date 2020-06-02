@@ -21,13 +21,13 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 	protected ByteBuf data;
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		tag = StringSerializer.readVarIntUTF8String(clientdata, 20);
 		data = MiscSerializer.readAllBytesSlice(clientdata, Short.MAX_VALUE);
 	}
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		switch (tag) {
 			case LegacyCustomPayloadChannelName.LEGACY_REGISTER: {
 				LegacyCustomPayloadData.transformAndWriteRegisterUnregister(codec, channelsCache, tag, data, true);

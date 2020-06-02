@@ -14,7 +14,7 @@ public abstract class MiddleHeldSlot extends ServerBoundMiddlePacket {
 	protected int slot;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		codec.read(create(slot));
 	}
 

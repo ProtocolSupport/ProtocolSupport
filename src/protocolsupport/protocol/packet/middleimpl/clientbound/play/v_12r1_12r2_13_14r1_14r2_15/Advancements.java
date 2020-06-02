@@ -20,7 +20,7 @@ public class Advancements extends MiddleAdvancements {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData advancements = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ADVANCEMENTS);
 		advancements.writeBoolean(reset);
 		ArraySerializer.writeVarIntTArray(advancements, advancementsMapping, (to, element) -> {

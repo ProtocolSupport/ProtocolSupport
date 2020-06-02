@@ -18,7 +18,7 @@ public abstract class MiddleWorldEvent extends ClientBoundMiddlePacket {
 	protected boolean disableRelative;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		effectId = serverdata.readInt();
 		PositionSerializer.readPositionTo(serverdata, position);
 		data = serverdata.readInt();

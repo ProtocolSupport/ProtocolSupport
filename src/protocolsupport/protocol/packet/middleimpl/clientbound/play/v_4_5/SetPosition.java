@@ -12,7 +12,7 @@ public class SetPosition extends AbstractSetPosition {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData setposition = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_POSITION);
 		setposition.writeDouble(x);
 		setposition.writeDouble(y + 1.6200000047683716D);

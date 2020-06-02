@@ -40,7 +40,7 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 	protected boolean respawnScreenEnabled;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		player = NetworkEntity.createPlayer(serverdata.readInt());
 		int gmdata = serverdata.readByte();
 		gamemode = GameMode.getById(gmdata & 0xFFFFFFF7);

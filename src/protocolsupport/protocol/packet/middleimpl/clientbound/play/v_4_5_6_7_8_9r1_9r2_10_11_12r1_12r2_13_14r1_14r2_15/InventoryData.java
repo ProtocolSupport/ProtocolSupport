@@ -27,7 +27,7 @@ public class InventoryData extends MiddleInventoryData {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		switch (windowCache.getOpenedWindowType()) {
 			case ENCHANTMENT: {
 				if (version.isBetween(ProtocolVersion.MINECRAFT_1_9_4, ProtocolVersion.MINECRAFT_1_8)) {

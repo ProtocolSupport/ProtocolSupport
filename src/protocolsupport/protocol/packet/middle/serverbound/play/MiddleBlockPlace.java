@@ -25,7 +25,7 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 	protected boolean insideblock;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		codec.read(create(position, face, hand, cX, cY, cZ, insideblock));
 	}
 

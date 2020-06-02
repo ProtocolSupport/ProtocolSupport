@@ -18,7 +18,7 @@ public abstract class MiddleEntitySound extends ClientBoundMiddlePacket {
 	protected float pitch;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		id = VarNumberSerializer.readVarInt(serverdata);
 		category = VarNumberSerializer.readVarInt(serverdata);
 		entityId = VarNumberSerializer.readVarInt(serverdata);

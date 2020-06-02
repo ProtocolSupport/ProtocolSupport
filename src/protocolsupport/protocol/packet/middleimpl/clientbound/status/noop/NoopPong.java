@@ -10,7 +10,7 @@ public class NoopPong extends MiddlePong {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 	}
 
 }

@@ -11,7 +11,7 @@ public class Flying extends MiddleFlying {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		onGround = clientdata.readBoolean();
 	}
 

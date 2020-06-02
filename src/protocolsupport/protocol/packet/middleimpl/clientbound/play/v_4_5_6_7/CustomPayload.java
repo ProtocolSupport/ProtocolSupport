@@ -23,7 +23,7 @@ public class CustomPayload extends MiddleCustomPayload {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		codec.write(create(version, Utils.clampString(channelsCache.getLegacyName(LegacyCustomPayloadChannelName.toPre13(tag)), 20), data));
 	}
 

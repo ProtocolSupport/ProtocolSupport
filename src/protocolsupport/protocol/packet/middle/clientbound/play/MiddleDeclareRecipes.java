@@ -17,7 +17,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 	protected Recipe[] recipes;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		int count = VarNumberSerializer.readVarInt(serverdata);
 		recipes = new Recipe[count];
 		for (int i = 0; i < count; i++) {
@@ -27,7 +27,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void cleanup() {
+	protected void cleanup() {
 		recipes = null;
 	}
 

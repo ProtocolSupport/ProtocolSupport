@@ -20,7 +20,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData spawnnamed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
 		spawnnamed.writeInt(entity.getId());
 		PlayerListEntry entry = playerlistCache.getEntry(entity.getUUID());

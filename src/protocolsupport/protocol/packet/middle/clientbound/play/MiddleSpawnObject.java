@@ -36,7 +36,7 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 	protected int motZ;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		int entityId = VarNumberSerializer.readVarInt(serverdata);
 		UUID uuid = MiscSerializer.readUUID(serverdata);
 		int typeId = serverdata.readUnsignedByte();
@@ -53,7 +53,7 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		if (!GenericIdSkipper.ENTITY.getTable(version).shouldSkip(entity.getType())) {
 			entityCache.addWatchedEntity(entity);
 			writeToClient0(entityRemappingTable.getRemap(entity.getType()).getLeft());

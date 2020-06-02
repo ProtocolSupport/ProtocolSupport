@@ -16,7 +16,7 @@ public class Explosion extends AbstractChunkCacheMiddleExplosion {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		codec.write(WorldCustomSound.create(
 			version,
 			(int) (x * 8), (int) (y * 8), (int) (z * 8),

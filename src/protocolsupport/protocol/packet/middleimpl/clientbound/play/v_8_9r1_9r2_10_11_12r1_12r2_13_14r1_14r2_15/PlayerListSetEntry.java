@@ -20,7 +20,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData playerlistsetentry = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_PLAYER_INFO);
 		VarNumberSerializer.writeVarInt(playerlistsetentry, action.ordinal());
 		VarNumberSerializer.writeVarInt(playerlistsetentry, infos.size());

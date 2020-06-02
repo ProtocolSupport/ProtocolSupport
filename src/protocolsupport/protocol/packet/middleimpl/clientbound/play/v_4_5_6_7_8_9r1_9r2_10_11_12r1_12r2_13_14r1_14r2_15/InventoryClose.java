@@ -12,7 +12,7 @@ public class InventoryClose extends MiddleInventoryClose {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData windowclose = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_CLOSE);
 		windowclose.writeByte(windowId);
 		codec.write(windowclose);

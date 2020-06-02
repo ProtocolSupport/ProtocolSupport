@@ -10,7 +10,7 @@ public class NoopPlayerListHeaderFooter extends MiddlePlayerListHeaderFooter {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 	}
 
 }

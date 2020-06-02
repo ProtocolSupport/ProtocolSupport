@@ -11,7 +11,7 @@ public class MoveVehicle extends MiddleMoveVehicle {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		x = clientdata.readDouble();
 		y = clientdata.readDouble();
 		z = clientdata.readDouble();

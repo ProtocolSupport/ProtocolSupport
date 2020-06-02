@@ -14,7 +14,7 @@ public abstract class MiddleBlockBreakAnimation extends MiddleBlock {
 	protected int stage;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		entityId = VarNumberSerializer.readVarInt(serverdata);
 		super.readServerData(serverdata);
 		stage = serverdata.readByte();

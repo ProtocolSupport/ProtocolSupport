@@ -17,7 +17,7 @@ public abstract class MiddleSpectate extends ServerBoundMiddlePacket {
 	protected UUID entityUUID;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		ServerBoundPacketData spetate = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_SPECTATE);
 		MiscSerializer.writeUUID(spetate, entityUUID);
 		codec.read(spetate);

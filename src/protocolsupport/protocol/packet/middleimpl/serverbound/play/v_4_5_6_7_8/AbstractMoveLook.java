@@ -22,7 +22,7 @@ public abstract class AbstractMoveLook extends ServerBoundMiddlePacket {
 	protected boolean onGround;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		int teleportId = cache.getMovementCache().tryTeleportConfirm(x, y, z);
 		if (teleportId == -1) {
 			codec.read(MiddleMoveLook.create(x, y, z, yaw, pitch, onGround));

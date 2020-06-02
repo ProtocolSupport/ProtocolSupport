@@ -23,7 +23,7 @@ public abstract class MiddleInventorySetItems extends ClientBoundMiddlePacket {
 	protected NetworkItemStack[] items;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		windowId = serverdata.readByte();
 		items = ArraySerializer.readShortTArray(serverdata, NetworkItemStack.class, ItemStackSerializer::readItemStack);
 

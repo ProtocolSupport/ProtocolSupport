@@ -13,7 +13,7 @@ public abstract class MiddleHeldSlot extends ClientBoundMiddlePacket {
 	protected int slot;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		slot = serverdata.readUnsignedByte();
 	}
 

@@ -20,7 +20,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		codec.write(create(version, clientCache.getLocale(), entityId, slot, itemstack));
 	}
 

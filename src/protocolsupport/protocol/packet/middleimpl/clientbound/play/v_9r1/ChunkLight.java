@@ -26,7 +26,7 @@ public class ChunkLight extends AbstractChunkLight {
 	protected final List<ClientBoundPacketData> blocktileupdates = new ArrayList<>();
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		int blockMask = ((setSkyLightMask | setBlockLightMask | emptySkyLightMask | emptyBlockLightMask) >> 1) & 0xFFFF;
 		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
 
@@ -52,7 +52,7 @@ public class ChunkLight extends AbstractChunkLight {
 	}
 
 	@Override
-	public void cleanup() {
+	protected void cleanup() {
 		blocktileupdates.clear();
 	}
 

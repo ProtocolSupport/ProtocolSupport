@@ -22,7 +22,7 @@ public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		codec.read(create(windowId));
 	}
 

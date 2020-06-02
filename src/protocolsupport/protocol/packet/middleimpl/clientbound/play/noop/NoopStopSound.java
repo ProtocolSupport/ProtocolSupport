@@ -10,7 +10,7 @@ public class NoopStopSound extends MiddleStopSound {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 	}
 
 }

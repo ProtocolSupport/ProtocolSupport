@@ -20,7 +20,7 @@ public abstract class MiddleBlockDig extends ServerBoundMiddlePacket {
 	protected int face;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		codec.read(create(status, position, face));
 	}
 

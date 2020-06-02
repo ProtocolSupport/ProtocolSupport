@@ -10,7 +10,7 @@ public class NoopSetCompression extends MiddleSetCompression {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 	}
 
 }

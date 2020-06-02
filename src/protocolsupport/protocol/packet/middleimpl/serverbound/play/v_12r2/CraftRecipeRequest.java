@@ -12,14 +12,14 @@ public class CraftRecipeRequest extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		clientdata.readUnsignedByte();
 		VarNumberSerializer.readVarInt(clientdata);
 		clientdata.readBoolean();
 	}
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 	}
 
 }

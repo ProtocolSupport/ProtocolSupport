@@ -12,7 +12,7 @@ public class Entity extends MiddleEntity {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData entitynoop = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_NOOP);
 		entitynoop.writeInt(entityId);
 		codec.write(entitynoop);

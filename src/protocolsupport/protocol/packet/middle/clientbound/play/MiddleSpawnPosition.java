@@ -15,7 +15,7 @@ public abstract class MiddleSpawnPosition extends ClientBoundMiddlePacket {
 	protected final Position position = new Position(0, 0, 0);
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		PositionSerializer.readPositionTo(serverdata, position);
 	}
 

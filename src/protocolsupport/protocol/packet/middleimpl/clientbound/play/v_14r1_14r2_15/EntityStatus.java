@@ -12,7 +12,7 @@ public class EntityStatus extends MiddleEntityStatus {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData entitystatus = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_STATUS);
 		entitystatus.writeInt(entity.getId());
 		entitystatus.writeByte(status);

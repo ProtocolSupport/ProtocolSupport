@@ -23,7 +23,7 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 	protected UsedHand hand;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		codec.read(create(entityId, action, interactedAt, hand));
 	}
 

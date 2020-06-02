@@ -15,7 +15,7 @@ public class DeclareTags extends MiddleDeclareTags {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData declaretags = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_DECLARE_TAGS);
 		writeTags(declaretags, blocks);
 		writeTags(declaretags, items);

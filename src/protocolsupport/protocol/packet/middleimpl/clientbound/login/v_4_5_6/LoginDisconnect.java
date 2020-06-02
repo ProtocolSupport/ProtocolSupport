@@ -13,7 +13,7 @@ public class LoginDisconnect extends MiddleLoginDisconnect {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData logindisconnect = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LOGIN_DISCONNECT);
 		StringSerializer.writeShortUTF16BEString(logindisconnect, message.toLegacyText(cache.getAttributesCache().getLocale()));
 		codec.write(logindisconnect);

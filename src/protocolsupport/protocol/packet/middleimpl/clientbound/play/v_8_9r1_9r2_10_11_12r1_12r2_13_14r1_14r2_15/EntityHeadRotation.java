@@ -13,7 +13,7 @@ public class EntityHeadRotation extends MiddleEntityHeadRotation {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData entityheadrotation = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_HEAD_ROTATION);
 		VarNumberSerializer.writeVarInt(entityheadrotation, entityId);
 		entityheadrotation.writeByte(headRot);

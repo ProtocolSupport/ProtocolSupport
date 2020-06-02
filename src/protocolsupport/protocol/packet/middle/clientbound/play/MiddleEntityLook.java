@@ -14,7 +14,7 @@ public abstract class MiddleEntityLook extends MiddleEntity {
 	protected boolean onGround;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		super.readServerData(serverdata);
 		yaw = serverdata.readByte();
 		pitch = serverdata.readByte();

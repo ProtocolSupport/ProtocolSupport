@@ -20,7 +20,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		String locale = cache.getAttributesCache().getLocale();
 		switch (action) {
 			case ADD: {

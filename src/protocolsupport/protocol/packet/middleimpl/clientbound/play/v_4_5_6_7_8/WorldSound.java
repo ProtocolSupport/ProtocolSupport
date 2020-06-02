@@ -11,7 +11,7 @@ public class WorldSound extends MiddleWorldSound {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		String soundname = SoundRemapper.getSoundName(version, id);
 		if (soundname != null) {
 			return;

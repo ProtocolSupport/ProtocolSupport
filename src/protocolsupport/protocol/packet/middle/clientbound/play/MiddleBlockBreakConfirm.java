@@ -15,7 +15,7 @@ public abstract class MiddleBlockBreakConfirm extends MiddleBlock {
 	protected boolean successful;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		super.readServerData(serverdata);
 		blockId = VarNumberSerializer.readVarInt(serverdata);
 		status = VarNumberSerializer.readVarInt(serverdata);

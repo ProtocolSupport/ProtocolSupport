@@ -17,7 +17,7 @@ public abstract class MiddleLoginCustomPayload extends ServerBoundMiddlePacket {
 	protected ByteBuf data;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		ServerBoundPacketData custompayload = ServerBoundPacketData.create(PacketType.SERVERBOUND_LOGIN_CUSTOM_PAYLOAD);
 		VarNumberSerializer.writeVarInt(custompayload, id);
 		custompayload.writeBoolean(data != null);

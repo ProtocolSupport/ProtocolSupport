@@ -10,7 +10,7 @@ public class NoopCraftRecipeConfirm extends MiddleCraftRecipeConfirm {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 	}
 
 }

@@ -13,7 +13,7 @@ public class AdvancementsTab extends MiddleAdvancementsTab {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData advanvementstab = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ADVANCEMENTS_TAB);
 		if (identifier != null) {
 			advanvementstab.writeBoolean(true);

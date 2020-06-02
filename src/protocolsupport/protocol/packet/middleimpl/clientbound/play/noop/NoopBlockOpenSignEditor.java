@@ -10,7 +10,7 @@ public class NoopBlockOpenSignEditor extends MiddleBlockOpenSignEditor {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 	}
 
 }

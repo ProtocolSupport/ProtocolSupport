@@ -10,7 +10,7 @@ public class NoopWorldBorder extends MiddleWorldBorder {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 	}
 
 }

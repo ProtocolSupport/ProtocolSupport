@@ -15,7 +15,7 @@ public abstract class MiddleBlockAction extends MiddleBlock {
 	protected int blockId;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		super.readServerData(serverdata);
 		actionId = serverdata.readUnsignedByte();
 		actionParam = serverdata.readUnsignedByte();

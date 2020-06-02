@@ -14,7 +14,7 @@ public class EntityPassengers extends MiddleEntityPassengers {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData entitypassengers = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_PASSENGERS);
 		VarNumberSerializer.writeVarInt(entitypassengers, vehicleId);
 		ArraySerializer.writeVarIntVarIntArray(entitypassengers, passengersIds);

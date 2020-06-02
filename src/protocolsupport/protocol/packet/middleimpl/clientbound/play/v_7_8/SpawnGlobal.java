@@ -13,7 +13,7 @@ public class SpawnGlobal extends MiddleSpawnGlobal {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData spawnglobal = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_GLOBAL);
 		VarNumberSerializer.writeVarInt(spawnglobal, entity.getId());
 		spawnglobal.writeByte(entity.getType().getNetworkTypeId());

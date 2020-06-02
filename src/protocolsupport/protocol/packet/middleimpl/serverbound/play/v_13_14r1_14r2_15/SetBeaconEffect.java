@@ -12,7 +12,7 @@ public class SetBeaconEffect extends MiddleSetBeaconEffect {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		primary = VarNumberSerializer.readVarInt(clientdata);
 		secondary = VarNumberSerializer.readVarInt(clientdata);
 	}

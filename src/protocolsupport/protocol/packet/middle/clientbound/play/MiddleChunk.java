@@ -29,7 +29,7 @@ public abstract class MiddleChunk extends ClientBoundMiddlePacket {
 	protected TileEntity[] tiles;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		coord = PositionSerializer.readIntChunkCoord(serverdata);
 		full = serverdata.readBoolean();
 		blockMask = VarNumberSerializer.readVarInt(serverdata);

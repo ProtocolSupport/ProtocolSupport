@@ -14,7 +14,7 @@ public abstract class MiddleKeepAlive extends ServerBoundMiddlePacket {
 	protected long keepAliveId;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		if (keepAliveId != -1) {
 			ServerBoundPacketData keepalive = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_KEEP_ALIVE);
 			keepalive.writeLong(keepAliveId);

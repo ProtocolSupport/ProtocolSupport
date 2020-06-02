@@ -15,7 +15,7 @@ public abstract class MiddleTeleportAccept extends ServerBoundMiddlePacket {
 	protected int teleportConfirmId;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		codec.read(create(teleportConfirmId));
 	}
 

@@ -16,7 +16,7 @@ public abstract class MiddleSetHealth extends ClientBoundMiddlePacket {
 	protected float saturation;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		health = serverdata.readFloat();
 		food = VarNumberSerializer.readVarInt(serverdata);
 		saturation = serverdata.readFloat();

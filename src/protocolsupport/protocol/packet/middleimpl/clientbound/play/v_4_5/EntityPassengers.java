@@ -18,7 +18,7 @@ public class EntityPassengers extends MiddleEntityPassengers {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		if (cache.getWatchedEntityCache().getWatchedEntity(vehicleId) == null) {
 			return;
 		}

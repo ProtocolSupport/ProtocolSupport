@@ -17,7 +17,7 @@ public class Explosion extends MiddleExplosion {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_14_4)) {
 			codec.write(WorldCustomSound.create(
 				version,

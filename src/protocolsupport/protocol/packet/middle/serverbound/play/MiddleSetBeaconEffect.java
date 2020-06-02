@@ -16,7 +16,7 @@ public abstract class MiddleSetBeaconEffect extends ServerBoundMiddlePacket {
 	protected int secondary;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		codec.read(create(primary, secondary));
 	}
 

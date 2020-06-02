@@ -18,7 +18,7 @@ public class BlockChangeMulti extends AbstractChunkCacheBlockChangeMulti {
 	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData blockchangemulti = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI);
 		PositionSerializer.writeIntChunkCoord(blockchangemulti, chunkCoord);
 		blockchangemulti.writeShort(records.length);

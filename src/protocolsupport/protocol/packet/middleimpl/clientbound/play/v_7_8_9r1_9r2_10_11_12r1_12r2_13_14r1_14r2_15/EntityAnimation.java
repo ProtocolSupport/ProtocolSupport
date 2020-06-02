@@ -13,7 +13,7 @@ public class EntityAnimation extends MiddleEntityAnimation {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData entityanimation = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_ANIMATION);
 		VarNumberSerializer.writeVarInt(entityanimation, entityId);
 		entityanimation.writeByte(animation.getId());

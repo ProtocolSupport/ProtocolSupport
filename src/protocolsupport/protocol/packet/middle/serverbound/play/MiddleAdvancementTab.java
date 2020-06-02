@@ -18,7 +18,7 @@ public abstract class MiddleAdvancementTab extends ServerBoundMiddlePacket {
 	protected String identifier;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		ServerBoundPacketData advanvementtab = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_ADVANCEMENT_TAB);
 		MiscSerializer.writeVarIntEnum(advanvementtab, action);
 		if (action == Action.OPEN) {

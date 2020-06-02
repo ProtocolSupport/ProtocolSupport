@@ -15,7 +15,7 @@ public class ResourcePack extends MiddleResourcePack {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData resourcepack = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeVarIntUTF8String(resourcepack, "MC|RPack");
 		ArraySerializer.writeShortByteArray(resourcepack, to -> ByteBufUtil.writeUtf8(to, url));

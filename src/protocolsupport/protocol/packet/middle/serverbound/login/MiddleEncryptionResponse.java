@@ -17,7 +17,7 @@ public abstract class MiddleEncryptionResponse extends ServerBoundMiddlePacket {
 	protected ByteBuf verifyToken;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		ServerBoundPacketData encryptionresponse = ServerBoundPacketData.create(PacketType.SERVERBOUND_LOGIN_ENCRYPTION_BEGIN);
 		ArraySerializer.writeVarIntByteArray(encryptionresponse, sharedSecret);
 		ArraySerializer.writeVarIntByteArray(encryptionresponse, verifyToken);

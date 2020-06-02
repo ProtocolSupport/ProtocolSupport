@@ -16,7 +16,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 	}
 
 	@Override
-	public void writeToClient() {
+	protected void writeToClient() {
 		ClientBoundPacketData spawnpainting = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_PAINTING);
 		VarNumberSerializer.writeVarInt(spawnpainting, entity.getId());
 		StringSerializer.writeVarIntUTF8String(spawnpainting, LegacyPainting.getName(type));

@@ -11,7 +11,7 @@ public class InventoryButton extends MiddleInventoryButton {
 	}
 
 	@Override
-	public void readClientData(ByteBuf clientdata) {
+	protected void readClientData(ByteBuf clientdata) {
 		windowId = clientdata.readUnsignedByte();
 		button = clientdata.readUnsignedByte();
 	}

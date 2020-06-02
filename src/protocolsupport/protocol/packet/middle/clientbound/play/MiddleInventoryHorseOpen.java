@@ -24,7 +24,7 @@ public abstract class MiddleInventoryHorseOpen extends ClientBoundMiddlePacket {
 	protected int entityId;
 
 	@Override
-	public void readServerData(ByteBuf serverdata) {
+	protected void readServerData(ByteBuf serverdata) {
 		windowId = serverdata.readByte();
 		slots = VarNumberSerializer.readVarInt(serverdata);
 		entityId = serverdata.readInt();

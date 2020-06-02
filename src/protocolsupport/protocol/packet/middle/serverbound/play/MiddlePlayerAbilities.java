@@ -16,7 +16,7 @@ public abstract class MiddlePlayerAbilities extends ServerBoundMiddlePacket {
 	protected float walkSpeed;
 
 	@Override
-	public void writeToServer() {
+	protected void writeToServer() {
 		ServerBoundPacketData abilities = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_ABILITIES);
 		abilities.writeByte(flags);
 		abilities.writeFloat(flySpeed);
