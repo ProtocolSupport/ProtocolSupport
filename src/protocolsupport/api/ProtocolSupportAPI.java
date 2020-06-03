@@ -64,6 +64,7 @@ public class ProtocolSupportAPI {
 	 * @return player {@link Connection} or null
 	 */
 	public static Connection getConnection(Player player) {
+		Validate.notNull(player, "Player can't be null");
 		return getConnection(player.spigot().getRawAddress());
 	}
 
@@ -74,6 +75,7 @@ public class ProtocolSupportAPI {
 	 * @return {@link Connection} with specified address
 	 */
 	public static Connection getConnection(SocketAddress address) {
+		Validate.notNull(address, "Address can't be null");
 		return ProtocolStorage.getConnection(address);
 	}
 
