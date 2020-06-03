@@ -4,6 +4,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleGameStateChange;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.MiscSerializer;
 
 public class GameStateChange extends MiddleGameStateChange {
 
@@ -13,21 +14,8 @@ public class GameStateChange extends MiddleGameStateChange {
 
 	@Override
 	protected void writeToClient() {
-		switch (type) {
-			case 1: {
-				type = 2;
-				break;
-			}
-			case 2: {
-				type = 1;
-				break;
-			}
-			default: {
-				break;
-			}
-		}
 		ClientBoundPacketData gamestatechange = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_GAME_STATE_CHANGE);
-		gamestatechange.writeByte(type);
+		MiscSerializer.writeByteEnum(gamestatechange, action);
 		gamestatechange.writeByte((int) value);
 		codec.write(gamestatechange);
 	}
