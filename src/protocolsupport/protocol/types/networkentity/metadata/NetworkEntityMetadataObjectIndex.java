@@ -79,7 +79,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 
 	public static class Insentient extends EntityLiving {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> INS_FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
-		public static final int FLAGS_BIT_ATTACKING = 2;
+		public static final int INS_FLAGS_BIT_ATTACKING = 2;
 	}
 
 	public static final class Player extends EntityLiving {

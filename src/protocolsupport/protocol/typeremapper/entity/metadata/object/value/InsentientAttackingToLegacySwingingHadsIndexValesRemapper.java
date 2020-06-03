@@ -14,7 +14,7 @@ public class InsentientAttackingToLegacySwingingHadsIndexValesRemapper extends I
 
 	@Override
 	public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectByte object) {
-		return new NetworkEntityMetadataObjectBoolean(BitUtils.isIBitSet(object.getValue(), NetworkEntityMetadataObjectIndex.Insentient.FLAGS_BIT_ATTACKING));
+		return new NetworkEntityMetadataObjectBoolean(BitUtils.isIBitSet(object.getValue(), NetworkEntityMetadataObjectIndex.Insentient.INS_FLAGS_BIT_ATTACKING));
 	}
 
 }
