@@ -161,6 +161,10 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> BOOST_TIME = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
 	}
 
+	public static class MushroomCow extends Ageable {
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectString> VARIANT = takeNextIndex(NetworkEntityMetadataObjectString.class);
+	}
+
 	public static class Rabbit extends Ageable {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> VARIANT = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
 	}
