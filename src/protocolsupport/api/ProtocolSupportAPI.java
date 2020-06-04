@@ -75,7 +75,6 @@ public class ProtocolSupportAPI {
 	 * @return {@link Connection} with specified address
 	 */
 	public static Connection getConnection(SocketAddress address) {
-		Validate.notNull(address, "Address can't be null");
 		return ProtocolStorage.getConnection(address);
 	}
 
