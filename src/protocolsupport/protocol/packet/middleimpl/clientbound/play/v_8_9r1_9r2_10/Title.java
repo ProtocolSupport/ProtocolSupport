@@ -23,8 +23,6 @@ public class Title extends MiddleTitle {
 
 	@Override
 	protected void writeToClient() {
-		message = LegacyChatJson.convert(version, clientCache.getLocale(), message);
-
 		if (action != Action.SET_ACTION_BAR) {
 			ClientBoundPacketData title = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_TITLE);
 			int actionId = action.ordinal();
@@ -32,7 +30,7 @@ public class Title extends MiddleTitle {
 			switch (action) {
 				case SET_TITLE:
 				case SET_SUBTITLE: {
-					StringSerializer.writeVarIntUTF8String(title, ChatAPI.toJSON(message));
+					StringSerializer.writeVarIntUTF8String(title, ChatAPI.toJSON(LegacyChatJson.convert(version, clientCache.getLocale(), message)));
 					break;
 				}
 				case SET_TIMES: {
@@ -51,7 +49,7 @@ public class Title extends MiddleTitle {
 			}
 			codec.write(title);
 		} else {
-			codec.write(Chat.create(MessagePosition.HOTBAR, message));
+			codec.write(Chat.create(MessagePosition.HOTBAR, LegacyChatJson.convert(version, clientCache.getLocale(), message)));
 		}
 	}
 
