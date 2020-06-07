@@ -13,7 +13,7 @@ public class WorldSound extends MiddleWorldSound {
 	@Override
 	protected void writeToClient() {
 		String soundname = SoundRemapper.getSoundName(version, id);
-		if(soundname == null) {
+		if (soundname == null) {
 			return;
 		}
 		codec.write(WorldCustomSound.create(version, x, y, z, soundname, category, volume, pitch));
