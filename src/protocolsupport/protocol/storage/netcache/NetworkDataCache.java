@@ -16,9 +16,9 @@ public class NetworkDataCache {
 		return windowcache;
 	}
 
-	protected final WatchedEntityCache wentitycache = new WatchedEntityCache();
-	public WatchedEntityCache getWatchedEntityCache() {
-		return wentitycache;
+	protected final NetworkEntityCache entitycache = new NetworkEntityCache();
+	public NetworkEntityCache getEntityCache() {
+		return entitycache;
 	}
 
 	protected final PlayerListCache playerlistcache = new PlayerListCache();

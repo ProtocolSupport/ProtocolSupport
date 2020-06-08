@@ -165,33 +165,4 @@ public class LegacyEntityId {
 		return toLegacyIntId.get(type);
 	}
 
-	public static int getMinecartObjectData(NetworkEntityType type) {
-		switch (type) {
-			case MINECART: {
-				return 0;
-			}
-			case MINECART_CHEST: {
-				return 1;
-			}
-			case MINECART_FURNACE: {
-				return 2;
-			}
-			case MINECART_TNT: {
-				return 3;
-			}
-			case MINECART_MOB_SPAWNER: {
-				return 4;
-			}
-			case MINECART_HOPPER: {
-				return 5;
-			}
-			case MINECART_COMMAND: {
-				return 6;
-			}
-			default: {
-				return 0;
-			}
-		}
-	}
-
 }

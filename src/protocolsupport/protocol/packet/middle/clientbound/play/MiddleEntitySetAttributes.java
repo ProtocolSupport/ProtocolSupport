@@ -8,9 +8,12 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.utils.Utils;
 
 public abstract class MiddleEntitySetAttributes extends MiddleEntity {
+
+	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
 	public MiddleEntitySetAttributes(ConnectionImpl connection) {
 		super(connection);
@@ -44,7 +47,7 @@ public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 
 	@Override
 	public void handleReadData() {
-		if (entityId == cache.getWatchedEntityCache().getSelfPlayerEntityId()) {
+		if (entityId == entityCache.getSelfId()) {
 			Attribute attr = attributes.get("generic.maxHealth");
 			if (attr != null) {
 				cache.getAttributesCache().setMaxHealth((float) attr.value);

@@ -9,6 +9,7 @@ import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.Netwo
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
+import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.Utils;
 
 public class SpawnNamed extends MiddleSpawnNamed {
@@ -31,7 +32,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		spawnnamed.writeByte(yaw);
 		spawnnamed.writeByte(pitch);
 		spawnnamed.writeShort(0);
-		NetworkEntityMetadataSerializer.writeLegacyData(spawnnamed, version, cache.getAttributesCache().getLocale(), NetworkEntityMetadataList.EMPTY);
+		NetworkEntityMetadataSerializer.writeLegacyData(spawnnamed, version, I18NData.DEFAULT_LOCALE, NetworkEntityMetadataList.EMPTY);
 		codec.write(spawnnamed);
 	}
 

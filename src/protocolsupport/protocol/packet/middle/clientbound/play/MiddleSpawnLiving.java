@@ -4,21 +4,21 @@ import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
+import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
-import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
-import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 
-	protected final WatchedEntityCache entityCache = cache.getWatchedEntityCache();
+	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
-	protected final EntityRemappingTable entityRemappingTable = EntityRemappersRegistry.REGISTRY.getTable(version);
+	protected final EnumSkippingTable<NetworkEntityType> entitySkipTable = GenericIdSkipper.ENTITY.getTable(version);
 
 	public MiddleSpawnLiving(ConnectionImpl connection) {
 		super(connection);
@@ -53,13 +53,12 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	protected void writeToClient() {
-		if (!GenericIdSkipper.ENTITY.getTable(version).shouldSkip(entity.getType())) {
-			entityCache.addWatchedEntity(entity);
-			writeToClient0(entityRemappingTable.getRemap(entity.getType()).getLeft());
+	protected void handleReadData() {
+		if (entitySkipTable.shouldSkip(entity.getType())) {
+			throw CancelMiddlePacketException.INSTANCE;
 		}
-	}
 
-	protected abstract void writeToClient0(NetworkEntityType remappedEntityType);
+		entityCache.addEntity(entity);
+	}
 
 }

@@ -34,12 +34,12 @@ public abstract class MiddleCollectEffect extends ClientBoundMiddlePacket {
 	public void handleReadData() {
 		//TODO: send needed collect packets from middle packet itself after implementing serverside entity position cache
 		if (
-			(collectorId == cache.getWatchedEntityCache().getSelfPlayerEntityId()) &&
+			(collectorId == cache.getEntityCache().getSelfId()) &&
 			(version.getProtocolType() == ProtocolType.PC) &&
 			version.isBefore(ProtocolVersion.MINECRAFT_1_9)
 		) {
 			Player player = connection.getPlayer();
-			NetworkEntity entity = cache.getWatchedEntityCache().getWatchedEntity(entityId);
+			NetworkEntity entity = cache.getEntityCache().getEntity(entityId);
 			if ((entity != null) && (player != null)) {
 				switch (entity.getType()) {
 					case ITEM: {

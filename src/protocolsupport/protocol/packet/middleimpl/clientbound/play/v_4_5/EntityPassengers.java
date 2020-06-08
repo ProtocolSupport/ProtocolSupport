@@ -5,8 +5,11 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityPassengers;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 
 public class EntityPassengers extends MiddleEntityPassengers {
+
+	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
 	public EntityPassengers(ConnectionImpl connection) {
 		super(connection);
@@ -19,7 +22,7 @@ public class EntityPassengers extends MiddleEntityPassengers {
 
 	@Override
 	protected void writeToClient() {
-		if (cache.getWatchedEntityCache().getWatchedEntity(vehicleId) == null) {
+		if (entityCache.getEntity(vehicleId) == null) {
 			return;
 		}
 

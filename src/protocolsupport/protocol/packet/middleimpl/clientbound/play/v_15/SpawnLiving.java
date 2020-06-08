@@ -2,15 +2,14 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_15;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnLiving;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.AbstractRemappedSpawnLiving;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.entity.FlatteningEntityId;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
-public class SpawnLiving extends MiddleSpawnLiving {
+public class SpawnLiving extends AbstractRemappedSpawnLiving {
 
 	protected final ArrayBasedIdRemappingTable flatteningEntityIdTable = FlatteningEntityId.REGISTRY.getTable(version);
 
@@ -19,11 +18,11 @@ public class SpawnLiving extends MiddleSpawnLiving {
 	}
 
 	@Override
-	protected void writeToClient0(NetworkEntityType remappedEntityType) {
+	protected void writeToClient() {
 		ClientBoundPacketData spawnliving = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_LIVING);
 		VarNumberSerializer.writeVarInt(spawnliving, entity.getId());
 		MiscSerializer.writeUUID(spawnliving, entity.getUUID());
-		VarNumberSerializer.writeVarInt(spawnliving, flatteningEntityIdTable.getRemap(remappedEntityType.getNetworkTypeId()));
+		VarNumberSerializer.writeVarInt(spawnliving, flatteningEntityIdTable.getRemap(rType.getNetworkTypeId()));
 		spawnliving.writeDouble(x);
 		spawnliving.writeDouble(y);
 		spawnliving.writeDouble(z);

@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
-import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
+import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
 import protocolsupport.protocol.typeremapper.entity.metadata.object.NetworkEntityMetadataObjectRemapper;
@@ -20,7 +20,7 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public abstract class MiddleEntityMetadata extends MiddleEntity {
 
-	protected final WatchedEntityCache entityCache = cache.getWatchedEntityCache();
+	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
 	protected final EntityRemappingTable entityRemappingTable = EntityRemappersRegistry.REGISTRY.getTable(version);
 
@@ -34,7 +34,7 @@ public abstract class MiddleEntityMetadata extends MiddleEntity {
 	@Override
 	protected void readServerData(ByteBuf serverdata) {
 		super.readServerData(serverdata);
-		entity = entityCache.getWatchedEntity(entityId);
+		entity = entityCache.getEntity(entityId);
 		NetworkEntityMetadataSerializer.readDataTo(serverdata, metadata);
 	}
 

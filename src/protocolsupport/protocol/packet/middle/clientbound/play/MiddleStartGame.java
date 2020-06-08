@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.AttributesCache;
-import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
+import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
 import protocolsupport.protocol.typeremapper.window.AbstractWindowsRemapper;
 import protocolsupport.protocol.typeremapper.window.WindowsRemappersRegistry;
@@ -19,7 +19,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntity;
 public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 
 	protected final AttributesCache clientCache = cache.getAttributesCache();
-	protected final WatchedEntityCache entityCache = cache.getWatchedEntityCache();
+	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 	protected final WindowCache windowCache = cache.getWindowCache();
 
 	protected final AbstractWindowsRemapper windowRemapper = WindowsRemappersRegistry.get(version);
@@ -59,8 +59,8 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 	protected void handleReadData() {
 		clientCache.setCurrentDimension(dimension);
 		clientCache.setRespawnScreenEnabled(respawnScreenEnabled);
-		entityCache.clearWatchedEntities();
-		entityCache.addWatchedSelfPlayer(player);
+		entityCache.clearEntities();
+		entityCache.setSelf(player);
 		windowCache.setPlayerWindow(windowRemapper.get(WindowType.PLAYER, 0));
 	}
 

@@ -5,7 +5,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.storage.netcache.AttributesCache;
-import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
+import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
 import protocolsupport.protocol.typeremapper.window.AbstractWindowsRemapper;
 import protocolsupport.protocol.typeremapper.window.WindowsRemappersRegistry;
@@ -16,7 +16,7 @@ import protocolsupport.protocol.types.WindowType;
 public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
 
 	protected final AttributesCache clientCache = cache.getAttributesCache();
-	protected final WatchedEntityCache entityCache = cache.getWatchedEntityCache();
+	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 	protected final WindowCache windowCache = cache.getWindowCache();
 
 	protected final AbstractWindowsRemapper windowRemapper = WindowsRemappersRegistry.get(version);
@@ -41,7 +41,7 @@ public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
 	@Override
 	public void handleReadData() {
 		clientCache.setCurrentDimension(dimension);
-		entityCache.clearWatchedEntities();
+		entityCache.clearEntities();
 		windowCache.setPlayerWindow(windowRemapper.get(WindowType.PLAYER, 0));
 	}
 

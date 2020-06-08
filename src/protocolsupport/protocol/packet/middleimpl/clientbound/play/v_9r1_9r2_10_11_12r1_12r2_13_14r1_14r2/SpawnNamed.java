@@ -8,6 +8,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.i18n.I18NData;
 
 public class SpawnNamed extends MiddleSpawnNamed {
 
@@ -25,7 +26,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		spawnnamed.writeDouble(z);
 		spawnnamed.writeByte(yaw);
 		spawnnamed.writeByte(pitch);
-		NetworkEntityMetadataSerializer.writeData(spawnnamed, version, cache.getAttributesCache().getLocale(), NetworkEntityMetadataList.EMPTY);
+		NetworkEntityMetadataSerializer.writeData(spawnnamed, version, I18NData.DEFAULT_LOCALE, NetworkEntityMetadataList.EMPTY);
 		codec.write(spawnnamed);
 	}
 

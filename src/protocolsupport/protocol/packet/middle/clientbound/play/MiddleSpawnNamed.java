@@ -7,12 +7,12 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
+import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 
-	protected final WatchedEntityCache entityCache = cache.getWatchedEntityCache();
+	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
 	public MiddleSpawnNamed(ConnectionImpl connection) {
 		super(connection);
@@ -39,7 +39,7 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void handleReadData() {
-		entityCache.addWatchedEntity(entity);
+		entityCache.addEntity(entity);
 	}
 
 }

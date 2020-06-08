@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityTeleport;
-import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
+import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.typeremapper.entity.EntityLocationOffset;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
@@ -11,7 +11,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class AbstractLocationOffsetEntityTeleport extends MiddleEntityTeleport {
 
-	protected final WatchedEntityCache entityCache = cache.getWatchedEntityCache();
+	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
 	protected final EntityRemappingTable entityRemappingTable = EntityRemappersRegistry.REGISTRY.getTable(version);
 	protected final EntityLocationOffset entityOffsetRemapper = EntityLocationOffset.get(version);
@@ -24,10 +24,12 @@ public abstract class AbstractLocationOffsetEntityTeleport extends MiddleEntityT
 
 	@Override
 	protected void handleReadData() {
-		entity = entityCache.getWatchedEntity(entityId);
+		entity = entityCache.getEntity(entityId);
+
 		if (entity == null) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
+
 		EntityLocationOffset.Offset offset = entityOffsetRemapper.get(entityRemappingTable.getRemap(entity.getType()).getLeft());
 		if (offset != null) {
 			x += offset.getX();

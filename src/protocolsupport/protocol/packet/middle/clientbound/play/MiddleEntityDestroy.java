@@ -4,11 +4,11 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
+import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 
 public abstract class MiddleEntityDestroy extends ClientBoundMiddlePacket {
 
-	protected final WatchedEntityCache entityCache = cache.getWatchedEntityCache();
+	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
 	public MiddleEntityDestroy(ConnectionImpl connection) {
 		super(connection);
@@ -23,7 +23,7 @@ public abstract class MiddleEntityDestroy extends ClientBoundMiddlePacket {
 
 	@Override
 	public void handleReadData() {
-		entityCache.removeWatchedEntities(entityIds);
+		entityCache.removeEntities(entityIds);
 	}
 
 }

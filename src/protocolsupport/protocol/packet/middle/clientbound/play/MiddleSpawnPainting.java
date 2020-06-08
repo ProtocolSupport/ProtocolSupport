@@ -8,14 +8,14 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.WatchedEntityCache;
+import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 
-	protected final WatchedEntityCache entityCache = cache.getWatchedEntityCache();
+	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
 	public MiddleSpawnPainting(ConnectionImpl connection) {
 		super(connection);
@@ -38,7 +38,7 @@ public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 
 	@Override
 	public void handleReadData() {
-		entityCache.addWatchedEntity(entity);
+		entityCache.addEntity(entity);
 	}
 
 }
