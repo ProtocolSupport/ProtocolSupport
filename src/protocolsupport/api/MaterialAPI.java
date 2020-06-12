@@ -125,11 +125,7 @@ public class MaterialAPI {
 	 * @return entity type
 	 */
 	public static EntityType getEntityLivingTypeByNetworkId(int id) {
-		try {
-			return NetworkEntityType.getMobByNetworkTypeId(id).getBukkitType();
-		} catch (IllegalArgumentException e) {
-			return null;
-		}
+		return NetworkEntityType.getMobByNetworkTypeId(id).getBukkitType();
 	}
 
 	/**
@@ -139,11 +135,7 @@ public class MaterialAPI {
 	 * @return entity type
 	 */
 	public static EntityType getEntityObjectTypeByNetworkId(int id) {
-		try {
-			return NetworkEntityType.getObjectByNetworkTypeId(id).getBukkitType();
-		} catch (IllegalArgumentException e) {
-			return null;
-		}
+		return NetworkEntityType.getObjectByNetworkTypeId(id).getBukkitType();
 	}
 
 }

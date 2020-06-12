@@ -1,24 +1,23 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import java.text.MessageFormat;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.ProtocolSupport;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
-import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
-import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
+import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();
-
-	protected final EnumSkippingTable<NetworkEntityType> entitySkipTable = GenericIdSkipper.ENTITY.getTable(version);
 
 	public MiddleSpawnObject(ConnectionImpl connection) {
 		super(connection);
@@ -40,6 +39,7 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 		int entityId = VarNumberSerializer.readVarInt(serverdata);
 		UUID uuid = MiscSerializer.readUUID(serverdata);
 		int typeId = serverdata.readUnsignedByte();
+		NetworkEntityType type = NetworkEntityType.getObjectByNetworkTypeId(typeId);
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();
 		z = serverdata.readDouble();
@@ -49,15 +49,22 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 		motX = serverdata.readShort();
 		motY = serverdata.readShort();
 		motZ = serverdata.readShort();
-		entity = NetworkEntity.createObject(uuid, entityId, typeId);
+
+		if (type == NetworkEntityType.NONE) {
+			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
+				ProtocolSupport.logWarning(MessageFormat.format(
+					"Attempted to spawn unknown object entity type id {0} at {1},{2},{3}",
+					typeId, x, y, z
+				));
+			}
+			throw CancelMiddlePacketException.INSTANCE;
+		}
+
+		entity = NetworkEntity.createObject(uuid, entityId, type);
 	}
 
 	@Override
 	protected void handleReadData() {
-		if (entitySkipTable.shouldSkip(entity.getType())) {
-			throw CancelMiddlePacketException.INSTANCE;
-		}
-
 		entityCache.addEntity(entity);
 	}
 

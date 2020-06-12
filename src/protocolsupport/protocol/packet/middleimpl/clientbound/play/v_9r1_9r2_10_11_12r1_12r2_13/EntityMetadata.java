@@ -8,6 +8,7 @@ import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.AttributesCache;
 import protocolsupport.protocol.types.Position;
 
 public class EntityMetadata extends AbstractUseBedPacketEntityMetadata {
@@ -16,11 +17,13 @@ public class EntityMetadata extends AbstractUseBedPacketEntityMetadata {
 		super(connection);
 	}
 
+	protected final AttributesCache clientCache = cache.getAttributesCache();
+
 	@Override
 	protected ClientBoundPacketData createEntityMetadata(NetworkEntityMetadataList remappedMetadata) {
 		ClientBoundPacketData entitymetadata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
 		VarNumberSerializer.writeVarInt(entitymetadata, entityId);
-		NetworkEntityMetadataSerializer.writeData(entitymetadata, version, cache.getAttributesCache().getLocale(), remappedMetadata);
+		NetworkEntityMetadataSerializer.writeData(entitymetadata, version, clientCache.getLocale(), remappedMetadata);
 		return entitymetadata;
 	}
 

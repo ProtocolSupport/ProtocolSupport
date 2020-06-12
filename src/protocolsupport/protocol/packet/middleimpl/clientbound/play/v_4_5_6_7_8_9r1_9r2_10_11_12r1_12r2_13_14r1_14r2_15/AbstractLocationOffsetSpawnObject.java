@@ -5,7 +5,7 @@ import protocolsupport.protocol.typeremapper.entity.EntityLocationOffset;
 
 public abstract class AbstractLocationOffsetSpawnObject extends AbstractRemappedSpawnObject {
 
-	protected final EntityLocationOffset entityOffsetRemapper = EntityLocationOffset.get(version);
+	protected final EntityLocationOffset entityOffset = EntityLocationOffset.get(version);
 
 	public AbstractLocationOffsetSpawnObject(ConnectionImpl connection) {
 		super(connection);
@@ -15,7 +15,7 @@ public abstract class AbstractLocationOffsetSpawnObject extends AbstractRemapped
 	protected void handleReadData() {
 		super.handleReadData();
 
-		EntityLocationOffset.Offset offset = entityOffsetRemapper.get(rType);
+		EntityLocationOffset.Offset offset = entityOffset.get(rType);
 		if (offset != null) {
 			x += offset.getX();
 			y += offset.getY();

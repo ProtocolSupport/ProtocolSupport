@@ -3,13 +3,10 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityPassengers;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.AbstractKnownEntityPassengers;
 
-public class EntityPassengers extends MiddleEntityPassengers {
-
-	protected final NetworkEntityCache entityCache = cache.getEntityCache();
+public class EntityPassengers extends AbstractKnownEntityPassengers {
 
 	public EntityPassengers(ConnectionImpl connection) {
 		super(connection);
@@ -22,10 +19,6 @@ public class EntityPassengers extends MiddleEntityPassengers {
 
 	@Override
 	protected void writeToClient() {
-		if (entityCache.getEntity(vehicleId) == null) {
-			return;
-		}
-
 		if (passengersIds.length == 0) {
 			int passengerId = vehiclePassenger.remove(vehicleId);
 			if (passengerId != vehiclePassenger.defaultReturnValue()) {

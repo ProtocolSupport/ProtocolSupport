@@ -16,7 +16,7 @@ public class EntityStatus extends AbstractRemoveEquipmentOnDeathEntityStatus {
 	@Override
 	protected void writeEquipmentRemove() {
 		for (MiddleEntityEquipment.Slot slot : AbstractNoOffhandEntityEquipment.SUPPORTED_SLOTS) {
-			codec.write(EntityEquipment.create(version, I18NData.DEFAULT_LOCALE, entity.getId(), slot, NetworkItemStack.NULL));
+			codec.write(EntityEquipment.create(version, I18NData.DEFAULT_LOCALE, entityId, slot, NetworkItemStack.NULL));
 		}
 	}
 

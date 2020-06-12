@@ -6,16 +6,16 @@ import protocolsupport.utils.Utils;
 
 public class NetworkEntity {
 
-	public static NetworkEntity createMob(UUID uuid, int id, int typeId) {
-		return new NetworkEntity(uuid, id, NetworkEntityType.getMobByNetworkTypeId(typeId));
+	public static NetworkEntity createMob(UUID uuid, int id, NetworkEntityType type) {
+		return new NetworkEntity(uuid, id, type);
 	}
 
-	public static NetworkEntity createObject(UUID uuid, int id, int typeId) {
-		return new NetworkEntity(uuid, id, NetworkEntityType.getObjectByNetworkTypeId(typeId));
+	public static NetworkEntity createObject(UUID uuid, int id, NetworkEntityType type) {
+		return new NetworkEntity(uuid, id, type);
 	}
 
-	public static NetworkEntity createGlobal(int id, int typeId) {
-		return new NetworkEntity(null, id, NetworkEntityType.getGlobalByNetworkTypeId(typeId));
+	public static NetworkEntity createGlobal(int id, NetworkEntityType type) {
+		return new NetworkEntity(null, id, type);
 	}
 
 	public static NetworkEntity createPlayer(UUID uuid, int id) {

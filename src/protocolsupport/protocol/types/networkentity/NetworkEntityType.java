@@ -1,6 +1,5 @@
 package protocolsupport.protocol.types.networkentity;
 
-import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -180,26 +179,17 @@ public enum NetworkEntityType {
 
 	public static NetworkEntityType getObjectByNetworkTypeId(int objectTypeId) {
 		NetworkEntityType type = OBJECT_BY_N_ID.get(objectTypeId);
-		if (type == null) {
-			throw new IllegalArgumentException(MessageFormat.format("Unknown object entity network type id {0}", objectTypeId));
-		}
-		return type;
+		return type != null ? type : NONE;
 	}
 
 	public static NetworkEntityType getMobByNetworkTypeId(int mobTypeId) {
 		NetworkEntityType type = MOB_BY_N_ID.get(mobTypeId);
-		if (type == null) {
-			throw new IllegalArgumentException(MessageFormat.format("Unknown mob entity network type id {0}", mobTypeId));
-		}
-		return type;
+		return type != null ? type : NONE;
 	}
 
 	public static NetworkEntityType getGlobalByNetworkTypeId(int globalTypeId) {
 		NetworkEntityType type = GLOBAL_BY_N_ID.get(globalTypeId);
-		if (type == null) {
-			throw new IllegalArgumentException(MessageFormat.format("Unknown global entity network type id {0}", globalTypeId));
-		}
-		return type;
+		return type != null ? type : NONE;
 	}
 
 	public static NetworkEntityType getByRegistrySTypeId(String name) {
