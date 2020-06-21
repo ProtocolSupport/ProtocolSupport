@@ -50,8 +50,8 @@ public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 	protected String formatLegacyClampedPrefix() {
 		String prefix = this.prefix.toLegacyText(clientCache.getLocale());
 
-		if (format != ChatColor.RESET) {
-			prefix = addStartFormat(prefix);
+		if (format != ChatColor.RESET && !prefix.isEmpty() && !isStringFormatOverride(prefix, format)) {
+			prefix = format + prefix;
 		}
 
 		String prefixLastFormatString = ChatColor.getLastColors(prefix);
@@ -71,15 +71,22 @@ public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 
 	protected String formatLegacyClampedSuffix() {
 		String suffix = this.suffix.toLegacyText(clientCache.getLocale());
-		suffix = addStartFormat(suffix);
+
+		if (!isStringFormatOverride(suffix, format)) {
+			suffix = format + suffix;
+			if (format.isFormat()) {
+				suffix = ChatColor.RESET + suffix;
+			}
+		}
+
 		return LegacyChat.clampLegacyText(suffix, NFIX_LIMIT);
 	}
 
 	protected Any<String, String> formatDisplayLinePrefixSuffix() {
 		String prefix = this.prefix.toLegacyText(clientCache.getLocale());
 
-		if (format != ChatColor.RESET) {
-			prefix = addStartFormat(prefix);
+		if (format != ChatColor.RESET && !isStringFormatOverride(prefix, format)) {
+			prefix = format + prefix;
 		}
 
 		if (prefix.length() <= NFIX_LIMIT) {
@@ -97,13 +104,6 @@ public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 		sSuffix = LegacyChat.clampLegacyText(sSuffix, NFIX_LIMIT);
 
 		return new Any<>(sPrefix, sSuffix);
-	}
-
-	protected String addStartFormat(String text) {
-		if (text.isEmpty() || isStringFormatOverride(text, format)) {
-			return text;
-		}
-		return format + text;
 	}
 
 	protected static boolean isStringFormatOverride(String string, ChatColor format) {
