@@ -1,15 +1,16 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2;
 
+import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardTeam;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2.AbstractScoreboardTeam;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
 
-public class ScoreboardTeam extends MiddleScoreboardTeam {
+public class ScoreboardTeam extends AbstractScoreboardTeam {
 
 	public ScoreboardTeam(ConnectionImpl connection) {
 		super(connection);
@@ -21,14 +22,14 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 		StringSerializer.writeVarIntUTF8String(scoreboardteam, name);
 		MiscSerializer.writeByteEnum(scoreboardteam, mode);
 		if ((mode == Mode.CREATE) || (mode == Mode.UPDATE)) {
-			String locale = cache.getAttributesCache().getLocale();
-			StringSerializer.writeVarIntUTF8String(scoreboardteam, LegacyChat.clampLegacyText(displayName.toLegacyText(locale), 32));
-			StringSerializer.writeVarIntUTF8String(scoreboardteam, LegacyChat.formatLegacyPrefixWithTeamColor(prefix.toLegacyText(locale), 16, color));
-			StringSerializer.writeVarIntUTF8String(scoreboardteam, LegacyChat.clampLegacyText(suffix.toLegacyText(locale), 16));
+			StringSerializer.writeVarIntUTF8String(scoreboardteam, LegacyChat.clampLegacyText(displayName.toLegacyText(clientCache.getLocale()), 32));
+			Any<String, String> nfix = formatPrefixSuffix();
+			StringSerializer.writeVarIntUTF8String(scoreboardteam, nfix.getObj1());
+			StringSerializer.writeVarIntUTF8String(scoreboardteam, nfix.getObj2());
 			scoreboardteam.writeByte(friendlyFire);
 			StringSerializer.writeVarIntUTF8String(scoreboardteam, nameTagVisibility);
 			StringSerializer.writeVarIntUTF8String(scoreboardteam, collisionRule);
-			scoreboardteam.writeByte(color <= 15 ? color : -1);
+			scoreboardteam.writeByte(format.isColor() ? format.ordinal() : -1);
 		}
 		if ((mode == Mode.CREATE) || (mode == Mode.PLAYERS_ADD) || (mode == Mode.PLAYERS_REMOVE)) {
 			ArraySerializer.writeVarIntVarIntUTF8StringArray(scoreboardteam, players);

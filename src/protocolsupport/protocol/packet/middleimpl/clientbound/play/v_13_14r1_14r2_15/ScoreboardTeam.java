@@ -8,7 +8,6 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class ScoreboardTeam extends MiddleScoreboardTeam {
 
@@ -26,7 +25,7 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 			scoreboardteam.writeByte(friendlyFire);
 			StringSerializer.writeVarIntUTF8String(scoreboardteam, nameTagVisibility);
 			StringSerializer.writeVarIntUTF8String(scoreboardteam, collisionRule);
-			VarNumberSerializer.writeVarInt(scoreboardteam, color);
+			MiscSerializer.writeVarIntEnum(scoreboardteam, format);
 			StringSerializer.writeVarIntUTF8String(scoreboardteam, ChatAPI.toJSON(prefix));
 			StringSerializer.writeVarIntUTF8String(scoreboardteam, ChatAPI.toJSON(suffix));
 		}

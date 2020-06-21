@@ -26,16 +26,15 @@ public class Modifier {
 		obfuscated = null;
 	}
 
-	@Deprecated
-	public void set(ChatColor color) {
-		if (color == null) {
+	public void set(ChatColor format) {
+		if ((format == null) || (format == ChatColor.RESET)) {
 			clear();
 			return;
 		}
-		if (color.isColor()) {
-			this.color = color;
-		} else if (color.isFormat()) {
-			switch (color) {
+		if (format.isColor()) {
+			this.color = format;
+		} else if (format.isFormat()) {
+			switch (format) {
 				case BOLD: {
 					this.bold = true;
 					break;
@@ -61,14 +60,11 @@ public class Modifier {
 				}
 			}
 		}
-		if (color == ChatColor.RESET) {
-			this.color = ChatColor.WHITE;
-			this.bold = false;
-			this.italic = false;
-			this.strikethrough = false;
-			this.underlined = false;
-			this.obfuscated = false;
-		}
+	}
+
+	public Modifier with(ChatColor format) {
+		set(format);
+		return this;
 	}
 
 	public boolean hasColor() {

@@ -11,6 +11,10 @@ public class TextComponent extends BaseComponent {
 		this.text = text;
 	}
 
+	public String getText() {
+		return text;
+	}
+
 	@Override
 	public String getValue(String locale) {
 		return text;

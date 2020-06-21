@@ -1,7 +1,11 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+
+import org.bukkit.ChatColor;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
@@ -12,7 +16,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.utils.EnumConstantLookups;
 import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
 
 public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
@@ -21,7 +25,7 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected final Set<String> teams = new HashSet<>();
+	protected final ScoreboardTeamsTracker teamsTracker = new ScoreboardTeamsTracker();
 
 	protected String name;
 	protected Mode mode;
@@ -31,7 +35,7 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 	protected int friendlyFire;
 	protected String nameTagVisibility;
 	protected String collisionRule;
-	protected int color;
+	protected ChatColor format;
 	protected String[] players;
 
 	@Override
@@ -43,7 +47,7 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 			friendlyFire = serverdata.readUnsignedByte();
 			nameTagVisibility = StringSerializer.readVarIntUTF8String(serverdata);
 			collisionRule = StringSerializer.readVarIntUTF8String(serverdata);
-			color = VarNumberSerializer.readVarInt(serverdata);
+			format = MiscSerializer.readVarIntEnum(serverdata, EnumConstantLookups.CHAT_COLOR);
 			prefix = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 			suffix = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 		}
@@ -53,19 +57,31 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 
 		switch (mode) {
 			case CREATE: {
-				if (!teams.add(name)) {
+				if (!teamsTracker.addTeam(name, players)) {
 					throw CancelMiddlePacketException.INSTANCE;
 				}
 				break;
 			}
 			case REMOVE: {
-				if (!teams.remove(name)) {
+				if (!teamsTracker.removeTeam(name)) {
+					throw CancelMiddlePacketException.INSTANCE;
+				}
+				break;
+			}
+			case PLAYERS_ADD: {
+				if (!teamsTracker.addPlayersToTeam(name, players)) {
+					throw CancelMiddlePacketException.INSTANCE;
+				}
+				break;
+			}
+			case PLAYERS_REMOVE: {
+				if (!teamsTracker.removePlayersFromTeam(name, players)) {
 					throw CancelMiddlePacketException.INSTANCE;
 				}
 				break;
 			}
 			default: {
-				if (!teams.contains(name)) {
+				if (teamsTracker.getTeam(name) == null) {
 					throw CancelMiddlePacketException.INSTANCE;
 				}
 				break;
@@ -76,6 +92,102 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 	protected static enum Mode {
 		CREATE, REMOVE, UPDATE, PLAYERS_ADD, PLAYERS_REMOVE;
 		public static final EnumConstantLookup<Mode> CONSTANT_LOOKUP = new EnumConstantLookup<>(Mode.class);
+	}
+
+	public static class ScoreboardTeamsTracker {
+
+		protected final Map<String, TrackedScoreboardTeam> teams = new HashMap<>();
+		protected final Map<String, TrackedScoreboardTeam> playerTeam = new HashMap<>();
+
+		public TrackedScoreboardTeam getTeam(String teamName) {
+			return teams.get(teamName);
+		}
+
+		public boolean addTeam(String teamName, String[] players) {
+			if (teams.containsKey(teamName)) {
+				return false;
+			}
+			TrackedScoreboardTeam team = new TrackedScoreboardTeam(teamName);
+			teams.put(teamName, team);
+			addPlayersToTeam(team, players);
+			return true;
+		}
+
+		public boolean addPlayersToTeam(String teamName, String[] players) {
+			TrackedScoreboardTeam team = teams.get(teamName);
+			if (team == null) {
+				return false;
+			}
+			addPlayersToTeam(team, players);
+			return true;
+		}
+
+		protected void addPlayersToTeam(TrackedScoreboardTeam team, String[] players) {
+			for (String player : players) {
+				team.addPlayer(player);
+				TrackedScoreboardTeam oldTeam = playerTeam.put(player, team);
+				if (oldTeam != null) {
+					oldTeam.removePlayer(player);
+				}
+			}
+		}
+
+		public boolean removePlayersFromTeam(String teamName, String[] players) {
+			TrackedScoreboardTeam team = teams.get(teamName);
+			if (team == null) {
+				return false;
+			}
+			Set<String> teamPlayers = team.players;
+			for (String player : players) {
+				if (!teamPlayers.contains(player)) {
+					return false;
+				}
+			}
+			for (String player : players) {
+				teamPlayers.remove(player);
+				playerTeam.remove(player);
+			}
+			return true;
+		}
+
+		public boolean removeTeam(String teamName) {
+			TrackedScoreboardTeam team = teams.remove(teamName);
+			if (team == null) {
+				return false;
+			}
+			for (String player : team.players) {
+				playerTeam.remove(player);
+			}
+			return true;
+		}
+
+		public static class TrackedScoreboardTeam {
+
+			protected final String name;
+			protected final Set<String> players = new HashSet<>();
+
+			public TrackedScoreboardTeam(String name) {
+				this.name = name;
+			}
+
+			public String getName() {
+				return name;
+			}
+
+			public Set<String> getPlayers() {
+				return players;
+			}
+
+			public void addPlayer(String player) {
+				players.add(player);
+			}
+
+			public void removePlayer(String player) {
+				players.remove(player);
+			}
+
+		}
+
 	}
 
 }
