@@ -1,6 +1,7 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.base;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperBooleanToByte;
 import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperNoOp;
 import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperNumberToShort;
 import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperOptionalChatToString;
@@ -20,8 +21,10 @@ public class BaseEntityMetadataRemapper extends EntityMetadataRemapper {
 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Entity.NAMETAG, 2), ProtocolVersionsHelper.UP_1_13);
 		addRemap(new IndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex.Entity.NAMETAG, 2), ProtocolVersionsHelper.RANGE__1_9__1_12_2);
+		addRemap(new IndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex.Entity.NAMETAG, 2), ProtocolVersion.MINECRAFT_1_8);
 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Entity.NAMETAG_VISIBLE, 3), ProtocolVersionsHelper.UP_1_9);
+		addRemap(new IndexValueRemapperBooleanToByte(NetworkEntityMetadataObjectIndex.Entity.NAMETAG_VISIBLE, 3), ProtocolVersion.MINECRAFT_1_8);
 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Entity.SILENT, 4), ProtocolVersionsHelper.UP_1_9);
 
