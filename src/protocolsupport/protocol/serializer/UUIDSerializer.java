@@ -11,7 +11,7 @@ public class UUIDSerializer {
 	}
 
 	public static UUID readUUID4I(ByteBuf from) {
-		return new UUID((from.readInt() << 32) | from.readInt(), (from.readInt() << 32) | from.readInt());
+		return new UUID(((from.readUnsignedInt()) << 32) | from.readUnsignedInt(), (from.readUnsignedInt() << 32) | from.readUnsignedInt());
 	}
 
 	public static void writeUUID2L(ByteBuf to, UUID uuid) {
