@@ -45,7 +45,7 @@ public abstract class MiddleEntityAttributes extends MiddleEntity {
 	}
 
 	@Override
-	public void handleReadData() {
+	protected void handleReadData() {
 		if (entityId == entityCache.getSelfId()) {
 			Attribute attr = attributes.get("generic.max_health");
 			if (attr != null) {

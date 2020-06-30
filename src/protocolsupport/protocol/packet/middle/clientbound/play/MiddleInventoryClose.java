@@ -21,7 +21,7 @@ public abstract class MiddleInventoryClose extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void handleReadData() {
+	protected void handleReadData() {
 		windowCache.closeWindow();
 	}
 

@@ -37,7 +37,7 @@ public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void handleReadData() {
+	protected void handleReadData() {
 		entityCache.addEntity(entity);
 	}
 

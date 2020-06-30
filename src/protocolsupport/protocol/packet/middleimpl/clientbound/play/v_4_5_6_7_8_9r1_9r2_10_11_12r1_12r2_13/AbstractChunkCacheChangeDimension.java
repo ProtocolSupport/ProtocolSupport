@@ -13,7 +13,7 @@ public abstract class AbstractChunkCacheChangeDimension extends MiddleChangeDime
 	}
 
 	@Override
-	public void handleReadData() {
+	protected void handleReadData() {
 		super.handleReadData();
 		chunkCache.clear();
 	}

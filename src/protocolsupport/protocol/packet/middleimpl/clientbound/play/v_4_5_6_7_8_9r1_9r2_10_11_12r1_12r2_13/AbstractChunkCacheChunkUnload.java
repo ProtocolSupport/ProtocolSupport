@@ -13,7 +13,7 @@ public abstract class AbstractChunkCacheChunkUnload extends MiddleChunkUnload {
 	}
 
 	@Override
-	public void handleReadData() {
+	protected void handleReadData() {
 		chunkCache.remove(chunk);
 	}
 

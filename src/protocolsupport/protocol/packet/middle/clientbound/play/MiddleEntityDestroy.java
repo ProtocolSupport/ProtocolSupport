@@ -22,7 +22,7 @@ public abstract class MiddleEntityDestroy extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void handleReadData() {
+	protected void handleReadData() {
 		entityCache.removeEntities(entityIds);
 	}
 

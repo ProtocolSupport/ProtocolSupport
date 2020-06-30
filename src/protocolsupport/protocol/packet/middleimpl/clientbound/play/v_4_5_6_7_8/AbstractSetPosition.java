@@ -13,7 +13,7 @@ public abstract class AbstractSetPosition extends MiddleSetPosition {
 	}
 
 	@Override
-	public void handleReadData() {
+	protected void handleReadData() {
 		if (teleportConfirmId != 0) {
 			movementCache.setTeleportLocation(x, y, z, teleportConfirmId);
 		}

@@ -23,7 +23,7 @@ public abstract class AbstractChunkCacheChunkData extends MiddleChunkData {
 	protected CachedChunk cachedChunk;
 
 	@Override
-	public void handleReadData() {
+	protected void handleReadData() {
 		cachedChunk = chunkCache.get(coord);
 		if (cachedChunk == null) {
 			cachedChunk = chunkCache.add(coord);

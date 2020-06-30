@@ -31,7 +31,7 @@ public abstract class MiddleCollectEffect extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	public void handleReadData() {
+	protected void handleReadData() {
 		//TODO: send needed collect packets from middle packet itself after implementing serverside entity position cache
 		if (
 			(collectorId == cache.getEntityCache().getSelfId()) &&
