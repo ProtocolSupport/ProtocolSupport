@@ -2,8 +2,6 @@ package protocolsupport.protocol.utils.chat;
 
 import java.lang.reflect.Type;
 
-import org.bukkit.ChatColor;
-
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -11,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import protocolsupport.api.chat.ChatColor;
 import protocolsupport.api.chat.modifiers.Modifier;
 import protocolsupport.utils.JsonUtils;
 
@@ -36,7 +35,10 @@ public class ModifierSerializer implements JsonDeserializer<Modifier>, JsonSeria
 			modifier.setRandom(jsonobject.get("obfuscated").getAsBoolean());
 		}
 		if (jsonobject.has("color")) {
-			modifier.setColor(ChatColor.valueOf(jsonobject.get("color").getAsString().toUpperCase()));
+			modifier.setRGBColor(ChatColor.of(jsonobject.get("color").getAsString()));
+		}
+		if (jsonobject.has("font")) {
+			modifier.setFont(jsonobject.get("font").getAsString());
 		}
 		return modifier;
 	}
@@ -49,9 +51,13 @@ public class ModifierSerializer implements JsonDeserializer<Modifier>, JsonSeria
 		JsonUtils.setIfNotNull(jsonobject, "underlined", modifier.isUnderlined());
 		JsonUtils.setIfNotNull(jsonobject, "strikethrough", modifier.isStrikethrough());
 		JsonUtils.setIfNotNull(jsonobject, "obfuscated", modifier.isRandom());
-		ChatColor color = modifier.getColor();
+		ChatColor color = modifier.getRGBColor();
 		if (color != null) {
-			jsonobject.addProperty("color", color.name().toLowerCase());
+			jsonobject.addProperty("color", color.getIdentifier());
+		}
+		String font = modifier.getFont();
+		if (font != null) {
+			jsonobject.addProperty("font", font);
 		}
 		return jsonobject;
 	}

@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyWindowType;
 import protocolsupport.protocol.typeremapper.legacy.LegacyWindowType.LegacyWindowData;
 
@@ -16,6 +17,8 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		super(connection);
 	}
 
+	protected final ClientCache clientCache = cache.getClientCache();
+
 	@Override
 	protected void writeToClient0() {
 		LegacyWindowData wdata = LegacyWindowType.getData(windowRemapper.toClientWindowType(type));
@@ -23,7 +26,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		writeData(
 			windowopen,
 			windowId, wdata.getStringId(),
-			title.toLegacyText(cache.getClientCache().getLocale()),
+			title.toLegacyText(clientCache.getLocale()),
 			windowRemapper.toClientSlots(0)
 		);
 		codec.write(windowopen);

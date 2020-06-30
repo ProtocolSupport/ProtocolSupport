@@ -61,8 +61,9 @@ public class LegacyChatJson {
 	static {
 		register(new LegacyChatJsonURLFixerComponentConverter(), ProtocolVersion.getAllSupported());
 		register(new LegacyChatJsonServerTranslateComponentConverter(), ProtocolVersion.getAllSupported());
-		register(new LegacyChatJsonKeybindComponentConverter(), ProtocolVersionsHelper.DOWN_1_11_1);
 		register(new LegacyChatJsonLegacyHoverComponentConverter(), ProtocolVersion.getAllSupported());
+		register(new LegacyChatJsonModifierColorConverter(), ProtocolVersionsHelper.DOWN_1_15_2);
+		register(new LegacyChatJsonKeybindComponentConverter(), ProtocolVersionsHelper.DOWN_1_11_1);
 	}
 
 }

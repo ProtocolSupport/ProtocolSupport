@@ -69,8 +69,8 @@ public class LegacyChat {
 		 * }
 		 */
 		public void writeModifier(Modifier newModifier) {
-			ChatColor lastAppendedColor = lastAppendedModifier.getColor();
-			ChatColor newColor = newModifier.getColor();
+			ChatColor lastAppendedColor = lastAppendedModifier.hasColor() ? lastAppendedModifier.getRGBColor().asBukkit() : null;
+			ChatColor newColor = newModifier.hasColor() ? newModifier.getRGBColor().asBukkit() : null;
 			if (newColor != lastAppendedColor) {
 				if (newColor != null) {
 					out.append(newColor);
@@ -172,7 +172,7 @@ public class LegacyChat {
 	 */
 	protected static Modifier combineModifiers(Modifier parentModifier, Modifier childModifier) {
 		Modifier combinedModifier = new Modifier();
-		combinedModifier.setColor(childModifier.hasColor() ? childModifier.getColor() : parentModifier.getColor());
+		combinedModifier.setRGBColor(childModifier.hasColor() ? childModifier.getRGBColor() : parentModifier.getRGBColor());
 		combinedModifier.setBold(childModifier.isBold() != null ? childModifier.isBold() : parentModifier.isBold());
 		combinedModifier.setItalic(childModifier.isItalic() != null ? childModifier.isItalic() : parentModifier.isItalic());
 		combinedModifier.setUnderlined(childModifier.isUnderlined() != null ? childModifier.isUnderlined() : parentModifier.isUnderlined());

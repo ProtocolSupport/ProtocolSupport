@@ -7,6 +7,8 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardO
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.storage.netcache.ClientCache;
+import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
 
 public class ScoreboardObjective extends MiddleScoreboardObjective {
 
@@ -14,13 +16,15 @@ public class ScoreboardObjective extends MiddleScoreboardObjective {
 		super(connection);
 	}
 
+	protected final ClientCache clientCache = cache.getClientCache();
+
 	@Override
 	protected void writeToClient() {
 		ClientBoundPacketData scoreboardobjective = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_OBJECTIVE);
 		StringSerializer.writeVarIntUTF8String(scoreboardobjective, name);
 		scoreboardobjective.writeByte(mode.ordinal());
 		if (mode != Mode.REMOVE) {
-			StringSerializer.writeVarIntUTF8String(scoreboardobjective, ChatAPI.toJSON(value));
+			StringSerializer.writeVarIntUTF8String(scoreboardobjective, ChatAPI.toJSON(LegacyChatJson.convert(version, clientCache.getLocale(), value)));
 			MiscSerializer.writeVarIntEnum(scoreboardobjective, type);
 		}
 		codec.write(scoreboardobjective);

@@ -8,6 +8,8 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.storage.netcache.ClientCache;
+import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
 
 public class ScoreboardTeam extends MiddleScoreboardTeam {
 
@@ -15,19 +17,23 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 		super(connection);
 	}
 
+	protected final ClientCache clientCache = cache.getClientCache();
+
 	@Override
 	protected void writeToClient() {
+		String locale = clientCache.getLocale();
+
 		ClientBoundPacketData scoreboardteam = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_TEAM);
 		StringSerializer.writeVarIntUTF8String(scoreboardteam, name);
 		MiscSerializer.writeByteEnum(scoreboardteam, mode);
 		if ((mode == Mode.CREATE) || (mode == Mode.UPDATE)) {
-			StringSerializer.writeVarIntUTF8String(scoreboardteam, ChatAPI.toJSON(displayName));
+			StringSerializer.writeVarIntUTF8String(scoreboardteam, ChatAPI.toJSON(LegacyChatJson.convert(version, locale, displayName)));
 			scoreboardteam.writeByte(friendlyFire);
 			StringSerializer.writeVarIntUTF8String(scoreboardteam, nameTagVisibility);
 			StringSerializer.writeVarIntUTF8String(scoreboardteam, collisionRule);
 			MiscSerializer.writeVarIntEnum(scoreboardteam, format);
-			StringSerializer.writeVarIntUTF8String(scoreboardteam, ChatAPI.toJSON(prefix));
-			StringSerializer.writeVarIntUTF8String(scoreboardteam, ChatAPI.toJSON(suffix));
+			StringSerializer.writeVarIntUTF8String(scoreboardteam, ChatAPI.toJSON(LegacyChatJson.convert(version, locale, prefix)));
+			StringSerializer.writeVarIntUTF8String(scoreboardteam, ChatAPI.toJSON(LegacyChatJson.convert(version, locale, suffix)));
 		}
 		if ((mode == Mode.CREATE) || (mode == Mode.PLAYERS_ADD) || (mode == Mode.PLAYERS_REMOVE)) {
 			ArraySerializer.writeVarIntVarIntUTF8StringArray(scoreboardteam, players);

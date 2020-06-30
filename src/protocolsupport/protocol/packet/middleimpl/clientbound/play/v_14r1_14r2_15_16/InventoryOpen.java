@@ -8,6 +8,8 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.ClientCache;
+import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
 
 public class InventoryOpen extends MiddleInventoryOpen {
 
@@ -15,12 +17,14 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		super(connection);
 	}
 
+	protected final ClientCache clientCache = cache.getClientCache();
+
 	@Override
 	protected void writeToClient0() {
 		ClientBoundPacketData windowopen = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
 		VarNumberSerializer.writeVarInt(windowopen, windowId);
 		MiscSerializer.writeVarIntEnum(windowopen, windowRemapper.toClientWindowType(type));
-		StringSerializer.writeVarIntUTF8String(windowopen, ChatAPI.toJSON(title));
+		StringSerializer.writeVarIntUTF8String(windowopen, ChatAPI.toJSON(LegacyChatJson.convert(version, clientCache.getLocale(), title)));
 		codec.write(windowopen);
 	}
 

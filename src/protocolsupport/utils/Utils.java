@@ -70,20 +70,19 @@ public class Utils {
 	}
 
 	public static int ceilToBase(int number, int base) {
-		if (base == 0) {
-			return 0;
+		int ceil = (number / base) * base;
+		if (number != ceil) {
+			ceil += base;
 		}
-		if (number == 0) {
-			return base;
-		}
-		if (number < 0) {
-			base *= -1;
-		}
-		final int mod = number % base;
-		if (mod == 0) {
-			return number;
-		}
-		return (number + base) - mod;
+		return ceil;
+	}
+
+	public static long getColorDiff(int r1, int r2, int g1, int g2, int b1, int b2) {
+		long rmean = (r1 + r2) / 2;
+		long r = r1 - r2;
+		long g = g1 - g2;
+		long b = b1 - b2;
+		return (((512 + rmean) * r * r) >> 8) + (4 * g * g) + (((767 - rmean) * b * b) >> 8);
 	}
 
 	public static void repeat(int count, Runnable action) {
