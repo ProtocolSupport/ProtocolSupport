@@ -9,6 +9,7 @@ import javax.crypto.SecretKey;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -46,6 +47,10 @@ public interface PlatformUtils {
 	public Material getBlockByNetworkId(int id);
 
 	public List<BlockData> getBlockDataList(Material material);
+
+	public int getBiomeNetworkId(Biome biome);
+
+	public Biome getBiomeByNetworkId(int id);
 
 	public List<Player> getNearbyPlayers(Location location, double rX, double rY, double rZ);
 

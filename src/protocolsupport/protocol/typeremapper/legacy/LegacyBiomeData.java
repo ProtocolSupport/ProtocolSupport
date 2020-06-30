@@ -25,7 +25,7 @@ public class LegacyBiomeData {
 
 	/*
 	 * biomeData[((y >> 2) << 4) | ((z >> 2) << 2) | ((x >> 2)]
-	 * Use y == 0, because vanilla 1.15 + only uses lowest layer for biome
+	 * Uses y == 0, because vanilla 1.15+ only uses lowest layer for biome
 	 * Transform 2 z bit shifts into mask
 	 */
 	protected static int getBiomeId(int[] biomeData, int x, int z) {

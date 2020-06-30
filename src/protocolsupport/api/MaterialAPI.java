@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 
@@ -72,6 +73,25 @@ public class MaterialAPI {
 	 */
 	public static Material getBlockByNetworkId(int id) {
 		return ServerPlatform.get().getMiscUtils().getBlockByNetworkId(id);
+	}
+
+	/**
+	 * Returns biome network id
+	 * @param biome biome
+	 * @return network id
+	 */
+	public static int getBiomeNetworkId(Biome biome) {
+		return ServerPlatform.get().getMiscUtils().getBiomeNetworkId(biome);
+	}
+
+	/**
+	 * Returns biome by network id<br>
+	 * Returns null if no biome exists for this network id
+	 * @param id biome network id
+	 * @return biome biome
+	 */
+	public static Biome getBiomeByNetworkId(int id) {
+		return ServerPlatform.get().getMiscUtils().getBiomeByNetworkId(id);
 	}
 
 	/**

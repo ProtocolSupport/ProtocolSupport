@@ -10,7 +10,7 @@ import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunkSectionBlockStorage;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.IdRemappingTable;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.protocol.utils.NumberBitsStorageCompact;
 import protocolsupport.utils.BitUtils;
@@ -19,7 +19,7 @@ public class ChunkWriterVariesWithLight {
 
 	public static void writeSectionsCompactFlattening(
 		ByteBuf buffer, int mask, int globalPaletteBitsPerBlock,
-		ArrayBasedIdRemappingTable blockDataRemappingTable,
+		IdRemappingTable blockDataRemappingTable,
 		FlatteningBlockDataTable flatteningBlockDataTable,
 		CachedChunk chunk, boolean hasSkyLight,
 		IntConsumer sectionPresentConsumer
@@ -73,7 +73,7 @@ public class ChunkWriterVariesWithLight {
 
 	public static void writeSectionsCompactPreFlattening(
 		ByteBuf buffer, int mask, int globalPaletteBitsPerBlock,
-		ArrayBasedIdRemappingTable blockDataRemappingTable,
+		IdRemappingTable blockDataRemappingTable,
 		CachedChunk chunk, boolean hasSkyLight,
 		IntConsumer sectionPresentConsumer
 	) {

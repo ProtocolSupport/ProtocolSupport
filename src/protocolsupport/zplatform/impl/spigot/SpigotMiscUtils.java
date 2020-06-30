@@ -12,9 +12,11 @@ import javax.crypto.SecretKey;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_16_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R1.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_16_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
@@ -41,6 +43,7 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.MultithreadEventLoopGroup;
 import io.netty.channel.epoll.Epoll;
 import net.minecraft.server.v1_16_R1.AxisAlignedBB;
+import net.minecraft.server.v1_16_R1.BiomeBase;
 import net.minecraft.server.v1_16_R1.Block;
 import net.minecraft.server.v1_16_R1.DedicatedServer;
 import net.minecraft.server.v1_16_R1.DedicatedServerProperties;
@@ -185,6 +188,17 @@ public class SpigotMiscUtils implements PlatformUtils {
 			CraftMagicNumbers.getBlock(material).getStates().a().stream()
 			.map(CraftBlockData::fromData)
 			.collect(Collectors.toList());
+	}
+
+	@Override
+	public int getBiomeNetworkId(Biome biome) {
+		return IRegistry.BIOME.a(CraftBlock.biomeToBiomeBase(biome));
+	}
+
+	@Override
+	public Biome getBiomeByNetworkId(int id) {
+		BiomeBase biomebase = IRegistry.BIOME.fromId(id);
+		return biomebase != null ? CraftBlock.biomeBaseToBiome(biomebase) : null;
 	}
 
 	@Override

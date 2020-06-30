@@ -5,7 +5,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.IdRemappingTable;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.protocol.types.chunk.ChunkSectonBlockData;
 import protocolsupport.protocol.utils.NumberBitsStorageCompact;
@@ -16,7 +16,7 @@ public class ChunkWriterVaries {
 
 	public static void writeSectionsPadded(
 		ByteBuf buffer, int mask, int globalPaletteBitsPerBlock,
-		ArrayBasedIdRemappingTable blockDataRemappingTable,
+		IdRemappingTable blockDataRemappingTable,
 		FlatteningBlockDataTable flatteningBlockDataTable,
 		ChunkSectonBlockData[] sections
 	) {
@@ -53,7 +53,7 @@ public class ChunkWriterVaries {
 
 	public static void writeSectionsCompact(
 		ByteBuf buffer, int mask, int globalPaletteBitsPerBlock,
-		ArrayBasedIdRemappingTable blockDataRemappingTable,
+		IdRemappingTable blockDataRemappingTable,
 		FlatteningBlockDataTable flatteningBlockDataTable,
 		ChunkSectonBlockData[] sections
 	) {

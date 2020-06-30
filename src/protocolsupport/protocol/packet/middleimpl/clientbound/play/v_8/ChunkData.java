@@ -9,21 +9,23 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.typeremapper.basic.BiomeRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterShort;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterUtils;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.IdRemappingTable;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
 
 public class ChunkData extends AbstractChunkCacheChunkData {
 
-	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
-
 	public ChunkData(ConnectionImpl connection) {
 		super(connection);
 	}
+
+	protected final IdRemappingTable biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
+	protected final IdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	@Override
 	protected void writeToClient() {
@@ -42,7 +44,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 				if (full) {
 					int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(biomes);
 					for (int biomeId : legacyBiomeData) {
-						to.writeByte(biomeId);
+						to.writeByte(biomeRemappingTable.getRemap(biomeId));
 					}
 				}
 			});

@@ -8,6 +8,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.basic.BiomeRemapper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
@@ -15,17 +16,18 @@ import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVaries;
 import protocolsupport.protocol.typeremapper.chunk.HeightMapTransformer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.RemappingTable.IdRemappingTable;
 
 public class ChunkData extends MiddleChunkData {
-
-	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
-	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
-	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
 	public ChunkData(ConnectionImpl connection) {
 		super(connection);
 	}
+
+	protected final IdRemappingTable biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
+	protected final IdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
+	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
 	@Override
 	protected void writeToClient() {
@@ -44,7 +46,7 @@ public class ChunkData extends MiddleChunkData {
 			if (full) {
 				int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(biomes);
 				for (int biomeId : legacyBiomeData) {
-					to.writeInt(biomeId);
+					to.writeInt(biomeRemappingTable.getRemap(biomeId));
 				}
 			}
 		});
