@@ -8,7 +8,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.storage.netcache.AttributesCache;
+import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.types.Position;
 
 public class EntityMetadata extends AbstractUseBedPacketEntityMetadata {
@@ -17,7 +17,7 @@ public class EntityMetadata extends AbstractUseBedPacketEntityMetadata {
 		super(connection);
 	}
 
-	protected final AttributesCache clientCache = cache.getAttributesCache();
+	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
 	protected ClientBoundPacketData createEntityMetadata(NetworkEntityMetadataList remappedMetadata) {

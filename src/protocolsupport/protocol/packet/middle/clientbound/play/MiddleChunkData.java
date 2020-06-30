@@ -1,0 +1,59 @@
+package protocolsupport.protocol.packet.middle.clientbound.play;
+
+import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.types.ChunkCoord;
+import protocolsupport.protocol.types.TileEntity;
+import protocolsupport.protocol.types.chunk.ChunkConstants;
+import protocolsupport.protocol.types.chunk.ChunkSectonBlockData;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.utils.BitUtils;
+
+public abstract class MiddleChunkData extends ClientBoundMiddlePacket {
+
+	public MiddleChunkData(ConnectionImpl connection) {
+		super(connection);
+	}
+
+	protected ChunkCoord coord;
+	protected boolean full;
+	protected int blockMask;
+	protected boolean useExistingLight;
+	protected NBTCompound heightmaps;
+	//TODO: remap biomes in <= 1.15.2 impls
+	protected final int[] biomes = new int[1024];
+	protected final ChunkSectonBlockData[] sections = new ChunkSectonBlockData[ChunkConstants.SECTION_COUNT_BLOCKS];
+	protected TileEntity[] tiles;
+
+	@Override
+	protected void readServerData(ByteBuf serverdata) {
+		coord = PositionSerializer.readIntChunkCoord(serverdata);
+		full = serverdata.readBoolean();
+		useExistingLight = serverdata.readBoolean();
+
+		blockMask = VarNumberSerializer.readVarInt(serverdata);
+		heightmaps = ItemStackSerializer.readDirectTag(serverdata);
+		if (full) {
+			for (int i = 0; i < biomes.length; i++) {
+				biomes[i] = serverdata.readInt();
+			}
+		}
+
+		{
+			ByteBuf chunkdata = ArraySerializer.readVarIntByteArraySlice(serverdata);
+			for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
+				if (BitUtils.isIBitSet(blockMask, sectionNumber)) {
+					sections[sectionNumber] = ChunkSectonBlockData.readFromStream(chunkdata);
+				}
+			}
+		}
+
+		tiles = ArraySerializer.readVarIntTArray(serverdata, TileEntity.class, from -> new TileEntity(ItemStackSerializer.readDirectTag(serverdata)));
+	}
+
+}

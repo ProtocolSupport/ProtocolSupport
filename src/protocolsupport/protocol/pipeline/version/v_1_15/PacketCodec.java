@@ -32,7 +32,7 @@ public class PacketCodec extends ModernPacketCodec {
 		registry.register(PacketType.CLIENTBOUND_PLAY_SPAWN_LIVING, 0x3);
 		registry.register(PacketType.CLIENTBOUND_PLAY_SPAWN_PAINTING, 0x4);
 		registry.register(PacketType.CLIENTBOUND_PLAY_SPAWN_EXP_ORB, 0x1);
-		registry.register(PacketType.CLIENTBOUND_PLAY_SPAWN_GLOBAL, 0x2);
+		registry.register(PacketType.CLIENTBOUND_LEGACY_PLAY_SPAWN_GLOBAL, 0x2);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY, 0x38);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_VELOCITY, 0x46);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_NOOP, 0x2C);

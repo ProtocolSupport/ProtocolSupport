@@ -20,7 +20,7 @@ public class ScoreboardObjective extends MiddleScoreboardObjective {
 		StringSerializer.writeVarIntUTF8String(scoreboardobjective, name);
 		MiscSerializer.writeByteEnum(scoreboardobjective, mode);
 		if (mode != Mode.REMOVE) {
-			StringSerializer.writeVarIntUTF8String(scoreboardobjective, LegacyChat.clampLegacyText(value.toLegacyText(cache.getAttributesCache().getLocale()), 32));
+			StringSerializer.writeVarIntUTF8String(scoreboardobjective, LegacyChat.clampLegacyText(value.toLegacyText(cache.getClientCache().getLocale()), 32));
 			StringSerializer.writeVarIntUTF8String(scoreboardobjective, getTypeString(type));
 		}
 		codec.write(scoreboardobjective);

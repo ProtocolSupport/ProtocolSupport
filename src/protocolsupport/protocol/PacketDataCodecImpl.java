@@ -39,7 +39,7 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 		try {
 			consumer.accept(t, v);
 			if (transformerEncoderCurrentRealChannelPromise != null) {
-				promise.setSuccess();
+				transformerEncoderCurrentRealChannelPromise.trySuccess();
 			}
 		} finally {
 			transformerEncoderCurrentRealChannelPromise = null;

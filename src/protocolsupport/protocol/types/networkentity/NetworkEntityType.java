@@ -21,8 +21,6 @@ public enum NetworkEntityType {
 	EXP_ORB(EType.NONE),
 	PAINTING(EType.NONE),
 	PLAYER(EType.NONE),
-	// Globals
-	THUNDERBOLT(EType.GLOBAL, 1, EntityType.LIGHTNING),
 	// Mobs
 	COW(EType.MOB, EntityType.COW),
 	MUSHROOM_COW(EType.MOB, EntityType.MUSHROOM_COW),
@@ -52,7 +50,6 @@ public enum NetworkEntityType {
 	ZOMBIE(EType.MOB, EntityType.ZOMBIE),
 	ZOMBIE_VILLAGER(EType.MOB, EntityType.ZOMBIE_VILLAGER, ZOMBIE),
 	HUSK(EType.MOB, EntityType.HUSK, ZOMBIE),
-	ZOMBIE_PIGMAN(EType.MOB, EntityType.PIG_ZOMBIE, ZOMBIE),
 	DROWNED(EType.MOB, EntityType.DROWNED, ZOMBIE),
 	BLAZE(EType.MOB, EntityType.BLAZE),
 	SPIDER(EType.MOB, EntityType.SPIDER),
@@ -89,6 +86,11 @@ public enum NetworkEntityType {
 	PANDA(EType.MOB, EntityType.PANDA),
 	PILLAGER(EType.MOB, EntityType.PILLAGER),
 	RAVAGER(EType.MOB, EntityType.RAVAGER),
+	PIGLIN(EType.MOB, EntityType.PIGLIN),
+	ZOMBIFIED_PIGLIN(EType.MOB, EntityType.ZOMBIFIED_PIGLIN, ZOMBIE),
+	HOGLIN(EType.MOB, EntityType.HOGLIN),
+	ZOGLIN(EType.MOB, EntityType.ZOGLIN),
+	STRIDER(EType.MOB, EntityType.STRIDER),
 	ARMOR_STAND_MOB(EType.MOB, EntityType.ARMOR_STAND),
 	// Objects
 	BOAT(EType.OBJECT, EntityType.BOAT),
@@ -125,7 +127,8 @@ public enum NetworkEntityType {
 	MINECART_TNT(EType.OBJECT, EntityType.MINECART_TNT, MINECART),
 	MINECART_MOB_SPAWNER(EType.OBJECT, EntityType.MINECART_MOB_SPAWNER, MINECART),
 	MINECART_HOPPER(EType.OBJECT, EntityType.MINECART_HOPPER, MINECART),
-	MINECART_COMMAND(EType.OBJECT, EntityType.MINECART_COMMAND, MINECART);
+	MINECART_COMMAND(EType.OBJECT, EntityType.MINECART_COMMAND, MINECART),
+	THUNDERBOLT(EType.OBJECT, 1, EntityType.LIGHTNING);
 
 	private final EType etype;
 	private final int typeId;
@@ -157,12 +160,11 @@ public enum NetworkEntityType {
 	}
 
 	public enum EType {
-		NONE, OBJECT, MOB, GLOBAL
+		NONE, OBJECT, MOB
 	}
 
 	protected static final ArrayMap<NetworkEntityType> OBJECT_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.OBJECT), (w -> w.typeId));
 	protected static final ArrayMap<NetworkEntityType> MOB_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.MOB), (w -> w.typeId));
-	protected static final ArrayMap<NetworkEntityType> GLOBAL_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.GLOBAL), (w -> w.typeId));
 	protected static final Map<EntityType, NetworkEntityType> BY_B_TYPE = CollectionsUtils.makeEnumMappingEnumMap(Arrays.stream(NetworkEntityType.values()).filter(NetworkEntityType::isReal), EntityType.class, NetworkEntityType::getBukkitType);
 	protected static final Map<String, NetworkEntityType> BY_R_STRING_ID = new HashMap<>();
 	static {
@@ -184,11 +186,6 @@ public enum NetworkEntityType {
 
 	public static NetworkEntityType getMobByNetworkTypeId(int mobTypeId) {
 		NetworkEntityType type = MOB_BY_N_ID.get(mobTypeId);
-		return type != null ? type : NONE;
-	}
-
-	public static NetworkEntityType getGlobalByNetworkTypeId(int globalTypeId) {
-		NetworkEntityType type = GLOBAL_BY_N_ID.get(globalTypeId);
 		return type != null ? type : NONE;
 	}
 

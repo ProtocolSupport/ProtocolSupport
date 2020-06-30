@@ -17,6 +17,7 @@ public abstract class MiddleChunkLight extends ClientBoundMiddlePacket {
 	}
 
 	protected ChunkCoord coord;
+	protected boolean trustEdges;
 	protected int setSkyLightMask;
 	protected int setBlockLightMask;
 	protected int emptySkyLightMask;
@@ -27,6 +28,7 @@ public abstract class MiddleChunkLight extends ClientBoundMiddlePacket {
 	@Override
 	protected void readServerData(ByteBuf serverdata) {
 		coord = PositionSerializer.readVarIntChunkCoord(serverdata);
+		trustEdges = serverdata.readBoolean();
 
 		setSkyLightMask = VarNumberSerializer.readVarInt(serverdata);
 		setBlockLightMask = VarNumberSerializer.readVarInt(serverdata);

@@ -2,6 +2,7 @@ package protocolsupport.zplatform;
 
 import java.security.PublicKey;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.entity.Entity;
 
@@ -11,7 +12,7 @@ import protocolsupport.api.utils.Profile;
 
 public interface PlatformPacketFactory {
 
-	public Object createOutboundChatPacket(String message, int position);
+	public Object createOutboundChatPacket(String message, int position, UUID uuid);
 
 	public Object createTabHeaderFooterPacket(BaseComponent header, BaseComponent footer);
 
@@ -145,8 +146,6 @@ public interface PlatformPacketFactory {
 	public int getOutPlayWorldParticlesPacketId();
 
 	public int getOutPlayGameStateChangePacketId();
-
-	public int getOutPlaySpawnWeatherPacketId();
 
 	public int getOutPlayWindowOpenPacketId();
 
@@ -344,5 +343,9 @@ public interface PlatformPacketFactory {
 	public int getInPlayUpdateCommandMinecartPacketId();
 
 	public int getInPlayUpdateStructureBlockPacketId();
+
+	public int getInPlayJigsawUpdatePacketId();
+
+	public int getInPlayJigsawGenerateStructurePacketId();
 
 }

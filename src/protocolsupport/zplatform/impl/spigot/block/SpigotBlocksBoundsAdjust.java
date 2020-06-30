@@ -1,9 +1,9 @@
 package protocolsupport.zplatform.impl.spigot.block;
 
-import net.minecraft.server.v1_15_R1.BlockCarpet;
-import net.minecraft.server.v1_15_R1.BlockLadder;
-import net.minecraft.server.v1_15_R1.BlockWaterLily;
-import net.minecraft.server.v1_15_R1.VoxelShapes;
+import net.minecraft.server.v1_16_R1.BlockCarpet;
+import net.minecraft.server.v1_16_R1.BlockLadder;
+import net.minecraft.server.v1_16_R1.BlockWaterLily;
+import net.minecraft.server.v1_16_R1.VoxelShapes;
 import protocolsupport.utils.ReflectionUtils;
 
 public class SpigotBlocksBoundsAdjust {

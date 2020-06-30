@@ -15,7 +15,7 @@ public class WitchEntityMetadataRemapper extends RaidParticipantEntityMetadataRe
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Witch.DRINKING_POTION, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Witch.DRINKING_POTION, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Witch.DRINKING_POTION, 11), ProtocolVersionsHelper.ALL_1_9);
-		addRemap(new IndexValueRemapperBooleanToByte(NetworkEntityMetadataObjectIndex.Witch.DRINKING_POTION, 16), ProtocolVersionsHelper.BEFORE_1_9);
+		addRemap(new IndexValueRemapperBooleanToByte(NetworkEntityMetadataObjectIndex.Witch.DRINKING_POTION, 16), ProtocolVersionsHelper.DOWN_1_8);
 	}
 
 }

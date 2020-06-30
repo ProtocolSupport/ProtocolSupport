@@ -17,7 +17,7 @@ public class ZombieVillagerEntityMetadataRemapper extends ZombieEntityMetadataRe
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ZombieVillager.CONVERTING, 15), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ZombieVillager.CONVERTING, 14), ProtocolVersion.MINECRAFT_1_10);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ZombieVillager.CONVERTING, 13), ProtocolVersionsHelper.ALL_1_9);
-		addRemap(new IndexValueRemapperBooleanToByte(NetworkEntityMetadataObjectIndex.ZombieVillager.CONVERTING, 14), ProtocolVersionsHelper.BEFORE_1_9);
+		addRemap(new IndexValueRemapperBooleanToByte(NetworkEntityMetadataObjectIndex.ZombieVillager.CONVERTING, 14), ProtocolVersionsHelper.DOWN_1_8);
 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ZombieVillager.VDATA, 19), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ZombieVillager.VDATA, 18), ProtocolVersionsHelper.ALL_1_14);

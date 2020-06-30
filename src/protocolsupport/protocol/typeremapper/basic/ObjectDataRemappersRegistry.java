@@ -25,7 +25,7 @@ public class ObjectDataRemappersRegistry {
 	public static final RemappingRegistry<ObjectDataRemappingTable> REGISTRY = new RemappingRegistry<ObjectDataRemappingTable>() {
 
 		{
-			Arrays.stream(ProtocolVersionsHelper.BEFORE_1_13)
+			Arrays.stream(ProtocolVersionsHelper.DOWN_1_12_2)
 			.forEach(version -> registerRemapEntry(
 				NetworkEntityType.ITEM_FRAME,
 				blockdata -> BlockDirection.CONSTANT_LOOKUP.getByOrdinal(blockdata).get2DId(),
@@ -51,7 +51,7 @@ public class ObjectDataRemappersRegistry {
 					version
 				);
 			});
-			Arrays.stream(ProtocolVersionsHelper.BEFORE_1_8)
+			Arrays.stream(ProtocolVersionsHelper.DOWN_1_7_10)
 			.forEach(version -> {
 				ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 				registerRemapEntry(
@@ -61,15 +61,15 @@ public class ObjectDataRemappersRegistry {
 				);
 			});
 
-			registerRemapEntry(NetworkEntityType.ARROW, entityId -> entityId - 1, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(NetworkEntityType.ARROW, entityId -> entityId - 1, ProtocolVersionsHelper.DOWN_1_8);
 
-			registerRemapEntry(NetworkEntityType.MINECART, i -> 0, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(NetworkEntityType.MINECART_CHEST, i -> 1, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(NetworkEntityType.MINECART_FURNACE, i -> 2, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(NetworkEntityType.MINECART_TNT, i -> 3, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(NetworkEntityType.MINECART_MOB_SPAWNER, i -> 4, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(NetworkEntityType.MINECART_HOPPER, i -> 5, ProtocolVersionsHelper.BEFORE_1_9);
-			registerRemapEntry(NetworkEntityType.MINECART_COMMAND, i -> 6, ProtocolVersionsHelper.BEFORE_1_9);
+			registerRemapEntry(NetworkEntityType.MINECART, i -> 0, ProtocolVersionsHelper.DOWN_1_8);
+			registerRemapEntry(NetworkEntityType.MINECART_CHEST, i -> 1, ProtocolVersionsHelper.DOWN_1_8);
+			registerRemapEntry(NetworkEntityType.MINECART_FURNACE, i -> 2, ProtocolVersionsHelper.DOWN_1_8);
+			registerRemapEntry(NetworkEntityType.MINECART_TNT, i -> 3, ProtocolVersionsHelper.DOWN_1_8);
+			registerRemapEntry(NetworkEntityType.MINECART_MOB_SPAWNER, i -> 4, ProtocolVersionsHelper.DOWN_1_8);
+			registerRemapEntry(NetworkEntityType.MINECART_HOPPER, i -> 5, ProtocolVersionsHelper.DOWN_1_8);
+			registerRemapEntry(NetworkEntityType.MINECART_COMMAND, i -> 6, ProtocolVersionsHelper.DOWN_1_8);
 		}
 
 		protected void registerRemapEntry(NetworkEntityType type, IntUnaryOperator operator, ProtocolVersion... versions) {

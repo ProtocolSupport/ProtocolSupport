@@ -1,8 +1,5 @@
 package protocolsupport.zplatform.impl.spigot.injector;
 
-import org.bukkit.Bukkit;
-
-import protocolsupport.ProtocolSupport;
 import protocolsupport.zplatform.PlatformInjector;
 import protocolsupport.zplatform.impl.spigot.block.SpigotBlocksBoundsAdjust;
 import protocolsupport.zplatform.impl.spigot.injector.network.SpigotNettyInjector;
@@ -21,7 +18,8 @@ public class SpigotPlatformInjector implements PlatformInjector {
 
 	@Override
 	public void onEnable() {
-		Bukkit.getPluginManager().registerEvents(new SpigotEntityTrackerInjector(), ProtocolSupport.getInstance());
+//TODO: get rid of the injector completely and switch to caching entity positions
+//		Bukkit.getPluginManager().registerEvents(new SpigotEntityTrackerInjector(), ProtocolSupport.getInstance());
 	}
 
 	@Override

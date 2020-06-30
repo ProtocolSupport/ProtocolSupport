@@ -11,13 +11,13 @@ public class CachedChunkSectionBlockStorage {
 		storage = new BlockStorageBytePaletted();
 	}
 
-	public CachedChunkSectionBlockStorage(ChunkSectonBlockData reader) {
-		if (reader.getBitsPerBlock() == ChunkConstants.GLOBAL_PALETTE_BITS_PER_BLOCK) {
-			storage = new BlockStorageDirect(reader.getBlockData());
+	public CachedChunkSectionBlockStorage(ChunkSectonBlockData sectionblockdata) {
+		if (sectionblockdata.getBitsPerNumber() == ChunkConstants.GLOBAL_PALETTE_BITS_PER_BLOCK) {
+			storage = new BlockStorageDirect(sectionblockdata);
 		} else {
-			BlockStorageBytePaletted storagePaletted = new BlockStorageBytePaletted(reader.getPalette());
+			BlockStorageBytePaletted storagePaletted = new BlockStorageBytePaletted(sectionblockdata.getPalette());
 			for (int index = 0; index < ChunkConstants.BLOCKS_IN_SECTION; index++) {
-				storagePaletted.setRuntimeId(index, (byte) reader.getRuntimeId(index));
+				storagePaletted.setRuntimeId(index, (byte) sectionblockdata.getNumber(index));
 			}
 			storage = storagePaletted;
 		}

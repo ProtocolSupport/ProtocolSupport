@@ -1,7 +1,6 @@
 package protocolsupport.protocol.serializer;
 
 import java.text.MessageFormat;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.ObjIntConsumer;
 import java.util.function.ToIntFunction;
@@ -26,15 +25,6 @@ public class MiscSerializer {
 
 	public static void writeByteEnum(ByteBuf to, Enum<?> e) {
 		to.writeByte(e.ordinal());
-	}
-
-	public static UUID readUUID(ByteBuf from) {
-		return new UUID(from.readLong(), from.readLong());
-	}
-
-	public static void writeUUID(ByteBuf to, UUID uuid) {
-		to.writeLong(uuid.getMostSignificantBits());
-		to.writeLong(uuid.getLeastSignificantBits());
 	}
 
 	public static byte[] readAllBytes(ByteBuf buf) {

@@ -14,7 +14,7 @@ public class LegacyWitherSkeletonEntityMetadataRemapper extends LegacySkeletonEn
 		//legacy skeleton type
 		addRemap(new NetworkEntityMetadataFirstUpdateObjectAddRemapper(12, new NetworkEntityMetadataObjectVarInt(1)), ProtocolVersion.MINECRAFT_1_10);
 		addRemap(new NetworkEntityMetadataFirstUpdateObjectAddRemapper(11, new NetworkEntityMetadataObjectVarInt(1)), ProtocolVersionsHelper.ALL_1_9);
-		addRemap(new NetworkEntityMetadataFirstUpdateObjectAddRemapper(13, new NetworkEntityMetadataObjectByte((byte) 1)), ProtocolVersionsHelper.BEFORE_1_9);
+		addRemap(new NetworkEntityMetadataFirstUpdateObjectAddRemapper(13, new NetworkEntityMetadataObjectByte((byte) 1)), ProtocolVersionsHelper.DOWN_1_8);
 	}
 
 }

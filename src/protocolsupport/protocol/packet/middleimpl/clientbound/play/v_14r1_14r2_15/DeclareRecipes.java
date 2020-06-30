@@ -6,29 +6,23 @@ import java.util.Map;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleDeclareRecipes;
-import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2_15_16.AbstractDeclareRecipes;
 import protocolsupport.protocol.types.recipe.Recipe;
-import protocolsupport.protocol.types.recipe.RecipeIngredient;
 import protocolsupport.protocol.types.recipe.RecipeType;
-import protocolsupport.protocol.types.recipe.ShapedRecipe;
-import protocolsupport.protocol.types.recipe.ShapelessRecipe;
-import protocolsupport.protocol.types.recipe.SmeltingRecipe;
-import protocolsupport.protocol.types.recipe.StonecuttingRecipe;
-import protocolsupport.protocol.utils.i18n.I18NData;
 
-public class DeclareRecipes extends MiddleDeclareRecipes {
+public class DeclareRecipes extends AbstractDeclareRecipes {
 
-	protected static final Map<RecipeType, RecipeWriter<? extends Recipe>> recipeWriters = new EnumMap<>(RecipeType.class);
-	protected static <T extends Recipe> void registerWriter(RecipeType type, RecipeWriter<T> writer) {
-		recipeWriters.put(type, writer);
+	public DeclareRecipes(ConnectionImpl connection) {
+		super(connection);
 	}
+
+	protected static final Map<RecipeType, RecipeWriter<Recipe>> recipeWriter = new EnumMap<>(RecipeType.class);
+
+	@SuppressWarnings("unchecked")
+	protected static <T extends Recipe> void registerWriter(RecipeType type, RecipeWriter<T> writer) {
+		recipeWriter.put(type, (RecipeWriter<Recipe>) writer);
+	}
+
 	static {
 		registerWriter(RecipeType.CRAFTING_SPECIAL_ARMORDYE, RecipeWriter.SIMPLE);
 		registerWriter(RecipeType.CRAFTING_SPECIAL_BOOKCLONING, RecipeWriter.SIMPLE);
@@ -52,94 +46,19 @@ public class DeclareRecipes extends MiddleDeclareRecipes {
 		registerWriter(RecipeType.CRAFTING_SPECIAL_SHIELDDECORATION, RecipeWriter.SIMPLE);
 		registerWriter(RecipeType.CRAFTING_SPECIAL_SHULKERBOXCOLORING, RecipeWriter.SIMPLE);
 		registerWriter(RecipeType.CRAFTING_SPECIAL_SUSPICIOUSSTEW, RecipeWriter.SIMPLE);
-		registerWriter(RecipeType.CRAFTING_SHAPELESS, new RecipeWriter<ShapelessRecipe>() {
-			@Override
-			protected void writeRecipeData(ByteBuf to, ProtocolVersion version, ShapelessRecipe recipe) {
-				StringSerializer.writeVarIntUTF8String(to, recipe.getGroup());
-				ArraySerializer.writeVarIntTArray(to, recipe.getIngredients(), (lTo, ingredient) -> writeIngredient(lTo, version, ingredient));
-				ItemStackSerializer.writeItemStack(to, version, I18NData.DEFAULT_LOCALE, recipe.getResult());
-			}
-		});
-		registerWriter(RecipeType.CRAFTING_SHAPED, new RecipeWriter<ShapedRecipe>() {
-			@Override
-			protected void writeRecipeData(ByteBuf to, ProtocolVersion version, ShapedRecipe recipe) {
-				VarNumberSerializer.writeVarInt(to, recipe.getWidth());
-				VarNumberSerializer.writeVarInt(to, recipe.getHeight());
-				StringSerializer.writeVarIntUTF8String(to, recipe.getGroup());
-				for (RecipeIngredient ingredient : recipe.getIngredients()) {
-					writeIngredient(to, version, ingredient);
-				}
-				ItemStackSerializer.writeItemStack(to, version, I18NData.DEFAULT_LOCALE, recipe.getResult());
-			}
-		});
-		RecipeWriter<SmeltingRecipe> smeltingRecipeWriter = new RecipeWriter<SmeltingRecipe>() {
-			@Override
-			protected void writeRecipeData(ByteBuf to, ProtocolVersion version, SmeltingRecipe recipe) {
-				StringSerializer.writeVarIntUTF8String(to, recipe.getGroup());
-				writeIngredient(to, version, recipe.getIngredient());
-				ItemStackSerializer.writeItemStack(to, version, I18NData.DEFAULT_LOCALE, recipe.getResult());
-				to.writeFloat(recipe.getExp());
-				VarNumberSerializer.writeVarInt(to, recipe.getTime());
-			}
-		};
-		registerWriter(RecipeType.SMELTING, smeltingRecipeWriter);
-		registerWriter(RecipeType.BLASTING, smeltingRecipeWriter);
-		registerWriter(RecipeType.SMOKING, smeltingRecipeWriter);
-		registerWriter(RecipeType.CAMPFIRE_COOKING, smeltingRecipeWriter);
-		registerWriter(RecipeType.STONECUTTING, new RecipeWriter<StonecuttingRecipe>() {
-			@Override
-			protected void writeRecipeData(ByteBuf to, ProtocolVersion version, StonecuttingRecipe recipe) {
-				StringSerializer.writeVarIntUTF8String(to, recipe.getGroup());
-				writeIngredient(to, version, recipe.getIngredient());
-				ItemStackSerializer.writeItemStack(to, version, I18NData.DEFAULT_LOCALE, recipe.getResult());
-			}
-		});
-
-	}
-
-	protected static void writeIngredient(ByteBuf to, ProtocolVersion version, RecipeIngredient ingredient) {
-		NetworkItemStack[] possibleStacks = ingredient.getPossibleItemStacks();
-		VarNumberSerializer.writeVarInt(to, possibleStacks.length);
-		for (int i = 0; i < possibleStacks.length; i++) {
-			ItemStackSerializer.writeItemStack(to, version, I18NData.DEFAULT_LOCALE, possibleStacks[i]);
-		}
-	}
-
-	protected static class RecipeWriter<T extends Recipe> {
-
-		public static final RecipeWriter<Recipe> SIMPLE = new RecipeWriter<>();
-
-		public boolean writeRecipe(ByteBuf to, ProtocolVersion version, T recipe) {
-			StringSerializer.writeVarIntUTF8String(to, recipe.getType().getInternalName());
-			StringSerializer.writeVarIntUTF8String(to, recipe.getId());
-			writeRecipeData(to, version, recipe);
-			return true;
-		}
-
-		protected void writeRecipeData(ByteBuf to, ProtocolVersion version, T recipe) {
-		}
-
-	}
-
-	public DeclareRecipes(ConnectionImpl connection) {
-		super(connection);
+		registerWriter(RecipeType.CRAFTING_SHAPELESS, RecipeWriter.SHAPELESS);
+		registerWriter(RecipeType.CRAFTING_SHAPED, RecipeWriter.SHAPED);
+		registerWriter(RecipeType.SMELTING, RecipeWriter.SMELTING);
+		registerWriter(RecipeType.BLASTING,  RecipeWriter.SMELTING);
+		registerWriter(RecipeType.SMOKING,  RecipeWriter.SMELTING);
+		registerWriter(RecipeType.CAMPFIRE_COOKING,  RecipeWriter.SMELTING);
+		registerWriter(RecipeType.STONECUTTING, RecipeWriter.STONECUTTING);
+		registerWriter(RecipeType.SMITHING, RecipeWriter.NOOP);
 	}
 
 	@Override
-	protected void writeToClient() {
-		ClientBoundPacketData declarerecipes = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_DECLARE_RECIPES);
-		ArraySerializer.writeVarIntTArray(declarerecipes, to -> {
-			int writtenRecipeCount = 0;
-			for (Recipe recipe : recipes) {
-				@SuppressWarnings("unchecked")
-				RecipeWriter<Recipe> writer = (RecipeWriter<Recipe>) recipeWriters.get(recipe.getType());
-				if ((writer != null) && writer.writeRecipe(to, version, recipe)) {
-					writtenRecipeCount++;
-				}
-			}
-			return writtenRecipeCount;
-		});
-		codec.write(declarerecipes);
+	protected RecipeWriter<Recipe> getRecipeWriter(RecipeType recipeType) {
+		return recipeWriter.get(recipeType);
 	}
 
 }

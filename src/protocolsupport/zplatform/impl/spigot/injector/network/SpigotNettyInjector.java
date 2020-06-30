@@ -8,9 +8,9 @@ import java.util.ListIterator;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import net.minecraft.server.v1_15_R1.ChatComponentText;
-import net.minecraft.server.v1_15_R1.NetworkManager;
-import net.minecraft.server.v1_15_R1.ServerConnection;
+import net.minecraft.server.v1_16_R1.ChatComponentText;
+import net.minecraft.server.v1_16_R1.NetworkManager;
+import net.minecraft.server.v1_16_R1.ServerConnection;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 
@@ -35,6 +35,7 @@ public class SpigotNettyInjector {
 
 		private final Collection<NetworkManager> networkManagers;
 		private final List<ChannelFuture> originalList;
+
 		public ChannelInjectList(Collection<NetworkManager> networkManagerList, List<ChannelFuture> originalList) {
 			this.originalList = originalList;
 			this.networkManagers = networkManagerList;

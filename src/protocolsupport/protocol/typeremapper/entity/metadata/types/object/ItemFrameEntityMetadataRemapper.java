@@ -20,7 +20,7 @@ public class ItemFrameEntityMetadataRemapper extends BaseEntityMetadataRemapper 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ItemFrame.ITEM, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ItemFrame.ITEM, 5), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ItemFrame.ITEM, 8), ProtocolVersion.MINECRAFT_1_8);
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ItemFrame.ITEM, 2), ProtocolVersionsHelper.BEFORE_1_8);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ItemFrame.ITEM, 2), ProtocolVersionsHelper.DOWN_1_7_10);
 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ItemFrame.ROTATION, 8), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.ItemFrame.ROTATION, 7), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
@@ -31,7 +31,7 @@ public class ItemFrameEntityMetadataRemapper extends BaseEntityMetadataRemapper 
 			public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectVarInt object) {
 				return new NetworkEntityMetadataObjectByte((byte) (object.getValue() >> 1));
 			}
-		}, ProtocolVersionsHelper.BEFORE_1_8);
+		}, ProtocolVersionsHelper.DOWN_1_7_10);
 	}
 
 }

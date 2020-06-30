@@ -14,7 +14,7 @@ public class WitherSkullEntityMetadataRemapper extends BaseEntityMetadataRemappe
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.WitherSkull.CHARGED, 7), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.WitherSkull.CHARGED, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.WitherSkull.CHARGED, 5), ProtocolVersionsHelper.ALL_1_9);
-		addRemap(new IndexValueRemapperBooleanToByte(NetworkEntityMetadataObjectIndex.WitherSkull.CHARGED, 10), ProtocolVersionsHelper.BEFORE_1_9);
+		addRemap(new IndexValueRemapperBooleanToByte(NetworkEntityMetadataObjectIndex.WitherSkull.CHARGED, 10), ProtocolVersionsHelper.DOWN_1_8);
 	}
 
 }

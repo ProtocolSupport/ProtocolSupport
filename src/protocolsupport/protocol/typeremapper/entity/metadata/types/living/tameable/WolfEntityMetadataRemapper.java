@@ -22,7 +22,7 @@ public class WolfEntityMetadataRemapper extends TameableEntityMetadataRemapper {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Wolf.BEGGING, 16), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Wolf.BEGGING, 16), ProtocolVersion.MINECRAFT_1_10);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Wolf.BEGGING, 15), ProtocolVersionsHelper.ALL_1_9);
-		addRemap(new IndexValueRemapperBooleanToByte(NetworkEntityMetadataObjectIndex.Wolf.BEGGING, 19), ProtocolVersionsHelper.BEFORE_1_9);
+		addRemap(new IndexValueRemapperBooleanToByte(NetworkEntityMetadataObjectIndex.Wolf.BEGGING, 19), ProtocolVersionsHelper.DOWN_1_8);
 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Wolf.COLLAR_COLOR, 19), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Wolf.COLLAR_COLOR, 19), ProtocolVersionsHelper.ALL_1_14);
@@ -35,7 +35,7 @@ public class WolfEntityMetadataRemapper extends TameableEntityMetadataRemapper {
 				return new NetworkEntityMetadataObjectByte((byte) (15 - object.getValue()));
 			}
 		}, ProtocolVersion.MINECRAFT_1_8);
-		addRemap(new IndexValueRemapperNumberToByte(NetworkEntityMetadataObjectIndex.Wolf.COLLAR_COLOR, 20), ProtocolVersionsHelper.BEFORE_1_8);
+		addRemap(new IndexValueRemapperNumberToByte(NetworkEntityMetadataObjectIndex.Wolf.COLLAR_COLOR, 20), ProtocolVersionsHelper.DOWN_1_7_10);
 	}
 
 	protected static class VarIntWolfCollarColorIndexValueRemapper extends IndexValueRemapper<NetworkEntityMetadataObjectVarInt> {

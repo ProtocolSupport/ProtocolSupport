@@ -23,7 +23,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		writeData(
 			windowopen,
 			windowId, wdata.getStringId(),
-			title.toLegacyText(cache.getAttributesCache().getLocale()),
+			title.toLegacyText(cache.getClientCache().getLocale()),
 			windowRemapper.toClientSlots(0)
 		);
 		codec.write(windowopen);

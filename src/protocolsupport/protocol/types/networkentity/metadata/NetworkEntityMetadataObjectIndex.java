@@ -321,6 +321,28 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> USING_CROSSBOW = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 	}
 
+	public static class Piglin extends Insentient {
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> IS_BABY = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> ZOMBIFICATION_IMMUNITY = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> USING_CROSSBOW = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> DANDCING = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
+	}
+
+	public static class Hoglin extends Ageable {
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> ZOMBIFICATION_IMMUNITY = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
+	}
+
+	public static class Zoglin extends Insentient {
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> IS_BABY = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
+	}
+
+	public static class Strider extends Ageable {
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> BOOST_TIME = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> DISPLAY_NAMETAG = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> HAS_SADDLE = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
+	}
+
+
 	public static class Boat extends Entity {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> TIME_SINCE_LAST_HIT = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> FORWARD_DIRECTION = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
@@ -345,6 +367,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 
 	public static class FishingFloat extends Entity {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> HOOKED_ENTITY = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> CATCHABLE = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 	}
 
 	public static class Item extends Entity {
@@ -371,7 +394,6 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 
 	public static class Arrow extends Entity {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> CIRTICAL = takeNextIndex(NetworkEntityMetadataObjectByte.class);
-		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectOptionalUUID> SHOOTER = takeNextIndex(NetworkEntityMetadataObjectOptionalUUID.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> PIERCING_LEVEL = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 	}
 

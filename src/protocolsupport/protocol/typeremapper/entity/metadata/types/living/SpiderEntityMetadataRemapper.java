@@ -14,7 +14,7 @@ public class SpiderEntityMetadataRemapper extends InsentientEntityMetadataRemapp
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Spider.CLIMBING, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Spider.CLIMBING, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Spider.CLIMBING, 11), ProtocolVersionsHelper.ALL_1_9);
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Spider.CLIMBING, 16), ProtocolVersionsHelper.BEFORE_1_9);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Spider.CLIMBING, 16), ProtocolVersionsHelper.DOWN_1_8);
 	}
 
 }

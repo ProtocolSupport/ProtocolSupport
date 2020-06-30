@@ -4,9 +4,9 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
+import protocolsupport.protocol.serializer.UUIDSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.i18n.I18NData;
 
@@ -20,7 +20,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 	protected void writeToClient() {
 		ClientBoundPacketData spawnnamed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
 		VarNumberSerializer.writeVarInt(spawnnamed, entity.getId());
-		MiscSerializer.writeUUID(spawnnamed, entity.getUUID());
+		UUIDSerializer.writeUUID2L(spawnnamed, entity.getUUID());
 		spawnnamed.writeInt((int) (x * 32));
 		spawnnamed.writeInt((int) (y * 32));
 		spawnnamed.writeInt((int) (z * 32));

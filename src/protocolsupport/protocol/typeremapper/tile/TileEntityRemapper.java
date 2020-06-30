@@ -110,22 +110,22 @@ public class TileEntityRemapper {
 			ProtocolVersionsHelper.ALL_PC
 		);
 
-		register(TileEntityType.PISTON, new TileEntityPistonRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
+		register(TileEntityType.PISTON, new TileEntityPistonRemapper(), ProtocolVersionsHelper.DOWN_1_12_2);
 
-		register(TileEntityType.BANNER, new TileEntityBannerRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
-		register(TileEntityType.SKULL, new TileEntitySkullRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
+		register(TileEntityType.BANNER, new TileEntityBannerRemapper(), ProtocolVersionsHelper.DOWN_1_12_2);
+		register(TileEntityType.SKULL, new TileEntitySkullRemapper(), ProtocolVersionsHelper.DOWN_1_12_2);
 
 		register(TileEntityType.BED, new TileEntityBedRemapper(), ProtocolVersionsHelper.ALL_1_12);
 
-		register(TileEntityType.MOB_SPAWNER, new TileEntityToLegacyTypeNameRemapper("MobSpawner"), ProtocolVersionsHelper.BEFORE_1_11);
-		register(TileEntityType.COMMAND_BLOCK, new TileEntityToLegacyTypeNameRemapper("Control"), ProtocolVersionsHelper.BEFORE_1_11);
-		register(TileEntityType.BEACON, new TileEntityToLegacyTypeNameRemapper("Beacon"), ProtocolVersionsHelper.BEFORE_1_11);
-		register(TileEntityType.SKULL, new TileEntityToLegacyTypeNameRemapper("Skull"), ProtocolVersionsHelper.BEFORE_1_11);
-		register(TileEntityType.BANNER, new TileEntityToLegacyTypeNameRemapper("Banner"), ProtocolVersionsHelper.BEFORE_1_11);
-		register(TileEntityType.STRUCTURE, new TileEntityToLegacyTypeNameRemapper("Structure"), ProtocolVersionsHelper.BEFORE_1_11);
-		register(TileEntityType.END_GATEWAY, new TileEntityToLegacyTypeNameRemapper("Airportal"), ProtocolVersionsHelper.BEFORE_1_11);
-		register(TileEntityType.SIGN, new TileEntityToLegacyTypeNameRemapper("Sign"), ProtocolVersionsHelper.BEFORE_1_11);
-		register(TileEntityType.PISTON, new TileEntityToLegacyTypeNameRemapper("Piston"), ProtocolVersionsHelper.BEFORE_1_11);
+		register(TileEntityType.MOB_SPAWNER, new TileEntityToLegacyTypeNameRemapper("MobSpawner"), ProtocolVersionsHelper.DOWN_1_10);
+		register(TileEntityType.COMMAND_BLOCK, new TileEntityToLegacyTypeNameRemapper("Control"), ProtocolVersionsHelper.DOWN_1_10);
+		register(TileEntityType.BEACON, new TileEntityToLegacyTypeNameRemapper("Beacon"), ProtocolVersionsHelper.DOWN_1_10);
+		register(TileEntityType.SKULL, new TileEntityToLegacyTypeNameRemapper("Skull"), ProtocolVersionsHelper.DOWN_1_10);
+		register(TileEntityType.BANNER, new TileEntityToLegacyTypeNameRemapper("Banner"), ProtocolVersionsHelper.DOWN_1_10);
+		register(TileEntityType.STRUCTURE, new TileEntityToLegacyTypeNameRemapper("Structure"), ProtocolVersionsHelper.DOWN_1_10);
+		register(TileEntityType.END_GATEWAY, new TileEntityToLegacyTypeNameRemapper("Airportal"), ProtocolVersionsHelper.DOWN_1_10);
+		register(TileEntityType.SIGN, new TileEntityToLegacyTypeNameRemapper("Sign"), ProtocolVersionsHelper.DOWN_1_10);
+		register(TileEntityType.PISTON, new TileEntityToLegacyTypeNameRemapper("Piston"), ProtocolVersionsHelper.DOWN_1_10);
 
 		register(
 			TileEntityType.MOB_SPAWNER,
@@ -154,7 +154,7 @@ public class TileEntityRemapper {
 					}
 				}
 			},
-			ProtocolVersionsHelper.BEFORE_1_9
+			ProtocolVersionsHelper.DOWN_1_8
 		);
 
 		register(

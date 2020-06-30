@@ -5,7 +5,7 @@ import java.util.UUID;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.UUIDSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
@@ -28,7 +28,7 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 	@Override
 	protected void readServerData(ByteBuf serverdata) {
 		int playerEntityId = VarNumberSerializer.readVarInt(serverdata);
-		UUID uuid = MiscSerializer.readUUID(serverdata);
+		UUID uuid = UUIDSerializer.readUUID2L(serverdata);
 		entity = NetworkEntity.createPlayer(uuid, playerEntityId);
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();

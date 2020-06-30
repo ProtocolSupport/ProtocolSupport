@@ -17,7 +17,7 @@ public class FireworkEntityMetadataRemapper extends BaseEntityMetadataRemapper {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Firework.ITEM, 7), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Firework.ITEM, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Firework.ITEM, 5), ProtocolVersionsHelper.ALL_1_9);
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Firework.ITEM, 8), ProtocolVersionsHelper.BEFORE_1_9);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Firework.ITEM, 8), ProtocolVersionsHelper.DOWN_1_8);
 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Firework.USER, 8), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapper<NetworkEntityMetadataObjectOptionalVarInt>(NetworkEntityMetadataObjectIndex.Firework.USER, 7) {

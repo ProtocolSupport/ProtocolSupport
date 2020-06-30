@@ -21,33 +21,35 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 	protected Action action;
 	protected Vector interactedAt;
 	protected UsedHand hand;
+	protected boolean sneaking;
 
 	@Override
 	protected void writeToServer() {
-		codec.read(create(entityId, action, interactedAt, hand));
+		codec.read(create(entityId, action, interactedAt, hand, sneaking));
 	}
 
-	public static ServerBoundPacketData create(int entityId, Action action, Vector interactedAt, UsedHand hand) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_USE_ENTITY);
-		VarNumberSerializer.writeVarInt(creator, entityId);
-		MiscSerializer.writeVarIntEnum(creator, action);
+	public static ServerBoundPacketData create(int entityId, Action action, Vector interactedAt, UsedHand hand, boolean sneaking) {
+		ServerBoundPacketData useentity = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_USE_ENTITY);
+		VarNumberSerializer.writeVarInt(useentity, entityId);
+		MiscSerializer.writeVarIntEnum(useentity, action);
 		switch (action) {
 			case INTERACT: {
-				MiscSerializer.writeVarIntEnum(creator, hand);
+				MiscSerializer.writeVarIntEnum(useentity, hand);
 				break;
 			}
 			case INTERACT_AT: {
-				creator.writeFloat((float) interactedAt.getX());
-				creator.writeFloat((float) interactedAt.getY());
-				creator.writeFloat((float) interactedAt.getZ());
-				MiscSerializer.writeVarIntEnum(creator, hand);
+				useentity.writeFloat((float) interactedAt.getX());
+				useentity.writeFloat((float) interactedAt.getY());
+				useentity.writeFloat((float) interactedAt.getZ());
+				MiscSerializer.writeVarIntEnum(useentity, hand);
 				break;
 			}
 			case ATTACK: {
 				break;
 			}
 		}
-		return creator;
+		useentity.writeBoolean(sneaking);
+		return useentity;
 	}
 
 	protected enum Action {

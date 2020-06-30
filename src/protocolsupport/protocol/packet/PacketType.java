@@ -56,6 +56,8 @@ public enum PacketType {
 	SERVERBOUND_PLAY_UPDATE_COMMAND_BLOCK(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayUpdateCommandBlockPacketId()),
 	SERVERBOUND_PLAY_UPDATE_COMMAND_MINECART(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayUpdateCommandMinecartPacketId()),
 	SERVERBOUND_PLAY_UPDATE_STRUCTURE_BLOCK(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayUpdateStructureBlockPacketId()),
+	SERVERBOUND_PLAY_JIGSAW_UPDATE(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayJigsawUpdatePacketId()),
+	SERVERBOUND_PLAY_JIGSAW_GENERATE(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayJigsawGenerateStructurePacketId()),
 
 	CLIENTBOUND_LOGIN_DISCONNECT(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutLoginDisconnectPacketId()),
 	CLIENTBOUND_LOGIN_ENCRYPTION_BEGIN(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutLoginEncryptionBeginPacketId()),
@@ -81,7 +83,6 @@ public enum PacketType {
 	CLIENTBOUND_PLAY_SPAWN_LIVING(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlaySpawnLivingPacketId()),
 	CLIENTBOUND_PLAY_SPAWN_PAINTING(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlaySpawnPaintingPacketId()),
 	CLIENTBOUND_PLAY_SPAWN_EXP_ORB(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlaySpawnExpOrbPacketId()),
-	CLIENTBOUND_PLAY_SPAWN_GLOBAL(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlaySpawnWeatherPacketId()),
 	CLIENTBOUND_PLAY_ENTITY_DESTROY(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayEntityDestroyPacketId()),
 	CLIENTBOUND_PLAY_ENTITY_VELOCITY(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayEntityVelocityPacketId()),
 	CLIENTBOUND_PLAY_ENTITY_NOOP(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayEntityPacketId()),
@@ -159,7 +160,8 @@ public enum PacketType {
 	CLIENTBOUND_PLAY_BLOCK_BREAK_CONFIRM(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayAcknowledgePlayerDiggingId()),
 
 	CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN(Direction.CLIENTBOUND, -1),
-	CLIENTBOUND_LEGACY_PLAY_USE_BED(Direction.CLIENTBOUND, -1);
+	CLIENTBOUND_LEGACY_PLAY_USE_BED(Direction.CLIENTBOUND, -1),
+	CLIENTBOUND_LEGACY_PLAY_SPAWN_GLOBAL(Direction.CLIENTBOUND, -1);
 
 	private final Direction direction;
 	private final int id;

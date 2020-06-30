@@ -13,6 +13,8 @@ public class FishingFloatEntityMetadataRemapper extends BaseEntityMetadataRemapp
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.FishingFloat.HOOKED_ENTITY, 7), ProtocolVersionsHelper.UP_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.FishingFloat.HOOKED_ENTITY, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.FishingFloat.HOOKED_ENTITY, 5), ProtocolVersionsHelper.ALL_1_9);
+
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.FishingFloat.CATCHABLE, 8), ProtocolVersionsHelper.UP_1_16);
 	}
 
 }

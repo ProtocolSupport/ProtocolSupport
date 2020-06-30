@@ -21,7 +21,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 
 	@Override
 	protected void writeToClient() {
-		String locale = cache.getAttributesCache().getLocale();
+		String locale = cache.getClientCache().getLocale();
 		switch (action) {
 			case ADD: {
 				for (Entry<UUID, PlayerListOldNewEntry> entry : infos.entrySet()) {

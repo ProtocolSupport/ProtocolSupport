@@ -47,9 +47,9 @@ public class EntityLocationOffset {
 				NetworkEntityType.MINECART_TNT, NetworkEntityType.MINECART_MOB_SPAWNER, NetworkEntityType.MINECART_HOPPER,
 				NetworkEntityType.MINECART_COMMAND
 			),
-			halfBlockUpY, ProtocolVersionsHelper.BEFORE_1_8
+			halfBlockUpY, ProtocolVersionsHelper.DOWN_1_7_10
 		);
-		register(NetworkEntityType.BOAT, new Offset(0D, 0.3, 0D, (byte) 0, (byte) 0), ProtocolVersionsHelper.BEFORE_1_8);
+		register(NetworkEntityType.BOAT, new Offset(0D, 0.3, 0D, (byte) 0, (byte) 0), ProtocolVersionsHelper.DOWN_1_7_10);
 		register(
 			Arrays.asList(NetworkEntityType.TNT, NetworkEntityType.FALLING_OBJECT),
 			halfBlockUpY, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10)

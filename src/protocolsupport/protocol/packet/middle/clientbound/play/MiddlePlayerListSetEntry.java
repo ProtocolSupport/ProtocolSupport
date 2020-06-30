@@ -10,6 +10,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.UUIDSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
@@ -32,7 +33,7 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 	protected void readServerData(ByteBuf serverdata) {
 		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		Utils.repeat(VarNumberSerializer.readVarInt(serverdata), () -> {
-			UUID uuid = MiscSerializer.readUUID(serverdata);
+			UUID uuid = UUIDSerializer.readUUID2L(serverdata);
 			switch (action) {
 				case ADD: {
 					PlayerListEntry oldEntry = playerlistCache.getEntry(uuid);

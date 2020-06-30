@@ -17,7 +17,7 @@ public class BaseEntityMetadataRemapper extends EntityMetadataRemapper {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Entity.BASE_FLAGS, 0), ProtocolVersionsHelper.ALL_PC);
 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Entity.AIR, 1), ProtocolVersionsHelper.UP_1_9);
-		addRemap(new IndexValueRemapperNumberToShort(NetworkEntityMetadataObjectIndex.Entity.AIR, 1), ProtocolVersionsHelper.BEFORE_1_9);
+		addRemap(new IndexValueRemapperNumberToShort(NetworkEntityMetadataObjectIndex.Entity.AIR, 1), ProtocolVersionsHelper.DOWN_1_8);
 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Entity.NAMETAG, 2), ProtocolVersionsHelper.UP_1_13);
 		addRemap(new IndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex.Entity.NAMETAG, 2), ProtocolVersionsHelper.RANGE__1_9__1_12_2);

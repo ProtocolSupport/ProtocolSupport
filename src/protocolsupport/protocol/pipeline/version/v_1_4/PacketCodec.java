@@ -51,7 +51,7 @@ public class PacketCodec extends LegacyPacketCodec {
 		registry.register(PacketType.CLIENTBOUND_PLAY_WORLD_EVENT, 0x3D);
 		registry.register(PacketType.CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND, 0x3E);
 		registry.register(PacketType.CLIENTBOUND_PLAY_GAME_STATE_CHANGE, 0x46);
-		registry.register(PacketType.CLIENTBOUND_PLAY_SPAWN_GLOBAL, 0x47);
+		registry.register(PacketType.CLIENTBOUND_LEGACY_PLAY_SPAWN_GLOBAL, 0x47);
 		registry.register(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN, 0x64);
 		registry.register(PacketType.CLIENTBOUND_PLAY_WINDOW_CLOSE, 0x65);
 		registry.register(PacketType.CLIENTBOUND_PLAY_WINDOW_SET_SLOT, 0x67);

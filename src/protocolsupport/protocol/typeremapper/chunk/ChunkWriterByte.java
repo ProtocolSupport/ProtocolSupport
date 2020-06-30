@@ -48,10 +48,10 @@ public class ChunkWriterByte {
 				blockIdIndex += 4096;
 				blockDataIndex += 2048;
 
-				ChunkUtils.copyLight(data, blockLightIndex, chunk.getBlockLight(sectionNumber));
+				ChunkWriterUtils.copyLight(data, blockLightIndex, chunk.getBlockLight(sectionNumber));
 				blockLightIndex += 2048;
 				if (hasSkyLight) {
-					ChunkUtils.copyLight(data, skyLightIndex, chunk.getSkyLight(sectionNumber));
+					ChunkWriterUtils.copyLight(data, skyLightIndex, chunk.getSkyLight(sectionNumber));
 					skyLightIndex += 2048;
 				}
 

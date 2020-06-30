@@ -6,7 +6,7 @@ import java.util.List;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkLight;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheChunkLight;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -15,7 +15,7 @@ import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 
-public class ChunkLight extends AbstractChunkLight {
+public class ChunkLight extends AbstractChunkCacheChunkLight {
 
 	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
@@ -28,14 +28,14 @@ public class ChunkLight extends AbstractChunkLight {
 	@Override
 	protected void writeToClient() {
 		int blockMask = ((setSkyLightMask | setBlockLightMask | emptySkyLightMask | emptyBlockLightMask) >> 1) & 0xFFFF;
-		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
+		boolean hasSkyLight = cache.getClientCache().hasSkyLightInCurrentDimension();
 
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(false); //full
 		VarNumberSerializer.writeVarInt(chunkdata, blockMask);
 		ArraySerializer.writeVarIntByteArray(chunkdata, to -> {
-			ChunkWriterVariesWithLight.writeSectionsPreFlattening(
+			ChunkWriterVariesWithLight.writeSectionsCompactPreFlattening(
 				to, blockMask, 13,
 				blockDataRemappingTable,
 				cachedChunk, hasSkyLight,

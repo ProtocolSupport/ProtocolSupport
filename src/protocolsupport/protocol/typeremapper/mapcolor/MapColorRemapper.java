@@ -13,9 +13,9 @@ public class MapColorRemapper {
 			//see http://minecraft.gamepedia.com/Map_item_format
 			for (ModernMapColor color : ModernMapColor.values()) {
 				if (color.getId() > ModernMapColor.Color143.getId()) {
-					registerRemapEntry(color.getId(), MapColorHelper.getSimilarModernColor(color, ModernMapColor.Color143.getId()).getId(), ProtocolVersionsHelper.BEFORE_1_12);
+					registerRemapEntry(color.getId(), MapColorHelper.getSimilarModernColor(color, ModernMapColor.Color143.getId()).getId(), ProtocolVersionsHelper.DOWN_1_11_1);
 				}
-				registerRemapEntry(color.getId(), MapColorHelper.getSimilarLegacyColor(color).getId(), ProtocolVersionsHelper.BEFORE_1_7);
+				registerRemapEntry(color.getId(), MapColorHelper.getSimilarLegacyColor(color).getId(), ProtocolVersionsHelper.DOWN_1_6_4);
 			}
 		}
 		@Override

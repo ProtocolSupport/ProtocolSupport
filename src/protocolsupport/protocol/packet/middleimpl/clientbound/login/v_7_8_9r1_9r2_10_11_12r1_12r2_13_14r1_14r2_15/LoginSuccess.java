@@ -15,6 +15,7 @@ public class LoginSuccess extends MiddleLoginSuccess {
 
 	@Override
 	protected void writeToClient() {
+		String uuidstring = uuid.toString();
 		if (version == ProtocolVersion.MINECRAFT_1_7_5) {
 			uuidstring = uuidstring.replace("-", "");
 		}

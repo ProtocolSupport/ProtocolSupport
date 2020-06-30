@@ -25,7 +25,7 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void writeToServer() {
-		cache.getAttributesCache().setLocale(locale);
+		cache.getClientCache().setLocale(locale);
 
 		codec.read(create(locale, viewDist, chatMode, chatColors, skinFlags, mainHand));
 	}

@@ -14,7 +14,7 @@ public class BlazeEntityMetadataRemapper extends InsentientEntityMetadataRemappe
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Blaze.ON_FIRE, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Blaze.ON_FIRE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Blaze.ON_FIRE, 11), ProtocolVersionsHelper.ALL_1_9);
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Blaze.ON_FIRE, 16), ProtocolVersionsHelper.BEFORE_1_9);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Blaze.ON_FIRE, 16), ProtocolVersionsHelper.DOWN_1_8);
 	}
 
 }

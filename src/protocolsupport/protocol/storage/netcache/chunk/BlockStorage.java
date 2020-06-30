@@ -1,6 +1,6 @@
 package protocolsupport.protocol.storage.netcache.chunk;
 
-public abstract class BlockStorage {
+public abstract interface BlockStorage {
 
 	public abstract short getBlockData(int index);
 

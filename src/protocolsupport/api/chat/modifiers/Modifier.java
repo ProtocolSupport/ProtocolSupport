@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 
 import protocolsupport.utils.Utils;
 
+//TODO: support Font and RGB color
 public class Modifier {
 
 	private ChatColor color;

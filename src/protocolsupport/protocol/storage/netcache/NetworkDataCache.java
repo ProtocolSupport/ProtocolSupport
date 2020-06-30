@@ -31,8 +31,8 @@ public class NetworkDataCache {
 		return keepalivecache;
 	}
 
-	protected final AttributesCache attrscache = new AttributesCache();
-	public AttributesCache getAttributesCache() {
+	protected final ClientCache attrscache = new ClientCache();
+	public ClientCache getClientCache() {
 		return attrscache;
 	}
 

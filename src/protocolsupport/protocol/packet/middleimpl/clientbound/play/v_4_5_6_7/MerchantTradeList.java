@@ -16,7 +16,7 @@ public class MerchantTradeList extends MiddleMerchantTradeList {
 		codec.write(CustomPayload.create(
 			version,
 			LegacyCustomPayloadChannelName.LEGACY_TRADE_LIST,
-			to -> MerchantDataSerializer.writeMerchantData(to, version, cache.getAttributesCache().getLocale(), merchantData)
+			to -> MerchantDataSerializer.writeMerchantData(to, version, cache.getClientCache().getLocale(), merchantData)
 		));
 	}
 

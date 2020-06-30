@@ -72,33 +72,33 @@ public class ItemStackComplexRemapperRegistry {
 	}
 
 	static {
-		registerToClient(Material.FILLED_MAP, new MapToLegacyIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
+		registerToClient(Material.FILLED_MAP, new MapToLegacyIdComplexRemapper(), ProtocolVersionsHelper.DOWN_1_12_2);
 		MinecraftData.getItems()
 		.filter(material -> Bukkit.getItemFactory().getItemMeta(material) instanceof BannerMeta)
 		.forEach(material -> {
 			Integer color = LegacyBanner.getColorByMaterial(material);
 			if (color != null) {
-				registerToClient(material, new BannerToLegacyComplexRemapper(color), ProtocolVersionsHelper.BEFORE_1_13);
+				registerToClient(material, new BannerToLegacyComplexRemapper(color), ProtocolVersionsHelper.DOWN_1_12_2);
 			}
 		});
-		registerToClient(Material.SHIELD, new ShieldToLegacyComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
+		registerToClient(Material.SHIELD, new ShieldToLegacyComplexRemapper(), ProtocolVersionsHelper.DOWN_1_12_2);
 
-		registerToClient(Material.DRAGON_HEAD, new DragonHeadToDragonPlayerHeadComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
+		registerToClient(Material.DRAGON_HEAD, new DragonHeadToDragonPlayerHeadComplexRemapper(), ProtocolVersionsHelper.DOWN_1_8);
 		registerToClient(Material.PLAYER_HEAD, new PlayerHeadToLegacyOwnerComplexRemapper(), ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5));
 
-		registerToClient(Material.POTION, new PotionToLegacyIdComplexRemapper(false), ProtocolVersionsHelper.BEFORE_1_9);
-		registerToClient(Material.SPLASH_POTION, new PotionToLegacyIdComplexRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
-		registerToClient(Material.LINGERING_POTION, new PotionToLegacyIdComplexRemapper(true), ProtocolVersionsHelper.BEFORE_1_9);
+		registerToClient(Material.POTION, new PotionToLegacyIdComplexRemapper(false), ProtocolVersionsHelper.DOWN_1_8);
+		registerToClient(Material.SPLASH_POTION, new PotionToLegacyIdComplexRemapper(true), ProtocolVersionsHelper.DOWN_1_8);
+		registerToClient(Material.LINGERING_POTION, new PotionToLegacyIdComplexRemapper(true), ProtocolVersionsHelper.DOWN_1_8);
 
 		registerToClient(Material.WRITABLE_BOOK, new EmptyBookPageAdderComplexRemapper(), ProtocolVersionsHelper.ALL_PC);
-		registerToClient(Material.WRITTEN_BOOK, new BookPagesToLegacyTextComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_8);
+		registerToClient(Material.WRITTEN_BOOK, new BookPagesToLegacyTextComplexRemapper(), ProtocolVersionsHelper.DOWN_1_7_10);
 
 		ItemSpawnEggData.getSpawnEggs()
 		.forEach(m -> {
 			NetworkEntityType spawnedType = ItemSpawnEggData.getSpawnedType(ItemMaterialLookup.getRuntimeId(m));
 			registerToClient(m, new SpawnEggToStringIdComplexRemapper(spawnedType.getKey()), ProtocolVersionsHelper.RANGE__1_11__1_12_2);
 			registerToClient(m, new SpawnEggToStringIdComplexRemapper(LegacyEntityId.getStringId(spawnedType)), ProtocolVersionsHelper.RANGE__1_9__1_10);
-			registerToClient(m, new SpawnEggToIntIdComplexRemapper(LegacyEntityId.getIntId(spawnedType)), ProtocolVersionsHelper.BEFORE_1_9);
+			registerToClient(m, new SpawnEggToIntIdComplexRemapper(LegacyEntityId.getIntId(spawnedType)), ProtocolVersionsHelper.DOWN_1_8);
 		});
 
 		EnchantFilterNBTComplexRemapper enchantfilter = new EnchantFilterNBTComplexRemapper();
@@ -109,12 +109,12 @@ public class ItemStackComplexRemapperRegistry {
 		MinecraftData.getItems()
 		.forEach(material -> {
 			registerToClient(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);
-			registerToClient(material, loretolegacytext, ProtocolVersionsHelper.BEFORE_1_14);
+			registerToClient(material, loretolegacytext, ProtocolVersionsHelper.DOWN_1_13_2);
 			if (material.getMaxDurability() > 0) {
-				registerToClient(material, durabilitytolegacydata, ProtocolVersionsHelper.BEFORE_1_13);
+				registerToClient(material, durabilitytolegacydata, ProtocolVersionsHelper.DOWN_1_12_2);
 			}
-			registerToClient(material, enchanttolegacyid, ProtocolVersionsHelper.BEFORE_1_13);
-			registerToClient(material, dnametolegacytext, ProtocolVersionsHelper.BEFORE_1_13);
+			registerToClient(material, enchanttolegacyid, ProtocolVersionsHelper.DOWN_1_12_2);
+			registerToClient(material, dnametolegacytext, ProtocolVersionsHelper.DOWN_1_12_2);
 		});
 	}
 
@@ -125,30 +125,30 @@ public class ItemStackComplexRemapperRegistry {
 		DisplayNameFromLegacyTextComplexRemapper dnamefromlegacytext = new DisplayNameFromLegacyTextComplexRemapper();
 		MinecraftData.getItems()
 		.forEach(material -> {
-			registerFromClient(material, lorefromlegacytext, ProtocolVersionsHelper.BEFORE_1_14);
+			registerFromClient(material, lorefromlegacytext, ProtocolVersionsHelper.DOWN_1_13_2);
 			if (material.getMaxDurability() > 0) {
-				registerToClient(material, durabilityfromlegacydata, ProtocolVersionsHelper.BEFORE_1_13);
+				registerToClient(material, durabilityfromlegacydata, ProtocolVersionsHelper.DOWN_1_12_2);
 			}
-			registerFromClient(material, enchantfromlegacyid, ProtocolVersionsHelper.BEFORE_1_13);
-			registerFromClient(material, dnamefromlegacytext, ProtocolVersionsHelper.BEFORE_1_13);
+			registerFromClient(material, enchantfromlegacyid, ProtocolVersionsHelper.DOWN_1_12_2);
+			registerFromClient(material, dnamefromlegacytext, ProtocolVersionsHelper.DOWN_1_12_2);
 		});
 
-		registerFromClient(Material.FILLED_MAP, new MapFromLegacyIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
+		registerFromClient(Material.FILLED_MAP, new MapFromLegacyIdComplexRemapper(), ProtocolVersionsHelper.DOWN_1_12_2);
 		MinecraftData.getItems()
 		.filter(material -> Bukkit.getItemFactory().getItemMeta(material) instanceof BannerMeta)
 		.filter(material -> LegacyBanner.getColorByMaterial(material) != null)
 		.forEach(material -> registerFromClient(
-			material, new BannerFromLegacyComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_13
+			material, new BannerFromLegacyComplexRemapper(), ProtocolVersionsHelper.DOWN_1_12_2
 		));
-		registerFromClient(Material.SHIELD, new ShieldFromLegacyComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_13);
+		registerFromClient(Material.SHIELD, new ShieldFromLegacyComplexRemapper(), ProtocolVersionsHelper.DOWN_1_12_2);
 
-		registerFromClient(Material.POTION, new PotionFromLegacyIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
+		registerFromClient(Material.POTION, new PotionFromLegacyIdComplexRemapper(), ProtocolVersionsHelper.DOWN_1_8);
 
 		ItemSpawnEggData.getSpawnEggs()
 		.forEach(m -> {
 			registerFromClient(m, new SpawnEggFromStringIdComplexRemapper(false), ProtocolVersionsHelper.RANGE__1_11__1_12_2);
 			registerFromClient(m, new SpawnEggFromStringIdComplexRemapper(true), ProtocolVersionsHelper.RANGE__1_9__1_10);
-			registerFromClient(m, new SpawnEggFromIntIdComplexRemapper(), ProtocolVersionsHelper.BEFORE_1_9);
+			registerFromClient(m, new SpawnEggFromIntIdComplexRemapper(), ProtocolVersionsHelper.DOWN_1_8);
 		});
 	}
 

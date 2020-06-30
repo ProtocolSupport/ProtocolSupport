@@ -27,7 +27,7 @@ public class LegacyEntityId {
 		register(NetworkEntityType.EXP_BOTTLE, "ThrownExpBottle");
 		register(NetworkEntityType.ELDER_GUARDIAN, "ElderGuardian");
 		register(NetworkEntityType.IRON_GOLEM, "VillagerGolem");
-		register(NetworkEntityType.ZOMBIE_PIGMAN, "PigZombie");
+		register(NetworkEntityType.ZOMBIFIED_PIGLIN, "PigZombie");
 		register(NetworkEntityType.WITHER_SKELETON, "WitherSkeleton");
 		register(NetworkEntityType.MULE, "Mule");
 		register(NetworkEntityType.AREA_EFFECT_CLOUD, "AreaEffectCloud");

@@ -7,19 +7,19 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractNoOffhandEntityEquipment;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.AttributesCache;
+import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.types.NetworkItemStack;
 
 public class EntityEquipment extends AbstractNoOffhandEntityEquipment {
-
-	protected final AttributesCache clientCache = cache.getAttributesCache();
 
 	public EntityEquipment(ConnectionImpl connection) {
 		super(connection);
 	}
 
+	protected final ClientCache clientCache = cache.getClientCache();
+
 	@Override
-	protected void writeToClient0() {
+	protected void writeToClient0(Slot slot, NetworkItemStack itemstack) {
 		codec.write(create(version, clientCache.getLocale(), entityId, slot, itemstack));
 	}
 

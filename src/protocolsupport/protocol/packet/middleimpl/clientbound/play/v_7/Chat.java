@@ -7,12 +7,12 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChat;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.storage.netcache.AttributesCache;
+import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
 
 public class Chat extends MiddleChat {
 
-	protected final AttributesCache clientCache = cache.getAttributesCache();
+	protected final ClientCache clientCache = cache.getClientCache();
 
 	public Chat(ConnectionImpl connection) {
 		super(connection);

@@ -9,10 +9,12 @@ public class TridentEntityMetadataRemapper extends ArrowEntityMetadataRemapper {
 	public static final TridentEntityMetadataRemapper INSTANCE = new TridentEntityMetadataRemapper();
 
 	protected TridentEntityMetadataRemapper() {
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Trident.LOYALTY, 10), ProtocolVersionsHelper.UP_1_14);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Trident.LOYALTY, 9), ProtocolVersionsHelper.UP_1_16);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Trident.LOYALTY, 10), ProtocolVersionsHelper.RANGE__1_14__1_15_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Trident.LOYALTY, 8), ProtocolVersionsHelper.ALL_1_13);
 
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Trident.HAS_GLINT, 11), ProtocolVersionsHelper.UP_1_15);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Trident.HAS_GLINT, 10), ProtocolVersionsHelper.UP_1_16);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Trident.HAS_GLINT, 11), ProtocolVersionsHelper.ALL_1_15);
 	}
 
 }

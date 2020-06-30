@@ -5,11 +5,11 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetHealth;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleClientCommand;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.storage.netcache.AttributesCache;
+import protocolsupport.protocol.storage.netcache.ClientCache;
 
 public class SetHealth extends MiddleSetHealth {
 
-	protected final AttributesCache clientCache = cache.getAttributesCache();
+	protected final ClientCache clientCache = cache.getClientCache();
 
 	public SetHealth(ConnectionImpl connection) {
 		super(connection);
@@ -18,7 +18,7 @@ public class SetHealth extends MiddleSetHealth {
 	@Override
 	protected void writeToClient() {
 		ClientBoundPacketData sethealth = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SET_HEALTH);
-		sethealth.writeShort((int) Math.ceil((health * 20.0F) / cache.getAttributesCache().getMaxHealth()));
+		sethealth.writeShort((int) Math.ceil((health * 20.0F) / cache.getClientCache().getMaxHealth()));
 		sethealth.writeShort(food);
 		sethealth.writeFloat(saturation);
 		codec.write(sethealth);

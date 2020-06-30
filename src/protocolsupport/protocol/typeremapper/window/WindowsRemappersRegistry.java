@@ -94,7 +94,7 @@ public class WindowsRemappersRegistry {
 			Pair.of(WindowType.ENCHANTMENT, new NonSlotCountBasedRemapperSelectFunction(new SingleWindowIdSkipSlotRemapper(WindowType.ENCHANTMENT, 0, 1))),
 			Pair.of(WindowType.FURNACE, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.FURNACE, 3, WindowFurnaceCache::new)))
 		);
-		register(remapper__pre_8, ProtocolVersionsHelper.BEFORE_1_8);
+		register(remapper__pre_8, ProtocolVersionsHelper.DOWN_1_7_10);
 	}
 
 	public static AbstractWindowsRemapper get(ProtocolVersion version) {

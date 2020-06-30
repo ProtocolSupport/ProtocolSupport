@@ -8,7 +8,7 @@ import protocolsupport.ProtocolSupport;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.UUIDSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
@@ -37,7 +37,7 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 	@Override
 	protected void readServerData(ByteBuf serverdata) {
 		int entityId = VarNumberSerializer.readVarInt(serverdata);
-		UUID uuid = MiscSerializer.readUUID(serverdata);
+		UUID uuid = UUIDSerializer.readUUID2L(serverdata);
 		int typeId = serverdata.readUnsignedByte();
 		NetworkEntityType type = NetworkEntityType.getObjectByNetworkTypeId(typeId);
 		x = serverdata.readDouble();

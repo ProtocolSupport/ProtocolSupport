@@ -10,12 +10,12 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.Chat;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.AttributesCache;
+import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
 
 public class Title extends MiddleTitle {
 
-	protected final AttributesCache clientCache = cache.getAttributesCache();
+	protected final ClientCache clientCache = cache.getClientCache();
 
 	public Title(ConnectionImpl connection) {
 		super(connection);

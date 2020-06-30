@@ -5,22 +5,23 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.AbstractSingleEntityEquipment;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.AttributesCache;
+import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.types.NetworkItemStack;
 
-public class EntityEquipment extends MiddleEntityEquipment {
-
-	protected final AttributesCache clientCache = cache.getAttributesCache();
+public class EntityEquipment extends AbstractSingleEntityEquipment {
 
 	public EntityEquipment(ConnectionImpl connection) {
 		super(connection);
 	}
 
+	protected final ClientCache clientCache = cache.getClientCache();
+
 	@Override
-	protected void writeToClient() {
+	protected void writeToClientSingle(Slot slot, NetworkItemStack itemstack) {
 		codec.write(create(version, clientCache.getLocale(), entityId, slot, itemstack));
 	}
 

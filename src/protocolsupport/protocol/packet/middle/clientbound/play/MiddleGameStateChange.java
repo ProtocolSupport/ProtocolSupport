@@ -4,12 +4,12 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.storage.netcache.AttributesCache;
+import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
 
 public abstract class MiddleGameStateChange extends ClientBoundMiddlePacket {
 
-	protected final AttributesCache clientCache = cache.getAttributesCache();
+	protected final ClientCache clientCache = cache.getClientCache();
 
 	public MiddleGameStateChange(ConnectionImpl connection) {
 		super(connection);

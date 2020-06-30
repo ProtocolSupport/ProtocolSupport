@@ -46,17 +46,17 @@ public class NetworkEntityMetadataObjectRegistry {
 		register(NetworkEntityMetadataObjectByte.class, 0, ProtocolVersionsHelper.ALL_PC);
 		register(NetworkEntityMetadataObjectVarInt.class, 1, ProtocolVersionsHelper.UP_1_9);
 		register(NetworkEntityMetadataObjectFloat.class, 2, ProtocolVersionsHelper.UP_1_9);
-		register(NetworkEntityMetadataObjectFloat.class, 3, ProtocolVersionsHelper.BEFORE_1_9);
+		register(NetworkEntityMetadataObjectFloat.class, 3, ProtocolVersionsHelper.DOWN_1_8);
 		register(NetworkEntityMetadataObjectString.class, 3, ProtocolVersionsHelper.UP_1_9);
-		register(NetworkEntityMetadataObjectString.class, 4, ProtocolVersionsHelper.BEFORE_1_9);
+		register(NetworkEntityMetadataObjectString.class, 4, ProtocolVersionsHelper.DOWN_1_8);
 		register(NetworkEntityMetadataObjectChat.class, 4, ProtocolVersionsHelper.UP_1_9);
 		register(NetworkEntityMetadataObjectOptionalChat.class, 5, ProtocolVersionsHelper.UP_1_13);
 		register(NetworkEntityMetadataObjectItemStack.class, 6, ProtocolVersionsHelper.UP_1_13);
-		register(NetworkEntityMetadataObjectItemStack.class, 5, ProtocolVersionsHelper.BEFORE_1_13);
+		register(NetworkEntityMetadataObjectItemStack.class, 5, ProtocolVersionsHelper.DOWN_1_12_2);
 		register(NetworkEntityMetadataObjectBoolean.class, 7, ProtocolVersionsHelper.UP_1_13);
 		register(NetworkEntityMetadataObjectBoolean.class, 6, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 		register(NetworkEntityMetadataObjectVector3f.class, 8, ProtocolVersionsHelper.UP_1_13);
-		register(NetworkEntityMetadataObjectVector3f.class, 7, ProtocolVersionsHelper.BEFORE_1_13);
+		register(NetworkEntityMetadataObjectVector3f.class, 7, ProtocolVersionsHelper.DOWN_1_12_2);
 		register(NetworkEntityMetadataObjectPosition.class, 9, ProtocolVersionsHelper.UP_1_13);
 		register(NetworkEntityMetadataObjectPosition.class, 8, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 		register(NetworkEntityMetadataObjectOptionalPosition.class, 10, ProtocolVersionsHelper.UP_1_13);
@@ -73,9 +73,9 @@ public class NetworkEntityMetadataObjectRegistry {
 		register(NetworkEntityMetadataObjectVillagerData.class, 16, ProtocolVersionsHelper.UP_1_14);
 		register(NetworkEntityMetadataObjectOptionalVarInt.class, 17, ProtocolVersionsHelper.UP_1_14);
 		register(NetworkEntityMetadataObjectEntityPose.class, 18, ProtocolVersionsHelper.UP_1_14);
-		register(NetworkEntityMetadataObjectShort.class, 1, ProtocolVersionsHelper.BEFORE_1_9);
-		register(NetworkEntityMetadataObjectInt.class, 2, ProtocolVersionsHelper.BEFORE_1_9);
-		register(NetworkEntityMetadataObjectVector3i.class, 6, ProtocolVersionsHelper.BEFORE_1_9);
+		register(NetworkEntityMetadataObjectShort.class, 1, ProtocolVersionsHelper.DOWN_1_8);
+		register(NetworkEntityMetadataObjectInt.class, 2, ProtocolVersionsHelper.DOWN_1_8);
+		register(NetworkEntityMetadataObjectVector3i.class, 6, ProtocolVersionsHelper.DOWN_1_8);
 	}
 
 	public static int getTypeId(@SuppressWarnings("rawtypes") Class<? extends NetworkEntityMetadataObject> clazz, ProtocolVersion version) {

@@ -12,11 +12,12 @@ import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
+import protocolsupport.protocol.utils.NumberBitsStorageCompact;
 import protocolsupport.utils.BitUtils;
 
 public class ChunkWriterVariesWithLight {
 
-	public static void writeSectionsFlattening(
+	public static void writeSectionsCompactFlattening(
 		ByteBuf buffer, int mask, int globalPaletteBitsPerBlock,
 		ArrayBasedIdRemappingTable blockDataRemappingTable,
 		FlatteningBlockDataTable flatteningBlockDataTable,
@@ -49,19 +50,19 @@ public class ChunkWriterVariesWithLight {
 					} else {
 						buffer.writeByte(globalPaletteBitsPerBlock);
 						VarNumberSerializer.writeVarInt(buffer, 0);
-						BlockStorageWriter writer = new BlockStorageWriter(globalPaletteBitsPerBlock);
+						NumberBitsStorageCompact writer = new NumberBitsStorageCompact(globalPaletteBitsPerBlock, ChunkConstants.BLOCKS_IN_SECTION);
 						for (int blockIndex = 0; blockIndex < ChunkConstants.BLOCKS_IN_SECTION; blockIndex++) {
-							writer.setBlockState(blockIndex, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, section.getBlockData(blockIndex)));
+							writer.setNumber(blockIndex, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, section.getBlockData(blockIndex)));
 						}
-						ArraySerializer.writeVarIntLongArray(buffer, writer.getBlockData());
+						ArraySerializer.writeVarIntLongArray(buffer, writer.getStorage());
 					}
 				} else {
-					ChunkUtils.writeBBEmptySection(buffer);
+					ChunkWriterUtils.writeBBEmptySection(buffer);
 				}
 
-				ChunkUtils.writeBBLight(buffer, chunk.getBlockLight(sectionNumber));
+				ChunkWriterUtils.writeBBLight(buffer, chunk.getBlockLight(sectionNumber));
 				if (hasSkyLight) {
-					ChunkUtils.writeBBLight(buffer, chunk.getSkyLight(sectionNumber));
+					ChunkWriterUtils.writeBBLight(buffer, chunk.getSkyLight(sectionNumber));
 				}
 
 				sectionPresentConsumer.accept(sectionNumber);
@@ -70,7 +71,7 @@ public class ChunkWriterVariesWithLight {
 	}
 
 
-	public static void writeSectionsPreFlattening(
+	public static void writeSectionsCompactPreFlattening(
 		ByteBuf buffer, int mask, int globalPaletteBitsPerBlock,
 		ArrayBasedIdRemappingTable blockDataRemappingTable,
 		CachedChunk chunk, boolean hasSkyLight,
@@ -84,7 +85,7 @@ public class ChunkWriterVariesWithLight {
 					BlockStorage blockstorage = section.getBlockStorage();
 					if (blockstorage instanceof BlockStorageBytePaletted) {
 						BlockStorageBytePaletted blockstoragePaletted = (BlockStorageBytePaletted) blockstorage;
-						buffer.writeByte(8);
+						buffer.writeByte(Byte.SIZE);
 						BlockStorageBytePaletted.Palette paletteObject = blockstoragePaletted.getPalette();
 						short[] palette = paletteObject.getPalette();
 						int paletteSize = Math.min(palette.length, paletteObject.getPaletteSize());
@@ -102,19 +103,19 @@ public class ChunkWriterVariesWithLight {
 					} else {
 						buffer.writeByte(globalPaletteBitsPerBlock);
 						VarNumberSerializer.writeVarInt(buffer, 0);
-						BlockStorageWriter writer = new BlockStorageWriter(globalPaletteBitsPerBlock);
+						NumberBitsStorageCompact writer = new NumberBitsStorageCompact(globalPaletteBitsPerBlock, ChunkConstants.BLOCKS_IN_SECTION);
 						for (int blockIndex = 0; blockIndex < ChunkConstants.BLOCKS_IN_SECTION; blockIndex++) {
-							writer.setBlockState(blockIndex, BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, section.getBlockData(blockIndex)));
+							writer.setNumber(blockIndex, BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, section.getBlockData(blockIndex)));
 						}
-						ArraySerializer.writeVarIntLongArray(buffer, writer.getBlockData());
+						ArraySerializer.writeVarIntLongArray(buffer, writer.getStorage());
 					}
 				} else {
-					ChunkUtils.writeBBEmptySection(buffer);
+					ChunkWriterUtils.writeBBEmptySection(buffer);
 				}
 
-				ChunkUtils.writeBBLight(buffer, chunk.getBlockLight(sectionNumber));
+				ChunkWriterUtils.writeBBLight(buffer, chunk.getBlockLight(sectionNumber));
 				if (hasSkyLight) {
-					ChunkUtils.writeBBLight(buffer, chunk.getSkyLight(sectionNumber));
+					ChunkWriterUtils.writeBBLight(buffer, chunk.getSkyLight(sectionNumber));
 				}
 
 				sectionPresentConsumer.accept(sectionNumber);

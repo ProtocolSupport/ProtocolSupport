@@ -26,7 +26,7 @@ public class VillagerEntityMetadataRemapper extends AbstractMerchantEntityMetada
 			public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectVillagerData object) {
 				return new NetworkEntityMetadataObjectInt(object.getValue().getProfession());
 			}
-		}, ProtocolVersionsHelper.BEFORE_1_9);
+		}, ProtocolVersionsHelper.DOWN_1_8);
 	}
 
 }

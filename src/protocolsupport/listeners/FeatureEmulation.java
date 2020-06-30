@@ -60,7 +60,7 @@ public class FeatureEmulation implements Listener {
 				player.addPotionEffect(new PotionEffect(
 					effect.getType(), effect.getDuration(), amplifierByte,
 					effect.isAmbient(), effect.hasParticles(), effect.hasIcon()
-				), true);
+				));
 			}
 		}
 	}

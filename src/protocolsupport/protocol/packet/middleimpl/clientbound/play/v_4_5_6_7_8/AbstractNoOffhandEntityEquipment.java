@@ -2,22 +2,24 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityEquipment;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.AbstractSingleEntityEquipment;
+import protocolsupport.protocol.types.NetworkItemStack;
 
-public abstract class AbstractNoOffhandEntityEquipment extends MiddleEntityEquipment {
+public abstract class AbstractNoOffhandEntityEquipment extends AbstractSingleEntityEquipment {
 
 	public AbstractNoOffhandEntityEquipment(ConnectionImpl connection) {
 		super(connection);
 	}
 
 	@Override
-	protected void writeToClient() {
-		if (slot == Slot.OFF_HAND) {
-			return;
+	protected void writeToClientSingle(Slot slot, NetworkItemStack itemstack) {
+		if (slot != Slot.OFF_HAND) {
+			writeToClient0(slot, itemstack);
 		}
-		writeToClient0();
 	}
 
-	protected abstract void writeToClient0();
+	protected abstract void writeToClient0(Slot slot, NetworkItemStack itemstack);
+
 
 	public static final MiddleEntityEquipment.Slot[] SUPPORTED_SLOTS = new MiddleEntityEquipment.Slot[] {
 		MiddleEntityEquipment.Slot.MAIN_HAND,

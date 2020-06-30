@@ -1,9 +1,9 @@
 package protocolsupport.zplatform.impl.spigot.network.handler;
 
-import net.minecraft.server.v1_15_R1.IChatBaseComponent;
-import net.minecraft.server.v1_15_R1.NetworkManager;
-import net.minecraft.server.v1_15_R1.PacketHandshakingInListener;
-import net.minecraft.server.v1_15_R1.PacketHandshakingInSetProtocol;
+import net.minecraft.server.v1_16_R1.IChatBaseComponent;
+import net.minecraft.server.v1_16_R1.NetworkManager;
+import net.minecraft.server.v1_16_R1.PacketHandshakingInListener;
+import net.minecraft.server.v1_16_R1.PacketHandshakingInSetProtocol;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;

@@ -6,14 +6,14 @@ import java.util.List;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkLight;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheChunkLight;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterByte;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
 import protocolsupport.utils.netty.Compressor;
 
-public class ChunkLight extends AbstractChunkLight {
+public class ChunkLight extends AbstractChunkCacheChunkLight {
 
 	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
@@ -26,8 +26,8 @@ public class ChunkLight extends AbstractChunkLight {
 	@Override
 	protected void writeToClient() {
 		int blockMask = ((setSkyLightMask | setBlockLightMask | emptySkyLightMask | emptyBlockLightMask) >> 1) & 0xFFFF;
-		String locale = cache.getAttributesCache().getLocale();
-		boolean hasSkyLight = cache.getAttributesCache().hasSkyLightInCurrentDimension();
+		String locale = cache.getClientCache().getLocale();
+		boolean hasSkyLight = cache.getClientCache().hasSkyLightInCurrentDimension();
 
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);

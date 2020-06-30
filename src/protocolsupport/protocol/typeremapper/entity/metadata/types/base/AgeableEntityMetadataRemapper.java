@@ -31,7 +31,7 @@ public class AgeableEntityMetadataRemapper extends InsentientEntityMetadataRemap
 			public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectBoolean object) {
 				return new NetworkEntityMetadataObjectInt((object.getValue() ? -1 : 0));
 			}
-		}, ProtocolVersionsHelper.BEFORE_1_8);
+		}, ProtocolVersionsHelper.DOWN_1_7_10);
 
 		addRemap(new IndexValueRemapperNumberToInt(NetworkEntityMetadataObjectIndex.Ageable.AGE_HACK, 12), ProtocolVersionsHelper.RANGE__1_6__1_7);
 	}

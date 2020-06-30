@@ -7,7 +7,7 @@ import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardTeam;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardTeam.ScoreboardTeamsTracker.TrackedScoreboardTeam;
-import protocolsupport.protocol.storage.netcache.AttributesCache;
+import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
 
 public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
@@ -16,7 +16,7 @@ public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 		super(connection);
 	}
 
-	protected final AttributesCache clientCache = cache.getAttributesCache();
+	protected final ClientCache clientCache = cache.getClientCache();
 
 
 	protected final Any<String, String> formatPrefixSuffix() {
@@ -50,7 +50,7 @@ public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 	protected String formatLegacyClampedPrefix() {
 		String prefix = this.prefix.toLegacyText(clientCache.getLocale());
 
-		if (format != ChatColor.RESET && !prefix.isEmpty() && !isStringFormatOverride(prefix, format)) {
+		if ((format != ChatColor.RESET) && !prefix.isEmpty() && !isStringFormatOverride(prefix, format)) {
 			prefix = format + prefix;
 		}
 
@@ -85,7 +85,7 @@ public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 	protected Any<String, String> formatDisplayLinePrefixSuffix() {
 		String prefix = this.prefix.toLegacyText(clientCache.getLocale());
 
-		if (format != ChatColor.RESET && !isStringFormatOverride(prefix, format)) {
+		if ((format != ChatColor.RESET) && !isStringFormatOverride(prefix, format)) {
 			prefix = format + prefix;
 		}
 

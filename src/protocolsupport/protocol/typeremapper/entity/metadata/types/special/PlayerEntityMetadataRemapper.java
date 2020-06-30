@@ -23,13 +23,13 @@ public class PlayerEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.ADDITIONAL_HEARTS, 13), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.ADDITIONAL_HEARTS, 11), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.ADDITIONAL_HEARTS, 10), ProtocolVersionsHelper.ALL_1_9);
-		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.ADDITIONAL_HEARTS, 17), ProtocolVersionsHelper.BEFORE_1_9);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.ADDITIONAL_HEARTS, 17), ProtocolVersionsHelper.DOWN_1_8);
 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.SCORE, 15), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.SCORE, 14), ProtocolVersionsHelper.ALL_1_14);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.SCORE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.SCORE, 11), ProtocolVersionsHelper.ALL_1_9);
-		addRemap(new IndexValueRemapperNumberToInt(NetworkEntityMetadataObjectIndex.Player.SCORE, 18), ProtocolVersionsHelper.BEFORE_1_9);
+		addRemap(new IndexValueRemapperNumberToInt(NetworkEntityMetadataObjectIndex.Player.SCORE, 18), ProtocolVersionsHelper.DOWN_1_8);
 
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.SKIN_FLAGS, 16), ProtocolVersionsHelper.UP_1_15);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.SKIN_FLAGS, 15), ProtocolVersionsHelper.ALL_1_14);
@@ -62,7 +62,7 @@ public class PlayerEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 					remapped.add(0, new NetworkEntityMetadataObjectByte((byte) edata.getBaseFlags()));
 				});
 			}
-		}, ProtocolVersionsHelper.BEFORE_1_9);
+		}, ProtocolVersionsHelper.DOWN_1_8);
 	}
 
 }

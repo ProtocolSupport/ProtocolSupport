@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.shorts.Short2ByteOpenCustomHashMap;
 import it.unimi.dsi.fastutil.shorts.ShortHash;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 
-public class BlockStorageBytePaletted extends BlockStorage {
+public class BlockStorageBytePaletted implements BlockStorage {
 
 	protected static class MaxSizeReachedException extends RuntimeException {
 		protected static final MaxSizeReachedException instance = new MaxSizeReachedException();

@@ -6,22 +6,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftEntity;
 
 import com.mojang.authlib.GameProfile;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_15_R1.*;
-import net.minecraft.server.v1_15_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_15_R1.PacketPlayInFlying.PacketPlayInLook;
-import net.minecraft.server.v1_15_R1.PacketPlayInFlying.PacketPlayInPosition;
-import net.minecraft.server.v1_15_R1.PacketPlayInFlying.PacketPlayInPositionLook;
-import net.minecraft.server.v1_15_R1.PacketPlayOutEntity.PacketPlayOutEntityLook;
-import net.minecraft.server.v1_15_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
-import net.minecraft.server.v1_15_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
-import net.minecraft.server.v1_15_R1.PacketPlayOutTitle.EnumTitleAction;
-import net.minecraft.server.v1_15_R1.ServerPing.ServerData;
-import net.minecraft.server.v1_15_R1.ServerPing.ServerPingPlayerSample;
+import net.minecraft.server.v1_16_R1.*;
+import net.minecraft.server.v1_16_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_16_R1.PacketPlayInFlying.PacketPlayInLook;
+import net.minecraft.server.v1_16_R1.PacketPlayInFlying.PacketPlayInPosition;
+import net.minecraft.server.v1_16_R1.PacketPlayInFlying.PacketPlayInPositionLook;
+import net.minecraft.server.v1_16_R1.PacketPlayOutEntity.PacketPlayOutEntityLook;
+import net.minecraft.server.v1_16_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
+import net.minecraft.server.v1_16_R1.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
+import net.minecraft.server.v1_16_R1.PacketPlayOutTitle.EnumTitleAction;
+import net.minecraft.server.v1_16_R1.ServerPing.ServerData;
+import net.minecraft.server.v1_16_R1.ServerPing.ServerPingPlayerSample;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
@@ -32,8 +32,8 @@ import protocolsupport.zplatform.PlatformPacketFactory;
 public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	@Override
-	public Object createOutboundChatPacket(String message, int position) {
-		return new PacketPlayOutChat(ChatSerializer.a(message), ChatMessageType.a((byte) position));
+	public Object createOutboundChatPacket(String message, int position, UUID uuid) {
+		return new PacketPlayOutChat(ChatSerializer.a(message), ChatMessageType.a((byte) position), uuid);
 	}
 
 	protected static final BaseComponent empty = new TextComponent("");
@@ -135,7 +135,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public Object createFakeJoinGamePacket() {
-		return new PacketPlayOutLogin(0, EnumGamemode.SURVIVAL, 0, false, DimensionManager.OVERWORLD, 60, WorldType.NORMAL, 4, false, true);
+		throw new UnsupportedOperationException("Fake join game packet is not implemented yet");
 	}
 
 	@Override
@@ -392,11 +392,6 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getOutPlayGameStateChangePacketId() {
 		return getOutId(PacketPlayOutGameStateChange.class);
-	}
-
-	@Override
-	public int getOutPlaySpawnWeatherPacketId() {
-		return getOutId(PacketPlayOutSpawnEntityWeather.class);
 	}
 
 	@Override
@@ -888,6 +883,16 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getInPlayUpdateStructureBlockPacketId() {
 		return getInId(PacketPlayInStruct.class);
+	}
+
+	@Override
+	public int getInPlayJigsawUpdatePacketId() {
+		return getInId(PacketPlayInSetJigsaw.class);
+	}
+
+	@Override
+	public int getInPlayJigsawGenerateStructurePacketId() {
+		return getInId(PacketPlayInJigsawGenerate.class);
 	}
 
 

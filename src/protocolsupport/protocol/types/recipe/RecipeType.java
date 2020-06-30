@@ -64,6 +64,12 @@ public enum RecipeType {
 		public Recipe read(String id, ByteBuf data) {
 			return new StonecuttingRecipe(id, data);
 		}
+	},
+	SMITHING {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SmithingRecipe(id, data);
+		}
 	};
 
 	private static final Map<String, RecipeType> byInternalName = CollectionsUtils.makeEnumMappingMap(RecipeType.class, RecipeType::getInternalName);

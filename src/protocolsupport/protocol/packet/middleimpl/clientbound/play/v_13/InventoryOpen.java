@@ -24,7 +24,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		writeData(
 			windowopen,
 			windowId, wdata.getStringId(),
-			LegacyChatJson.convert(version, cache.getAttributesCache().getLocale(), title),
+			LegacyChatJson.convert(version, cache.getClientCache().getLocale(), title),
 			windowRemapper.toClientSlots(0)
 		);
 		codec.write(windowopen);

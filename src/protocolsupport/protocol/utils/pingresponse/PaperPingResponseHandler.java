@@ -139,6 +139,21 @@ public class PaperPingResponseHandler extends PingResponseHandler {
 		}
 
 		@Override
+		public boolean complete(boolean arg0, boolean arg1) {
+			return false;
+		}
+
+		@Override
+		public boolean completeFromCache(boolean arg0) {
+			return false;
+		}
+
+		@Override
+		public boolean completeFromCache(boolean arg0, boolean arg1) {
+			return false;
+		}
+
+		@Override
 		public boolean hasProperty(String propertyName) {
 			return false;
 		}

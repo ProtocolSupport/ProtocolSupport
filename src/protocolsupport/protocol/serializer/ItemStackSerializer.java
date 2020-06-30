@@ -68,7 +68,7 @@ public class ItemStackSerializer {
 				itemstack.setNBT(readShortTag(from));
 				return itemstack;
 			}
-		}, ProtocolVersionsHelper.BEFORE_1_8);
+		}, ProtocolVersionsHelper.DOWN_1_7_10);
 	}};
 
 	public static final SimpleTypeSerializer<NetworkItemStack> ITEMSTACK_SERIALIZER = new SimpleTypeSerializer<NetworkItemStack>() {{
@@ -104,7 +104,7 @@ public class ItemStackSerializer {
 				to.writeShort(itemstack.getLegacyData());
 				writeShortTag(to, itemstack.getNBT());
 			}
-		}, ProtocolVersionsHelper.BEFORE_1_8);
+		}, ProtocolVersionsHelper.DOWN_1_7_10);
 	}};
 
 	/**
@@ -185,12 +185,12 @@ public class ItemStackSerializer {
 
 	public static final SimpleTypeDeserializer<NBTCompound> TAG_DESERIALIZER = new SimpleTypeDeserializer<NBTCompound>() {{
 		register(ItemStackSerializer::readDirectTag, ProtocolVersionsHelper.UP_1_8);
-		register(ItemStackSerializer::readShortTag, ProtocolVersionsHelper.BEFORE_1_8);
+		register(ItemStackSerializer::readShortTag, ProtocolVersionsHelper.DOWN_1_7_10);
 	}};
 
 	public static final SimpleTypeSerializer<NBTCompound> TAG_SERIALIZER = new SimpleTypeSerializer<NBTCompound>() {{
 		register(ItemStackSerializer::writeDirectTag, ProtocolVersionsHelper.UP_1_8);
-		register(ItemStackSerializer::writeShortTag, ProtocolVersionsHelper.BEFORE_1_8);
+		register(ItemStackSerializer::writeShortTag, ProtocolVersionsHelper.DOWN_1_7_10);
 	}};
 
 	public static NBTCompound readTag(ByteBuf from, ProtocolVersion version) {

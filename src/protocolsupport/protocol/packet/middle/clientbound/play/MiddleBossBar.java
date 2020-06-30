@@ -9,6 +9,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.serializer.UUIDSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookups;
 
@@ -28,7 +29,7 @@ public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void readServerData(ByteBuf serverdata) {
-		uuid = MiscSerializer.readUUID(serverdata);
+		uuid = UUIDSerializer.readUUID2L(serverdata);
 		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		switch (action) {
 			case ADD: {

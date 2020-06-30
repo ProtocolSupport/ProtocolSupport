@@ -20,7 +20,7 @@ public class ServerInfo extends MiddleServerInfo {
 	protected void writeToClient() {
 		ClientBoundPacketData serverinfo = ClientBoundPacketData.create(PacketType.CLIENTBOUND_STATUS_SERVER_INFO);
 		String response = new StringJoiner("§")
-		.add(ChatColor.stripColor(ping.getMotd().toLegacyText(cache.getAttributesCache().getLocale())).replace("§", ""))
+		.add(ChatColor.stripColor(ping.getMotd().toLegacyText(cache.getClientCache().getLocale())).replace("§", ""))
 		.add(String.valueOf(ping.getPlayers().getOnline()))
 		.add(String.valueOf(ping.getPlayers().getMax()))
 		.toString();
