@@ -18,8 +18,6 @@ public class SpigotPlatformInjector implements PlatformInjector {
 
 	@Override
 	public void onEnable() {
-//TODO: get rid of the injector completely and switch to caching entity positions
-//		Bukkit.getPluginManager().registerEvents(new SpigotEntityTrackerInjector(), ProtocolSupport.getInstance());
 	}
 
 	@Override

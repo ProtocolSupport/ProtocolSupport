@@ -84,7 +84,6 @@ dependencies {
 	compile fileTree(dir: librariesShadeDirectory, include: '*.jar')
 	compileOnly group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.1-R0.1-SNAPSHOT'
 	compileOnly fileTree(dir: librariesRuntimeDirectory, include: '*.jar')
-	compileOnly fileTree(dir: new File("libraries_runtime_manual"), include: '*.jar')
 
 	annotationProcessor fileTree(dir: annotationProcessorsDirectory, include: '*.jar')
 	compileOnly fileTree(dir: annotationProcessorsDirectory, include: '*.jar')
@@ -161,29 +160,10 @@ shadowJar {
 	minimize()
 }
 
-task postprocessFatJar(type: Zip) {
-	Set<String> workaroundRelocationClasses = new HashSet<>(Arrays.asList(
-		"protocolsupport/zplatform/impl/spigot/entitytracker/SpigotEntityTrackerEntryInjectorMap.class",
-		"protocolsupport/zplatform/impl/spigot/entitytracker/PaperSpigotEntityTrackerEntryInjectorMap.class",
-		"protocolsupport/zplatform/impl/spigot/injector/SpigotEntityTrackerInjector.class"
-	));
-	File originalJar = new File(shadowJar.destinationDir, shadowJar.archiveName)
-
-	archiveName = shadowJar.archiveName
-
-	from(zipTree(originalJar)) {
-        exclude(workaroundRelocationClasses)
-	}
-
-	from(sourceSets.main.output.classesDirs) {
-		include(workaroundRelocationClasses)    
-	}
-}
-
 
 task copyFinalJarToTarget(type: DefaultTask) {doLast{
 	java.nio.file.Files.copy(
-		postprocessFatJar.archivePath.getAbsoluteFile().toPath(),
+		shadowJar.archivePath.getAbsoluteFile().toPath(),
 		new File(targetJarDirectory, jar.baseName + '.jar').getAbsoluteFile().toPath(),
 		java.nio.file.StandardCopyOption.REPLACE_EXISTING
 	)
@@ -200,5 +180,4 @@ jar.enabled = false
 jar.finalizedBy(shadowJar)
 shadowJar.dependsOn(generateInfo)
 shadowJar.dependsOn(generateLocaleList)
-shadowJar.finalizedBy(postprocessFatJar)
-postprocessFatJar.finalizedBy(copyFinalJarToTarget)
+shadowJar.finalizedBy(copyFinalJarToTarget)
