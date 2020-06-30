@@ -2,11 +2,11 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16.AbstractKnownEntityTeleport;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
-public class EntityTeleport extends AbstractKnownEntityTeleport {
+public class EntityTeleport extends MiddleEntityTeleport {
 
 	public EntityTeleport(ConnectionImpl connection) {
 		super(connection);
@@ -14,6 +14,10 @@ public class EntityTeleport extends AbstractKnownEntityTeleport {
 
 	@Override
 	protected void writeToClient() {
+		codec.write(create(entityId, x, y, z, yaw, pitch, onGround));
+	}
+
+	public static ClientBoundPacketData create(int entityId, double x, double y, double z, byte yaw, byte pitch, boolean onGround) {
 		ClientBoundPacketData entityteleport = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_TELEPORT);
 		VarNumberSerializer.writeVarInt(entityteleport, entityId);
 		entityteleport.writeInt((int) (x * 32));
@@ -22,7 +26,7 @@ public class EntityTeleport extends AbstractKnownEntityTeleport {
 		entityteleport.writeByte(yaw);
 		entityteleport.writeByte(pitch);
 		entityteleport.writeBoolean(onGround);
-		codec.write(entityteleport);
+		return entityteleport;
 	}
 
 }

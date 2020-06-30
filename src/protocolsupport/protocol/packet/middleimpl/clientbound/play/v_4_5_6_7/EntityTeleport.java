@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
@@ -13,6 +13,10 @@ public class EntityTeleport extends AbstractLocationOffsetEntityTeleport {
 
 	@Override
 	protected void writeToClient() {
+		codec.write(create(entityId, x, y, z, yaw, pitch));
+	}
+
+	public static ClientBoundPacketData create(int entityId, double x, double y, double z, byte yaw, byte pitch) {
 		ClientBoundPacketData entityteleport = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_TELEPORT);
 		entityteleport.writeInt(entityId);
 		entityteleport.writeInt((int) (x * 32));
@@ -20,7 +24,7 @@ public class EntityTeleport extends AbstractLocationOffsetEntityTeleport {
 		entityteleport.writeInt((int) (z * 32));
 		entityteleport.writeByte(yaw);
 		entityteleport.writeByte(pitch);
-		codec.write(entityteleport);
+		return entityteleport;
 	}
 
 }

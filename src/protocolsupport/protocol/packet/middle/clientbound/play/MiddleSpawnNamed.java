@@ -9,6 +9,7 @@ import protocolsupport.protocol.serializer.UUIDSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 
 public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 
@@ -39,6 +40,10 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void handleReadData() {
+		NetworkEntityDataCache ecache = entity.getDataCache();
+		ecache.setLocation(x, y, z, pitch, yaw);
+		ecache.setHeadYaw(yaw);
+
 		entityCache.addEntity(entity);
 	}
 

@@ -33,6 +33,8 @@ public abstract class MiddleSpawnExpOrb extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void handleReadData() {
+		entity.getDataCache().setLocation(x, y, z, (byte) 0, (byte) 0);
+
 		entityCache.addEntity(entity);
 	}
 

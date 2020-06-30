@@ -1,11 +1,8 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityRelMove;
-import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.typeremapper.legacy.LegacyRelMoveConverter;
-import protocolsupport.protocol.typeremapper.legacy.LegacyRelMoveConverter.RelMove;
+import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 
 public class EntityRelMove extends MiddleEntityRelMove {
 
@@ -15,16 +12,8 @@ public class EntityRelMove extends MiddleEntityRelMove {
 
 	@Override
 	protected void writeToClient() {
-		int relMoveX = relX / 128;
-		int relMoveY = relY / 128;
-		int relMoveZ = relZ / 128;
-		for (RelMove relMove : LegacyRelMoveConverter.getRelMoves(new RelMove(relMoveX, relMoveY, relMoveZ), 127)) {
-			ClientBoundPacketData entityrelmove = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE);
-			entityrelmove.writeInt(entityId);
-			entityrelmove.writeByte(relMove.getX());
-			entityrelmove.writeByte(relMove.getY());
-			entityrelmove.writeByte(relMove.getZ());
-			codec.write(entityrelmove);
-		}
+		NetworkEntityDataCache ecache = entity.getDataCache();
+
+		codec.write(EntityTeleport.create(entityId, ecache.getX(), ecache.getY(), ecache.getZ(), ecache.getYaw(), ecache.getPitch()));
 	}
 }
