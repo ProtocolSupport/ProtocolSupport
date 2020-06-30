@@ -7,6 +7,7 @@ import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexRemapper;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.GameProfileSerializer;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.authlib.LoginProfile;
@@ -18,7 +19,7 @@ public class DragonHeadToDragonPlayerHeadComplexRemapper implements ItemStackCom
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		itemstack.setTypeId(ItemMaterialLookup.getRuntimeId(Material.PLAYER_HEAD));
 		NBTCompound wrapper = new NBTCompound();
-		wrapper.setTag("SkullOwner", createTag());
+		wrapper.setTag(CommonNBT.PLAYERHEAD_ITEM_PROFILE, createTag());
 		itemstack.setNBT(wrapper);
 		return itemstack;
 	}

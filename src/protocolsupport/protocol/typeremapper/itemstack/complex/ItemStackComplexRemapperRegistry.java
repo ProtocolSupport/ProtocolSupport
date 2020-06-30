@@ -32,6 +32,7 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.ItemDura
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.LoreToLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.MapToLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyUUIDComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PotionToLegacyIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.ShieldToLegacyComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.SpawnEggToIntIdComplexRemapper;
@@ -83,8 +84,18 @@ public class ItemStackComplexRemapperRegistry {
 		});
 		registerToClient(Material.SHIELD, new ShieldToLegacyComplexRemapper(), ProtocolVersionsHelper.DOWN_1_12_2);
 
-		registerToClient(Material.DRAGON_HEAD, new DragonHeadToDragonPlayerHeadComplexRemapper(), ProtocolVersionsHelper.DOWN_1_8);
-		registerToClient(Material.PLAYER_HEAD, new PlayerHeadToLegacyOwnerComplexRemapper(), ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5));
+		{
+			DragonHeadToDragonPlayerHeadComplexRemapper dragonHeadToPlayerHead = new DragonHeadToDragonPlayerHeadComplexRemapper();
+			PlayerHeadToLegacyUUIDComplexRemapper playerHeadToLegacyUUID = new PlayerHeadToLegacyUUIDComplexRemapper();
+			PlayerHeadToLegacyOwnerComplexRemapper playerHeadToLegacyOwner = new PlayerHeadToLegacyOwnerComplexRemapper();
+
+			registerToClient(Material.DRAGON_HEAD, dragonHeadToPlayerHead, ProtocolVersionsHelper.DOWN_1_8);
+			registerToClient(Material.DRAGON_HEAD, playerHeadToLegacyUUID, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_8));
+			registerToClient(Material.DRAGON_HEAD, playerHeadToLegacyOwner, ProtocolVersionsHelper.DOWN_1_7_5);
+
+			registerToClient(Material.PLAYER_HEAD, playerHeadToLegacyUUID, ProtocolVersionsHelper.RANGE__1_7_10__1_15_2);
+			registerToClient(Material.PLAYER_HEAD, playerHeadToLegacyOwner, ProtocolVersionsHelper.DOWN_1_7_5);
+		}
 
 		registerToClient(Material.POTION, new PotionToLegacyIdComplexRemapper(false), ProtocolVersionsHelper.DOWN_1_8);
 		registerToClient(Material.SPLASH_POTION, new PotionToLegacyIdComplexRemapper(true), ProtocolVersionsHelper.DOWN_1_8);

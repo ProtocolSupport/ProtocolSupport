@@ -97,6 +97,11 @@ public class CommonNBT {
 	public static final String BANNER_PATTERN_COLOR = "Color";
 
 
+	public static final String PLAYERHEAD_ITEM_PROFILE = "SkullOwner";
+
+	public static final String PLAYERHEAD_TILE_PROFILE = "Owner";
+
+
 	public static NetworkItemStack deserializeItemStackFromNBT(NBTCompound compound) {
 		NetworkItemStack stack = new NetworkItemStack();
 		stack.setTypeId(ItemMaterialLookup.getRuntimeId(ItemMaterialLookup.getByKey(compound.getTagOfType("id", NBTType.STRING).getValue())));

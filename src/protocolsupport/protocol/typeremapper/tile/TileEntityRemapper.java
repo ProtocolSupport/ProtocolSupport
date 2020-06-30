@@ -15,6 +15,7 @@ import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHeadToDragonPlayerHeadComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyUUIDComplexRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.protocol.types.TileEntityType;
@@ -164,15 +165,20 @@ public class TileEntityRemapper {
 				NBTNumber skulltype = nbt.getNumberTag("SkullType");
 				if ((skulltype != null) && (skulltype.getAsInt() == 5)) {
 					nbt.setTag("SkullType", new NBTByte((byte) 3));
-					nbt.setTag("Owner", DragonHeadToDragonPlayerHeadComplexRemapper.createTag());
+					nbt.setTag(CommonNBT.PLAYERHEAD_TILE_PROFILE, DragonHeadToDragonPlayerHeadComplexRemapper.createTag());
 				}
 			},
-			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_8)
+			ProtocolVersionsHelper.DOWN_1_8
 		);
 		register(
 			TileEntityType.SKULL,
-			tile -> PlayerHeadToLegacyOwnerComplexRemapper.remap(tile.getNBT(), "Owner", "ExtraType"),
-			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_5)
+			tile -> PlayerHeadToLegacyUUIDComplexRemapper.remap(tile.getNBT(), CommonNBT.PLAYERHEAD_TILE_PROFILE),
+			ProtocolVersionsHelper.RANGE__1_7_10__1_15_2
+		);
+		register(
+			TileEntityType.SKULL,
+			tile -> PlayerHeadToLegacyOwnerComplexRemapper.remap(tile.getNBT(), CommonNBT.PLAYERHEAD_TILE_PROFILE, "ExtraType"),
+			ProtocolVersionsHelper.DOWN_1_7_5
 		);
 	}
 

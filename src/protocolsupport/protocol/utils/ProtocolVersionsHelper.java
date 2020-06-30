@@ -38,6 +38,8 @@ public class ProtocolVersionsHelper {
 
 	public static final ProtocolVersion[] DOWN_1_6_4 = ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_6_4);
 
+	public static final ProtocolVersion[] DOWN_1_7_5 = ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_6_4);
+
 	public static final ProtocolVersion[] DOWN_1_7_10 = ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_7_10);
 
 	public static final ProtocolVersion[] DOWN_1_8 = ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_8);
@@ -99,6 +101,8 @@ public class ProtocolVersionsHelper {
 	public static final ProtocolVersion[] RANGE__1_9__1_13_2 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.MINECRAFT_1_13_2);
 
 	public static final ProtocolVersion[] RANGE__1_8__1_12_2 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_12_2);
+
+	public static final ProtocolVersion[] RANGE__1_7_10__1_15_2 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_10, ProtocolVersion.MINECRAFT_1_15_2);
 
 	public static final ProtocolVersion[] RANGE__1_7_5__1_12_2 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_12_2);
 

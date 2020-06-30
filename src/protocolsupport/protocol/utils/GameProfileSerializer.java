@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTIntArray;
 import protocolsupport.protocol.types.nbt.NBTList;
 import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.protocol.types.nbt.NBTType;
@@ -15,11 +16,17 @@ import protocolsupport.protocol.utils.authlib.LoginProfile;
 
 public class GameProfileSerializer {
 
-	private static final String NAME_KEY = "Name";
-	private static final String UUID_KEY = "Id";
-	private static final String PROPERTIES_KEY = "Properties";
-	private static final String PROPERTY_VALUE_KEY = "Value";
-	private static final String PROPERTY_SIGNATURE_KEY = "Signature";
+	public static final String NAME_KEY = "Name";
+	public static final String UUID_KEY = "Id";
+	public static final String PROPERTIES_KEY = "Properties";
+	public static final String PROPERTY_VALUE_KEY = "Value";
+	public static final String PROPERTY_SIGNATURE_KEY = "Signature";
+
+	public static NBTIntArray serializeUUID(UUID uuid) {
+		long most = uuid.getMostSignificantBits();
+		long least = uuid.getLeastSignificantBits();
+		return new NBTIntArray(new int[] {(int) (most >>> 32), (int) most, (int) least >>> 32, (int) least});
+	}
 
 	public static NBTCompound serialize(LoginProfile gameProfile) {
 		NBTCompound tag = new NBTCompound();
@@ -27,7 +34,7 @@ public class GameProfileSerializer {
 			tag.setTag(NAME_KEY, new NBTString(gameProfile.getName()));
 		}
 		if (gameProfile.getUUID() != null) {
-			tag.setTag(UUID_KEY, new NBTString(gameProfile.getUUID().toString()));
+			tag.setTag(UUID_KEY, serializeUUID(gameProfile.getUUID()));
 		}
 		if (!gameProfile.getProperties().isEmpty()) {
 			NBTCompound propertiesTag = new NBTCompound();
@@ -48,33 +55,20 @@ public class GameProfileSerializer {
 		return tag;
 	}
 
-	public static LoginProfile deserialize(NBTCompound tag) {
-		String name = NBTString.getValueOrNull(tag.getTagOfType(NAME_KEY, NBTType.STRING));
-		UUID uuid = null;
-		try {
-			uuid = UUID.fromString(NBTString.getValueOrNull(tag.getTagOfType(UUID_KEY, NBTType.STRING)));
-		} catch (Throwable t) {
-		}
-		if (StringUtils.isEmpty(name) && (uuid == null)) {
+	public static UUID deserializeUUID(NBTIntArray tag) {
+		if (tag == null) {
 			return null;
 		}
-		LoginProfile gameProfile = new LoginProfile(uuid, name);
-		NBTCompound propertiesTag = tag.getTagOfType(PROPERTIES_KEY, NBTType.COMPOUND);
-		if (propertiesTag != null) {
-			for (String propertyName : propertiesTag.getTagNames()) {
-				NBTList<NBTCompound> propertiesListTag = propertiesTag.getTagListOfType(propertyName, NBTType.COMPOUND);
-				if (propertiesListTag != null) {
-					for (NBTCompound propertyTag : propertiesListTag.getTags()) {
-						gameProfile.addProperty(new ProfileProperty(
-							propertyName,
-							NBTString.getValueOrNull(propertyTag.getTagOfType(PROPERTY_VALUE_KEY, NBTType.STRING)),
-							NBTString.getValueOrNull(propertyTag.getTagOfType(PROPERTY_SIGNATURE_KEY, NBTType.STRING))
-						));
-					}
-				}
-			}
+
+		int[] array = tag.getValue();
+		try {
+			return new UUID(
+				(((long) array[0]) << 32L) | Integer.toUnsignedLong(array[1]),
+				(((long) array[2]) << 32L) | Integer.toUnsignedLong(array[3])
+			);
+		} catch (IllegalArgumentException t) {
+			return null;
 		}
-		return gameProfile;
 	}
 
 }
