@@ -8,7 +8,6 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.GenericRemappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.GenericRemappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftSoundData;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -579,10 +578,6 @@ public class SoundRemapper {
 
 	public static String getSoundName(ProtocolVersion version, String name) {
 		return SOUND_REMAPPING_REGISTRY.getTable(version).getRemap(name);
-	}
-
-	public static String getSoundName(ProtocolVersion version, int id) {
-		return getSoundName(version, MinecraftSoundData.getNameById(id));
 	}
 
 	public static float createEntityGenericExplodePitch() {
