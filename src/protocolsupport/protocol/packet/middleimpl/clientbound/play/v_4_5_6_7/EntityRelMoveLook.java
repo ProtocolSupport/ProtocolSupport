@@ -14,7 +14,7 @@ public class EntityRelMoveLook extends MiddleEntityRelMoveLook {
 	protected void writeToClient() {
 		NetworkEntityDataCache ecache = entity.getDataCache();
 
-		codec.write(EntityTeleport.create(entityId, ecache.getX(), ecache.getY(), ecache.getZ(), ecache.getYaw(), ecache.getPitch()));
+		codec.write(EntityTeleport.create(entityId, ecache.getX(), ecache.getY(), ecache.getZ(), ecache.getYawB(), ecache.getPitchB()));
 	}
 
 }

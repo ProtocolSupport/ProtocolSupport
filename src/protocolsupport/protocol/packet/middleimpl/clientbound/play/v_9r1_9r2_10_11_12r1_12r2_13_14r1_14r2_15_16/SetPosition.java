@@ -15,11 +15,11 @@ public class SetPosition extends MiddleSetPosition {
 	@Override
 	protected void writeToClient() {
 		ClientBoundPacketData setposition = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_POSITION);
-		setposition.writeDouble(xOrig);
-		setposition.writeDouble(yOrig);
-		setposition.writeDouble(zOrig);
-		setposition.writeFloat(yawOrig);
-		setposition.writeFloat(pitchOrig);
+		setposition.writeDouble(x);
+		setposition.writeDouble(y);
+		setposition.writeDouble(z);
+		setposition.writeFloat(yaw);
+		setposition.writeFloat(pitch);
 		setposition.writeByte(flags);
 		VarNumberSerializer.writeVarInt(setposition, teleportConfirmId);
 		codec.write(setposition);

@@ -15,6 +15,10 @@ public class NetworkEntityCache {
 		addEntity(player);
 	}
 
+	public NetworkEntity getSelf() {
+		return player;
+	}
+
 	public int getSelfId() {
 		return player != null ? player.getId() : -1;
 	}

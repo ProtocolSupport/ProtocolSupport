@@ -1,5 +1,6 @@
 package protocolsupport.protocol.types.networkentity;
 
+import protocolsupport.protocol.utils.LookUtils;
 import protocolsupport.utils.BitUtils;
 import protocolsupport.utils.Utils;
 
@@ -35,8 +36,8 @@ public class NetworkEntityDataCache {
 	protected long x;
 	protected long y;
 	protected long z;
-	protected byte pitch;
-	protected byte yaw;
+	protected float pitch;
+	protected float yaw;
 	protected byte headYaw;
 
 	public double getX() {
@@ -51,12 +52,20 @@ public class NetworkEntityDataCache {
 		return z * pos_s_to_real;
 	}
 
-	public byte getPitch() {
+	public float getPitch() {
 		return pitch;
 	}
 
-	public byte getYaw() {
+	public float getYaw() {
 		return yaw;
+	}
+
+	public byte getPitchB() {
+		return LookUtils.toByte(pitch);
+	}
+
+	public byte getYawB() {
+		return LookUtils.toByte(yaw);
 	}
 
 	public byte getHeadYaw() {
@@ -64,11 +73,11 @@ public class NetworkEntityDataCache {
 	}
 
 	public void setLocation(double x, double y, double z, byte pitch, byte yaw) {
-		this.x = (long) (x * pos_real_to_s);
-		this.y = (long) (y * pos_real_to_s);
-		this.z = (long) (z * pos_real_to_s);
-		this.pitch = pitch;
-		this.yaw = yaw;
+		setX(x);
+		setY(y);
+		setZ(z);
+		setPitch(LookUtils.toFloat(pitch));
+		setYaw(LookUtils.toFloat(yaw));
 	}
 
 	public void addLocation(short sX, short sY, short sZ) {
@@ -78,8 +87,48 @@ public class NetworkEntityDataCache {
 	}
 
 	public void setLook(byte pitch, byte yaw) {
+		setPitch(LookUtils.toFloat(pitch));
+		setYaw(LookUtils.toFloat(yaw));
+	}
+
+	public void setX(double x) {
+		this.x = (long) (x * pos_real_to_s);
+	}
+
+	public void setY(double y) {
+		this.y = (long) (y * pos_real_to_s);
+	}
+
+	public void setZ(double z) {
+		this.z = (long) (z * pos_real_to_s);
+	}
+
+	public void setPitch(float pitch) {
 		this.pitch = pitch;
+	}
+
+	public void setYaw(float yaw) {
 		this.yaw = yaw;
+	}
+
+	public void addX(double x) {
+		this.x += (long) (x * pos_real_to_s);
+	}
+
+	public void addY(double y) {
+		this.y += (long) (y * pos_real_to_s);
+	}
+
+	public void addZ(double z) {
+		this.z += (long) (z * pos_real_to_s);
+	}
+
+	public void addPitch(float pitch) {
+		this.pitch += pitch;
+	}
+
+	public void addYaw(float yaw) {
+		this.yaw += yaw;
 	}
 
 	public void setHeadYaw(byte headYaw) {

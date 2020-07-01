@@ -1,11 +1,13 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
-import org.bukkit.Location;
-
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
+import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
+import protocolsupport.utils.BitUtils;
 
 public abstract class MiddleSetPosition extends ClientBoundMiddlePacket {
 
@@ -13,11 +15,15 @@ public abstract class MiddleSetPosition extends ClientBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected double xOrig;
-	protected double yOrig;
-	protected double zOrig;
-	protected float yawOrig;
-	protected float pitchOrig;
+	protected static final int FLAGS_BIT_X = 0;
+	protected static final int FLAGS_BIT_Y = 1;
+	protected static final int FLAGS_BIT_Z = 2;
+	protected static final int FLAGS_BIT_PITCH = 3;
+	protected static final int FLAGS_BIT_YAW = 4;
+
+	protected final NetworkEntityCache entityCache = cache.getEntityCache();
+
+	protected NetworkEntity self;
 	protected double x;
 	protected double y;
 	protected double z;
@@ -28,31 +34,45 @@ public abstract class MiddleSetPosition extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void readServerData(ByteBuf serverdata) {
-		xOrig = x = serverdata.readDouble();
-		yOrig = y = serverdata.readDouble();
-		zOrig = z = serverdata.readDouble();
-		yawOrig = yaw = serverdata.readFloat();
-		pitchOrig = pitch = serverdata.readFloat();
+		self = entityCache.getSelf();
+		x = serverdata.readDouble();
+		y = serverdata.readDouble();
+		z = serverdata.readDouble();
+		yaw = serverdata.readFloat();
+		pitch = serverdata.readFloat();
 		flags = serverdata.readByte();
-		if (flags != 0) {
-			Location location = connection.getPlayer().getLocation();
-			if ((flags & 0x01) != 0) {
-				x += location.getX();
-			}
-			if ((flags & 0x02) != 0) {
-				y += location.getY();
-			}
-			if ((flags & 0x04) != 0) {
-				z += location.getX();
-			}
-			if ((flags & 0x08) != 0) {
-				pitch += location.getPitch();
-			}
-			if ((flags & 0x10) != 0) {
-				yaw += location.getYaw();
-			}
-		}
 		teleportConfirmId = VarNumberSerializer.readVarInt(serverdata);
+	}
+
+	@Override
+	protected void handleReadData() {
+		NetworkEntityDataCache ecache = self.getDataCache();
+
+		if (BitUtils.isIBitSet(flags, FLAGS_BIT_X)) {
+			ecache.addX(x);
+		} else {
+			ecache.setX(x);
+		}
+		if (BitUtils.isIBitSet(flags, FLAGS_BIT_Y)) {
+			ecache.addY(y);
+		} else {
+			ecache.setY(y);
+		}
+		if (BitUtils.isIBitSet(flags, FLAGS_BIT_Z)) {
+			ecache.addZ(z);
+		} else {
+			ecache.setZ(z);
+		}
+		if (BitUtils.isIBitSet(flags, FLAGS_BIT_PITCH)) {
+			ecache.addPitch(pitch);
+		} else {
+			ecache.setPitch(pitch);
+		}
+		if (BitUtils.isIBitSet(flags, FLAGS_BIT_YAW)) {
+			ecache.addYaw(yaw);
+		} else {
+			ecache.setYaw(yaw);
+		}
 	}
 
 }

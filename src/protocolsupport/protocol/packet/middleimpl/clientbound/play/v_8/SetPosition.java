@@ -14,21 +14,12 @@ public class SetPosition extends AbstractSetPosition {
 	@Override
 	protected void writeToClient() {
 		ClientBoundPacketData setposition = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_POSITION);
-		if (teleportConfirmId == 0) {
-			setposition.writeDouble(xOrig);
-			setposition.writeDouble(yOrig);
-			setposition.writeDouble(zOrig);
-			setposition.writeFloat(yawOrig);
-			setposition.writeFloat(pitchOrig);
-			setposition.writeByte(flags);
-		} else {
-			setposition.writeDouble(x);
-			setposition.writeDouble(y);
-			setposition.writeDouble(z);
-			setposition.writeFloat(yaw);
-			setposition.writeFloat(pitch);
-			setposition.writeByte(0);
-		}
+		setposition.writeDouble(x);
+		setposition.writeDouble(y);
+		setposition.writeDouble(z);
+		setposition.writeFloat(yaw);
+		setposition.writeFloat(pitch);
+		setposition.writeByte(0);
 		codec.write(setposition);
 	}
 
