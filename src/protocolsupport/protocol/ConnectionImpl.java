@@ -353,8 +353,8 @@ public class ConnectionImpl extends Connection {
 	@Override
 	public String toString() {
 		return MessageFormat.format(
-			"{0}(profile: {1}, player: {2}, address: {3}, rawaddress: {4}, version: {5}, metadata: {6})",
-			getClass().getName(), getProfile(), getPlayer(), getAddress(), getRawAddress(), getVersion(), metadata
+			"{0}(profile: {1}, player: {2}, address: {3}, rawaddress: {4}, version: {5})",
+			getClass().getName(), getProfile(), getPlayer(), getAddress(), getRawAddress(), getVersion()
 		);
 	}
 
