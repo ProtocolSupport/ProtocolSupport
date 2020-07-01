@@ -84,7 +84,7 @@ public class LogicHandler extends MessageToMessageCodec<Object, Object> {
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
-		Bukkit.getPluginManager().callEvent(new ConnectionCloseEvent(connection));
+		Bukkit.getPluginManager().callEvent(new ConnectionCloseEvent(connection, !Bukkit.isPrimaryThread()));
 
 	}
 
