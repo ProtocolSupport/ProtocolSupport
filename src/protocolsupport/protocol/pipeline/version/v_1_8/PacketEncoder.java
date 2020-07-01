@@ -49,6 +49,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.BookOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.ChunkData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.ChunkLight;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.ChunkUnload;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.CollectEffect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityRelMove;
@@ -62,7 +63,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SpawnObje
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.UpdateMap;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2.EntityEffectAdd;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10.CollectEffect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10.Title;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.BlockAction;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2.BlockBreakConfirm;

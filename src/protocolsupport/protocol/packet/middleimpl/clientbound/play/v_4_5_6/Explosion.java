@@ -18,7 +18,7 @@ public class Explosion extends AbstractChunkCacheMiddleExplosion {
 	protected void writeToClient() {
 		codec.write(WorldCustomSound.create(
 			version,
-			(int) (x * 8), (int) (y * 8), (int) (z * 8),
+			x, y, z,
 			"entity.generic.explode", 4.0F, SoundRemapper.createEntityGenericExplodePitch()
 		));
 

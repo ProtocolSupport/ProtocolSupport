@@ -22,6 +22,14 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 
 	public static ClientBoundPacketData create(
 		ProtocolVersion version,
+		double x, double y, double z,
+		String sound, float volume, float pitch
+	) {
+		return create(version, (int) (x * 8), (int) (y * 8), (int) (z * 8), sound, volume, pitch);
+	}
+
+	public static ClientBoundPacketData create(
+		ProtocolVersion version,
 		int x, int y, int z,
 		String sound, float volume, float pitch
 	) {
