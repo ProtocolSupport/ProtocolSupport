@@ -42,6 +42,7 @@ import protocolsupport.protocol.types.particle.types.ParticleFallingNectar;
 import protocolsupport.protocol.types.particle.types.ParticleFallingObsidianTear;
 import protocolsupport.protocol.types.particle.types.ParticleFallingWater;
 import protocolsupport.protocol.types.particle.types.ParticleFishing;
+import protocolsupport.protocol.types.particle.types.ParticleFlame;
 import protocolsupport.protocol.types.particle.types.ParticleFlash;
 import protocolsupport.protocol.types.particle.types.ParticleHappyVillager;
 import protocolsupport.protocol.types.particle.types.ParticleItem;
@@ -54,6 +55,8 @@ import protocolsupport.protocol.types.particle.types.ParticlePortal;
 import protocolsupport.protocol.types.particle.types.ParticleRain;
 import protocolsupport.protocol.types.particle.types.ParticleReversePortal;
 import protocolsupport.protocol.types.particle.types.ParticleSneeze;
+import protocolsupport.protocol.types.particle.types.ParticleSoul;
+import protocolsupport.protocol.types.particle.types.ParticleSoulFlame;
 import protocolsupport.protocol.types.particle.types.ParticleSpit;
 import protocolsupport.protocol.types.particle.types.ParticleSplash;
 import protocolsupport.protocol.types.particle.types.ParticleSquidInk;
@@ -91,6 +94,14 @@ public class ParticleRemapper {
 				));
 			});
 
+			registerRemap(
+				ParticleSoulFlame.class,
+				original -> new ParticleFlame(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.DOWN_1_15_2
+			);
 			registerRemap(
 				ParticleReversePortal.class,
 				original -> new ParticlePortal(
@@ -213,6 +224,7 @@ public class ParticleRemapper {
 			);
 
 			//TODO: think of possible remaps
+			registerSkip(ParticleSoul.class, ProtocolVersionsHelper.DOWN_1_15_2);
 			registerSkip(ParticleAsh.class, ProtocolVersionsHelper.DOWN_1_15_2);
 			registerSkip(ParticleWhiteAsh.class, ProtocolVersionsHelper.DOWN_1_15_2);
 			registerSkip(ParticleCrimsonSpore.class, ProtocolVersionsHelper.DOWN_1_15_2);

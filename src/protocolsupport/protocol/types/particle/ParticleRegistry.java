@@ -67,6 +67,8 @@ import protocolsupport.protocol.types.particle.types.ParticleRain;
 import protocolsupport.protocol.types.particle.types.ParticleReversePortal;
 import protocolsupport.protocol.types.particle.types.ParticleSmoke;
 import protocolsupport.protocol.types.particle.types.ParticleSneeze;
+import protocolsupport.protocol.types.particle.types.ParticleSoul;
+import protocolsupport.protocol.types.particle.types.ParticleSoulFlame;
 import protocolsupport.protocol.types.particle.types.ParticleSpit;
 import protocolsupport.protocol.types.particle.types.ParticleSplash;
 import protocolsupport.protocol.types.particle.types.ParticleSquidInk;
@@ -120,6 +122,8 @@ public class ParticleRegistry {
 		register(ParticleFirework::new);
 		register(ParticleFishing::new);
 		register(ParticleFlame::new);
+		register(ParticleSoulFlame::new);
+		register(ParticleSoul::new);
 		register(ParticleFlash::new);
 		register(ParticleHappyVillager::new);
 		register(ParticleComposter::new);
