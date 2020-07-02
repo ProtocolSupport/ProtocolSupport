@@ -1,6 +1,7 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.base;
 
 import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperNoOp;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperOptionalUUIDToString;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
@@ -12,6 +13,12 @@ public class TameableEntityMetadataRemapper extends AgeableEntityMetadataRemappe
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Tameable.TAME_FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Tameable.TAME_FLAGS, 12), ProtocolVersionsHelper.ALL_1_9);
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Tameable.TAME_FLAGS, 16), ProtocolVersionsHelper.DOWN_1_8);
+
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Tameable.OWNER, 17), ProtocolVersionsHelper.UP_1_15);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Tameable.OWNER, 16), ProtocolVersionsHelper.ALL_1_14);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Tameable.OWNER, 14), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
+		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Tameable.OWNER, 13), ProtocolVersionsHelper.ALL_1_9);
+		addRemap(new IndexValueRemapperOptionalUUIDToString(NetworkEntityMetadataObjectIndex.Tameable.OWNER, 17), ProtocolVersionsHelper.DOWN_1_8);
 	}
 
 }
