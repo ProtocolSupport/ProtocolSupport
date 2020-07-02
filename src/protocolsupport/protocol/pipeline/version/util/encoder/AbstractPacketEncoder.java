@@ -42,18 +42,18 @@ public abstract class AbstractPacketEncoder extends ChannelOutboundHandlerAdapte
 		ByteBuf input = (ByteBuf) msg;
 		if (!input.isReadable()) {
 			input.release();
-			promise.setSuccess();
 			return;
 		}
 
 		ClientBoundMiddlePacket packetTransformer = null;
 		try {
 			packetTransformer = registry.getTransformer(connection.getNetworkState(), VarNumberSerializer.readVarInt(input));
-			codec.channelWrite(promise, packetTransformer, input, (transformer, data) -> transformer.encode(data));
+			packetTransformer.encode(input);
 			if (input.isReadable()) {
 				throw new DecoderException("Data not read fully, bytes left " + input.readableBytes());
 			}
-		} catch (Exception exception) {
+			promise.trySuccess();
+		} catch (Throwable exception) {
 			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 				input.readerIndex(0);
 				throw new EncoderException(MessageFormat.format(

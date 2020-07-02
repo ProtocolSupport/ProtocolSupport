@@ -1,11 +1,9 @@
 package protocolsupport.protocol;
 
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.function.BiConsumer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPromise;
 import io.netty.handler.codec.EncoderException;
 import io.netty.util.ReferenceCountUtil;
 import protocolsupport.protocol.packet.PacketData;
@@ -30,20 +28,6 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 
 	public int readPacketId(ByteBuf from) {
 		return packetIdCodec.readPacketId(from);
-	}
-
-	protected ChannelPromise transformerEncoderCurrentRealChannelPromise;
-
-	public <T, V> void channelWrite(ChannelPromise promise, T t, V v, BiConsumer<T, V> consumer) {
-		transformerEncoderCurrentRealChannelPromise = promise;
-		try {
-			consumer.accept(t, v);
-			if (transformerEncoderCurrentRealChannelPromise != null) {
-				transformerEncoderCurrentRealChannelPromise.trySuccess();
-			}
-		} finally {
-			transformerEncoderCurrentRealChannelPromise = null;
-		}
 	}
 
 	protected ClientBoundPacketDataProcessor transformerEncoderHeadProcessor = new ClientBoundPacketDataProcessor() {
@@ -98,13 +82,7 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 	protected void write0(PacketData<?> packetdata) {
 		try {
 			packetIdCodec.writeClientBoundPacketId(packetdata);
-			if (transformerEncoderCurrentRealChannelPromise != null) {
-				ChannelPromise promise = transformerEncoderCurrentRealChannelPromise;
-				transformerEncoderCurrentRealChannelPromise = null;
-				transformerEncoderCtx.write(packetdata, promise);
-			} else {
-				transformerEncoderCtx.write(packetdata, transformerEncoderCtx.voidPromise());
-			}
+			transformerEncoderCtx.write(packetdata, transformerEncoderCtx.voidPromise());
 		} catch (Throwable t) {
 			ReferenceCountUtil.safeRelease(packetdata);
 			throw new EncoderException(t);
