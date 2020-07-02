@@ -15,7 +15,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopCraf
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDeclareCommands;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDeclareRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopDeclareTags;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopEntitySound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopLookAt;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopSetCooldown;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopSetViewCenter;
@@ -24,6 +23,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopStop
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopUnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopUpdateViewDistance;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopVehicleMove;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.EntitySound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.WorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.WorldSound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16.InventoryClose;
@@ -155,6 +155,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_EFFECT_REMOVE, EntityEffectRemove::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SET_EXPERIENCE, SetExperience::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_ATTRIBUTES, EntityAttributes::new);
+		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_SOUND, EntitySound::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE, ChunkData::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI, BlockChangeMulti::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE, BlockChangeSingle::new);
@@ -213,7 +214,6 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_LOOK_AT, NoopLookAt::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_SET_VIEW_CENTER, NoopSetViewCenter::new);
 		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_UPDATE_VIEW_DISTANCE, NoopUpdateViewDistance::new);
-		registry.register(NetworkState.PLAY, PacketType.CLIENTBOUND_PLAY_ENTITY_SOUND, NoopEntitySound::new);
 	}
 
 }
