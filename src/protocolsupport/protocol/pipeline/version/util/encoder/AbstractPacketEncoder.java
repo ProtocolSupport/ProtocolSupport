@@ -42,6 +42,7 @@ public abstract class AbstractPacketEncoder extends ChannelOutboundHandlerAdapte
 		ByteBuf input = (ByteBuf) msg;
 		if (!input.isReadable()) {
 			input.release();
+			promise.trySuccess();
 			return;
 		}
 
