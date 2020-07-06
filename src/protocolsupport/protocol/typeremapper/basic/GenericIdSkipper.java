@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.basic;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.potion.PotionEffectType;
 
@@ -86,11 +87,17 @@ public class GenericIdSkipper {
 
 	public static final GenericSkippingRegistry<String, GenericSkippingTable<String>> ATTRIBUTES = new GenericSkippingRegistry<String, GenericSkippingTable<String>>() {
 		{
+			registerSkipEntry("generic.attack_knockback", ProtocolVersionsHelper.DOWN_1_13_2);
 			registerSkipEntry("generic.flying_speed", ProtocolVersionsHelper.DOWN_1_11_1);
 			registerSkipEntry("generic.armor_toughness", ProtocolVersionsHelper.DOWN_1_9);
 			registerSkipEntry("generic.luck", ProtocolVersionsHelper.DOWN_1_8);
 			registerSkipEntry("generic.armor", ProtocolVersionsHelper.DOWN_1_8);
 			registerSkipEntry("generic.attack_speed", ProtocolVersionsHelper.DOWN_1_8);
+		}
+		@Override
+		public void registerSkipEntry(String id, ProtocolVersion... versions) {
+			super.registerSkipEntry(id, versions);
+			super.registerSkipEntry(NamespacedKey.minecraft(id).toString(), versions);
 		}
 		@Override
 		protected GenericSkippingTable<String> createTable() {
