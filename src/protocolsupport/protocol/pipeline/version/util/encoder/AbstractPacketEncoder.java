@@ -15,6 +15,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.pipeline.version.util.MiddlePacketRegistry;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.utils.netty.CombinedResultChannelPromise;
 import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class AbstractPacketEncoder extends ChannelOutboundHandlerAdapter {
@@ -49,11 +50,17 @@ public abstract class AbstractPacketEncoder extends ChannelOutboundHandlerAdapte
 		ClientBoundMiddlePacket packetTransformer = null;
 		try {
 			packetTransformer = registry.getTransformer(connection.getNetworkState(), VarNumberSerializer.readVarInt(input));
-			packetTransformer.encode(input);
-			if (input.isReadable()) {
-				throw new DecoderException("Data not read fully, bytes left " + input.readableBytes());
+			CombinedResultChannelPromise combinedPromise = new CombinedResultChannelPromise(ctx.channel(), promise);
+			codec.setWritePromise(combinedPromise);
+			try {
+				packetTransformer.encode(input);
+				if (input.isReadable()) {
+					throw new DecoderException("Data not read fully, bytes left " + input.readableBytes());
+				}
+			} finally {				
+				codec.clearWritePromise();
 			}
-			promise.trySuccess();
+			combinedPromise.closeUsageRegister();
 		} catch (Throwable exception) {
 			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 				input.readerIndex(0);

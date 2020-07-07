@@ -11,6 +11,7 @@ import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.pipeline.IPacketIdCodec;
+import protocolsupport.utils.netty.CombinedResultChannelPromise;
 
 public class PacketDataCodecImpl extends PacketDataCodec {
 
@@ -79,10 +80,26 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 		transformerDecoderCtx.fireChannelReadComplete();
 	}
 
+	protected CombinedResultChannelPromise promise;
+
+	public void setWritePromise(CombinedResultChannelPromise promise) {
+		this.promise = promise;
+	}
+
+	public void clearWritePromise() {
+		this.promise = null;
+	}
+
 	protected void write0(PacketData<?> packetdata) {
 		try {
 			packetIdCodec.writeClientBoundPacketId(packetdata);
-			transformerEncoderCtx.write(packetdata, transformerEncoderCtx.voidPromise());
+			CombinedResultChannelPromise combinedPromise = promise;
+			if (combinedPromise != null) {
+				combinedPromise.registerUsage();
+				transformerEncoderCtx.write(packetdata, combinedPromise);
+			} else {
+				transformerEncoderCtx.write(packetdata, transformerEncoderCtx.voidPromise());
+			}
 		} catch (Throwable t) {
 			ReferenceCountUtil.safeRelease(packetdata);
 			throw new EncoderException(t);
