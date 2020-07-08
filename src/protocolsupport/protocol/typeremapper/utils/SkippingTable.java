@@ -7,15 +7,16 @@ public class SkippingTable {
 
 	public abstract static class IntSkippingTable extends SkippingTable {
 
-		public abstract void setSkip(int id);
+		public abstract void set(int id);
 
-		public abstract boolean shouldSkip(int id);
+		public abstract boolean isSet(int id);
 
 	}
 
 	public static class ArrayBasedIntSkippingTable extends IntSkippingTable {
 
 		protected final boolean[] table;
+
 		public ArrayBasedIntSkippingTable(int size) {
 			table = new boolean[size];
 			for (int i = 0; i < table.length; i++) {
@@ -24,12 +25,12 @@ public class SkippingTable {
 		}
 
 		@Override
-		public void setSkip(int id) {
+		public void set(int id) {
 			table[id] = true;
 		}
 
 		@Override
-		public boolean shouldSkip(int id) {
+		public boolean isSet(int id) {
 			return table[id];
 		}
 
@@ -39,7 +40,7 @@ public class SkippingTable {
 
 		protected final HashSet<T> set = new HashSet<>();
 
-		public void setSkip(T id) {
+		public void set(T id) {
 			set.add(id);
 		}
 
@@ -52,15 +53,16 @@ public class SkippingTable {
 	public static class EnumSkippingTable<T extends Enum<T>> extends SkippingTable {
 
 		protected final EnumSet<T> set;
+
 		public EnumSkippingTable(Class<T> clazz) {
 			this.set = EnumSet.noneOf(clazz);
 		}
 
-		public void setSkip(T id) {
+		public void set(T id) {
 			set.add(id);
 		}
 
-		public boolean shouldSkip(T id) {
+		public boolean isSet(T id) {
 			return set.contains(id);
 		}
 

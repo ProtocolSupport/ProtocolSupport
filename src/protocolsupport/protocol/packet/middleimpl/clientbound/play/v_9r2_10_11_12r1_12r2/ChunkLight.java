@@ -14,12 +14,12 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.types.TileEntity;
 
 public class ChunkLight extends AbstractChunkCacheChunkLight {
 
-	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+	protected final ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	public ChunkLight(ConnectionImpl connection) {
 		super(connection);

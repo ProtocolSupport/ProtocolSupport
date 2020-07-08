@@ -28,7 +28,7 @@ public class NetworkEntityMetadataObjectParticle extends ReadableNetworkEntityMe
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
 		value = ParticleRemapper.REGISTRY.getTable(version).getRemap(value.getClass()).apply(value);
-		VarNumberSerializer.writeVarInt(to, FlatteningParticleId.REGISTRY.getTable(version).getRemap(ParticleRegistry.getId(value)));
+		VarNumberSerializer.writeVarInt(to, FlatteningParticleId.REGISTRY.getTable(version).get(ParticleRegistry.getId(value)));
 		ParticleDataSerializer.INSTANCE.get(version).write(to, value);
 	}
 

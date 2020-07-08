@@ -43,7 +43,7 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void writeToClient() {
-		if (windowSkipper.shouldSkip(type)) {
+		if (windowSkipper.isSet(type)) {
 			codec.readAndComplete(MiddleInventoryClose.create(windowId));
 		} else {
 			windowRemapper = windowsRemapper.get(type, 0);

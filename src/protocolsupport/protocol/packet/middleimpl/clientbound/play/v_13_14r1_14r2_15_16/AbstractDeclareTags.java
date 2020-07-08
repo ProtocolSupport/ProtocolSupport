@@ -12,7 +12,7 @@ import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.Flattenin
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.itemstack.FlatteningItemId;
 import protocolsupport.protocol.typeremapper.itemstack.LegacyItemType;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.IdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
 import protocolsupport.protocol.utils.BlockBlockDataLookup;
 
 //TODO: implement special handling for entity tags
@@ -23,7 +23,7 @@ public abstract class AbstractDeclareTags extends MiddleDeclareTags {
 	}
 
 	protected void writeBlocksTags(ByteBuf to, Tag[] tags) {
-		IdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+		IdMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 		FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 		ArraySerializer.writeVarIntTArray(to, tags, (lTo, tag) -> {
 			StringSerializer.writeVarIntUTF8String(lTo, tag.getTagId());
@@ -32,7 +32,7 @@ public abstract class AbstractDeclareTags extends MiddleDeclareTags {
 				int count = blocksIds.length;
 				for (int blockId : blocksIds) {
 					int blockData = BlockBlockDataLookup.getBlockDataId(blockId);
-					if (blockDataRemappingTable.getRemap(blockData) == blockData) {
+					if (blockDataRemappingTable.get(blockData) == blockData) {
 						FlatteningBlockDataEntry fEntry = flatteningBlockDataTable.getRemap(blockData);
 						VarNumberSerializer.writeVarInt(llTo, fEntry != null ? fEntry.getBlockId() : blockId);
 					} else {
@@ -45,16 +45,16 @@ public abstract class AbstractDeclareTags extends MiddleDeclareTags {
 	}
 
 	protected void writeItemsTags(ByteBuf to, Tag[] tags) {
-		IdRemappingTable itemTypeRemappingTable = LegacyItemType.REGISTRY.getTable(version);
-		IdRemappingTable flatteningItemTypeTable = FlatteningItemId.REGISTRY_TO_CLIENT.getTable(version);
+		IdMappingTable itemTypeRemappingTable = LegacyItemType.REGISTRY.getTable(version);
+		IdMappingTable flatteningItemTypeTable = FlatteningItemId.REGISTRY_TO_CLIENT.getTable(version);
 		ArraySerializer.writeVarIntTArray(to, tags, (lTo, tag) -> {
 			StringSerializer.writeVarIntUTF8String(lTo, tag.getTagId());
 			ArraySerializer.writeVarIntTArray(lTo, llTo -> {
 				int[] itemsIds = tag.getTaggedIds();
 				int count = itemsIds.length;
 				for (int itemId : itemsIds) {
-					if (itemTypeRemappingTable.getRemap(itemId) == itemId) {
-						VarNumberSerializer.writeVarInt(llTo, flatteningItemTypeTable.getRemap(itemId));
+					if (itemTypeRemappingTable.get(itemId) == itemId) {
+						VarNumberSerializer.writeVarInt(llTo, flatteningItemTypeTable.get(itemId));
 					} else {
 						count--;
 					}

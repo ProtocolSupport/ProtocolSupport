@@ -4,20 +4,21 @@ import java.util.HashMap;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 
-public class RemappingTable {
+public class MappingTable {
 
-	public abstract static class IdRemappingTable extends RemappingTable {
+	public abstract static class IdMappingTable extends MappingTable {
 
-		public abstract void setRemap(int from, int to);
+		public abstract void set(int from, int to);
 
-		public abstract int getRemap(int id);
+		public abstract int get(int id);
 
 	}
 
-	public static class ArrayBasedIdRemappingTable extends IdRemappingTable {
+	public static class ArrayBasedIntMappingTable extends IdMappingTable {
 
 		protected final int[] table;
-		public ArrayBasedIdRemappingTable(int size) {
+
+		public ArrayBasedIntMappingTable(int size) {
 			table = new int[size];
 			for (int i = 0; i < table.length; i++) {
 				table[i] = i;
@@ -25,12 +26,12 @@ public class RemappingTable {
 		}
 
 		@Override
-		public void setRemap(int from, int to) {
+		public void set(int from, int to) {
 			table[from] = to;
 		}
 
 		@Override
-		public int getRemap(int id) {
+		public int get(int id) {
 			if ((id >= 0) && (id < table.length)) {
 				return table[id];
 			} else {
@@ -40,7 +41,7 @@ public class RemappingTable {
 
 	}
 
-	public static class HashMapBasedIdRemappingTable extends IdRemappingTable {
+	public static class HashMapBasedIntMappingTable extends IdMappingTable {
 
 		protected final Int2IntOpenHashMap table = new Int2IntOpenHashMap();
 		{
@@ -48,27 +49,27 @@ public class RemappingTable {
 		}
 
 		@Override
-		public void setRemap(int from, int to) {
+		public void set(int from, int to) {
 			table.put(from, to);
 		}
 
 		@Override
-		public int getRemap(int id) {
+		public int get(int id) {
 			int r = table.get(id);
 			return r != table.defaultReturnValue() ? r : id;
 		}
 
 	}
 
-	public static class GenericRemappingTable<T> extends RemappingTable {
+	public static class GenericMappingTable<T> extends MappingTable {
 
 		protected final HashMap<T, T> table = new HashMap<>();
 
-		public void setRemap(T from, T to) {
+		public void set(T from, T to) {
 			table.put(from, to);
 		}
 
-		public T getRemap(T from) {
+		public T get(T from) {
 			return table.getOrDefault(from, from);
 		}
 

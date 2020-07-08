@@ -15,7 +15,7 @@ import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVaries;
 import protocolsupport.protocol.typeremapper.chunk.HeightMapTransformer;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.IdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
 
 public class ChunkData extends MiddleChunkData {
 
@@ -23,8 +23,8 @@ public class ChunkData extends MiddleChunkData {
 		super(connection);
 	}
 
-	protected final IdRemappingTable biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
-	protected final IdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+	protected final IdMappingTable biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
+	protected final IdMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
@@ -37,7 +37,7 @@ public class ChunkData extends MiddleChunkData {
 		ItemStackSerializer.writeDirectTag(chunkdata, HeightMapTransformer.transform(heightmaps));
 		if (full) {
 			for (int biome : biomes) {
-				chunkdata.writeInt(biomeRemappingTable.getRemap(biome));
+				chunkdata.writeInt(biomeRemappingTable.get(biome));
 			}
 		}
 		ArraySerializer.writeVarIntByteArray(chunkdata, to -> {

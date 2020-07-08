@@ -16,7 +16,7 @@ import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.Flattenin
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.IdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
 
@@ -26,8 +26,8 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 		super(connection);
 	}
 
-	protected final IdRemappingTable biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
-	protected final IdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+	protected final IdMappingTable biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
+	protected final IdMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 
 	@Override
@@ -47,7 +47,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 			if (full) {
 				int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(biomes);
 				for (int biomeId : legacyBiomeData) {
-					to.writeInt(biomeRemappingTable.getRemap(biomeId));
+					to.writeInt(biomeRemappingTable.get(biomeId));
 				}
 			}
 		});

@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9
 import protocolsupport.protocol.serializer.UUIDSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.entity.FlatteningEntityId;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 
 public class SpawnObject extends AbstractRemappedSpawnObject {
 
@@ -15,14 +15,14 @@ public class SpawnObject extends AbstractRemappedSpawnObject {
 		super(connection);
 	}
 
-	protected final ArrayBasedIdRemappingTable flatteningEntityIdTable = FlatteningEntityId.REGISTRY.getTable(version);
+	protected final ArrayBasedIntMappingTable flatteningEntityIdTable = FlatteningEntityId.REGISTRY.getTable(version);
 
 	@Override
 	protected void writeToClient() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		UUIDSerializer.writeUUID2L(serializer, entity.getUUID());
-		serializer.writeByte(flatteningEntityIdTable.getRemap(rType.getNetworkTypeId()));
+		serializer.writeByte(flatteningEntityIdTable.get(rType.getNetworkTypeId()));
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);
 		serializer.writeDouble(z);

@@ -87,8 +87,8 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.object.mineca
 import protocolsupport.protocol.typeremapper.entity.metadata.types.object.minecart.MinecartFurnaceEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.special.ArmorStandEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.special.PlayerEntityMetadataRemapper;
-import protocolsupport.protocol.typeremapper.utils.RemappingRegistry;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingRegistry;
+import protocolsupport.protocol.typeremapper.utils.MappingTable;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupportbuildprocessor.Preload;
@@ -96,7 +96,7 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class EntityRemappersRegistry {
 
-	public static class EntityRemappingTable extends RemappingTable {
+	public static class EntityRemappingTable extends MappingTable {
 
 		protected final EnumMap<NetworkEntityType, Pair<NetworkEntityType, List<NetworkEntityMetadataObjectRemapper>>> table = new EnumMap<>(NetworkEntityType.class);
 
@@ -110,7 +110,7 @@ public class EntityRemappersRegistry {
 
 	}
 
-	public static final RemappingRegistry<EntityRemappingTable> REGISTRY = new RemappingRegistry<EntityRemappingTable>() {
+	public static final MappingRegistry<EntityRemappingTable> REGISTRY = new MappingRegistry<EntityRemappingTable>() {
 
 		final class Mapping {
 			private final NetworkEntityType from;

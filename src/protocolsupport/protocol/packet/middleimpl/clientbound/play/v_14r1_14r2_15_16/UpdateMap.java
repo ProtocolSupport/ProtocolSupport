@@ -8,7 +8,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 
 public class UpdateMap extends MiddleUpdateMap {
 
@@ -35,9 +35,9 @@ public class UpdateMap extends MiddleUpdateMap {
 		});
 		updatemap.writeByte(columns);
 		if (columns > 0) {
-			ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(version);
+			ArrayBasedIntMappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(version);
 			for (int i = 0; i < colors.length; i++) {
-				colors[i] = (byte) colorRemapper.getRemap(colors[i] & 0xFF);
+				colors[i] = (byte) colorRemapper.get(colors[i] & 0xFF);
 			}
 			updatemap.writeByte(rows);
 			updatemap.writeByte(xstart);

@@ -10,13 +10,13 @@ import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.itemstack.PreFlatteningItemIdData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEffect;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.HashMapBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.HashMapBasedIntMappingTable;
 
 public class WorldEvent extends MiddleWorldEvent {
 
-	protected final HashMapBasedIdRemappingTable legacyEffectId = LegacyEffect.REGISTRY.getTable(version);
-	protected final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+	protected final HashMapBasedIntMappingTable legacyEffectId = LegacyEffect.REGISTRY.getTable(version);
+	protected final ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	public WorldEvent(ConnectionImpl connection) {
 		super(connection);
@@ -29,7 +29,7 @@ public class WorldEvent extends MiddleWorldEvent {
 		} else if ((effectId == 1010) && (data != 0)) {
 			data = PreFlatteningItemIdData.getIdFromLegacyCombinedId(PreFlatteningItemIdData.getLegacyCombinedIdByModernId(data));
 		}
-		effectId = legacyEffectId.getRemap(effectId);
+		effectId = legacyEffectId.get(effectId);
 
 		ClientBoundPacketData worldevent = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_EVENT);
 		worldevent.writeInt(effectId);

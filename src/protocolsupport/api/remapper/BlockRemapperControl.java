@@ -6,7 +6,7 @@ import org.bukkit.block.data.BlockData;
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.ServerPlatform;
 
@@ -19,7 +19,7 @@ public class BlockRemapperControl {
 		LegacyBlockData.REGISTRY.applyDefaultRemaps();
 	}
 
-	protected final ArrayBasedIdRemappingTable table;
+	protected final ArrayBasedIntMappingTable table;
 
 	public BlockRemapperControl(ProtocolVersion version) {
 		Validate.isTrue(version.isSupported(), "Can't control block remapping for unsupported version");
@@ -32,7 +32,7 @@ public class BlockRemapperControl {
 	 * @param to blockstate runtime id to which remap will occur
 	 */
 	public void setRemap(int from, int to) {
-		table.setRemap(from, to);
+		table.set(from, to);
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class BlockRemapperControl {
 	 * @return remap for specified blockstate runtime id
 	 */
 	public int getRemap(int id) {
-		return table.getRemap(id);
+		return table.get(id);
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class BlockRemapperControl {
 	 */
 	public void setRemap(BlockData from, BlockData to) {
 		PlatformUtils utils = ServerPlatform.get().getMiscUtils();
-		table.setRemap(utils.getBlockDataNetworkId(from), utils.getBlockDataNetworkId(to));
+		table.set(utils.getBlockDataNetworkId(from), utils.getBlockDataNetworkId(to));
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class BlockRemapperControl {
 	 * @return remap for specified blockstate runtime id
 	 */
 	public BlockData getRemap(BlockData id) {
-		return MaterialAPI.getBlockDataByNetworkId(table.getRemap(MaterialAPI.getBlockDataNetworkId(id)));
+		return MaterialAPI.getBlockDataByNetworkId(table.get(MaterialAPI.getBlockDataNetworkId(id)));
 	}
 
 }

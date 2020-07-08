@@ -3,6 +3,7 @@ package protocolsupport.protocol.storage.netcache;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTType;
@@ -10,6 +11,16 @@ import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.Utils;
 
 public class ClientCache {
+
+	protected UUID uuid;
+
+	public UUID getUUID() {
+		return uuid;
+	}
+
+	public void setUUID(UUID uuid) {
+		this.uuid = uuid;
+	}
 
 	protected boolean respawnScreenEnabled;
 

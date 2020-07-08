@@ -5,7 +5,7 @@ import org.bukkit.Material;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.LegacyItemType;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 
 public class ItemRemapperControl {
@@ -17,7 +17,7 @@ public class ItemRemapperControl {
 		LegacyItemType.REGISTRY.applyDefaultRemaps();
 	}
 
-	private final ArrayBasedIdRemappingTable table;
+	private final ArrayBasedIntMappingTable table;
 
 	public ItemRemapperControl(ProtocolVersion version) {
 		Validate.isTrue(version.isSupported(), "Can't control item remapping for unsupported version");
@@ -39,7 +39,7 @@ public class ItemRemapperControl {
 	 * @return remap for specified item id
 	 */
 	public int getRemap(int id) {
-		return table.getRemap(id);
+		return table.get(id);
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class ItemRemapperControl {
 	 * @param to runtime item id to which remap will occur
 	 */
 	public void setRemap(int from, int to) {
-		table.setRemap(from, to);
+		table.set(from, to);
 	}
 
 }

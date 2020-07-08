@@ -10,9 +10,9 @@ import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.utils.RemappingRegistry;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingRegistry;
+import protocolsupport.protocol.typeremapper.utils.MappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.types.BlockDirection;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
@@ -22,7 +22,7 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class ObjectDataRemappersRegistry {
 
-	public static final RemappingRegistry<ObjectDataRemappingTable> REGISTRY = new RemappingRegistry<ObjectDataRemappingTable>() {
+	public static final MappingRegistry<ObjectDataRemappingTable> REGISTRY = new MappingRegistry<ObjectDataRemappingTable>() {
 
 		{
 			Arrays.stream(ProtocolVersionsHelper.DOWN_1_12_2)
@@ -34,7 +34,7 @@ public class ObjectDataRemappersRegistry {
 
 			Arrays.stream(ProtocolVersionsHelper.UP_1_13)
 			.forEach(version -> {
-				ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+				ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 				FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 				registerRemapEntry(
 					NetworkEntityType.FALLING_OBJECT,
@@ -44,7 +44,7 @@ public class ObjectDataRemappersRegistry {
 			});
 			Arrays.stream(ProtocolVersionsHelper.RANGE__1_8__1_12_2)
 			.forEach(version -> {
-				ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+				ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 				registerRemapEntry(
 					NetworkEntityType.FALLING_OBJECT,
 					blockdata -> BlockRemappingHelper.remapPreFlatteningBlockDataM12(blockDataRemappingTable, blockdata),
@@ -53,7 +53,7 @@ public class ObjectDataRemappersRegistry {
 			});
 			Arrays.stream(ProtocolVersionsHelper.DOWN_1_7_10)
 			.forEach(version -> {
-				ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+				ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 				registerRemapEntry(
 					NetworkEntityType.FALLING_OBJECT,
 					blockdata -> BlockRemappingHelper.remapPreFlatteningBlockDataM16(blockDataRemappingTable, blockdata),
@@ -83,7 +83,7 @@ public class ObjectDataRemappersRegistry {
 
 	};
 
-	public static class ObjectDataRemappingTable extends RemappingTable {
+	public static class ObjectDataRemappingTable extends MappingTable {
 
 		protected final Map<NetworkEntityType, IntUnaryOperator> table = new EnumMap<>(NetworkEntityType.class);
 

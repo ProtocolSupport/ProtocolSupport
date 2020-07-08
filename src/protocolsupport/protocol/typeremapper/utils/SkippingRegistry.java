@@ -32,9 +32,9 @@ public abstract class SkippingRegistry<T extends SkippingTable> {
 
 	public abstract static class IntSkippingRegistry<T extends IntSkippingTable> extends SkippingRegistry<T> {
 
-		public void registerSkipEntry(int id, ProtocolVersion... versions) {
+		public void register(int id, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
-				getTable(version).setSkip(id);
+				getTable(version).set(id);
 			}
 		}
 
@@ -42,9 +42,9 @@ public abstract class SkippingRegistry<T extends SkippingTable> {
 
 	public abstract static class EnumSkippingRegistry<T extends Enum<T>, R extends EnumSkippingTable<T>> extends SkippingRegistry<R> {
 
-		public void registerSkipEntry(T id, ProtocolVersion... versions) {
+		public void register(T id, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
-				getTable(version).setSkip(id);
+				getTable(version).set(id);
 			}
 		}
 
@@ -52,9 +52,9 @@ public abstract class SkippingRegistry<T extends SkippingTable> {
 
 	public abstract static class GenericSkippingRegistry<T, R extends GenericSkippingTable<T>> extends SkippingRegistry<R> {
 
-		public void registerSkipEntry(T id, ProtocolVersion... versions) {
+		public void register(T id, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
-				getTable(version).setSkip(id);
+				getTable(version).set(id);
 			}
 		}
 

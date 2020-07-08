@@ -57,7 +57,7 @@ public abstract class AbstractPacketEncoder extends ChannelOutboundHandlerAdapte
 				if (input.isReadable()) {
 					throw new DecoderException("Data not read fully, bytes left " + input.readableBytes());
 				}
-			} finally {				
+			} finally {
 				codec.clearWritePromise();
 			}
 			combinedPromise.closeUsageRegister();

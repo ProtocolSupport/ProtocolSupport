@@ -9,7 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyMap;
 import protocolsupport.protocol.typeremapper.legacy.LegacyMap.ColumnEntry;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 
 public class UpdateMap extends MiddleUpdateMap {
 
@@ -47,7 +47,7 @@ public class UpdateMap extends MiddleUpdateMap {
 		if (columns > 0) {
 			LegacyMap maptransformer = new LegacyMap();
 			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, colors);
-			ArrayBasedIdRemappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(version);
+			ArrayBasedIntMappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(version);
 			for (ColumnEntry entry : maptransformer.toPre18MapData()) {
 				ClientBoundPacketData mapdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 				mapdata.writeShort(mapId);
@@ -58,7 +58,7 @@ public class UpdateMap extends MiddleUpdateMap {
 				mapdata.writeByte(entry.getY());
 				byte[] colors = entry.getColors();
 				for (int i = 0; i < colors.length; i++) {
-					colors[i] = (byte) colorRemapper.getRemap(colors[i] & 0xFF);
+					colors[i] = (byte) colorRemapper.get(colors[i] & 0xFF);
 				}
 				mapdata.writeBytes(colors);
 				codec.write(mapdata);

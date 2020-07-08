@@ -26,7 +26,7 @@ public abstract class AbstractRemappedSpawnObject extends MiddleSpawnObject {
 
 	@Override
 	protected void handleReadData() {
-		if (entitySkipTable.shouldSkip(entity.getType())) {
+		if (entitySkipTable.isSet(entity.getType())) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
 

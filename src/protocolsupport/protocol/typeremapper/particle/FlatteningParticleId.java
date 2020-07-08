@@ -3,8 +3,8 @@ package protocolsupport.protocol.typeremapper.particle;
 import com.google.gson.JsonObject;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.utils.RemappingRegistry.IdRemappingRegistry;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingRegistry.IntMappingRegistry;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
@@ -13,10 +13,10 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class FlatteningParticleId {
 
-	public static final IdRemappingRegistry<ArrayBasedIdRemappingTable> REGISTRY = new IdRemappingRegistry<ArrayBasedIdRemappingTable>() {
+	public static final IntMappingRegistry<ArrayBasedIntMappingTable> REGISTRY = new IntMappingRegistry<ArrayBasedIntMappingTable>() {
 		@Override
-		protected ArrayBasedIdRemappingTable createTable() {
-			return new ArrayBasedIdRemappingTable(128);
+		protected ArrayBasedIntMappingTable createTable() {
+			return new ArrayBasedIntMappingTable(128);
 		}
 	};
 
@@ -24,9 +24,9 @@ public class FlatteningParticleId {
 		JsonObject rootObject = ResourceUtils.getAsJson(MappingsData.getResourcePath("flatteningparticles.json"));
 		for (String versionString : rootObject.keySet()) {
 			JsonObject entriesObject = rootObject.get(versionString).getAsJsonObject();
-			ArrayBasedIdRemappingTable table = REGISTRY.getTable(ProtocolVersion.valueOf(versionString));
+			ArrayBasedIntMappingTable table = REGISTRY.getTable(ProtocolVersion.valueOf(versionString));
 			for (String particleidString : entriesObject.keySet()) {
-				table.setRemap(Integer.parseInt(particleidString), JsonUtils.getInt(entriesObject, particleidString));
+				table.set(Integer.parseInt(particleidString), JsonUtils.getInt(entriesObject, particleidString));
 			}
 		}
 	}

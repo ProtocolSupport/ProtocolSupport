@@ -22,7 +22,7 @@ public abstract class AbstractRemappedSpawnLiving extends MiddleSpawnLiving {
 
 	@Override
 	protected void handleReadData() {
-		if (entitySkipTable.shouldSkip(entity.getType())) {
+		if (entitySkipTable.isSet(entity.getType())) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
 

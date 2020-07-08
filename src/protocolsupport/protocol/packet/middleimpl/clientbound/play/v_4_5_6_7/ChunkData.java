@@ -11,7 +11,7 @@ import protocolsupport.protocol.typeremapper.basic.BiomeRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterByte;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterUtils;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.IdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.utils.netty.Compressor;
@@ -22,8 +22,8 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 		super(connection);
 	}
 
-	protected final IdRemappingTable biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
-	protected final IdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+	protected final IdMappingTable biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
+	protected final IdMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	@Override
 	protected void writeToClient() {

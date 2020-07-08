@@ -22,10 +22,10 @@ public class GenericIdSkipper {
 
 	public static final EnumSkippingRegistry<NetworkEntityType, EnumSkippingTable<NetworkEntityType>> ENTITY = new EnumSkippingRegistry<NetworkEntityType, EnumSkippingTable<NetworkEntityType>>() {
 		{
-			registerSkipEntry(NetworkEntityType.AREA_EFFECT_CLOUD, ProtocolVersionsHelper.DOWN_1_8);
-			registerSkipEntry(NetworkEntityType.ARMOR_STAND_MOB, ProtocolVersionsHelper.DOWN_1_7_10);
-			registerSkipEntry(NetworkEntityType.ARMOR_STAND_OBJECT, ProtocolVersionsHelper.DOWN_1_7_10);
-			registerSkipEntry(NetworkEntityType.LEASH_KNOT, ProtocolVersionsHelper.DOWN_1_5_2);
+			register(NetworkEntityType.AREA_EFFECT_CLOUD, ProtocolVersionsHelper.DOWN_1_8);
+			register(NetworkEntityType.ARMOR_STAND_MOB, ProtocolVersionsHelper.DOWN_1_7_10);
+			register(NetworkEntityType.ARMOR_STAND_OBJECT, ProtocolVersionsHelper.DOWN_1_7_10);
+			register(NetworkEntityType.LEASH_KNOT, ProtocolVersionsHelper.DOWN_1_5_2);
 		}
 
 		@Override
@@ -51,8 +51,8 @@ public class GenericIdSkipper {
 			registerSkipEntry(Enchantment.LUCK, ProtocolVersionsHelper.DOWN_1_6_4);
 		}
 		protected void registerSkipEntry(Enchantment ench, ProtocolVersion... versions) {
-			registerSkipEntry(ench.getKey().getKey(), versions);
-			registerSkipEntry(ench.getKey().toString(), versions);
+			register(ench.getKey().getKey(), versions);
+			register(ench.getKey().toString(), versions);
 		}
 		@Override
 		protected GenericSkippingTable<String> createTable() {
@@ -77,7 +77,7 @@ public class GenericIdSkipper {
 		}
 		@SuppressWarnings("deprecation")
 		protected void registerSkipEntry(PotionEffectType effecttype, ProtocolVersion... versions) {
-			registerSkipEntry(effecttype.getId(), versions);
+			register(effecttype.getId(), versions);
 		}
 		@Override
 		protected ArrayBasedIntSkippingTable createTable() {
@@ -87,17 +87,17 @@ public class GenericIdSkipper {
 
 	public static final GenericSkippingRegistry<String, GenericSkippingTable<String>> ATTRIBUTES = new GenericSkippingRegistry<String, GenericSkippingTable<String>>() {
 		{
-			registerSkipEntry("generic.attack_knockback", ProtocolVersionsHelper.DOWN_1_13_2);
-			registerSkipEntry("generic.flying_speed", ProtocolVersionsHelper.DOWN_1_11_1);
-			registerSkipEntry("generic.armor_toughness", ProtocolVersionsHelper.DOWN_1_9);
-			registerSkipEntry("generic.luck", ProtocolVersionsHelper.DOWN_1_8);
-			registerSkipEntry("generic.armor", ProtocolVersionsHelper.DOWN_1_8);
-			registerSkipEntry("generic.attack_speed", ProtocolVersionsHelper.DOWN_1_8);
+			register("generic.attack_knockback", ProtocolVersionsHelper.DOWN_1_13_2);
+			register("generic.flying_speed", ProtocolVersionsHelper.DOWN_1_11_1);
+			register("generic.armor_toughness", ProtocolVersionsHelper.DOWN_1_9);
+			register("generic.luck", ProtocolVersionsHelper.DOWN_1_8);
+			register("generic.armor", ProtocolVersionsHelper.DOWN_1_8);
+			register("generic.attack_speed", ProtocolVersionsHelper.DOWN_1_8);
 		}
 		@Override
-		public void registerSkipEntry(String id, ProtocolVersion... versions) {
-			super.registerSkipEntry(id, versions);
-			super.registerSkipEntry(NamespacedKey.minecraft(id).toString(), versions);
+		public void register(String id, ProtocolVersion... versions) {
+			super.register(id, versions);
+			super.register(NamespacedKey.minecraft(id).toString(), versions);
 		}
 		@Override
 		protected GenericSkippingTable<String> createTable() {
@@ -107,13 +107,13 @@ public class GenericIdSkipper {
 
 	public static final EnumSkippingRegistry<WindowType, EnumSkippingTable<WindowType>> INVENTORY = new EnumSkippingRegistry<WindowType, EnumSkippingTable<WindowType>>() {
 		{
-			registerSkipEntry(WindowType.STONECUTTER, ProtocolVersionsHelper.DOWN_1_13_2);
-			registerSkipEntry(WindowType.LECTERN, ProtocolVersionsHelper.DOWN_1_13_2);
-			registerSkipEntry(WindowType.CARTOGRAPHY, ProtocolVersionsHelper.DOWN_1_13_2);
-			registerSkipEntry(WindowType.STONECUTTER, ProtocolVersionsHelper.DOWN_1_13_2);
-			registerSkipEntry(WindowType.GRINDSTONE, ProtocolVersionsHelper.DOWN_1_13_2);
-			registerSkipEntry(WindowType.LOOM, ProtocolVersionsHelper.DOWN_1_13_2);
-			registerSkipEntry(WindowType.HOPPER, ProtocolVersionsHelper.DOWN_1_4_7);
+			register(WindowType.STONECUTTER, ProtocolVersionsHelper.DOWN_1_13_2);
+			register(WindowType.LECTERN, ProtocolVersionsHelper.DOWN_1_13_2);
+			register(WindowType.CARTOGRAPHY, ProtocolVersionsHelper.DOWN_1_13_2);
+			register(WindowType.STONECUTTER, ProtocolVersionsHelper.DOWN_1_13_2);
+			register(WindowType.GRINDSTONE, ProtocolVersionsHelper.DOWN_1_13_2);
+			register(WindowType.LOOM, ProtocolVersionsHelper.DOWN_1_13_2);
+			register(WindowType.HOPPER, ProtocolVersionsHelper.DOWN_1_4_7);
 		}
 		@Override
 		protected EnumSkippingTable<WindowType> createTable() {

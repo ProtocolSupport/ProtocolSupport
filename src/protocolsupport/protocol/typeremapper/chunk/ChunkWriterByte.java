@@ -6,7 +6,7 @@ import protocolsupport.protocol.storage.netcache.chunk.CachedChunkSectionBlockSt
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.IdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.utils.BitUtils;
 
@@ -14,9 +14,9 @@ public class ChunkWriterByte {
 
 	public static byte[] serializeSectionsAndBiomes(
 		int mask,
-		IdRemappingTable blockDataRemappingTable,
+		IdMappingTable blockDataRemappingTable,
 		CachedChunk chunk, boolean hasSkyLight,
-		IdRemappingTable biomeRemappingTable, int[] biomeData,
+		IdMappingTable biomeRemappingTable, int[] biomeData,
 		IntConsumer sectionPresentConsumer
 	) {
 		int columnsCount = Integer.bitCount(mask);
@@ -63,7 +63,7 @@ public class ChunkWriterByte {
 			int biomeDataOffset = data.length - 256;
 			int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(biomeData);
 			for (int i = 0; i < legacyBiomeData.length; i++) {
-				data[biomeDataOffset + i] = (byte) biomeRemappingTable.getRemap(legacyBiomeData[i]);
+				data[biomeDataOffset + i] = (byte) biomeRemappingTable.get(legacyBiomeData[i]);
 			}
 		}
 

@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.ints.IntConsumer;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunkSectionBlockStorage;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.IdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.utils.BitUtils;
 
@@ -12,7 +12,7 @@ public class ChunkWriterShort {
 
 	public static byte[] serializeSections(
 		int mask,
-		IdRemappingTable blockDataRemappingTable,
+		IdMappingTable blockDataRemappingTable,
 		CachedChunk chunk, boolean hasSkyLight,
 		IntConsumer sectionPresentConsumer
 	) {

@@ -3,8 +3,8 @@ package protocolsupport.protocol.typeremapper.block;
 import com.google.gson.JsonObject;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.utils.RemappingRegistry;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingRegistry;
+import protocolsupport.protocol.typeremapper.utils.MappingTable;
 import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.utils.JsonUtils;
@@ -14,7 +14,7 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class FlatteningBlockData {
 
-	public static final RemappingRegistry<FlatteningBlockDataTable> REGISTRY = new RemappingRegistry<FlatteningBlockDataTable>() {
+	public static final MappingRegistry<FlatteningBlockDataTable> REGISTRY = new MappingRegistry<FlatteningBlockDataTable>() {
 		@Override
 		protected FlatteningBlockDataTable createTable() {
 			return new FlatteningBlockDataTable();
@@ -36,7 +36,7 @@ public class FlatteningBlockData {
 		}
 	}
 
-	public static class FlatteningBlockDataTable extends RemappingTable {
+	public static class FlatteningBlockDataTable extends MappingTable {
 
 		protected final FlatteningBlockDataEntry[] table = new FlatteningBlockDataEntry[MinecraftData.BLOCKDATA_COUNT];
 

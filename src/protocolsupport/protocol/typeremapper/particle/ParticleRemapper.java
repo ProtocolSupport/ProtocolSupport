@@ -9,9 +9,9 @@ import java.util.function.UnaryOperator;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
-import protocolsupport.protocol.typeremapper.utils.RemappingRegistry;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable;
-import protocolsupport.protocol.typeremapper.utils.RemappingTable.ArrayBasedIdRemappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingRegistry;
+import protocolsupport.protocol.typeremapper.utils.MappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.types.particle.Particle;
 import protocolsupport.protocol.types.particle.types.ParticleAsh;
 import protocolsupport.protocol.types.particle.types.ParticleBarrier;
@@ -72,20 +72,20 @@ import protocolsupportbuildprocessor.Preload;
 public class ParticleRemapper {
 
 	//TODO: single -> multiple particles
-	public static final RemappingRegistry<ParticleRemappingTable> REGISTRY = new RemappingRegistry<ParticleRemappingTable>() {
+	public static final MappingRegistry<ParticleRemappingTable> REGISTRY = new MappingRegistry<ParticleRemappingTable>() {
 		{
 			Arrays.stream(ProtocolVersion.getAllSupported())
 			.forEach(version -> {
-				ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+				ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 				registerRemap(ParticleBlock.class, original -> new ParticleBlock(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
 					original.getData(), original.getCount(),
-					blockDataRemappingTable.getRemap(original.getBlockData())
+					blockDataRemappingTable.get(original.getBlockData())
 				), version);
 				registerRemap(ParticleFallingDust.class, original -> new ParticleFallingDust(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
 					original.getData(), original.getCount(),
-					blockDataRemappingTable.getRemap(original.getBlockData())
+					blockDataRemappingTable.get(original.getBlockData())
 				));
 				registerRemap(ParticleItem.class, original -> new ParticleItem(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
@@ -267,7 +267,7 @@ public class ParticleRemapper {
 		}
 	};
 
-	public static class ParticleRemappingTable extends RemappingTable {
+	public static class ParticleRemappingTable extends MappingTable {
 
 		protected final Map<Class<? extends Particle>, Function<Particle, Particle>> table = new HashMap<>();
 
