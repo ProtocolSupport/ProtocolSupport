@@ -53,7 +53,10 @@ public class CombinedResultChannelPromise implements ChannelPromise {
 			return false;
 		}
 		if (exception != null && !fail.compareAndSet(null, exception)) {
-			fail.get().addSuppressed(exception);
+			Throwable rootException = fail.get();
+			if (rootException != exception) {
+				rootException.addSuppressed(exception);
+			}
 		}
 		if (currentRegisters == 0 && !canRegister.get()) {
 			Throwable resultException = fail.get();
