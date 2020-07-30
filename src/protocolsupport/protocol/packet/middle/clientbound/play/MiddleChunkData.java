@@ -25,7 +25,6 @@ public abstract class MiddleChunkData extends ClientBoundMiddlePacket {
 	protected int blockMask;
 	protected boolean useExistingLight;
 	protected NBTCompound heightmaps;
-	//TODO: remap biomes in <= 1.15.2 impls
 	protected final int[] biomes = new int[1024];
 	protected final ChunkSectonBlockData[] sections = new ChunkSectonBlockData[ChunkConstants.SECTION_COUNT_BLOCKS];
 	protected TileEntity[] tiles;
