@@ -29,13 +29,13 @@ public class NetworkEntity {
 	protected final UUID uuid;
 	protected final int id;
 	protected final NetworkEntityType type;
-	protected final NetworkEntityDataCache cache;
+
+	protected final NetworkEntityDataCache cache = new NetworkEntityDataCache();
 
 	public NetworkEntity(UUID uuid, int id, NetworkEntityType type) {
 		this.uuid = uuid;
 		this.id = id;
 		this.type = type;
-		this.cache = NetworkEntityDataCacheFactory.create(getType());
 	}
 
 	public UUID getUUID() {

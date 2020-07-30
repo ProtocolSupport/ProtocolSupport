@@ -24,6 +24,11 @@ public abstract class MiddleLoginSuccess extends ClientBoundMiddlePacket {
 	}
 
 	@Override
+	protected void handleReadData() {
+		cache.getClientCache().setUUID(uuid);
+	}
+
+	@Override
 	protected void cleanup() {
 		uuid = null;
 		name = null;
