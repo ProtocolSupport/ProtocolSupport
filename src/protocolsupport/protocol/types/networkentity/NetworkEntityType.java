@@ -128,7 +128,7 @@ public enum NetworkEntityType {
 	MINECART_MOB_SPAWNER(EType.OBJECT, EntityType.MINECART_MOB_SPAWNER, MINECART),
 	MINECART_HOPPER(EType.OBJECT, EntityType.MINECART_HOPPER, MINECART),
 	MINECART_COMMAND(EType.OBJECT, EntityType.MINECART_COMMAND, MINECART),
-	THUNDERBOLT(EType.OBJECT, EntityType.LIGHTNING);
+	THUNDERBOLT(EType.OBJECT, 1, EntityType.LIGHTNING);
 
 	private final EType etype;
 	private final int typeId;
@@ -202,6 +202,13 @@ public enum NetworkEntityType {
 		this.bukkitType = bukkitType;
 		this.typeId = bukkitType != null ? ServerPlatform.get().getMiscUtils().getEntityTypeNetworkId(bukkitType) : -1;
 		this.superType = superType;
+	}
+
+	NetworkEntityType(EType etype, int typeId, EntityType bukkitType) {
+		this.etype = etype;
+		this.bukkitType = bukkitType;
+		this.typeId = typeId;
+		this.superType = null;
 	}
 
 	NetworkEntityType(EType etype, EntityType bukkitType) {

@@ -1,11 +1,16 @@
-import java.nio.file.Path
-import java.nio.file.Paths
-import java.nio.file.Files
 import java.text.MessageFormat
 
 
+ext.newFile = {File parent, String... childs ->
+	for (String child : childs) {
+		parent = new File(parent, child);
+	}
+	return parent;
+}
+
+
 class UpdateLibrariesTask extends DefaultTask {
-	Path directory
+	File directory
 	List<Map> libraries
 	Set<String> manualLibraries = new HashSet<>();
 
@@ -19,8 +24,8 @@ class UpdateLibrariesTask extends DefaultTask {
 
 			librariesNames.add(libraryName)
 
-			Path libraryFile = directory.resolve(libraryName)
-			if (Files.notExists(libraryFile)) {
+			File libraryFile = new File(directory, libraryName)
+			if (!libraryFile.exists()) {
 				logger.lifecycle(MessageFormat.format("Downloading library {0} from {1}", libraryName, url))
 				ant.get(src: url, dest: libraryFile)
 			} else {
@@ -28,14 +33,13 @@ class UpdateLibrariesTask extends DefaultTask {
 			}
 		})
 
-		Files.list(directory)
-		.filter({
-			String filename = it.getFileName().toString()
-			!librariesNames.contains(filename) && !manualLibraries.contains(filename)
+		directory.listFiles()
+		.findAll({
+			!librariesNames.contains(it.getName()) && !manualLibraries.contains(it.getName())
 		})
 		.each({
-			logger.lifecycle(MessageFormat.format("Deleting old library {0}", it.getFileName()))
-			Files.delete(it)
+			logger.lifecycle(MessageFormat.format("Deleting old library {0}", it.getName()))
+			it.delete()
 		})
 	}
 
@@ -45,7 +49,7 @@ ext.UpdateLibrariesTask = UpdateLibrariesTask
 
 
 class BuildLibraryTask extends DefaultTask {
-	Path targetDirectory
+	File targetDirectory
 	String targetLibraryName
 	String builderUrl
 	String buildCommand
@@ -54,21 +58,21 @@ class BuildLibraryTask extends DefaultTask {
 
 	@TaskAction
 	def update() {
-		Path libraryFile = targetDirectory.resolve(targetLibraryName)
-		Path buildDirectory = getProject().buildDir.toPath().toAbsolutePath().resolve("libraries").resolve(targetLibraryName)
-		Files.createDirectories(buildDirectory)
-		if (Files.notExists(libraryFile)) {
+		File libraryFile = new File(targetDirectory, targetLibraryName)
+		File buildDirectory = new File(new File("build_libraries"), targetLibraryName)
+		buildDirectory.mkdirs()
+		if (!libraryFile.exists()) {
 			logger.lifecycle(MessageFormat.format("Building library {0} from {1}", targetLibraryName, builderUrl))
-			ant.get(src: builderUrl, dest: buildDirectory.resolve(builderName))
+			File builder = new File(buildDirectory, builderName)
+			ant.get(src: builderUrl, dest: builder)
 			getProject().exec {
-				workingDir = buildDirectory.toFile()
+				workingDir = buildDirectory
 				commandLine = buildCommand.replace("{BUILDER}", builderName).split("\\s+")
 			}
-			Path builtLibraryFile = buildDirectory
-			for (String builtLibraryElementName : builtLibraryName) {
-				builtLibraryFile = builtLibraryFile.resolve(builtLibraryElementName)
-			}
-			Files.copy(builtLibraryFile, libraryFile)
+			java.nio.file.Files.copy(
+				getProject().newFile(buildDirectory, builtLibraryName).getAbsoluteFile().toPath(),
+				libraryFile.getAbsoluteFile().toPath()
+			)
 		} else {
 			logger.lifecycle(MessageFormat.format("Skipping building of library {0} because it already exists", targetLibraryName))
 		}
