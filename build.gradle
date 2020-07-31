@@ -1,9 +1,13 @@
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.Files
+
 plugins {
 	id 'com.github.johnrengelman.shadow' version '5.0.0'
 	id 'java'
 }
 
-apply from: 'helper.gradle'
+apply from: 'gradle/helper.gradle'
 
 
 defaultTasks 'build'
@@ -13,19 +17,23 @@ group 'protocolsupport'
 version '4.29-dev'
 
 
-File librariesRuntimeDirectory = new File("libraries_runtime")
-File librariesShadeDirectory = new File("libraries_shade")
-File generatedResourcesDirectory = new File("gen")
-File annotationProcessorsDirectory = new File("processors")
-File targetJarDirectory = new File("target")
+Path projectDirectoryPath = projectDir.toPath().toAbsolutePath()
+
+
+Path librariesRuntimeDirectoryPath = projectDirectoryPath.resolve("libraries_runtime")
+Path librariesShadeDirectoryPath = projectDirectoryPath.resolve("libraries_shade")
+Path annotationProcessorsDirectoryPath = projectDirectoryPath.resolve("processors")
+Path generatedResourcesDirectoryPath = projectDirectoryPath.resolve("gen")
 String resourcesDirectoryName = "resources";
+Path generatedResourcesResourcesDirectoryPath = generatedResourcesDirectoryPath.resolve(resourcesDirectoryName)
 
 task setupFolders(type: DefaultTask) {doLast{
-	librariesRuntimeDirectory.mkdirs()
-	librariesShadeDirectory.mkdirs()
-	targetJarDirectory.mkdirs()
-	generatedResourcesDirectory.deleteDir()
-	generatedResourcesDirectory.mkdirs()
+	Files.createDirectories(librariesRuntimeDirectoryPath)
+	Files.createDirectories(librariesShadeDirectoryPath)
+	Files.createDirectories(annotationProcessorsDirectoryPath)
+	generatedResourcesDirectoryPath.toFile().deleteDir()
+	Files.createDirectories(generatedResourcesDirectoryPath)
+	Files.createDirectories(generatedResourcesResourcesDirectoryPath)
 }}
 
 
@@ -59,7 +67,7 @@ repositories {
 }
 
 task updateSpigot(type: BuildLibraryTask) {
-	targetDirectory = librariesRuntimeDirectory
+	targetDirectory = librariesRuntimeDirectoryPath
 	targetLibraryName = "spigot-1.16.1-1.jar"
 	builderUrl = "https://papermc.io/api/v1/paper/1.16.1/3/download"
 	buildCommand = "java -Dpaperclip.patchonly=true -jar {BUILDER}"
@@ -67,13 +75,13 @@ task updateSpigot(type: BuildLibraryTask) {
 }
 
 task updateRuntimeLibraries(type: UpdateLibrariesTask) {
-	directory = librariesRuntimeDirectory
+	directory = librariesRuntimeDirectoryPath
 	libraries = []
 	manualLibraries = new HashSet<>(Arrays.asList(updateSpigot.targetLibraryName))
 }
 
 task updateShadeLibraries(type: UpdateLibrariesTask) {
-	directory = librariesShadeDirectory
+	directory = librariesShadeDirectoryPath
 	libraries = []
 }
 
@@ -81,15 +89,16 @@ dependencies {
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
 	compile group: 'it.unimi.dsi', name: 'fastutil', version: '8.2.2'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
-	compile fileTree(dir: librariesShadeDirectory, include: '*.jar')
+	compile fileTree(dir: librariesShadeDirectoryPath, include: '*.jar')
 	compileOnly group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.1-R0.1-SNAPSHOT'
-	compileOnly fileTree(dir: librariesRuntimeDirectory, include: '*.jar')
+	compileOnly fileTree(dir: librariesRuntimeDirectoryPath, include: '*.jar')
 
-	annotationProcessor fileTree(dir: annotationProcessorsDirectory, include: '*.jar')
-	compileOnly fileTree(dir: annotationProcessorsDirectory, include: '*.jar')
+	annotationProcessor fileTree(dir: annotationProcessorsDirectoryPath, include: '*.jar')
+	compileOnly fileTree(dir: annotationProcessorsDirectoryPath, include: '*.jar')
 
-	testCompile fileTree(dir: librariesRuntimeDirectory, include: '*.jar')
-	testCompile fileTree(dir: librariesShadeDirectory, include: '*.jar')
+	testCompile group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.1-R0.1-SNAPSHOT'
+	testCompile fileTree(dir: librariesRuntimeDirectoryPath, include: '*.jar')
+	testCompile fileTree(dir: annotationProcessorsDirectoryPath, include: '*.jar')
 	testCompile 'org.junit.jupiter:junit-jupiter-api:5.2.0'
 	testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
 }
@@ -102,7 +111,7 @@ compileJava {
 
 	options.encoding = 'UTF-8'
 	options.incremental = false
-	options.compilerArgs << ("-Aprotocolsupportbuildprocessor.generatedresourcesdirectory=" + newFile(generatedResourcesDirectory, resourcesDirectoryName, "preload").getAbsolutePath())
+	options.compilerArgs << ("-Aprotocolsupportbuildprocessor.generatedresourcesdirectory=" + generatedResourcesResourcesDirectoryPath.resolve("preload").toString())
 }
 
 
@@ -112,14 +121,13 @@ test {
 
 
 task generateLocaleList(type: DefaultTask) {doLast{
-	File langsListFile = newFile(generatedResourcesDirectory, resourcesDirectoryName, "i18n", "languages")
-	langsListFile.getParentFile().mkdirs()
-	langsListFile.createNewFile()
-	new PrintWriter(langsListFile).withCloseable({
+	Path i18nDirectory = generatedResourcesResourcesDirectoryPath.resolve("i18n")
+	Files.createDirectories(i18nDirectory)
+	new PrintWriter(Files.newBufferedWriter(i18nDirectory.resolve("languages"))).withCloseable({
 		writer ->
-			newFile(sourceSets.main.resources.srcDirs.iterator().next(), resourcesDirectoryName, "i18n").list()
-			.each({
-				String[] split = it.split("[.]");
+			Files.list(sourceSets.main.resources.srcDirs[0].toPath().resolve(resourcesDirectoryName).resolve("i18n"))
+			.forEach({
+				String[] split = it.getFileName().toString().split("[.]");
 				if (split.length == 2 && split[1].equals("json")) {
 					writer.println(split[0])
 				}
@@ -133,22 +141,15 @@ task generateInfo(type: DefaultTask) {doLast{
 	properties.setProperty("buildhost", System.getProperty("protocolsupport.buildhost", "unknown"))
 	properties.setProperty("buildnumber", System.getProperty("protocolsupport.buildnumber", "unknown"))
 	properties.setProperty("buildgit", System.getProperty("protocolsupport.buildgit", "unknown"))
-	File buildInfoFile = newFile(generatedResourcesDirectory, resourcesDirectoryName, "buildinfo")
-	buildInfoFile.getParentFile().mkdirs()
-	buildInfoFile.createNewFile()
-	new FileOutputStream(buildInfoFile).withCloseable({ properties.store(it, "Build info") })
+	Files.newBufferedWriter(generatedResourcesResourcesDirectoryPath.resolve("buildinfo")).withCloseable({ properties.store(it, "Build info") })
 }}
 
 String relocatePrefix = "protocolsupport.libs."
 
 shadowJar {
-	doFirst {
-		new File(destinationDir, archiveName).delete()
-	}
-
 	from sourceSets.main.java.srcDirs
 	from 'LICENSE'
-	from generatedResourcesDirectory
+	from generatedResourcesDirectoryPath.toFile()
 
 	archiveName = jar.archiveName
 
@@ -162,9 +163,11 @@ shadowJar {
 
 
 task copyFinalJarToTarget(type: DefaultTask) {doLast{
+	Path targetJarDirectory = projectDirectoryPath.resolve("target")
+	Files.createDirectories(targetJarDirectory)
 	java.nio.file.Files.copy(
-		shadowJar.archivePath.getAbsoluteFile().toPath(),
-		new File(targetJarDirectory, jar.baseName + '.jar').getAbsoluteFile().toPath(),
+		shadowJar.archivePath.toPath().toAbsolutePath(),
+		targetJarDirectory.resolve(jar.baseName + '.jar'),
 		java.nio.file.StandardCopyOption.REPLACE_EXISTING
 	)
 }}
