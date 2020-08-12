@@ -1,14 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_11_12r1_12r2_13_14r1_14r2_15_16;
 
-import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTitle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.serializer.chat.ChatSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
-import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
 
 public class Title extends MiddleTitle {
 
@@ -26,7 +25,7 @@ public class Title extends MiddleTitle {
 			case SET_TITLE:
 			case SET_SUBTITLE:
 			case SET_ACTION_BAR: {
-				StringSerializer.writeVarIntUTF8String(serializer, ChatAPI.toJSON(LegacyChatJson.convert(version, clientCache.getLocale(), message)));
+				StringSerializer.writeVarIntUTF8String(serializer, ChatSerializer.serialize(version, clientCache.getLocale(), message));
 				break;
 			}
 			case SET_TIMES: {

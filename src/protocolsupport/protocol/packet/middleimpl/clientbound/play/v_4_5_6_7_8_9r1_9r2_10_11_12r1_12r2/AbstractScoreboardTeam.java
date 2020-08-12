@@ -8,7 +8,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardTeam;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardTeam.ScoreboardTeamsTracker.TrackedScoreboardTeam;
 import protocolsupport.protocol.storage.netcache.ClientCache;
-import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
+import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 
 public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 

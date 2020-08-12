@@ -28,11 +28,9 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public interface PlatformUtils {
 
-	public ItemStack createItemStackFromNetwork(NetworkItemStack stack);
+	public ItemStack createBukkitItemStackFromNetwork(NetworkItemStack stack);
 
-	public ItemStack deserializeItemStackFromNBTJson(String json);
-
-	public String serializeItemStackToNBTJson(ItemStack itemstack);
+	public NetworkItemStack createNetworkItemStackFromBukkit(ItemStack itemstack);
 
 	public int getEntityTypeNetworkId(EntityType type);
 

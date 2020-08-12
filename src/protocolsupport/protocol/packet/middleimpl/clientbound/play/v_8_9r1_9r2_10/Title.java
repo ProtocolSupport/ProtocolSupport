@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10;
 
 import io.netty.handler.codec.EncoderException;
-import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.ChatAPI.MessagePosition;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
@@ -10,8 +9,8 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.Chat;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.serializer.chat.ChatSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
-import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
 
 public class Title extends MiddleTitle {
 
@@ -30,7 +29,7 @@ public class Title extends MiddleTitle {
 			switch (action) {
 				case SET_TITLE:
 				case SET_SUBTITLE: {
-					StringSerializer.writeVarIntUTF8String(title, ChatAPI.toJSON(LegacyChatJson.convert(version, clientCache.getLocale(), message)));
+					StringSerializer.writeVarIntUTF8String(title, ChatSerializer.serialize(version, clientCache.getLocale(), message));
 					break;
 				}
 				case SET_TIMES: {
@@ -49,7 +48,7 @@ public class Title extends MiddleTitle {
 			}
 			codec.write(title);
 		} else {
-			codec.write(Chat.create(MessagePosition.HOTBAR, LegacyChatJson.convert(version, clientCache.getLocale(), message)));
+			codec.write(Chat.create(MessagePosition.HOTBAR, ChatSerializer.serialize(version, clientCache.getLocale(), message)));
 		}
 	}
 

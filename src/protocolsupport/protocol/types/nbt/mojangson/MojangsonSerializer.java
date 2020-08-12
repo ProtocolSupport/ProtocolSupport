@@ -12,6 +12,8 @@ import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupportbuildprocessor.Preload;
 
+//TODO: per version mojanson serializers
+//TODO: use single quote for string tag value quoting
 @Preload
 public class MojangsonSerializer {
 

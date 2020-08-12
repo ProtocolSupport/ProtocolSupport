@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16;
 
-import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBossBar;
@@ -9,13 +8,16 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.UUIDSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
+import protocolsupport.protocol.serializer.chat.ChatSerializer;
+import protocolsupport.protocol.storage.netcache.ClientCache;
 
 public class BossBar extends MiddleBossBar {
 
 	public BossBar(ConnectionImpl connection) {
 		super(connection);
 	}
+
+	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
 	protected void writeToClient() {
@@ -24,7 +26,7 @@ public class BossBar extends MiddleBossBar {
 		MiscSerializer.writeVarIntEnum(bossbar, action);
 		switch (action) {
 			case ADD: {
-				StringSerializer.writeVarIntUTF8String(bossbar, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getClientCache().getLocale(), title)));
+				StringSerializer.writeVarIntUTF8String(bossbar, ChatSerializer.serialize(version, clientCache.getLocale(), title));
 				bossbar.writeFloat(percent);
 				VarNumberSerializer.writeVarInt(bossbar, color);
 				VarNumberSerializer.writeVarInt(bossbar, divider);
@@ -39,7 +41,7 @@ public class BossBar extends MiddleBossBar {
 				break;
 			}
 			case UPDATE_TITLE: {
-				StringSerializer.writeVarIntUTF8String(bossbar, ChatAPI.toJSON(LegacyChatJson.convert(version, cache.getClientCache().getLocale(), title)));
+				StringSerializer.writeVarIntUTF8String(bossbar, ChatSerializer.serialize(version, clientCache.getLocale(), title));
 				break;
 			}
 			case UPDATE_STYLE: {

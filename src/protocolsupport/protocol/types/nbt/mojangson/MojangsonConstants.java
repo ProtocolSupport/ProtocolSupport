@@ -13,6 +13,7 @@ class MojangsonConstants {
 	static final char separator = ',';
 
 	static final char string_quote = '\"';
+	static final char string_quote_single = '\'';
 	static final char string_escape = '\\';
 
 	static final char type_byte = 'b';
@@ -31,6 +32,10 @@ class MojangsonConstants {
 
 	static final char type_double = 'd';
 	static final char type_double_u = 'D';
+
+	static boolean isQuote(char c) {
+		return (c == string_quote) || (c == string_quote_single);
+	}
 
 	static boolean isAllowedUnquotedStringCodePoint(char c) {
 		return ((c >= '0') && (c <= '9')) || ((c >= 'A') && (c <= 'Z')) || ((c >= 'a') && (c <= 'z')) || (c == '_') || (c == '-') || (c == '.') || (c == '+');

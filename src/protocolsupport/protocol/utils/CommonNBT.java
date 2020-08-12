@@ -102,26 +102,33 @@ public class CommonNBT {
 	public static final String PLAYERHEAD_TILE_PROFILE = "Owner";
 
 
-	public static NetworkItemStack deserializeItemStackFromNBT(NBTCompound compound) {
-		NetworkItemStack stack = new NetworkItemStack();
-		stack.setTypeId(ItemMaterialLookup.getRuntimeId(ItemMaterialLookup.getByKey(compound.getTagOfType("id", NBTType.STRING).getValue())));
-		stack.setAmount(compound.getNumberTag("Count").getAsByte());
-		NBTCompound itemstacknbt = compound.getTagOfType("tag", NBTType.COMPOUND);
-		if (itemstacknbt != null) {
-			stack.setNBT(itemstacknbt);
+	public static final String ITEMSTACK_STORAGE_ID = "id";
+	public static final String ITEMSTACK_STORAGE_COUNT = "Count";
+	public static final String ITEMSTACK_STORAGE_NBT = "tag";
+
+	public static NetworkItemStack deserializeItemStackFromNBT(NBTCompound rootTag) {
+		NetworkItemStack itemstack = new NetworkItemStack();
+		NBTString idTag = rootTag.getTagOfType(ITEMSTACK_STORAGE_ID, NBTType.STRING);
+		if (idTag != null) {
+			itemstack.setTypeId(ItemMaterialLookup.getRuntimeId(ItemMaterialLookup.getByKey(idTag.getValue())));
 		}
-		return stack;
+		NBTNumber countTag = rootTag.getNumberTag(ITEMSTACK_STORAGE_COUNT);
+		if (countTag != null) {
+			itemstack.setAmount(countTag.getAsInt());
+		}
+		NBTCompound tagTag = rootTag.getTagOfType(ITEMSTACK_STORAGE_NBT, NBTType.COMPOUND);
+		if (tagTag != null) {
+			itemstack.setNBT(tagTag);
+		}
+		return itemstack;
 	}
 
 	public static NBTCompound serializeItemStackToNBT(NetworkItemStack itemstack) {
-		NBTCompound compound = new NBTCompound();
-		compound.setTag("id", new NBTString(ItemMaterialLookup.getByRuntimeId(itemstack.getTypeId()).getKey().toString()));
-		compound.setTag("Count", new NBTByte((byte) itemstack.getAmount()));
-		NBTCompound itemstacknbt = itemstack.getNBT();
-		if (itemstacknbt != null) {
-			compound.setTag("tag", itemstacknbt);
-		}
-		return compound;
+		NBTCompound rootTag = new NBTCompound();
+		rootTag.setTag(ITEMSTACK_STORAGE_ID, new NBTString(ItemMaterialLookup.getByRuntimeId(itemstack.getTypeId()).getKey().toString()));
+		rootTag.setTag(ITEMSTACK_STORAGE_COUNT, new NBTByte((byte) itemstack.getAmount()));
+		rootTag.setTag(ITEMSTACK_STORAGE_NBT, itemstack.getNBT());
+		return rootTag;
 	}
 
 	public static String deserializeBlockDataFromNBT(NBTCompound compound) {

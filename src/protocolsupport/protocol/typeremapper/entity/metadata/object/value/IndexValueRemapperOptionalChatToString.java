@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.entity.metadata.object.value;
 
 import org.bukkit.ChatColor;
 
-import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
+import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalChat;

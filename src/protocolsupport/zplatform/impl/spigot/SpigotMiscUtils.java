@@ -1,5 +1,6 @@
 package protocolsupport.zplatform.impl.spigot;
 
+import java.io.DataOutput;
 import java.security.KeyPair;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -33,7 +34,6 @@ import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
@@ -53,10 +53,8 @@ import net.minecraft.server.v1_16_R1.EnumProtocol;
 import net.minecraft.server.v1_16_R1.IRegistry;
 import net.minecraft.server.v1_16_R1.Item;
 import net.minecraft.server.v1_16_R1.MinecraftServer;
-import net.minecraft.server.v1_16_R1.MojangsonParser;
 import net.minecraft.server.v1_16_R1.NBTCompressedStreamTools;
 import net.minecraft.server.v1_16_R1.NBTReadLimiter;
-import net.minecraft.server.v1_16_R1.NBTTagCompound;
 import net.minecraft.server.v1_16_R1.ServerConnection;
 import net.minecraft.server.v1_16_R1.WorldServer;
 import protocolsupport.api.utils.NetworkState;
@@ -70,6 +68,7 @@ import protocolsupport.protocol.pipeline.common.PacketEncrypter;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.serializer.DefaultNBTSerializer;
+import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.LoginProfile;
 import protocolsupport.utils.ReflectionUtils;
@@ -202,7 +201,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 	}
 
 	@Override
-	public ItemStack createItemStackFromNetwork(NetworkItemStack stack) {
+	public ItemStack createBukkitItemStackFromNetwork(NetworkItemStack stack) {
 		net.minecraft.server.v1_16_R1.ItemStack nmsitemstack = new net.minecraft.server.v1_16_R1.ItemStack(Item.getById(stack.getTypeId()), stack.getAmount());
 		NBTCompound rootTag = stack.getNBT();
 		if (rootTag != null) {
@@ -219,20 +218,25 @@ public class SpigotMiscUtils implements PlatformUtils {
 	}
 
 	@Override
-	public ItemStack deserializeItemStackFromNBTJson(String json) {
-		try {
-			return CraftItemStack.asCraftMirror(net.minecraft.server.v1_16_R1.ItemStack.a(MojangsonParser.parse(json)));
-		} catch (CommandSyntaxException e) {
-			throw new RuntimeException(e);
+	public NetworkItemStack createNetworkItemStackFromBukkit(ItemStack itemstack) {
+		if ((itemstack == null) || (itemstack.getType() == Material.AIR)) {
+			return NetworkItemStack.NULL;
 		}
-	}
-
-	@Override
-	public String serializeItemStackToNBTJson(ItemStack itemstack) {
-		net.minecraft.server.v1_16_R1.ItemStack nmsitemstack = CraftItemStack.asNMSCopy(itemstack);
-		NBTTagCompound compound = new NBTTagCompound();
-		nmsitemstack.save(compound);
-		return compound.toString();
+		NetworkItemStack networkItemStack = new NetworkItemStack();
+		networkItemStack.setTypeId(ItemMaterialLookup.getRuntimeId(itemstack.getType()));
+		networkItemStack.setAmount(itemstack.getAmount());
+		if (itemstack.hasItemMeta()) {
+			//TODO: a faster way to do that
+			net.minecraft.server.v1_16_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(itemstack);
+			ByteBuf buffer = Unpooled.buffer();
+			try {
+				NBTCompressedStreamTools.a(nmsItemStack.getTag(), (DataOutput) new ByteBufOutputStream(buffer));
+				networkItemStack.setNBT(DefaultNBTSerializer.INSTANCE.deserializeTag(new ByteBufInputStream(buffer)));
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return networkItemStack;
 	}
 
 	@Override

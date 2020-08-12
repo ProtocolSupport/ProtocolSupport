@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_12r1_12r2_
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleAdvancements;
@@ -11,7 +10,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
+import protocolsupport.protocol.serializer.chat.ChatSerializer;
 
 public class Advancements extends MiddleAdvancements {
 
@@ -53,8 +52,8 @@ public class Advancements extends MiddleAdvancements {
 	}
 
 	protected static void writeAdvancementDisplay(ByteBuf to, ProtocolVersion version, String locale, AdvancementDisplay display) {
-		StringSerializer.writeVarIntUTF8String(to, ChatAPI.toJSON(LegacyChatJson.convert(version, locale, display.title)));
-		StringSerializer.writeVarIntUTF8String(to, ChatAPI.toJSON(LegacyChatJson.convert(version, locale, display.description)));
+		StringSerializer.writeVarIntUTF8String(to, ChatSerializer.serialize(version, locale, display.title));
+		StringSerializer.writeVarIntUTF8String(to, ChatSerializer.serialize(version, locale, display.description));
 		ItemStackSerializer.writeItemStack(to, version, locale, display.icon);
 		MiscSerializer.writeVarIntEnum(to, display.frametype);
 		to.writeInt(display.flags);

@@ -5,31 +5,20 @@ import java.text.MessageFormat;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
+import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
-import protocolsupport.api.chat.modifiers.ClickAction;
-import protocolsupport.api.chat.modifiers.HoverAction;
-import protocolsupport.api.chat.modifiers.Modifier;
-import protocolsupport.protocol.utils.chat.ClickActionSerializer;
-import protocolsupport.protocol.utils.chat.ComponentSerializer;
-import protocolsupport.protocol.utils.chat.HoverActionSerializer;
-import protocolsupport.protocol.utils.chat.ModifierSerializer;
+import protocolsupport.protocol.serializer.chat.ChatSerializer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
 public class ChatAPI {
 
-	private static final Gson gson = new GsonBuilder()
-	.registerTypeHierarchyAdapter(BaseComponent.class, new ComponentSerializer())
-	.registerTypeHierarchyAdapter(Modifier.class, new ModifierSerializer())
-	.registerTypeHierarchyAdapter(ClickAction.class, new ClickActionSerializer())
-	.registerTypeHierarchyAdapter(HoverAction.class, new HoverActionSerializer())
-	.create();
+
 
 	/**
 	 * Converts json string to chat component<br>
@@ -54,10 +43,13 @@ public class ChatAPI {
 	 */
 	public static BaseComponent fromJSON(String json, boolean lenient) {
 		try {
-			BaseComponent result = gson.fromJson(json, BaseComponent.class);
+			BaseComponent result = ChatSerializer.deserialize(json);
 			return result != null ? result : new TextComponent("");
 		} catch (Exception e) {
 			if (lenient) {
+				if (ServerPlatform.get().getMiscUtils().isDebugging()) {
+					ProtocolSupport.logError("Error parsing chat json " + json, e);
+				}
 				return new TextComponent(json);
 			} else {
 				throw new JsonParseException(json, e);
@@ -71,7 +63,7 @@ public class ChatAPI {
 	 * @return json string
 	 */
 	public static String toJSON(BaseComponent component) {
-		return component != null ? gson.toJson(component) : null;
+		return component != null ? ChatSerializer.serialize(ProtocolVersionsHelper.LATEST_PC, I18NData.DEFAULT_LOCALE, component) : null;
 	}
 
 	/**

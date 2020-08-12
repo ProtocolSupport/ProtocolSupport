@@ -1,4 +1,4 @@
-package protocolsupport.protocol.utils.chat;
+package protocolsupport.protocol.serializer.chat;
 
 import java.lang.reflect.Type;
 import java.util.Map.Entry;
@@ -9,8 +9,6 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.KeybindComponent;
@@ -21,9 +19,74 @@ import protocolsupport.api.chat.components.TranslateComponent;
 import protocolsupport.api.chat.modifiers.ClickAction;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.Modifier;
+import protocolsupport.protocol.utils.json.SimpleJsonObjectSerializer;
+import protocolsupport.protocol.utils.json.SimpleJsonTreeSerializer;
+import protocolsupport.utils.CachedInstanceOfChain;
 import protocolsupport.utils.JsonUtils;
 
-public class ComponentSerializer implements JsonDeserializer<BaseComponent>, JsonSerializer<BaseComponent> {
+public class ComponentSerializer implements JsonDeserializer<BaseComponent>, SimpleJsonObjectSerializer<BaseComponent, String> {
+
+	public static final ComponentSerializer DEFAULT_INSTANCE = new ComponentSerializer.Builder().build();
+
+	public static class Builder {
+
+		private ComponentContentSerializer<TextComponent> textSerializer = TextComponentContentSerializer.INSTANCE;
+		private ComponentContentSerializer<TranslateComponent> translateSerializer = TranslateComponentContentSerializer.INSTANCE;
+		private ComponentContentSerializer<ScoreComponent> scoreSerializer = ScoreComponentContentSerializer.INSTANCE;
+		private ComponentContentSerializer<SelectorComponent> selectorSerializer = SelectorComponentContentSerializer.INSTANCE;
+		private ComponentContentSerializer<KeybindComponent> keybindSerializer = new KeybindComponentContentSerializer();
+
+		public Builder setTextSerializer(ComponentContentSerializer<TextComponent> textSerializer) {
+			this.textSerializer = textSerializer;
+			return this;
+		}
+
+		public Builder setTranslateSerializer(ComponentContentSerializer<TranslateComponent> translateSerializer) {
+			this.translateSerializer = translateSerializer;
+			return this;
+		}
+
+		public Builder setScoreSerializer(ComponentContentSerializer<ScoreComponent> scoreSerializer) {
+			this.scoreSerializer = scoreSerializer;
+			return this;
+		}
+
+		public Builder setSelectorSerializer(ComponentContentSerializer<SelectorComponent> selectorSerializer) {
+			this.selectorSerializer = selectorSerializer;
+			return this;
+		}
+
+		public Builder setKeybindSerializer(ComponentContentSerializer<KeybindComponent> keybindSerializer) {
+			this.keybindSerializer = keybindSerializer;
+			return this;
+		}
+
+		public ComponentSerializer build() {
+			return new ComponentSerializer(textSerializer, translateSerializer, scoreSerializer, selectorSerializer, keybindSerializer);
+		}
+
+	}
+
+	private final CachedInstanceOfChain<ComponentContentSerializer<BaseComponent>> componentContentSerializers = new CachedInstanceOfChain<>();
+
+	public ComponentSerializer(
+		ComponentContentSerializer<TextComponent> textSerializer,
+		ComponentContentSerializer<TranslateComponent> translateSerializer,
+		ComponentContentSerializer<ScoreComponent> scoreSerializer,
+		ComponentContentSerializer<SelectorComponent> selectorSerializer,
+		ComponentContentSerializer<KeybindComponent> keybindSerializer
+	) {
+		setComponentContentSerializer(TextComponent.class, textSerializer);
+		setComponentContentSerializer(TranslateComponent.class, translateSerializer);
+		setComponentContentSerializer(ScoreComponent.class, scoreSerializer);
+		setComponentContentSerializer(SelectorComponent.class, selectorSerializer);
+		setComponentContentSerializer(KeybindComponent.class, keybindSerializer);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <T extends BaseComponent> void setComponentContentSerializer(Class<T> clazz, ComponentContentSerializer<T> serializer) {
+		componentContentSerializers.setKnownPath(clazz, (ComponentContentSerializer<BaseComponent>) serializer);
+	}
 
 	@Override
 	public BaseComponent deserialize(JsonElement element, Type type, JsonDeserializationContext ctx) {
@@ -100,63 +163,36 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>, Jso
 	}
 
 	@Override
-	public JsonElement serialize(BaseComponent component, Type type, JsonSerializationContext ctx) {
-		JsonObject jsonObject = new JsonObject();
+	public JsonElement serialize(SimpleJsonTreeSerializer<String> serializer, BaseComponent component, String locale) {
+		JsonObject json = new JsonObject();
 		if (!component.getModifier().isEmpty()) {
-			serializeAndAdd(component.getModifier(), jsonObject, ctx);
+			serializeAndAdd(serializer, json, component.getModifier(), locale);
 		}
 		if (component.getClickAction() != null) {
-			jsonObject.add("clickEvent", ctx.serialize(component.getClickAction()));
+			json.add("clickEvent", serializer.serialize(component.getClickAction(), locale));
 		}
 		if (component.getHoverAction() != null) {
-			jsonObject.add("hoverEvent", ctx.serialize(component.getHoverAction()));
+			json.add("hoverEvent", serializer.serialize(component.getHoverAction(), locale));
 		}
 		if (component.getClickInsertion() != null) {
-			jsonObject.addProperty("insertion", component.getClickInsertion());
+			json.addProperty("insertion", component.getClickInsertion());
 		}
 		if (!component.getSiblings().isEmpty()) {
 			JsonArray jsonArray = new JsonArray();
 			for (BaseComponent sibling : component.getSiblings()) {
-				jsonArray.add(serialize(sibling, sibling.getClass(), ctx));
+				jsonArray.add(serialize(serializer, sibling, locale));
 			}
-			jsonObject.add("extra", jsonArray);
+			json.add("extra", jsonArray);
 		}
-		if (component instanceof TextComponent) {
-			jsonObject.addProperty("text", component.getValue());
-		} else if (component instanceof TranslateComponent) {
-			TranslateComponent translate = (TranslateComponent) component;
-			jsonObject.addProperty("translate", translate.getTranslationKey());
-			if (!translate.getTranslationArgs().isEmpty()) {
-				JsonArray argsJson = new JsonArray();
-				for (BaseComponent arg : translate.getTranslationArgs()) {
-					argsJson.add(serialize(arg, arg.getClass(), ctx));
-				}
-				jsonObject.add("with", argsJson);
-			}
-		} else if (component instanceof ScoreComponent) {
-			ScoreComponent score = (ScoreComponent) component;
-			JsonObject scoreJSON = new JsonObject();
-			scoreJSON.addProperty("name", score.getPlayerName());
-			scoreJSON.addProperty("objective", score.getObjectiveName());
-			if (score.hasValue()) {
-				scoreJSON.addProperty("value", score.getValue());
-			}
-			jsonObject.add("score", scoreJSON);
-		} else if (component instanceof SelectorComponent) {
-			jsonObject.addProperty("selector", component.getValue());
-		} else if (component instanceof KeybindComponent) {
-			jsonObject.addProperty("keybind", ((KeybindComponent) component).getKeybind());
-		} else {
-			throw new IllegalArgumentException("Don't know how to serialize " + component + " as a Component");
-		}
-		return jsonObject;
+		componentContentSerializers.selectPath(component.getClass()).serialize(serializer, json, component, locale);
+		return json;
 	}
 
-	private void serializeAndAdd(Object object, JsonObject jsonObject, JsonSerializationContext ctx) {
-		JsonElement serialize = ctx.serialize(object);
+	protected void serializeAndAdd(SimpleJsonTreeSerializer<String> serializer, JsonObject json, Object object, String locale) {
+		JsonElement serialize = serializer.serialize(object, locale);
 		if (serialize.isJsonObject()) {
 			for (Entry<String, JsonElement> entry : ((JsonObject) serialize).entrySet()) {
-				jsonObject.add(entry.getKey(), entry.getValue());
+				json.add(entry.getKey(), entry.getValue());
 			}
 		}
 	}

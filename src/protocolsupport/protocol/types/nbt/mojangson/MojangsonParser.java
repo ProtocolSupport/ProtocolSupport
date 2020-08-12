@@ -40,8 +40,8 @@ public class MojangsonParser {
 		} else if (firstChar == MojangsonConstants.array_start) {
 			return readArray(reader);
 		} else {
-			if (firstChar == MojangsonConstants.string_quote) {
-				return new NBTString(readQuotedString(reader));
+			if (MojangsonConstants.isQuote(firstChar)) {
+				return new NBTString(readQuotedString(reader, firstChar));
 			} else {
 				String string = readUnquotedString(firstChar, reader);
 				if (string.equals("true")) {
@@ -95,7 +95,7 @@ public class MojangsonParser {
 				return compound;
 			}
 
-			String key = keyStartChar == MojangsonConstants.string_quote ? readQuotedString(reader) : readUnquotedString(keyStartChar, reader);
+			String key = MojangsonConstants.isQuote(keyStartChar) ? readQuotedString(reader, keyStartChar) : readUnquotedString(keyStartChar, reader);
 			if (skipWhitespace(reader) != MojangsonConstants.compound_kv) {
 				throw new IllegalArgumentException("Missing kv separator after compound key");
 			}
@@ -225,23 +225,24 @@ public class MojangsonParser {
 	 * After finishing reader current position will point to the finishing quote <br>
 	 * Returns read string
 	 * @param reader reader
+	 * @param quoteChar quote char
 	 * @return string
 	 * @throws IOException
 	 */
-	protected static String readQuotedString(MojangsonReaderHelper reader) throws IOException {
+	protected static String readQuotedString(MojangsonReaderHelper reader, char quoteChar) throws IOException {
 		StringBuilder builder = new StringBuilder();
 		for (;;) {
 			char c = reader.read();
 			if (c == MojangsonConstants.string_escape) {
 				char afterEscapeChar = reader.read();
-				if (afterEscapeChar == MojangsonConstants.string_quote) {
-					builder.append(MojangsonConstants.string_quote);
+				if (afterEscapeChar == quoteChar) {
+					builder.append(quoteChar);
 				} else if (afterEscapeChar == MojangsonConstants.string_escape) {
 					builder.append(MojangsonConstants.string_escape);
 				} else {
 					throw new IllegalArgumentException("Invalid char " + afterEscapeChar + " after string escape");
 				}
-			} else if (c != MojangsonConstants.string_quote) {
+			} else if (c != quoteChar) {
 				builder.append(c);
 			} else {
 				return builder.toString();

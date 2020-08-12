@@ -6,9 +6,9 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOp
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
+import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 import protocolsupport.protocol.typeremapper.legacy.LegacyWindowType;
 import protocolsupport.protocol.typeremapper.legacy.LegacyWindowType.LegacyWindowData;
-import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChat;
 
 public class InventoryOpen extends MiddleInventoryOpen {
 

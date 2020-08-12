@@ -5,7 +5,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
+import protocolsupport.protocol.serializer.chat.ChatSerializer;
 import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEntityMetadataObject;
 
 public class NetworkEntityMetadataObjectChat extends ReadableNetworkEntityMetadataObject<BaseComponent> {
@@ -17,7 +17,7 @@ public class NetworkEntityMetadataObjectChat extends ReadableNetworkEntityMetada
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
-		StringSerializer.writeVarIntUTF8String(to, ChatAPI.toJSON(LegacyChatJson.convert(version, locale, value)));
+		StringSerializer.writeVarIntUTF8String(to, ChatSerializer.serialize(version, locale, value));
 	}
 
 }

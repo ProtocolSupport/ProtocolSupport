@@ -1,6 +1,8 @@
 package protocolsupport.protocol.types.pingresponse;
 
 import java.lang.reflect.Type;
+import java.util.EnumMap;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,34 +13,42 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
-import protocolsupport.api.chat.modifiers.ClickAction;
-import protocolsupport.api.chat.modifiers.HoverAction;
-import protocolsupport.api.chat.modifiers.Modifier;
-import protocolsupport.protocol.utils.chat.ClickActionSerializer;
-import protocolsupport.protocol.utils.chat.ComponentSerializer;
-import protocolsupport.protocol.utils.chat.HoverActionSerializer;
-import protocolsupport.protocol.utils.chat.ModifierSerializer;
+import protocolsupport.protocol.serializer.chat.ChatSerializer.GsonBaseComponentSerializer;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.JsonUtils;
+import protocolsupportbuildprocessor.Preload;
 
+//TODO: this probably also needs to be redone to version based serialization for future proofness
+@Preload
 public class PingResponse {
 
-	private static final Gson gson = new GsonBuilder()
-	.registerTypeAdapter(PingResponse.class, new PingResponse.Serializer())
-	.registerTypeAdapter(PingResponseProtocolData.class, new PingResponseProtocolData.Serializer())
-	.registerTypeAdapter(PingResponsePlayers.class, new PingResponsePlayers.Serializer())
-	.registerTypeHierarchyAdapter(BaseComponent.class, new ComponentSerializer())
-	.registerTypeHierarchyAdapter(Modifier.class, new ModifierSerializer())
-	.registerTypeHierarchyAdapter(ClickAction.class, new ClickActionSerializer())
-	.registerTypeHierarchyAdapter(HoverAction.class, new HoverActionSerializer())
-	.create();
+	private static final Map<ProtocolVersion, Gson> serializers = new EnumMap<>(ProtocolVersion.class);
 
-	public static PingResponse fromJson(String json) {
-		return gson.fromJson(json, PingResponse.class);
+	private static final Gson deserializer;
+
+	static {
+		for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
+			serializers.put(
+				version,
+				new GsonBuilder()
+				.registerTypeAdapter(PingResponse.class, new PingResponse.Serializer())
+				.registerTypeAdapter(PingResponseProtocolData.class, new PingResponseProtocolData.Serializer())
+				.registerTypeAdapter(PingResponsePlayers.class, new PingResponsePlayers.Serializer())
+				.registerTypeHierarchyAdapter(BaseComponent.class, new GsonBaseComponentSerializer(version))
+				.create()
+			);
+		}
+		deserializer = serializers.get(ProtocolVersionsHelper.LATEST_PC);
 	}
 
-	public static String toJson(PingResponse response) {
-		return gson.toJson(response);
+	public static PingResponse fromJson(String json) {
+		return deserializer.fromJson(json, PingResponse.class);
+	}
+
+	public static String toJson(ProtocolVersion version, PingResponse response) {
+		return serializers.get(version).toJson(response);
 	}
 
 	private PingResponseProtocolData protocoldata;

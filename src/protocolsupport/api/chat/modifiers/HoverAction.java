@@ -3,39 +3,71 @@ package protocolsupport.api.chat.modifiers;
 import java.io.IOException;
 import java.util.UUID;
 
+import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.protocol.types.NetworkBukkitItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.types.nbt.mojangson.MojangsonParser;
 import protocolsupport.protocol.types.nbt.mojangson.MojangsonSerializer;
+import protocolsupport.protocol.utils.CommonNBT;
+import protocolsupport.protocol.utils.NamespacedKeyUtils;
 import protocolsupport.utils.Utils;
-import protocolsupport.zplatform.ServerPlatform;
 
-@SuppressWarnings("deprecation")
 public class HoverAction {
 
 	private final Type type;
-	private final String value;
+	private final Object contents;
 
+	@Deprecated
 	public HoverAction(Type type, String value) {
 		this.type = type;
-		this.value = value;
+		switch (type) {
+			case SHOW_TEXT: {
+				this.contents = ChatAPI.fromJSON(value);
+				return;
+			}
+			case SHOW_ENTITY: {
+				try {
+					NBTCompound compound = MojangsonParser.parse(value);
+					NBTString etype = compound.getTagOfType("type", NBTType.STRING);
+					NBTString euuid = compound.getTagOfType("id", NBTType.STRING);
+					this.contents = new EntityInfo(
+						etype != null ? Registry.ENTITY_TYPE.get(NamespacedKeyUtils.fromString(etype.getValue())) : null,
+						euuid != null ? UUID.fromString(euuid.getValue()) : null,
+						NBTString.getValueOrNull(compound.getTagOfType("name", NBTType.STRING))
+					);
+					return;
+				} catch (IOException e) {
+					throw new IllegalArgumentException("HoverAction value " + value + " can't be parsed as EntityInfo");
+				}
+			}
+			case SHOW_ITEM: {
+				try {
+					this.contents = new NetworkBukkitItemStack(CommonNBT.deserializeItemStackFromNBT(MojangsonParser.parse(value)));
+				} catch (IOException e) {
+					throw new IllegalArgumentException("HoverAction value " + value + " can't be parsed as ItemStack");
+				}
+				return;
+			}
+		}
+		throw new IllegalArgumentException("Unknown HoverAction Type " + type);
 	}
 
 	public HoverAction(BaseComponent component) {
 		this.type = Type.SHOW_TEXT;
-		this.value = ChatAPI.toJSON(component);
+		this.contents = component;
 	}
 
 	public HoverAction(ItemStack itemstack) {
 		this.type = Type.SHOW_ITEM;
-		this.value = ServerPlatform.get().getMiscUtils().serializeItemStackToNBTJson(itemstack);
+		this.contents = itemstack;
 	}
 
 	public HoverAction(Entity entity) {
@@ -44,54 +76,51 @@ public class HoverAction {
 
 	public HoverAction(EntityInfo entityinfo) {
 		this.type = Type.SHOW_ENTITY;
-		NBTCompound compound = new NBTCompound();
-		EntityType etype = entityinfo.getType();
-		UUID euuid = entityinfo.getUUID();
-		String ename = entityinfo.getName();
-		if (etype != null) {
-			compound.setTag("type", new NBTString(etype.getName()));
-		}
-		if (euuid != null) {
-			compound.setTag("id", new NBTString(euuid.toString()));
-		}
-		if (ename != null) {
-			compound.setTag("name", new NBTString(ename));
-		}
-		this.value = MojangsonSerializer.serialize(compound);
+		this.contents = entityinfo;
 	}
 
 	public Type getType() {
 		return type;
 	}
 
+	public Object getContents() {
+		return contents;
+	}
+
+	@Deprecated
 	public String getValue() {
-		return value;
+		if (contents instanceof BaseComponent) {
+			return ChatAPI.toJSON((BaseComponent) contents);
+		} else if (contents instanceof EntityInfo) {
+			EntityInfo entityinfo = (EntityInfo) contents;
+			NBTCompound compound = new NBTCompound();
+			String ename = entityinfo.getName();
+			compound.setTag("type", new NBTString(entityinfo.getType().getKey().toString()));
+			compound.setTag("id", new NBTString(entityinfo.getUUID().toString()));
+			if (ename != null) {
+				compound.setTag("name", new NBTString(ename));
+			}
+			return MojangsonSerializer.serialize(compound);
+		} else if (contents instanceof ItemStack) {
+			return MojangsonSerializer.serialize(CommonNBT.serializeItemStackToNBT(NetworkBukkitItemStack.create(getItemStack())));
+		} else {
+			return contents.toString();
+		}
 	}
 
 	public BaseComponent getText() {
 		validateAction(type, Type.SHOW_TEXT);
-		return ChatAPI.fromJSON(value);
+		return (BaseComponent) contents;
 	}
 
 	public ItemStack getItemStack() {
 		validateAction(type, Type.SHOW_ITEM);
-		return ServerPlatform.get().getMiscUtils().deserializeItemStackFromNBTJson(value);
+		return (ItemStack) contents;
 	}
 
 	public EntityInfo getEntity() {
 		validateAction(type, Type.SHOW_ENTITY);
-		try {
-			NBTCompound compound = MojangsonParser.parse(value);
-			NBTString etype = compound.getTagOfType("type", NBTType.STRING);
-			NBTString euuid = compound.getTagOfType("id", NBTType.STRING);
-			return new EntityInfo(
-				etype != null ? EntityType.fromName(etype.getValue()) : null,
-				euuid != null ? UUID.fromString(euuid.getValue()) : null,
-				NBTString.getValueOrNull(compound.getTagOfType("name", NBTType.STRING))
-			);
-		} catch (IOException e) {
-			throw new RuntimeException("Unable to parse value", e);
-		}
+		return (EntityInfo) contents;
 	}
 
 	static void validateAction(Type current, Type expected) {
@@ -110,14 +139,19 @@ public class HoverAction {
 	}
 
 	public static class EntityInfo {
+
 		private final EntityType etype;
 		private final UUID uuid;
-		private final String name;
+		private final BaseComponent name;
 
 		public EntityInfo(EntityType etype, UUID uuid, String name) {
-			this.etype = etype;
-			this.uuid = uuid;
-			this.name = name;
+			this(etype, uuid, name != null ? ChatAPI.fromJSON(name, true) : null);
+		}
+
+		public EntityInfo(EntityType etype, UUID uuid, BaseComponent displayname) {
+			this.etype = etype != null ? etype : EntityType.PIG;
+			this.uuid = uuid != null ? uuid : new UUID(0, 0);
+			this.name = displayname;
 		}
 
 		public EntityInfo(Entity entity) {
@@ -132,14 +166,20 @@ public class HoverAction {
 			return uuid;
 		}
 
-		public String getName() {
+		public BaseComponent getDisplayName() {
 			return name;
+		}
+
+		@Deprecated
+		public String getName() {
+			return ChatAPI.toJSON(name);
 		}
 
 		@Override
 		public String toString() {
 			return Utils.toStringAllFields(this);
 		}
+
 	}
 
 }

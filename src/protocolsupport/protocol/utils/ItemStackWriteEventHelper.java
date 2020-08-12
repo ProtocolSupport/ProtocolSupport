@@ -16,7 +16,7 @@ import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ItemStackWriteEvent;
-import protocolsupport.protocol.typeremapper.legacy.chat.LegacyChatJson;
+import protocolsupport.protocol.serializer.chat.ChatSerializer;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTList;
@@ -38,7 +38,7 @@ public class ItemStackWriteEventHelper {
 				NBTCompound displayNBT = CommonNBT.getOrCreateDisplayTag(rootTag);
 
 				if (forcedDisplayName != null) {
-					displayNBT.setTag(CommonNBT.DISPLAY_NAME, new NBTString(ChatAPI.toJSON(LegacyChatJson.convert(version, locale, forcedDisplayName))));
+					displayNBT.setTag(CommonNBT.DISPLAY_NAME, new NBTString(ChatSerializer.serialize(version, locale, forcedDisplayName)));
 				}
 
 				if (!additionalLore.isEmpty()) {
@@ -71,7 +71,7 @@ public class ItemStackWriteEventHelper {
 
 		protected ItemStack getOrCreateBukkitItemStack() {
 			if (bukkitItemStack == null) {
-				bukkitItemStack = ServerPlatform.get().getMiscUtils().createItemStackFromNetwork(itemstack);
+				bukkitItemStack = ServerPlatform.get().getMiscUtils().createBukkitItemStackFromNetwork(itemstack);
 			}
 			return bukkitItemStack;
 		}

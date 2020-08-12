@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.legacy.chat;
+package protocolsupport.protocol.typeremapper.legacy;
 
 import org.bukkit.ChatColor;
 
