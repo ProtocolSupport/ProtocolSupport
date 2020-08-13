@@ -32,7 +32,7 @@ BukkitDev: https://dev.bukkit.org/projects/protocolsupport/
 
 MC Market: http://www.mc-market.org/resources/4607/
 
-Main Jenkins: https://build.true-games.org/job/ProtocolSupport/
+Main Jenkins: https://build.true-games.org/job/ProtocolSupport/<br>
 Backup Jenkins: https://ci.velocitypowered.com/job/ProtocolSupport/
 
 ---
