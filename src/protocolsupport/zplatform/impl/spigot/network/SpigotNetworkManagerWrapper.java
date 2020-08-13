@@ -14,11 +14,11 @@ import com.mojang.authlib.properties.Property;
 import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.minecraft.server.v1_16_R1.ChatComponentText;
-import net.minecraft.server.v1_16_R1.NetworkManager;
-import net.minecraft.server.v1_16_R1.Packet;
-import net.minecraft.server.v1_16_R1.PacketListener;
-import net.minecraft.server.v1_16_R1.PlayerConnection;
+import net.minecraft.server.v1_16_R2.ChatComponentText;
+import net.minecraft.server.v1_16_R2.NetworkManager;
+import net.minecraft.server.v1_16_R2.Packet;
+import net.minecraft.server.v1_16_R2.PacketListener;
+import net.minecraft.server.v1_16_R2.PlayerConnection;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
@@ -85,7 +85,7 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public PacketListener getPacketListener() {
-		return internal.i();
+		return internal.j();
 	}
 
 	@Override

@@ -318,7 +318,9 @@ public interface PlatformPacketFactory {
 
 	public int getInPlayTeleportAcceptPacketId();
 
-	public int getInPlayRecipeBookDataPacketId();
+	public int getInPlayRecipeBookRecipePacketId();
+
+	public int getInPlayRecipeBookStatePacketId();
 
 	public int getInPlayCraftRecipeRequestPacketId();
 
@@ -347,5 +349,7 @@ public interface PlatformPacketFactory {
 	public int getInPlayJigsawUpdatePacketId();
 
 	public int getInPlayJigsawGenerateStructurePacketId();
+
+
 
 }

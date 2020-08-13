@@ -23,9 +23,8 @@ public abstract class MiddleChunkData extends ClientBoundMiddlePacket {
 	protected ChunkCoord coord;
 	protected boolean full;
 	protected int blockMask;
-	protected boolean useExistingLight;
 	protected NBTCompound heightmaps;
-	protected final int[] biomes = new int[1024];
+	protected int[] biomes;
 	protected final ChunkSectonBlockData[] sections = new ChunkSectonBlockData[ChunkConstants.SECTION_COUNT_BLOCKS];
 	protected TileEntity[] tiles;
 
@@ -33,14 +32,11 @@ public abstract class MiddleChunkData extends ClientBoundMiddlePacket {
 	protected void readServerData(ByteBuf serverdata) {
 		coord = PositionSerializer.readIntChunkCoord(serverdata);
 		full = serverdata.readBoolean();
-		useExistingLight = serverdata.readBoolean();
 
 		blockMask = VarNumberSerializer.readVarInt(serverdata);
 		heightmaps = ItemStackSerializer.readDirectTag(serverdata);
 		if (full) {
-			for (int i = 0; i < biomes.length; i++) {
-				biomes[i] = serverdata.readInt();
-			}
+			biomes = ArraySerializer.readVarIntVarIntArray(serverdata);
 		}
 
 		{

@@ -5,6 +5,7 @@ import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeMulti;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
 import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
+import protocolsupport.protocol.types.ChunkCoord;
 
 public abstract class AbstractChunkCacheBlockChangeMulti extends MiddleBlockChangeMulti {
 
@@ -16,14 +17,15 @@ public abstract class AbstractChunkCacheBlockChangeMulti extends MiddleBlockChan
 
 	@Override
 	protected void handleReadData() {
-		CachedChunk cachedChunk = chunkCache.get(chunkCoord);
+		CachedChunk cachedChunk = chunkCache.get(new ChunkCoord(getChunkX(chunkCoordWithSection), getChunkZ(chunkCoordWithSection)));
 
 		if (cachedChunk == null) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
 
-		for (Record record : records) {
-			cachedChunk.setBlock(record.y >> 4, CachedChunk.getBlockIndex(record.x, record.y & 0xF, record.z), (short) record.id);
+		int sectionY = getChunkSectionY(chunkCoordWithSection);
+		for (long record : records) {
+			cachedChunk.setBlock(sectionY, CachedChunk.getBlockIndex(getRecordRelX(record), getRecordRelY(record), getRecordRelZ(record)), (short) getRecordBlockData(record));
 		}
 	}
 

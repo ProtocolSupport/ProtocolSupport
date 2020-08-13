@@ -18,7 +18,7 @@ public class ChangeDimension extends AbstractChunkCacheChangeDimension {
 	@Override
 	protected void writeToClient() {
 		ClientBoundPacketData changedimension = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_RESPAWN);
-		changedimension.writeInt(LegacyDimension.getId(dimension));
+		changedimension.writeInt(LegacyDimension.getIntId(dimension));
 		MiscSerializer.writeByteEnum(changedimension, Difficulty.HARD);
 		changedimension.writeByte(gamemodeCurrent.getId());
 		changedimension.writeShort(256);

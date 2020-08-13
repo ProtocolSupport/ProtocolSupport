@@ -17,6 +17,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AgeableE
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.LivingEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.BasePiglingEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.BatEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.BlazeEntityMetadataRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.CreeperEntityMetadataRemapper;
@@ -386,6 +387,11 @@ public class EntityRemappersRegistry {
 			.register();
 			new Mapping(NetworkEntityType.PIGLIN)
 			.addMapping(NetworkEntityType.PIGLIN, PiglinEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_16)
+			.addMapping(NetworkEntityType.VILLAGER, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.DOWN_1_15_2)
+			.register();
+			new Mapping(NetworkEntityType.PIGLIN_BRUTE)
+			.addMapping(NetworkEntityType.PIGLIN_BRUTE, BasePiglingEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.UP_1_16_2)
+			.addMapping(NetworkEntityType.PIGLIN, BasePiglingEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.RANGE__1_16__1_16_1)
 			.addMapping(NetworkEntityType.VILLAGER, InsentientEntityMetadataRemapper.INSTANCE, ProtocolVersionsHelper.DOWN_1_15_2)
 			.register();
 			new Mapping(NetworkEntityType.ZOMBIFIED_PIGLIN)

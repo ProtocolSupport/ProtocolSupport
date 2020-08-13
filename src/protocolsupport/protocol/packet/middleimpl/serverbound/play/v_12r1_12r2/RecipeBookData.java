@@ -3,8 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_12r1_12r2;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleRecipeBookData;
-import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class RecipeBookData extends ServerBoundMiddlePacket {
 
@@ -14,13 +13,13 @@ public class RecipeBookData extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void readClientData(ByteBuf clientdata) {
-		MiddleRecipeBookData.Type type = MiscSerializer.readVarIntEnum(clientdata, MiddleRecipeBookData.Type.CONSTANT_LOOKUP);
+		int type = VarNumberSerializer.readVarInt(clientdata);
 		switch (type) {
-			case DISPLAYED_RECIPE: {
+			case 0: {
 				clientdata.readInt();
 				break;
 			}
-			case RECIPE_BOOK_STATUS: {
+			case 1: {
 				clientdata.readBoolean();
 				clientdata.readBoolean();
 				break;

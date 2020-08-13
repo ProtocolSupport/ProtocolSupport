@@ -31,12 +31,12 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 	}
 
 	protected NetworkEntity player;
-	protected GameMode gamemodeCurrent;
 	protected boolean hardcore;
+	protected GameMode gamemodeCurrent;
 	protected GameMode gamemodePrevious;
 	protected String[] worlds;
 	protected NBTCompound dimensions;
-	protected String dimension;
+	protected NBTCompound dimension;
 	protected String world;
 	protected long hashedSeed;
 	protected int maxplayers;
@@ -49,17 +49,19 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 	@Override
 	protected void readServerData(ByteBuf serverdata) {
 		player = NetworkEntity.createPlayer(serverdata.readInt());
-		int gmdata = serverdata.readByte();
-		gamemodeCurrent = GameMode.getById(gmdata & 0xFFFFFFF7);
-		hardcore = (gmdata & 0x8) == 0x8;
+		hardcore = serverdata.readBoolean();
+		gamemodeCurrent = GameMode.getById(serverdata.readByte());
 		gamemodePrevious = GameMode.getById(serverdata.readByte());
 		worlds = ArraySerializer.readVarIntVarIntUTF8StringArray(serverdata);
 		dimensions = ItemStackSerializer.readDirectTag(serverdata);
-		dimension = StringSerializer.readVarIntUTF8String(serverdata);
+		dimension = ItemStackSerializer.readDirectTag(serverdata);
 		world = StringSerializer.readVarIntUTF8String(serverdata);
 		hashedSeed = serverdata.readLong();
-		serverdata.readByte();
-		maxplayers = TabAPI.getMaxTabSize();
+		maxplayers = VarNumberSerializer.readVarInt(serverdata);
+		int forcedMaxPlayers = TabAPI.getMaxTabSize();
+		if (forcedMaxPlayers >= 0) {
+			maxplayers = forcedMaxPlayers;
+		}
 		renderDistance = VarNumberSerializer.readVarInt(serverdata);
 		reducedDebugInfo = serverdata.readBoolean();
 		respawnScreenEnabled = serverdata.readBoolean();
@@ -69,7 +71,6 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void handleReadData() {
-		clientCache.setDimensions(dimensions);
 		clientCache.setCurrentDimension(dimension);
 		clientCache.setRespawnScreenEnabled(respawnScreenEnabled);
 		windowCache.setPlayerWindow(windowRemapper.get(WindowType.PLAYER, 0));

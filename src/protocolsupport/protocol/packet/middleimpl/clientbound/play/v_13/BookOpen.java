@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13;
 
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBookOpen;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2_15_16.CustomPayload;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2_15_16r1_16r2.CustomPayload;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 

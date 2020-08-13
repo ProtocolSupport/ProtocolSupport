@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
@@ -11,6 +12,7 @@ import protocolsupport.protocol.typeremapper.window.AbstractWindowsRemapper;
 import protocolsupport.protocol.typeremapper.window.WindowsRemappersRegistry;
 import protocolsupport.protocol.types.GameMode;
 import protocolsupport.protocol.types.WindowType;
+import protocolsupport.protocol.types.nbt.NBTCompound;
 
 public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
 
@@ -25,7 +27,7 @@ public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
 	protected final AbstractWindowsRemapper windowRemapper = WindowsRemappersRegistry.get(version);
 
 
-	protected String dimension;
+	protected NBTCompound dimension;
 	protected String world;
 	protected long hashedSeed;
 	protected GameMode gamemodeCurrent;
@@ -37,7 +39,7 @@ public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void readServerData(ByteBuf serverdata) {
-		dimension = StringSerializer.readVarIntUTF8String(serverdata);
+		dimension = ItemStackSerializer.readDirectTag(serverdata);
 		world = StringSerializer.readVarIntUTF8String(serverdata);
 		hashedSeed = serverdata.readLong();
 		gamemodeCurrent = GameMode.getById(serverdata.readByte());

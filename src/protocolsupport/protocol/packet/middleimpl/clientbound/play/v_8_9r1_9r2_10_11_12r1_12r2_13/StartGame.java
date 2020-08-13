@@ -22,9 +22,9 @@ public class StartGame extends AbstractChunkCacheStartGame {
 		startgame.writeInt(player.getId());
 		startgame.writeByte(gamemodeCurrent.getId() | (hardcore ? 0x8 : 0));
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9_1)) {
-			startgame.writeByte(LegacyDimension.getId(dimension));
+			startgame.writeByte(LegacyDimension.getIntId(dimension));
 		} else {
-			startgame.writeInt(LegacyDimension.getId(dimension));
+			startgame.writeInt(LegacyDimension.getIntId(dimension));
 		}
 		MiscSerializer.writeByteEnum(startgame, Difficulty.HARD);
 		startgame.writeByte(maxplayers);

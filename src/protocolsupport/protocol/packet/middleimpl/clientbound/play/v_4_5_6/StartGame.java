@@ -21,7 +21,7 @@ public class StartGame extends AbstractChunkCacheStartGame {
 		startgame.writeInt(player.getId());
 		StringSerializer.writeShortUTF16BEString(startgame, "default");
 		startgame.writeByte(gamemodeCurrent.getId() | (hardcore ? 0x8 : 0));
-		startgame.writeByte(LegacyDimension.getId(dimension));
+		startgame.writeByte(LegacyDimension.getIntId(dimension));
 		MiscSerializer.writeByteEnum(startgame, Difficulty.HARD);
 		startgame.writeByte(0);
 		startgame.writeByte(maxplayers);

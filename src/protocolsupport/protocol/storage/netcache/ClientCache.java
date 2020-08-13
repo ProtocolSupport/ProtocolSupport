@@ -1,12 +1,8 @@
 package protocolsupport.protocol.storage.netcache;
 
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import protocolsupport.protocol.types.nbt.NBTCompound;
-import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.Utils;
 
@@ -32,23 +28,10 @@ public class ClientCache {
 		return respawnScreenEnabled;
 	}
 
-	protected Map<String, NBTCompound> dimensions;
 	protected NBTCompound dimension;
 
-	public void setDimensions(NBTCompound dimensionsNBT) {
-		Map<String, NBTCompound> dimensions = new HashMap<>();
-		for (NBTCompound dimensionNBT : dimensionsNBT.getTagListOfType("dimension", NBTType.COMPOUND).getTags()) {
-			dimensions.put(dimensionNBT.getTagOfType("name", NBTType.STRING).getValue(), dimensionNBT);
-		}
-		this.dimensions = dimensions;
-	}
-
-	public void setCurrentDimension(String dimension) {
-		this.dimension = dimensions.get(dimension);
-
-		if (this.dimension == null) {
-			throw new IllegalArgumentException(MessageFormat.format("Dimension {0} doesn''t exist in dimension registry {1}", dimension, dimensions));
-		}
+	public void setCurrentDimension(NBTCompound dimension) {
+		this.dimension = dimension;
 	}
 
 	public boolean hasSkyLightInCurrentDimension() {

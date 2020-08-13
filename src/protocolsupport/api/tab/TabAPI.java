@@ -1,7 +1,6 @@
 package protocolsupport.api.tab;
 
 import org.apache.commons.lang3.Validate;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import protocolsupport.api.ProtocolSupportAPI;
@@ -10,10 +9,11 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class TabAPI {
 
-	private static int maxTabSize = Math.min(Bukkit.getMaxPlayers(), 60);
+	private static int maxTabSize = -1;
 
 	/**
-	 * Returns max player list size
+	 * Returns max player list size<br>
+	 * Negative return value indicates that forced player list size is not set
 	 * @return max player list size
 	 */
 	public static int getMaxTabSize() {

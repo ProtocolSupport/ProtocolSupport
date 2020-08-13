@@ -6,7 +6,7 @@ import java.util.Map;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2_15_16.AbstractDeclareRecipes;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2_15_16r1_16r2.AbstractDeclareRecipes;
 import protocolsupport.protocol.types.recipe.Recipe;
 import protocolsupport.protocol.types.recipe.RecipeType;
 

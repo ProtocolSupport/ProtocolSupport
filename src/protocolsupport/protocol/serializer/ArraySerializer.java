@@ -63,6 +63,14 @@ public class ArraySerializer {
 		return array;
 	}
 
+	public static long[] readVarIntVarLongArray(ByteBuf from) {
+		long[] array = new long[VarNumberSerializer.readVarInt(from)];
+		for (int i = 0; i < array.length; i++) {
+			array[i] = VarNumberSerializer.readVarLong(from);
+		}
+		return array;
+	}
+
 
 	public static void writeShortByteArray(ByteBuf to, ByteBuf data) {
 		to.writeShort(data.readableBytes());
@@ -124,6 +132,13 @@ public class ArraySerializer {
 		VarNumberSerializer.writeVarInt(to, array.length);
 		for (int element : array) {
 			VarNumberSerializer.writeVarInt(to, element);
+		}
+	}
+
+	public static void writeVarIntVarLongArray(ByteBuf to, long[] array) {
+		VarNumberSerializer.writeVarInt(to, array.length);
+		for (long element : array) {
+			VarNumberSerializer.writeVarLong(to, element);
 		}
 	}
 

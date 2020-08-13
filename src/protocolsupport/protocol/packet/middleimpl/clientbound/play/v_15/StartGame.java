@@ -19,7 +19,7 @@ public class StartGame extends MiddleStartGame {
 		ClientBoundPacketData startgame = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_START_GAME);
 		startgame.writeInt(player.getId());
 		startgame.writeByte(gamemodeCurrent.getId() | (hardcore ? 0x8 : 0));
-		startgame.writeInt(LegacyDimension.getId(dimension));
+		startgame.writeInt(LegacyDimension.getIntId(dimension));
 		startgame.writeLong(hashedSeed);
 		startgame.writeByte(maxplayers);
 		StringSerializer.writeVarIntUTF8String(startgame, "default");

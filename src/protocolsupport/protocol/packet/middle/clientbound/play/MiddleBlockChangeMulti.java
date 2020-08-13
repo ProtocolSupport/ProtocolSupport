@@ -4,11 +4,6 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.types.ChunkCoord;
-import protocolsupport.protocol.types.Position;
-import protocolsupport.utils.Utils;
 
 public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 
@@ -16,45 +11,43 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 		super(connection);
 	}
 
-	protected ChunkCoord chunkCoord;
-	protected Record[] records;
+	protected long chunkCoordWithSection;
+	protected boolean large; //TODO: figure out what exactly this does, currently set to true if there is more than 64 dirty blocks in a chunk
+	protected long[] records;
 
 	@Override
 	protected void readServerData(ByteBuf serverdata) {
-		chunkCoord = PositionSerializer.readIntChunkCoord(serverdata);
-		records = ArraySerializer.readVarIntTArray(
-			serverdata,
-			Record.class,
-			from -> new Record(serverdata.readUnsignedShort(), VarNumberSerializer.readVarInt(from))
-		);
+		chunkCoordWithSection = serverdata.readLong();
+		large = serverdata.readBoolean();
+		records = ArraySerializer.readVarIntVarLongArray(serverdata);
 	}
 
-
-	public static class Record {
-		public final int coord;
-		public final int x;
-		public final int y;
-		public final int z;
-		public final int id;
-		public Record(int coord, int id) {
-			this.coord = coord;
-			this.x = coord >> 12;
-			this.y = coord & 0xFF;
-			this.z = (coord >> 8) & 0xF;
-			this.id = id;
-		}
-		@Override
-		public String toString() {
-			return Utils.toStringAllFields(this);
-		}
+	protected static int getChunkX(long coord) {
+		return (int) (coord >> 42);
 	}
 
-	public static Position getGlobalPosition(ChunkCoord chunk, Record record) {
-		return new Position(
-			(chunk.getX() << 4) + record.x,
-			record.y,
-			(chunk.getZ() << 4) + record.z
-		);
+	protected static int getChunkZ(long coord) {
+		return (int) ((coord << 22) >> 42);
+	}
+
+	protected static int getChunkSectionY(long coord) {
+		return (int) ((coord << 44) >> 44);
+	}
+
+	protected static int getRecordBlockData(long record) {
+		return (int) (record >>> 12);
+	}
+
+	protected static int getRecordRelX(long record) {
+		return (int) ((record >> 8) & 0xF);
+	}
+
+	protected static int getRecordRelZ(long record) {
+		return (int) ((record >> 4) & 0xF);
+	}
+
+	protected static int getRecordRelY(long record) {
+		return (int) (record & 0xF);
 	}
 
 }

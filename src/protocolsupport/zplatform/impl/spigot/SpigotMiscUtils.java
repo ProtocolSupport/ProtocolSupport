@@ -13,16 +13,14 @@ import javax.crypto.SecretKey;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_16_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R1.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_16_R1.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_16_R1.util.CraftIconCache;
-import org.bukkit.craftbukkit.v1_16_R1.util.CraftMagicNumbers;
+import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R2.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_16_R2.util.CraftIconCache;
+import org.bukkit.craftbukkit.v1_16_R2.util.CraftMagicNumbers;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -42,21 +40,20 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.MultithreadEventLoopGroup;
 import io.netty.channel.epoll.Epoll;
-import net.minecraft.server.v1_16_R1.AxisAlignedBB;
-import net.minecraft.server.v1_16_R1.BiomeBase;
-import net.minecraft.server.v1_16_R1.Block;
-import net.minecraft.server.v1_16_R1.DedicatedServer;
-import net.minecraft.server.v1_16_R1.DedicatedServerProperties;
-import net.minecraft.server.v1_16_R1.EntityPlayer;
-import net.minecraft.server.v1_16_R1.EntityTypes;
-import net.minecraft.server.v1_16_R1.EnumProtocol;
-import net.minecraft.server.v1_16_R1.IRegistry;
-import net.minecraft.server.v1_16_R1.Item;
-import net.minecraft.server.v1_16_R1.MinecraftServer;
-import net.minecraft.server.v1_16_R1.NBTCompressedStreamTools;
-import net.minecraft.server.v1_16_R1.NBTReadLimiter;
-import net.minecraft.server.v1_16_R1.ServerConnection;
-import net.minecraft.server.v1_16_R1.WorldServer;
+import net.minecraft.server.v1_16_R2.AxisAlignedBB;
+import net.minecraft.server.v1_16_R2.Block;
+import net.minecraft.server.v1_16_R2.DedicatedServer;
+import net.minecraft.server.v1_16_R2.DedicatedServerProperties;
+import net.minecraft.server.v1_16_R2.EntityPlayer;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.EnumProtocol;
+import net.minecraft.server.v1_16_R2.IRegistry;
+import net.minecraft.server.v1_16_R2.Item;
+import net.minecraft.server.v1_16_R2.MinecraftServer;
+import net.minecraft.server.v1_16_R2.NBTCompressedStreamTools;
+import net.minecraft.server.v1_16_R2.NBTReadLimiter;
+import net.minecraft.server.v1_16_R2.ServerConnection;
+import net.minecraft.server.v1_16_R2.WorldServer;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.api.utils.Profile;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
@@ -144,10 +141,16 @@ public class SpigotMiscUtils implements PlatformUtils {
 		return new SpigotHandshakeListener(networkmanager);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public int getEntityTypeNetworkId(EntityType type) {
-		return IRegistry.ENTITY_TYPE.a(EntityTypes.a(type.getName()).get());
+		if (type == EntityType.UNKNOWN) {
+			return -1;
+		}
+		return
+			EntityTypes.a(type.getKey().toString())
+			.map(IRegistry.ENTITY_TYPE::a)
+			.orElse(Integer.valueOf(-1))
+			.intValue();
 	}
 
 	@Override
@@ -190,19 +193,8 @@ public class SpigotMiscUtils implements PlatformUtils {
 	}
 
 	@Override
-	public int getBiomeNetworkId(Biome biome) {
-		return IRegistry.BIOME.a(CraftBlock.biomeToBiomeBase(biome));
-	}
-
-	@Override
-	public Biome getBiomeByNetworkId(int id) {
-		BiomeBase biomebase = IRegistry.BIOME.fromId(id);
-		return biomebase != null ? CraftBlock.biomeBaseToBiome(biomebase) : null;
-	}
-
-	@Override
 	public ItemStack createBukkitItemStackFromNetwork(NetworkItemStack stack) {
-		net.minecraft.server.v1_16_R1.ItemStack nmsitemstack = new net.minecraft.server.v1_16_R1.ItemStack(Item.getById(stack.getTypeId()), stack.getAmount());
+		net.minecraft.server.v1_16_R2.ItemStack nmsitemstack = new net.minecraft.server.v1_16_R2.ItemStack(Item.getById(stack.getTypeId()), stack.getAmount());
 		NBTCompound rootTag = stack.getNBT();
 		if (rootTag != null) {
 			//TODO: a faster way to do that
@@ -227,7 +219,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 		networkItemStack.setAmount(itemstack.getAmount());
 		if (itemstack.hasItemMeta()) {
 			//TODO: a faster way to do that
-			net.minecraft.server.v1_16_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(itemstack);
+			net.minecraft.server.v1_16_R2.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(itemstack);
 			ByteBuf buffer = Unpooled.buffer();
 			try {
 				NBTCompressedStreamTools.a(nmsItemStack.getTag(), (DataOutput) new ByteBufOutputStream(buffer));
@@ -295,7 +287,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public int getCompressionThreshold() {
-		return getServer().av();
+		return getServer().aw();
 	}
 
 	@Override
@@ -334,7 +326,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public MultithreadEventLoopGroup getServerIOEventLoopGroup() {
 		try {
-			if (Epoll.isAvailable() && getServer().k()) {
+			if (Epoll.isAvailable() && getServer().l()) {
 				return ServerConnection.b.a();
 			} else {
 				return ServerConnection.a.a();

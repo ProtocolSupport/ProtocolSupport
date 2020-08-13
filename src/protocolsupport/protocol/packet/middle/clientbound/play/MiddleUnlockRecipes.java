@@ -18,6 +18,10 @@ public abstract class MiddleUnlockRecipes extends ClientBoundMiddlePacket {
 	protected boolean craftRecipeBookFiltering;
 	protected boolean smeltingRecipeBookOpen;
 	protected boolean smeltingRecipeBookFiltering;
+	protected boolean blastFurnaceRecipeBookOpen;
+	protected boolean blastFurnaceRecipeBookFiltering;
+	protected boolean smokerRecipeBookOpen;
+	protected boolean smokerRecipeBookFiltering;
 	protected String[] recipes1;
 	protected String[] recipes2;
 
@@ -28,6 +32,10 @@ public abstract class MiddleUnlockRecipes extends ClientBoundMiddlePacket {
 		craftRecipeBookFiltering = serverdata.readBoolean();
 		smeltingRecipeBookOpen = serverdata.readBoolean();
 		smeltingRecipeBookFiltering = serverdata.readBoolean();
+		blastFurnaceRecipeBookOpen = serverdata.readBoolean();
+		blastFurnaceRecipeBookFiltering = serverdata.readBoolean();
+		smokerRecipeBookOpen = serverdata.readBoolean();
+		smokerRecipeBookFiltering = serverdata.readBoolean();
 		recipes1 = ArraySerializer.readVarIntVarIntUTF8StringArray(serverdata);
 		if (action == Action.INIT) {
 			recipes2 = ArraySerializer.readVarIntVarIntUTF8StringArray(serverdata);

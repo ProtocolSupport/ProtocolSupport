@@ -14,6 +14,7 @@ import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.Flattenin
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVaries;
 import protocolsupport.protocol.typeremapper.chunk.HeightMapTransformer;
+import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
 
@@ -36,7 +37,7 @@ public class ChunkData extends MiddleChunkData {
 		VarNumberSerializer.writeVarInt(chunkdata, blockMask);
 		ItemStackSerializer.writeDirectTag(chunkdata, HeightMapTransformer.transform(heightmaps));
 		if (full) {
-			for (int biome : biomes) {
+			for (int biome : LegacyBiomeData.toLegacy1024EntryBiomeData(biomes)) {
 				chunkdata.writeInt(biomeRemappingTable.get(biome));
 			}
 		}

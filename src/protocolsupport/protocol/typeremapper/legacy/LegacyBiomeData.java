@@ -4,7 +4,16 @@ import java.util.Arrays;
 
 public class LegacyBiomeData {
 
+	public static int[] toLegacy1024EntryBiomeData(int[] biomeData) {
+		if (biomeData.length != 1024) {
+			return Arrays.copyOfRange(biomeData, 0, 1024);
+		} else {
+			return biomeData;
+		}
+	}
+
 	public static int[] toLegacyBiomeData(int[] biomeData) {
+		biomeData = toLegacy1024EntryBiomeData(biomeData);
 		int[] legacyBiomeData = new int[256];
 		for (int z = 0; z < 16; z += 4) {
 			for (int x = 0; x < 16; x += 4) {

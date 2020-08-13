@@ -16,11 +16,11 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public enum NetworkEntityType {
 
-	NONE(EType.NONE),
+	NONE(EType.NONE, EntityType.UNKNOWN),
 	// Specials (Spawned by separate packets)
-	EXP_ORB(EType.NONE),
-	PAINTING(EType.NONE),
-	PLAYER(EType.NONE),
+	EXP_ORB(EType.SPECIAL, EntityType.EXPERIENCE_ORB),
+	PAINTING(EType.SPECIAL, EntityType.PAINTING),
+	PLAYER(EType.SPECIAL, EntityType.PLAYER),
 	// Mobs
 	COW(EType.MOB, EntityType.COW),
 	MUSHROOM_COW(EType.MOB, EntityType.MUSHROOM_COW),
@@ -87,6 +87,7 @@ public enum NetworkEntityType {
 	PILLAGER(EType.MOB, EntityType.PILLAGER),
 	RAVAGER(EType.MOB, EntityType.RAVAGER),
 	PIGLIN(EType.MOB, EntityType.PIGLIN),
+	PIGLIN_BRUTE(EType.MOB, EntityType.PIGLIN_BRUTE),
 	ZOMBIFIED_PIGLIN(EType.MOB, EntityType.ZOMBIFIED_PIGLIN, ZOMBIE),
 	HOGLIN(EType.MOB, EntityType.HOGLIN),
 	ZOGLIN(EType.MOB, EntityType.ZOGLIN),
@@ -135,10 +136,6 @@ public enum NetworkEntityType {
 	private final EntityType bukkitType;
 	private final NetworkEntityType superType;
 
-	public boolean isReal() {
-		return etype != EType.NONE;
-	}
-
 	public NetworkEntityType getSuperType() {
 		return superType;
 	}
@@ -160,16 +157,15 @@ public enum NetworkEntityType {
 	}
 
 	public enum EType {
-		NONE, OBJECT, MOB
+		NONE, SPECIAL, OBJECT, MOB
 	}
 
 	protected static final ArrayMap<NetworkEntityType> OBJECT_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.OBJECT), (w -> w.typeId));
 	protected static final ArrayMap<NetworkEntityType> MOB_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.MOB), (w -> w.typeId));
-	protected static final Map<EntityType, NetworkEntityType> BY_B_TYPE = CollectionsUtils.makeEnumMappingEnumMap(Arrays.stream(NetworkEntityType.values()).filter(NetworkEntityType::isReal), EntityType.class, NetworkEntityType::getBukkitType);
+	protected static final Map<EntityType, NetworkEntityType> BY_B_TYPE = CollectionsUtils.makeEnumMappingEnumMap(Arrays.stream(NetworkEntityType.values()), EntityType.class, NetworkEntityType::getBukkitType);
 	protected static final Map<String, NetworkEntityType> BY_R_STRING_ID = new HashMap<>();
 	static {
 		Arrays.stream(NetworkEntityType.values())
-		.filter(NetworkEntityType::isReal)
 		.forEach(w -> {
 			String rName = w.bukkitType.getName();
 			if (rName != null) {
@@ -200,16 +196,12 @@ public enum NetworkEntityType {
 	NetworkEntityType(EType etype, EntityType bukkitType, NetworkEntityType superType) {
 		this.etype = etype;
 		this.bukkitType = bukkitType;
-		this.typeId = bukkitType != null ? ServerPlatform.get().getMiscUtils().getEntityTypeNetworkId(bukkitType) : -1;
+		this.typeId = ServerPlatform.get().getMiscUtils().getEntityTypeNetworkId(bukkitType);
 		this.superType = superType;
 	}
 
 	NetworkEntityType(EType etype, EntityType bukkitType) {
 		this(etype, bukkitType, null);
-	}
-
-	NetworkEntityType(EType etype) {
-		this(etype, null, null);
 	}
 
 }

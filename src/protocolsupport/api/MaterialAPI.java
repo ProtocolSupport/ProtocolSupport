@@ -79,9 +79,11 @@ public class MaterialAPI {
 	 * Returns biome network id
 	 * @param biome biome
 	 * @return network id
+	 * @deprecated biome id mappings are now per connection
 	 */
+	@Deprecated
 	public static int getBiomeNetworkId(Biome biome) {
-		return ServerPlatform.get().getMiscUtils().getBiomeNetworkId(biome);
+		return 0;
 	}
 
 	/**
@@ -89,9 +91,11 @@ public class MaterialAPI {
 	 * Returns null if no biome exists for this network id
 	 * @param id biome network id
 	 * @return biome biome
+	 * @deprecated biome id mappings are now per connection
 	 */
+	@Deprecated
 	public static Biome getBiomeByNetworkId(int id) {
-		return ServerPlatform.get().getMiscUtils().getBiomeByNetworkId(id);
+		return Biome.PLAINS;
 	}
 
 	/**

@@ -8,6 +8,7 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
+import protocolsupport.protocol.types.ChunkCoord;
 
 public class BlockChangeMulti extends AbstractChunkCacheBlockChangeMulti {
 
@@ -19,13 +20,15 @@ public class BlockChangeMulti extends AbstractChunkCacheBlockChangeMulti {
 
 	@Override
 	protected void writeToClient() {
+		int chunkAbsY = getChunkSectionY(chunkCoordWithSection) << 4;
+
 		ClientBoundPacketData blockchangemulti = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI);
-		PositionSerializer.writeIntChunkCoord(blockchangemulti, chunkCoord);
+		PositionSerializer.writeIntChunkCoord(blockchangemulti, new ChunkCoord(getChunkX(chunkCoordWithSection), getChunkZ(chunkCoordWithSection)));
 		blockchangemulti.writeShort(records.length);
 		blockchangemulti.writeInt(records.length * 4);
-		for (Record record : records) {
-			blockchangemulti.writeShort(record.coord);
-			blockchangemulti.writeShort(BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, record.id));
+		for (long record : records) {
+			blockchangemulti.writeShort((getRecordRelX(record) << 12) | (getRecordRelZ(record) << 8) | chunkAbsY | getRecordRelY(record));
+			blockchangemulti.writeShort(BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, getRecordBlockData(record)));
 		}
 		codec.write(blockchangemulti);
 	}
