@@ -33,11 +33,7 @@ public class ChunkWriterVaries {
 					for (short blockdata : palette) {
 						VarNumberSerializer.writeVarInt(buffer, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, blockdata));
 					}
-					NumberBitsStoragePadded blockstorage = new NumberBitsStoragePadded(bitsPerBlock, ChunkConstants.BLOCKS_IN_SECTION);
-					for (int blockIndex = 0; blockIndex < ChunkConstants.BLOCKS_IN_SECTION; blockIndex++) {
-						blockstorage.setNumber(blockIndex, section.getNumber(blockIndex));
-					}
-					ArraySerializer.writeVarIntLongArray(buffer, blockstorage.getStorage());
+					ArraySerializer.writeVarIntLongArray(buffer, section.getStorage());
 				} else {
 					buffer.writeShort(section.getNonAirBlockCount());
 					buffer.writeByte(globalPaletteBitsPerBlock);
