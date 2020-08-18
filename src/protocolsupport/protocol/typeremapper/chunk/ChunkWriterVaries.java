@@ -25,7 +25,7 @@ public class ChunkWriterVaries {
 				ChunkSectonBlockData section = sections[sectionNumber];
 
 				int bitsPerBlock = section.getBitsPerNumber();
-				if (bitsPerBlock != globalPaletteBitsPerBlock) {
+				if (bitsPerBlock != ChunkConstants.GLOBAL_PALETTE_BITS_PER_BLOCK) {
 					buffer.writeShort(section.getNonAirBlockCount());
 					buffer.writeByte(bitsPerBlock);
 					short[] palette = section.getPalette();
@@ -58,7 +58,7 @@ public class ChunkWriterVaries {
 				ChunkSectonBlockData section = sections[sectionNumber];
 
 				int bitsPerBlock = section.getBitsPerNumber();
-				if (bitsPerBlock != globalPaletteBitsPerBlock) {
+				if (bitsPerBlock != ChunkConstants.GLOBAL_PALETTE_BITS_PER_BLOCK) {
 					buffer.writeShort(section.getNonAirBlockCount());
 					buffer.writeByte(8);
 					short[] palette = section.getPalette();
