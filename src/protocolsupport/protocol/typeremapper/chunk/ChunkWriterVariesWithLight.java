@@ -42,10 +42,16 @@ public class ChunkWriterVariesWithLight {
 						}
 						int blockdataLength = ChunkConstants.BLOCKS_IN_SECTION >> 3;
 						VarNumberSerializer.writeVarInt(buffer, blockdataLength);
-						for (int i = 0; i < blockdataLength; i++) {
-							for (int j = 1; j <= Long.BYTES; j++) {
-								buffer.writeByte(blockstoragePaletted.getRuntimeId((i << 3) + (Long.BYTES - j)));
-							}
+						for (int paletteLongIndex = 0; paletteLongIndex < blockdataLength; paletteLongIndex++) {
+							int blockIndex = paletteLongIndex << 3;
+							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex | 7));
+							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex | 6));
+							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex | 5));
+							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex | 4));
+							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex | 3));
+							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex | 2));
+							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex | 1));
+							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex));
 						}
 					} else {
 						buffer.writeByte(globalPaletteBitsPerBlock);
@@ -95,10 +101,16 @@ public class ChunkWriterVariesWithLight {
 						}
 						int blockdataLength = ChunkConstants.BLOCKS_IN_SECTION >> 3;
 						VarNumberSerializer.writeVarInt(buffer, blockdataLength);
-						for (int i = 0; i < blockdataLength; i++) {
-							for (int j = 1; j <= Long.BYTES; j++) {
-								buffer.writeByte(blockstoragePaletted.getRuntimeId((i << 3) + (Long.BYTES - j)));
-							}
+						for (int paletteLongIndex = 0; paletteLongIndex < blockdataLength; paletteLongIndex++) {
+							int blockIndex = paletteLongIndex << 3;
+							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex | 7));
+							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex | 6));
+							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex | 5));
+							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex | 4));
+							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex | 3));
+							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex | 2));
+							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex | 1));
+							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex));
 						}
 					} else {
 						buffer.writeByte(globalPaletteBitsPerBlock);
