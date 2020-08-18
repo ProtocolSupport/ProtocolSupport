@@ -50,7 +50,7 @@ public abstract class AbstractStatusListener {
 			ServerPingResponseEvent revent = PingResponseHandlerProvider.get().createResponse(ConnectionImpl.getFromChannel(networkManager.getChannel()));
 			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createStatusServerInfoPacket(
 				revent.getPlayers(), revent.getProtocolInfo(),
-				revent.getIcon(), revent.getMotd(),
+				revent.getIcon(), revent.getJsonMotd(),
 				revent.getOnlinePlayers(), revent.getMaxPlayers()
 			));
 		});

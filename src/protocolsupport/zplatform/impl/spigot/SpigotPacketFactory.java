@@ -103,7 +103,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	private final UUID profileUUID = UUID.randomUUID();
 	@Override
-	public Object createStatusServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, String motd, int onlinePlayers, int maxPlayers) {
+	public Object createStatusServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, BaseComponent motd, int onlinePlayers, int maxPlayers) {
 		ServerPingPlayerSample playerSample = new ServerPingPlayerSample(maxPlayers, onlinePlayers);
 
 		Collections.shuffle(profiles);
@@ -115,7 +115,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 
 		ServerPing serverping = new ServerPing();
 		serverping.setFavicon(icon);
-		serverping.setMOTD(new ChatComponentText(motd));
+		serverping.setMOTD(ChatSerializer.a(ChatAPI.toJSON(motd)));
 		serverping.setPlayerSample(playerSample);
 		serverping.setServerInfo(new ServerData(info.getName(), info.getId()));
 

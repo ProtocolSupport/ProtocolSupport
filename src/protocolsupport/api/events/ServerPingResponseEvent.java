@@ -7,6 +7,8 @@ import org.bukkit.event.HandlerList;
 
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.utils.IconUtils;
 import protocolsupport.zplatform.ServerPlatform;
 
@@ -16,17 +18,29 @@ import protocolsupport.zplatform.ServerPlatform;
 public class ServerPingResponseEvent extends ConnectionEvent {
 
 	protected ProtocolInfo info;
-	protected String motd;
+	protected BaseComponent motd;
 	protected String icon;
 	protected int onlinePlayers;
 	protected int maxPlayers;
 	protected List<String> players;
 
-	public ServerPingResponseEvent(Connection connection, ProtocolInfo info, String icon, String motd, int onlinePlayers, int maxPlayers, List<String> players) {
+	public ServerPingResponseEvent(
+		Connection connection,
+		ProtocolInfo info, String icon, String motd,
+		int onlinePlayers, int maxPlayers, List<String> players
+	) {
+		this(connection, info, icon, new TextComponent(motd), onlinePlayers, maxPlayers, players);
+	}
+
+	public ServerPingResponseEvent(
+		Connection connection,
+		ProtocolInfo info, String icon, BaseComponent motd,
+		int onlinePlayers, int maxPlayers, List<String> players
+	) {
 		super(connection);
 		setProtocolInfo(info);
 		setIcon(icon);
-		setMotd(motd);
+		setJsonMotd(motd);
 		this.onlinePlayers = onlinePlayers;
 		setMaxPlayers(maxPlayers);
 		setPlayers(players);
@@ -67,20 +81,38 @@ public class ServerPingResponseEvent extends ConnectionEvent {
 	}
 
 	/**
-	 * Returns MotD
+	 * Returns MotD<br>
+	 * The returned string a result of converting json motd to legacy text, so it's better to use {@link ServerPingResponseEvent#getJsonMotd()} instead
 	 * @return MotD
 	 */
 	public String getMotd() {
+		return motd.toLegacyText();
+	}
+
+	/**
+	 * Returns MotD
+	 * @return MotD
+	 */
+	public BaseComponent getJsonMotd() {
 		return motd;
 	}
 
 	/**
 	 * Sets MotD <br>
-	 * If MotD is null default one is used
+	 * If MotD is null, empty motd is used
 	 * @param motd motd
 	 */
 	public void setMotd(String motd) {
-		this.motd = motd != null ? motd : "A minecraft server (ProtocolSupport)";
+		setJsonMotd(motd != null ? new TextComponent(motd) : null);
+	}
+
+	/**
+	 * Sets MotD <br>
+	 * If MotD is null, empty motd is used
+	 * @param motd motd
+	 */
+	public void setJsonMotd(BaseComponent motd) {
+		this.motd = motd != null ? motd : new TextComponent("");
 	}
 
 	/**
