@@ -5,6 +5,7 @@ import java.nio.file.Files
 plugins {
 	id 'com.github.johnrengelman.shadow' version '5.0.0'
 	id 'java'
+	id 'maven'
 }
 
 apply from: 'gradle/helper.gradle'
@@ -14,7 +15,7 @@ defaultTasks 'build'
 
 
 group 'protocolsupport'
-version '4.29-dev'
+version '1.16.2-dev'
 
 
 Path projectDirectoryPath = projectDir.toPath().toAbsolutePath()
