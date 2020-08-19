@@ -69,6 +69,8 @@ class BuildLibraryTask extends DefaultTask {
 				builtLibraryFile = builtLibraryFile.resolve(builtLibraryElementName)
 			}
 			Files.copy(builtLibraryFile, libraryFile)
+			buildDirectory.toFile().deleteDir()
+			logger.lifecycle(MessageFormat.format("Successfully built library {0}", targetLibraryName))
 		} else {
 			logger.lifecycle(MessageFormat.format("Skipping building of library {0} because it already exists", targetLibraryName))
 		}
