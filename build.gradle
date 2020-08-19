@@ -71,7 +71,10 @@ task updateSpigot(type: BuildLibraryTask) {
 	targetDirectory = librariesRuntimeDirectoryPath
 	targetLibraryName = "spigot-1.16.2-1.jar"
 	builderUrl = "https://hub.spigotmc.org/jenkins/job/BuildTools/120/artifact/target/BuildTools.jar"
-	buildCommand = "java -jar {BUILDER} --rev 1.16.2"
+	buildCommand = ["java", "-jar", getBuilderPath().toString(), "--rev", "1.16.2"]
+	buildEnv = [
+		"MAVEN_OPTS": "-Dmaven.repo.local=" + getBuildDirectory().resolve("m2").toString() + " -Xmx1024M"
+	]
 	builtLibraryName = ["spigot-1.16.2.jar"]
 }
 
