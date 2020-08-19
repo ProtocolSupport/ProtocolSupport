@@ -2,7 +2,6 @@ package protocolsupport.zplatform.impl.spigot;
 
 import java.io.IOException;
 import java.security.PublicKey;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -106,7 +105,6 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	public Object createStatusServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, BaseComponent motd, int onlinePlayers, int maxPlayers) {
 		ServerPingPlayerSample playerSample = new ServerPingPlayerSample(maxPlayers, onlinePlayers);
 
-		Collections.shuffle(profiles);
 		com.mojang.authlib.GameProfile[] gprofiles = new com.mojang.authlib.GameProfile[profiles.size()];
 		for (int i = 0; i < profiles.size(); i++) {
 			gprofiles[i] = new com.mojang.authlib.GameProfile(profileUUID, profiles.get(i));
