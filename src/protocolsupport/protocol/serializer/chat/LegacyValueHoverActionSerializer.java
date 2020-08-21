@@ -11,8 +11,10 @@ import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.HoverAction.EntityInfo;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
 import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
+import protocolsupport.protocol.typeremapper.itemstack.FlatteningItemId;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.types.NetworkBukkitItemStack;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTByte;
@@ -31,10 +33,12 @@ public class LegacyValueHoverActionSerializer extends HoverActionSerializer {
 
 	protected final ProtocolVersion version;
 	protected final EntityRemappingTable entityRemapTable;
+	protected final ArrayBasedIntMappingTable flatteningItemFromClientTable;
 
 	public LegacyValueHoverActionSerializer(ProtocolVersion version) {
 		this.version = version;
 		this.entityRemapTable = EntityRemappersRegistry.REGISTRY.getTable(version);
+		this.flatteningItemFromClientTable = FlatteningItemId.REGISTRY_FROM_CLIENT.getTable(version);
 	}
 
 	@Override
@@ -67,7 +71,8 @@ public class LegacyValueHoverActionSerializer extends HoverActionSerializer {
 				itemstack = ItemStackRemapper.remapToClient(version, locale, itemstack);
 				NBTCompound rootTag = new NBTCompound();
 				if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13)) {
-					rootTag.setTag("id", new NBTString(ItemMaterialLookup.getByRuntimeId(itemstack.getTypeId()).getKey().toString()));
+					//TODO: create and use mappings for legacy item id -> item material
+					rootTag.setTag("id", new NBTString(ItemMaterialLookup.getByRuntimeId(flatteningItemFromClientTable.get(itemstack.getTypeId())).getKey().toString()));
 				} else {
 					if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8)) {
 						rootTag.setTag("id", new NBTString(String.valueOf(itemstack.getTypeId())));
