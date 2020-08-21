@@ -2,11 +2,13 @@ package protocolsupport.protocol.utils;
 
 import java.util.Map.Entry;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBT;
 import protocolsupport.protocol.types.nbt.NBTByte;
 import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTIntArray;
 import protocolsupport.protocol.types.nbt.NBTList;
 import protocolsupport.protocol.types.nbt.NBTNumber;
 import protocolsupport.protocol.types.nbt.NBTString;
@@ -41,6 +43,10 @@ public class CommonNBT {
 		}
 		return display;
 	}
+
+	public static final String ATTRIBUTES = "AttributeModifiers";
+	public static final String ATTRIBUTE_ID = "AttributeName";
+	public static final String ATTRIBUTE_UUID = "UUID";
 
 
 	public static String[] getSignLines(NBTCompound tag) {
@@ -145,6 +151,28 @@ public class CommonNBT {
 				}
 			}
 			return joiner.toString();
+		}
+	}
+
+	public static NBTIntArray serializeUUID(UUID uuid) {
+		long most = uuid.getMostSignificantBits();
+		long least = uuid.getLeastSignificantBits();
+		return new NBTIntArray(new int[] {(int) (most >>> 32), (int) most, (int) least >>> 32, (int) least});
+	}
+
+	public static UUID deserializeUUID(NBTIntArray tag) {
+		if (tag == null) {
+			return null;
+		}
+
+		int[] array = tag.getValue();
+		try {
+			return new UUID(
+				(((long) array[0]) << 32L) | Integer.toUnsignedLong(array[1]),
+				(((long) array[2]) << 32L) | Integer.toUnsignedLong(array[3])
+			);
+		} catch (IllegalArgumentException t) {
+			return null;
 		}
 	}
 

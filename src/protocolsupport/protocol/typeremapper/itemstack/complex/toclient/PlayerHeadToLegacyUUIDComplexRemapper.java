@@ -21,7 +21,7 @@ public class PlayerHeadToLegacyUUIDComplexRemapper extends ItemStackNBTComplexRe
 	public static NBTCompound remap(NBTCompound tag, String tagname) {
 		NBTCompound gameprofileTag = tag.getTagOfType(tagname, NBTType.COMPOUND);
 		if (gameprofileTag != null) {
-			UUID uuid = GameProfileSerializer.deserializeUUID(gameprofileTag.getTagOfType(GameProfileSerializer.UUID_KEY, NBTType.INT_ARRAY));
+			UUID uuid = CommonNBT.deserializeUUID(gameprofileTag.getTagOfType(GameProfileSerializer.UUID_KEY, NBTType.INT_ARRAY));
 			if (uuid != null) {
 				gameprofileTag.setTag(GameProfileSerializer.UUID_KEY, new NBTString(uuid.toString()));
 			}
