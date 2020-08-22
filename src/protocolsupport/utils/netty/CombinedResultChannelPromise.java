@@ -52,13 +52,13 @@ public class CombinedResultChannelPromise implements ChannelPromise {
 		if (currentRegisters < 0) {
 			return false;
 		}
-		if (exception != null && !fail.compareAndSet(null, exception)) {
+		if ((exception != null) && !fail.compareAndSet(null, exception)) {
 			Throwable rootException = fail.get();
 			if (rootException != exception) {
 				rootException.addSuppressed(exception);
 			}
 		}
-		if (currentRegisters == 0 && !canRegister.get()) {
+		if ((currentRegisters == 0) && !canRegister.get()) {
 			Throwable resultException = fail.get();
 			if (resultException == null) {
 				promise.trySuccess();

@@ -42,7 +42,7 @@ public class ServerTranslateTranslateComponentContentSerializer implements Compo
 						lTranslationArgIndex = -1;
 					}
 				}
-				if (lTranslationArgIndex >= 0 && lTranslationArgIndex < translationArgs.size()) {
+				if ((lTranslationArgIndex >= 0) && (lTranslationArgIndex < translationArgs.size())) {
 					translatedComponent.addSibling(translationArgs.get(lTranslationArgIndex));
 				}
 			}
