@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13;
 
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChangeDimension;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.AbstractLegacyChangeDimension;
 import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
 
-public abstract class AbstractChunkCacheChangeDimension extends MiddleChangeDimension {
+public abstract class AbstractChunkCacheChangeDimension extends AbstractLegacyChangeDimension {
 
 	protected final ChunkCache chunkCache = cache.getChunkCache();
 

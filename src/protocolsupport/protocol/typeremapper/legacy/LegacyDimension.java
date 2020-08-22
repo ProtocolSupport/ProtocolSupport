@@ -31,4 +31,8 @@ public class LegacyDimension {
 		}
 	}
 
+	public static int getAlternativeIntId(int dimensionId) {
+		return dimensionId != 0 ? 0 : -1;
+	}
+
 }

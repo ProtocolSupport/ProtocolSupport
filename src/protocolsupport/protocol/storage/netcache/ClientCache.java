@@ -30,8 +30,10 @@ public class ClientCache {
 
 	protected NBTCompound dimension;
 
-	public void setCurrentDimension(NBTCompound dimension) {
+	public NBTCompound setCurrentDimension(NBTCompound dimension) {
+		NBTCompound oldDimension = this.dimension;
 		this.dimension = dimension;
+		return oldDimension;
 	}
 
 	public boolean hasSkyLightInCurrentDimension() {
