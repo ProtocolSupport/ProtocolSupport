@@ -35,4 +35,8 @@ public class LegacyDimension {
 		return dimensionId != 0 ? 0 : -1;
 	}
 
+	public static String getWorldType(boolean flat) {
+		return flat ? "flat" : "default";
+	}
+
 }
