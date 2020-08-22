@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r1_16r2;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunkLight;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -12,8 +11,8 @@ import protocolsupport.utils.BitUtils;
 
 public class ChunkLight extends MiddleChunkLight {
 
-	public ChunkLight(ConnectionImpl connection) {
-		super(connection);
+	public ChunkLight(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

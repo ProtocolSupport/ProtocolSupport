@@ -4,7 +4,6 @@ import java.text.MessageFormat;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleDeclareRecipes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -26,8 +25,8 @@ import protocolsupport.protocol.utils.i18n.I18NData;
 
 public abstract class AbstractDeclareRecipes extends MiddleDeclareRecipes {
 
-	public AbstractDeclareRecipes(ConnectionImpl connection) {
-		super(connection);
+	public AbstractDeclareRecipes(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected static class RecipeWriter<T extends Recipe> {

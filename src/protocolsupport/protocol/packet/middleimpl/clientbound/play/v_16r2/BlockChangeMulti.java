@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -12,8 +11,8 @@ import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMap
 
 public class BlockChangeMulti extends MiddleBlockChangeMulti {
 
-	public BlockChangeMulti(ConnectionImpl connection) {
-		super(connection);
+	public BlockChangeMulti(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);

@@ -1,14 +1,13 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleCustomPayload extends ClientBoundMiddlePacket {
 
-	public MiddleCustomPayload(ConnectionImpl connection) {
-		super(connection);
+	public MiddleCustomPayload(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected String tag;

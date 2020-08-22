@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
@@ -11,8 +10,8 @@ import protocolsupport.utils.BitUtils;
 
 public abstract class MiddleSetPosition extends ClientBoundMiddlePacket {
 
-	public MiddleSetPosition(ConnectionImpl connection) {
-		super(connection);
+	public MiddleSetPosition(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected static final int FLAGS_BIT_X = 0;

@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleKickDisconnect;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -9,8 +8,8 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 
 public class KickDisconnect extends MiddleKickDisconnect {
 
-	public KickDisconnect(ConnectionImpl connection) {
-		super(connection);
+	public KickDisconnect(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

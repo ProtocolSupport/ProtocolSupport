@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.serverbound.login;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -8,8 +7,8 @@ import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleLoginStart extends ServerBoundMiddlePacket {
 
-	public MiddleLoginStart(ConnectionImpl connection) {
-		super(connection);
+	public MiddleLoginStart(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected String name;

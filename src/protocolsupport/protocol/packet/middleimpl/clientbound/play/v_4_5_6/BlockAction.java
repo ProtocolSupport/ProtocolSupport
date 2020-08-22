@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockAction;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -13,8 +12,8 @@ public class BlockAction extends MiddleBlockAction {
 
 	protected final ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
-	public BlockAction(ConnectionImpl connection) {
-		super(connection);
+	public BlockAction(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

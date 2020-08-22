@@ -9,6 +9,7 @@ import io.netty.handler.codec.DecoderException;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.PacketDataCodecImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.protocol.pipeline.version.util.ConnectionImplMiddlePacketInit;
 import protocolsupport.protocol.pipeline.version.util.MiddlePacketRegistry;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.zplatform.ServerPlatform;
@@ -21,7 +22,7 @@ public abstract class AbstractPacketDecoder extends SimpleChannelInboundHandler<
 
 	public AbstractPacketDecoder(ConnectionImpl connection) {
 		this.connection = connection;
-		this.registry = new MiddlePacketRegistry<>(connection);
+		this.registry = new MiddlePacketRegistry<>(new ConnectionImplMiddlePacketInit(connection));
 	}
 
 	public void init(PacketDataCodecImpl codec) {

@@ -1,14 +1,13 @@
 package protocolsupport.protocol.packet.middle.serverbound.status;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
 public abstract class MiddlePing extends ServerBoundMiddlePacket {
 
-	public MiddlePing(ConnectionImpl connection) {
-		super(connection);
+	public MiddlePing(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected long pingId;

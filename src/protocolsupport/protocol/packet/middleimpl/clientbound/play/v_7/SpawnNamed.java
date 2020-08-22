@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 import java.util.UUID;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -21,8 +20,8 @@ public class SpawnNamed extends MiddleSpawnNamed {
 
 	protected final PlayerListCache playerlistCache = cache.getPlayerListCache();
 
-	public SpawnNamed(ConnectionImpl connection) {
-		super(connection);
+	public SpawnNamed(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

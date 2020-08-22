@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_5_6_7;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -14,8 +13,8 @@ public class WorldParticle extends MiddleWorldParticle {
 
 	protected final ParticleRemappingTable remapper = ParticleRemapper.REGISTRY.getTable(version);
 
-	public WorldParticle(ConnectionImpl connection) {
-		super(connection);
+	public WorldParticle(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

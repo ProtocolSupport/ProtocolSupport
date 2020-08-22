@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClose;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -24,8 +23,8 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 	protected final EnumSkippingTable<WindowType> windowSkipper = GenericIdSkipper.INVENTORY.getTable(version);
 	protected final AbstractWindowsRemapper windowsRemapper = WindowsRemappersRegistry.get(version);
 
-	public MiddleInventoryOpen(ConnectionImpl connection) {
-		super(connection);
+	public MiddleInventoryOpen(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected byte windowId;

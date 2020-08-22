@@ -5,7 +5,6 @@ import java.util.UUID;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -15,8 +14,8 @@ import protocolsupport.protocol.utils.EnumConstantLookups;
 
 public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 
-	public MiddleBossBar(ConnectionImpl connection) {
-		super(connection);
+	public MiddleBossBar(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected UUID uuid;

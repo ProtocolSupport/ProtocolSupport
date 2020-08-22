@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -10,8 +9,8 @@ import protocolsupport.protocol.types.recipe.RecipeType;
 
 public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 
-	public MiddleDeclareRecipes(ConnectionImpl connection) {
-		super(connection);
+	public MiddleDeclareRecipes(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected Recipe[] recipes;

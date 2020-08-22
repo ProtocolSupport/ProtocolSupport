@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_5;
 import org.bukkit.Bukkit;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -13,8 +12,8 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class Ping extends ServerBoundMiddlePacket {
 
-	public Ping(ConnectionImpl connection) {
-		super(connection);
+	public Ping(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

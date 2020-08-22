@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_15_16r1_16r2;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -12,8 +11,8 @@ import protocolsupport.protocol.storage.netcache.ClientCache;
 
 public class InventoryOpen extends MiddleInventoryOpen {
 
-	public InventoryOpen(ConnectionImpl connection) {
-		super(connection);
+	public InventoryOpen(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final ClientCache clientCache = cache.getClientCache();

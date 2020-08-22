@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
@@ -12,8 +11,8 @@ public abstract class MiddleSpawnExpOrb extends ClientBoundMiddlePacket {
 
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
-	public MiddleSpawnExpOrb(ConnectionImpl connection) {
-		super(connection);
+	public MiddleSpawnExpOrb(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected NetworkEntity entity;

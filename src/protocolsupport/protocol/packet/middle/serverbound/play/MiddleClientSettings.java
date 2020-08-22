@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 
 import org.bukkit.inventory.MainHand;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -12,8 +11,8 @@ import protocolsupport.protocol.utils.EnumConstantLookups;
 
 public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 
-	public MiddleClientSettings(ConnectionImpl connection) {
-		super(connection);
+	public MiddleClientSettings(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected String locale;

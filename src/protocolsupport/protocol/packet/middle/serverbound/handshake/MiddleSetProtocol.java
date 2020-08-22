@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.serverbound.handshake;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -10,8 +9,8 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleSetProtocol extends ServerBoundMiddlePacket {
 
-	public MiddleSetProtocol(ConnectionImpl connection) {
-		super(connection);
+	public MiddleSetProtocol(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected String hostname;

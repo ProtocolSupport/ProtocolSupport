@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunkData;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunkSectionBlockStorage;
@@ -16,8 +15,8 @@ public abstract class AbstractChunkCacheChunkData extends MiddleChunkData {
 	protected final ChunkCache chunkCache = cache.getChunkCache();
 	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
-	public AbstractChunkCacheChunkData(ConnectionImpl connection) {
-		super(connection);
+	public AbstractChunkCacheChunkData(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected CachedChunk cachedChunk;

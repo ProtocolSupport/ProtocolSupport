@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_5_6_7;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardScore;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -9,8 +8,8 @@ import protocolsupport.utils.Utils;
 
 public class ScoreboardScore extends MiddleScoreboardScore {
 
-	public ScoreboardScore(ConnectionImpl connection) {
-		super(connection);
+	public ScoreboardScore(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

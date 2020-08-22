@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2_15_16r1_16r2;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleDeclareTags;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -18,8 +17,8 @@ import protocolsupport.protocol.utils.BlockBlockDataLookup;
 //TODO: implement special handling for entity tags
 public abstract class AbstractDeclareTags extends MiddleDeclareTags {
 
-	public AbstractDeclareTags(ConnectionImpl connection) {
-		super(connection);
+	public AbstractDeclareTags(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected void writeBlocksTags(ByteBuf to, Tag[] tags) {

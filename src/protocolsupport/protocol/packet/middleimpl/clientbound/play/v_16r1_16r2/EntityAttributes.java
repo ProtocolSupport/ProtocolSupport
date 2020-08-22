@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r1_16r2;
 
 import java.util.ArrayList;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityAttributes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -14,8 +13,8 @@ import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkipping
 
 public class EntityAttributes extends MiddleEntityAttributes {
 
-	public EntityAttributes(ConnectionImpl connection) {
-		super(connection);
+	public EntityAttributes(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

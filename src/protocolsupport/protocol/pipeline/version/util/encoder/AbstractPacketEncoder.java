@@ -12,6 +12,7 @@ import io.netty.handler.codec.EncoderException;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.PacketDataCodecImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
+import protocolsupport.protocol.pipeline.version.util.ConnectionImplMiddlePacketInit;
 import protocolsupport.protocol.pipeline.version.util.MiddlePacketRegistry;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -26,7 +27,7 @@ public abstract class AbstractPacketEncoder extends ChannelOutboundHandlerAdapte
 
 	public AbstractPacketEncoder(ConnectionImpl connection) {
 		this.connection = connection;
-		this.registry = new MiddlePacketRegistry<>(connection);
+		this.registry = new MiddlePacketRegistry<>(new ConnectionImplMiddlePacketInit(connection));
 	}
 
 	public void init(PacketDataCodecImpl codec) {

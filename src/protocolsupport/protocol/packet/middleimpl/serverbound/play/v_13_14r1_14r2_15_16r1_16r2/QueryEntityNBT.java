@@ -1,14 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13_14r1_14r2_15_16r1_16r2;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleQueryEntityNBT;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class QueryEntityNBT extends MiddleQueryEntityNBT {
 
-	public QueryEntityNBT(ConnectionImpl connection) {
-		super(connection);
+	public QueryEntityNBT(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

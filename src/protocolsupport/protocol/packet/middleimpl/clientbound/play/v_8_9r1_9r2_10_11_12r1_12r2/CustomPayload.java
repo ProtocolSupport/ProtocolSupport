@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_
 import java.util.function.Consumer;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -16,8 +15,8 @@ public class CustomPayload extends MiddleCustomPayload {
 
 	protected final CustomPayloadChannelsCache channelsCache = cache.getChannelsCache();
 
-	public CustomPayload(ConnectionImpl connection) {
-		super(connection);
+	public CustomPayload(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

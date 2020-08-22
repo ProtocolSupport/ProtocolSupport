@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 
 import org.bukkit.util.Vector;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -13,8 +12,8 @@ import protocolsupport.protocol.utils.EnumConstantLookups;
 
 public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 
-	public MiddleUseEntity(ConnectionImpl connection) {
-		super(connection);
+	public MiddleUseEntity(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected int entityId;

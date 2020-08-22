@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleUpdateMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -11,8 +10,8 @@ import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMap
 
 public class UpdateMap extends MiddleUpdateMap {
 
-	public UpdateMap(ConnectionImpl connection) {
-		super(connection);
+	public UpdateMap(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

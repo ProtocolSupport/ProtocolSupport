@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockBreakAnimation;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -9,8 +8,8 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class BlockBreakAnimation extends MiddleBlockBreakAnimation {
 
-	public BlockBreakAnimation(ConnectionImpl connection) {
-		super(connection);
+	public BlockBreakAnimation(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

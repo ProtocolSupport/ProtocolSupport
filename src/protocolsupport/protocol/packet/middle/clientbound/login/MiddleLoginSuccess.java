@@ -3,15 +3,14 @@ package protocolsupport.protocol.packet.middle.clientbound.login;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.UUIDSerializer;
 
 public abstract class MiddleLoginSuccess extends ClientBoundMiddlePacket {
 
-	public MiddleLoginSuccess(ConnectionImpl connection) {
-		super(connection);
+	public MiddleLoginSuccess(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected UUID uuid;

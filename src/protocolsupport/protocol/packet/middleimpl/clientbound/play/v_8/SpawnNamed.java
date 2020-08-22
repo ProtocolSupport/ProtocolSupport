@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -12,8 +11,8 @@ import protocolsupport.protocol.utils.i18n.I18NData;
 
 public class SpawnNamed extends MiddleSpawnNamed {
 
-	public SpawnNamed(ConnectionImpl connection) {
-		super(connection);
+	public SpawnNamed(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

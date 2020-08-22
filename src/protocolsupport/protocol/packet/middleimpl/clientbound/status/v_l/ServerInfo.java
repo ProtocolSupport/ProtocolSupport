@@ -4,7 +4,6 @@ import java.util.StringJoiner;
 
 import org.bukkit.ChatColor;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.status.MiddleServerInfo;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -12,8 +11,8 @@ import protocolsupport.protocol.serializer.StringSerializer;
 
 public class ServerInfo extends MiddleServerInfo {
 
-	public ServerInfo(ConnectionImpl connection) {
-		super(connection);
+	public ServerInfo(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

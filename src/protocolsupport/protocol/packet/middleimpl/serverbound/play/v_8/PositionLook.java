@@ -1,13 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8.AbstractMoveLook;
 
 public class PositionLook extends AbstractMoveLook {
 
-	public PositionLook(ConnectionImpl connection) {
-		super(connection);
+	public PositionLook(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

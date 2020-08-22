@@ -1,13 +1,12 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 
 public abstract class MiddleVehicleMove extends ClientBoundMiddlePacket {
 
-	public MiddleVehicleMove(ConnectionImpl connection) {
-		super(connection);
+	public MiddleVehicleMove(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected double x;

@@ -1,14 +1,13 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 
 public abstract class MiddleEntityEffectRemove extends MiddleEntity {
 
-	public MiddleEntityEffectRemove(ConnectionImpl connection) {
-		super(connection);
+	public MiddleEntityEffectRemove(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected int effectId;

@@ -10,7 +10,6 @@ import org.bukkit.ChatColor;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -21,8 +20,8 @@ import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
 
 public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 
-	public MiddleScoreboardTeam(ConnectionImpl connection) {
-		super(connection);
+	public MiddleScoreboardTeam(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final ScoreboardTeamsTracker teamsTracker = new ScoreboardTeamsTracker();

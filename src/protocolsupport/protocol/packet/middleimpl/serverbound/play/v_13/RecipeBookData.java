@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleRecipeBookRecipe;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleRecipeBookState;
@@ -12,8 +11,8 @@ import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
 
 public class RecipeBookData extends ServerBoundMiddlePacket {
 
-	public RecipeBookData(ConnectionImpl connection) {
-		super(connection);
+	public RecipeBookData(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected Type type;

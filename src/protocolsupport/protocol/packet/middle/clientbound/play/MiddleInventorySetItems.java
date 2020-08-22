@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -15,8 +14,8 @@ public abstract class MiddleInventorySetItems extends ClientBoundMiddlePacket {
 
 	protected final WindowCache windowCache = cache.getWindowCache();
 
-	public MiddleInventorySetItems(ConnectionImpl connection) {
-		super(connection);
+	public MiddleInventorySetItems(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected byte windowId;

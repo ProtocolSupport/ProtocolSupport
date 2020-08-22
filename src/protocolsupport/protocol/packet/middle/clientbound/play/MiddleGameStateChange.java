@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
@@ -11,8 +10,8 @@ public abstract class MiddleGameStateChange extends ClientBoundMiddlePacket {
 
 	protected final ClientCache clientCache = cache.getClientCache();
 
-	public MiddleGameStateChange(ConnectionImpl connection) {
-		super(connection);
+	public MiddleGameStateChange(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected Action action;

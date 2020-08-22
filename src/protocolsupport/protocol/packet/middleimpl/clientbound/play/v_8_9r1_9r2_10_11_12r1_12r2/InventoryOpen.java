@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2;
 
 import protocolsupport.api.chat.components.TextComponent;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -14,8 +13,8 @@ import protocolsupport.protocol.utils.i18n.I18NData;
 
 public class InventoryOpen extends MiddleInventoryOpen {
 
-	public InventoryOpen(ConnectionImpl connection) {
-		super(connection);
+	public InventoryOpen(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final ClientCache clientCache = cache.getClientCache();

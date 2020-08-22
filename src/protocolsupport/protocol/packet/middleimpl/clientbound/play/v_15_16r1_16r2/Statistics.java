@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_15_16r1_16r2;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleStatistics;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -9,8 +8,8 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class Statistics extends MiddleStatistics {
 
-	public Statistics(ConnectionImpl connection) {
-		super(connection);
+	public Statistics(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

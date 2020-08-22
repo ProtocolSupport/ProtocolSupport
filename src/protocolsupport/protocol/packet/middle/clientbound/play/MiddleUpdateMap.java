@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -9,8 +8,8 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleUpdateMap extends ClientBoundMiddlePacket {
 
-	public MiddleUpdateMap(ConnectionImpl connection) {
-		super(connection);
+	public MiddleUpdateMap(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected int id;

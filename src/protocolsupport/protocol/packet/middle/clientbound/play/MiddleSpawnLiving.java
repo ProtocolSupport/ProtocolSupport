@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.ProtocolSupport;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.UUIDSerializer;
@@ -20,8 +19,8 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
-	public MiddleSpawnLiving(ConnectionImpl connection) {
-		super(connection);
+	public MiddleSpawnLiving(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected NetworkEntity entity;

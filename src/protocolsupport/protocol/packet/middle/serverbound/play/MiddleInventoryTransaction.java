@@ -1,14 +1,13 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
 public abstract class MiddleInventoryTransaction extends ServerBoundMiddlePacket {
 
-	public MiddleInventoryTransaction(ConnectionImpl connection) {
-		super(connection);
+	public MiddleInventoryTransaction(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected int windowId;

@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -11,8 +10,8 @@ import protocolsupport.protocol.types.UsedHand;
 
 public abstract class MiddleEditBook extends ServerBoundMiddlePacket {
 
-	public MiddleEditBook(ConnectionImpl connection) {
-		super(connection);
+	public MiddleEditBook(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected NetworkItemStack book;

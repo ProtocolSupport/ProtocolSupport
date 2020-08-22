@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTabComplete;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -12,8 +11,8 @@ import protocolsupport.utils.Utils;
 
 public class TabComplete extends MiddleTabComplete {
 
-	public TabComplete(ConnectionImpl connection) {
-		super(connection);
+	public TabComplete(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTitle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -11,8 +10,8 @@ import protocolsupport.protocol.storage.netcache.ClientCache;
 
 public class Title extends MiddleTitle {
 
-	public Title(ConnectionImpl connection) {
-		super(connection);
+	public Title(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final ClientCache clientCache = cache.getClientCache();

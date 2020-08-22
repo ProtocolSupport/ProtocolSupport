@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -16,8 +15,8 @@ import protocolsupport.protocol.types.nbt.NBTCompound;
 
 public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
 
-	public MiddleChangeDimension(ConnectionImpl connection) {
-		super(connection);
+	public MiddleChangeDimension(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final ClientCache clientCache = cache.getClientCache();

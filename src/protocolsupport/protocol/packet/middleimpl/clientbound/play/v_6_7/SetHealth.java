@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetHealth;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleClientCommand;
@@ -11,8 +10,8 @@ public class SetHealth extends MiddleSetHealth {
 
 	protected final ClientCache clientCache = cache.getClientCache();
 
-	public SetHealth(ConnectionImpl connection) {
-		super(connection);
+	public SetHealth(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

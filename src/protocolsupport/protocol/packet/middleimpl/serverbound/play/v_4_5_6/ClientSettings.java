@@ -3,14 +3,13 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6;
 import org.bukkit.inventory.MainHand;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleClientSettings;
 import protocolsupport.protocol.serializer.StringSerializer;
 
 public class ClientSettings extends MiddleClientSettings {
 
-	public ClientSettings(ConnectionImpl connection) {
-		super(connection);
+	public ClientSettings(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

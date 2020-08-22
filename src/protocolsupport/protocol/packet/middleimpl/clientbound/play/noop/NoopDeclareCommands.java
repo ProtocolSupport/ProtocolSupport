@@ -1,12 +1,11 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.noop;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleDeclareCommands;
 
 public class NoopDeclareCommands extends MiddleDeclareCommands {
 
-	public NoopDeclareCommands(ConnectionImpl connection) {
-		super(connection);
+	public NoopDeclareCommands(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

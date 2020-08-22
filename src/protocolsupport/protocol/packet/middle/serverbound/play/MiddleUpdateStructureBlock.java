@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -13,8 +12,8 @@ import protocolsupport.protocol.utils.EnumConstantLookups;
 
 public abstract class MiddleUpdateStructureBlock extends ServerBoundMiddlePacket {
 
-	public MiddleUpdateStructureBlock(ConnectionImpl connection) {
-		super(connection);
+	public MiddleUpdateStructureBlock(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final Position position = new Position(0, 0, 0);

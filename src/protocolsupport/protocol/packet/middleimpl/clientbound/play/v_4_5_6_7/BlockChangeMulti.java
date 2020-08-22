@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheBlockChangeMulti;
@@ -12,8 +11,8 @@ import protocolsupport.protocol.types.ChunkCoord;
 
 public class BlockChangeMulti extends AbstractChunkCacheBlockChangeMulti {
 
-	public BlockChangeMulti(ConnectionImpl connection) {
-		super(connection);
+	public BlockChangeMulti(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);

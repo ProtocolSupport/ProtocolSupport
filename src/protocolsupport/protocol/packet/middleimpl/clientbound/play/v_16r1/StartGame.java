@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r1;
 
 import java.util.Map;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleStartGame;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -19,8 +18,8 @@ import protocolsupport.protocol.types.nbt.NBTType;
 
 public class StartGame extends MiddleStartGame {
 
-	public StartGame(ConnectionImpl connection) {
-		super(connection);
+	public StartGame(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

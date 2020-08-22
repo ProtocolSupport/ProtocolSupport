@@ -3,15 +3,14 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_12r1;
 import java.util.function.Function;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 
 public class PrepareCraftingGrid extends ServerBoundMiddlePacket {
 
-	public PrepareCraftingGrid(ConnectionImpl connection) {
-		super(connection);
+	public PrepareCraftingGrid(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

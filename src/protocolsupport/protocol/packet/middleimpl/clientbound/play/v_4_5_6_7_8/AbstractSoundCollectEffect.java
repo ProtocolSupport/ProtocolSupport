@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCollectEffect;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
@@ -10,8 +9,8 @@ import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 
 public abstract class AbstractSoundCollectEffect extends MiddleCollectEffect {
 
-	public AbstractSoundCollectEffect(ConnectionImpl connection) {
-		super(connection);
+	public AbstractSoundCollectEffect(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();

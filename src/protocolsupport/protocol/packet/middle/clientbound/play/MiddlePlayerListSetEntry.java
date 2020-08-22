@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.utils.ProfileProperty;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -22,8 +21,8 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 
 	protected final PlayerListCache playerlistCache = cache.getPlayerListCache();
 
-	public MiddlePlayerListSetEntry(ConnectionImpl connection) {
-		super(connection);
+	public MiddlePlayerListSetEntry(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected Action action;

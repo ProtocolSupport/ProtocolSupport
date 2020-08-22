@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -19,8 +18,8 @@ public class WorldParticle extends MiddleWorldParticle {
 	protected final ArrayBasedIntMappingTable flatteningIdTable = FlatteningParticleId.REGISTRY.getTable(version);
 	protected final TypeSerializer.Entry<Particle> dataSerializer = ParticleDataSerializer.INSTANCE.get(version);
 
-	public WorldParticle(ConnectionImpl connection) {
-		super(connection);
+	public WorldParticle(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

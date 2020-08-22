@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleMoveLook;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleTeleportAccept;
@@ -10,8 +9,8 @@ public abstract class AbstractMoveLook extends ServerBoundMiddlePacket {
 
 	protected final MovementCache movementCache = cache.getMovementCache();
 
-	public AbstractMoveLook(ConnectionImpl connection) {
-		super(connection);
+	public AbstractMoveLook(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected double x;

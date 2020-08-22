@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
@@ -10,8 +9,8 @@ public abstract class MiddleInventoryData extends ClientBoundMiddlePacket {
 
 	protected final WindowCache windowCache = cache.getWindowCache();
 
-	public MiddleInventoryData(ConnectionImpl connection) {
-		super(connection);
+	public MiddleInventoryData(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected byte windowId;

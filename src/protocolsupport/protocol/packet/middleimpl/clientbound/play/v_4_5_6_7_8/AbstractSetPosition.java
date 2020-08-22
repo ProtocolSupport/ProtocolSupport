@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetPosition;
 import protocolsupport.protocol.storage.netcache.MovementCache;
 import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
@@ -9,8 +8,8 @@ public abstract class AbstractSetPosition extends MiddleSetPosition {
 
 	protected final MovementCache movementCache = cache.getMovementCache();
 
-	public AbstractSetPosition(ConnectionImpl connection) {
-		super(connection);
+	public AbstractSetPosition(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

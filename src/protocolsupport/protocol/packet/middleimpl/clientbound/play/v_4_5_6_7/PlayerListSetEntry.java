@@ -4,7 +4,6 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListSetEntry;
@@ -15,8 +14,8 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 
 public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 
-	public PlayerListSetEntry(ConnectionImpl connection) {
-		super(connection);
+	public PlayerListSetEntry(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

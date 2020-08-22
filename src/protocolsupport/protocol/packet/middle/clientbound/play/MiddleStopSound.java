@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -11,8 +10,8 @@ public abstract class MiddleStopSound extends ClientBoundMiddlePacket {
 	protected static final int FLAG_SOURCE = 0x1;
 	protected static final int FLAG_NAME = 0x2;
 
-	public MiddleStopSound(ConnectionImpl connection) {
-		super(connection);
+	public MiddleStopSound(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected int source = -1;

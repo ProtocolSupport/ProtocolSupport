@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -13,8 +12,8 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 
 	protected final CustomPayloadChannelsCache channelsCache = cache.getChannelsCache();
 
-	public CustomPayload(ConnectionImpl connection) {
-		super(connection);
+	public CustomPayload(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected String tag;

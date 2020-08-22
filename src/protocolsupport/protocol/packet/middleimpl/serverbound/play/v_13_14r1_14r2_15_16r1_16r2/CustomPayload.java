@@ -1,15 +1,14 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13_14r1_14r2_15_16r1_16r2;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 
 public class CustomPayload extends MiddleCustomPayload {
 
-	public CustomPayload(ConnectionImpl connection) {
-		super(connection);
+	public CustomPayload(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

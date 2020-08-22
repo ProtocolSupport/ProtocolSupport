@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -12,8 +11,8 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 
 	protected final WindowCache windowCache = cache.getWindowCache();
 
-	public MiddleInventoryClick(ConnectionImpl connection) {
-		super(connection);
+	public MiddleInventoryClick(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected byte windowId;

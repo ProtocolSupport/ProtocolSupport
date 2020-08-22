@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
@@ -17,8 +16,8 @@ public abstract class AbstractRemappedSpawnObject extends MiddleSpawnObject {
 	protected final EntityRemappingTable entityRemapTable = EntityRemappersRegistry.REGISTRY.getTable(version);
 	protected final ObjectDataRemappingTable entityObjectDataRemapTable = ObjectDataRemappersRegistry.REGISTRY.getTable(version);
 
-	public AbstractRemappedSpawnObject(ConnectionImpl connection) {
-		super(connection);
+	public AbstractRemappedSpawnObject(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected NetworkEntityType rType;

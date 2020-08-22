@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.protocol.types.TileEntityType;
@@ -10,8 +9,8 @@ import protocolsupport.protocol.types.nbt.NBTCompound;
 public abstract class MiddleBlockTileUpdate extends MiddleBlock {
 
 
-	public MiddleBlockTileUpdate(ConnectionImpl connection) {
-		super(connection);
+	public MiddleBlockTileUpdate(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected TileEntity tile;

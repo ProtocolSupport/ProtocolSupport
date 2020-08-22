@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 import java.util.ArrayList;
 import java.util.List;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheChunkLight;
@@ -18,8 +17,8 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 
 	protected final ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
-	public ChunkLight(ConnectionImpl connection) {
-		super(connection);
+	public ChunkLight(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final List<ClientBoundPacketData> blocktileupdates = new ArrayList<>();

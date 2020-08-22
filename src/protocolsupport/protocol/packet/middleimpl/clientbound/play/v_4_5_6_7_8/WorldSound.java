@@ -1,13 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldSound;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftSoundData;
 
 public class WorldSound extends MiddleWorldSound {
 
-	public WorldSound(ConnectionImpl connection) {
-		super(connection);
+	public WorldSound(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

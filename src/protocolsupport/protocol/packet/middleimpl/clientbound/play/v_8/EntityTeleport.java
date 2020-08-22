@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityTeleport;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -8,8 +7,8 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class EntityTeleport extends MiddleEntityTeleport {
 
-	public EntityTeleport(ConnectionImpl connection) {
-		super(connection);
+	public EntityTeleport(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

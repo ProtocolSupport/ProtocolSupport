@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleStartGame;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -11,8 +10,8 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class StartGame extends MiddleStartGame {
 
-	public StartGame(ConnectionImpl connection) {
-		super(connection);
+	public StartGame(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

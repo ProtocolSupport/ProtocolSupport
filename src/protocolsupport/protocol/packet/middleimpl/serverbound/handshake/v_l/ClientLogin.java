@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_l;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -11,8 +10,8 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class ClientLogin extends ServerBoundMiddlePacket {
 
-	public ClientLogin(ConnectionImpl connection) {
-		super(connection);
+	public ClientLogin(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected String username;

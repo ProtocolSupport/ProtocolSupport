@@ -1,15 +1,14 @@
 package protocolsupport.protocol.packet.middle.clientbound.status;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.types.pingresponse.PingResponse;
 
 public abstract class MiddleServerInfo extends ClientBoundMiddlePacket {
 
-	public MiddleServerInfo(ConnectionImpl connection) {
-		super(connection);
+	public MiddleServerInfo(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected PingResponse ping;

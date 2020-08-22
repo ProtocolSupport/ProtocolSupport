@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractNoOffhandEntityEquipment;
@@ -11,8 +10,8 @@ import protocolsupport.protocol.types.NetworkItemStack;
 
 public class EntityEquipment extends AbstractNoOffhandEntityEquipment {
 
-	public EntityEquipment(ConnectionImpl connection) {
-		super(connection);
+	public EntityEquipment(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final ClientCache clientCache = cache.getClientCache();

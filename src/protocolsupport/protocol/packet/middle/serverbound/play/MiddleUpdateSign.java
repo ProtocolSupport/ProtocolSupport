@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -10,8 +9,8 @@ import protocolsupport.protocol.types.Position;
 
 public abstract class MiddleUpdateSign extends ServerBoundMiddlePacket {
 
-	public MiddleUpdateSign(ConnectionImpl connection) {
-		super(connection);
+	public MiddleUpdateSign(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final Position position = new Position(0, 0, 0);

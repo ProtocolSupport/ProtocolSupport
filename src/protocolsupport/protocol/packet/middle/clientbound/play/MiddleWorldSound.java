@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -9,8 +8,8 @@ import protocolsupport.protocol.types.SoundCategory;
 
 public abstract class MiddleWorldSound extends ClientBoundMiddlePacket {
 
-	public MiddleWorldSound(ConnectionImpl connection) {
-		super(connection);
+	public MiddleWorldSound(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected int id;

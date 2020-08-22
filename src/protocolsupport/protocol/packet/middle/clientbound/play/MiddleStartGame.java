@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.tab.TabAPI;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
@@ -26,8 +25,8 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 
 	protected final AbstractWindowsRemapper windowRemapper = WindowsRemappersRegistry.get(version);
 
-	public MiddleStartGame(ConnectionImpl connection) {
-		super(connection);
+	public MiddleStartGame(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected NetworkEntity player;

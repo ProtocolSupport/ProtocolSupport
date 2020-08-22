@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockOpenSignEditor;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -9,8 +8,8 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 
 public class BlockOpenSignEditor extends MiddleBlockOpenSignEditor {
 
-	public BlockOpenSignEditor(ConnectionImpl connection) {
-		super(connection);
+	public BlockOpenSignEditor(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

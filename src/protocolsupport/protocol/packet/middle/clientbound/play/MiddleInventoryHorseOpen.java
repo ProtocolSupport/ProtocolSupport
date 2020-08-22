@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
@@ -15,8 +14,8 @@ public abstract class MiddleInventoryHorseOpen extends ClientBoundMiddlePacket {
 
 	protected final AbstractWindowsRemapper windowsRemapper = WindowsRemappersRegistry.get(version);
 
-	public MiddleInventoryHorseOpen(ConnectionImpl connection) {
-		super(connection);
+	public MiddleInventoryHorseOpen(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected byte windowId;

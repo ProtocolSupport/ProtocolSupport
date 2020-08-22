@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -9,8 +8,8 @@ import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
 
 public abstract class MiddleRecipeBookState extends ServerBoundMiddlePacket {
 
-	public MiddleRecipeBookState(ConnectionImpl connection) {
-		super(connection);
+	public MiddleRecipeBookState(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected RecipeBookType bookType;

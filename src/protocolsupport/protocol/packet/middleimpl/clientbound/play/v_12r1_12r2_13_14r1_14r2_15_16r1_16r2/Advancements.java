@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_12r1_12r2_
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleAdvancements;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -14,8 +13,8 @@ import protocolsupport.protocol.serializer.chat.ChatSerializer;
 
 public class Advancements extends MiddleAdvancements {
 
-	public Advancements(ConnectionImpl connection) {
-		super(connection);
+	public Advancements(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

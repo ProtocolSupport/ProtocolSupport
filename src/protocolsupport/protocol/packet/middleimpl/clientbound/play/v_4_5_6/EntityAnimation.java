@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
 
 import java.util.EnumMap;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityAnimation;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -18,8 +17,8 @@ public class EntityAnimation extends MiddleEntityAnimation {
 		animationIds.put(Animation.MAGIC_CRIT, 7);
 	}
 
-	public EntityAnimation(ConnectionImpl connection) {
-		super(connection);
+	public EntityAnimation(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

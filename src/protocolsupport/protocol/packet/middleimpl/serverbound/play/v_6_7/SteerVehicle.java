@@ -1,14 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_6_7;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSteerVehicle;
 import protocolsupport.utils.BitUtils;
 
 public class SteerVehicle extends MiddleSteerVehicle {
 
-	public SteerVehicle(ConnectionImpl connection) {
-		super(connection);
+	public SteerVehicle(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected static final int[] flags_mask = new int[] {FLAGS_BIT_JUMPING, FLAGS_BIT_UNMOUNT};

@@ -1,14 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 
 public class PlayerAbilities extends MiddlePlayerAbilities {
 
-	public PlayerAbilities(ConnectionImpl connection) {
-		super(connection);
+	public PlayerAbilities(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

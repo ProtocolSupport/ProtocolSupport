@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractSoundCollectEffect;
@@ -9,8 +8,8 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class CollectEffect extends AbstractSoundCollectEffect {
 
-	public CollectEffect(ConnectionImpl connection) {
-		super(connection);
+	public CollectEffect(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

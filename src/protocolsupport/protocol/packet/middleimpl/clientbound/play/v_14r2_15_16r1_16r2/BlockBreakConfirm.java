@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r2_15_16r1_16r2;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockBreakConfirm;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -14,8 +13,8 @@ import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMap
 
 public class BlockBreakConfirm extends MiddleBlockBreakConfirm {
 
-	public BlockBreakConfirm(ConnectionImpl connection) {
-		super(connection);
+	public BlockBreakConfirm(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);

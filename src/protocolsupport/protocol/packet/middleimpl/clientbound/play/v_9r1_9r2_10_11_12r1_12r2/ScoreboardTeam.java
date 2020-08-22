@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2;
 
 import protocolsupport.api.utils.Any;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2.AbstractScoreboardTeam;
@@ -12,8 +11,8 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 
 public class ScoreboardTeam extends AbstractScoreboardTeam {
 
-	public ScoreboardTeam(ConnectionImpl connection) {
-		super(connection);
+	public ScoreboardTeam(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

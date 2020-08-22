@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleKeepAlive;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.KeepAliveCache;
@@ -11,8 +10,8 @@ public class KeepAlive extends MiddleKeepAlive {
 
 	protected final KeepAliveCache keepaliveCache = cache.getKeepAliveCache();
 
-	public KeepAlive(ConnectionImpl connection) {
-		super(connection);
+	public KeepAlive(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

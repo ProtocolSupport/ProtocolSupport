@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1;
 
 import java.util.Map;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheChunkData;
@@ -20,8 +19,8 @@ import protocolsupport.protocol.types.TileEntity;
 
 public class ChunkData extends AbstractChunkCacheChunkData {
 
-	public ChunkData(ConnectionImpl connection) {
-		super(connection);
+	public ChunkData(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final IdMappingTable biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);

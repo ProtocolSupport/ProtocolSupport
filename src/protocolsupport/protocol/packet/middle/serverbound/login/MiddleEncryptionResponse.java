@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.login;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -9,8 +8,8 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 
 public abstract class MiddleEncryptionResponse extends ServerBoundMiddlePacket {
 
-	public MiddleEncryptionResponse(ConnectionImpl connection) {
-		super(connection);
+	public MiddleEncryptionResponse(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected ByteBuf sharedSecret;

@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractUseBedPacketEntityMetadata;
@@ -13,8 +12,8 @@ import protocolsupport.protocol.types.Position;
 
 public class EntityMetadata extends AbstractUseBedPacketEntityMetadata {
 
-	public EntityMetadata(ConnectionImpl connection) {
-		super(connection);
+	public EntityMetadata(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final ClientCache clientCache = cache.getClientCache();

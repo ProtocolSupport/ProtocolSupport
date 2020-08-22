@@ -1,13 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityRelMoveLook;
 import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 
 public class EntityRelMoveLook extends MiddleEntityRelMoveLook {
 
-	public EntityRelMoveLook(ConnectionImpl connection) {
-		super(connection);
+	public EntityRelMoveLook(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

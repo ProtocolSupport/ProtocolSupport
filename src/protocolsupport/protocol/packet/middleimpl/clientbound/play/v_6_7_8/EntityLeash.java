@@ -1,14 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityLeash;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 
 public class EntityLeash extends MiddleEntityLeash {
 
-	public EntityLeash(ConnectionImpl connection) {
-		super(connection);
+	public EntityLeash(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

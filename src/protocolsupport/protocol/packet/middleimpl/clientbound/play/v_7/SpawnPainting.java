@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -11,8 +10,8 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyPainting;
 
 public class SpawnPainting extends MiddleSpawnPainting {
 
-	public SpawnPainting(ConnectionImpl connection) {
-		super(connection);
+	public SpawnPainting(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

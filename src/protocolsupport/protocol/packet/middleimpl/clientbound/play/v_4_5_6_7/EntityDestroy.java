@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -8,8 +7,8 @@ import protocolsupport.utils.Utils;
 
 public class EntityDestroy extends MiddleEntityDestroy {
 
-	public EntityDestroy(ConnectionImpl connection) {
-		super(connection);
+	public EntityDestroy(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

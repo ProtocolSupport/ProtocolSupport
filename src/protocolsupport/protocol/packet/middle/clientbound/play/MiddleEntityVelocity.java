@@ -1,12 +1,11 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 
 public abstract class MiddleEntityVelocity extends MiddleEntity {
 
-	public MiddleEntityVelocity(ConnectionImpl connection) {
-		super(connection);
+	public MiddleEntityVelocity(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected int motX;

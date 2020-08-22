@@ -6,7 +6,6 @@ import java.util.Set;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -15,8 +14,8 @@ import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
 
 public abstract class MiddleScoreboardObjective extends ClientBoundMiddlePacket {
 
-	public MiddleScoreboardObjective(ConnectionImpl connection) {
-		super(connection);
+	public MiddleScoreboardObjective(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final Set<String> objectives = new HashSet<>();

@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -15,8 +14,8 @@ import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry
 
 public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 
-	public PlayerListSetEntry(ConnectionImpl connection) {
-		super(connection);
+	public PlayerListSetEntry(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

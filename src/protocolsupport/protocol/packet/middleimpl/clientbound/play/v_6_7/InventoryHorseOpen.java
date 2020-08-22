@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryHorseOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -8,8 +7,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_5_6_7.Inven
 
 public class InventoryHorseOpen extends MiddleInventoryHorseOpen {
 
-	public InventoryHorseOpen(ConnectionImpl connection) {
-		super(connection);
+	public InventoryHorseOpen(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleUnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -9,8 +8,8 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 
 public class UnlockRecipes extends MiddleUnlockRecipes {
 
-	public UnlockRecipes(ConnectionImpl connection) {
-		super(connection);
+	public UnlockRecipes(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import org.bukkit.util.NumberConversions;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleExplosion;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
 import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
@@ -13,8 +12,8 @@ public abstract class AbstractChunkCacheMiddleExplosion extends MiddleExplosion 
 
 	protected final ChunkCache chunkCache = cache.getChunkCache();
 
-	public AbstractChunkCacheMiddleExplosion(ConnectionImpl connection) {
-		super(connection);
+	public AbstractChunkCacheMiddleExplosion(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

@@ -3,15 +3,14 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r1_16r2;
 import java.util.EnumMap;
 import java.util.Map;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2_15_16r1_16r2.AbstractDeclareRecipes;
 import protocolsupport.protocol.types.recipe.Recipe;
 import protocolsupport.protocol.types.recipe.RecipeType;
 
 public class DeclareRecipes extends AbstractDeclareRecipes {
 
-	public DeclareRecipes(ConnectionImpl connection) {
-		super(connection);
+	public DeclareRecipes(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected static final Map<RecipeType, RecipeWriter<Recipe>> recipeWriter = new EnumMap<>(RecipeType.class);

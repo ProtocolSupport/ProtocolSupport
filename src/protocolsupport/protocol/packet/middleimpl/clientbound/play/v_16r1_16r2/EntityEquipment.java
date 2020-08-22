@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r1_16r2;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -10,8 +9,8 @@ import protocolsupport.protocol.storage.netcache.ClientCache;
 
 public class EntityEquipment extends MiddleEntityEquipment {
 
-	public EntityEquipment(ConnectionImpl connection) {
-		super(connection);
+	public EntityEquipment(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final ClientCache clientCache = cache.getClientCache();

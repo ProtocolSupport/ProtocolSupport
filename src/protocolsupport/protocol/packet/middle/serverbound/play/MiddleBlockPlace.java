@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -12,8 +11,8 @@ import protocolsupport.protocol.types.UsedHand;
 
 public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 
-	public MiddleBlockPlace(ConnectionImpl connection) {
-		super(connection);
+	public MiddleBlockPlace(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected UsedHand hand;

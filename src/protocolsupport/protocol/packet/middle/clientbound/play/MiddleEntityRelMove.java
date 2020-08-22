@@ -1,15 +1,14 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleEntityRelMove extends MiddleEntity {
 
-	public MiddleEntityRelMove(ConnectionImpl connection) {
-		super(connection);
+	public MiddleEntityRelMove(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();

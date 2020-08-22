@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r1;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -9,8 +8,8 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyDimension;
 
 public class ChangeDimension extends MiddleChangeDimension {
 
-	public ChangeDimension(ConnectionImpl connection) {
-		super(connection);
+	public ChangeDimension(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

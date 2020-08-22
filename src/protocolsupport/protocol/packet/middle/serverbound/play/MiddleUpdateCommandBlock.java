@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -16,8 +15,8 @@ public abstract class MiddleUpdateCommandBlock extends ServerBoundMiddlePacket {
 	public static final int FLAGS_BIT_CONDITIONAL = 1;
 	public static final int FLAGS_BIT_AUTO = 2;
 
-	public MiddleUpdateCommandBlock(ConnectionImpl connection) {
-		super(connection);
+	public MiddleUpdateCommandBlock(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final Position position = new Position(0, 0, 0);

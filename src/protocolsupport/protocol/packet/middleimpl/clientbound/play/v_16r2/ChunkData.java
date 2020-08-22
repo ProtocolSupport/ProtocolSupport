@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunkData;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -18,8 +17,8 @@ import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
 
 public class ChunkData extends MiddleChunkData {
 
-	public ChunkData(ConnectionImpl connection) {
-		super(connection);
+	public ChunkData(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final IdMappingTable biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);

@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5;
 
 import protocolsupport.api.chat.ChatAPI.MessagePosition;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChat;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -12,8 +11,8 @@ public class Chat extends MiddleChat {
 
 	protected final ClientCache clientCache = cache.getClientCache();
 
-	public Chat(ConnectionImpl connection) {
-		super(connection);
+	public Chat(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import org.bukkit.ChatColor;
 
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.utils.Any;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardTeam;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardTeam.ScoreboardTeamsTracker.TrackedScoreboardTeam;
 import protocolsupport.protocol.storage.netcache.ClientCache;
@@ -12,8 +11,8 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 
 public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 
-	public AbstractScoreboardTeam(ConnectionImpl connection) {
-		super(connection);
+	public AbstractScoreboardTeam(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected final ClientCache clientCache = cache.getClientCache();

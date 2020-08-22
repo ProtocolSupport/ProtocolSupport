@@ -1,6 +1,5 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -8,8 +7,8 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleSelectTrade extends ServerBoundMiddlePacket {
 
-	public MiddleSelectTrade(ConnectionImpl connection) {
-		super(connection);
+	public MiddleSelectTrade(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected int slot;

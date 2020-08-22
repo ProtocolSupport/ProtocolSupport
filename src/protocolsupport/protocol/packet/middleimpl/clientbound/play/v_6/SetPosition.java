@@ -1,14 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6;
 
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractSetPosition;
 
 public class SetPosition extends AbstractSetPosition {
 
-	public SetPosition(ConnectionImpl connection) {
-		super(connection);
+	public SetPosition(MiddlePacketInit init) {
+		super(init);
 	}
 
 	@Override

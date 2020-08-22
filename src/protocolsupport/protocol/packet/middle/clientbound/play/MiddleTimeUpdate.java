@@ -1,13 +1,12 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 
 public abstract class MiddleTimeUpdate extends ClientBoundMiddlePacket {
 
-	public MiddleTimeUpdate(ConnectionImpl connection) {
-		super(connection);
+	public MiddleTimeUpdate(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected long worldAge;

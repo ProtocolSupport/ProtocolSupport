@@ -1,15 +1,14 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleDeclareTags extends ClientBoundMiddlePacket {
 
-	public MiddleDeclareTags(ConnectionImpl connection) {
-		super(connection);
+	public MiddleDeclareTags(MiddlePacketInit init) {
+		super(init);
 	}
 
 	protected Tag[] blocks;
