@@ -13,7 +13,11 @@ public abstract class AbstractRemoveEquipmentOnDeathEntityStatus extends Abstrac
 
 	@Override
 	protected void writeToClient() {
-		if ((entity.getType() == NetworkEntityType.PLAYER) && (status == STATUS_LIVING_DEATH)) {
+		if (
+			(status == STATUS_LIVING_DEATH) &&
+			(entity.getType() == NetworkEntityType.PLAYER) &&
+			(entity.getId() != entityCache.getSelfId())
+		) {
 			writeEquipmentRemove();
 		}
 
