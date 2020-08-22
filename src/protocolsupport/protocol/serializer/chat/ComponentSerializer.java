@@ -188,7 +188,7 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>, Sim
 		return json;
 	}
 
-	protected void serializeAndAdd(SimpleJsonTreeSerializer<String> serializer, JsonObject json, Object object, String locale) {
+	public static void serializeAndAdd(SimpleJsonTreeSerializer<String> serializer, JsonObject json, Object object, String locale) {
 		JsonElement serialize = serializer.serialize(object, locale);
 		if (serialize.isJsonObject()) {
 			for (Entry<String, JsonElement> entry : ((JsonObject) serialize).entrySet()) {

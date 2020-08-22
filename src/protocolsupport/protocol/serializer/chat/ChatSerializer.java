@@ -42,9 +42,14 @@ public class ChatSerializer {
 	}
 
 	static {
+		ComponentSerializer serverTranslateComponentSerializer =
+			new ComponentSerializer.Builder()
+			.setTranslateSerializer(ServerTranslateTranslateComponentContentSerializer.INSTANCE)
+			.build();
+
 		register(
 			new SimpleJsonTreeSerializer.Builder<String>()
-			.registerSerializer(BaseComponent.class, ComponentSerializer.DEFAULT_INSTANCE)
+			.registerSerializer(BaseComponent.class, serverTranslateComponentSerializer)
 			.registerSerializer(Modifier.class, ModifierSerializer.INSTANCE)
 			.registerSerializer(ClickAction.class, UrlFixClickActionSerializer.INSTANCE)
 			.registerSerializer(HoverAction.class, HoverActionSerializer.INSTANCE)
@@ -55,7 +60,7 @@ public class ChatSerializer {
 		for (ProtocolVersion version : ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_12, ProtocolVersion.MINECRAFT_1_15_2)) {
 			register(
 				new SimpleJsonTreeSerializer.Builder<String>()
-				.registerSerializer(BaseComponent.class, ComponentSerializer.DEFAULT_INSTANCE)
+				.registerSerializer(BaseComponent.class, serverTranslateComponentSerializer)
 				.registerSerializer(Modifier.class, LegacyColorsModifierSerializer.INSTANCE)
 				.registerSerializer(ClickAction.class, UrlFixClickActionSerializer.INSTANCE)
 				.registerSerializer(HoverAction.class, new LegacyValueHoverActionSerializer(version))
@@ -68,8 +73,9 @@ public class ChatSerializer {
 				new SimpleJsonTreeSerializer.Builder<String>()
 				.registerSerializer(
 					BaseComponent.class,
-					new ComponentSerializer.Builder().
-					setKeybindSerializer(AsTextKeybindComponentContentSerializer.INSTANCE)
+					new ComponentSerializer.Builder()
+					.setTranslateSerializer(ServerTranslateTranslateComponentContentSerializer.INSTANCE)
+					.setKeybindSerializer(AsTextKeybindComponentContentSerializer.INSTANCE)
 					.build()
 				)
 				.registerSerializer(Modifier.class, LegacyColorsModifierSerializer.INSTANCE)

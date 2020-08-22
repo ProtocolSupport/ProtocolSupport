@@ -14,35 +14,44 @@ import protocolsupport.protocol.utils.json.SimpleJsonTreeSerializer;
 
 public class ServerTranslateTranslateComponentContentSerializer implements ComponentContentSerializer<TranslateComponent> {
 
+	public static final ServerTranslateTranslateComponentContentSerializer INSTANCE = new ServerTranslateTranslateComponentContentSerializer();
+
 	protected static final Pattern langFormat = Pattern.compile("\\%(\\d?)\\$?([%s])");
 
 	@Override
 	public void serialize(SimpleJsonTreeSerializer<String> serializer, JsonObject json, TranslateComponent component, String locale) {
+		TextComponent translatedComponent = new TextComponent("");
 		String translation = TranslationAPI.getTranslationString(locale, component.getTranslationKey());
-		TextComponent rootcomponent = new TextComponent("");
-		List<BaseComponent> tlArgs = component.getTranslationArgs();
+		List<BaseComponent> translationArgs = component.getTranslationArgs();
 		Matcher matcher = langFormat.matcher(translation);
-		int index = 0;
-		int tlArgIndex = 0;
+		int matchEndIndex = 0;
+		int translationArgIndex = 0;
 		while (matcher.find()) {
-			rootcomponent.addSibling(new TextComponent(translation.substring(index, matcher.start())));
-			index = matcher.end();
-			if (matcher.group(2).equals("%")) {
-				rootcomponent.addSibling(new TextComponent("%"));
-			} else if (matcher.group(2).equals("s")) {
-				int lTlArgIndex = tlArgIndex;
-				if (!matcher.group(1).isEmpty()) {
-					lTlArgIndex = Integer.parseInt(matcher.group(1)) - 1;
+			translatedComponent.addSibling(new TextComponent(translation.substring(matchEndIndex, matcher.start())));
+			matchEndIndex = matcher.end();
+			String group2 = matcher.group(2);
+			if (group2.equals("%")) {
+				translatedComponent.addSibling(new TextComponent("%"));
+			} else if (group2.equals("s")) {
+				int lTranslationArgIndex = translationArgIndex;
+				String group1 = matcher.group(1);
+				if (!group1.isEmpty()) {
+					try {
+						lTranslationArgIndex = Integer.parseInt(group1) - 1;
+					} catch (NumberFormatException e) {
+						lTranslationArgIndex = -1;
+					}
 				}
-				if (tlArgIndex < tlArgs.size()) {
-					rootcomponent.addSibling(tlArgs.get(lTlArgIndex));
-				} else {
-					rootcomponent.addSibling(new TextComponent("[Invalid traslation argument index]"));
+				if (lTranslationArgIndex >= 0 && lTranslationArgIndex < translationArgs.size()) {
+					translatedComponent.addSibling(translationArgs.get(lTranslationArgIndex));
 				}
 			}
-			tlArgIndex++;
+			translationArgIndex++;
 		}
-		TextComponentContentSerializer.INSTANCE.serialize(serializer, json, rootcomponent, locale);
+		if (matchEndIndex < translation.length()) {
+			translatedComponent.addSibling(new TextComponent(translation.substring(matchEndIndex)));
+		}
+		ComponentSerializer.serializeAndAdd(serializer, json, translatedComponent, locale);
 	}
 
 }
