@@ -45,14 +45,14 @@ public class StartGame extends MiddleStartGame {
 	protected static NBTCompound toLegacyDimensionRegistry(NBTCompound dimensions) {
 		NBTCompound legacyRegistry = new NBTCompound();
 		NBTList<NBTCompound> legacyDimensions = new NBTList<>(NBTType.COMPOUND);
-		for (NBTCompound dimension : dimensions.getTagOfType("minecraft:dimension_type", NBTType.COMPOUND).getTagListOfType("value", NBTType.COMPOUND).getTags()) {
-			NBTCompound dimensionSettings = dimension.getTagOfType("element", NBTType.COMPOUND);
+		for (NBTCompound dimension : dimensions.getTagOfTypeOrThrow("minecraft:dimension_type", NBTType.COMPOUND).getTagListOfTypeOrThrow("value", NBTType.COMPOUND).getTags()) {
+			NBTCompound dimensionSettings = dimension.getTagOfTypeOrThrow("element", NBTType.COMPOUND);
 			NBTCompound legacyDimension = new NBTCompound();
 			legacyDimension.setTag("name", dimension.getTag("name"));
 			for (Map.Entry<String, NBT> dimensionSettingsEntry : dimensionSettings.getTags().entrySet()) {
 				legacyDimension.setTag(dimensionSettingsEntry.getKey(), dimensionSettingsEntry.getValue());
 			}
-			legacyDimension.setTag("shrunk", new NBTByte(dimensionSettings.getNumberTag("coordinate_scale").getAsDouble() != 1.0));
+			legacyDimension.setTag("shrunk", new NBTByte(dimensionSettings.getNumberTagOrThrow("coordinate_scale").getAsDouble() != 1.0));
 			legacyDimensions.addTag(legacyDimension);
 		}
 		legacyRegistry.setTag("dimension", legacyDimensions);

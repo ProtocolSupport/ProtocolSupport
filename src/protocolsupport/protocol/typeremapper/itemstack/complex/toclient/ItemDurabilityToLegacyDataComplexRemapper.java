@@ -11,7 +11,7 @@ public class ItemDurabilityToLegacyDataComplexRemapper implements ItemStackCompl
 	@Override
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		NBTNumber damage;
-		if ((itemstack.getNBT() != null) && ((damage = itemstack.getNBT().getNumberTag(CommonNBT.ITEM_DAMAGE)) != null)) {
+		if ((itemstack.getNBT() != null) && ((damage = itemstack.getNBT().getNumberTagOrNull(CommonNBT.ITEM_DAMAGE)) != null)) {
 			itemstack.setLegacyData(damage.getAsInt());
 		}
 		return itemstack;

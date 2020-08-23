@@ -93,7 +93,7 @@ public class TileEntityRemapper {
 				EntityRemappingTable entityRemapTable = EntityRemappersRegistry.REGISTRY.getTable(version);
 				return tile -> {
 					NBTCompound nbt = tile.getNBT();
-					NBTCompound spawndataTag = nbt.getTagOfType(CommonNBT.MOB_SPAWNER_SPAWNDATA, NBTType.COMPOUND);
+					NBTCompound spawndataTag = nbt.getTagOfTypeOrNull(CommonNBT.MOB_SPAWNER_SPAWNDATA, NBTType.COMPOUND);
 					NetworkEntityType type = null;
 					if (spawndataTag == null) {
 						spawndataTag = new NBTCompound();
@@ -131,7 +131,7 @@ public class TileEntityRemapper {
 		register(
 			TileEntityType.MOB_SPAWNER,
 			tile -> {
-				NBTCompound spawndata = tile.getNBT().getTagOfType(CommonNBT.MOB_SPAWNER_SPAWNDATA, NBTType.COMPOUND);
+				NBTCompound spawndata = tile.getNBT().getTagOfTypeOrNull(CommonNBT.MOB_SPAWNER_SPAWNDATA, NBTType.COMPOUND);
 				if (spawndata != null) {
 					NetworkEntityType type = CommonNBT.getSpawnedMobType(spawndata);
 					if (type != NetworkEntityType.NONE) {
@@ -145,9 +145,8 @@ public class TileEntityRemapper {
 			TileEntityType.MOB_SPAWNER,
 			tile -> {
 				NBTCompound nbt = tile.getNBT();
-				NBTCompound spawndata = tile.getNBT().getTagOfType(CommonNBT.MOB_SPAWNER_SPAWNDATA, NBTType.COMPOUND);
+				NBTCompound spawndata = nbt.removeTagAndReturnIfType(CommonNBT.MOB_SPAWNER_SPAWNDATA, NBTType.COMPOUND);
 				if (spawndata != null) {
-					nbt.removeTag(CommonNBT.MOB_SPAWNER_SPAWNDATA);
 					nbt.removeTag("SpawnPotentials");
 					NetworkEntityType type = CommonNBT.getSpawnedMobType(spawndata);
 					if (type != NetworkEntityType.NONE) {
@@ -162,7 +161,7 @@ public class TileEntityRemapper {
 			TileEntityType.SKULL,
 			tile -> {
 				NBTCompound nbt = tile.getNBT();
-				NBTNumber skulltype = nbt.getNumberTag("SkullType");
+				NBTNumber skulltype = nbt.getNumberTagOrNull("SkullType");
 				if ((skulltype != null) && (skulltype.getAsInt() == 5)) {
 					nbt.setTag("SkullType", new NBTByte((byte) 3));
 					nbt.setTag(CommonNBT.PLAYERHEAD_TILE_PROFILE, DragonHeadToDragonPlayerHeadComplexRemapper.createTag());

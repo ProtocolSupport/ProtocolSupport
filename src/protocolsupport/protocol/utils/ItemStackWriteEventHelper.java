@@ -34,7 +34,7 @@ public class ItemStackWriteEventHelper {
 				}
 
 				if (!additionalLore.isEmpty()) {
-					NBTList<NBTString> loreNBT = displayNBT.getTagListOfType(CommonNBT.DISPLAY_LORE, NBTType.STRING);
+					NBTList<NBTString> loreNBT = displayNBT.getTagListOfTypeOrNull(CommonNBT.DISPLAY_LORE, NBTType.STRING);
 					if (loreNBT == null) {
 						loreNBT = new NBTList<>(NBTType.STRING);
 					}

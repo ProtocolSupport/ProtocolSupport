@@ -11,7 +11,7 @@ public class MapToLegacyIdComplexRemapper implements ItemStackComplexRemapper {
 	@Override
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		NBTNumber mapId;
-		if ((itemstack.getNBT() != null) && ((mapId = itemstack.getNBT().getNumberTag(CommonNBT.MAP_ID)) != null)) {
+		if ((itemstack.getNBT() != null) && ((mapId = itemstack.getNBT().getNumberTagOrNull(CommonNBT.MAP_ID)) != null)) {
 			itemstack.setLegacyData(mapId.getAsInt());
 		}
 		return itemstack;

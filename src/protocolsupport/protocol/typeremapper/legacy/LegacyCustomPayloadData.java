@@ -70,7 +70,7 @@ public class LegacyCustomPayloadData {
 			if (version == ProtocolVersion.MINECRAFT_1_8) {
 				NBTCompound rootTag = book.getNBT();
 				if (rootTag != null) {
-					NBTList<NBTString> pages = rootTag.getTagListOfType("pages", NBTType.STRING);
+					NBTList<NBTString> pages = rootTag.getTagListOfTypeOrNull("pages", NBTType.STRING);
 					if (pages != null) {
 						NBTList<NBTString> newPages = new NBTList<>(NBTType.STRING);
 						for (NBTString page : pages.getTags()) {

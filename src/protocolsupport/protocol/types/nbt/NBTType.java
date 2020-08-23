@@ -22,7 +22,7 @@ public class NBTType<T extends NBT> {
 		this.clazz = clazz;
 	}
 
-	public Class<T> getNBTTagClass() {
+	public Class<T> getNBTClass() {
 		return clazz;
 	}
 

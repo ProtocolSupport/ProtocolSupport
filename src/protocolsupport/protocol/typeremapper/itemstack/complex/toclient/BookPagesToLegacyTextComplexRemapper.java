@@ -13,7 +13,7 @@ public class BookPagesToLegacyTextComplexRemapper extends ItemStackNBTComplexRem
 
 	@Override
 	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
-		NBTList<NBTString> pages = tag.getTagListOfType("pages", NBTType.STRING);
+		NBTList<NBTString> pages = tag.getTagListOfTypeOrNull("pages", NBTType.STRING);
 		if (pages != null) {
 			NBTList<NBTString> newPages = new NBTList<>(NBTType.STRING);
 			for (NBTString page : pages.getTags()) {

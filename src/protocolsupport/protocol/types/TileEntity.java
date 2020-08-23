@@ -3,7 +3,6 @@ package protocolsupport.protocol.types;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTInt;
 import protocolsupport.protocol.types.nbt.NBTString;
-import protocolsupport.protocol.types.nbt.NBTType;
 
 public class TileEntity {
 
@@ -12,8 +11,8 @@ public class TileEntity {
 	protected final NBTCompound nbt;
 
 	public TileEntity(NBTCompound fullNbt) {
-		this.type = TileEntityType.getByRegistryId(fullNbt.getTagOfType("id", NBTType.STRING).getValue());
-		this.position = new Position(fullNbt.getNumberTag("x").getAsInt(), fullNbt.getNumberTag("y").getAsInt(), fullNbt.getNumberTag("z").getAsInt());
+		this.type = TileEntityType.getByRegistryId(fullNbt.getStringTagValueOrThrow("id"));
+		this.position = new Position(fullNbt.getNumberTagOrThrow("x").getAsInt(), fullNbt.getNumberTagOrThrow("y").getAsInt(), fullNbt.getNumberTagOrThrow("z").getAsInt());
 		this.nbt = fullNbt;
 	}
 

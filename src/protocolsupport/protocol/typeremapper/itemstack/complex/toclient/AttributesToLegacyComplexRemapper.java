@@ -21,14 +21,14 @@ public class AttributesToLegacyComplexRemapper extends ItemStackNBTComplexRemapp
 
 	@Override
 	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
-		NBTList<NBTCompound> attributesTag = tag.getTagListOfType(CommonNBT.ATTRIBUTES, NBTType.COMPOUND);
+		NBTList<NBTCompound> attributesTag = tag.getTagListOfTypeOrNull(CommonNBT.ATTRIBUTES, NBTType.COMPOUND);
 		if (attributesTag != null) {
 			for (NBTCompound attributeTag : attributesTag.getTags()) {
-				NBTString attributeIdTag = attributeTag.getTagOfType(CommonNBT.ATTRIBUTE_ID, NBTType.STRING);
+				NBTString attributeIdTag = attributeTag.getTagOfTypeOrNull(CommonNBT.ATTRIBUTE_ID, NBTType.STRING);
 				if (attributeIdTag != null) {
 					attributeTag.setTag(CommonNBT.ATTRIBUTE_ID, new NBTString(LegacyEntityAttribute.getLegacyId(attributeIdTag.getValue())));
 				}
-				NBTIntArray uuidTag = attributeTag.getTagOfType(CommonNBT.ATTRIBUTE_UUID, NBTType.INT_ARRAY);
+				NBTIntArray uuidTag = attributeTag.getTagOfTypeOrNull(CommonNBT.ATTRIBUTE_UUID, NBTType.INT_ARRAY);
 				if (uuidTag != null) {
 					UUID uuid = CommonNBT.deserializeUUID(uuidTag);
 					attributeTag.setTag(LEGACY_ATTRIBUTE_UUID_MOST, new NBTLong(uuid.getMostSignificantBits()));

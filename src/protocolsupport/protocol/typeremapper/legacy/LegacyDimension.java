@@ -3,16 +3,15 @@ package protocolsupport.protocol.typeremapper.legacy;
 import java.text.MessageFormat;
 
 import protocolsupport.protocol.types.nbt.NBTCompound;
-import protocolsupport.protocol.types.nbt.NBTType;
 
 public class LegacyDimension {
 
 	public static String getStringId(NBTCompound dimension) {
-		return dimension.getTagOfType("effects", NBTType.STRING).getValue();
+		return dimension.getStringTagValueOrThrow("effects");
 	}
 
 	public static int getIntId(NBTCompound dimension) {
-		switch (dimension.getTagOfType("effects", NBTType.STRING).getValue()) {
+		switch (dimension.getStringTagValueOrThrow("effects")) {
 			case "overworld":
 			case "minecraft:overworld": {
 				return 0;

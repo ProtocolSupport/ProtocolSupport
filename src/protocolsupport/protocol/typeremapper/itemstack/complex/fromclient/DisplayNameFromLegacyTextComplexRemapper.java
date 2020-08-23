@@ -14,9 +14,9 @@ public class DisplayNameFromLegacyTextComplexRemapper extends ItemStackNBTComple
 
 	@Override
 	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
-		NBTCompound displayTag = tag.getTagOfType(CommonNBT.DISPLAY, NBTType.COMPOUND);
+		NBTCompound displayTag = tag.getTagOfTypeOrNull(CommonNBT.DISPLAY, NBTType.COMPOUND);
 		if (displayTag != null) {
-			NBTString displayNameTag = displayTag.getTagOfType(CommonNBT.DISPLAY_NAME, NBTType.STRING);
+			NBTString displayNameTag = displayTag.getTagOfTypeOrNull(CommonNBT.DISPLAY_NAME, NBTType.STRING);
 			if (displayNameTag != null) {
 				displayTag.setTag(CommonNBT.DISPLAY_NAME, new NBTString(ChatAPI.toJSON(new TextComponent(displayNameTag.getValue()))));
 			}

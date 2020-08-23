@@ -36,7 +36,7 @@ public class CommonNBT {
 	public static final String DISPLAY_LORE = "Lore";
 
 	public static NBTCompound getOrCreateDisplayTag(NBTCompound rootTag) {
-		NBTCompound display = rootTag.getTagOfType(DISPLAY, NBTType.COMPOUND);
+		NBTCompound display = rootTag.getTagOfTypeOrNull(DISPLAY, NBTType.COMPOUND);
 		if (display == null) {
 			display = new NBTCompound();
 			rootTag.setTag(DISPLAY, display);
@@ -52,7 +52,7 @@ public class CommonNBT {
 	public static String[] getSignLines(NBTCompound tag) {
 		String[] lines = new String[4];
 		for (int i = 0; i < lines.length; i++) {
-			lines[i] = NBTString.getValueOrDefault(tag.getTagOfType("Text" + (i + 1), NBTType.STRING), "");
+			lines[i] = tag.getStringTagValueOrDefault("Text" + (i + 1), "");
 		}
 		return lines;
 	}
@@ -68,22 +68,24 @@ public class CommonNBT {
 	public static final String MOB_SPAWNER_SPAWNDATA = "SpawnData";
 
 	public static NetworkEntityType getSpawnedMobType(NBTCompound spawndataTag) {
-		return NetworkEntityType.getByRegistrySTypeId(NBTString.getValueOrNull(spawndataTag.getTagOfType("id", NBTType.STRING)));
+		return NetworkEntityType.getByRegistrySTypeId(spawndataTag.getStringTagValueOrNull("id"));
 	}
 
 
 	public static final String POTION_TYPE = "Potion";
 
 	public static String getPotionEffectType(NBTCompound tag) {
-		NBTString potionType = tag.getTagOfType(POTION_TYPE, NBTType.STRING);
+		NBTString potionType = tag.getTagOfTypeOrNull(POTION_TYPE, NBTType.STRING);
 		if (potionType != null) {
 			return potionType.getValue();
 		}
-		NBTList<NBTCompound> customPotionEffects = tag.getTagListOfType("CustomPotionEffects", NBTType.COMPOUND);
-		for (NBTCompound customPotionEffect : customPotionEffects.getTags()) {
-			NBTNumber potionId = customPotionEffect.getNumberTag("Id");
-			if (potionId != null) {
-				return MinecraftPotionData.getNameById(potionId.getAsInt());
+		NBTList<NBTCompound> customPotionEffects = tag.getTagListOfTypeOrNull("CustomPotionEffects", NBTType.COMPOUND);
+		if (customPotionEffects != null) {
+			for (NBTCompound customPotionEffect : customPotionEffects.getTags()) {
+				NBTNumber potionId = customPotionEffect.getNumberTagOrNull("Id");
+				if (potionId != null) {
+					return MinecraftPotionData.getNameById(potionId.getAsInt());
+				}
 			}
 		}
 		return null;
@@ -114,15 +116,15 @@ public class CommonNBT {
 
 	public static NetworkItemStack deserializeItemStackFromNBT(NBTCompound rootTag) {
 		NetworkItemStack itemstack = new NetworkItemStack();
-		NBTString idTag = rootTag.getTagOfType(ITEMSTACK_STORAGE_ID, NBTType.STRING);
+		NBTString idTag = rootTag.getTagOfTypeOrNull(ITEMSTACK_STORAGE_ID, NBTType.STRING);
 		if (idTag != null) {
 			itemstack.setTypeId(ItemMaterialLookup.getRuntimeId(ItemMaterialLookup.getByKey(idTag.getValue())));
 		}
-		NBTNumber countTag = rootTag.getNumberTag(ITEMSTACK_STORAGE_COUNT);
+		NBTNumber countTag = rootTag.getNumberTagOrNull(ITEMSTACK_STORAGE_COUNT);
 		if (countTag != null) {
 			itemstack.setAmount(countTag.getAsInt());
 		}
-		NBTCompound tagTag = rootTag.getTagOfType(ITEMSTACK_STORAGE_NBT, NBTType.COMPOUND);
+		NBTCompound tagTag = rootTag.getTagOfTypeOrNull(ITEMSTACK_STORAGE_NBT, NBTType.COMPOUND);
 		if (tagTag != null) {
 			itemstack.setNBT(tagTag);
 		}
@@ -138,8 +140,8 @@ public class CommonNBT {
 	}
 
 	public static String deserializeBlockDataFromNBT(NBTCompound compound) {
-		String name = compound.getTagOfType("Name", NBTType.STRING).getValue();
-		NBTCompound properties = compound.getTagOfType("Properties", NBTType.COMPOUND);
+		String name = compound.getStringTagValueOrThrow("Name");
+		NBTCompound properties = compound.getTagOfTypeOrNull("Properties", NBTType.COMPOUND);
 		if (properties == null) {
 			return name;
 		} else {

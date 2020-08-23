@@ -16,9 +16,9 @@ public class ShieldFromLegacyComplexRemapper implements ItemStackComplexRemapper
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		NBTCompound tag = itemstack.getNBT();
 		if (tag != null) {
-			NBTCompound blockTag = tag.getTagOfType(CommonNBT.BLOCK_TAG, NBTType.COMPOUND);
+			NBTCompound blockTag = tag.getTagOfTypeOrNull(CommonNBT.BLOCK_TAG, NBTType.COMPOUND);
 			if (blockTag != null) {
-				NBTNumber base = blockTag.getNumberTag(CommonNBT.BANNER_BASE);
+				NBTNumber base = blockTag.getNumberTagOrNull(CommonNBT.BANNER_BASE);
 				if (base != null) {
 					blockTag.setTag(CommonNBT.BANNER_BASE, new NBTInt(15 - base.getAsInt()));
 				}

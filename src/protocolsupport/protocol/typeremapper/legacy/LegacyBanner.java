@@ -16,10 +16,10 @@ import protocolsupportbuildprocessor.Preload;
 public class LegacyBanner {
 
 	public static void transformBanner(NBTCompound tag) {
-		NBTList<NBTCompound> patterns = tag.getTagListOfType(CommonNBT.BANNER_PATTERNS, NBTType.COMPOUND);
+		NBTList<NBTCompound> patterns = tag.getTagListOfTypeOrNull(CommonNBT.BANNER_PATTERNS, NBTType.COMPOUND);
 		if (patterns != null) {
 			for (NBTCompound pattern : patterns.getTags()) {
-				pattern.setTag(CommonNBT.BANNER_PATTERN_COLOR, new NBTInt(15 - pattern.getNumberTag(CommonNBT.BANNER_PATTERN_COLOR).getAsInt()));
+				pattern.setTag(CommonNBT.BANNER_PATTERN_COLOR, new NBTInt(15 - pattern.getNumberTagOrThrow(CommonNBT.BANNER_PATTERN_COLOR).getAsInt()));
 			}
 		}
 	}

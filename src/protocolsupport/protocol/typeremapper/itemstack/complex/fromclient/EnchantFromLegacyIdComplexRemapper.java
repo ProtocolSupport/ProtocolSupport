@@ -17,12 +17,11 @@ public class EnchantFromLegacyIdComplexRemapper extends ItemStackNBTComplexRemap
 
 	@Override
 	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
-		NBTList<NBTCompound> enchTag = tag.getTagListOfType(CommonNBT.LEGACY_ENCHANTMENTS, NBTType.COMPOUND);
+		NBTList<NBTCompound> enchTag = tag.removeTagAndReturnIfListType(CommonNBT.LEGACY_ENCHANTMENTS, NBTType.COMPOUND);
 		if (enchTag != null) {
-			tag.removeTag(CommonNBT.LEGACY_ENCHANTMENTS);
 			tag.setTag(CommonNBT.MODERN_ENCHANTMENTS, remapEnchantList(enchTag));
 		}
-		NBTList<NBTCompound> bookEnch = tag.getTagListOfType(CommonNBT.BOOK_ENCHANTMENTS, NBTType.COMPOUND);
+		NBTList<NBTCompound> bookEnch = tag.removeTagAndReturnIfListType(CommonNBT.BOOK_ENCHANTMENTS, NBTType.COMPOUND);
 		if (bookEnch != null) {
 			tag.setTag(CommonNBT.BOOK_ENCHANTMENTS, remapEnchantList(bookEnch));
 		}
@@ -32,7 +31,7 @@ public class EnchantFromLegacyIdComplexRemapper extends ItemStackNBTComplexRemap
 	protected NBTList<NBTCompound> remapEnchantList(NBTList<NBTCompound> oldList) {
 		NBTList<NBTCompound> newList = new NBTList<>(NBTType.COMPOUND);
 		for (NBTCompound enchData : oldList.getTags()) {
-			NBTNumber enchId = enchData.getNumberTag("id");
+			NBTNumber enchId = enchData.getNumberTagOrNull("id");
 			if (enchId != null) {
 				Enchantment ench = LegacyEnchantmentId.getById(enchId.getAsInt());
 				if (ench != null) {

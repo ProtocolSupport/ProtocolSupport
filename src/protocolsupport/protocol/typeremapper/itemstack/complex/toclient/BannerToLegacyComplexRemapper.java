@@ -19,7 +19,7 @@ public class BannerToLegacyComplexRemapper implements ItemStackComplexRemapper {
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		NBTCompound tag = itemstack.getNBT();
 		if (tag != null) {
-			NBTCompound blockTag = tag.getTagOfType(CommonNBT.BLOCK_TAG, NBTType.COMPOUND);
+			NBTCompound blockTag = tag.getTagOfTypeOrNull(CommonNBT.BLOCK_TAG, NBTType.COMPOUND);
 			if (blockTag != null) {
 				LegacyBanner.transformBanner(blockTag);
 			}

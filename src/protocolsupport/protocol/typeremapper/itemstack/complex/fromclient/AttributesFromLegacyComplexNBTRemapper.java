@@ -18,15 +18,15 @@ public class AttributesFromLegacyComplexNBTRemapper extends ItemStackNBTComplexR
 
 	@Override
 	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
-		NBTList<NBTCompound> attributesTag = tag.getTagListOfType(CommonNBT.ATTRIBUTES, NBTType.COMPOUND);
+		NBTList<NBTCompound> attributesTag = tag.getTagListOfTypeOrNull(CommonNBT.ATTRIBUTES, NBTType.COMPOUND);
 		if (attributesTag != null) {
 			for (NBTCompound attributeTag : attributesTag.getTags()) {
-				NBTString attributeIdTag = attributeTag.getTagOfType(CommonNBT.ATTRIBUTE_ID, NBTType.STRING);
+				NBTString attributeIdTag = attributeTag.getTagOfTypeOrNull(CommonNBT.ATTRIBUTE_ID, NBTType.STRING);
 				if (attributeIdTag != null) {
 					attributeTag.setTag(CommonNBT.ATTRIBUTE_ID, new NBTString(LegacyEntityAttribute.getModernId(attributeIdTag.getValue())));
 				}
-				NBTLong uuidMostTag = tag.getTagOfType(AttributesToLegacyComplexRemapper.LEGACY_ATTRIBUTE_UUID_MOST, NBTType.LONG);
-				NBTLong uuidLeastTag = tag.getTagOfType(AttributesToLegacyComplexRemapper.LEGACY_ATTRIBUTE_UUID_LEAST, NBTType.LONG);
+				NBTLong uuidMostTag = tag.getTagOfTypeOrNull(AttributesToLegacyComplexRemapper.LEGACY_ATTRIBUTE_UUID_MOST, NBTType.LONG);
+				NBTLong uuidLeastTag = tag.getTagOfTypeOrNull(AttributesToLegacyComplexRemapper.LEGACY_ATTRIBUTE_UUID_LEAST, NBTType.LONG);
 				if ((uuidMostTag != null) && (uuidLeastTag != null)) {
 					attributeTag.setTag(CommonNBT.ATTRIBUTE_UUID, CommonNBT.serializeUUID(new UUID(uuidMostTag.getAsLong(), uuidLeastTag.getAsLong())));
 				}

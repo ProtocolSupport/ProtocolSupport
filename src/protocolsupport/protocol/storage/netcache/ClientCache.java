@@ -43,7 +43,7 @@ public class ClientCache implements IBiomeRegistry {
 	}
 
 	public boolean hasSkyLightInCurrentDimension() {
-		return dimension.getNumberTag("has_skylight").getAsInt() == 1;
+		return dimension.getNumberTagOrThrow("has_skylight").getAsInt() == 1;
 	}
 
 	protected final Biome[] biomeById = new Biome[256];
@@ -73,12 +73,12 @@ public class ClientCache implements IBiomeRegistry {
 	}
 
 	public void setDimensionCodec(NBTCompound dimensionCodec) {
-		NBTCompound biomeRegistry = dimensionCodec.getTagOfType("minecraft:worldgen/biome", NBTType.COMPOUND);
+		NBTCompound biomeRegistry = dimensionCodec.getTagOfTypeOrNull("minecraft:worldgen/biome", NBTType.COMPOUND);
 		if (biomeRegistry != null) {
-			for (NBTCompound biomeData : biomeRegistry.getTagListOfType("value", NBTType.COMPOUND).getTags()) {
+			for (NBTCompound biomeData : biomeRegistry.getTagListOfTypeOrThrow("value", NBTType.COMPOUND).getTags()) {
 				registerBiome(
-					Registry.BIOME.get(NamespacedKeyUtils.fromString(biomeData.getTagOfType("name", NBTType.STRING).getValue())),
-					biomeData.getNumberTag("id").getAsInt()
+					Registry.BIOME.get(NamespacedKeyUtils.fromString(biomeData.getStringTagValueOrThrow("name"))),
+					biomeData.getNumberTagOrThrow("id").getAsInt()
 				);
 			}
 		}

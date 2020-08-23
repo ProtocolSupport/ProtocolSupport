@@ -49,8 +49,8 @@ public class NBTList<T extends NBT> extends NBT {
 		if (type != tag.getType()) {
 			throw new IllegalArgumentException(MessageFormat.format(
 				"Invalid tag type. Expected {0}, got {1}.",
-				type.getNBTTagClass(),
-				tag.getType().getNBTTagClass()
+				type.getNBTClass(),
+				tag.getType().getNBTClass()
 			));
 		}
 		tags.add(tag);

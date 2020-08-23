@@ -26,12 +26,4 @@ public class NBTString extends NBT {
 		return string.hashCode();
 	}
 
-	public static String getValueOrNull(NBTString tag) {
-		return getValueOrDefault(tag, null);
-	}
-
-	public static String getValueOrDefault(NBTString tag, String defaultVal) {
-		return tag != null ? tag.getValue() : defaultVal;
-	}
-
 }

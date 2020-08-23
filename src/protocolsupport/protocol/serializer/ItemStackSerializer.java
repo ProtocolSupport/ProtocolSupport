@@ -199,7 +199,7 @@ public class ItemStackSerializer {
 
 	public static NBTCompound readDirectTag(ByteBuf from) {
 		try {
-			return DefaultNBTSerializer.INSTANCE.deserializeTag(new ByteBufInputStream(from));
+			return (NBTCompound) DefaultNBTSerializer.INSTANCE.deserializeTag(new ByteBufInputStream(from));
 		} catch (IOException e) {
 			throw new DecoderException(e);
 		}
@@ -212,7 +212,7 @@ public class ItemStackSerializer {
 				return null;
 			}
 			try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new ByteBufInputStream(from.readSlice(length))))) {
-				return DefaultNBTSerializer.INSTANCE.deserializeTag(stream);
+				return (NBTCompound) DefaultNBTSerializer.INSTANCE.deserializeTag(stream);
 			}
 		} catch (IOException e) {
 			throw new DecoderException(e);

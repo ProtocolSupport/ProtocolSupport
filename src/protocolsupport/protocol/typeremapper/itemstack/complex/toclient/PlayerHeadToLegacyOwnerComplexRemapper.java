@@ -4,7 +4,6 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackNBTComplexRemapper;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
-import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.GameProfileSerializer;
@@ -18,14 +17,9 @@ public class PlayerHeadToLegacyOwnerComplexRemapper extends ItemStackNBTComplexR
 	}
 
 	public static void remap(NBTCompound tag, String tagname, String newtagname) {
-		NBTCompound gameprofileTag = tag.getTagOfType(tagname, NBTType.COMPOUND);
+		NBTCompound gameprofileTag = tag.getTagOfTypeOrNull(tagname, NBTType.COMPOUND);
 		if (gameprofileTag != null) {
-			NBTString nameTag = gameprofileTag.getTagOfType(GameProfileSerializer.NAME_KEY, NBTType.STRING);
-			if (nameTag != null) {
-				tag.setTag(newtagname, nameTag);
-			} else {
-				tag.removeTag(tagname);
-			}
+			tag.setTag(newtagname, gameprofileTag.getTagOfTypeOrNull(GameProfileSerializer.NAME_KEY, NBTType.STRING));
 		}
 	}
 

@@ -223,7 +223,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 			ByteBuf buffer = Unpooled.buffer();
 			try {
 				NBTCompressedStreamTools.a(nmsItemStack.getTag(), (DataOutput) new ByteBufOutputStream(buffer));
-				networkItemStack.setNBT(DefaultNBTSerializer.INSTANCE.deserializeTag(new ByteBufInputStream(buffer)));
+				networkItemStack.setNBT((NBTCompound) DefaultNBTSerializer.INSTANCE.deserializeTag(new ByteBufInputStream(buffer)));
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

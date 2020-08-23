@@ -15,7 +15,7 @@ public class BannerFromLegacyComplexRemapper implements ItemStackComplexRemapper
 		itemstack.setTypeId(LegacyBanner.getMaterialByColor(itemstack.getLegacyData()));
 		NBTCompound tag = itemstack.getNBT();
 		if (tag != null) {
-			NBTCompound blockTag = tag.getTagOfType(CommonNBT.BLOCK_TAG, NBTType.COMPOUND);
+			NBTCompound blockTag = tag.getTagOfTypeOrNull(CommonNBT.BLOCK_TAG, NBTType.COMPOUND);
 			if (blockTag != null) {
 				LegacyBanner.transformBanner(blockTag);
 			}

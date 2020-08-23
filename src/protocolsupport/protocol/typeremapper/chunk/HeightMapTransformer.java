@@ -24,8 +24,8 @@ public class HeightMapTransformer {
 	protected static final String NAME_WORLD_SURFACE = "WORLD_SURFACE";
 
 	public static NBTCompound transform(NBTCompound heightmaps) {
-		heightmaps.setTag(NAME_MOTION_BLOCKING, new NBTLongArray(transformStorageToCompact(heightmaps.getTagOfType(NAME_MOTION_BLOCKING, NBTType.LONG_ARRAY).getValue())));
-		heightmaps.setTag(NAME_WORLD_SURFACE, new NBTLongArray(transformStorageToCompact(heightmaps.getTagOfType(NAME_WORLD_SURFACE, NBTType.LONG_ARRAY).getValue())));
+		heightmaps.setTag(NAME_MOTION_BLOCKING, new NBTLongArray(transformStorageToCompact(heightmaps.getTagOfTypeOrThrow(NAME_MOTION_BLOCKING, NBTType.LONG_ARRAY).getValue())));
+		heightmaps.setTag(NAME_WORLD_SURFACE, new NBTLongArray(transformStorageToCompact(heightmaps.getTagOfTypeOrThrow(NAME_WORLD_SURFACE, NBTType.LONG_ARRAY).getValue())));
 		return heightmaps;
 	}
 

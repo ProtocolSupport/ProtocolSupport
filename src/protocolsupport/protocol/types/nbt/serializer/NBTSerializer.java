@@ -10,21 +10,17 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import protocolsupport.protocol.types.nbt.NBT;
-import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTType;
 
 public class NBTSerializer<IN, OUT> {
 
-	public NBTCompound deserializeTag(IN from) throws IOException {
+	public NBT deserializeTag(IN from) throws IOException {
 		NBTType<?> type = readTagType(from);
 		if (type == NBTType.END) {
 			return null;
 		}
-		if (type != NBTType.COMPOUND) {
-			throw new IOException(MessageFormat.format("Root tag must be compound, got: {0}", type));
-		}
 		readTagName(from);
-		return (NBTCompound) readTag(from, type);
+		return readTag(from, type);
 	}
 
 	public void serializeTag(OUT to, NBT tag) throws IOException {
@@ -32,9 +28,6 @@ public class NBTSerializer<IN, OUT> {
 		writeTagType(to, type);
 		if (tag.getType() == NBTType.END) {
 			return;
-		}
-		if (type != NBTType.COMPOUND) {
-			throw new IOException(MessageFormat.format("Root tag must be compound, got: {0}", type));
 		}
 		writeTagName(to, "");
 		writeTag(to, tag);

@@ -36,12 +36,12 @@ public class HoverAction {
 			case SHOW_ENTITY: {
 				try {
 					NBTCompound compound = MojangsonParser.parse(value);
-					NBTString etype = compound.getTagOfType("type", NBTType.STRING);
-					NBTString euuid = compound.getTagOfType("id", NBTType.STRING);
+					NBTString etype = compound.getTagOfTypeOrNull("type", NBTType.STRING);
+					NBTString euuid = compound.getTagOfTypeOrNull("id", NBTType.STRING);
 					this.contents = new EntityInfo(
 						etype != null ? Registry.ENTITY_TYPE.get(NamespacedKeyUtils.fromString(etype.getValue())) : null,
 						euuid != null ? UUID.fromString(euuid.getValue()) : null,
-						NBTString.getValueOrNull(compound.getTagOfType("name", NBTType.STRING))
+						compound.getStringTagValueOrNull("name")
 					);
 					return;
 				} catch (IOException e) {
