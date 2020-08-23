@@ -14,11 +14,12 @@ import protocolsupport.utils.netty.Compressor;
 
 public class ChunkLight extends AbstractChunkCacheChunkLight {
 
-	protected final ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	public ChunkLight(MiddlePacketInit init) {
 		super(init);
 	}
+
+	protected final ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	protected final List<ClientBoundPacketData> blocktileupdates = new ArrayList<>();
 
@@ -34,7 +35,9 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 		chunkdata.writeShort(blockMask);
 		chunkdata.writeShort(0);
 		byte[] compressed = Compressor.compressStatic(ChunkWriterByte.serializeSectionsAndBiomes(
-			blockMask, blockDataRemappingTable, cachedChunk, hasSkyLight, null, null,
+			blockMask,
+			cachedChunk, blockDataRemappingTable, hasSkyLight,
+			null, null, null,
 			sectionNumber ->
 				cachedChunk.getTiles(sectionNumber).values()
 				.forEach(tile -> blocktileupdates.add(BlockTileUpdate.create(version, locale, tile)))

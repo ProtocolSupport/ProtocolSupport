@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 import java.util.EnumMap;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.EnumMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
 
@@ -40,6 +41,16 @@ public abstract class MappingRegistry<T extends MappingTable> {
 	}
 
 	public abstract static class GenericMappingRegistry<T, R extends GenericMappingTable<T>> extends MappingRegistry<R> {
+
+		public void register(T from, T to, ProtocolVersion... versions) {
+			for (ProtocolVersion version : versions) {
+				getTable(version).set(from, to);
+			}
+		}
+
+	}
+
+	public abstract static class EnumMappingRegistry<T extends Enum<T>, R extends EnumMappingTable<T>> extends MappingRegistry<R> {
 
 		public void register(T from, T to, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {

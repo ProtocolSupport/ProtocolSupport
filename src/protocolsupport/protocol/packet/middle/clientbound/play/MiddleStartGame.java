@@ -72,6 +72,7 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void handleReadData() {
+		clientCache.setDimensionCodec(dimensions);
 		oldDimension = clientCache.setCurrentDimension(dimension);
 		clientCache.setRespawnScreenEnabled(respawnScreenEnabled);
 		windowCache.setPlayerWindow(windowRemapper.get(WindowType.PLAYER, 0));

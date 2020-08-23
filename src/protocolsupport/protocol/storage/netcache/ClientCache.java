@@ -1,12 +1,18 @@
 package protocolsupport.protocol.storage.netcache;
 
+import java.util.Arrays;
 import java.util.UUID;
 
+import org.bukkit.Registry;
+import org.bukkit.block.Biome;
+
 import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTType;
+import protocolsupport.protocol.utils.NamespacedKeyUtils;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.Utils;
 
-public class ClientCache {
+public class ClientCache implements IBiomeRegistry {
 
 	protected UUID uuid;
 
@@ -38,6 +44,44 @@ public class ClientCache {
 
 	public boolean hasSkyLightInCurrentDimension() {
 		return dimension.getNumberTag("has_skylight").getAsInt() == 1;
+	}
+
+	protected final Biome[] biomeById = new Biome[256];
+	protected final int[] biomeToId = new int[Biome.values().length];
+
+	{
+		Arrays.fill(biomeToId, -1);
+	}
+
+	protected void registerBiome(Biome biome, int id) {
+		biomeById[id] = biome;
+		biomeToId[biome.ordinal()] = id;
+	}
+
+	@Override
+	public Biome getBiome(int id) {
+		if ((id >= 0) && (id < biomeById.length)) {
+			return biomeById[id];
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public int getBiomeId(Biome biome) {
+		return biomeToId[biome.ordinal()];
+	}
+
+	public void setDimensionCodec(NBTCompound dimensionCodec) {
+		NBTCompound biomeRegistry = dimensionCodec.getTagOfType("minecraft:worldgen/biome", NBTType.COMPOUND);
+		if (biomeRegistry != null) {
+			for (NBTCompound biomeData : biomeRegistry.getTagListOfType("value", NBTType.COMPOUND).getTags()) {
+				registerBiome(
+					Registry.BIOME.get(NamespacedKeyUtils.fromString(biomeData.getTagOfType("name", NBTType.STRING).getValue())),
+					biomeData.getNumberTag("id").getAsInt()
+				);
+			}
+		}
 	}
 
 	protected float maxHealth = 20.0F;

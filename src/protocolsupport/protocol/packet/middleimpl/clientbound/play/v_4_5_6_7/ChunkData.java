@@ -2,14 +2,18 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
 import java.util.Map;
 
+import org.bukkit.block.Biome;
+
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheChunkData;
 import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.basic.BiomeRemapper;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterByte;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterUtils;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.EnumMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
@@ -21,7 +25,9 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 		super(init);
 	}
 
-	protected final IdMappingTable biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
+	protected final ClientCache clientCache = cache.getClientCache();
+
+	protected final EnumMappingTable<Biome> biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
 	protected final IdMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	@Override
@@ -43,8 +49,8 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 			chunkdata.writeShort(0);
 			byte[] compressed = Compressor.compressStatic(ChunkWriterByte.serializeSectionsAndBiomes(
 				blockMask,
-				blockDataRemappingTable, cachedChunk, hasSkyLight,
-				biomeRemappingTable, full ? biomes : null,
+				cachedChunk, blockDataRemappingTable, hasSkyLight,
+				full ? biomes : null, clientCache, biomeRemappingTable,
 				sectionNumber -> {}
 			));
 			chunkdata.writeInt(compressed.length);

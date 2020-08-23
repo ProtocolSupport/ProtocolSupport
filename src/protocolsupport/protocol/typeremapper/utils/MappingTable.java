@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.utils;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
@@ -64,6 +65,24 @@ public class MappingTable {
 	public static class GenericMappingTable<T> extends MappingTable {
 
 		protected final HashMap<T, T> table = new HashMap<>();
+
+		public void set(T from, T to) {
+			table.put(from, to);
+		}
+
+		public T get(T from) {
+			return table.getOrDefault(from, from);
+		}
+
+	}
+
+	public static class EnumMappingTable<T extends Enum<T>> extends MappingTable {
+
+		protected final EnumMap<T, T> table;
+
+		public EnumMappingTable(Class<T> clazz) {
+			this.table = new EnumMap<>(clazz);
+		}
 
 		public void set(T from, T to) {
 			table.put(from, to);
