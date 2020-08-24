@@ -25,6 +25,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14r1_14r2_1
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14r1_14r2_15_16r1_16r2.UpdateCommandBlock;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14r1_14r2_15_16r1_16r2.UpdateSign;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14r1_14r2_15_16r1_16r2.UpdateStructureBlock;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_15.JigsawUpdate;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.CreativeSetSlot;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.Flying;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.HeldSlot;
@@ -104,6 +105,7 @@ public class PacketDecoder extends AbstractModernPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x24, UpdateCommandBlock::new);
 		registry.register(NetworkState.PLAY, 0x25, UpdateCommandMinecart::new);
 		registry.register(NetworkState.PLAY, 0x26, CreativeSetSlot::new);
+		registry.register(NetworkState.PLAY, 0x27, JigsawUpdate::new);
 		registry.register(NetworkState.PLAY, 0x28, UpdateStructureBlock::new);
 		registry.register(NetworkState.PLAY, 0x29, UpdateSign::new);
 		registry.register(NetworkState.PLAY, 0x2A, Animation::new);
