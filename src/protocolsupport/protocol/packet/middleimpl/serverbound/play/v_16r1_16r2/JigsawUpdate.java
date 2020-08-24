@@ -14,11 +14,11 @@ public class JigsawUpdate extends MiddleJigsawUpdate {
 	@Override
 	protected void readClientData(ByteBuf clientdata) {
 		PositionSerializer.readPositionTo(clientdata, position);
-		name = StringSerializer.readVarIntUTF8String(clientdata);
-		target = StringSerializer.readVarIntUTF8String(clientdata);
-		pool = StringSerializer.readVarIntUTF8String(clientdata);
-		finalState = StringSerializer.readVarIntUTF8String(clientdata);
-		jointType = StringSerializer.readVarIntUTF8String(clientdata);
+		name = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
+		target = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
+		pool = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
+		finalState = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
+		jointType = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
 	}
 
 }
