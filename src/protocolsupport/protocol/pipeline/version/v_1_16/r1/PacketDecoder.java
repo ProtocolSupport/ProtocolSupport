@@ -25,6 +25,8 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14r1_14r2_1
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14r1_14r2_15_16r1_16r2.UpdateCommandBlock;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14r1_14r2_15_16r1_16r2.UpdateSign;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14r1_14r2_15_16r1_16r2.UpdateStructureBlock;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_16r1_16r2.JigsawGenerate;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_16r1_16r2.JigsawUpdate;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_16r1_16r2.PlayerAbilities;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_16r1_16r2.UseEntity;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.CreativeSetSlot;
@@ -60,7 +62,6 @@ public class PacketDecoder extends AbstractModernPacketDecoder {
 	}
 
 	{
-		//TODO: implement missing packets
 		registry.register(NetworkState.HANDSHAKING, 0x00, SetProtocol::new);
 		registry.register(NetworkState.LOGIN, 0x00, LoginStart::new);
 		registry.register(NetworkState.LOGIN, 0x01, EncryptionResponse::new);
@@ -81,6 +82,7 @@ public class PacketDecoder extends AbstractModernPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x0C, EditBook::new);
 		registry.register(NetworkState.PLAY, 0x0D, QueryEntityNBT::new);
 		registry.register(NetworkState.PLAY, 0x0E, UseEntity::new);
+		registry.register(NetworkState.PLAY, 0x0F, JigsawGenerate::new);
 		registry.register(NetworkState.PLAY, 0x10, KeepAlive::new);
 		registry.register(NetworkState.PLAY, 0x12, Move::new);
 		registry.register(NetworkState.PLAY, 0x13, MoveLook::new);
@@ -104,6 +106,7 @@ public class PacketDecoder extends AbstractModernPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x25, UpdateCommandBlock::new);
 		registry.register(NetworkState.PLAY, 0x26, UpdateCommandMinecart::new);
 		registry.register(NetworkState.PLAY, 0x27, CreativeSetSlot::new);
+		registry.register(NetworkState.PLAY, 0x28, JigsawUpdate::new);
 		registry.register(NetworkState.PLAY, 0x29, UpdateStructureBlock::new);
 		registry.register(NetworkState.PLAY, 0x2A, UpdateSign::new);
 		registry.register(NetworkState.PLAY, 0x2B, Animation::new);
