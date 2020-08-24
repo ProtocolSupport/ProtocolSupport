@@ -105,9 +105,7 @@ public class CommonNBT {
 	public static final String BANNER_PATTERN_COLOR = "Color";
 
 
-	public static final String PLAYERHEAD_ITEM_PROFILE = "SkullOwner";
-
-	public static final String PLAYERHEAD_TILE_PROFILE = "Owner";
+	public static final String PLAYERHEAD_PROFILE = "SkullOwner";
 
 
 	public static final String ITEMSTACK_STORAGE_ID = "id";

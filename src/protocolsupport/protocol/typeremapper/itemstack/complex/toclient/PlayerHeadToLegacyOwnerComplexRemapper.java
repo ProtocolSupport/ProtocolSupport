@@ -12,12 +12,12 @@ public class PlayerHeadToLegacyOwnerComplexRemapper extends ItemStackNBTComplexR
 
 	@Override
 	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
-		remap(tag, CommonNBT.PLAYERHEAD_ITEM_PROFILE, "SkullOwner");
+		remap(tag, "SkullOwner");
 		return tag;
 	}
 
-	public static void remap(NBTCompound tag, String tagname, String newtagname) {
-		NBTCompound gameprofileTag = tag.getTagOfTypeOrNull(tagname, NBTType.COMPOUND);
+	public static void remap(NBTCompound tag, String newtagname) {
+		NBTCompound gameprofileTag = tag.getTagOfTypeOrNull(CommonNBT.PLAYERHEAD_PROFILE, NBTType.COMPOUND);
 		if (gameprofileTag != null) {
 			tag.setTag(newtagname, gameprofileTag.getTagOfTypeOrNull(GameProfileSerializer.NAME_KEY, NBTType.STRING));
 		}

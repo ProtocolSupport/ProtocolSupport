@@ -19,7 +19,7 @@ public class DragonHeadToDragonPlayerHeadComplexRemapper implements ItemStackCom
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		itemstack.setTypeId(ItemMaterialLookup.getRuntimeId(Material.PLAYER_HEAD));
 		NBTCompound wrapper = new NBTCompound();
-		wrapper.setTag(CommonNBT.PLAYERHEAD_ITEM_PROFILE, createTag());
+		wrapper.setTag(CommonNBT.PLAYERHEAD_PROFILE, createTag());
 		itemstack.setNBT(wrapper);
 		return itemstack;
 	}

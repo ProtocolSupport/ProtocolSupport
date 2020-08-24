@@ -164,19 +164,27 @@ public class TileEntityRemapper {
 				NBTNumber skulltype = nbt.getNumberTagOrNull("SkullType");
 				if ((skulltype != null) && (skulltype.getAsInt() == 5)) {
 					nbt.setTag("SkullType", new NBTByte((byte) 3));
-					nbt.setTag(CommonNBT.PLAYERHEAD_TILE_PROFILE, DragonHeadToDragonPlayerHeadComplexRemapper.createTag());
+					nbt.setTag(CommonNBT.PLAYERHEAD_PROFILE, DragonHeadToDragonPlayerHeadComplexRemapper.createTag());
 				}
 			},
 			ProtocolVersionsHelper.DOWN_1_8
 		);
 		register(
 			TileEntityType.SKULL,
-			tile -> PlayerHeadToLegacyUUIDComplexRemapper.remap(tile.getNBT(), CommonNBT.PLAYERHEAD_TILE_PROFILE),
+			tile -> PlayerHeadToLegacyUUIDComplexRemapper.remap(tile.getNBT()),
 			ProtocolVersionsHelper.RANGE__1_7_10__1_15_2
 		);
 		register(
 			TileEntityType.SKULL,
-			tile -> PlayerHeadToLegacyOwnerComplexRemapper.remap(tile.getNBT(), CommonNBT.PLAYERHEAD_TILE_PROFILE, "ExtraType"),
+			tile -> {
+				NBTCompound tag = tile.getNBT();
+				tag.setTag("Owner", tag.removeTagAndReturnIfType(CommonNBT.PLAYERHEAD_PROFILE, NBTType.COMPOUND));
+			},
+			ProtocolVersionsHelper.RANGE__1_7_10__1_15_2
+		);
+		register(
+			TileEntityType.SKULL,
+			tile -> PlayerHeadToLegacyOwnerComplexRemapper.remap(tile.getNBT(), "ExtraType"),
 			ProtocolVersionsHelper.DOWN_1_7_5
 		);
 	}
