@@ -18,7 +18,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupportbuildprocessor.Preload;
 
-//TODO: actually combine with entity remapping
+//TODO: combine with entity remapping
 @Preload
 public class ObjectDataRemappersRegistry {
 

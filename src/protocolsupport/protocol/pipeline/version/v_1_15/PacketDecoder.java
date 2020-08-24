@@ -61,7 +61,6 @@ public class PacketDecoder extends AbstractModernPacketDecoder {
 	}
 
 	{
-		//TODO: implement missing packets
 		registry.register(NetworkState.HANDSHAKING, 0x00, SetProtocol::new);
 		registry.register(NetworkState.LOGIN, 0x00, LoginStart::new);
 		registry.register(NetworkState.LOGIN, 0x01, EncryptionResponse::new);

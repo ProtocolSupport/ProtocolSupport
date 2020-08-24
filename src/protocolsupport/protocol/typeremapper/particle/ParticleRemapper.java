@@ -243,7 +243,7 @@ public class ParticleRemapper {
 			registerSkip(ParticleNautilus.class, ProtocolVersionsHelper.DOWN_1_12_2);
 			registerSkip(ParticleDolphin.class, ProtocolVersionsHelper.DOWN_1_12_2);
 			registerSkip(ParticleTotemOfUndying.class, ProtocolVersionsHelper.DOWN_1_10);
-			registerSkip(ParticleFallingDust.class, ProtocolVersionsHelper.DOWN_1_9_4); //TODO: actually remap to colored dust, after building blockdata -> color table
+			registerSkip(ParticleFallingDust.class, ProtocolVersionsHelper.DOWN_1_9_4); //TODO: remap to colored dust, after building blockdata -> color table
 			registerSkip(ParticleEndRod.class, ProtocolVersionsHelper.DOWN_1_8);
 			registerSkip(ParticleDamageIndicator.class, ProtocolVersionsHelper.DOWN_1_8);
 			registerSkip(ParticleSweepAttack.class, ProtocolVersionsHelper.DOWN_1_8);
