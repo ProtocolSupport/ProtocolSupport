@@ -30,8 +30,7 @@ public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 		) {
 			TrackedScoreboardTeam team = teamsTracker.getTeam(name);
 			for (String player : team.getPlayers()) {
-				//TODO: improve performance (by checking for non color codes presence)
-				if (!ChatColor.stripColor(player).isEmpty()) {
+				if (!LegacyChat.isEmpty(player)) {
 					return false;
 				}
 			}

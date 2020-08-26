@@ -7,6 +7,22 @@ import protocolsupport.api.chat.modifiers.Modifier;
 
 public class LegacyChat {
 
+	public static boolean isEmpty(String string) {
+		if (string.isEmpty()) {
+			return true;
+		}
+		int length = string.length();
+		int index = 0;
+		do {
+			if (string.charAt(index) != ChatColor.COLOR_CHAR) {
+				return false;
+			} else {
+				index += 2;
+			}
+		} while (index < length);
+		return true;
+	}
+
 	public static String toText(BaseComponent component, String locale) {
 		if (component == null) {
 			return "";
