@@ -1,15 +1,31 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		maven {
+			url 'https://jitpack.io'
+		}
+	}
+	dependencies {
+		classpath group: 'com.github.HurricaneGamesOrg', name: 'ManualGradleDependencySupplier', version: '4f4893da88'
+	}
+}
+
+plugins {
+	id 'java'
+	id 'maven'
+	id 'com.github.johnrengelman.shadow' version '5.0.0'
+}
+
+apply plugin: 'org.hurricanegames.ManualGradleDependencySupplier'
+
+
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.Files
 
-plugins {
-	id 'com.github.johnrengelman.shadow' version '5.0.0'
-	id 'java'
-	id 'maven'
-}
-
-apply from: 'gradle/helper.gradle'
-
+import org.hurricanegames.manualgradledependencysupplier.DependencySupplier
+import org.hurricanegames.manualgradledependencysupplier.BuildDependencySupplier
+import org.hurricanegames.manualgradledependencysupplier.ManualGradleDependencySupplier
 
 defaultTasks 'build'
 
@@ -19,19 +35,14 @@ version '1.16.2-dev'
 
 
 Path projectDirectoryPath = projectDir.toPath().toAbsolutePath()
+Path projectBuildDirectoryPath = getBuildDir().toPath()
 
 
-Path librariesRuntimeDirectoryPath = projectDirectoryPath.resolve("libraries_runtime")
-Path librariesShadeDirectoryPath = projectDirectoryPath.resolve("libraries_shade")
-Path annotationProcessorsDirectoryPath = projectDirectoryPath.resolve("processors")
-Path generatedResourcesDirectoryPath = projectDirectoryPath.resolve("gen")
-String resourcesDirectoryName = "resources";
+Path generatedResourcesDirectoryPath = projectDirectoryPath.resolve('gen')
+String resourcesDirectoryName = 'resources';
 Path generatedResourcesResourcesDirectoryPath = generatedResourcesDirectoryPath.resolve(resourcesDirectoryName)
 
 task setupFolders(type: DefaultTask) {doLast{
-	Files.createDirectories(librariesRuntimeDirectoryPath)
-	Files.createDirectories(librariesShadeDirectoryPath)
-	Files.createDirectories(annotationProcessorsDirectoryPath)
 	generatedResourcesDirectoryPath.toFile().deleteDir()
 	Files.createDirectories(generatedResourcesDirectoryPath)
 	Files.createDirectories(generatedResourcesResourcesDirectoryPath)
@@ -67,42 +78,39 @@ repositories {
 	}
 }
 
-task updateSpigot(type: BuildLibraryTask) {
-	targetDirectory = librariesRuntimeDirectoryPath
-	targetLibraryName = "spigot-1.16.2-1.jar"
-	builderUrl = "https://hub.spigotmc.org/jenkins/job/BuildTools/120/artifact/target/BuildTools.jar"
-	buildCommand = ["java", "-jar", getBuilderPath().toString(), "--rev", "1.16.2"]
-	buildEnv = [
-		"MAVEN_OPTS": "-Dmaven.repo.local=" + getBuildDirectory().resolve("m2").toString() + " -Xmx1024M"
-	]
-	builtLibraryName = ["spigot-1.16.2.jar"]
-}
-
-task updateRuntimeLibraries(type: UpdateLibrariesTask) {
-	directory = librariesRuntimeDirectoryPath
-	libraries = []
-	manualLibraries = new HashSet<>(Arrays.asList(updateSpigot.targetLibraryName))
-}
-
-task updateShadeLibraries(type: UpdateLibrariesTask) {
-	directory = librariesShadeDirectoryPath
-	libraries = []
-}
-
 dependencies {
+	Path spigotBuildDirectoryPath = projectBuildDirectoryPath.resolve('spigot')
+	FileCollection runtimeLibraries = ManualGradleDependencySupplier.supplyDependecies(
+		projectDirectoryPath.resolve('libraries_runtime'),
+		[
+			new BuildDependencySupplier(
+				'spigot-1.16.2-1.jar',
+				new URL('https://hub.spigotmc.org/jenkins/job/BuildTools/120/artifact/target/BuildTools.jar'),
+				spigotBuildDirectoryPath,
+				'BuildTools.jar',
+				['java', '-jar', 'BuildTools.jar', '--rev', '1.16.2'],
+				['spigot-1.16.2.jar']
+			).setBuildEnv([
+				"MAVEN_OPTS": "-Dmaven.repo.local=" + spigotBuildDirectoryPath.resolve("m2").toString() + " -Xmx1024M"
+			])
+		],
+		true
+	)
+
+	FileCollection annotationProcessors = fileTree(dir: projectDirectoryPath.resolve('processors'), include: '*.jar')
+
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
 	compile group: 'it.unimi.dsi', name: 'fastutil', version: '8.2.2'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
-	compile fileTree(dir: librariesShadeDirectoryPath, include: '*.jar')
 	compileOnly group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.2-R0.1-SNAPSHOT'
-	compileOnly fileTree(dir: librariesRuntimeDirectoryPath, include: '*.jar')
+	compileOnly annotationProcessors
+	compileOnly runtimeLibraries
 
-	annotationProcessor fileTree(dir: annotationProcessorsDirectoryPath, include: '*.jar')
-	compileOnly fileTree(dir: annotationProcessorsDirectoryPath, include: '*.jar')
+	annotationProcessor annotationProcessors
 
 	testCompile group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.2-R0.1-SNAPSHOT'
-	testCompile fileTree(dir: librariesRuntimeDirectoryPath, include: '*.jar')
-	testCompile fileTree(dir: annotationProcessorsDirectoryPath, include: '*.jar')
+	testCompile runtimeLibraries
+	testCompile annotationProcessors
 	testCompile 'org.junit.jupiter:junit-jupiter-api:5.2.0'
 	testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
 }
@@ -120,7 +128,7 @@ compileJava {
 
 
 test {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }
 
 
@@ -153,7 +161,7 @@ String relocatePrefix = "protocolsupport.libs."
 shadowJar {
 	from sourceSets.main.java.srcDirs
 	from 'LICENSE'
-	from generatedResourcesDirectoryPath.toFile()
+	from generatedResourcesDirectoryPath
 
 	archiveName = jar.archiveName
 
@@ -179,9 +187,6 @@ task copyFinalJarToTarget(type: DefaultTask) {doLast{
 
 compileJava.dependsOn(clean)
 compileJava.dependsOn(setupFolders)
-compileJava.dependsOn(updateSpigot)
-compileJava.dependsOn(updateRuntimeLibraries)
-compileJava.dependsOn(updateShadeLibraries)
 compileJava.finalizedBy(test)
 jar.enabled = false
 jar.finalizedBy(shadowJar)
