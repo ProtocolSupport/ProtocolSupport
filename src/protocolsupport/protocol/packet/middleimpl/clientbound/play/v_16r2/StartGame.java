@@ -26,7 +26,7 @@ public class StartGame extends MiddleStartGame {
 		ItemStackSerializer.writeDirectTag(startgame, dimension);
 		StringSerializer.writeVarIntUTF8String(startgame, world);
 		startgame.writeLong(hashedSeed);
-		startgame.writeByte(maxplayers);
+		VarNumberSerializer.writeVarInt(startgame, maxplayers);
 		VarNumberSerializer.writeVarInt(startgame, renderDistance);
 		startgame.writeBoolean(reducedDebugInfo);
 		startgame.writeBoolean(respawnScreenEnabled);
