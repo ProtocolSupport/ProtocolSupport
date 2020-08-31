@@ -10,6 +10,7 @@ public class NBTByteArray extends NBT {
 	}
 
 	protected final byte[] array;
+
 	public NBTByteArray(byte[] array) {
 		this.array = array;
 	}
@@ -19,8 +20,18 @@ public class NBTByteArray extends NBT {
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		return (other instanceof NBTByteArray) && Arrays.equals(((NBTByteArray) other).array, array);
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		NBTByteArray other = (NBTByteArray) obj;
+		return Arrays.equals(array, other.array);
 	}
 
 	@Override

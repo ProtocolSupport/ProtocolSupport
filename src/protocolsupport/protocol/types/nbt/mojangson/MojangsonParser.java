@@ -113,7 +113,7 @@ public class MojangsonParser {
 		public abstract void addElement(E element);
 	}
 
-	protected static class GenericNBTListArrayReaderHelper extends NBTArrayReaderHelper <NBTList<NBT>, NBT> {
+	protected static class GenericNBTListArrayReaderHelper extends NBTArrayReaderHelper<NBTList<NBT>, NBT> {
 		protected final NBTList<NBT> list;
 		public GenericNBTListArrayReaderHelper(NBTType<NBT> type) {
 			list = new NBTList<>(type);

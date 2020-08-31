@@ -12,7 +12,6 @@ import protocolsupport.protocol.types.nbt.NBTIntArray;
 import protocolsupport.protocol.types.nbt.NBTList;
 import protocolsupport.protocol.types.nbt.NBTNumber;
 import protocolsupport.protocol.types.nbt.NBTString;
-import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftPotionData;
 
@@ -36,7 +35,7 @@ public class CommonNBT {
 	public static final String DISPLAY_LORE = "Lore";
 
 	public static NBTCompound getOrCreateDisplayTag(NBTCompound rootTag) {
-		NBTCompound display = rootTag.getTagOfTypeOrNull(DISPLAY, NBTType.COMPOUND);
+		NBTCompound display = rootTag.getCompoundTagOrNull(DISPLAY);
 		if (display == null) {
 			display = new NBTCompound();
 			rootTag.setTag(DISPLAY, display);
@@ -57,6 +56,7 @@ public class CommonNBT {
 		return lines;
 	}
 
+	public static final String BOOK_PAGES = "pages";
 
 	public static final String BOOK_ENCHANTMENTS = "StoredEnchantments";
 
@@ -75,11 +75,11 @@ public class CommonNBT {
 	public static final String POTION_TYPE = "Potion";
 
 	public static String getPotionEffectType(NBTCompound tag) {
-		NBTString potionType = tag.getTagOfTypeOrNull(POTION_TYPE, NBTType.STRING);
+		NBTString potionType = tag.getStringTagOrNull(POTION_TYPE);
 		if (potionType != null) {
 			return potionType.getValue();
 		}
-		NBTList<NBTCompound> customPotionEffects = tag.getTagListOfTypeOrNull("CustomPotionEffects", NBTType.COMPOUND);
+		NBTList<NBTCompound> customPotionEffects = tag.getCompoundListTagOrNull("CustomPotionEffects");
 		if (customPotionEffects != null) {
 			for (NBTCompound customPotionEffect : customPotionEffects.getTags()) {
 				NBTNumber potionId = customPotionEffect.getNumberTagOrNull("Id");
@@ -114,7 +114,7 @@ public class CommonNBT {
 
 	public static NetworkItemStack deserializeItemStackFromNBT(NBTCompound rootTag) {
 		NetworkItemStack itemstack = new NetworkItemStack();
-		NBTString idTag = rootTag.getTagOfTypeOrNull(ITEMSTACK_STORAGE_ID, NBTType.STRING);
+		NBTString idTag = rootTag.getStringTagOrNull(ITEMSTACK_STORAGE_ID);
 		if (idTag != null) {
 			itemstack.setTypeId(ItemMaterialLookup.getRuntimeId(ItemMaterialLookup.getByKey(idTag.getValue())));
 		}
@@ -122,7 +122,7 @@ public class CommonNBT {
 		if (countTag != null) {
 			itemstack.setAmount(countTag.getAsInt());
 		}
-		NBTCompound tagTag = rootTag.getTagOfTypeOrNull(ITEMSTACK_STORAGE_NBT, NBTType.COMPOUND);
+		NBTCompound tagTag = rootTag.getCompoundTagOrNull(ITEMSTACK_STORAGE_NBT);
 		if (tagTag != null) {
 			itemstack.setNBT(tagTag);
 		}
@@ -139,7 +139,7 @@ public class CommonNBT {
 
 	public static String deserializeBlockDataFromNBT(NBTCompound compound) {
 		String name = compound.getStringTagValueOrThrow("Name");
-		NBTCompound properties = compound.getTagOfTypeOrNull("Properties", NBTType.COMPOUND);
+		NBTCompound properties = compound.getCompoundTagOrNull("Properties");
 		if (properties == null) {
 			return name;
 		} else {

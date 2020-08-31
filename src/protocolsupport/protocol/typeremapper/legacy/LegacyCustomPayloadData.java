@@ -7,7 +7,6 @@ import org.bukkit.Material;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEditBook;
@@ -23,13 +22,12 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.CustomPayloadChannelsCache;
+import protocolsupport.protocol.typeremapper.basic.CommonNBTTransformer;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.UsedHand;
 import protocolsupport.protocol.types.nbt.NBTCompound;
-import protocolsupport.protocol.types.nbt.NBTList;
-import protocolsupport.protocol.types.nbt.NBTString;
-import protocolsupport.protocol.types.nbt.NBTType;
+import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.BitUtils;
@@ -70,14 +68,7 @@ public class LegacyCustomPayloadData {
 			if (version == ProtocolVersion.MINECRAFT_1_8) {
 				NBTCompound rootTag = book.getNBT();
 				if (rootTag != null) {
-					NBTList<NBTString> pages = rootTag.getTagListOfTypeOrNull("pages", NBTType.STRING);
-					if (pages != null) {
-						NBTList<NBTString> newPages = new NBTList<>(NBTType.STRING);
-						for (NBTString page : pages.getTags()) {
-							newPages.addTag(new NBTString(ChatAPI.fromJSON(page.getValue()).toLegacyText(I18NData.DEFAULT_LOCALE)));
-						}
-						rootTag.setTag("pages", newPages);
-					}
+					CommonNBTTransformer.toLegacyChatList(rootTag.getStringListTagOrNull(CommonNBT.BOOK_PAGES), I18NData.DEFAULT_LOCALE);
 				}
 			}
 			codec.read(MiddleEditBook.create(book, true, UsedHand.MAIN));

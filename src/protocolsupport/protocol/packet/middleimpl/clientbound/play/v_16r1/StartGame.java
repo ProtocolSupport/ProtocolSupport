@@ -14,7 +14,6 @@ import protocolsupport.protocol.types.nbt.NBT;
 import protocolsupport.protocol.types.nbt.NBTByte;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTList;
-import protocolsupport.protocol.types.nbt.NBTType;
 
 public class StartGame extends MiddleStartGame {
 
@@ -44,11 +43,11 @@ public class StartGame extends MiddleStartGame {
 
 	protected static NBTCompound toLegacyDimensionRegistry(NBTCompound dimensions) {
 		NBTCompound legacyRegistry = new NBTCompound();
-		NBTList<NBTCompound> legacyDimensions = new NBTList<>(NBTType.COMPOUND);
-		for (NBTCompound dimension : dimensions.getTagOfTypeOrThrow("minecraft:dimension_type", NBTType.COMPOUND).getTagListOfTypeOrThrow("value", NBTType.COMPOUND).getTags()) {
-			NBTCompound dimensionSettings = dimension.getTagOfTypeOrThrow("element", NBTType.COMPOUND);
+		NBTList<NBTCompound> legacyDimensions = NBTList.createCompoundList();
+		for (NBTCompound dimension : dimensions.getCompoundTagOrThrow("minecraft:dimension_type").getCompoundListTagOrThrow("value").getTags()) {
+			NBTCompound dimensionSettings = dimension.getCompoundTagOrThrow("element");
 			NBTCompound legacyDimension = new NBTCompound();
-			legacyDimension.setTag("name", dimension.getTag("name"));
+			legacyDimension.setTag("name", dimension.getTagOrNull("name"));
 			for (Map.Entry<String, NBT> dimensionSettingsEntry : dimensionSettings.getTags().entrySet()) {
 				legacyDimension.setTag(dimensionSettingsEntry.getKey(), dimensionSettingsEntry.getValue());
 			}

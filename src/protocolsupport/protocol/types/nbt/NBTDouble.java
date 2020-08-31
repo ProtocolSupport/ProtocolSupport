@@ -8,6 +8,7 @@ public class NBTDouble extends NBTNumber {
 	}
 
 	protected final double value;
+
 	public NBTDouble(double value) {
 		this.value = value;
 	}
@@ -43,13 +44,23 @@ public class NBTDouble extends NBTNumber {
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		return (other instanceof NBTDouble) && (((NBTDouble) other).value == value);
+	public int hashCode() {
+		return Double.hashCode(value);
 	}
 
 	@Override
-	public int hashCode() {
-		return Double.hashCode(value);
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		NBTDouble other = (NBTDouble) obj;
+		return Double.doubleToLongBits(value) == Double.doubleToLongBits(other.value);
 	}
 
 }

@@ -4,8 +4,17 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class NBTList<T extends NBT> extends NBT {
+
+	public static NBTList<NBTCompound> createCompoundList() {
+		return new NBTList<>(NBTType.COMPOUND);
+	}
+
+	public static NBTList<NBTString> createStringList() {
+		return new NBTList<>(NBTType.STRING);
+	}
 
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -45,29 +54,46 @@ public class NBTList<T extends NBT> extends NBT {
 		return tags.get(index);
 	}
 
+	public void setTag(int index, T tag) {
+		validateAddTag(tag);
+		tags.set(index, tag);
+	}
+
+	public void addTag(int index, T tag) {
+		validateAddTag(tag);
+		tags.add(index, tag);
+	}
+
 	public void addTag(T tag) {
-		if (type != tag.getType()) {
-			throw new IllegalArgumentException(MessageFormat.format(
-				"Invalid tag type. Expected {0}, got {1}.",
-				type.getNBTClass(),
-				tag.getType().getNBTClass()
-			));
-		}
+		validateAddTag(tag);
 		tags.add(tag);
 	}
 
-	@Override
-	public boolean equals(Object other) {
-		if (other instanceof NBTList) {
-			NBTList<?> list = (NBTList<?>) other;
-			return (list.type == type) && list.tags.equals(tags);
+	protected void validateAddTag(T tag) {
+		if (type != tag.getType()) {
+			throw new IllegalArgumentException(MessageFormat.format("Invalid tag type. Expected {0}, got {1}.", type.getNBTClass(), tag.getClass()));
 		}
-		return false;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		NBTList<T> other = (NBTList<T>) obj;
+		return Objects.equals(type, other.type) && Objects.equals(tags, other.tags);
 	}
 
 	@Override
 	public int hashCode() {
-		return type.hashCode() + tags.hashCode();
+		return Objects.hash(type, tags);
 	}
 
 }

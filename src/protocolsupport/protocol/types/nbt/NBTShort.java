@@ -8,6 +8,7 @@ public class NBTShort extends NBTNumber {
 	}
 
 	protected final short value;
+
 	public NBTShort(short value) {
 		this.value = value;
 	}
@@ -43,13 +44,23 @@ public class NBTShort extends NBTNumber {
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		return (other instanceof NBTShort) && (((NBTShort) other).value == value);
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		NBTShort other = (NBTShort) obj;
+		return value == other.value;
 	}
 
 	@Override
 	public int hashCode() {
-		return value;
+		return Short.hashCode(value);
 	}
 
 }

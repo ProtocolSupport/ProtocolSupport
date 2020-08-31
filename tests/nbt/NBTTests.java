@@ -41,17 +41,17 @@ public class NBTTests {
 		list.addTag(new NBTInt(30));
 		compound.setTag(testlisttagname, list);
 
-		Assertions.assertNotNull(compound.getTag(testtagname));
-		Assertions.assertNotNull(compound.getTagOfTypeOrNull(testtagname, NBTType.SHORT));
-		Assertions.assertNull(compound.getTagOfTypeOrNull(testtagname, NBTType.INT));
+		Assertions.assertNotNull(compound.getTagOrNull(testtagname));
+		Assertions.assertNotNull(compound.getTagOfTypeOrNull(testtagname, NBTShort.class));
+		Assertions.assertNull(compound.getTagOfTypeOrNull(testtagname, NBTInt.class));
 		Assertions.assertNotNull(compound.getNumberTagOrNull(testtagname));
 
-		Assertions.assertNotNull(compound.getTag(testlisttagname));
-		Assertions.assertNotNull(compound.getTagOfTypeOrNull(testlisttagname, NBTType.LIST));
-		Assertions.assertNull(compound.getTagOfTypeOrNull(testlisttagname, NBTType.DOUBLE));
-		Assertions.assertNotNull(compound.getTagListOfTypeOrNull(testlisttagname, NBTType.INT));
-		Assertions.assertNull(compound.getTagListOfTypeOrNull(testlisttagname, NBTType.SHORT));
-		Assertions.assertNotNull(compound.getNumberTagListOrNull(testlisttagname));
+		Assertions.assertNotNull(compound.getTagOrNull(testlisttagname));
+		Assertions.assertNotNull(compound.getTagOfTypeOrNull(testlisttagname, NBTList.class));
+		Assertions.assertNull(compound.getTagOfTypeOrNull(testlisttagname, NBTDouble.class));
+		Assertions.assertNotNull(compound.getTagListOfTypeOrNull(testlisttagname, NBTInt.class));
+		Assertions.assertNull(compound.getTagListOfTypeOrNull(testlisttagname, NBTShort.class));
+		Assertions.assertNotNull(compound.getNumberListTagOrNull(testlisttagname));
 	}
 
 	@Test

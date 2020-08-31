@@ -1,5 +1,7 @@
 package protocolsupport.protocol.types.nbt;
 
+import java.util.Objects;
+
 public class NBTType<T extends NBT> {
 
 	public static final NBTType<NBTEnd> END = new NBTType<>(NBTEnd.class);
@@ -18,6 +20,7 @@ public class NBTType<T extends NBT> {
 	public static final NBTType<NBTLongArray> LONG_ARRAY = new NBTType<>(NBTLongArray.class);
 
 	protected final Class<T> clazz;
+
 	protected NBTType(Class<T> clazz) {
 		this.clazz = clazz;
 	}
@@ -29,6 +32,27 @@ public class NBTType<T extends NBT> {
 	@Override
 	public String toString() {
 		return clazz.getSimpleName();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		NBTType<T> other = (NBTType<T>) obj;
+		return Objects.equals(clazz, other.clazz);
+	}
+
+	@Override
+	public int hashCode() {
+		return clazz.hashCode();
 	}
 
 }

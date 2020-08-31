@@ -23,7 +23,6 @@ import protocolsupport.protocol.types.nbt.NBTByte;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTNumber;
 import protocolsupport.protocol.types.nbt.NBTString;
-import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
@@ -93,7 +92,7 @@ public class TileEntityRemapper {
 				EntityRemappingTable entityRemapTable = EntityRemappersRegistry.REGISTRY.getTable(version);
 				return tile -> {
 					NBTCompound nbt = tile.getNBT();
-					NBTCompound spawndataTag = nbt.getTagOfTypeOrNull(CommonNBT.MOB_SPAWNER_SPAWNDATA, NBTType.COMPOUND);
+					NBTCompound spawndataTag = nbt.getCompoundTagOrNull(CommonNBT.MOB_SPAWNER_SPAWNDATA);
 					NetworkEntityType type = null;
 					if (spawndataTag == null) {
 						spawndataTag = new NBTCompound();
@@ -131,7 +130,7 @@ public class TileEntityRemapper {
 		register(
 			TileEntityType.MOB_SPAWNER,
 			tile -> {
-				NBTCompound spawndata = tile.getNBT().getTagOfTypeOrNull(CommonNBT.MOB_SPAWNER_SPAWNDATA, NBTType.COMPOUND);
+				NBTCompound spawndata = tile.getNBT().getCompoundTagOrNull(CommonNBT.MOB_SPAWNER_SPAWNDATA);
 				if (spawndata != null) {
 					NetworkEntityType type = CommonNBT.getSpawnedMobType(spawndata);
 					if (type != NetworkEntityType.NONE) {
@@ -145,7 +144,7 @@ public class TileEntityRemapper {
 			TileEntityType.MOB_SPAWNER,
 			tile -> {
 				NBTCompound nbt = tile.getNBT();
-				NBTCompound spawndata = nbt.removeTagAndReturnIfType(CommonNBT.MOB_SPAWNER_SPAWNDATA, NBTType.COMPOUND);
+				NBTCompound spawndata = nbt.removeTagAndReturnIfType(CommonNBT.MOB_SPAWNER_SPAWNDATA, NBTCompound.class);
 				if (spawndata != null) {
 					nbt.removeTag("SpawnPotentials");
 					NetworkEntityType type = CommonNBT.getSpawnedMobType(spawndata);
@@ -178,7 +177,7 @@ public class TileEntityRemapper {
 			TileEntityType.SKULL,
 			tile -> {
 				NBTCompound tag = tile.getNBT();
-				tag.setTag("Owner", tag.removeTagAndReturnIfType(CommonNBT.PLAYERHEAD_PROFILE, NBTType.COMPOUND));
+				tag.setTag("Owner", tag.removeTagAndReturnIfType(CommonNBT.PLAYERHEAD_PROFILE, NBTCompound.class));
 			},
 			ProtocolVersionsHelper.RANGE__1_7_10__1_15_2
 		);

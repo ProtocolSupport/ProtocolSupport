@@ -9,7 +9,6 @@ import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTList;
 import protocolsupport.protocol.types.nbt.NBTString;
-import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.utils.authlib.LoginProfile;
 
 public class GameProfileSerializer {
@@ -31,7 +30,7 @@ public class GameProfileSerializer {
 		if (!gameProfile.getProperties().isEmpty()) {
 			NBTCompound propertiesTag = new NBTCompound();
 			for (Entry<String, Set<ProfileProperty>> entry : gameProfile.getProperties().entrySet()) {
-				NBTList<NBTCompound> propertiesListTag = new NBTList<>(NBTType.COMPOUND);
+				NBTList<NBTCompound> propertiesListTag = NBTList.createCompoundList();
 				for (ProfileProperty property : entry.getValue()) {
 					NBTCompound propertyTag = new NBTCompound();
 					propertyTag.setTag(PROPERTY_VALUE_KEY, new NBTString(property.getValue()));

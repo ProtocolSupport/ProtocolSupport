@@ -8,6 +8,7 @@ public class NBTFloat extends NBTNumber {
 	}
 
 	protected final float value;
+
 	public NBTFloat(float value) {
 		this.value = value;
 	}
@@ -43,8 +44,18 @@ public class NBTFloat extends NBTNumber {
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		return (other instanceof NBTFloat) && (((NBTFloat) other).value == value);
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		NBTFloat other = (NBTFloat) obj;
+		return Float.floatToIntBits(value) == Float.floatToIntBits(other.value);
 	}
 
 	@Override

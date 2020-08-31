@@ -2,7 +2,6 @@ package protocolsupport.protocol.typeremapper.chunk;
 
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTLongArray;
-import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.utils.NumberBitsStorageCompact;
 import protocolsupport.protocol.utils.NumberBitsStoragePadded;
 
@@ -24,8 +23,8 @@ public class HeightMapTransformer {
 	protected static final String NAME_WORLD_SURFACE = "WORLD_SURFACE";
 
 	public static NBTCompound transform(NBTCompound heightmaps) {
-		heightmaps.setTag(NAME_MOTION_BLOCKING, new NBTLongArray(transformStorageToCompact(heightmaps.getTagOfTypeOrThrow(NAME_MOTION_BLOCKING, NBTType.LONG_ARRAY).getValue())));
-		heightmaps.setTag(NAME_WORLD_SURFACE, new NBTLongArray(transformStorageToCompact(heightmaps.getTagOfTypeOrThrow(NAME_WORLD_SURFACE, NBTType.LONG_ARRAY).getValue())));
+		heightmaps.setTag(NAME_MOTION_BLOCKING, new NBTLongArray(transformStorageToCompact(heightmaps.getTagOfTypeOrThrow(NAME_MOTION_BLOCKING, NBTLongArray.class).getValue())));
+		heightmaps.setTag(NAME_WORLD_SURFACE, new NBTLongArray(transformStorageToCompact(heightmaps.getTagOfTypeOrThrow(NAME_WORLD_SURFACE, NBTLongArray.class).getValue())));
 		return heightmaps;
 	}
 

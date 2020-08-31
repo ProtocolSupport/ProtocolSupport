@@ -5,7 +5,6 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackComplexR
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
-import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ItemSpawnEggData;
 
@@ -21,7 +20,7 @@ public class SpawnEggFromStringIdComplexRemapper implements ItemStackComplexRema
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		NBTCompound rootTag = itemstack.getNBT();
 		if (rootTag != null) {
-			NBTCompound entityTag = rootTag.removeTagAndReturnIfType("EntityTag", NBTType.COMPOUND);
+			NBTCompound entityTag = rootTag.removeTagAndReturnIfType("EntityTag", NBTCompound.class);
 			if (entityTag != null) {
 				String stype = entityTag.getStringTagValueOrNull("id");
 				if (stype != null) {

@@ -8,6 +8,7 @@ public class NBTLong extends NBTNumber {
 	}
 
 	protected final long value;
+
 	public NBTLong(long value) {
 		this.value = value;
 	}
@@ -43,8 +44,18 @@ public class NBTLong extends NBTNumber {
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		return (other instanceof NBTLong) && (((NBTLong) other).value == value);
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		NBTLong other = (NBTLong) obj;
+		return value == other.value;
 	}
 
 	@Override

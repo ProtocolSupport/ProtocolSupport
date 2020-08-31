@@ -10,6 +10,7 @@ public class NBTIntArray extends NBT {
 	}
 
 	protected final int[] array;
+
 	public NBTIntArray(int[] array) {
 		this.array = array;
 	}
@@ -19,8 +20,18 @@ public class NBTIntArray extends NBT {
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		return (other instanceof NBTIntArray) && Arrays.equals(((NBTIntArray) other).array, array);
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		NBTIntArray other = (NBTIntArray) obj;
+		return Arrays.equals(array, other.array);
 	}
 
 	@Override

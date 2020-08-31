@@ -23,92 +23,118 @@ public class NBTCompound extends NBT {
 		return Collections.unmodifiableMap(tags);
 	}
 
-	public NBT getTag(String key) {
+	public NBT getTagOrThrow(String key) {
+		NBT tag = getTagOrNull(key);
+		if (tag == null) {
+			throw new IllegalStateException(MessageFormat.format("NBT {0} does not exist", key));
+		}
+		return tag;
+	}
+
+	public NBT getTagOrNull(String key) {
 		return tags.get(key);
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends NBT> T getTagOfTypeOrThrow(String key, NBTType<T> type) {
-		NBT tag = tags.get(key);
-		if (tag == null) {
-			throw new IllegalStateException(MessageFormat.format("NBT {0} does not exist", key));
+	public <T extends NBT> T getTagOfTypeOrThrow(String key, Class<T> type) {
+		NBT tag = getTagOrThrow(key);
+		if (type.isInstance(tag)) {
+			return (T) tag;
+		} else {
+			throw new IllegalStateException(MessageFormat.format("NBT {0} has unexpected type, expected {1}, but got {2}", key, type, tag.getClass()));
 		}
-		if (tag.getType() != type) {
-			throw new IllegalStateException(MessageFormat.format("NBT {0} has unexpected type, expected {1}, but got {2}", key, type, tag.getType()));
-		}
-		return (T) tag;
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends NBT> T getTagOfTypeOrNull(String key, NBTType<T> type) {
-		NBT tag = tags.get(key);
-		if ((tag != null) && (tag.getType() == type)) {
+	public <T extends NBT> T getTagOfTypeOrNull(String key, Class<T> type) {
+		NBT tag = getTagOrNull(key);
+		if (type.isInstance(tag)) {
 			return (T) tag;
 		}
 		return null;
 	}
 
-	public NBTNumber getNumberTagOrThrow(String key) {
-		NBT tag = tags.get(key);
-		if (tag == null) {
-			throw new IllegalStateException(MessageFormat.format("NBT {0} does not exist", key));
-		}
-		if (!NBTNumber.class.isAssignableFrom(tag.getType().getNBTClass())) {
-			throw new IllegalStateException(MessageFormat.format("NBT {0} has unexpected type, expected NBTNumber, but got {1}", key, tag.getType()));
-		}
-		return (NBTNumber) tag;
-	}
-
-	public NBTNumber getNumberTagOrNull(String key) {
-		NBT tag = tags.get(key);
-		if ((tag != null) && NBTNumber.class.isAssignableFrom(tag.getType().getNBTClass())) {
-			return (NBTNumber) tag;
-		}
-		return null;
-	}
-
 	@SuppressWarnings("unchecked")
-	public <T extends NBT> NBTList<T> getTagListOfTypeOrThrow(String key, NBTType<T> type) {
-		NBTList<? extends NBT> list = getTagOfTypeOrThrow(key, NBTType.LIST);
-		if (list.getTagsType() != type) {
-			throw new IllegalStateException(MessageFormat.format("NBTList {0} tags type has unexpected type, expected {1}, but got {2}", key, type, list.getTagsType()));
+	public <T extends NBT> NBTList<T> getTagListOfTypeOrThrow(String key, Class<T> type) {
+		NBTList<? extends NBT> list = getTagOfTypeOrThrow(key, NBTList.class);
+		if (!type.isAssignableFrom(list.getTagsType().getNBTClass())) {
+			throw new IllegalStateException(MessageFormat.format("NBTList {0} tags type has unexpected type, expected {1}, but got {2}", key, type, list.getTagsType().getNBTClass()));
 		}
 		return (NBTList<T>) list;
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends NBT> NBTList<T> getTagListOfTypeOrNull(String key, NBTType<T> type) {
-		NBTList<? extends NBT> list = getTagOfTypeOrNull(key, NBTType.LIST);
-		if ((list != null) && (list.getTagsType() == type)) {
+	public <T extends NBT> NBTList<T> getTagListOfTypeOrNull(String key, Class<T> type) {
+		NBTList<? extends NBT> list = getTagOfTypeOrNull(key, NBTList.class);
+		if ((list != null) && type.isAssignableFrom(list.getTagsType().getNBTClass())) {
 			return (NBTList<T>) list;
 		}
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
-	public NBTList<NBTNumber> getNumberTagListOrNull(String key) {
-		NBTList<? extends NBT> list = getTagOfTypeOrNull(key, NBTType.LIST);
-		if ((list != null) && NBTNumber.class.isAssignableFrom(list.getTagsType().getNBTClass())) {
-			return (NBTList<NBTNumber>) list;
-		}
-		return null;
+	public NBTCompound getCompoundTagOrThrow(String key) {
+		return getTagOfTypeOrThrow(key, NBTCompound.class);
+	}
+
+	public NBTCompound getCompoundTagOrNull(String key) {
+		return getTagOfTypeOrNull(key, NBTCompound.class);
+	}
+
+	public NBTNumber getNumberTagOrThrow(String key) {
+		return getTagOfTypeOrThrow(key, NBTNumber.class);
+	}
+
+	public NBTNumber getNumberTagOrNull(String key) {
+		return getTagOfTypeOrNull(key, NBTNumber.class);
+	}
+
+	public NBTString getStringTagOrThrow(String key) {
+		return getTagOfTypeOrThrow(key, NBTString.class);
+	}
+
+	public NBTString getStringTagOrNull(String key) {
+		return getTagOfTypeOrNull(key, NBTString.class);
+	}
+
+	public NBTList<NBTCompound> getCompoundListTagOrThrow(String key) {
+		return getTagListOfTypeOrThrow(key, NBTCompound.class);
+	}
+
+	public NBTList<NBTCompound> getCompoundListTagOrNull(String key) {
+		return getTagListOfTypeOrNull(key, NBTCompound.class);
+	}
+
+	public NBTList<NBTNumber> getNumberTagListTagOrThrow(String key) {
+		return getTagListOfTypeOrThrow(key, NBTNumber.class);
+	}
+
+	public NBTList<NBTNumber> getNumberListTagOrNull(String key) {
+		return getTagListOfTypeOrNull(key, NBTNumber.class);
+	}
+
+	public NBTList<NBTString> getStringListTagOrThrow(String key) {
+		return getTagListOfTypeOrThrow(key, NBTString.class);
+	}
+
+	public NBTList<NBTString> getStringListTagOrNull(String key) {
+		return getTagListOfTypeOrNull(key, NBTString.class);
 	}
 
 	public String getStringTagValueOrThrow(String key) {
-		return getTagOfTypeOrThrow(key, NBTType.STRING).getValue();
+		return getStringTagOrThrow(key).getValue();
 	}
 
 	public String getStringTagValueOrNull(String key) {
-		NBT tag = tags.get(key);
-		if ((tag != null) && (tag.getType() == NBTType.STRING)) {
+		NBT tag = getTagOrNull(key);
+		if (NBTString.class.isInstance(tag)) {
 			return ((NBTString) tag).getValue();
 		}
 		return null;
 	}
 
 	public String getStringTagValueOrDefault(String key, String defaultValue) {
-		NBT tag = tags.get(key);
-		if ((tag != null) && (tag.getType() == NBTType.STRING)) {
+		NBT tag = getTagOrNull(key);
+		if (NBTString.class.isInstance(tag)) {
 			return ((NBTString) tag).getValue();
 		}
 		return defaultValue;
@@ -119,22 +145,19 @@ public class NBTCompound extends NBT {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends NBT> T removeTagAndReturnIfType(String key, NBTType<T> type) {
+	public <T extends NBT> T removeTagAndReturnIfType(String key, Class<T> type) {
 		NBT tag = removeTag(key);
-		if ((tag != null) && (tag.getType() == type)) {
+		if (type.isInstance(tag)) {
 			return (T) tag;
 		}
 		return null;
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends NBT> NBTList<T> removeTagAndReturnIfListType(String key, NBTType<T> type) {
-		NBT tag = removeTag(key);
-		if ((tag != null) && (tag.getType() == NBTType.LIST)) {
-			NBTList<?> listTag = (NBTList<?>) tag;
-			if (listTag.getTagsType() == type) {
-				return (NBTList<T>) listTag;
-			}
+	public <T extends NBT> NBTList<T> removeTagAndReturnIfListType(String key, Class<T> type) {
+		NBTList<?> list = removeTagAndReturnIfType(key, NBTList.class);
+		if ((list != null) && type.isAssignableFrom(list.getType().getNBTClass())) {
+			return (NBTList<T>) list;
 		}
 		return null;
 	}

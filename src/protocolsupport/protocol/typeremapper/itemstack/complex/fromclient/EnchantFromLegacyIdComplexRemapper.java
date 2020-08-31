@@ -10,18 +10,17 @@ import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTList;
 import protocolsupport.protocol.types.nbt.NBTNumber;
 import protocolsupport.protocol.types.nbt.NBTString;
-import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.utils.CommonNBT;
 
 public class EnchantFromLegacyIdComplexRemapper extends ItemStackNBTComplexRemapper {
 
 	@Override
 	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
-		NBTList<NBTCompound> enchTag = tag.removeTagAndReturnIfListType(CommonNBT.LEGACY_ENCHANTMENTS, NBTType.COMPOUND);
+		NBTList<NBTCompound> enchTag = tag.removeTagAndReturnIfListType(CommonNBT.LEGACY_ENCHANTMENTS, NBTCompound.class);
 		if (enchTag != null) {
 			tag.setTag(CommonNBT.MODERN_ENCHANTMENTS, remapEnchantList(enchTag));
 		}
-		NBTList<NBTCompound> bookEnch = tag.removeTagAndReturnIfListType(CommonNBT.BOOK_ENCHANTMENTS, NBTType.COMPOUND);
+		NBTList<NBTCompound> bookEnch = tag.removeTagAndReturnIfListType(CommonNBT.BOOK_ENCHANTMENTS, NBTCompound.class);
 		if (bookEnch != null) {
 			tag.setTag(CommonNBT.BOOK_ENCHANTMENTS, remapEnchantList(bookEnch));
 		}
@@ -29,7 +28,7 @@ public class EnchantFromLegacyIdComplexRemapper extends ItemStackNBTComplexRemap
 	}
 
 	protected NBTList<NBTCompound> remapEnchantList(NBTList<NBTCompound> oldList) {
-		NBTList<NBTCompound> newList = new NBTList<>(NBTType.COMPOUND);
+		NBTList<NBTCompound> newList = NBTList.createCompoundList();
 		for (NBTCompound enchData : oldList.getTags()) {
 			NBTNumber enchId = enchData.getNumberTagOrNull("id");
 			if (enchId != null) {

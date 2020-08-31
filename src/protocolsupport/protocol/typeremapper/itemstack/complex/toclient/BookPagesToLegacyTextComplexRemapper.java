@@ -1,26 +1,17 @@
 package protocolsupport.protocol.typeremapper.itemstack.complex.toclient;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.protocol.typeremapper.basic.CommonNBTTransformer;
 import protocolsupport.protocol.typeremapper.itemstack.complex.ItemStackNBTComplexRemapper;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
-import protocolsupport.protocol.types.nbt.NBTList;
-import protocolsupport.protocol.types.nbt.NBTString;
-import protocolsupport.protocol.types.nbt.NBTType;
+import protocolsupport.protocol.utils.CommonNBT;
 
 public class BookPagesToLegacyTextComplexRemapper extends ItemStackNBTComplexRemapper {
 
 	@Override
 	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
-		NBTList<NBTString> pages = tag.getTagListOfTypeOrNull("pages", NBTType.STRING);
-		if (pages != null) {
-			NBTList<NBTString> newPages = new NBTList<>(NBTType.STRING);
-			for (NBTString page : pages.getTags()) {
-				newPages.addTag(new NBTString(ChatAPI.fromJSON(page.getValue(), true).toLegacyText(locale)));
-			}
-			tag.setTag("pages", newPages);
-		}
+		CommonNBTTransformer.toLegacyChatList(tag.getStringListTagOrNull(CommonNBT.BOOK_PAGES), locale);
 		return tag;
 	}
 

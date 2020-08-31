@@ -8,6 +8,7 @@ public class NBTInt extends NBTNumber {
 	}
 
 	protected final int value;
+
 	public NBTInt(int value) {
 		this.value = value;
 	}
@@ -43,13 +44,23 @@ public class NBTInt extends NBTNumber {
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		return (other instanceof NBTInt) && (((NBTInt) other).value == value);
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		NBTInt other = (NBTInt) obj;
+		return value == other.value;
 	}
 
 	@Override
 	public int hashCode() {
-		return value;
+		return Integer.hashCode(value);
 	}
 
 }

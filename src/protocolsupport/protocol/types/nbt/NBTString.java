@@ -1,5 +1,7 @@
 package protocolsupport.protocol.types.nbt;
 
+import java.util.Objects;
+
 public class NBTString extends NBT {
 
 	@Override
@@ -8,6 +10,7 @@ public class NBTString extends NBT {
 	}
 
 	protected final String string;
+
 	public NBTString(String string) {
 		this.string = string;
 	}
@@ -17,13 +20,23 @@ public class NBTString extends NBT {
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		return (other instanceof NBTString) && ((NBTString) other).string.equals(string);
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		NBTString other = (NBTString) obj;
+		return Objects.equals(string, other.string);
 	}
 
 	@Override
 	public int hashCode() {
-		return string.hashCode();
+		return Objects.hash(string);
 	}
 
 }

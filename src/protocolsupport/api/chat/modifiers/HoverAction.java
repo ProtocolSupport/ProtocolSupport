@@ -13,7 +13,6 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.types.NetworkBukkitItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTString;
-import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.types.nbt.mojangson.MojangsonParser;
 import protocolsupport.protocol.types.nbt.mojangson.MojangsonSerializer;
 import protocolsupport.protocol.utils.CommonNBT;
@@ -36,8 +35,8 @@ public class HoverAction {
 			case SHOW_ENTITY: {
 				try {
 					NBTCompound compound = MojangsonParser.parse(value);
-					NBTString etype = compound.getTagOfTypeOrNull("type", NBTType.STRING);
-					NBTString euuid = compound.getTagOfTypeOrNull("id", NBTType.STRING);
+					NBTString etype = compound.getStringTagOrNull("type");
+					NBTString euuid = compound.getStringTagOrNull("id");
 					this.contents = new EntityInfo(
 						etype != null ? Registry.ENTITY_TYPE.get(NamespacedKeyUtils.fromString(etype.getValue())) : null,
 						euuid != null ? UUID.fromString(euuid.getValue()) : null,

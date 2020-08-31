@@ -7,7 +7,6 @@ import org.bukkit.Material;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTInt;
 import protocolsupport.protocol.types.nbt.NBTList;
-import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupportbuildprocessor.Preload;
@@ -16,7 +15,7 @@ import protocolsupportbuildprocessor.Preload;
 public class LegacyBanner {
 
 	public static void transformBanner(NBTCompound tag) {
-		NBTList<NBTCompound> patterns = tag.getTagListOfTypeOrNull(CommonNBT.BANNER_PATTERNS, NBTType.COMPOUND);
+		NBTList<NBTCompound> patterns = tag.getCompoundListTagOrNull(CommonNBT.BANNER_PATTERNS);
 		if (patterns != null) {
 			for (NBTCompound pattern : patterns.getTags()) {
 				pattern.setTag(CommonNBT.BANNER_PATTERN_COLOR, new NBTInt(15 - pattern.getNumberTagOrThrow(CommonNBT.BANNER_PATTERN_COLOR).getAsInt()));

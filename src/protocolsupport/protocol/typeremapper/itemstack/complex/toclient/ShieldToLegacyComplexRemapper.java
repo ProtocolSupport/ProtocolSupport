@@ -7,7 +7,6 @@ import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTInt;
 import protocolsupport.protocol.types.nbt.NBTNumber;
-import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.utils.CommonNBT;
 
 public class ShieldToLegacyComplexRemapper implements ItemStackComplexRemapper {
@@ -16,7 +15,7 @@ public class ShieldToLegacyComplexRemapper implements ItemStackComplexRemapper {
 	public NetworkItemStack remap(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		NBTCompound tag = itemstack.getNBT();
 		if (tag != null) {
-			NBTCompound blockTag = tag.getTagOfTypeOrNull(CommonNBT.BLOCK_TAG, NBTType.COMPOUND);
+			NBTCompound blockTag = tag.getCompoundTagOrNull(CommonNBT.BLOCK_TAG);
 			if (blockTag != null) {
 				NBTNumber base = blockTag.getNumberTagOrNull(CommonNBT.BANNER_BASE);
 				if (base != null) {

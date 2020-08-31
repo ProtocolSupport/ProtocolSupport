@@ -15,7 +15,6 @@ import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTList;
 import protocolsupport.protocol.types.nbt.NBTString;
-import protocolsupport.protocol.types.nbt.NBTType;
 
 public class ItemStackWriteEventHelper {
 
@@ -34,9 +33,9 @@ public class ItemStackWriteEventHelper {
 				}
 
 				if (!additionalLore.isEmpty()) {
-					NBTList<NBTString> loreNBT = displayNBT.getTagListOfTypeOrNull(CommonNBT.DISPLAY_LORE, NBTType.STRING);
+					NBTList<NBTString> loreNBT = displayNBT.getStringListTagOrNull(CommonNBT.DISPLAY_LORE);
 					if (loreNBT == null) {
-						loreNBT = new NBTList<>(NBTType.STRING);
+						loreNBT = NBTList.createStringList();
 					}
 					for (String lore : additionalLore) {
 						loreNBT.addTag(new NBTString(ChatAPI.toJSON(new TextComponent(lore))));

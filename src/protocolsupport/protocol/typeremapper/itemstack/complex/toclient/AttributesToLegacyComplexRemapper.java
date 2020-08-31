@@ -11,7 +11,6 @@ import protocolsupport.protocol.types.nbt.NBTIntArray;
 import protocolsupport.protocol.types.nbt.NBTList;
 import protocolsupport.protocol.types.nbt.NBTLong;
 import protocolsupport.protocol.types.nbt.NBTString;
-import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.utils.CommonNBT;
 
 public class AttributesToLegacyComplexRemapper extends ItemStackNBTComplexRemapper {
@@ -21,14 +20,14 @@ public class AttributesToLegacyComplexRemapper extends ItemStackNBTComplexRemapp
 
 	@Override
 	public NBTCompound remapTag(ProtocolVersion version, String locale, NetworkItemStack itemstack, NBTCompound tag) {
-		NBTList<NBTCompound> attributesTag = tag.getTagListOfTypeOrNull(CommonNBT.ATTRIBUTES, NBTType.COMPOUND);
+		NBTList<NBTCompound> attributesTag = tag.getCompoundListTagOrNull(CommonNBT.ATTRIBUTES);
 		if (attributesTag != null) {
 			for (NBTCompound attributeTag : attributesTag.getTags()) {
-				NBTString attributeIdTag = attributeTag.getTagOfTypeOrNull(CommonNBT.ATTRIBUTE_ID, NBTType.STRING);
+				NBTString attributeIdTag = attributeTag.getStringTagOrNull(CommonNBT.ATTRIBUTE_ID);
 				if (attributeIdTag != null) {
 					attributeTag.setTag(CommonNBT.ATTRIBUTE_ID, new NBTString(LegacyEntityAttribute.getLegacyId(attributeIdTag.getValue())));
 				}
-				NBTIntArray uuidTag = attributeTag.getTagOfTypeOrNull(CommonNBT.ATTRIBUTE_UUID, NBTType.INT_ARRAY);
+				NBTIntArray uuidTag = attributeTag.getTagOfTypeOrNull(CommonNBT.ATTRIBUTE_UUID, NBTIntArray.class);
 				if (uuidTag != null) {
 					UUID uuid = CommonNBT.deserializeUUID(uuidTag);
 					attributeTag.setTag(LEGACY_ATTRIBUTE_UUID_MOST, new NBTLong(uuid.getMostSignificantBits()));

@@ -7,7 +7,6 @@ import org.bukkit.Registry;
 import org.bukkit.block.Biome;
 
 import protocolsupport.protocol.types.nbt.NBTCompound;
-import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.utils.NamespacedKeyUtils;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.Utils;
@@ -73,9 +72,9 @@ public class ClientCache implements IBiomeRegistry {
 	}
 
 	public void setDimensionCodec(NBTCompound dimensionCodec) {
-		NBTCompound biomeRegistry = dimensionCodec.getTagOfTypeOrNull("minecraft:worldgen/biome", NBTType.COMPOUND);
+		NBTCompound biomeRegistry = dimensionCodec.getCompoundTagOrNull("minecraft:worldgen/biome");
 		if (biomeRegistry != null) {
-			for (NBTCompound biomeData : biomeRegistry.getTagListOfTypeOrThrow("value", NBTType.COMPOUND).getTags()) {
+			for (NBTCompound biomeData : biomeRegistry.getCompoundListTagOrThrow("value").getTags()) {
 				registerBiome(
 					Registry.BIOME.get(NamespacedKeyUtils.fromString(biomeData.getStringTagValueOrThrow("name"))),
 					biomeData.getNumberTagOrThrow("id").getAsInt()
