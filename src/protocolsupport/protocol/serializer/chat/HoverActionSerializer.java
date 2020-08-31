@@ -86,13 +86,15 @@ public class HoverActionSerializer implements JsonDeserializer<HoverAction>, Sim
 
 		JsonElement valueJson = rootJson.get("value");
 		if (valueJson != null) {
+			BaseComponent value = ctx.deserialize(valueJson, BaseComponent.class);
 			switch (atype) {
 				case SHOW_TEXT: {
-					return new HoverAction((BaseComponent) ctx.deserialize(valueJson, BaseComponent.class));
+					return new HoverAction(value);
 				}
 				case SHOW_ENTITY:
 				case SHOW_ITEM: {
-					return new HoverAction(atype, valueJson.getAsString());
+					//TODO: add toLegacyUnformattedText to BaseComponent and use it instead
+					return new HoverAction(atype, org.bukkit.ChatColor.stripColor(value.toLegacyText()));
 				}
 			}
 		}
