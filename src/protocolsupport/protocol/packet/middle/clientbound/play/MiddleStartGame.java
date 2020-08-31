@@ -10,7 +10,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
-import protocolsupport.protocol.typeremapper.window.AbstractWindowsRemapper;
+import protocolsupport.protocol.typeremapper.window.WindowsRemapper;
 import protocolsupport.protocol.typeremapper.window.WindowsRemappersRegistry;
 import protocolsupport.protocol.types.GameMode;
 import protocolsupport.protocol.types.WindowType;
@@ -23,7 +23,7 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 	protected final WindowCache windowCache = cache.getWindowCache();
 
-	protected final AbstractWindowsRemapper windowRemapper = WindowsRemappersRegistry.get(version);
+	protected final WindowsRemapper windowsRemapper = WindowsRemappersRegistry.get(version);
 
 	public MiddleStartGame(MiddlePacketInit init) {
 		super(init);
@@ -75,7 +75,7 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 		clientCache.setDimensionCodec(dimensions);
 		oldDimension = clientCache.setCurrentDimension(dimension);
 		clientCache.setRespawnScreenEnabled(respawnScreenEnabled);
-		windowCache.setPlayerWindow(windowRemapper.get(WindowType.PLAYER, 0));
+		windowCache.setPlayerWindow(windowsRemapper.get(WindowType.PLAYER, 0));
 		entityCache.clearEntities();
 		entityCache.setSelf(player);
 	}

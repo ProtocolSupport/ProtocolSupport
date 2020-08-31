@@ -11,8 +11,8 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
-import protocolsupport.protocol.typeremapper.window.AbstractWindowsRemapper;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper;
+import protocolsupport.protocol.typeremapper.window.WindowsRemapper;
 import protocolsupport.protocol.typeremapper.window.WindowsRemappersRegistry;
 import protocolsupport.protocol.types.WindowType;
 
@@ -21,7 +21,7 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 	protected final WindowCache windowCache = cache.getWindowCache();
 
 	protected final EnumSkippingTable<WindowType> windowSkipper = GenericIdSkipper.INVENTORY.getTable(version);
-	protected final AbstractWindowsRemapper windowsRemapper = WindowsRemappersRegistry.get(version);
+	protected final WindowsRemapper windowsRemapper = WindowsRemappersRegistry.get(version);
 
 	public MiddleInventoryOpen(MiddlePacketInit init) {
 		super(init);

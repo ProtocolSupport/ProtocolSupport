@@ -8,7 +8,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import protocolsupport.protocol.types.WindowType;
 
-public class WindowsRemapper extends AbstractWindowsRemapper {
+public class WindowsRemapper {
 
 	protected final Map<WindowType, IntFunction<WindowRemapper>> windows = new EnumMap<>(WindowType.class);
 
@@ -41,7 +41,6 @@ public class WindowsRemapper extends AbstractWindowsRemapper {
 
 	}
 
-	@Override
 	public WindowRemapper get(WindowType type, int windowSlots) {
 		return windows.get(type).apply(windowSlots);
 	}

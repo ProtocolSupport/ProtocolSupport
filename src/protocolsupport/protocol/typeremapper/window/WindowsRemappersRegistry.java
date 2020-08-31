@@ -18,21 +18,56 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class WindowsRemappersRegistry {
 
-	protected static final Map<ProtocolVersion, AbstractWindowsRemapper> registry = new EnumMap<>(ProtocolVersion.class);
+	protected static final Map<ProtocolVersion, WindowsRemapper> registry = new EnumMap<>(ProtocolVersion.class);
 
-	protected static void register(AbstractWindowsRemapper remapper, ProtocolVersion... versions) {
+	protected static void register(WindowsRemapper remapper, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
 			registry.put(version, remapper);
 		}
 	}
 
 	static {
-		register(AbstractWindowsRemapper.NOOP, ProtocolVersionsHelper.UP_1_14);
+		WindowsRemapper remapper__noop = new WindowsRemapper(
+			Pair.of(WindowType.GENERIC_9X1, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.GENERIC_9X2, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.GENERIC_9X3, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.GENERIC_9X4, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.GENERIC_9X5, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.GENERIC_9X6, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.GENERIC_3X3, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.ANVIL, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.BEACON, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.BLAST_FURNACE, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.BREWING_STAND, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.CRAFTING, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.ENCHANTMENT, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.FURNACE, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.GRINDSTONE, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.HOPPER, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.LECTERN, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.LOOM, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.MERCHANT, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.SHULKER_BOX, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.SMITHING, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.SMOKER, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.CARTOGRAPHY, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.STONECUTTER, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.HORSE, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
+			Pair.of(WindowType.PLAYER, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE))
+		);
+		register(remapper__noop, ProtocolVersionsHelper.UP_1_16);
+
+		WindowsRemapper remapper__14__15_2 = new WindowsRemapper(
+			remapper__noop,
+			Pair.of(WindowType.SMITHING, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.ANVIL)))
+		);
+		register(remapper__14__15_2, ProtocolVersionsHelper.RANGE__1_14__1_15_2);
 
 		WindowsRemapper remapper__11__13_2 = new WindowsRemapper(
 			Pair.of(WindowType.PLAYER, new NonSlotCountBasedRemapperSelectFunction(NoopWindowRemapper.INSTANCE)),
 			Pair.of(WindowType.CRAFTING, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.CRAFTING, 0))),
 			Pair.of(WindowType.ANVIL, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.ANVIL, 0))),
+			Pair.of(WindowType.SMITHING, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.ANVIL, 0))),
 			Pair.of(WindowType.ENCHANTMENT, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.ENCHANTMENT, 0))),
 			Pair.of(WindowType.BREWING_STAND, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.BREWING_STAND, 5))),
 			Pair.of(WindowType.BEACON, new NonSlotCountBasedRemapperSelectFunction(new NoopWindowRemapper(WindowType.BEACON, 1))),
@@ -97,7 +132,7 @@ public class WindowsRemappersRegistry {
 		register(remapper__pre_8, ProtocolVersionsHelper.DOWN_1_7_10);
 	}
 
-	public static AbstractWindowsRemapper get(ProtocolVersion version) {
+	public static WindowsRemapper get(ProtocolVersion version) {
 		return registry.get(version);
 	}
 
