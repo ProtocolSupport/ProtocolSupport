@@ -19,6 +19,13 @@ plugins {
 apply plugin: 'org.hurricanegames.ManualGradleDependencySupplier'
 
 
+defaultTasks 'build'
+
+
+group 'protocolsupport'
+version '1.16.2-2-dev'
+
+
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.Files
@@ -26,12 +33,6 @@ import java.nio.file.Files
 import org.hurricanegames.manualgradledependencysupplier.DependencySupplier
 import org.hurricanegames.manualgradledependencysupplier.BuildDependencySupplier
 import org.hurricanegames.manualgradledependencysupplier.ManualGradleDependencySupplier
-
-defaultTasks 'build'
-
-
-group 'protocolsupport'
-version '1.16.2-1'
 
 
 Path projectDirectoryPath = projectDir.toPath().toAbsolutePath()
@@ -177,9 +178,9 @@ shadowJar {
 task copyFinalJarToTarget(type: DefaultTask) {doLast{
 	Path targetJarDirectory = projectDirectoryPath.resolve("target")
 	Files.createDirectories(targetJarDirectory)
-	java.nio.file.Files.copy(
+	Files.copy(
 		shadowJar.archivePath.toPath().toAbsolutePath(),
-		targetJarDirectory.resolve(jar.baseName + '.jar'),
+		targetJarDirectory.resolve(shadowJar.baseName + '.jar'),
 		java.nio.file.StandardCopyOption.REPLACE_EXISTING
 	)
 }}
