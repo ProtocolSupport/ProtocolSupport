@@ -34,7 +34,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 
 	@Override
 	protected void writeToClient() {
-		boolean hasSkyLight = cache.getClientCache().hasSkyLightInCurrentDimension();
+		boolean hasSkyLight = cache.getClientCache().hasDimensionSkyLight();
 
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);

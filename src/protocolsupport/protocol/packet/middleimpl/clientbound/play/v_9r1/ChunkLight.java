@@ -27,7 +27,7 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 	@Override
 	protected void writeToClient() {
 		int blockMask = ((setSkyLightMask | setBlockLightMask | emptySkyLightMask | emptyBlockLightMask) >> 1) & 0xFFFF;
-		boolean hasSkyLight = cache.getClientCache().hasSkyLightInCurrentDimension();
+		boolean hasSkyLight = cache.getClientCache().hasDimensionSkyLight();
 
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);

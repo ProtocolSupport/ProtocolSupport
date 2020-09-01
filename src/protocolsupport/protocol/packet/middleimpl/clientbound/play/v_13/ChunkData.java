@@ -41,7 +41,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(chunkdata, blockMask);
-		boolean hasSkyLight = cache.getClientCache().hasSkyLightInCurrentDimension();
+		boolean hasSkyLight = cache.getClientCache().hasDimensionSkyLight();
 		ArraySerializer.writeVarIntByteArray(chunkdata, to -> {
 			ChunkWriterVariesWithLight.writeSectionsCompactFlattening(
 				to, blockMask, 14,

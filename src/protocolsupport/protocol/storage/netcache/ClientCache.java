@@ -34,15 +34,21 @@ public class ClientCache implements IBiomeRegistry {
 	}
 
 	protected NBTCompound dimension;
+	protected boolean dimensionSkyLight;
 
 	public NBTCompound setCurrentDimension(NBTCompound dimension) {
 		NBTCompound oldDimension = this.dimension;
 		this.dimension = dimension;
+		this.dimensionSkyLight = dimension.getNumberTagOrThrow("has_skylight").getAsInt() == 1;
 		return oldDimension;
 	}
 
-	public boolean hasSkyLightInCurrentDimension() {
-		return dimension.getNumberTagOrThrow("has_skylight").getAsInt() == 1;
+	public void setDimensionSkyLight(boolean hasSkyLight) {
+		this.dimensionSkyLight = hasSkyLight;
+	}
+
+	public boolean hasDimensionSkyLight() {
+		return dimensionSkyLight;
 	}
 
 	protected final Biome[] biomeById = new Biome[256];
@@ -82,6 +88,7 @@ public class ClientCache implements IBiomeRegistry {
 			}
 		}
 	}
+
 
 	protected float maxHealth = 20.0F;
 

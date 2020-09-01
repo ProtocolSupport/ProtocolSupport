@@ -9,14 +9,21 @@ public abstract class AbstractLegacyChangeDimension extends MiddleChangeDimensio
 		super(init);
 	}
 
+	protected int dimensionId;
+
+	@Override
+	protected void handleReadData() {
+		super.handleReadData();
+		dimensionId = LegacyDimension.getIntId(dimension);
+	}
+
 	@Override
 	protected void writeToClient() {
-		int newDimensionId = LegacyDimension.getIntId(dimension);
-		if (LegacyDimension.getIntId(oldDimension) == newDimensionId) {
-			writeChangeDimension(LegacyDimension.getAlternativeIntId(newDimensionId));
-			writeChangeDimension(newDimensionId);
+		if (LegacyDimension.getIntId(oldDimension) == dimensionId) {
+			writeChangeDimension(LegacyDimension.getAlternativeIntId(dimensionId));
+			writeChangeDimension(dimensionId);
 		} else {
-			writeChangeDimension(newDimensionId);
+			writeChangeDimension(dimensionId);
 		}
 	}
 
