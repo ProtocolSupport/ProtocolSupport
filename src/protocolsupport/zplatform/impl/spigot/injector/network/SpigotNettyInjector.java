@@ -18,7 +18,7 @@ public class SpigotNettyInjector {
 
 	@SuppressWarnings("unchecked")
 	public static void inject() throws IllegalAccessException, NoSuchFieldException {
-		ServerConnection serverConnection = SpigotMiscUtils.getServer().getServerConnection();
+		ServerConnection serverConnection = SpigotMiscUtils.SERVER.getServerConnection();
 		Collection<NetworkManager> nmList = null;
 		try {
 			nmList = (Collection<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("pending")).get(serverConnection);

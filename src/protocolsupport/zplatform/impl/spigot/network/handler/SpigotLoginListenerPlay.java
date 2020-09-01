@@ -76,7 +76,7 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn {
 
-	protected static final MinecraftServer server = SpigotMiscUtils.getServer();
+	protected static final MinecraftServer server = SpigotMiscUtils.SERVER;
 
 	public SpigotLoginListenerPlay(NetworkManagerWrapper networkmanager) {
 		super(networkmanager);
@@ -98,7 +98,7 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 		};
 	}
 
-	private static final String BAN_DATE_FORMAT_STRING = "yyyy-MM-dd 'at' HH:mm:ss z";
+	protected static final String BAN_DATE_FORMAT_STRING = "yyyy-MM-dd 'at' HH:mm:ss z";
 	@Override
 	protected void checkBans(PlayerLoginEvent event, Object[] data) {
 		PlayerList playerlist = server.getPlayerList();

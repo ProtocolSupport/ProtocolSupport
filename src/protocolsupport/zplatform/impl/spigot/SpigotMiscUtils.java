@@ -49,7 +49,6 @@ import net.minecraft.server.v1_16_R2.EntityTypes;
 import net.minecraft.server.v1_16_R2.EnumProtocol;
 import net.minecraft.server.v1_16_R2.IRegistry;
 import net.minecraft.server.v1_16_R2.Item;
-import net.minecraft.server.v1_16_R2.MinecraftServer;
 import net.minecraft.server.v1_16_R2.NBTCompressedStreamTools;
 import net.minecraft.server.v1_16_R2.NBTReadLimiter;
 import net.minecraft.server.v1_16_R2.ServerConnection;
@@ -79,6 +78,8 @@ import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedSplit
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotMiscUtils implements PlatformUtils {
+
+	public static final DedicatedServer SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 
 	public static NetworkState protocolToNetState(EnumProtocol state) {
 		switch (state) {
@@ -118,10 +119,6 @@ public class SpigotMiscUtils implements PlatformUtils {
 				throw new IllegalArgumentException("Unknown state " + state);
 			}
 		}
-	}
-
-	public static MinecraftServer getServer() {
-		return ((CraftServer) Bukkit.getServer()).getServer();
 	}
 
 	public static GameProfile toMojangGameProfile(LoginProfile profile) {
@@ -248,7 +245,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public boolean isRunning() {
-		return getServer().isRunning();
+		return SERVER.isRunning();
 	}
 
 	@Override
@@ -258,19 +255,18 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public boolean isProxyPreventionEnabled() {
-		//TODO: implement
-		return false;
+		return SERVER.V();
 	}
 
 	@Override
 	public boolean isDebugging() {
-		return getServer().isDebugging();
+		return SERVER.isDebugging();
 	}
 
 	@Override
 	public void enableDebug() {
 		try {
-			ReflectionUtils.getField(DedicatedServerProperties.class, "debug").set(((DedicatedServer)getServer()).getDedicatedServerProperties(), true);
+			ReflectionUtils.getField(DedicatedServerProperties.class, "debug").set(SERVER.getDedicatedServerProperties(), true);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException("Exception occured while enabled debug");
 		}
@@ -279,7 +275,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public void disableDebug() {
 		try {
-			ReflectionUtils.getField(DedicatedServerProperties.class, "debug").set(((DedicatedServer)getServer()).getDedicatedServerProperties(), false);
+			ReflectionUtils.getField(DedicatedServerProperties.class, "debug").set(SERVER.getDedicatedServerProperties(), false);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException("Exception occured while disabling debug");
 		}
@@ -287,29 +283,29 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public int getCompressionThreshold() {
-		return getServer().aw();
+		return SERVER.aw();
 	}
 
 	@Override
 	public KeyPair getEncryptionKeyPair() {
-		return getServer().getKeyPair();
+		return SERVER.getKeyPair();
 	}
 
 	@Override
 	public <V> FutureTask<V> callSyncTask(Callable<V> call) {
 		FutureTask<V> task = new FutureTask<>(call);
-		getServer().processQueue.add(task);
+		SERVER.processQueue.add(task);
 		return task;
 	}
 
 	@Override
 	public String getModName() {
-		return getServer().getServerModName();
+		return SERVER.getServerModName();
 	}
 
 	@Override
 	public String getVersionName() {
-		return getServer().getVersion();
+		return SERVER.getVersion();
 	}
 
 	@Override
@@ -326,7 +322,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public MultithreadEventLoopGroup getServerIOEventLoopGroup() {
 		try {
-			if (Epoll.isAvailable() && getServer().l()) {
+			if (Epoll.isAvailable() && SERVER.l()) {
 				return ServerConnection.b.a();
 			} else {
 				return ServerConnection.a.a();
