@@ -21,10 +21,13 @@ import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.protocol.types.TileEntityType;
 import protocolsupport.protocol.types.nbt.NBTByte;
 import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTIntArray;
+import protocolsupport.protocol.types.nbt.NBTList;
 import protocolsupport.protocol.types.nbt.NBTNumber;
 import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.CommonNBT;
+import protocolsupport.protocol.utils.GameProfileSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 import protocolsupportbuildprocessor.Preload;
@@ -156,6 +159,30 @@ public class TileEntityRemapper {
 			ProtocolVersionsHelper.DOWN_1_8
 		);
 
+		register(
+			TileEntityType.SKULL,
+			tile -> {
+				NBTCompound tag = tile.getNBT();
+				NBTCompound gameprofileTag = tag.getCompoundTagOrNull(CommonNBT.PLAYERHEAD_PROFILE);
+				if (gameprofileTag == null) {
+					return;
+				}
+				NBTCompound propertiesTag = gameprofileTag.getCompoundTagOrNull(GameProfileSerializer.PROPERTIES_KEY);
+				if (propertiesTag == null) {
+					return;
+				}
+				NBTList<NBTCompound> texturesTag = propertiesTag.getCompoundListTagOrNull("textures");
+				if ((texturesTag == null) || texturesTag.isEmpty()) {
+					return;
+				}
+				String textureValueTag = texturesTag.getTag(0).getStringTagValueOrNull(GameProfileSerializer.PROPERTY_VALUE_KEY);
+				if (textureValueTag == null) {
+					return;
+				}
+				gameprofileTag.setTag(GameProfileSerializer.UUID_KEY, new NBTIntArray(new int[] {0, 0, 0, textureValueTag.hashCode()}));
+			},
+			ProtocolVersion.getAllBeforeI(ProtocolVersion.MINECRAFT_1_16_1)
+		);
 		register(
 			TileEntityType.SKULL,
 			tile -> {
