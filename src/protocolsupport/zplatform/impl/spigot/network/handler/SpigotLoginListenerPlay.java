@@ -1,12 +1,14 @@
 package protocolsupport.zplatform.impl.spigot.network.handler;
 
-import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.spigotmc.SpigotConfig;
+
+import com.mojang.authlib.GameProfile;
 
 import net.minecraft.server.v1_16_R2.EntityPlayer;
 import net.minecraft.server.v1_16_R2.ExpirableListEntry;
@@ -103,12 +105,12 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 	protected void checkBans(PlayerLoginEvent event, Object[] data) {
 		PlayerList playerlist = server.getPlayerList();
 
-		com.mojang.authlib.GameProfile mojangGameProfile = ((EntityPlayer) data[0]).getProfile();
+		GameProfile mojangGameProfile = ((EntityPlayer) data[0]).getProfile();
+		SocketAddress address = networkManager.getAddress();
 
-		InetSocketAddress socketaddress = networkManager.getAddress();
 		if (playerlist.getProfileBans().isBanned(mojangGameProfile)) {
 			GameProfileBanEntry profileban = playerlist.getProfileBans().get(mojangGameProfile);
-			if (!hasExpired(profileban)) {
+			if (isBanned(profileban)) {
 				String reason = "You are banned from this server!\nReason: " + profileban.getReason();
 				if (profileban.getExpires() != null) {
 					reason = reason + "\nYour ban will be removed on " +  new SimpleDateFormat(BAN_DATE_FORMAT_STRING).format(profileban.getExpires());
@@ -117,9 +119,9 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 			}
 		} else if (!playerlist.isWhitelisted(mojangGameProfile)) {
 			event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, SpigotConfig.whitelistMessage);
-		} else if (playerlist.getIPBans().isBanned(socketaddress)) {
-			IpBanEntry ipban = playerlist.getIPBans().get(socketaddress);
-			if (!hasExpired(ipban)) {
+		} else if (playerlist.getIPBans().isBanned(address)) {
+			IpBanEntry ipban = playerlist.getIPBans().get(address);
+			if (isBanned(ipban)) {
 				String reason = "Your IP address is banned from this server!\nReason: " + ipban.getReason();
 				if (ipban.getExpires() != null) {
 					reason = reason + "\nYour ban will be removed on " + new SimpleDateFormat(BAN_DATE_FORMAT_STRING).format(ipban.getExpires());
@@ -131,9 +133,15 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 		}
 	}
 
-	private static boolean hasExpired(ExpirableListEntry<?> entry) {
+	protected static boolean isBanned(ExpirableListEntry<?> entry) {
+		if (entry == null) {
+			return false;
+		}
 		Date expireDate = entry.getExpires();
-		return (expireDate != null) && expireDate.before(new Date());
+		if (expireDate == null) {
+			return true;
+		}
+		return expireDate.after(new Date());
 	}
 
 	@Override
