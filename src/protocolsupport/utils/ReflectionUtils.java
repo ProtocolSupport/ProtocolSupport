@@ -21,7 +21,15 @@ public class ReflectionUtils {
 				}
 			}
 		} while ((clazz = clazz.getSuperclass()) != null);
-		throw new RuntimeException("Can't find field " + name);
+		throw new RuntimeException("Can't find field " + name + " in class " + clazz + " or it's superclasses");
+	}
+
+	public static void setField(Field field, Object object, Object value) {
+		try {
+			field.set(object, value);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static Method getMethod(Class<?> clazz, String name, int paramlength) {
@@ -32,7 +40,7 @@ public class ReflectionUtils {
 				}
 			}
 		} while ((clazz = clazz.getSuperclass()) != null);
-		throw new RuntimeException("Can't find method " + name + " with params length " + paramlength);
+		throw new RuntimeException("Can't find method " + name + " with params length " + paramlength + " in class " + clazz + " or it's superclasses");
 	}
 
 	public static void setStaticFinalField(Class<?> clazz, String fieldname, Object value) {
