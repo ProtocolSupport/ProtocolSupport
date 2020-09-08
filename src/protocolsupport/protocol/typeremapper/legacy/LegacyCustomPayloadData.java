@@ -53,6 +53,10 @@ public class LegacyCustomPayloadData {
 		codec.read(MiddleCustomPayload.create(modernTag, payloadModernTagJoiner.toString().getBytes(StandardCharsets.UTF_8)));
 	}
 
+	public static void transformAndWriteBrand(PacketDataCodec codec, ByteBuf data) {
+		codec.read(MiddleCustomPayload.create(LegacyCustomPayloadChannelName.MODERN_BRAND, custompayload -> StringSerializer.writeVarIntUTF8String(custompayload, data.toString(StandardCharsets.UTF_8))));
+	}
+
 	public static void transformAndWriteBookEdit(PacketDataCodec codec, ProtocolVersion version, ByteBuf data) {
 		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version);
 		if (!book.isNull()) {

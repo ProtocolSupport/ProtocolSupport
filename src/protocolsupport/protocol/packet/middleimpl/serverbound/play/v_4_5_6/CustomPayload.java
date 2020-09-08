@@ -36,6 +36,10 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 				LegacyCustomPayloadData.transformAndWriteRegisterUnregister(codec, channelsCache, tag, data, false);
 				break;
 			}
+			case LegacyCustomPayloadChannelName.LEGACY_BRAND: {
+				LegacyCustomPayloadData.transformAndWriteBrand(codec, data);
+				break;
+			}
 			case LegacyCustomPayloadChannelName.LEGACY_BOOK_EDIT: {
 				LegacyCustomPayloadData.transformAndWriteBookEdit(codec, version, data);
 				break;
