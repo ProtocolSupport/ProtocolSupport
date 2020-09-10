@@ -8,6 +8,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexV
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalUUID;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
@@ -30,9 +31,10 @@ public class TameableEntityMetadataRemapper extends AgeableEntityMetadataRemappe
 		addRemap(new NetworkEntityMetadataObjectRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, NetworkEntityMetadataList remapped) {
-				NetworkEntityMetadataObjectIndex.Tameable.OWNER.getValue(original).ifPresent(object ->
-					entity.getDataCache().setData(DATA_KEY_OWNER, object.getValue())
-				);
+				NetworkEntityMetadataObjectOptionalUUID ownerObject = NetworkEntityMetadataObjectIndex.Tameable.OWNER.getObject(original);
+				if (ownerObject != null) {
+					entity.getDataCache().setData(DATA_KEY_OWNER, ownerObject.getValue());
+				}
 			}
 		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_9, ProtocolVersion.MINECRAFT_1_14_4));
 	}

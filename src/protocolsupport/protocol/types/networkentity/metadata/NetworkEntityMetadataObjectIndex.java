@@ -2,7 +2,6 @@ package protocolsupport.protocol.types.networkentity.metadata;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
-import java.util.Optional;
 
 import protocolsupport.ProtocolSupport;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBlockData;
@@ -34,19 +33,20 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 	protected final Class<?> entityClass;
 	protected final int index;
 	protected final Class<T> expectedDWObjectType;
+
 	protected NetworkEntityMetadataObjectIndex(Class<?> entityClass, int index, Class<T> expectedType) {
 		this.entityClass = entityClass;
 		this.index = index;
 		this.expectedDWObjectType = expectedType;
 	}
 
-	public Optional<T> getValue(ArrayMap<NetworkEntityMetadataObject<?>> metadata) {
+	public T getObject(ArrayMap<NetworkEntityMetadataObject<?>> metadata) {
 		NetworkEntityMetadataObject<?> object = metadata.get(index);
 		if (object == null) {
-			return Optional.empty();
+			return null;
 		}
 		if (expectedDWObjectType.isInstance(object)) {
-			return Optional.of(expectedDWObjectType.cast(object));
+			return expectedDWObjectType.cast(object);
 		}
 		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 			ProtocolSupport.logWarning(MessageFormat.format(
@@ -54,7 +54,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 				entityClass.getSimpleName(), index, expectedDWObjectType.getName(), object.getClass().getName()
 			));
 		}
-		return Optional.empty();
+		return null;
 	}
 
 	public static class Entity {

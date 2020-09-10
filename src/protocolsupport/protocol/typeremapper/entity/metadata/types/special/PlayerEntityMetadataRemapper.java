@@ -74,8 +74,8 @@ public class PlayerEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 		addRemap(new NetworkEntityMetadataObjectRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, NetworkEntityMetadataList remapped) {
-				NetworkEntityMetadataObjectByte baseflags = NetworkEntityMetadataObjectIndex.Entity.BASE_FLAGS.getValue(original).orElse(null);
-				NetworkEntityMetadataObjectByte handuse = NetworkEntityMetadataObjectIndex.EntityLiving.HAND_USE.getValue(original).orElse(null);
+				NetworkEntityMetadataObjectByte baseflags = NetworkEntityMetadataObjectIndex.Entity.BASE_FLAGS.getObject(original);
+				NetworkEntityMetadataObjectByte handuse = NetworkEntityMetadataObjectIndex.EntityLiving.HAND_USE.getObject(original);
 				if ((baseflags != null) || (handuse != null)) {
 					HandUseAsBaseFlagsTransformer transformer = entity.getDataCache().computeDataIfAbsent(DATA_KEY_BASE_FLAGS, k -> new HandUseAsBaseFlagsTransformer());
 					if (baseflags != null) {

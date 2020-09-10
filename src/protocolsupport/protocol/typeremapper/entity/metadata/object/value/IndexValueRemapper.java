@@ -11,6 +11,7 @@ public abstract class IndexValueRemapper<T extends NetworkEntityMetadataObject<?
 
 	protected final NetworkEntityMetadataObjectIndex<T> fromIndex;
 	protected final int toIndex;
+
 	public IndexValueRemapper(NetworkEntityMetadataObjectIndex<T> fromIndex, int toIndex) {
 		this.fromIndex = fromIndex;
 		this.toIndex = toIndex;
@@ -18,7 +19,10 @@ public abstract class IndexValueRemapper<T extends NetworkEntityMetadataObject<?
 
 	@Override
 	public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, NetworkEntityMetadataList remapped) {
-		fromIndex.getValue(original).ifPresent(v -> remapped.add(toIndex, remapValue(v)));
+		T object = fromIndex.getObject(original);
+		if (object != null) {
+			remapped.add(toIndex, remapValue(object));
+		}
 	}
 
 	public abstract NetworkEntityMetadataObject<?> remapValue(T object);

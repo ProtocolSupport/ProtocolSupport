@@ -62,11 +62,12 @@ public class EndermanEntityMetadataRemapper extends InsentientEntityMetadataRema
 			final ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, NetworkEntityMetadataList remapped) {
-				NetworkEntityMetadataObjectIndex.Enderman.CARRIED_BLOCK.getValue(original).ifPresent(object -> {
-					int lId = BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, object.getValue());
+				NetworkEntityMetadataObjectBlockData carriedBlockObject = NetworkEntityMetadataObjectIndex.Enderman.CARRIED_BLOCK.getObject(original);
+				if (carriedBlockObject != null) {
+					int lId = BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, carriedBlockObject.getValue());
 					remapped.add(16, new NetworkEntityMetadataObjectByte((byte) PreFlatteningBlockIdData.getIdFromCombinedId(lId)));
 					remapped.add(17, new NetworkEntityMetadataObjectByte((byte) PreFlatteningBlockIdData.getDataFromCombinedId(lId)));
-				});
+				}
 			}
 		}, ProtocolVersionsHelper.DOWN_1_7_10);
 

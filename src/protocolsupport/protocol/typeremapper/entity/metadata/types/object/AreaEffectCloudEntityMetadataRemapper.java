@@ -44,6 +44,7 @@ public class AreaEffectCloudEntityMetadataRemapper extends BaseEntityMetadataRem
 
 		protected final ParticleRemappingTable remapper;
 		protected final int toIndex;
+
 		public AreaEffectCloudModernParticleObjectMetadataRemapper(int toIndex, ParticleRemappingTable remapper) {
 			this.toIndex = toIndex;
 			this.remapper = remapper;
@@ -51,13 +52,13 @@ public class AreaEffectCloudEntityMetadataRemapper extends BaseEntityMetadataRem
 
 		@Override
 		public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, NetworkEntityMetadataList remapped) {
-			NetworkEntityMetadataObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent(particleObject -> {
+			NetworkEntityMetadataObjectParticle particleObject = NetworkEntityMetadataObjectIndex.AreaEffectCloud.PARTICLE.getObject(original);
+			if (particleObject != null) {
 				Particle particle = remapper.getRemap(particleObject.getValue().getClass()).apply(particleObject.getValue());
-				if (particle == null) {
-					return;
+				if (particle != null) {
+					remapped.add(toIndex, new NetworkEntityMetadataObjectParticle(particle));
 				}
-				remapped.add(toIndex, new NetworkEntityMetadataObjectParticle(particle));
-			});
+			}
 		}
 
 	}
@@ -66,6 +67,7 @@ public class AreaEffectCloudEntityMetadataRemapper extends BaseEntityMetadataRem
 
 		protected final ParticleRemappingTable remapper;
 		protected final int toIndex;
+
 		public AreaEffectCloudLegacyParticleObjectMetadataRemapper(int toIndex, ParticleRemappingTable remapper) {
 			this.toIndex = toIndex;
 			this.remapper = remapper;
@@ -73,7 +75,8 @@ public class AreaEffectCloudEntityMetadataRemapper extends BaseEntityMetadataRem
 
 		@Override
 		public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, NetworkEntityMetadataList remapped) {
-			NetworkEntityMetadataObjectIndex.AreaEffectCloud.PARTICLE.getValue(original).ifPresent(particleObject -> {
+			NetworkEntityMetadataObjectParticle particleObject = NetworkEntityMetadataObjectIndex.AreaEffectCloud.PARTICLE.getObject(original);
+			if (particleObject != null) {
 				Particle particle = remapper.getRemap(particleObject.getValue().getClass()).apply(particleObject.getValue());
 				if (particle == null) {
 					return;
@@ -86,7 +89,7 @@ public class AreaEffectCloudEntityMetadataRemapper extends BaseEntityMetadataRem
 				if (data.length >= 2) {
 					remapped.add(toIndex + 1, new NetworkEntityMetadataObjectVarInt(data[1]));
 				}
-			});
+			}
 		}
 
 	}
