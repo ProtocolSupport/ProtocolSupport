@@ -1,6 +1,6 @@
 name: ProtocolSupport
 main: protocolsupport.ProtocolSupport
-version: 1.16.2-3
+version: 1.16.3-1
 api-version: 1.16
 authors:
 - _Shevchik_

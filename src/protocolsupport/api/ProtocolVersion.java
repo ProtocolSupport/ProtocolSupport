@@ -13,7 +13,8 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public enum ProtocolVersion {
 
-	MINECRAFT_FUTURE(-1, new OrderId(ProtocolType.PC, 34)),
+	MINECRAFT_FUTURE(-1, new OrderId(ProtocolType.PC, 35)),
+	MINECRAFT_1_16_3(753, new OrderId(ProtocolType.PC, 34), "1.16.3"),
 	MINECRAFT_1_16_2(751, new OrderId(ProtocolType.PC, 33), "1.16.2"),
 	MINECRAFT_1_16_1(736, new OrderId(ProtocolType.PC, 32), "1.16.1"),
 	MINECRAFT_1_16(735, new OrderId(ProtocolType.PC, 31), "1.16"),
@@ -270,7 +271,7 @@ public enum ProtocolVersion {
 	public static ProtocolVersion getLatest(ProtocolType type) {
 		switch (type) {
 			case PC: {
-				return MINECRAFT_1_16_2;
+				return MINECRAFT_1_16_3;
 			}
 			default: {
 				throw new IllegalArgumentException(MessageFormat.format("No supported versions for protocol type {0}", type));
