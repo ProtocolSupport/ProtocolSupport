@@ -156,7 +156,7 @@ public class NBTCompound extends NBT {
 	@SuppressWarnings("unchecked")
 	public <T extends NBT> NBTList<T> removeTagAndReturnIfListType(String key, Class<T> type) {
 		NBTList<?> list = removeTagAndReturnIfType(key, NBTList.class);
-		if ((list != null) && type.isAssignableFrom(list.getType().getNBTClass())) {
+		if ((list != null) && type.isAssignableFrom(list.getTagsType().getNBTClass())) {
 			return (NBTList<T>) list;
 		}
 		return null;
