@@ -7,16 +7,37 @@ import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexV
 import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapperNumberToInt;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.LivingEntityMetadataRemapper;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
-import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.utils.BitUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class PlayerEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 
 	public static final PlayerEntityMetadataRemapper INSTANCE = new PlayerEntityMetadataRemapper();
+
+	public static final String DATA_KEY_BASE_FLAGS = "Player_BaseFlags";
+
+	protected static class HandUseAsBaseFlagsTransformer {
+
+		protected byte baseflags;
+		protected byte usehands;
+
+		public void updateBaseFlags(byte baseflags) {
+			this.baseflags = (byte) BitUtils.setIBit(baseflags, 4, usehands);
+		}
+
+		public void updateUseHands(byte usehands) {
+			this.usehands = (byte) (usehands & 1);
+		}
+
+		public byte getComputedBaseFlags() {
+			return (byte) BitUtils.setIBit(baseflags, 4, usehands);
+		}
+
+	}
 
 	protected PlayerEntityMetadataRemapper() {
 		addRemap(new IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex.Player.ADDITIONAL_HEARTS, 14), ProtocolVersionsHelper.UP_1_15);
@@ -53,14 +74,18 @@ public class PlayerEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 		addRemap(new NetworkEntityMetadataObjectRemapper() {
 			@Override
 			public void remap(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, NetworkEntityMetadataList remapped) {
-				NetworkEntityMetadataObjectIndex.Entity.BASE_FLAGS.getValue(original)
-				.ifPresent(baseflags -> entity.getDataCache().setBaseFlags(baseflags.getValue()));
-				NetworkEntityMetadataObjectIndex.EntityLiving.HAND_USE.getValue(original)
-				.ifPresent(activehandflags -> {
-					NetworkEntityDataCache edata = entity.getDataCache();
-					edata.setBaseFlag(4, activehandflags.getValue() & 1);
-					remapped.add(0, new NetworkEntityMetadataObjectByte((byte) edata.getBaseFlags()));
-				});
+				NetworkEntityMetadataObjectByte baseflags = NetworkEntityMetadataObjectIndex.Entity.BASE_FLAGS.getValue(original).orElse(null);
+				NetworkEntityMetadataObjectByte handuse = NetworkEntityMetadataObjectIndex.EntityLiving.HAND_USE.getValue(original).orElse(null);
+				if ((baseflags != null) || (handuse != null)) {
+					HandUseAsBaseFlagsTransformer transformer = entity.getDataCache().computeDataIfAbsent(DATA_KEY_BASE_FLAGS, k -> new HandUseAsBaseFlagsTransformer());
+					if (baseflags != null) {
+						transformer.updateBaseFlags(baseflags.getValue());
+					}
+					if (handuse != null) {
+						transformer.updateUseHands(handuse.getValue());
+					}
+					remapped.add(0, new NetworkEntityMetadataObjectByte(transformer.getComputedBaseFlags()));
+				}
 			}
 		}, ProtocolVersionsHelper.DOWN_1_8);
 	}

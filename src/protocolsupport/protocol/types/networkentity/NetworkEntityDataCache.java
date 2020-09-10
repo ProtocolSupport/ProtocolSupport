@@ -2,9 +2,10 @@ package protocolsupport.protocol.types.networkentity;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import protocolsupport.protocol.utils.LookUtils;
-import protocolsupport.utils.BitUtils;
 import protocolsupport.utils.Utils;
 
 public class NetworkEntityDataCache {
@@ -17,20 +18,6 @@ public class NetworkEntityDataCache {
 
 	public void unsetFirstMeta() {
 		this.firstMeta = false;
-	}
-
-	protected int baseFlags = 0;
-
-	public int getBaseFlags() {
-		return baseFlags;
-	}
-
-	public void setBaseFlags(int baseFlags) {
-		this.baseFlags = baseFlags;
-	}
-
-	public void setBaseFlag(int bitpos, int value) {
-		baseFlags = BitUtils.setIBit(baseFlags, bitpos, value);
 	}
 
 	protected static final double pos_s_to_real = 1 / 4096D;
@@ -147,6 +134,16 @@ public class NetworkEntityDataCache {
 	@SuppressWarnings("unchecked")
 	public <T> T getData(String key) {
 		return (T) data.get(key);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T computeData(String key, BiFunction<String, T, T> compute) {
+		return (T) data.compute(key, (BiFunction<String, Object, Object>) compute);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T computeDataIfAbsent(String key, Function<String, T> compute) {
+		return (T) data.computeIfAbsent(key, compute);
 	}
 
 	@Override
