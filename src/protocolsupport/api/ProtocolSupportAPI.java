@@ -14,10 +14,11 @@ import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 
 import protocolsupport.protocol.storage.ProtocolStorage;
+import protocolsupport.zplatform.ServerPlatform;
 
 public class ProtocolSupportAPI {
 
-	private static final BigInteger apiversion = BigInteger.valueOf(11);
+	private static final BigInteger apiversion = BigInteger.valueOf(12);
 	/**
 	 * Returns ProtocolSupport API version <br>
 	 * This number is incremented every time API changes (behavior change, method/field added/removed)
@@ -59,13 +60,14 @@ public class ProtocolSupportAPI {
 
 	/**
 	 * Returns player {@link Connection} <br>
-	 * Returns null if player is not online or is not a real player
+	 * Returns null if player is not a real player
 	 * @param player player
 	 * @return player {@link Connection} or null
 	 */
 	public static Connection getConnection(Player player) {
 		Validate.notNull(player, "Player can't be null");
-		return getConnection(player.spigot().getRawAddress());
+		Connection connection = ServerPlatform.get().getMiscUtils().getConnection(player);
+		return connection != null ? connection : getConnection(player.spigot().getRawAddress());
 	}
 
 	/**

@@ -18,6 +18,7 @@ import org.bukkit.util.CachedServerIcon;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.MultithreadEventLoopGroup;
 import protocolsupport.api.utils.Profile;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
@@ -26,6 +27,8 @@ import protocolsupport.protocol.utils.authlib.LoginProfile;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public interface PlatformUtils {
+
+	public ConnectionImpl getConnection(Player player);
 
 	public ItemStack createBukkitItemStackFromNetwork(NetworkItemStack stack);
 

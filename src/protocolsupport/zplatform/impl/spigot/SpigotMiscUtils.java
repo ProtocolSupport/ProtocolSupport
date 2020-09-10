@@ -37,6 +37,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.MultithreadEventLoopGroup;
 import io.netty.channel.epoll.Epoll;
@@ -51,10 +52,12 @@ import net.minecraft.server.v1_16_R2.IRegistry;
 import net.minecraft.server.v1_16_R2.Item;
 import net.minecraft.server.v1_16_R2.NBTCompressedStreamTools;
 import net.minecraft.server.v1_16_R2.NBTReadLimiter;
+import net.minecraft.server.v1_16_R2.PlayerConnection;
 import net.minecraft.server.v1_16_R2.ServerConnection;
 import net.minecraft.server.v1_16_R2.WorldServer;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.api.utils.Profile;
+import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
@@ -131,6 +134,20 @@ public class SpigotMiscUtils implements PlatformUtils {
 			.collect(Collectors.toList()))
 		);
 		return mojangGameProfile;
+	}
+
+	@Override
+	public ConnectionImpl getConnection(Player player) {
+		if (player instanceof CraftPlayer) {
+			PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
+			if (connection != null) {
+				Channel channel = connection.networkManager.channel;
+				if (channel != null) {
+					return ConnectionImpl.getFromChannel(channel);
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override
