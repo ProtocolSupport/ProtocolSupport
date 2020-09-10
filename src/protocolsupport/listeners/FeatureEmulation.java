@@ -1,7 +1,9 @@
 package protocolsupport.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.SoundCategory;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -36,7 +38,13 @@ public class FeatureEmulation implements Listener {
 				for (Player player : Bukkit.getOnlinePlayers()) {
 					ProtocolVersion version = ProtocolSupportAPI.getProtocolVersion(player);
 					if ((version.getProtocolType() == ProtocolType.PC) && version.isBefore(ProtocolVersion.MINECRAFT_1_9)) {
-						if (!player.isFlying() && (player.hasPotionEffect(PotionEffectType.LEVITATION) || player.hasPotionEffect(PotionEffectType.SLOW_FALLING))) {
+						if (player.isFlying()) {
+							continue;
+						}
+						if (
+							player.hasPotionEffect(PotionEffectType.LEVITATION) ||
+							(player.hasPotionEffect(PotionEffectType.SLOW_FALLING) && !isNearGround(player))
+						) {
 							player.setVelocity(player.getVelocity());
 						}
 					}
@@ -44,6 +52,37 @@ public class FeatureEmulation implements Listener {
 			},
 			1, 1
 		);
+	}
+
+
+	protected static final double PLAYER_BB_SIZE = 0.3;
+
+	protected static boolean isNearGround(Player player) {
+		Location location = player.getLocation();
+		World world = location.getWorld();
+		double x = location.getX();
+		double z = location.getZ();
+		int y = location.getBlockY();
+		return isGroundInAABB(world, x, z, y, PLAYER_BB_SIZE) || isGroundInAABB(world, x, z, y - 1, PLAYER_BB_SIZE);
+	}
+
+	protected static boolean isGroundInAABB(World world, double x, double z, int y, double offset) {
+		if ((y < 0) || (y > world.getMaxHeight())) {
+			return false;
+		}
+		if (!world.getBlockAt((int) (x + offset), y, (int) (z + offset)).isEmpty()) {
+			return true;
+		}
+		if (!world.getBlockAt((int) (x - offset), y, (int) (z + offset)).isEmpty()) {
+			return true;
+		}
+		if (!world.getBlockAt((int) (x + offset), y, (int) (z - offset)).isEmpty()) {
+			return true;
+		}
+		if (!world.getBlockAt((int) (x - offset), y, (int) (z - offset)).isEmpty()) {
+			return true;
+		}
+		return false;
 	}
 
 	@EventHandler
