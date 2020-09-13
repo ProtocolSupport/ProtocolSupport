@@ -393,7 +393,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 	}
 
 	public static class Arrow extends Entity {
-		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> CIRTICAL = takeNextIndex(NetworkEntityMetadataObjectByte.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> CRITICAL = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> PIERCING_LEVEL = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 	}
 
