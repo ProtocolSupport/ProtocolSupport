@@ -7,13 +7,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import protocolsupport.commands.CommandHandler;
-import protocolsupport.listeners.FeatureEmulation;
 import protocolsupport.listeners.LocaleUseLoader;
 import protocolsupport.listeners.MultiplePassengersRestrict;
+import protocolsupport.listeners.PotionEffectAmplifierClamp;
 import protocolsupport.listeners.ReloadCommandBlocker;
+import protocolsupport.listeners.TabAPIHandler;
+import protocolsupport.listeners.emulation.BlockPlaceSelfSoundEmulation;
+import protocolsupport.listeners.emulation.DamageHurtEffectEmulation;
+import protocolsupport.listeners.emulation.LeaveVehicleOnCrouchEmulation;
+import protocolsupport.listeners.emulation.LevitationSlowFallingEmulation;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
@@ -101,10 +107,17 @@ public class ProtocolSupport extends JavaPlugin {
 		}
 		ServerPlatform.get().getInjector().onEnable();
 		getCommand("protocolsupport").setExecutor(new CommandHandler());
-		getServer().getPluginManager().registerEvents(new FeatureEmulation(), this);
-		getServer().getPluginManager().registerEvents(new ReloadCommandBlocker(), this);
-		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
-		getServer().getPluginManager().registerEvents(new LocaleUseLoader(), this);
+
+		PluginManager pluginmanager = getServer().getPluginManager();
+		pluginmanager.registerEvents(new TabAPIHandler(), this);
+		pluginmanager.registerEvents(new ReloadCommandBlocker(), this);
+		pluginmanager.registerEvents(new LocaleUseLoader(), this);
+		pluginmanager.registerEvents(new PotionEffectAmplifierClamp(), this);
+		pluginmanager.registerEvents(new MultiplePassengersRestrict(), this);
+		pluginmanager.registerEvents(new BlockPlaceSelfSoundEmulation(), this);
+		pluginmanager.registerEvents(new DamageHurtEffectEmulation(), this);
+		pluginmanager.registerEvents(new LeaveVehicleOnCrouchEmulation(), this);
+		new LevitationSlowFallingEmulation().runTaskTimer(this, 1, 1);
 	}
 
 	@Override
