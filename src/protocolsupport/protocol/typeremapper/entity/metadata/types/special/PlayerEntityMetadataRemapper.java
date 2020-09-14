@@ -26,11 +26,11 @@ public class PlayerEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 		protected byte usehands;
 
 		public void updateBaseFlags(byte baseflags) {
-			this.baseflags = (byte) BitUtils.setIBit(baseflags, 4, usehands);
+			this.baseflags = baseflags;
 		}
 
 		public void updateUseHands(byte usehands) {
-			this.usehands = (byte) (usehands & 1);
+			this.usehands = usehands;
 		}
 
 		public byte getComputedBaseFlags() {
@@ -82,7 +82,7 @@ public class PlayerEntityMetadataRemapper extends LivingEntityMetadataRemapper {
 						transformer.updateBaseFlags(baseflags.getValue());
 					}
 					if (handuse != null) {
-						transformer.updateUseHands(handuse.getValue());
+						transformer.updateUseHands((byte) (handuse.getValue() & 1));
 					}
 					remapped.add(0, new NetworkEntityMetadataObjectByte(transformer.getComputedBaseFlags()));
 				}
