@@ -5,9 +5,9 @@ import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetada
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBoolean;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
 
-public class IndexValueRemapperBooleanToByte extends IndexValueRemapper<NetworkEntityMetadataObjectBoolean> {
+public class NetworkEntityMetadataIndexValueRemapperBooleanToByte extends NetworkEntityMetadataIndexValueRemapper<NetworkEntityMetadataObjectBoolean> {
 
-	public IndexValueRemapperBooleanToByte(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> fromIndex, int toIndex) {
+	public NetworkEntityMetadataIndexValueRemapperBooleanToByte(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> fromIndex, int toIndex) {
 		super(fromIndex, toIndex);
 	}
 

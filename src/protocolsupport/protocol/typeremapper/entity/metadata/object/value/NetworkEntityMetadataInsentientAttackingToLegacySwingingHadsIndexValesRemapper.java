@@ -6,9 +6,9 @@ import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEnti
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
 import protocolsupport.utils.BitUtils;
 
-public class InsentientAttackingToLegacySwingingHadsIndexValesRemapper extends IndexValueRemapper<NetworkEntityMetadataObjectByte> {
+public class NetworkEntityMetadataInsentientAttackingToLegacySwingingHadsIndexValesRemapper extends NetworkEntityMetadataIndexValueRemapper<NetworkEntityMetadataObjectByte> {
 
-	public InsentientAttackingToLegacySwingingHadsIndexValesRemapper(int toIndex) {
+	public NetworkEntityMetadataInsentientAttackingToLegacySwingingHadsIndexValesRemapper(int toIndex) {
 		super(NetworkEntityMetadataObjectIndex.Insentient.INS_FLAGS, toIndex);
 	}
 

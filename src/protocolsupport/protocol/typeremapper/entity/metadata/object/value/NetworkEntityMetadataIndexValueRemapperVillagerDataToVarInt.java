@@ -5,9 +5,9 @@ import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetada
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVarInt;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVillagerData;
 
-public class IndexValueRemapperVillagerDataToVarInt extends IndexValueRemapper<NetworkEntityMetadataObjectVillagerData> {
+public class NetworkEntityMetadataIndexValueRemapperVillagerDataToVarInt extends NetworkEntityMetadataIndexValueRemapper<NetworkEntityMetadataObjectVillagerData> {
 
-	public IndexValueRemapperVillagerDataToVarInt(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVillagerData> fromIndex, int toIndex) {
+	public NetworkEntityMetadataIndexValueRemapperVillagerDataToVarInt(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVillagerData> fromIndex, int toIndex) {
 		super(fromIndex, toIndex);
 	}
 

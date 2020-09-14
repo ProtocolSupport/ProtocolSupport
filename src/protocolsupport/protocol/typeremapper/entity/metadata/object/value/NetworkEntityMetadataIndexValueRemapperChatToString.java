@@ -6,11 +6,11 @@ import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetada
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectChat;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectString;
 
-public class IndexValueRemapperChatToString extends IndexValueRemapper<NetworkEntityMetadataObjectChat> {
+public class NetworkEntityMetadataIndexValueRemapperChatToString extends NetworkEntityMetadataIndexValueRemapper<NetworkEntityMetadataObjectChat> {
 
 	protected final int limit;
 
-	public IndexValueRemapperChatToString(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectChat> fromIndex, int toIndex, int limit) {
+	public NetworkEntityMetadataIndexValueRemapperChatToString(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectChat> fromIndex, int toIndex, int limit) {
 		super(fromIndex, toIndex);
 		this.limit = limit;
 	}

@@ -3,10 +3,10 @@ package protocolsupport.protocol.typeremapper.entity.metadata.object.value;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 
-public class IndexValueRemapperNoOp extends IndexValueRemapper<NetworkEntityMetadataObject<Object>> {
+public class NetworkEntityMetadataIndexValueRemapperNoOp extends NetworkEntityMetadataIndexValueRemapper<NetworkEntityMetadataObject<Object>> {
 
 	@SuppressWarnings("unchecked")
-	public IndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex<? extends NetworkEntityMetadataObject<?>> fromIndex, int toIndex) {
+	public NetworkEntityMetadataIndexValueRemapperNoOp(NetworkEntityMetadataObjectIndex<? extends NetworkEntityMetadataObject<?>> fromIndex, int toIndex) {
 		super((NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObject<Object>>) fromIndex, toIndex);
 	}
 

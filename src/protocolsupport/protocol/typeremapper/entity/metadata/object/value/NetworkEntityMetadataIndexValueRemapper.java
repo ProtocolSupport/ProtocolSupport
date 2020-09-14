@@ -7,12 +7,12 @@ import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetada
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
-public abstract class IndexValueRemapper<T extends NetworkEntityMetadataObject<?>> extends NetworkEntityMetadataObjectRemapper {
+public abstract class NetworkEntityMetadataIndexValueRemapper<T extends NetworkEntityMetadataObject<?>> extends NetworkEntityMetadataObjectRemapper {
 
 	protected final NetworkEntityMetadataObjectIndex<T> fromIndex;
 	protected final int toIndex;
 
-	public IndexValueRemapper(NetworkEntityMetadataObjectIndex<T> fromIndex, int toIndex) {
+	public NetworkEntityMetadataIndexValueRemapper(NetworkEntityMetadataObjectIndex<T> fromIndex, int toIndex) {
 		this.fromIndex = fromIndex;
 		this.toIndex = toIndex;
 	}

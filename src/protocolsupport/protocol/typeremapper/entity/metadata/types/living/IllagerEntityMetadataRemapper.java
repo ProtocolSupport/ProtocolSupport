@@ -1,6 +1,6 @@
 package protocolsupport.protocol.typeremapper.entity.metadata.types.living;
 
-import protocolsupport.protocol.typeremapper.entity.metadata.object.value.IndexValueRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.NetworkEntityMetadataIndexValueRemapper;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.base.RaidParticipantEntityMetadataRemapper;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
@@ -14,7 +14,7 @@ public class IllagerEntityMetadataRemapper extends RaidParticipantEntityMetadata
 
 	protected IllagerEntityMetadataRemapper() {
 		addRemap(
-			new IndexValueRemapper<NetworkEntityMetadataObjectByte>(NetworkEntityMetadataObjectIndex.Insentient.INS_FLAGS, 12) {
+			new NetworkEntityMetadataIndexValueRemapper<NetworkEntityMetadataObjectByte>(NetworkEntityMetadataObjectIndex.Insentient.INS_FLAGS, 12) {
 				@Override
 				public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObjectByte object) {
 					return new NetworkEntityMetadataObjectByte((byte) (BitUtils.isIBitSet(object.getValue(), NetworkEntityMetadataObjectIndex.Insentient.INS_FLAGS_BIT_ATTACKING) ? 1 : 0));

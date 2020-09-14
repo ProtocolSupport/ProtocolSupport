@@ -8,18 +8,18 @@ import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetada
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalChat;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectString;
 
-public class IndexValueRemapperOptionalChatToString extends IndexValueRemapper<NetworkEntityMetadataObjectOptionalChat> {
+public class NetworkEntityMetadataIndexValueRemapperOptionalChatToString extends NetworkEntityMetadataIndexValueRemapper<NetworkEntityMetadataObjectOptionalChat> {
 
 	public static final int NO_LIMIT = -1;
 
 	protected final int limit;
 
-	public IndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectOptionalChat> fromIndex, int toIndex, int limit) {
+	public NetworkEntityMetadataIndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectOptionalChat> fromIndex, int toIndex, int limit) {
 		super(fromIndex, toIndex);
 		this.limit = limit;
 	}
 
-	public IndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectOptionalChat> fromIndex, int toIndex) {
+	public NetworkEntityMetadataIndexValueRemapperOptionalChatToString(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectOptionalChat> fromIndex, int toIndex) {
 		this(fromIndex, toIndex, NO_LIMIT);
 	}
 

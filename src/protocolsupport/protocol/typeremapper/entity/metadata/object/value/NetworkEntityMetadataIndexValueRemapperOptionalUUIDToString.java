@@ -7,9 +7,9 @@ import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetada
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalUUID;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectString;
 
-public class IndexValueRemapperOptionalUUIDToString extends IndexValueRemapper<NetworkEntityMetadataObjectOptionalUUID> {
+public class NetworkEntityMetadataIndexValueRemapperOptionalUUIDToString extends NetworkEntityMetadataIndexValueRemapper<NetworkEntityMetadataObjectOptionalUUID> {
 
-	public IndexValueRemapperOptionalUUIDToString(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectOptionalUUID> fromIndex, int toIndex) {
+	public NetworkEntityMetadataIndexValueRemapperOptionalUUIDToString(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectOptionalUUID> fromIndex, int toIndex) {
 		super(fromIndex, toIndex);
 	}
 

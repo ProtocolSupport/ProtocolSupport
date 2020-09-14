@@ -2,18 +2,18 @@ package protocolsupport.protocol.typeremapper.entity.metadata.object.value;
 
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectShort;
 
-public final class IndexValueRemapperNumberToByte extends IndexValueRemapper<NetworkEntityMetadataObject<Number>> {
+public class NetworkEntityMetadataIndexValueRemapperNumberToShort extends NetworkEntityMetadataIndexValueRemapper<NetworkEntityMetadataObject<Number>> {
 
 	@SuppressWarnings("unchecked")
-	public IndexValueRemapperNumberToByte(NetworkEntityMetadataObjectIndex<? extends NetworkEntityMetadataObject<? extends Number>> fromIndex, int toIndex) {
+	public NetworkEntityMetadataIndexValueRemapperNumberToShort(NetworkEntityMetadataObjectIndex<? extends NetworkEntityMetadataObject<? extends Number>> fromIndex, int toIndex) {
 		super((NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObject<Number>>) fromIndex, toIndex);
 	}
 
 	@Override
 	public NetworkEntityMetadataObject<?> remapValue(NetworkEntityMetadataObject<Number> object) {
-		return new NetworkEntityMetadataObjectByte(object.getValue().byteValue());
+		return new NetworkEntityMetadataObjectShort(object.getValue().shortValue());
 	}
 
 }
