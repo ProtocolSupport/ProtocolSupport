@@ -19,7 +19,7 @@ public class SpawnLiving extends AbstractRemappedSpawnLiving {
 	protected void writeToClient() {
 		ClientBoundPacketData spawnliving = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_LIVING);
 		VarNumberSerializer.writeVarInt(spawnliving, entity.getId());
-		spawnliving.writeByte(LegacyEntityId.getIntId(rType));
+		spawnliving.writeByte(LegacyEntityId.getIntId(fType));
 		spawnliving.writeInt((int) (x * 32));
 		spawnliving.writeInt((int) (y * 32));
 		spawnliving.writeInt((int) (z * 32));

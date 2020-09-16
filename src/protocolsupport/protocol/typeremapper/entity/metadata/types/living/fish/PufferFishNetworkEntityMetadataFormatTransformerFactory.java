@@ -1,0 +1,17 @@
+package protocolsupport.protocol.typeremapper.entity.metadata.types.living.fish;
+
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+
+public class PufferFishNetworkEntityMetadataFormatTransformerFactory extends FishNetworkEntityMetadataFormatTransformerFactory {
+
+	public static final PufferFishNetworkEntityMetadataFormatTransformerFactory INSTANCE = new PufferFishNetworkEntityMetadataFormatTransformerFactory();
+
+	protected PufferFishNetworkEntityMetadataFormatTransformerFactory() {
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.PufferFish.PUFF_STATE, 16), ProtocolVersionsHelper.UP_1_15);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.PufferFish.PUFF_STATE, 15), ProtocolVersionsHelper.ALL_1_14);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.PufferFish.PUFF_STATE, 13), ProtocolVersionsHelper.ALL_1_13);
+	}
+
+}

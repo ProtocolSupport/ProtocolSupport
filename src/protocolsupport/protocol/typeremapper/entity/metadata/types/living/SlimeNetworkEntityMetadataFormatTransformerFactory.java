@@ -1,0 +1,21 @@
+package protocolsupport.protocol.typeremapper.entity.metadata.types.living;
+
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.NetworkEntityMetadataObjectIndexValueNumberToByteTransformer;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+
+public class SlimeNetworkEntityMetadataFormatTransformerFactory extends InsentientNetworkEntityMetadataFormatTransformerFactory {
+
+	public static final SlimeNetworkEntityMetadataFormatTransformerFactory INSTANCE = new SlimeNetworkEntityMetadataFormatTransformerFactory();
+
+	protected SlimeNetworkEntityMetadataFormatTransformerFactory() {
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Slime.SIZE, 15), ProtocolVersionsHelper.UP_1_15);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Slime.SIZE, 14), ProtocolVersionsHelper.ALL_1_14);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Slime.SIZE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Slime.SIZE, 11), ProtocolVersionsHelper.ALL_1_9);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNumberToByteTransformer(NetworkEntityMetadataObjectIndex.Slime.SIZE, 16), ProtocolVersionsHelper.DOWN_1_8);
+	}
+
+}

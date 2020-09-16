@@ -9,7 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.base.TameableEntityMetadataRemapper;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.base.TameableNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.types.UsedHand;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
@@ -45,7 +45,7 @@ public class UseEntity extends AbstractSneakingCacheUseEntity {
 	protected void handleReadData() {
 		if ((hand == UsedHand.OFF) && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_14_4)) {
 			NetworkEntity entity = entityCache.getEntity(entityId);
-			if ((entity != null) && clientCache.getUUID().equals(entity.getDataCache().getData(TameableEntityMetadataRemapper.DATA_KEY_OWNER))) {
+			if ((entity != null) && clientCache.getUUID().equals(entity.getDataCache().getData(TameableNetworkEntityMetadataFormatTransformerFactory.DATA_KEY_OWNER))) {
 				throw CancelMiddlePacketException.INSTANCE;
 			}
 		}

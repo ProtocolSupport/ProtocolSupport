@@ -16,9 +16,9 @@ public abstract class AbstractUseBedPacketEntityMetadata extends AbstractRemappe
 
 	@Override
 	public void writeToClient() {
-		codec.write(createEntityMetadata(rMetadata));
+		codec.write(createEntityMetadata(fMetadata));
 
-		if (entity.getType() == NetworkEntityType.PLAYER) {
+		if (lType == NetworkEntityType.PLAYER) {
 			NetworkEntityMetadataObjectOptionalPosition bedpositionObject = NetworkEntityMetadataObjectIndex.EntityLiving.BED_LOCATION.getObject(metadata);
 			if (bedpositionObject != null) {
 				Position bedposition = bedpositionObject.getValue();

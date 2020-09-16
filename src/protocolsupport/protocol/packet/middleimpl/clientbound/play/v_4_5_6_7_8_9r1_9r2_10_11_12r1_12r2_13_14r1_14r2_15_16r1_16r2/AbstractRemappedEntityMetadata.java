@@ -1,9 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2;
 
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
-import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
-import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
-import protocolsupport.protocol.typeremapper.entity.metadata.object.NetworkEntityMetadataObjectRemapper;
+import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry;
+import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry.LegacyNetworkEntityEntry;
+import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry.LegacyNetworkEntityTable;
+import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry;
+import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry.NetworkEntityDataFormatTransformerTable;
+import protocolsupport.protocol.typeremapper.entity.NetworkEntityTransformHelper;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class AbstractRemappedEntityMetadata extends AbstractKnownEntityMetadata {
 
@@ -11,24 +15,25 @@ public abstract class AbstractRemappedEntityMetadata extends AbstractKnownEntity
 		super(init);
 	}
 
-	protected final EntityRemappingTable entityRemapTable = EntityRemappersRegistry.REGISTRY.getTable(version);
+	protected final LegacyNetworkEntityTable legacyEntityEntryTable = LegacyNetworkEntityRegistry.INSTANCE.getTable(version);
+	protected final NetworkEntityDataFormatTransformerTable entityDataFormatTable = NetworkEntityDataFormatTransformRegistry.INSTANCE.getTable(version);
 
-	protected final NetworkEntityMetadataList rMetadata = new NetworkEntityMetadataList();
+	protected NetworkEntityType lType;
+	protected final NetworkEntityMetadataList fMetadata = new NetworkEntityMetadataList();
 
 	@Override
 	protected void handleReadData() {
 		super.handleReadData();
 
-		for (NetworkEntityMetadataObjectRemapper remapper : entityRemapTable.getRemap(entity.getType()).getRight()) {
-			remapper.remap(entity, metadata, rMetadata);
-		}
-		entity.getDataCache().unsetFirstMeta();
+		LegacyNetworkEntityEntry legacyEntityEntry = legacyEntityEntryTable.get(entity.getType());
+		lType = legacyEntityEntry.getType();
+		NetworkEntityTransformHelper.transformMetadata(entity, metadata, legacyEntityEntry, entityDataFormatTable, fMetadata);
 	}
 
 	@Override
 	protected void cleanup() {
 		super.cleanup();
-		rMetadata.clear();
+		fMetadata.clear();
 	}
 
 }

@@ -11,8 +11,10 @@ import java.util.function.Function;
 import java.util.function.ObjIntConsumer;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
-import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
+import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry;
+import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry.LegacyNetworkEntityTable;
+import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry;
+import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry.NetworkEntityDataFormatTransformerTable;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHeadToDragonPlayerHeadComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyUUIDComplexRemapper;
@@ -92,7 +94,8 @@ public class TileEntityRemapper {
 		registerPerVersion(
 			TileEntityType.MOB_SPAWNER,
 			version -> {
-				EntityRemappingTable entityRemapTable = EntityRemappersRegistry.REGISTRY.getTable(version);
+				LegacyNetworkEntityTable legacyEntityEntryTable = LegacyNetworkEntityRegistry.INSTANCE.getTable(version);
+				NetworkEntityDataFormatTransformerTable entityDataFormatTable = NetworkEntityDataFormatTransformRegistry.INSTANCE.getTable(version);
 				return tile -> {
 					NBTCompound nbt = tile.getNBT();
 					NBTCompound spawndataTag = nbt.getCompoundTagOrNull(CommonNBT.MOB_SPAWNER_SPAWNDATA);
@@ -107,7 +110,8 @@ public class TileEntityRemapper {
 							type = NetworkEntityType.PIG;
 						}
 					}
-					spawndataTag.setTag("id", new NBTString(entityRemapTable.getRemap(type).getLeft().getKey()));
+					//TODO: also handle additioanl nbt data
+					spawndataTag.setTag("id", new NBTString(entityDataFormatTable.get(legacyEntityEntryTable.get(type).getType()).getKey().getKey()));
 				};
 			},
 			ProtocolVersionsHelper.ALL_PC

@@ -1,0 +1,18 @@
+package protocolsupport.protocol.typeremapper.entity.metadata.types.living.tameable;
+
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.base.TameableNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+
+public class ParrotNetworkEntityMetadataFormatTransformerFactory extends TameableNetworkEntityMetadataFormatTransformerFactory {
+
+	public static final ParrotNetworkEntityMetadataFormatTransformerFactory INSTANCE = new ParrotNetworkEntityMetadataFormatTransformerFactory();
+
+	protected ParrotNetworkEntityMetadataFormatTransformerFactory() {
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Parrot.VARIANT, 18), ProtocolVersionsHelper.UP_1_15);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Parrot.VARIANT, 17), ProtocolVersionsHelper.ALL_1_14);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Parrot.VARIANT, 15), ProtocolVersionsHelper.RANGE__1_12__1_13_2);
+	}
+
+}

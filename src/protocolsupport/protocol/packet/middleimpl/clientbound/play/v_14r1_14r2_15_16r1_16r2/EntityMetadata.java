@@ -19,7 +19,7 @@ public class EntityMetadata extends AbstractRemappedEntityMetadata {
 	public void writeToClient() {
 		ClientBoundPacketData entitymetadata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
 		VarNumberSerializer.writeVarInt(entitymetadata, entityId);
-		NetworkEntityMetadataSerializer.writeData(entitymetadata, version, clientCache.getLocale(), rMetadata);
+		NetworkEntityMetadataSerializer.writeData(entitymetadata, version, clientCache.getLocale(), fMetadata);
 		codec.write(entitymetadata);
 	}
 

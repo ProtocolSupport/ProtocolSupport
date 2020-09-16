@@ -2,10 +2,10 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnLiving;
-import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
-import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
-import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
-import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
+import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry;
+import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry.LegacyNetworkEntityTable;
+import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry;
+import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry.NetworkEntityDataFormatTransformerTable;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class AbstractRemappedSpawnLiving extends MiddleSpawnLiving {
@@ -14,20 +14,24 @@ public abstract class AbstractRemappedSpawnLiving extends MiddleSpawnLiving {
 		super(init);
 	}
 
-	protected final EnumSkippingTable<NetworkEntityType> entitySkipTable = GenericIdSkipper.ENTITY.getTable(version);
-	protected final EntityRemappingTable entityRemapTable = EntityRemappersRegistry.REGISTRY.getTable(version);
+	protected final LegacyNetworkEntityTable legacyEntityEntryTable = LegacyNetworkEntityRegistry.INSTANCE.getTable(version);
+	protected final NetworkEntityDataFormatTransformerTable entityDataFormatTable = NetworkEntityDataFormatTransformRegistry.INSTANCE.getTable(version);
 
-	protected NetworkEntityType rType;
+	protected NetworkEntityType lType;
+	protected NetworkEntityType fType;
 
 	@Override
 	protected void handleReadData() {
-		if (entitySkipTable.isSet(entity.getType())) {
+		NetworkEntityType lLType = legacyEntityEntryTable.get(entity.getType()).getType();
+
+		if (lLType == NetworkEntityType.NONE) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
 
 		super.handleReadData();
 
-		rType = entityRemapTable.getRemap(entity.getType()).getLeft();
+		lType = lLType;
+		fType = entityDataFormatTable.get(lType).getKey();
 	}
 
 }

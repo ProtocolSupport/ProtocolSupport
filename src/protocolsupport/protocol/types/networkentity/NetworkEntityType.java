@@ -7,9 +7,9 @@ import java.util.Map;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
 
+import protocolsupport.protocol.utils.minecraftdata.MinecraftEntityData;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
-import protocolsupport.zplatform.ServerPlatform;
 import protocolsupportbuildprocessor.Preload;
 
 @SuppressWarnings("deprecation")
@@ -145,7 +145,7 @@ public enum NetworkEntityType {
 	}
 
 	public String getKey() {
-		return bukkitType != null ? NamespacedKey.minecraft(bukkitType.getName()).toString() : "";
+		return bukkitType != EntityType.UNKNOWN ? bukkitType.getKey().toString() : "";
 	}
 
 	public EntityType getBukkitType() {
@@ -196,7 +196,7 @@ public enum NetworkEntityType {
 	NetworkEntityType(EType etype, EntityType bukkitType, NetworkEntityType superType) {
 		this.etype = etype;
 		this.bukkitType = bukkitType;
-		this.typeId = ServerPlatform.get().getMiscUtils().getEntityTypeNetworkId(bukkitType);
+		this.typeId = MinecraftEntityData.getIdByName(getKey());
 		this.superType = superType;
 	}
 

@@ -17,7 +17,7 @@ public class SpawnObject extends AbstractLocationOffsetSpawnObject {
 		int fpX = (int) (x * 32);
 		int fpY = (int) (y * 32);
 		int fpZ = (int) (z * 32);
-		if (rType == NetworkEntityType.ITEM_FRAME) {
+		if (lType == NetworkEntityType.ITEM_FRAME) {
 			switch (rObjectdata) {
 				case 0: {
 					fpZ -= 32;
@@ -44,7 +44,7 @@ public class SpawnObject extends AbstractLocationOffsetSpawnObject {
 
 		ClientBoundPacketData spawnobject = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		spawnobject.writeInt(entity.getId());
-		spawnobject.writeByte(LegacyEntityId.getObjectIntId(rType));
+		spawnobject.writeByte(LegacyEntityId.getObjectIntId(fType));
 		spawnobject.writeInt(fpX);
 		spawnobject.writeInt(fpY);
 		spawnobject.writeInt(fpZ);

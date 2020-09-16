@@ -20,7 +20,7 @@ public class MinecraftPotionData {
 	}
 
 	static {
-		JsonObject rootObject = ResourceUtils.getAsJson(MinecraftData.getResourcePath("potions.json"));
+		JsonObject rootObject = ResourceUtils.getAsJson(MinecraftDataResourceUtils.getResourcePath("potions.json"));
 		for (String potionidString : rootObject.keySet()) {
 			register(Integer.parseInt(potionidString), JsonUtils.getString(rootObject, potionidString));
 		}

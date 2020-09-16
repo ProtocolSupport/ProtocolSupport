@@ -1,0 +1,24 @@
+package protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse;
+
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.NetworkEntityMetadataObjectIndexValueNumberToIntTransformer;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AgeableNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+
+public class BaseHorseNetworkEntityMetadataFormatTransformerFactory extends AgeableNetworkEntityMetadataFormatTransformerFactory {
+
+	public static final BaseHorseNetworkEntityMetadataFormatTransformerFactory INSTANCE = new BaseHorseNetworkEntityMetadataFormatTransformerFactory();
+
+	protected BaseHorseNetworkEntityMetadataFormatTransformerFactory() {
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.BaseHorse.HORSE_FLAGS, 16), ProtocolVersionsHelper.UP_1_15);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.BaseHorse.HORSE_FLAGS, 15), ProtocolVersionsHelper.ALL_1_14);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.BaseHorse.HORSE_FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.BaseHorse.HORSE_FLAGS, 12), ProtocolVersionsHelper.ALL_1_9);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNumberToIntTransformer(NetworkEntityMetadataObjectIndex.BaseHorse.HORSE_FLAGS, 16), ProtocolVersionsHelper.DOWN_1_8);
+
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.BaseHorse.OWNER, 17), ProtocolVersionsHelper.UP_1_15);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.BaseHorse.OWNER, 16), ProtocolVersionsHelper.ALL_1_14);
+	}
+
+}

@@ -12,28 +12,12 @@ import protocolsupport.protocol.typeremapper.utils.SkippingTable.ArrayBasedIntSk
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkippingTable;
 import protocolsupport.protocol.types.WindowType;
-import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftPotionData;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
 public class GenericIdSkipper {
-
-	public static final EnumSkippingRegistry<NetworkEntityType, EnumSkippingTable<NetworkEntityType>> ENTITY = new EnumSkippingRegistry<NetworkEntityType, EnumSkippingTable<NetworkEntityType>>() {
-		{
-			register(NetworkEntityType.AREA_EFFECT_CLOUD, ProtocolVersionsHelper.DOWN_1_8);
-			register(NetworkEntityType.ARMOR_STAND_MOB, ProtocolVersionsHelper.DOWN_1_7_10);
-			register(NetworkEntityType.ARMOR_STAND_OBJECT, ProtocolVersionsHelper.DOWN_1_7_10);
-			register(NetworkEntityType.LEASH_KNOT, ProtocolVersionsHelper.DOWN_1_5_2);
-		}
-
-		@Override
-		protected EnumSkippingTable<NetworkEntityType> createTable() {
-			return new EnumSkippingTable<>(NetworkEntityType.class);
-		}
-
-	};
 
 	public static final GenericSkippingRegistry<String, GenericSkippingTable<String>> ENCHANT = new GenericSkippingRegistry<String, GenericSkippingTable<String>>() {
 		{

@@ -8,6 +8,13 @@ import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEnti
 
 public class NetworkEntityMetadataObjectVillagerData extends ReadableNetworkEntityMetadataObject<VillagerData> {
 
+	public NetworkEntityMetadataObjectVillagerData() {
+	}
+
+	public NetworkEntityMetadataObjectVillagerData(VillagerData vdata) {
+		this.value = vdata;
+	}
+
 	@Override
 	public void readFromStream(ByteBuf from) {
 		value = new VillagerData(VarNumberSerializer.readVarInt(from), VarNumberSerializer.readVarInt(from), VarNumberSerializer.readVarInt(from));

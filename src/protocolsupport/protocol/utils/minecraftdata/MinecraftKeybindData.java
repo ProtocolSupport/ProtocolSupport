@@ -12,7 +12,7 @@ public class MinecraftKeybindData {
 	protected static final HashMap<String, String> nameToKeyRepr = new HashMap<>();
 
 	static {
-		ResourceUtils.getAsBufferedReader(MinecraftData.getResourcePath("keybinds")).lines()
+		ResourceUtils.getAsBufferedReader(MinecraftDataResourceUtils.getResourcePath("keybinds")).lines()
 		.filter(line -> !line.isEmpty())
 		.forEach(line -> {
 			String[] split = line.split("[:]");

@@ -9,10 +9,6 @@ import protocolsupport.api.MaterialAPI;
 
 public class MinecraftData {
 
-	public static String getResourcePath(String name) {
-		return ("data/" + name);
-	}
-
 	public static final int ITEM_COUNT = (int) getItems().count();
 
 	public static final int BLOCK_COUNT = (int) getBlocks().count();

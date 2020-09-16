@@ -12,7 +12,7 @@ public class MinecraftBlockData {
 	protected static final BlockDataEntry[] blocks = new BlockDataEntry[MinecraftData.BLOCKDATA_COUNT];
 
 	static {
-		JsonObject rootObject = ResourceUtils.getAsJson(MinecraftData.getResourcePath("blocks.json"));
+		JsonObject rootObject = ResourceUtils.getAsJson(MinecraftDataResourceUtils.getResourcePath("blocks.json"));
 		for (String blockdataidString : rootObject.keySet()) {
 			JsonObject blockdataObject = JsonUtils.getJsonObject(rootObject, blockdataidString);
 			JsonObject soundsObject = JsonUtils.getJsonObject(blockdataObject, "sounds");

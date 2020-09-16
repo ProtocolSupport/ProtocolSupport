@@ -21,7 +21,6 @@ import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_16_R2.util.CraftIconCache;
 import org.bukkit.craftbukkit.v1_16_R2.util.CraftMagicNumbers;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
@@ -46,7 +45,6 @@ import net.minecraft.server.v1_16_R2.Block;
 import net.minecraft.server.v1_16_R2.DedicatedServer;
 import net.minecraft.server.v1_16_R2.DedicatedServerProperties;
 import net.minecraft.server.v1_16_R2.EntityPlayer;
-import net.minecraft.server.v1_16_R2.EntityTypes;
 import net.minecraft.server.v1_16_R2.EnumProtocol;
 import net.minecraft.server.v1_16_R2.IRegistry;
 import net.minecraft.server.v1_16_R2.Item;
@@ -153,18 +151,6 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public AbstractHandshakeListener createHandshakeListener(NetworkManagerWrapper networkmanager) {
 		return new SpigotHandshakeListener(networkmanager);
-	}
-
-	@Override
-	public int getEntityTypeNetworkId(EntityType type) {
-		if (type == EntityType.UNKNOWN) {
-			return -1;
-		}
-		return
-			EntityTypes.a(type.getKey().toString())
-			.map(IRegistry.ENTITY_TYPE::a)
-			.orElse(Integer.valueOf(-1))
-			.intValue();
 	}
 
 	@Override

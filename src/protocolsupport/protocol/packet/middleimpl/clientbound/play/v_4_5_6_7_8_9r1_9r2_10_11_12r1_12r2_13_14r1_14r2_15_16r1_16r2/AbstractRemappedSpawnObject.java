@@ -2,37 +2,41 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
-import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry;
 import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry.ObjectDataRemappingTable;
-import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry;
-import protocolsupport.protocol.typeremapper.entity.EntityRemappersRegistry.EntityRemappingTable;
-import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
+import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry;
+import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry.LegacyNetworkEntityTable;
+import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry;
+import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry.NetworkEntityDataFormatTransformerTable;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class AbstractRemappedSpawnObject extends MiddleSpawnObject {
-
-	protected final EnumSkippingTable<NetworkEntityType> entitySkipTable = GenericIdSkipper.ENTITY.getTable(version);
-	protected final EntityRemappingTable entityRemapTable = EntityRemappersRegistry.REGISTRY.getTable(version);
-	protected final ObjectDataRemappingTable entityObjectDataRemapTable = ObjectDataRemappersRegistry.REGISTRY.getTable(version);
 
 	public AbstractRemappedSpawnObject(MiddlePacketInit init) {
 		super(init);
 	}
 
-	protected NetworkEntityType rType;
+	protected final LegacyNetworkEntityTable legacyEntityEntryTable = LegacyNetworkEntityRegistry.INSTANCE.getTable(version);
+	protected final NetworkEntityDataFormatTransformerTable entityDataFormatTable = NetworkEntityDataFormatTransformRegistry.INSTANCE.getTable(version);
+	protected final ObjectDataRemappingTable entityObjectDataRemapTable = ObjectDataRemappersRegistry.REGISTRY.getTable(version);
+
+	protected NetworkEntityType lType;
+	protected NetworkEntityType fType;
 	protected int rObjectdata;
 
 	@Override
 	protected void handleReadData() {
-		if (entitySkipTable.isSet(entity.getType())) {
+		NetworkEntityType lLType = legacyEntityEntryTable.get(entity.getType()).getType();
+
+		if (lLType == NetworkEntityType.NONE) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
 
 		super.handleReadData();
 
-		rType = entityRemapTable.getRemap(entity.getType()).getLeft();
-		rObjectdata = entityObjectDataRemapTable.getRemap(rType).applyAsInt(objectdata);
+		lType = lLType;
+		fType = entityDataFormatTable.get(lType).getKey();
+		rObjectdata = entityObjectDataRemapTable.getRemap(lType).applyAsInt(objectdata);
 	}
 
 }

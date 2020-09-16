@@ -1,0 +1,19 @@
+package protocolsupport.protocol.typeremapper.entity.metadata.types.living;
+
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.base.InsentientNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+
+public class EnderDragonNetworkEntityMetadataFormatTransformerFactory extends InsentientNetworkEntityMetadataFormatTransformerFactory {
+
+	public static final EnderDragonNetworkEntityMetadataFormatTransformerFactory INSTANCE = new EnderDragonNetworkEntityMetadataFormatTransformerFactory();
+
+	protected EnderDragonNetworkEntityMetadataFormatTransformerFactory() {
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.EnderDragon.PHASE, 15), ProtocolVersionsHelper.UP_1_15);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.EnderDragon.PHASE, 14), ProtocolVersionsHelper.ALL_1_14);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.EnderDragon.PHASE, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.EnderDragon.PHASE, 11), ProtocolVersionsHelper.ALL_1_9);
+	}
+
+}

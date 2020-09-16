@@ -7,13 +7,13 @@ import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.serializer.UUIDSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.entity.FlatteningEntityId;
+import protocolsupport.protocol.typeremapper.entity.FlatteningNetworkEntityId;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.utils.i18n.I18NData;
 
 public class SpawnLiving extends AbstractRemappedSpawnLiving {
 
-	protected final ArrayBasedIntMappingTable flatteningEntityIdTable = FlatteningEntityId.REGISTRY.getTable(version);
+	protected final ArrayBasedIntMappingTable flatteningEntityIdTable = FlatteningNetworkEntityId.REGISTRY.getTable(version);
 
 	public SpawnLiving(MiddlePacketInit init) {
 		super(init);
@@ -24,7 +24,7 @@ public class SpawnLiving extends AbstractRemappedSpawnLiving {
 		ClientBoundPacketData spawnliving = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_LIVING);
 		VarNumberSerializer.writeVarInt(spawnliving, entity.getId());
 		UUIDSerializer.writeUUID2L(spawnliving, entity.getUUID());
-		VarNumberSerializer.writeVarInt(spawnliving, flatteningEntityIdTable.get(rType.getNetworkTypeId()));
+		VarNumberSerializer.writeVarInt(spawnliving, flatteningEntityIdTable.get(fType.getNetworkTypeId()));
 		spawnliving.writeDouble(x);
 		spawnliving.writeDouble(y);
 		spawnliving.writeDouble(z);

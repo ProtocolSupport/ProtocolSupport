@@ -50,11 +50,28 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		}
 		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 			ProtocolSupport.logWarning(MessageFormat.format(
-				"Wrong metadata type for entity type {0} index {1}, expected {2}, got {3}",
+				"Got wrong metadata type for entity type {0} index {1}, expected {2}, got {3}",
 				entityClass.getSimpleName(), index, expectedDWObjectType.getName(), object.getClass().getName()
 			));
 		}
 		return null;
+	}
+
+	public void setObject(ArrayMap<NetworkEntityMetadataObject<?>> metadata, T object) {
+		if (object == null) {
+			metadata.put(index, null);
+			return;
+		}
+		if (expectedDWObjectType.isInstance(object)) {
+			metadata.put(index, object);
+			return;
+		}
+		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
+			ProtocolSupport.logWarning(MessageFormat.format(
+				"Attempted to set wrong metadata type for entity type {0} index {1}, expected {2}, got {3}",
+				entityClass.getSimpleName(), index, expectedDWObjectType.getName(), object.getClass().getName()
+			));
+		}
 	}
 
 	public static class Entity {
@@ -321,9 +338,12 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> USING_CROSSBOW = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 	}
 
-	public static class Piglin extends Insentient {
-		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> IS_BABY = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
+	public static class BasePiglin extends Insentient {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> ZOMBIFICATION_IMMUNITY = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
+	}
+
+	public static class Piglin extends BasePiglin {
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> IS_BABY = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> USING_CROSSBOW = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> DANDCING = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 	}

@@ -1,0 +1,17 @@
+package protocolsupport.protocol.typeremapper.entity.metadata.types.living.ageable;
+
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.base.AgeableNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+
+public class MushroomCowNetworkEntityMetadataFormatTransformerFactory extends AgeableNetworkEntityMetadataFormatTransformerFactory {
+
+	public static final MushroomCowNetworkEntityMetadataFormatTransformerFactory INSTANCE = new MushroomCowNetworkEntityMetadataFormatTransformerFactory();
+
+	protected MushroomCowNetworkEntityMetadataFormatTransformerFactory() {
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MushroomCow.VARIANT, 16), ProtocolVersionsHelper.UP_1_15);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MushroomCow.VARIANT, 15), ProtocolVersionsHelper.ALL_1_14);
+	}
+
+}

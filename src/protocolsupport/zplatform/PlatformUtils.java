@@ -10,7 +10,6 @@ import javax.crypto.SecretKey;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
@@ -33,8 +32,6 @@ public interface PlatformUtils {
 	public ItemStack createBukkitItemStackFromNetwork(NetworkItemStack stack);
 
 	public NetworkItemStack createNetworkItemStackFromBukkit(ItemStack itemstack);
-
-	public int getEntityTypeNetworkId(EntityType type);
 
 	public int getItemNetworkId(Material material);
 

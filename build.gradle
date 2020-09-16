@@ -79,6 +79,10 @@ repositories {
 	}
 }
 
+configurations {
+	runtimeDependencies
+}
+
 dependencies {
 	Path spigotBuildDirectoryPath = projectBuildDirectoryPath.resolve('spigot')
 	FileCollection runtimeLibraries = ManualGradleDependencySupplier.supplyDependecies(
@@ -100,26 +104,28 @@ dependencies {
 
 	FileCollection annotationProcessors = fileTree(dir: projectDirectoryPath.resolve('processors'), include: '*.jar')
 
-	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
-	compile group: 'it.unimi.dsi', name: 'fastutil', version: '8.2.2'
-	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
-	compileOnly group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.2-R0.1-SNAPSHOT'
-	compileOnly annotationProcessors
-	compileOnly runtimeLibraries
+	runtimeDependencies group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.2-R0.1-SNAPSHOT'
+	runtimeDependencies annotationProcessors
+	runtimeDependencies runtimeLibraries
+
+
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+	implementation group: 'it.unimi.dsi', name: 'fastutil', version: '8.2.2'
+	implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
+
+	compileOnly configurations.runtimeDependencies
 
 	annotationProcessor annotationProcessors
 
-	testCompile group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.2-R0.1-SNAPSHOT'
-	testCompile runtimeLibraries
-	testCompile annotationProcessors
-	testCompile 'org.junit.jupiter:junit-jupiter-api:5.2.0'
+	testImplementation configurations.runtimeDependencies
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.2.0'
 	testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
 }
 
 compileJava {
 	doFirst {
-	    classpath -= configurations.compileOnly
-	    classpath += configurations.compileOnly
+	    classpath -= configurations.runtimeDependencies
+	    classpath += configurations.runtimeDependencies
 	}
 
 	options.encoding = 'UTF-8'
@@ -129,8 +135,14 @@ compileJava {
 
 
 test {
+	doFirst {
+	    classpath -= configurations.runtimeDependencies
+	    classpath += configurations.runtimeDependencies
+	}
+
 	useJUnitPlatform()
 }
+
 
 
 task generateLocaleList(type: DefaultTask) {doLast{

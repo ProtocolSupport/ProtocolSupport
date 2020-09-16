@@ -16,7 +16,7 @@ public class SpawnObject extends AbstractThunderboltSpawnObject {
 	protected void writeSpawnObject() {
 		ClientBoundPacketData spawnobject = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		VarNumberSerializer.writeVarInt(spawnobject, entity.getId());
-		spawnobject.writeByte(LegacyEntityId.getObjectIntId(rType));
+		spawnobject.writeByte(LegacyEntityId.getObjectIntId(fType));
 		spawnobject.writeInt((int) (x * 32));
 		spawnobject.writeInt((int) (y * 32));
 		spawnobject.writeInt((int) (z * 32));

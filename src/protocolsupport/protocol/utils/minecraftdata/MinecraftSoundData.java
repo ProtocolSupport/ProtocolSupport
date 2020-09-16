@@ -16,7 +16,7 @@ public class MinecraftSoundData {
 	}
 
 	static {
-		JsonObject rootObject = ResourceUtils.getAsJson(MinecraftData.getResourcePath("sounds.json"));
+		JsonObject rootObject = ResourceUtils.getAsJson(MinecraftDataResourceUtils.getResourcePath("sounds.json"));
 		for (String soundidString : rootObject.keySet()) {
 			register(Integer.parseInt(soundidString), JsonUtils.getString(rootObject, soundidString));
 		}

@@ -1,0 +1,20 @@
+package protocolsupport.protocol.typeremapper.entity.metadata.types.object;
+
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.entity.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.base.BaseNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+
+public class PotionNetworkEntityMetadataFormatTransformerFactoryFactory extends BaseNetworkEntityMetadataFormatTransformerFactory {
+
+	public static final PotionNetworkEntityMetadataFormatTransformerFactoryFactory INSTANCE = new PotionNetworkEntityMetadataFormatTransformerFactoryFactory();
+
+	protected PotionNetworkEntityMetadataFormatTransformerFactoryFactory() {
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Potion.ITEM, 7), ProtocolVersionsHelper.UP_1_14);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Potion.ITEM, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Potion.ITEM, 7), ProtocolVersion.MINECRAFT_1_10);
+		addTransformer(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Potion.ITEM, 5), ProtocolVersionsHelper.ALL_1_9);
+	}
+
+}
