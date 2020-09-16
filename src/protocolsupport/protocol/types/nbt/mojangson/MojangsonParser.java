@@ -183,6 +183,9 @@ public class MojangsonParser {
 			if (Character.isWhitespace(firstChar)) {
 				firstChar = skipWhitespace(reader);
 			}
+			if (firstChar == MojangsonConstants.array_end) {
+				return new NBTList<>(NBTType.END);
+			}
 			NBT firstValue = read(firstChar, reader);
 			arrayReaderHelper = new GenericNBTListArrayReaderHelper((NBTType<NBT>) firstValue.getType());
 			arrayReaderHelper.addElement(firstValue);
