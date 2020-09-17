@@ -9,8 +9,8 @@ import org.bukkit.Material;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftItemData;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
-import protocolsupport.zplatform.ServerPlatform;
 import protocolsupportbuildprocessor.Preload;
 
 @SuppressWarnings("deprecation")
@@ -26,7 +26,7 @@ public class ItemMaterialLookup {
 		Arrays.stream(Material.values())
 		.filter(m -> !m.isLegacy())
 		.forEach(material -> {
-			int id = ServerPlatform.get().getMiscUtils().getItemNetworkId(material);
+			int id = MinecraftItemData.getIdByName(material.getKey().toString());
 			if (id != -1) {
 				byKey.put(material.getKey().getKey(), material);
 				byKey.put(material.getKey().toString(), material);

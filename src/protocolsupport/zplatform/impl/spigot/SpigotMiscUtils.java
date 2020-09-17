@@ -167,12 +167,6 @@ public class SpigotMiscUtils implements PlatformUtils {
 	}
 
 	@Override
-	public int getItemNetworkId(Material material) {
-		Item item = CraftMagicNumbers.getItem(material);
-		return item != null ? Item.getId(item) : -1;
-	}
-
-	@Override
 	public int getBlockDataNetworkId(BlockData blockdata) {
 		return Block.getCombinedId(((CraftBlockData) blockdata).getState());
 	}

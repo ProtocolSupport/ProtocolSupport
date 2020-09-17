@@ -33,8 +33,6 @@ public interface PlatformUtils {
 
 	public NetworkItemStack createNetworkItemStackFromBukkit(ItemStack itemstack);
 
-	public int getItemNetworkId(Material material);
-
 	public int getBlockDataNetworkId(BlockData blockdata);
 
 	public int getBlockNetworkId(Material material);
