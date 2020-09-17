@@ -36,6 +36,11 @@ public class ClickAction {
 	}
 
 	@Override
+	public ClickAction clone() {
+		return new ClickAction(type, value);
+	}
+
+	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);
 	}

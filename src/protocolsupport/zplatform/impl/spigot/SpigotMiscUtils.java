@@ -46,6 +46,8 @@ import net.minecraft.server.v1_16_R2.DedicatedServer;
 import net.minecraft.server.v1_16_R2.DedicatedServerProperties;
 import net.minecraft.server.v1_16_R2.EntityPlayer;
 import net.minecraft.server.v1_16_R2.EnumProtocol;
+import net.minecraft.server.v1_16_R2.IChatBaseComponent;
+import net.minecraft.server.v1_16_R2.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_16_R2.IRegistry;
 import net.minecraft.server.v1_16_R2.Item;
 import net.minecraft.server.v1_16_R2.NBTCompressedStreamTools;
@@ -53,6 +55,8 @@ import net.minecraft.server.v1_16_R2.NBTReadLimiter;
 import net.minecraft.server.v1_16_R2.PlayerConnection;
 import net.minecraft.server.v1_16_R2.ServerConnection;
 import net.minecraft.server.v1_16_R2.WorldServer;
+import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.api.utils.Profile;
 import protocolsupport.protocol.ConnectionImpl;
@@ -132,6 +136,10 @@ public class SpigotMiscUtils implements PlatformUtils {
 			.collect(Collectors.toList()))
 		);
 		return mojangGameProfile;
+	}
+
+	public static IChatBaseComponent toPlatformMessage(BaseComponent message) {
+		return ChatSerializer.a(ChatAPI.toJSON(message));
 	}
 
 	@Override

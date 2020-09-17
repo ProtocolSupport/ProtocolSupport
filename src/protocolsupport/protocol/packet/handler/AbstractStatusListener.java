@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.netty.channel.ChannelFutureListener;
 import protocolsupport.ProtocolSupport;
+import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.utils.pingresponse.PingResponseHandlerProvider;
@@ -19,8 +20,8 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public abstract class AbstractStatusListener {
 
-	private static final int statusThreads = JavaSystemProperty.getValue("statusthreads", 2, Integer::parseInt);
-	private static final int statusThreadKeepAlive = JavaSystemProperty.getValue("statusthreadskeepalive", 60, Integer::parseInt);
+	protected static final int statusThreads = JavaSystemProperty.getValue("statusthreads", 2, Integer::parseInt);
+	protected static final int statusThreadKeepAlive = JavaSystemProperty.getValue("statusthreadskeepalive", 60, Integer::parseInt);
 
 	static {
 		ProtocolSupport.logInfo(MessageFormat.format("Status threads max count: {0}, keep alive time: {1}", statusThreads, statusThreadKeepAlive));
@@ -29,7 +30,7 @@ public abstract class AbstractStatusListener {
 	protected static final Executor statusprocessor = new ThreadPoolExecutor(
 		1, statusThreads,
 		statusThreadKeepAlive, TimeUnit.SECONDS,
-		new LinkedBlockingQueue<Runnable>(),
+		new LinkedBlockingQueue<>(),
 		r -> new Thread(r, "StatusProcessingThread")
 	);
 
@@ -42,7 +43,7 @@ public abstract class AbstractStatusListener {
 
 	public void handleStatusRequest() {
 		if (sentInfo) {
-			networkManager.close("Status request has already been handled.");
+			networkManager.close(new TextComponent("Status request has already been handled"));
 		}
 		sentInfo = true;
 

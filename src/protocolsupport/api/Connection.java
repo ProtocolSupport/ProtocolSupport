@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ReadOnlyByteBuf;
+import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.api.utils.Profile;
 import protocolsupport.protocol.utils.authlib.LoginProfile;
@@ -39,6 +40,13 @@ public abstract class Connection {
 	 * Closes the connection
 	 */
 	public abstract void close();
+
+	/**
+	 * Disconnects client with sending disconnect message <br>
+	 * If sending disconnect message is impossible, just closes the connection
+	 * @param message disconnect message
+	 */
+	public abstract void disconnect(BaseComponent message);
 
 	/**
 	 * Disconnects client with sending disconnect message <br>

@@ -21,8 +21,8 @@ import protocolsupport.utils.Utils;
 
 public class HoverAction {
 
-	private final Type type;
-	private final Object contents;
+	protected final Type type;
+	protected final Object contents;
 
 	@Deprecated
 	public HoverAction(Type type, String value) {
@@ -129,6 +129,24 @@ public class HoverAction {
 	}
 
 	@Override
+	public HoverAction clone() {
+		switch (type) {
+			case SHOW_TEXT: {
+				return new HoverAction(getText().clone());
+			}
+			case SHOW_ITEM: {
+				return new HoverAction(getItemStack().clone());
+			}
+			case SHOW_ENTITY: {
+				return new HoverAction(getEntity().clone());
+			}
+			default: {
+				throw new IllegalStateException("Unknown hover type " + type);
+			}
+		}
+	}
+
+	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);
 	}
@@ -139,9 +157,9 @@ public class HoverAction {
 
 	public static class EntityInfo {
 
-		private final EntityType etype;
-		private final UUID uuid;
-		private final BaseComponent name;
+		protected final EntityType etype;
+		protected final UUID uuid;
+		protected final BaseComponent name;
 
 		public EntityInfo(EntityType etype, UUID uuid, String name) {
 			this(etype, uuid, name != null ? ChatAPI.fromJSON(name, true) : null);
@@ -167,6 +185,12 @@ public class HoverAction {
 
 		public BaseComponent getDisplayName() {
 			return name;
+		}
+
+		@Override
+		public EntityInfo clone() {
+			BaseComponent displayName = getDisplayName();
+			return new EntityInfo(getType(), getUUID(), displayName != null ? displayName.clone() : null);
 		}
 
 		@Deprecated

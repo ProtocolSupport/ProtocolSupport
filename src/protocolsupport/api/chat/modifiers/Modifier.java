@@ -39,7 +39,7 @@ public class Modifier {
 		this.font = font;
 	}
 
-	public Modifier withFont() {
+	public Modifier withFont(String font) {
 		setFont(font);
 		return this;
 	}
@@ -124,6 +124,19 @@ public class Modifier {
 	public Modifier withRandom(Boolean random) {
 		setRandom(random);
 		return this;
+	}
+
+	@Override
+	public Modifier clone() {
+		return
+			new Modifier()
+			.withRGBColor(getRGBColor())
+			.withFont(getFont())
+			.withBold(isBold())
+			.withItalic(isItalic())
+			.withUnderlined(isUnderlined())
+			.withStrikethrough(isStrikethrough())
+			.withRandom(isRandom());
 	}
 
 	@Override

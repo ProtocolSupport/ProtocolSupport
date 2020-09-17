@@ -27,6 +27,8 @@ import io.netty.channel.ChannelPipeline;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.PlayerLoginStartEvent;
 import protocolsupport.api.events.PlayerProfileCompleteEvent;
 import protocolsupport.api.utils.Profile;
@@ -71,7 +73,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 		ThreadLocalRandom.current().nextBytes(randomBytes);
 
 		synchronized (timeoutTaskLock) {
-			this.timeoutTask = connection.getIOExecutor().schedule(() -> disconnect("Took too long to log in"), 30, TimeUnit.SECONDS);
+			this.timeoutTask = connection.getIOExecutor().schedule(() -> disconnect(new TextComponent("Took too long to log in")), 30, TimeUnit.SECONDS);
 		}
 	}
 
@@ -90,13 +92,13 @@ public abstract class AbstractLoginListener implements IPacketListener {
 	}
 
 	@Override
-	public void disconnect(String s) {
+	public void disconnect(BaseComponent message) {
 		try {
-			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + s);
-			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(s), future -> networkManager.close(s));
+			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + message.toLegacyText());
+			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), future -> networkManager.close(message));
 		} catch (Throwable exception) {
 			Bukkit.getLogger().log(Level.SEVERE, "Error whilst disconnecting player", exception);
-			networkManager.close("Error whilst disconnecting player, force closing connection");
+			networkManager.close(new TextComponent("Error whilst disconnecting player, force closing connection"));
 		}
 	}
 
@@ -115,7 +117,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 				PlayerLoginStartEvent event = new PlayerLoginStartEvent(connection);
 				Bukkit.getPluginManager().callEvent(event);
 				if (event.isLoginDenied()) {
-					AbstractLoginListener.this.disconnect(event.getDenyLoginMessage());
+					AbstractLoginListener.this.disconnect(event.getDenyLoginMessageJson());
 					return;
 				}
 
@@ -128,7 +130,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 					loginOffline();
 				}
 			} catch (Throwable t) {
-				AbstractLoginListener.this.disconnect("Error occured while logging in");
+				AbstractLoginListener.this.disconnect(new TextComponent("Error occured while logging in"));
 				if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 					t.printStackTrace();
 				}
@@ -157,7 +159,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 				enableEncryption(loginKey);
 				loginOnline(loginKey);
 			} catch (Throwable t) {
-				AbstractLoginListener.this.disconnect("Error occured while logging in");
+				AbstractLoginListener.this.disconnect(new TextComponent("Error occured while logging in"));
 				if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 					t.printStackTrace();
 				}
@@ -177,7 +179,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 			networkManager.getSpoofedProperties().forEach(profile::addProperty);
 			finishLogin();
 		} catch (Exception exception) {
-			disconnect("Failed to verify username!");
+			disconnect(new TextComponent("Failed to verify username!"));
 			Bukkit.getLogger().log(Level.SEVERE, "Exception verifying " + connection.getProfile().getOriginalName(), exception);
 		}
 	}
@@ -191,10 +193,10 @@ public abstract class AbstractLoginListener implements IPacketListener {
 			);
 			finishLogin();
 		} catch (AuthenticationUnavailableException authenticationunavailableexception) {
-			disconnect("Authentication servers are down. Please try again later, sorry!");
+			disconnect(new TextComponent("Authentication servers are down. Please try again later, sorry!"));
 			Bukkit.getLogger().severe("Couldn't verify username because servers are unavailable");
 		} catch (Exception exception) {
-			disconnect("Failed to verify username!");
+			disconnect(new TextComponent("Failed to verify username!"));
 			Bukkit.getLogger().log(Level.SEVERE, "Exception verifying " + connection.getProfile().getOriginalName(), exception);
 		}
 	}
@@ -214,7 +216,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 		PlayerProfileCompleteEvent event = new PlayerProfileCompleteEvent(connection);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isLoginDenied()) {
-			disconnect(event.getDenyLoginMessage());
+			disconnect(event.getDenyLoginMessageJson());
 			return;
 		}
 		if (event.getForcedName() != null) {
@@ -233,17 +235,14 @@ public abstract class AbstractLoginListener implements IPacketListener {
 			syncEvent.disallow(asyncEvent.getResult(), asyncEvent.getKickMessage());
 		}
 		if (PlayerPreLoginEvent.getHandlerList().getRegisteredListeners().length != 0) {
-			if (ServerPlatform.get().getMiscUtils().callSyncTask(() -> {
+			ServerPlatform.get().getMiscUtils().callSyncTask(() -> {
 				Bukkit.getPluginManager().callEvent(syncEvent);
-				return syncEvent.getResult();
-			}).get() != PlayerPreLoginEvent.Result.ALLOWED) {
-				disconnect(syncEvent.getKickMessage());
-				return;
-			}
+				return null;
+			}).get();
 		}
 
 		if (syncEvent.getResult() != PlayerPreLoginEvent.Result.ALLOWED) {
-			disconnect(syncEvent.getKickMessage());
+			disconnect(BaseComponent.fromMessage(syncEvent.getKickMessage()));
 			return;
 		}
 
@@ -262,11 +261,11 @@ public abstract class AbstractLoginListener implements IPacketListener {
 				));
 				try {
 					if (!waitpacketsend.await(5, TimeUnit.SECONDS)) {
-						disconnect("Timeout while waiting for login success send");
+						disconnect(new TextComponent("Timeout while waiting for login success send"));
 						return;
 					}
 				} catch (InterruptedException e) {
-					disconnect("Exception while waiting for login success send");
+					disconnect(new TextComponent("Interrupt while waiting for login success send"));
 					return;
 				}
 			}

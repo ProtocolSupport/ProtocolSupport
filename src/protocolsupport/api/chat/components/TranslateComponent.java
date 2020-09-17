@@ -6,16 +6,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import protocolsupport.api.TranslationAPI;
-import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 
 /**
- * Chat component that displays translated key and arguments into the current client language <br>
+ * Chat component that displays text int current client language using key and arguments <br>
  * Note: ProtocolSupport always translate components serverside, so this component will never be actually sent to client <br>
- * This unfortunately breaks clientside custom translations, but the don't have other way <br>
- * But it is possible to inject custom serverside translation using {@link TranslationAPI#registerTranslation(String, java.io.InputStream)}
+ * This unfortunately breaks clientside custom translations, but it is possible to inject custom serverside translation using {@link TranslationAPI#registerTranslation(String, java.io.InputStream)}
  */
 public class TranslateComponent extends BaseComponent {
 
@@ -41,7 +37,16 @@ public class TranslateComponent extends BaseComponent {
 
 	@Override
 	public String getValue(String locale) {
-		return TranslationAPI.translate(locale, translationKey, Lists.transform(args, v -> LegacyChat.toText(v, locale)).toArray(new String[0]));
+		String[] legacyArgs = new String[args.size()];
+		for (int i = 0; i < args.size(); i++) {
+			legacyArgs[i] = args.get(i).toLegacyText(locale);
+		}
+		return TranslationAPI.translate(locale, translationKey, legacyArgs);
+	}
+
+	@Override
+	public TranslateComponent cloneThis() {
+		return new TranslateComponent(translationKey, cloneFullList(args));
 	}
 
 }

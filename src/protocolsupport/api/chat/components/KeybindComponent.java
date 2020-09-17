@@ -9,7 +9,8 @@ import protocolsupport.protocol.utils.minecraftdata.MinecraftKeybindData;
  */
 public class KeybindComponent extends BaseComponent {
 
-	private final String keybind;
+	protected final String keybind;
+
 	public KeybindComponent(String keybind) {
 		this.keybind = keybind;
 	}
@@ -22,6 +23,11 @@ public class KeybindComponent extends BaseComponent {
 	public String getValue(String locale) {
 		String keybindtext = MinecraftKeybindData.getKey(keybind);
 		return MessageFormat.format("{0}({1})", keybind, keybindtext != null ? keybindtext : "unknown");
+	}
+
+	@Override
+	public KeybindComponent cloneThis() {
+		return new KeybindComponent(keybind);
 	}
 
 }

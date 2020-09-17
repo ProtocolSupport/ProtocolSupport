@@ -22,6 +22,8 @@ import protocolsupport.api.Connection;
 import protocolsupport.api.Connection.PacketListener.PacketEvent;
 import protocolsupport.api.Connection.PacketListener.RawPacketEvent;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.handler.IPacketListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
@@ -79,14 +81,14 @@ public class ConnectionImpl extends Connection {
 
 	@Override
 	public void close() {
-		networkmanager.close("Force connection close");
+		networkmanager.close(new TextComponent("Force connection close"));
 	}
 
 	@Override
-	public void disconnect(String message) {
+	public void disconnect(BaseComponent message) {
 		Player player = getPlayer();
 		if (player != null) {
-			player.kickPlayer(message);
+			player.kickPlayer(message.toLegacyText());
 			return;
 		}
 		Object packetListener = networkmanager.getPacketListener();
@@ -95,6 +97,11 @@ public class ConnectionImpl extends Connection {
 			return;
 		}
 		close();
+	}
+
+	@Override
+	public void disconnect(String message) {
+		disconnect(BaseComponent.fromMessage(message));
 	}
 
 	@Override

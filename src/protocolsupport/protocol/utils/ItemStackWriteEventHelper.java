@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
-import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ItemStackWriteEvent;
 import protocolsupport.protocol.serializer.chat.ChatSerializer;
 import protocolsupport.protocol.types.NetworkBukkitItemStack;
@@ -38,7 +37,7 @@ public class ItemStackWriteEventHelper {
 						loreNBT = NBTList.createStringList();
 					}
 					for (String lore : additionalLore) {
-						loreNBT.addTag(new NBTString(ChatAPI.toJSON(new TextComponent(lore))));
+						loreNBT.addTag(new NBTString(ChatAPI.toJSON(BaseComponent.fromMessage(lore))));
 					}
 					displayNBT.setTag(CommonNBT.DISPLAY_LORE, loreNBT);
 				}

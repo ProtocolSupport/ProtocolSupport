@@ -29,7 +29,7 @@ public class ServerPingResponseEvent extends ConnectionEvent {
 		ProtocolInfo info, String icon, String motd,
 		int onlinePlayers, int maxPlayers, List<String> players
 	) {
-		this(connection, info, icon, new TextComponent(motd), onlinePlayers, maxPlayers, players);
+		this(connection, info, icon, BaseComponent.fromMessage(motd), onlinePlayers, maxPlayers, players);
 	}
 
 	public ServerPingResponseEvent(
@@ -103,7 +103,7 @@ public class ServerPingResponseEvent extends ConnectionEvent {
 	 * @param motd motd
 	 */
 	public void setMotd(String motd) {
-		setJsonMotd(motd != null ? new TextComponent(motd) : null);
+		setJsonMotd(motd != null ? BaseComponent.fromMessage(motd) : null);
 	}
 
 	/**

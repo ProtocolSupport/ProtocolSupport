@@ -71,4 +71,13 @@ public class NetworkBukkitItemStack extends ItemStack {
 		return result;
 	}
 
+	@Override
+	public ItemStack clone() {
+		ItemStack clone = new ItemStack(getType(), getAmount());
+		if (hasItemMeta()) {
+			clone.setItemMeta(getItemMeta());
+		}
+		return clone;
+	}
+
 }

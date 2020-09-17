@@ -7,6 +7,8 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 
+import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ConnectionHandshakeEvent;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.ConnectionImpl;
@@ -35,7 +37,7 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 					final InetAddress address = networkManager.getAddress().getAddress();
 					if (ThrottleTracker.isEnabled() && !ServerPlatform.get().getMiscUtils().isProxyEnabled()) {
 						if (ThrottleTracker.throttle(address)) {
-							disconnect("Connection throttled! Please wait before reconnecting.");
+							disconnect(new TextComponent("Connection throttled! Please wait before reconnecting."));
 							return;
 						}
 					}
@@ -45,7 +47,7 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 
 				ConnectionImpl connection = ConnectionImpl.getFromChannel(networkManager.getChannel());
 				if (!connection.getVersion().isSupported()) {
-					disconnect(MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replace("'", "''"), ServerPlatform.get().getMiscUtils().getVersionName()));
+					disconnect(BaseComponent.fromMessage(MessageFormat.format(ServerPlatform.get().getMiscUtils().getOutdatedServerMessage().replace("'", "''"), ServerPlatform.get().getMiscUtils().getVersionName())));
 					break;
 				}
 
@@ -55,14 +57,14 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 					connection.changeAddress(event.getSpoofedAddress());
 				}
 				if (event.isLoginDenied()) {
-					disconnect(event.getDenyLoginMessage());
+					disconnect(event.getDenyLoginMessageJson());
 					return;
 				}
 				hostname = event.getHostname();
 				boolean proxyEnabled = event.shouldParseHostname() && ServerPlatform.get().getMiscUtils().isProxyEnabled();
 				SpoofedData sdata = SpoofedDataParser.tryParse(hostname, proxyEnabled);
 				if (sdata.isFailed()) {
-					disconnect(sdata.getFailMessage());
+					disconnect(BaseComponent.fromMessage(sdata.getFailMessage()));
 					return;
 				}
 				if (proxyEnabled) {
@@ -95,11 +97,11 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 	}
 
 	@Override
-	public void disconnect(String message) {
+	public void disconnect(BaseComponent message) {
 		try {
 			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), future -> networkManager.close(message));
 		} catch (Throwable exception) {
-			networkManager.close("Error whilst disconnecting player, force closing connection");
+			networkManager.close(new TextComponent("Error whilst disconnecting player, force closing connection"));
 		}
 	}
 

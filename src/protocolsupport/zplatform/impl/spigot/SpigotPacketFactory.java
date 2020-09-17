@@ -35,13 +35,13 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		return new PacketPlayOutChat(ChatSerializer.a(message), ChatMessageType.a((byte) position), uuid);
 	}
 
-	protected static final BaseComponent empty = new TextComponent("");
+	protected static final BaseComponent emptyMessage = new TextComponent("");
 
 	@Override
 	public Object createTabHeaderFooterPacket(BaseComponent header, BaseComponent footer) {
 		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
-		serializer.a(ChatAPI.toJSON(header != null ? header : empty));
-		serializer.a(ChatAPI.toJSON(footer != null ? footer : empty));
+		serializer.a(ChatAPI.toJSON(header != null ? header : emptyMessage));
+		serializer.a(ChatAPI.toJSON(footer != null ? footer : emptyMessage));
 		PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
 		try {
 			packet.a(serializer);
@@ -76,13 +76,13 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public Object createLoginDisconnectPacket(String message) {
-		return new PacketLoginOutDisconnect(new ChatComponentText(message));
+	public Object createLoginDisconnectPacket(BaseComponent message) {
+		return new PacketLoginOutDisconnect(SpigotMiscUtils.toPlatformMessage(message));
 	}
 
 	@Override
-	public Object createPlayDisconnectPacket(String message) {
-		return new PacketPlayOutKickDisconnect(new ChatComponentText(message));
+	public Object createPlayDisconnectPacket(BaseComponent message) {
+		return new PacketPlayOutKickDisconnect(SpigotMiscUtils.toPlatformMessage(message));
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 
 		ServerPing serverping = new ServerPing();
 		serverping.setFavicon(icon);
-		serverping.setMOTD(ChatSerializer.a(ChatAPI.toJSON(motd)));
+		serverping.setMOTD(SpigotMiscUtils.toPlatformMessage(motd));
 		serverping.setPlayerSample(playerSample);
 		serverping.setServerInfo(new ServerData(info.getName(), info.getId()));
 

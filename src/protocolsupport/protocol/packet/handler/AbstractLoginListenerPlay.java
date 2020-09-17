@@ -13,6 +13,8 @@ import org.bukkit.event.player.PlayerLoginEvent;
 
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.PlayerLoginFinishEvent;
 import protocolsupport.api.events.PlayerSyncLoginEvent;
 import protocolsupport.api.utils.NetworkState;
@@ -65,11 +67,11 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 		);
 		try {
 			if (!waitpacketsend.await(5, TimeUnit.SECONDS)) {
-				disconnect("Timeout while waiting for login success send");
+				disconnect(new TextComponent("Timeout while waiting for login success send"));
 				return;
 			}
 		} catch (InterruptedException e) {
-			disconnect("Exception while waiting for login success send");
+			disconnect(new TextComponent("Interrupt while waiting for login success send"));
 			return;
 		}
 		networkManager.setProtocol(NetworkState.PLAY);
@@ -79,7 +81,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 		PlayerLoginFinishEvent event = new PlayerLoginFinishEvent(connection);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isLoginDenied()) {
-			disconnect(event.getDenyLoginMessage());
+			disconnect(event.getDenyLoginMessageJson());
 			return;
 		}
 
@@ -103,7 +105,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 
 	protected void joinWorld() {
 		if (!ServerPlatform.get().getMiscUtils().isRunning()) {
-			disconnect(org.spigotmc.SpigotConfig.restartMessage);
+			disconnect(BaseComponent.fromMessage(org.spigotmc.SpigotConfig.restartMessage));
 			return;
 		}
 
@@ -121,7 +123,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 		PlayerSyncLoginEvent syncloginevent = new PlayerSyncLoginEvent(connection, joindata.player);
 		Bukkit.getPluginManager().callEvent(syncloginevent);
 		if (syncloginevent.isLoginDenied()) {
-			disconnect(syncloginevent.getDenyLoginMessage());
+			disconnect(syncloginevent.getDenyLoginMessageJson());
 			joindata.close();
 			return;
 		}
@@ -135,7 +137,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 		checkBans(bukkitevent, joindata.data);
 		Bukkit.getPluginManager().callEvent(bukkitevent);
 		if (bukkitevent.getResult() != PlayerLoginEvent.Result.ALLOWED) {
-			disconnect(bukkitevent.getKickMessage());
+			disconnect(BaseComponent.fromMessage(bukkitevent.getKickMessage()));
 			joindata.close();
 			return;
 		}
@@ -150,26 +152,26 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 	}
 
 	@Override
-	public void disconnect(final String s) {
+	public void disconnect(BaseComponent message) {
 		try {
-			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + s);
+			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + message.toLegacyText());
 			ProtocolVersion version = connection.getVersion();
 			if ((version.getProtocolType() == ProtocolType.PC) && version.isBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10)) {
 				//first send join game that will make client actually switch to game state
 				networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createFakeJoinGamePacket());
 				//send disconnect with a little delay
-				connection.getIOExecutor().schedule(() -> disconnect0(s), 50, TimeUnit.MILLISECONDS);
+				connection.getIOExecutor().schedule(() -> disconnectPlay(message), 50, TimeUnit.MILLISECONDS);
 			} else {
-				disconnect0(s);
+				disconnectPlay(message);
 			}
 		} catch (Throwable exception) {
 			Bukkit.getLogger().log(Level.SEVERE, "Error whilst disconnecting player", exception);
-			networkManager.close("Error whilst disconnecting player, force closing connection");
+			networkManager.close(new TextComponent("Error whilst disconnecting player, force closing connection"));
 		}
 	}
 
-	protected void disconnect0(String s) {
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createPlayDisconnectPacket(s), future -> networkManager.close(s));
+	protected void disconnectPlay(BaseComponent message) {
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createPlayDisconnectPacket(message), future -> networkManager.close(message));
 	}
 
 	protected abstract JoinData createJoinData();

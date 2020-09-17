@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.api.utils.ProfileProperty;
 
@@ -46,7 +47,7 @@ public abstract class NetworkManagerWrapper {
 
 	public abstract boolean isConnected();
 
-	public abstract void close(String closeMessage);
+	public abstract void close(BaseComponent closeMessage);
 
 	public abstract void sendPacket(Object packet);
 

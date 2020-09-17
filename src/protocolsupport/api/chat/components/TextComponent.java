@@ -20,4 +20,9 @@ public class TextComponent extends BaseComponent {
 		return text;
 	}
 
+	@Override
+	public TextComponent cloneThis() {
+		return new TextComponent(text);
+	}
+
 }

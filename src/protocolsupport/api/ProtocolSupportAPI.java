@@ -18,7 +18,7 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class ProtocolSupportAPI {
 
-	private static final BigInteger apiversion = BigInteger.valueOf(12);
+	private static final BigInteger apiversion = BigInteger.valueOf(13);
 	/**
 	 * Returns ProtocolSupport API version <br>
 	 * This number is incremented every time API changes (behavior change, method/field added/removed)

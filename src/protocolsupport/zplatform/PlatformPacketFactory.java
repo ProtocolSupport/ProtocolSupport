@@ -26,9 +26,9 @@ public interface PlatformPacketFactory {
 
 	public Object createTitleParamsPacket(int fadeIn, int stay, int fadeOut);
 
-	public Object createLoginDisconnectPacket(String message);
+	public Object createLoginDisconnectPacket(BaseComponent message);
 
-	public Object createPlayDisconnectPacket(String message);
+	public Object createPlayDisconnectPacket(BaseComponent message);
 
 	public Object createLoginEncryptionBeginPacket(PublicKey publicKey, byte[] randomBytes);
 

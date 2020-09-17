@@ -52,4 +52,11 @@ public class ScoreComponent extends BaseComponent {
 		return value != null ? value : "";
 	}
 
+	@Override
+	public ScoreComponent cloneThis() {
+		ScoreComponent clone = new ScoreComponent(playername, objectivename);
+		clone.forcedvalue = forcedvalue;
+		return clone;
+	}
+
 }

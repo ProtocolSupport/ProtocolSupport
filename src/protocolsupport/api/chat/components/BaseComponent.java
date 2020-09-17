@@ -220,7 +220,7 @@ public abstract class BaseComponent {
 	 * Returns component converted to text<br>
 	 * Only converts component itself to text, siblings, modifiers, actions, insertion are not included<br>
 	 * Uses default locale for converting
-	 * @return component converted to text
+	 * @return text
 	 */
 	public String getValue() {
 		return getValue(I18NData.DEFAULT_LOCALE);
@@ -230,15 +230,50 @@ public abstract class BaseComponent {
 	 * Returns component converted to text<br>
 	 * Only converts component itself to text, siblings, modifier, actions, insertion are not included<br>
 	 * @param locale locale
-	 * @return component converted to text
+	 * @return text
 	 */
 	public abstract String getValue(String locale);
+
+	/**
+	 * Deep clone component and all it's parts
+	 * @return component full clone
+	 */
+	@Override
+	public BaseComponent clone() {
+		BaseComponent clone = cloneThis();
+		clone.setModifier(getModifier().clone());
+		HoverAction hover = getHoverAction();
+		if (hover != null) {
+			clone.setHoverAction(hover.clone());
+		}
+		ClickAction click = getClickAction();
+		if (click != null) {
+			clone.setClickAction(click.clone());
+		}
+		clone.setClickInsertion(getClickInsertion());
+		clone.addSiblings(cloneFullList(getSiblings()));
+		return clone;
+	}
+
+	/**
+	 * Clone only the component itself, without siblings, modifier, actions, insertion
+	 * @return component itself clone
+	 */
+	public abstract BaseComponent cloneThis();
+
+	protected static List<BaseComponent> cloneFullList(List<BaseComponent> components) {
+		List<BaseComponent> clone = new ArrayList<>(components.size());
+		for (BaseComponent component : components) {
+			clone.add(component.clone());
+		}
+		return clone;
+	}
 
 	/**
 	 * Returns component converted to legacy text<br>
 	 * Converts component, it's siblings, modifier, actions, insertion<br>
 	 * Uses default locale for converting
-	 * @return component converted to legacy text
+	 * @return legacy text
 	 */
 	public String toLegacyText() {
 		return toLegacyText(I18NData.DEFAULT_LOCALE);
@@ -247,8 +282,9 @@ public abstract class BaseComponent {
 	/**
 	 * Returns component converted to legacy text<br>
 	 * Converts component, it's siblings, modifier, actions, insertion<br>
+	 * Colors are converted to legacy color codes, so rgb colors are replaced with similar colors
 	 * @param locale locale
-	 * @return component converted to legacy text
+	 * @return legacy text
 	 */
 	public String toLegacyText(String locale) {
 		return LegacyChat.toText(this, locale);
@@ -257,6 +293,17 @@ public abstract class BaseComponent {
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);
+	}
+
+
+	/**
+	 * Returns base component converted from string message <br>
+	 * Supports legacy colors codes that use § character, and rgb colors (§x)
+	 * @param message string message
+	 * @return json message root component
+	 */
+	public static BaseComponent fromMessage(String message) {
+		return LegacyChat.fromMessage(message);
 	}
 
 }

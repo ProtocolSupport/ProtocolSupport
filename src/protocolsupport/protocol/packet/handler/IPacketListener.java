@@ -1,8 +1,10 @@
 package protocolsupport.protocol.packet.handler;
 
+import protocolsupport.api.chat.components.BaseComponent;
+
 public interface IPacketListener {
 
-	public void disconnect(String message);
+	public void disconnect(BaseComponent message);
 
 	public void destroy();
 
