@@ -26,10 +26,10 @@ public class DamageHurtEffectEmulation implements Listener {
 					}
 					Connection connection = ProtocolSupportAPI.getConnection(player);
 					if (connection == null) {
-						return;
+						continue;
 					}
 					ProtocolVersion version = connection.getVersion();
-					if ((version.getProtocolType() == ProtocolType.PC) && connection.getVersion().isBefore(ProtocolVersion.MINECRAFT_1_12)) {
+					if ((version.getProtocolType() == ProtocolType.PC) && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_11_1)) {
 						connection.sendPacket(ServerPlatform.get().getPacketFactory().createEntityStatusPacket(event.getEntity(), 2));
 					}
 				}
