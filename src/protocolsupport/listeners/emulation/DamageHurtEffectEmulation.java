@@ -19,6 +19,7 @@ public class DamageHurtEffectEmulation implements Listener {
 		switch (event.getCause()) {
 			case FIRE_TICK:
 			case FIRE:
+			case LAVA:
 			case DROWNING: {
 				for (Player player : ServerPlatform.get().getMiscUtils().getNearbyPlayers(event.getEntity().getLocation(), 48, 128, 48)) {
 					if (player == null) {
