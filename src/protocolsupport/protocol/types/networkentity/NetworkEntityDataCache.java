@@ -5,12 +5,16 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import protocolsupport.protocol.utils.LookUtils;
+import protocolsupport.protocol.utils.PrimitiveTypeUtils;
 import protocolsupport.utils.Utils;
 
 public class NetworkEntityDataCache {
 
 	protected boolean firstMeta = true;
+
+	public void setFirstMeta() {
+		this.firstMeta = true;
+	}
 
 	public boolean isFirstMeta() {
 		return firstMeta;
@@ -51,11 +55,11 @@ public class NetworkEntityDataCache {
 	}
 
 	public byte getPitchB() {
-		return LookUtils.toByte(pitch);
+		return PrimitiveTypeUtils.toAngleB(pitch);
 	}
 
 	public byte getYawB() {
-		return LookUtils.toByte(yaw);
+		return PrimitiveTypeUtils.toAngleB(yaw);
 	}
 
 	public byte getHeadYaw() {
@@ -66,8 +70,8 @@ public class NetworkEntityDataCache {
 		setX(x);
 		setY(y);
 		setZ(z);
-		setPitch(LookUtils.toFloat(pitch));
-		setYaw(LookUtils.toFloat(yaw));
+		setPitch(PrimitiveTypeUtils.fromAngleB(pitch));
+		setYaw(PrimitiveTypeUtils.fromAngleB(yaw));
 	}
 
 	public void addLocation(short sX, short sY, short sZ) {
@@ -77,8 +81,8 @@ public class NetworkEntityDataCache {
 	}
 
 	public void setLook(byte pitch, byte yaw) {
-		setPitch(LookUtils.toFloat(pitch));
-		setYaw(LookUtils.toFloat(yaw));
+		setPitch(PrimitiveTypeUtils.fromAngleB(pitch));
+		setYaw(PrimitiveTypeUtils.fromAngleB(yaw));
 	}
 
 	public void setX(double x) {

@@ -56,6 +56,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityRel
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityRelMoveLook;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityStatus;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityTeleport;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityVelocity;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.ScoreboardTeam;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SetPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.SpawnNamed;
@@ -90,7 +91,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.EntityEffectRemove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.EntityHeadRotation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.EntityLook;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.EntityVelocity;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.KeepAlive;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.PlayerListHeaderFooter;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.PlayerListSetEntry;

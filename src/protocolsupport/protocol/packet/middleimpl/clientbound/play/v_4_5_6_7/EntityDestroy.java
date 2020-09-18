@@ -13,14 +13,18 @@ public class EntityDestroy extends MiddleEntityDestroy {
 
 	@Override
 	protected void writeToClient() {
-		for (int[] part : Utils.splitArray(entityIds, 120)) {
-			ClientBoundPacketData entitydestroy = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY);
-			entitydestroy.writeByte(part.length);
-			for (int i = 0; i < part.length; i++) {
-				entitydestroy.writeInt(part[i]);
-			}
-			codec.write(entitydestroy);
+		for (int[] partEntityIds : Utils.splitArray(entityIds, 120)) {
+			codec.write(create(partEntityIds));
 		}
+	}
+
+	public static ClientBoundPacketData create(int... entityIds) {
+		ClientBoundPacketData entitydestroy = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY);
+		entitydestroy.writeByte(entityIds.length);
+		for (int i = 0; i < entityIds.length; i++) {
+			entitydestroy.writeInt(entityIds[i]);
+		}
+		return entitydestroy;
 	}
 
 }

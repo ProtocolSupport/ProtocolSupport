@@ -13,7 +13,6 @@ Important notes:
 
 Known issues:
 * [Anything that is not latest] Items in creative mode may not work as expected, or may not work at all
-* [1.8 and earlier] Thrown potion texture is invalid
 
 Known wontfix issues:
 * [Anything that is not latest] Stats are not sent

@@ -74,6 +74,24 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		}
 	}
 
+	public boolean copy(ArrayMap<NetworkEntityMetadataObject<?>> source, ArrayMap<NetworkEntityMetadataObject<?>> target) {
+		NetworkEntityMetadataObject<?> object = source.get(index);
+		if (object == null) {
+			return false;
+		}
+		if (expectedDWObjectType.isInstance(object)) {
+			target.put(index, object);
+			return true;
+		}
+		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
+			ProtocolSupport.logWarning(MessageFormat.format(
+				"Got wrong metadata type for entity type {0} index {1}, expected {2}, got {3}",
+				entityClass.getSimpleName(), index, expectedDWObjectType.getName(), object.getClass().getName()
+			));
+		}
+		return false;
+	}
+
 	public static class Entity {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> BASE_FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> AIR = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);

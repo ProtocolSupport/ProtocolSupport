@@ -43,7 +43,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.Ent
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityHeadRotation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityLook;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityRelMove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityRelMoveLook;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityStatus;
@@ -81,6 +80,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.BlockBrea
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.BlockOpenSignEditor;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.Chat;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.ResourcePack;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SetPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7.SpawnNamed;

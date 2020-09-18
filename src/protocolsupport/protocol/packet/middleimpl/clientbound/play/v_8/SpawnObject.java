@@ -2,11 +2,13 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.AbstractThunderboltSpawnObject;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPotionItemAsObjectDataSpawnObject;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.PrimitiveTypeUtils;
 
-public class SpawnObject extends AbstractThunderboltSpawnObject {
+public class SpawnObject extends AbstractPotionItemAsObjectDataSpawnObject {
 
 	public SpawnObject(MiddlePacketInit init) {
 		super(init);
@@ -14,21 +16,31 @@ public class SpawnObject extends AbstractThunderboltSpawnObject {
 
 	@Override
 	protected void writeSpawnObject() {
+		codec.write(create(entity.getId(), fType, x, y, z, pitch, yaw, rObjectdata, velX, velY, velZ));
+	}
+
+	public static ClientBoundPacketData create(
+		int entityId, NetworkEntityType type,
+		double x, double y, double z,
+		byte pitch, byte yaw,
+		int objectdata,
+		short velX, short velY, short velZ
+	) {
 		ClientBoundPacketData spawnobject = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
-		VarNumberSerializer.writeVarInt(spawnobject, entity.getId());
-		spawnobject.writeByte(LegacyEntityId.getObjectIntId(fType));
-		spawnobject.writeInt((int) (x * 32));
-		spawnobject.writeInt((int) (y * 32));
-		spawnobject.writeInt((int) (z * 32));
+		VarNumberSerializer.writeVarInt(spawnobject, entityId);
+		spawnobject.writeByte(LegacyEntityId.getObjectIntId(type));
+		spawnobject.writeInt(PrimitiveTypeUtils.toFixedPoint32(x));
+		spawnobject.writeInt(PrimitiveTypeUtils.toFixedPoint32(y));
+		spawnobject.writeInt(PrimitiveTypeUtils.toFixedPoint32(z));
 		spawnobject.writeByte(pitch);
 		spawnobject.writeByte(yaw);
-		spawnobject.writeInt(rObjectdata);
-		if (rObjectdata > 0) {
-			spawnobject.writeShort(motX);
-			spawnobject.writeShort(motY);
-			spawnobject.writeShort(motZ);
+		spawnobject.writeInt(objectdata);
+		if (objectdata > 0) {
+			spawnobject.writeShort(velX);
+			spawnobject.writeShort(velY);
+			spawnobject.writeShort(velZ);
 		}
-		codec.write(spawnobject);
+		return spawnobject;
 	}
 
 	@Override
@@ -36,9 +48,9 @@ public class SpawnObject extends AbstractThunderboltSpawnObject {
 		ClientBoundPacketData spawnglobal = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_SPAWN_GLOBAL);
 		VarNumberSerializer.writeVarInt(spawnglobal, entity.getId());
 		spawnglobal.writeByte(1);
-		spawnglobal.writeInt((int) (x * 32));
-		spawnglobal.writeInt((int) (y * 32));
-		spawnglobal.writeInt((int) (z * 32));
+		spawnglobal.writeInt(PrimitiveTypeUtils.toFixedPoint32(x));
+		spawnglobal.writeInt(PrimitiveTypeUtils.toFixedPoint32(y));
+		spawnglobal.writeInt(PrimitiveTypeUtils.toFixedPoint32(z));
 		codec.write(spawnglobal);
 	}
 

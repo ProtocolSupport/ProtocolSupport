@@ -35,6 +35,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Block
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.ChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.EntityAnimation;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Explosion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.GameStateChange;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.HeldSlot;
@@ -63,7 +64,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.Ent
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityHeadRotation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityLook;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityRelMove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityRelMoveLook;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityStatus;

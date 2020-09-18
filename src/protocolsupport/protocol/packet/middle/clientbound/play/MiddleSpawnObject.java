@@ -30,9 +30,9 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 	protected byte pitch;
 	protected byte yaw;
 	protected int objectdata;
-	protected int motX;
-	protected int motY;
-	protected int motZ;
+	protected short velX;
+	protected short velY;
+	protected short velZ;
 
 	@Override
 	protected void readServerData(ByteBuf serverdata) {
@@ -46,9 +46,9 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 		pitch = serverdata.readByte();
 		yaw = serverdata.readByte();
 		objectdata = serverdata.readInt();
-		motX = serverdata.readShort();
-		motY = serverdata.readShort();
-		motZ = serverdata.readShort();
+		velX = serverdata.readShort();
+		velY = serverdata.readShort();
+		velZ = serverdata.readShort();
 
 		if (type == NetworkEntityType.NONE) {
 			if (ServerPlatform.get().getMiscUtils().isDebugging()) {

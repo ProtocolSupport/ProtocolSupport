@@ -19,19 +19,19 @@ public class EntityMetadata extends AbstractPlayerUseBedAsPacketEntityMetadata {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	protected ClientBoundPacketData createEntityMetadata(NetworkEntityMetadataList remappedMetadata) {
+	protected void writeEntityMetadata(NetworkEntityMetadataList remappedMetadata) {
 		ClientBoundPacketData entitymetadata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
 		VarNumberSerializer.writeVarInt(entitymetadata, entityId);
 		NetworkEntityMetadataSerializer.writeData(entitymetadata, version, clientCache.getLocale(), remappedMetadata);
-		return entitymetadata;
+		codec.write(entitymetadata);
 	}
 
 	@Override
-	protected ClientBoundPacketData createUseBed(Position position) {
+	protected void writePlayerUseBed(Position position) {
 		ClientBoundPacketData usebed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED);
 		VarNumberSerializer.writeVarInt(usebed, entityId);
 		PositionSerializer.writeLegacyPositionL(usebed, position);
-		return usebed;
+		codec.write(usebed);
 	}
 
 }

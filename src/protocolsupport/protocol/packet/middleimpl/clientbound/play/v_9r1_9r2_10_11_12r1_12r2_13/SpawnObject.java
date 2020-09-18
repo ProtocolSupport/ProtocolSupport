@@ -25,9 +25,9 @@ public class SpawnObject extends AbstractThunderboltSpawnObject {
 		spawnobject.writeByte(pitch);
 		spawnobject.writeByte(yaw);
 		spawnobject.writeInt(rObjectdata);
-		spawnobject.writeShort(motX);
-		spawnobject.writeShort(motY);
-		spawnobject.writeShort(motZ);
+		spawnobject.writeShort(velX);
+		spawnobject.writeShort(velY);
+		spawnobject.writeShort(velZ);
 		codec.write(spawnobject);
 	}
 
