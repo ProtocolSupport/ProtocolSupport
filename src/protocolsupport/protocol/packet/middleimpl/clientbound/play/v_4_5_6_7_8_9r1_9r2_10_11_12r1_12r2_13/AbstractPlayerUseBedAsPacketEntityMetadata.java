@@ -8,9 +8,9 @@ import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalPosition;
 
-public abstract class AbstractUseBedPacketEntityMetadata extends AbstractRemappedEntityMetadata {
+public abstract class AbstractPlayerUseBedAsPacketEntityMetadata extends AbstractRemappedEntityMetadata {
 
-	public AbstractUseBedPacketEntityMetadata(MiddlePacketInit init) {
+	public AbstractPlayerUseBedAsPacketEntityMetadata(MiddlePacketInit init) {
 		super(init);
 	}
 

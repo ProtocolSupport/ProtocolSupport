@@ -69,7 +69,7 @@ public class LegacyNetworkEntityRegistry extends MappingRegistry<LegacyNetworkEn
 
 		new Mapping(NetworkEntityType.LAMA)
 		.add(NetworkEntityType.LAMA, ProtocolVersionsHelper.UP_1_11)
-		.add(NetworkEntityType.COMMON_HORSE, ProtocolVersionsHelper.RANGE__1_6__1_10)
+		.add(NetworkEntityType.COMMON_HORSE, BattleHorseInitDefaultMetadataTransformer.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_10)
 		.add(NetworkEntityType.COW, ProtocolVersionsHelper.DOWN_1_5_2)
 		.register();
 
@@ -243,7 +243,7 @@ public class LegacyNetworkEntityRegistry extends MappingRegistry<LegacyNetworkEn
 		new Mapping(NetworkEntityType.TRADER_LAMA)
 		.add(NetworkEntityType.TRADER_LAMA, ProtocolVersionsHelper.UP_1_14)
 		.add(NetworkEntityType.LAMA, ProtocolVersionsHelper.RANGE__1_11__1_13_2)
-		.add(NetworkEntityType.COMMON_HORSE, ProtocolVersionsHelper.RANGE__1_6__1_10)
+		.add(NetworkEntityType.COMMON_HORSE, BattleHorseInitDefaultMetadataTransformer.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_10)
 		.add(NetworkEntityType.COW, ProtocolVersionsHelper.DOWN_1_5_2)
 		.register();
 
@@ -593,6 +593,18 @@ public class LegacyNetworkEntityRegistry extends MappingRegistry<LegacyNetworkEn
 		@Override
 		public void accept(ArrayMap<NetworkEntityMetadataObject<?>> t) {
 			NetworkEntityMetadataObjectIndex.Villager.VDATA.setObject(t, new NetworkEntityMetadataObjectVillagerData(new VillagerData(0, 0, 0)));
+		}
+
+	}
+
+	public static class BattleHorseInitDefaultMetadataTransformer implements Consumer<ArrayMap<NetworkEntityMetadataObject<?>>> {
+
+		public static final BattleHorseInitDefaultMetadataTransformer INSTANCE = new BattleHorseInitDefaultMetadataTransformer();
+
+		@Override
+		public void accept(ArrayMap<NetworkEntityMetadataObject<?>> t) {
+			NetworkEntityMetadataObjectIndex.BattleHorse.VARIANT.setObject(t, new NetworkEntityMetadataObjectVarInt(0));
+			NetworkEntityMetadataObjectIndex.BattleHorse.ARMOR.setObject(t, new NetworkEntityMetadataObjectVarInt(0));
 		}
 
 	}
