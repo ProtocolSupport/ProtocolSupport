@@ -7,21 +7,23 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.storage.netcache.CustomPayloadChannelsCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.utils.Utils;
 
 public class CustomPayload extends MiddleCustomPayload {
-
-	protected final CustomPayloadChannelsCache channelsCache = cache.getChannelsCache();
 
 	public CustomPayload(MiddlePacketInit init) {
 		super(init);
 	}
 
 	@Override
+	protected String getClientTag(String tag) {
+		return Utils.clampString(LegacyCustomPayloadChannelName.toLegacy(tag), 20);
+	}
+
+	@Override
 	protected void writeToClient() {
-		codec.write(create(Utils.clampString(channelsCache.getLegacyName(LegacyCustomPayloadChannelName.toPre13(tag)), 20), data));
+		codec.write(create(tag, data));
 	}
 
 	public static ClientBoundPacketData create(String tag, Consumer<ByteBuf> dataWriter) {

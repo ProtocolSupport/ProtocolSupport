@@ -1,10 +1,19 @@
 package protocolsupport.protocol.storage.netcache;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
 import protocolsupport.utils.Utils;
 
 public class NetworkDataCache {
+
+	protected final ConcurrentMap<Object, Object> custompayloadtransformermetadata = new ConcurrentHashMap<>();
+
+	public ConcurrentMap<Object, Object> getCustomPayloadTransformerMetdata() {
+		return custompayloadtransformermetadata;
+	}
 
 	protected final MovementCache movecache = new MovementCache();
 	public MovementCache getMovementCache() {
@@ -34,11 +43,6 @@ public class NetworkDataCache {
 	protected final ClientCache attrscache = new ClientCache();
 	public ClientCache getClientCache() {
 		return attrscache;
-	}
-
-	protected final CustomPayloadChannelsCache cpccache = new CustomPayloadChannelsCache();
-	public CustomPayloadChannelsCache getChannelsCache() {
-		return cpccache;
 	}
 
 	protected final ChunkCache chunkcache = new ChunkCache();

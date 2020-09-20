@@ -1,14 +1,13 @@
 package protocolsupport.protocol.typeremapper.legacy;
 
 import java.nio.charset.StandardCharsets;
-import java.util.StringJoiner;
 
 import org.bukkit.Material;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.PacketDataCodec;
-import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEditBook;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleNameItem;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddlePickItem;
@@ -21,7 +20,6 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.CustomPayloadChannelsCache;
 import protocolsupport.protocol.typeremapper.basic.CommonNBTTransformer;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.Position;
@@ -34,27 +32,10 @@ import protocolsupport.utils.BitUtils;
 
 public class LegacyCustomPayloadData {
 
-	public static void transformAndWriteRegisterUnregister(
-		PacketDataCodec codec,
-		CustomPayloadChannelsCache ccache,
-		String tag, ByteBuf data, boolean register
-	) {
-		String modernTag = LegacyCustomPayloadChannelName.fromPre13(tag);
-		StringJoiner payloadModernTagJoiner = new StringJoiner("\u0000");
-		for (String payloadLegacyTag : data.toString(StandardCharsets.UTF_8).split("\u0000")) {
-			String payloadModernTag = LegacyCustomPayloadChannelName.fromPre13(payloadLegacyTag);
-			if (register) {
-				ccache.register(payloadModernTag, payloadLegacyTag);
-			} else {
-				ccache.unregister(payloadModernTag);
-			}
-			payloadModernTagJoiner.add(payloadModernTag);
-		}
-		codec.read(MiddleCustomPayload.create(modernTag, payloadModernTagJoiner.toString().getBytes(StandardCharsets.UTF_8)));
-	}
-
-	public static void transformAndWriteBrand(PacketDataCodec codec, ByteBuf data) {
-		codec.read(MiddleCustomPayload.create(LegacyCustomPayloadChannelName.MODERN_BRAND, custompayload -> StringSerializer.writeVarIntUTF8String(custompayload, data.toString(StandardCharsets.UTF_8))));
+	public static ByteBuf transformBrandDirectToString(ByteBuf data) {
+		ByteBuf buffer = Unpooled.buffer(data.readableBytes() + VarNumberSerializer.MAX_LENGTH);
+		StringSerializer.writeVarIntUTF8String(buffer, data.toString(StandardCharsets.UTF_8));
+		return buffer;
 	}
 
 	public static void transformAndWriteBookEdit(PacketDataCodec codec, ProtocolVersion version, ByteBuf data) {
@@ -129,11 +110,6 @@ public class LegacyCustomPayloadData {
 	public static void transformAndWriteTradeSelect(PacketDataCodec codec, ByteBuf data) {
 		int slot = data.readInt();
 		codec.read(MiddleSelectTrade.create(slot));
-	}
-
-	public static void transformAndWriteCustomPayload(PacketDataCodec codec, String tag, ByteBuf data) {
-		String modernName = LegacyCustomPayloadChannelName.fromPre13(tag);
-		codec.read(MiddleCustomPayload.create(modernName, data));
 	}
 
 	public static void transformAndWriteBasicCommandBlockEdit(PacketDataCodec codec, ByteBuf data) {

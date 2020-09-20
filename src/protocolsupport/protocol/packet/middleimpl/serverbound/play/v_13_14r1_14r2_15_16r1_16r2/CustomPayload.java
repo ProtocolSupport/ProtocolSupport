@@ -17,4 +17,9 @@ public class CustomPayload extends MiddleCustomPayload {
 		data = MiscSerializer.readAllBytesSlice(clientdata);
 	}
 
+	@Override
+	protected String getServerTag(String tag) {
+		return tag;
+	}
+
 }

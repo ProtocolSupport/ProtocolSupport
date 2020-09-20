@@ -1,23 +1,19 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
+import protocolsupport.ProtocolSupport;
+import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.storage.netcache.CustomPayloadChannelsCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadData;
+import protocolsupport.zplatform.ServerPlatform;
 
-public class CustomPayload extends ServerBoundMiddlePacket {
-
-	protected final CustomPayloadChannelsCache channelsCache = cache.getChannelsCache();
+public class CustomPayload extends MiddleCustomPayload {
 
 	public CustomPayload(MiddlePacketInit init) {
 		super(init);
 	}
-
-	protected String tag;
-	protected ByteBuf data;
 
 	@Override
 	protected void readClientData(ByteBuf clientdata) {
@@ -26,58 +22,69 @@ public class CustomPayload extends ServerBoundMiddlePacket {
 	}
 
 	@Override
+	protected String getServerTag(String tag) {
+		return LegacyCustomPayloadChannelName.fromLegacy(tag);
+	}
+
+	@Override
 	protected void writeToServer() {
+		if (custom) {
+			super.writeToServer();
+			return;
+		}
+
 		switch (tag) {
-			case LegacyCustomPayloadChannelName.LEGACY_REGISTER: {
-				LegacyCustomPayloadData.transformAndWriteRegisterUnregister(codec, channelsCache, tag, data, true);
-				break;
-			}
-			case LegacyCustomPayloadChannelName.LEGACY_UNREGISTER: {
-				LegacyCustomPayloadData.transformAndWriteRegisterUnregister(codec, channelsCache, tag, data, false);
-				break;
-			}
 			case LegacyCustomPayloadChannelName.LEGACY_BOOK_EDIT: {
 				LegacyCustomPayloadData.transformAndWriteBookEdit(codec, version, data);
-				break;
+				return;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_BOOK_SIGN: {
 				LegacyCustomPayloadData.transformAndWriteBookSign(codec, version, data);
-				break;
+				return;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_SET_BEACON: {
 				LegacyCustomPayloadData.transformAndWriteSetBeaconEffect(codec, data);
-				break;
+				return;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_NAME_ITEM: {
 				LegacyCustomPayloadData.transformAndWriteNameItemSString(codec, data);
-				break;
+				return;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_TRADE_SELECT: {
 				LegacyCustomPayloadData.transformAndWriteTradeSelect(codec, data);
-				break;
+				return;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_PICK_ITEM: {
 				LegacyCustomPayloadData.transformAndWritePickItem(codec, data);
-				break;
+				return;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_STRUCTURE_BLOCK: {
 				LegacyCustomPayloadData.transformAndWriteStructureBlock(codec, data);
-				break;
+				return;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_RIGHT_NAME:
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_TYPO_NAME: {
 				LegacyCustomPayloadData.transformAndWriteAdvancedCommandBlockEdit(codec, data, true);
-				break;
+				return;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_COMMAND_BLOCK_NAME: {
 				LegacyCustomPayloadData.transformAndWriteAutoCommandBlockEdit(codec, data);
-				break;
+				return;
 			}
 			default: {
-				LegacyCustomPayloadData.transformAndWriteCustomPayload(codec, tag, data);
+				String legacyTag = LegacyCustomPayloadChannelName.fromLegacy(tag);
+				if (legacyTag == null) {
+					if (ServerPlatform.get().getMiscUtils().isDebugging()) {
+						ProtocolSupport.logWarning("Skipping unsuppored legacy custom payload tag " + legacyTag);
+					}
+					return;
+				}
+				tag = legacyTag;
 				break;
 			}
 		}
+
+		super.writeToServer();
 	}
 
 }

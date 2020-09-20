@@ -2,10 +2,12 @@ package protocolsupport.protocol.typeremapper.legacy;
 
 import java.util.regex.Pattern;
 
-import protocolsupport.protocol.utils.NamespacedKeyUtils;
+import protocolsupportbuildprocessor.Preload;
 
+@Preload
 public class LegacyCustomPayloadChannelName {
 
+	//TODO: move modern channels to separate type
 	public static final String MODERN_REGISTER = "minecraft:register";
 	public static final String MODERN_UNREGISTER = "minecraft:unregister";
 	public static final String MODERN_TRADE_LIST = "minecraft:trader_list";
@@ -30,22 +32,25 @@ public class LegacyCustomPayloadChannelName {
 	public static final String LEGACY_TRADE_SELECT = "MC|TrSel";
 	public static final String LEGACY_TRADE_LIST = "MC|TrList";
 
-	public static String toPre13(String modernName) {
+	public static String toLegacy(String modernName) {
 		switch (modernName) {
-			case MODERN_TRADE_LIST: {
-				return LEGACY_TRADE_LIST;
-			}
-			case MODERN_BRAND: {
-				return LEGACY_BRAND;
-			}
-			case MODERN_BOOK_OPEN: {
-				return LEGACY_BOOK_OPEN;
-			}
 			case MODERN_REGISTER: {
 				return LEGACY_REGISTER;
 			}
 			case MODERN_UNREGISTER: {
 				return LEGACY_UNREGISTER;
+			}
+			case MODERN_BRAND: {
+				return LEGACY_BRAND;
+			}
+			case MODERN_BUNGEE: {
+				return LEGACY_BUNGEE;
+			}
+			case MODERN_TRADE_LIST: {
+				return LEGACY_TRADE_LIST;
+			}
+			case MODERN_BOOK_OPEN: {
+				return LEGACY_BOOK_OPEN;
 			}
 			default: {
 				return modernName;
@@ -54,8 +59,8 @@ public class LegacyCustomPayloadChannelName {
 	}
 
 	protected static final Pattern valid_pattern = Pattern.compile("[a-z0-9._-]+\\:[a-z0-9._-]*");
-	protected static final Pattern invalid_pattern = Pattern.compile("[^a-z0-9._-]+");
-	public static String fromPre13(String legacyName) {
+
+	public static String fromLegacy(String legacyName) {
 		switch (legacyName) {
 			case LEGACY_REGISTER: {
 				return MODERN_REGISTER;
@@ -69,11 +74,14 @@ public class LegacyCustomPayloadChannelName {
 			case LEGACY_BUNGEE: {
 				return MODERN_BUNGEE;
 			}
+			case MODERN_BUNGEE: {
+				return null;
+			}
 			default: {
 				if (valid_pattern.matcher(legacyName).matches()) {
 					return legacyName;
 				} else {
-					return NamespacedKeyUtils.combine("l", invalid_pattern.matcher(legacyName.toLowerCase()).replaceAll(""));
+					return null;
 				}
 			}
 		}
