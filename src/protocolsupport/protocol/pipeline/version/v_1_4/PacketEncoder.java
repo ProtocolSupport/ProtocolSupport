@@ -39,6 +39,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorl
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4.InventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.Chat;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.EntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.EntityPassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.InventoryHorseOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.PlayerAbilities;
@@ -73,7 +74,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.Chu
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.CollectEffect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.Entity;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityEffectAdd;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityEffectRemove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityEquipment;

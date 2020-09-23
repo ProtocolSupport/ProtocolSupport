@@ -12,7 +12,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.listeners.LocaleUseLoader;
-import protocolsupport.listeners.MultiplePassengersRestrict;
 import protocolsupport.listeners.PotionEffectAmplifierClamp;
 import protocolsupport.listeners.ReloadCommandBlocker;
 import protocolsupport.listeners.TabAPIHandler;
@@ -113,7 +112,6 @@ public class ProtocolSupport extends JavaPlugin {
 		pluginmanager.registerEvents(new ReloadCommandBlocker(), this);
 		pluginmanager.registerEvents(new LocaleUseLoader(), this);
 		pluginmanager.registerEvents(new PotionEffectAmplifierClamp(), this);
-		pluginmanager.registerEvents(new MultiplePassengersRestrict(), this);
 		pluginmanager.registerEvents(new BlockPlaceSelfSoundEmulation(), this);
 		pluginmanager.registerEvents(new DamageHurtEffectEmulation(), this);
 		pluginmanager.registerEvents(new LeaveVehicleOnCrouchEmulation(), this);

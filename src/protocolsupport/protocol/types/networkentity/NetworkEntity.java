@@ -1,5 +1,6 @@
 package protocolsupport.protocol.types.networkentity;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import protocolsupport.utils.Utils;
@@ -52,6 +53,26 @@ public class NetworkEntity {
 
 	public NetworkEntityDataCache getDataCache() {
 		return cache;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		NetworkEntity other = (NetworkEntity) obj;
+		return id == other.id;
 	}
 
 	@Override

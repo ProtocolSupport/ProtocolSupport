@@ -58,7 +58,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.Chu
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.CollectEffect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.CustomPayload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.Entity;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityEffectAdd;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityEffectRemove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityEquipment;
@@ -93,6 +92,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6.BlockOpen
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6.Chat;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6.SetPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7.EntityAttributes;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7.EntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7.InventoryHorseOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7.SetHealth;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8.EntityLeash;

@@ -50,6 +50,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.ChunkData
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.ChunkLight;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.ChunkUnload;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.CollectEffect;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8.EntityRelMove;
@@ -87,7 +88,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.Camera;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.CombatEvent;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.Entity;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.EntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.EntityEffectRemove;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.EntityHeadRotation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.EntityLook;

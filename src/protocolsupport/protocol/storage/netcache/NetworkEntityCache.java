@@ -1,5 +1,8 @@
 package protocolsupport.protocol.storage.netcache;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
@@ -29,6 +32,35 @@ public class NetworkEntityCache {
 
 	public NetworkEntity getEntity(int entityId) {
 		return entities.get(entityId);
+	}
+
+	public List<NetworkEntity> getEntities(int... entityIds) {
+		if (entityIds.length == 0) {
+			return new ArrayList<>();
+		}
+		List<NetworkEntity> result = new ArrayList<>(entityIds.length);
+		for (int entityId : entityIds) {
+			NetworkEntity entity = entities.get(entityId);
+			if (entity != null) {
+				result.add(entity);
+			}
+		}
+		return result;
+	}
+
+	public List<NetworkEntity> popEntities(int[] entityIds) {
+		if (entityIds.length == 0) {
+			return new ArrayList<>();
+		}
+		List<NetworkEntity> result = new ArrayList<>(entityIds.length);
+		for (int entityId : entityIds) {
+			NetworkEntity entity = entities.remove(entityId);
+			if (entity != null) {
+				result.add(entity);
+			}
+		}
+		readdSelf();
+		return result;
 	}
 
 	public void removeEntities(int[] entityIds) {
