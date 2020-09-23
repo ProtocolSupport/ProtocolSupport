@@ -166,7 +166,7 @@ public class HoverAction {
 		}
 
 		public EntityInfo(EntityType etype, UUID uuid, BaseComponent displayname) {
-			this.etype = etype != null ? etype : EntityType.PIG;
+			this.etype = ((etype != null) && (etype != EntityType.UNKNOWN)) ? etype : EntityType.PIG;
 			this.uuid = uuid != null ? uuid : new UUID(0, 0);
 			this.name = displayname;
 		}
