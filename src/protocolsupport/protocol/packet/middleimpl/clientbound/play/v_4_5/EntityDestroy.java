@@ -1,12 +1,18 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.RandomAccess;
 
+import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPassengerStackEntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPassengerStackEntityPassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPassengerStackEntityPassengers.NetworkEntityVehicleData;
+import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.utils.Utils;
 
 public class EntityDestroy extends AbstractPassengerStackEntityDestroy {
@@ -26,19 +32,17 @@ public class EntityDestroy extends AbstractPassengerStackEntityDestroy {
 	}
 
 	@Override
-	protected void writeDestroyEntities(int[] entitiesIds) {
-		for (int[] partEntityIds : Utils.splitArray(entityIds, 120)) {
-			codec.write(create(partEntityIds));
-		}
+	protected <A extends List<NetworkEntity> & RandomAccess> void writeDestroyEntities(A entities) {
+		writeDestroyEntities(codec, entities);
 	}
 
-	public static ClientBoundPacketData create(int... entityIds) {
-		ClientBoundPacketData entitydestroy = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY);
-		entitydestroy.writeByte(entityIds.length);
-		for (int i = 0; i < entityIds.length; i++) {
-			entitydestroy.writeInt(entityIds[i]);
+
+	public static <A extends List<NetworkEntity> & RandomAccess> void writeDestroyEntities(PacketDataCodec codec, A entities) {
+		for (A partEntityIds : Utils.splitList(entities, 120)) {
+			ClientBoundPacketData entitydestroy = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY);
+			ArraySerializer.writeTArray(entitydestroy, partEntityIds, ByteBuf::writeByte, (to, entity) -> to.writeInt(entity.getId()));
+			codec.write(entitydestroy);
 		}
-		return entitydestroy;
 	}
 
 }

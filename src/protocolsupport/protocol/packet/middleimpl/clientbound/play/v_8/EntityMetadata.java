@@ -1,8 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
+import java.util.Collections;
+
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPassengerStackEntityDestroy;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPassengerStackEntityPassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPotionItemAsObjectDataEntityMetadata;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8.EntityPassengers;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -14,6 +19,7 @@ import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 import protocolsupport.protocol.utils.CommonNBT;
+import protocolsupport.utils.Utils;
 import protocolsupport.utils.Vector3S;
 
 public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata {
@@ -50,7 +56,12 @@ public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata
 				objectdata = LegacyPotionId.toLegacyId(CommonNBT.getPotionEffectType(tag), true);
 			}
 		}
-		codec.write(EntityDestroy.create(entityId));
+		AbstractPassengerStackEntityDestroy.writeDestroy(
+			Utils.createSingletonArrayList(entity),
+			entity -> AbstractPassengerStackEntityPassengers.writeVehiclePassengers(codec, EntityPassengers::create, entity, Collections.emptyList()),
+			entity -> AbstractPassengerStackEntityPassengers.writeLeaveVehicleConnectStack(codec, EntityPassengers::create, entity),
+			entitiesIds -> EntityDestroy.writeDestroyEntities(codec, entitiesIds)
+		);
 		codec.write(SpawnObject.create(
 			entityId, entityDataFormatTable.get(lType).getKey(),
 			ecache.getX(), ecache.getY(), ecache.getZ(),

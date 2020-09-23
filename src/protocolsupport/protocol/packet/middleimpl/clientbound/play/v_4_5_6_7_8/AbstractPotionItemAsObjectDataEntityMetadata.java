@@ -31,6 +31,7 @@ public abstract class AbstractPotionItemAsObjectDataEntityMetadata extends Abstr
 				writePotionReplaceSpawn(item.getValue(), potiondata.getVelocity());
 				NetworkEntityTransformHelper.transformMetadataFormat(entity, lType, potiondata.getMetadata(), entityDataFormatTable, fMetadata);
 				writeEntityMetadata(fMetadata);
+				//TODO: also reattach passengers
 				return;
 			}
 		}

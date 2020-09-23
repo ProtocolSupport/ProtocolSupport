@@ -2,9 +2,11 @@ package protocolsupport.protocol.serializer;
 
 import java.lang.reflect.Array;
 import java.util.List;
+import java.util.RandomAccess;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.ObjIntConsumer;
 import java.util.function.ToIntFunction;
 
 import io.netty.buffer.ByteBuf;
@@ -146,6 +148,15 @@ public class ArraySerializer {
 		VarNumberSerializer.writeVarInt(to, array.length);
 		for (long element : array) {
 			to.writeLong(element);
+		}
+	}
+
+
+	public static <T, A extends List<T> & RandomAccess> void writeTArray(ByteBuf to, A array, ObjIntConsumer<ByteBuf> lengthWriter, BiConsumer<ByteBuf, T> elementWriter) {
+		int size = array.size();
+		lengthWriter.accept(to, size);
+		for (int i = 0; i < size; i++) {
+			elementWriter.accept(to, array.get(i));
 		}
 	}
 

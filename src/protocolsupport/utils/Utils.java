@@ -4,8 +4,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.RandomAccess;
 import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 
@@ -46,27 +48,30 @@ public class Utils {
 		return string.substring(0, string.length() > limit ? limit : string.length());
 	}
 
-	public static List<int[]> splitArray(int[] array, int limit) {
-		List<int[]> list = new ArrayList<>();
-		if (array.length <= limit) {
-			list.add(array);
-			return list;
-		}
-		int count = getSplitCount(array.length, limit);
-		int copied = 0;
-		for (int i = 0; i < count; i++) {
-			list.add(Arrays.copyOfRange(array, copied, Math.min(array.length, copied + limit)));
-			copied += limit;
-		}
+	public static <T> ArrayList<T> createSingletonArrayList(T element) {
+		ArrayList<T> list = new ArrayList<>(1);
+		list.add(element);
 		return list;
 	}
 
-	public static int getSplitCount(int length, int maxlength) {
-		int count = length / maxlength;
-		if ((length % maxlength) != 0) {
-			count++;
+	@SuppressWarnings("unchecked")
+	public static <T, A extends List<T> & RandomAccess> List<A> splitList(A list, int limit) {
+		int size = list.size();
+		if (size <= limit) {
+			return Collections.singletonList(list);
 		}
-		return count;
+		int count = size / limit;
+		List<A> result = new ArrayList<>(count);
+		int fromIndex = 0;
+		for (int i = 0; i < count; i++) {
+			int toIndex = fromIndex + limit;
+			result.add((A) list.subList(fromIndex, toIndex));
+			fromIndex = toIndex;
+		}
+		if (fromIndex < (size - 1)) {
+			result.add((A) list.subList(fromIndex, size));
+		}
+		return result;
 	}
 
 	public static int ceilToBase(int number, int base) {

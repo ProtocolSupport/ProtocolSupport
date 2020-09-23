@@ -34,6 +34,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopVehi
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldBorder;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.Chat;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.EntityDestroy;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.EntityPassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.InventoryHorseOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5.PlayerAbilities;
@@ -45,7 +46,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Block
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.BlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.ChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.EntityAnimation;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.EntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.Explosion;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.GameStateChange;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.HeldSlot;

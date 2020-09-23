@@ -1,15 +1,14 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5;
 
 import java.util.Collections;
 
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.EntityVelocity;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPassengerStackEntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPassengerStackEntityPassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPotionItemAsObjectDataEntityMetadata;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7.EntityDestroy;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8.EntityPassengers;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -43,6 +42,7 @@ public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata
 	protected void writePlayerUseBed(Position position) {
 		ClientBoundPacketData usebed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED);
 		usebed.writeInt(entityId);
+		usebed.writeByte(0);
 		PositionSerializer.writeLegacyPositionB(usebed, position);
 		codec.write(usebed);
 	}

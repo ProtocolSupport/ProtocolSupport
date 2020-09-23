@@ -1,7 +1,6 @@
 package protocolsupport.protocol.storage.netcache;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -34,11 +33,11 @@ public class NetworkEntityCache {
 		return entities.get(entityId);
 	}
 
-	public List<NetworkEntity> getEntities(int... entityIds) {
+	public ArrayList<NetworkEntity> getEntities(int... entityIds) {
 		if (entityIds.length == 0) {
 			return new ArrayList<>();
 		}
-		List<NetworkEntity> result = new ArrayList<>(entityIds.length);
+		ArrayList<NetworkEntity> result = new ArrayList<>(entityIds.length);
 		for (int entityId : entityIds) {
 			NetworkEntity entity = entities.get(entityId);
 			if (entity != null) {
@@ -48,11 +47,11 @@ public class NetworkEntityCache {
 		return result;
 	}
 
-	public List<NetworkEntity> popEntities(int[] entityIds) {
+	public ArrayList<NetworkEntity> popEntities(int[] entityIds) {
 		if (entityIds.length == 0) {
 			return new ArrayList<>();
 		}
-		List<NetworkEntity> result = new ArrayList<>(entityIds.length);
+		ArrayList<NetworkEntity> result = new ArrayList<>(entityIds.length);
 		for (int entityId : entityIds) {
 			NetworkEntity entity = entities.remove(entityId);
 			if (entity != null) {
