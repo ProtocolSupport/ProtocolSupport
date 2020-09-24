@@ -8,7 +8,7 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheChunkData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
-import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
@@ -34,26 +34,25 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 
 	@Override
 	protected void writeToClient() {
-		ClientBoundPacketData chunksingle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
-		PositionSerializer.writeIntChunkCoord(chunksingle, coord);
-		chunksingle.writeBoolean(full);
-		VarNumberSerializer.writeVarInt(chunksingle, blockMask);
-		boolean hasSkyLight = cache.getClientCache().hasDimensionSkyLight();
-		ArraySerializer.writeVarIntByteArray(chunksingle, to -> {
+		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
+		chunkdata.writeBoolean(full);
+		VarNumberSerializer.writeVarInt(chunkdata, blockMask);
+		MiscSerializer.writeVarIntLengthPrefixedType(chunkdata, this, (to, chunksections) -> {
 			ChunkWriterVariesWithLight.writeSectionsCompactPreFlattening(
-				to, blockMask, 13,
-				blockDataRemappingTable,
-				cachedChunk, hasSkyLight,
+				to, chunksections.blockMask, 13,
+				chunksections.blockDataRemappingTable,
+				chunksections.cachedChunk, chunksections.clientCache.hasDimensionSkyLight(),
 				sectionNumber -> {}
 			);
-			if (full) {
-				int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(biomes);
+			if (chunksections.full) {
+				int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(chunksections.biomes);
 				for (int biomeId : legacyBiomeData) {
-					to.writeByte(BiomeRemapper.mapBiome(biomeId, clientCache, biomeRemappingTable));
+					to.writeByte(BiomeRemapper.mapBiome(biomeId, chunksections.clientCache, chunksections.biomeRemappingTable));
 				}
 			}
 		});
-		codec.write(chunksingle);
+		codec.write(chunkdata);
 
 		for (Map<Position, TileEntity> sectionTiles : cachedChunk.getTiles()) {
 			for (TileEntity tile : sectionTiles.values()) {

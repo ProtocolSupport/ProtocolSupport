@@ -90,12 +90,6 @@ public class Utils {
 		return (((512 + rmean) * r * r) >> 8) + (4 * g * g) + (((767 - rmean) * b * b) >> 8);
 	}
 
-	public static void repeat(int count, Runnable action) {
-		for (int i = 0; i < count; i++) {
-			action.run();
-		}
-	}
-
 	public static final long currentTimeMillisFromNanoTime() {
 		return TimeUnit.NANOSECONDS.toMillis(System.nanoTime());
 	}

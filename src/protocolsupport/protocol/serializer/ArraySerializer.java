@@ -4,10 +4,8 @@ import java.lang.reflect.Array;
 import java.util.List;
 import java.util.RandomAccess;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.ObjIntConsumer;
-import java.util.function.ToIntFunction;
 
 import io.netty.buffer.ByteBuf;
 
@@ -79,10 +77,6 @@ public class ArraySerializer {
 		to.writeBytes(data);
 	}
 
-	public static void writeShortByteArray(ByteBuf to, Consumer<ByteBuf> dataWriter) {
-		MiscSerializer.writeLengthPrefixedBytes(to, (lTo, length) -> lTo.writeShort(length), dataWriter);
-	}
-
 	public static <T> void writeShortTArray(ByteBuf to, T[] array, BiConsumer<ByteBuf, T> elementWriter) {
 		to.writeShort(array.length);
 		for (T element : array) {
@@ -101,14 +95,6 @@ public class ArraySerializer {
 		to.writeBytes(data);
 	}
 
-	public static void writeVarIntByteArray(ByteBuf to, Consumer<ByteBuf> dataWriter) {
-		MiscSerializer.writeLengthPrefixedBytes(to, VarNumberSerializer::writeFixedSizeVarInt, dataWriter);
-	}
-
-	public static void writeVarIntTArray(ByteBuf to, ToIntFunction<ByteBuf> arrayWriter) {
-		MiscSerializer.writeSizePrefixedData(to, VarNumberSerializer::writeFixedSizeVarInt, arrayWriter);
-	}
-
 	public static <T> void writeVarIntTArray(ByteBuf to, T[] array, BiConsumer<ByteBuf, T> elementWriter) {
 		VarNumberSerializer.writeVarInt(to, array.length);
 		for (T element : array) {
@@ -116,10 +102,11 @@ public class ArraySerializer {
 		}
 	}
 
-	public static <T> void writeVarIntTArray(ByteBuf to, List<T> array, BiConsumer<ByteBuf, T> elementWriter) {
-		VarNumberSerializer.writeVarInt(to, array.size());
-		for (T element : array) {
-			elementWriter.accept(to, element);
+	public static <T, A extends List<T> & RandomAccess> void writeVarIntTArray(ByteBuf to, A array, BiConsumer<ByteBuf, T> elementWriter) {
+		int size = array.size();
+		VarNumberSerializer.writeVarInt(to, size);
+		for (int i = 0; i < size; i++) {
+			elementWriter.accept(to, array.get(i));
 		}
 	}
 

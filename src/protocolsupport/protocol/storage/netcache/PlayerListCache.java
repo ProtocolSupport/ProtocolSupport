@@ -3,8 +3,6 @@ package protocolsupport.protocol.storage.netcache;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import protocolsupport.api.chat.ChatAPI;
@@ -29,19 +27,20 @@ public class PlayerListCache {
 	}
 
 	public static class PlayerListEntry {
+
 		protected final String name;
 		protected String displayNameJson;
 		protected int ping;
 		protected GameMode gamemode;
-		protected final Map<String, ProfileProperty> propSigned = new HashMap<>();
-		protected final Map<String, ProfileProperty> propUnsigned = new HashMap<>();
+
+		protected final ArrayList<ProfileProperty> properties = new ArrayList<>();
 
 		public PlayerListEntry(String name, int ping, GameMode gamemode, String displayNameJson, Collection<ProfileProperty> properties) {
 			this.name = name;
 			this.ping = ping;
 			this.gamemode = gamemode;
 			this.displayNameJson = displayNameJson;
-			properties.forEach(this::addProperty);
+			this.properties.addAll(properties);
 		}
 
 		public String getUserName() {
@@ -77,22 +76,11 @@ public class PlayerListCache {
 		}
 
 		public void addProperty(ProfileProperty property) {
-			if (property.hasSignature()) {
-				propSigned.put(property.getName(), property);
-			} else {
-				propUnsigned.put(property.getName(), property);
-			}
+			properties.add(property);
 		}
 
-		public List<ProfileProperty> getProperties(boolean signedOnly) {
-			if (signedOnly) {
-				return new ArrayList<>(propSigned.values());
-			} else {
-				ArrayList<ProfileProperty> properties = new ArrayList<>();
-				properties.addAll(propSigned.values());
-				properties.addAll(propUnsigned.values());
-				return properties;
-			}
+		public ArrayList<ProfileProperty> getProperties() {
+			return properties;
 		}
 
 		@Override
@@ -102,7 +90,7 @@ public class PlayerListCache {
 
 		@Override
 		public PlayerListEntry clone() {
-			return new PlayerListEntry(name, ping, gamemode, displayNameJson, getProperties(false));
+			return new PlayerListEntry(name, ping, gamemode, displayNameJson, properties);
 		}
 
 	}

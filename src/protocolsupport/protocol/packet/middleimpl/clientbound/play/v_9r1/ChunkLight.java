@@ -7,9 +7,10 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheChunkLight;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
-import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
@@ -22,25 +23,27 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 		super(init);
 	}
 
+	protected final ClientCache clientCache = cache.getClientCache();
+
 	protected final List<ClientBoundPacketData> blocktileupdates = new ArrayList<>();
 
 	@Override
 	protected void writeToClient() {
 		int blockMask = ((setSkyLightMask | setBlockLightMask | emptySkyLightMask | emptyBlockLightMask) >> 1) & 0xFFFF;
-		boolean hasSkyLight = cache.getClientCache().hasDimensionSkyLight();
 
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(false); //full
 		VarNumberSerializer.writeVarInt(chunkdata, blockMask);
-		ArraySerializer.writeVarIntByteArray(chunkdata, to -> {
+		MiscSerializer.writeVarIntLengthPrefixedType(chunkdata, this, (to, chunksections) -> {
 			ChunkWriterVariesWithLight.writeSectionsCompactPreFlattening(
 				to, blockMask, 13,
-				blockDataRemappingTable,
-				cachedChunk, hasSkyLight,
+				chunksections.blockDataRemappingTable,
+				chunksections.cachedChunk,
+				chunksections.clientCache.hasDimensionSkyLight(),
 				sectionNumber ->
-					cachedChunk.getTiles(sectionNumber).values()
-					.forEach(tile -> blocktileupdates.add(BlockTileUpdate.create(version, tile)))
+					chunksections.cachedChunk.getTiles(sectionNumber).values()
+					.forEach(tile -> blocktileupdates.add(BlockTileUpdate.create(chunksections.version, tile)))
 			);
 		});
 

@@ -7,8 +7,8 @@ import org.bukkit.block.Biome;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheChunkData;
-import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
@@ -38,26 +38,26 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(chunkdata, blockMask);
-		boolean hasSkyLight = cache.getClientCache().hasDimensionSkyLight();
-		ArraySerializer.writeVarIntByteArray(chunkdata, to -> {
+		MiscSerializer.writeVarIntLengthPrefixedType(chunkdata, this, (to, chunksections) -> {
 			ChunkWriterVariesWithLight.writeSectionsCompactPreFlattening(
-				to, blockMask, 13,
-				blockDataRemappingTable,
-				cachedChunk, hasSkyLight,
+				to, chunksections.blockMask, 13,
+				chunksections.blockDataRemappingTable,
+				chunksections.cachedChunk,
+				chunksections.clientCache.hasDimensionSkyLight(),
 				sectionNumber -> {}
 			);
-			if (full) {
-				int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(biomes);
+			if (chunksections.full) {
+				int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(chunksections.biomes);
 				for (int biomeId : legacyBiomeData) {
-					to.writeByte(BiomeRemapper.mapBiome(biomeId, clientCache, biomeRemappingTable));
+					to.writeByte(BiomeRemapper.mapBiome(biomeId, chunksections.clientCache, chunksections.biomeRemappingTable));
 				}
 			}
 		});
-		ArraySerializer.writeVarIntTArray(chunkdata, lTo -> {
+		MiscSerializer.writeVarIntCountPrefixedType(chunkdata, cachedChunk.getTiles(), (tilesTo, chunkTiles) -> {
 			int count = 0;
-			for (Map<Position, TileEntity> sectionTiles : cachedChunk.getTiles()) {
+			for (Map<Position, TileEntity> sectionTiles : chunkTiles) {
 				for (TileEntity tile : sectionTiles.values()) {
-					ItemStackSerializer.writeDirectTag(lTo, tile.getNBT());
+					ItemStackSerializer.writeDirectTag(tilesTo, tile.getNBT());
 				}
 				count += sectionTiles.size();
 			}

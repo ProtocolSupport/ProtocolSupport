@@ -9,6 +9,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleDeclareReci
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.NetworkItemStack;
@@ -119,14 +120,14 @@ public abstract class AbstractDeclareRecipes extends MiddleDeclareRecipes {
 	@Override
 	protected void writeToClient() {
 		ClientBoundPacketData declarerecipes = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_DECLARE_RECIPES);
-		ArraySerializer.writeVarIntTArray(declarerecipes, to -> {
+		MiscSerializer.writeVarIntCountPrefixedType(declarerecipes, recipes, (recipesTo, recipes) -> {
 			int writtenRecipeCount = 0;
 			for (Recipe recipe : recipes) {
 				RecipeWriter<Recipe> writer = getRecipeWriter(recipe.getType());
 				if (writer == null) {
 					throw new IllegalArgumentException(MessageFormat.format("Missing recipe writer for recipe type {0}", recipe.getType()));
 				}
-				if (writer.writeRecipe(to, version, recipe)) {
+				if (writer.writeRecipe(recipesTo, version, recipe)) {
 					writtenRecipeCount++;
 				}
 			}

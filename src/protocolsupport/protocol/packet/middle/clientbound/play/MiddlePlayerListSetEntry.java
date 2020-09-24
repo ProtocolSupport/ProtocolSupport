@@ -15,7 +15,6 @@ import protocolsupport.protocol.storage.netcache.PlayerListCache;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.protocol.types.GameMode;
 import protocolsupport.protocol.utils.EnumConstantLookups;
-import protocolsupport.utils.Utils;
 
 public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 
@@ -31,7 +30,8 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 	@Override
 	protected void readServerData(ByteBuf serverdata) {
 		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
-		Utils.repeat(VarNumberSerializer.readVarInt(serverdata), () -> {
+		int entryCount = VarNumberSerializer.readVarInt(serverdata);
+		while (entryCount-- > 0) {
 			UUID uuid = UUIDSerializer.readUUID2L(serverdata);
 			switch (action) {
 				case ADD: {
@@ -41,7 +41,8 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 					}
 					String username = StringSerializer.readVarIntUTF8String(serverdata);
 					ArrayList<ProfileProperty> properties = new ArrayList<>();
-					Utils.repeat(VarNumberSerializer.readVarInt(serverdata), () -> {
+					int propertiesCount = VarNumberSerializer.readVarInt(serverdata);
+					while (propertiesCount-- > 0) {
 						String name = StringSerializer.readVarIntUTF8String(serverdata);
 						String value = StringSerializer.readVarIntUTF8String(serverdata);
 						String signature = null;
@@ -49,7 +50,7 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 							signature = StringSerializer.readVarIntUTF8String(serverdata);
 						}
 						properties.add(new ProfileProperty(name, value, signature));
-					});
+					};
 					GameMode gamemode = GameMode.getById(VarNumberSerializer.readVarInt(serverdata));
 					int ping = VarNumberSerializer.readVarInt(serverdata);
 					String displayNameJson = null;
@@ -102,7 +103,7 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 					break;
 				}
 			}
-		});
+		};
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunkData;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
@@ -41,17 +42,17 @@ public class ChunkData extends MiddleChunkData {
 		chunkdata.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(chunkdata, blockMask);
 		ItemStackSerializer.writeDirectTag(chunkdata, HeightMapTransformer.transform(heightmaps));
-		ArraySerializer.writeVarIntByteArray(chunkdata, to -> {
+		MiscSerializer.writeVarIntLengthPrefixedType(chunkdata, this, (to, chunksections) -> {
 			ChunkWriterVaries.writeSectionsCompact(
-				to, blockMask, 14,
-				blockDataRemappingTable,
-				flatteningBlockDataTable,
-				sections
+				to, chunksections.blockMask, 14,
+				chunksections.blockDataRemappingTable,
+				chunksections.flatteningBlockDataTable,
+				chunksections.sections
 			);
-			if (full) {
-				int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(biomes);
+			if (chunksections.full) {
+				int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(chunksections.biomes);
 				for (int biomeId : legacyBiomeData) {
-					to.writeInt(BiomeRemapper.mapBiome(biomeId, clientCache, biomeRemappingTable));
+					to.writeInt(BiomeRemapper.mapBiome(biomeId, chunksections.clientCache, chunksections.biomeRemappingTable));
 				}
 			}
 		});

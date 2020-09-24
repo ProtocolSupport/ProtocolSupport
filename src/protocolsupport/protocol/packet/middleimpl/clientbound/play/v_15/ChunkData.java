@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunkData;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
@@ -46,12 +47,12 @@ public class ChunkData extends MiddleChunkData {
 				chunkdata.writeInt(BiomeRemapper.mapBiome(biome, clientCache, biomeRemappingTable));
 			}
 		}
-		ArraySerializer.writeVarIntByteArray(chunkdata, to -> {
+		MiscSerializer.writeVarIntLengthPrefixedType(chunkdata, this, (to, chunksections) -> {
 			ChunkWriterVaries.writeSectionsCompact(
-				to, blockMask, 14,
-				blockDataRemappingTable,
-				flatteningBlockDataTable,
-				sections
+				to, chunksections.blockMask, 14,
+				chunksections.blockDataRemappingTable,
+				chunksections.flatteningBlockDataTable,
+				chunksections.sections
 			);
 		});
 		ArraySerializer.writeVarIntTArray(

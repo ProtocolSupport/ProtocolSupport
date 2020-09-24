@@ -29,7 +29,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 			switch (action) {
 				case ADD: {
 					StringSerializer.writeVarIntUTF8String(playerlistsetentry, currentEntry.getUserName());
-					ArraySerializer.writeVarIntTArray(playerlistsetentry, currentEntry.getProperties(false), (to, property) -> {
+					ArraySerializer.writeVarIntTArray(playerlistsetentry, currentEntry.getProperties(), (to, property) -> {
 						StringSerializer.writeVarIntUTF8String(to, property.getName());
 						StringSerializer.writeVarIntUTF8String(to, property.getValue());
 						to.writeBoolean(property.hasSignature());

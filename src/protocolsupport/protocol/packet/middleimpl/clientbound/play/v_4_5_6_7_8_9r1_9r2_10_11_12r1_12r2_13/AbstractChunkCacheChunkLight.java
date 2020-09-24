@@ -9,11 +9,11 @@ import protocolsupport.utils.BitUtils;
 
 public abstract class AbstractChunkCacheChunkLight extends MiddleChunkLight {
 
-	protected final ChunkCache chunkCache = cache.getChunkCache();
-
 	public AbstractChunkCacheChunkLight(MiddlePacketInit init) {
 		super(init);
 	}
+
+	protected final ChunkCache chunkCache = cache.getChunkCache();
 
 	protected CachedChunk cachedChunk;
 
