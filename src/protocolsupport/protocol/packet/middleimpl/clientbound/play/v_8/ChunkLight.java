@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -13,6 +12,9 @@ import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterShort;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.TileEntity;
+import protocolsupport.utils.BitUtils;
 
 public class ChunkLight extends AbstractChunkCacheChunkLight {
 
@@ -24,30 +26,25 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 
 	protected final ClientCache clientCache = cache.getClientCache();
 
-	protected final List<ClientBoundPacketData> blocktileupdates = new ArrayList<>();
-
 	@Override
 	protected void writeToClient() {
-		int blockMask = ((setSkyLightMask | setBlockLightMask | emptySkyLightMask | emptyBlockLightMask) >> 1) & 0xFFFF;
-
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(false); //full
 		chunkdata.writeShort(blockMask);
 		ArraySerializer.writeVarIntByteArray(chunkdata, ChunkWriterShort.serializeSections(
-			blockMask, blockDataRemappingTable, cachedChunk, clientCache.hasDimensionSkyLight(),
-			sectionNumber -> cachedChunk.getTiles(sectionNumber).values().forEach(tile -> blocktileupdates.add(BlockTileUpdate.create(version, tile)))
+			blockMask, blockDataRemappingTable, cachedChunk, clientCache.hasDimensionSkyLight()
 		));
-
 		codec.write(chunkdata);
-		for (ClientBoundPacketData blocktileupdate : blocktileupdates) {
-			codec.write(blocktileupdate);
-		}
-	}
 
-	@Override
-	protected void cleanup() {
-		blocktileupdates.clear();
+		Map<Position, TileEntity>[] tiles = cachedChunk.getTiles();
+		for (int sectionNumber = 0; sectionNumber < tiles.length; sectionNumber++) {
+			if (BitUtils.isIBitSet(blockMask, sectionNumber)) {
+				for (TileEntity tile : tiles[sectionNumber].values()) {
+					codec.write(BlockTileUpdate.create(version, tile));
+				}
+			}
+		}
 	}
 
 }

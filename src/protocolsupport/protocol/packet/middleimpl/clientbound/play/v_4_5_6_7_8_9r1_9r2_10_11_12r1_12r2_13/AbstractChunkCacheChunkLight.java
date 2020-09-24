@@ -16,6 +16,7 @@ public abstract class AbstractChunkCacheChunkLight extends MiddleChunkLight {
 	protected final ChunkCache chunkCache = cache.getChunkCache();
 
 	protected CachedChunk cachedChunk;
+	protected int blockMask;
 
 	@Override
 	protected void handleReadData() {
@@ -46,6 +47,8 @@ public abstract class AbstractChunkCacheChunkLight extends MiddleChunkLight {
 		if (!chunkLoaded) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
+
+		blockMask = ((setSkyLightMask | setBlockLightMask | emptySkyLightMask | emptyBlockLightMask) >> 1) & 0xFFFF;
 	}
 
 }

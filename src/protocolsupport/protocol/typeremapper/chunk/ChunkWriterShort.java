@@ -1,6 +1,5 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
-import it.unimi.dsi.fastutil.ints.IntConsumer;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunkSectionBlockStorage;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
@@ -13,8 +12,7 @@ public class ChunkWriterShort {
 	public static byte[] serializeSections(
 		int mask,
 		IdMappingTable blockDataRemappingTable,
-		CachedChunk chunk, boolean hasSkyLight,
-		IntConsumer sectionPresentConsumer
+		CachedChunk chunk, boolean hasSkyLight
 	) {
 		int columnsCount = Integer.bitCount(mask);
 		byte[] data = new byte[((hasSkyLight ? 12288 : 10240) * columnsCount)];
@@ -43,8 +41,6 @@ public class ChunkWriterShort {
 					ChunkWriterUtils.copyLight(data, skyLightIndex, chunk.getSkyLight(sectionNumber));
 					skyLightIndex += 2048;
 				}
-
-				sectionPresentConsumer.accept(sectionNumber);
 			}
 		}
 

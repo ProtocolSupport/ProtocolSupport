@@ -1,8 +1,11 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
+import java.util.Collection;
+import java.util.Map;
+
 import io.netty.buffer.ByteBuf;
-import it.unimi.dsi.fastutil.ints.IntConsumer;
 import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.chunk.BlockStorage;
 import protocolsupport.protocol.storage.netcache.chunk.BlockStorageBytePaletted;
@@ -11,6 +14,8 @@ import protocolsupport.protocol.storage.netcache.chunk.CachedChunkSectionBlockSt
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
+import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.protocol.utils.NumberBitsStorageCompact;
 import protocolsupport.utils.BitUtils;
@@ -21,8 +26,7 @@ public class ChunkWriterVariesWithLight {
 		ByteBuf buffer, int mask, int globalPaletteBitsPerBlock,
 		IdMappingTable blockDataRemappingTable,
 		FlatteningBlockDataTable flatteningBlockDataTable,
-		CachedChunk chunk, boolean hasSkyLight,
-		IntConsumer sectionPresentConsumer
+		CachedChunk chunk, boolean hasSkyLight
 	) {
 		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
 			if (BitUtils.isIBitSet(mask, sectionNumber)) {
@@ -70,8 +74,6 @@ public class ChunkWriterVariesWithLight {
 				if (hasSkyLight) {
 					ChunkWriterUtils.writeBBLight(buffer, chunk.getSkyLight(sectionNumber));
 				}
-
-				sectionPresentConsumer.accept(sectionNumber);
 			}
 		}
 	}
@@ -80,8 +82,7 @@ public class ChunkWriterVariesWithLight {
 	public static void writeSectionsCompactPreFlattening(
 		ByteBuf buffer, int mask, int globalPaletteBitsPerBlock,
 		IdMappingTable blockDataRemappingTable,
-		CachedChunk chunk, boolean hasSkyLight,
-		IntConsumer sectionPresentConsumer
+		CachedChunk chunk, boolean hasSkyLight
 	) {
 		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
 			if (BitUtils.isIBitSet(mask, sectionNumber)) {
@@ -129,10 +130,23 @@ public class ChunkWriterVariesWithLight {
 				if (hasSkyLight) {
 					ChunkWriterUtils.writeBBLight(buffer, chunk.getSkyLight(sectionNumber));
 				}
-
-				sectionPresentConsumer.accept(sectionNumber);
 			}
 		}
+	}
+
+	public static int writeTiles(ByteBuf buffer, int mask, CachedChunk chunk) {
+		int count = 0;
+		Map<Position, TileEntity>[] tiles = chunk.getTiles();
+		for (int sectionNumber = 0; sectionNumber < tiles.length; sectionNumber++) {
+			if (BitUtils.isIBitSet(mask, sectionNumber)) {
+				Collection<TileEntity> sectionTiles = tiles[sectionNumber].values();
+				for (TileEntity tile : sectionTiles) {
+					ItemStackSerializer.writeDirectTag(buffer, tile.getNBT());
+				}
+				count += sectionTiles.size();
+			}
+		}
+		return count;
 	}
 
 }

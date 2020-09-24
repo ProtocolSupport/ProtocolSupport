@@ -2,7 +2,6 @@ package protocolsupport.protocol.typeremapper.chunk;
 
 import org.bukkit.block.Biome;
 
-import it.unimi.dsi.fastutil.ints.IntConsumer;
 import protocolsupport.protocol.storage.netcache.IBiomeRegistry;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunkSectionBlockStorage;
@@ -20,8 +19,7 @@ public class ChunkWriterByte {
 	public static byte[] serializeSectionsAndBiomes(
 		int mask,
 		CachedChunk chunk, IdMappingTable blockDataRemappingTable, boolean hasSkyLight,
-		int[] biomeData, IBiomeRegistry biomeRegistry, EnumMappingTable<Biome> biomeRemappingTable,
-		IntConsumer sectionPresentConsumer
+		int[] biomeData, IBiomeRegistry biomeRegistry, EnumMappingTable<Biome> biomeRemappingTable
 	) {
 		int columnsCount = Integer.bitCount(mask);
 		byte[] data = new byte[((hasSkyLight ? 10240 : 8192) * columnsCount) + (biomeData != null ? 256 : 0)];
@@ -58,8 +56,6 @@ public class ChunkWriterByte {
 					ChunkWriterUtils.copyLight(data, skyLightIndex, chunk.getSkyLight(sectionNumber));
 					skyLightIndex += 2048;
 				}
-
-				sectionPresentConsumer.accept(sectionNumber);
 			}
 		}
 

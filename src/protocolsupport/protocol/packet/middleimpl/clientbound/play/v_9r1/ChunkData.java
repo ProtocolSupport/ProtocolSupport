@@ -42,8 +42,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 			ChunkWriterVariesWithLight.writeSectionsCompactPreFlattening(
 				to, chunksections.blockMask, 13,
 				chunksections.blockDataRemappingTable,
-				chunksections.cachedChunk, chunksections.clientCache.hasDimensionSkyLight(),
-				sectionNumber -> {}
+				chunksections.cachedChunk, chunksections.clientCache.hasDimensionSkyLight()
 			);
 			if (chunksections.full) {
 				int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(chunksections.biomes);

@@ -1,13 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13;
 
-import java.util.Map;
-
 import org.bukkit.block.Biome;
 
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheChunkData;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -20,8 +17,6 @@ import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.EnumMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
-import protocolsupport.protocol.types.Position;
-import protocolsupport.protocol.types.TileEntity;
 
 public class ChunkData extends AbstractChunkCacheChunkData {
 
@@ -45,8 +40,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 			ChunkWriterVariesWithLight.writeSectionsCompactFlattening(
 				to, chunksections.blockMask, 14,
 				chunksections.blockDataRemappingTable, chunksections.flatteningBlockDataTable,
-				chunksections.cachedChunk, chunksections.clientCache.hasDimensionSkyLight(),
-				sectionNumber -> {}
+				chunksections.cachedChunk, chunksections.clientCache.hasDimensionSkyLight()
 			);
 			if (chunksections.full) {
 				int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(chunksections.biomes);
@@ -55,15 +49,8 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 				}
 			}
 		});
-		MiscSerializer.writeVarIntCountPrefixedType(chunkdata, cachedChunk.getTiles(), (tilesTo, chunkTiles) -> {
-			int count = 0;
-			for (Map<Position, TileEntity> sectionTiles : chunkTiles) {
-				for (TileEntity tile : sectionTiles.values()) {
-					ItemStackSerializer.writeDirectTag(tilesTo, tile.getNBT());
-				}
-				count += sectionTiles.size();
-			}
-			return count;
+		MiscSerializer.writeVarIntCountPrefixedType(chunkdata, this, (to, chunksections) -> {
+			return ChunkWriterVariesWithLight.writeTiles(to, chunksections.blockMask, chunksections.cachedChunk);
 		});
 		codec.write(chunkdata);
 	}

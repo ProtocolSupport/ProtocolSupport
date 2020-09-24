@@ -48,8 +48,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 					chunksections.blockMask,
 					chunksections.blockDataRemappingTable,
 					chunksections.cachedChunk,
-					chunksections.clientCache.hasDimensionSkyLight(),
-					sectionNumber -> {}
+					chunksections.clientCache.hasDimensionSkyLight()
 				));
 				if (chunksections.full) {
 					int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(chunksections.biomes);
