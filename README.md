@@ -16,7 +16,6 @@ Known issues:
 
 Known wontfix issues:
 * [Anything that is not latest] Stats are not sent
-* [All] Can't have multiple boats passengers (Intentional to prevent rendering glitches). Disable all versions before 1.9 using API to reenable multiple boat passengers.
 * [1.12 and earlier] Chests are seen as enderchests (Intentional to prevent rendering glitches). Block mappings can be changed using API if you with to see chests as chests again.
 * [1.8 and earlier] Can't control vehicle (Not directly translatable at network level, too much work to implement serverside)
 * [1.4.7 and earlier] Server shows up as "incompatible" in the server list (Impossible to fix due to the lack of an way to verify the client version during server list ping)
