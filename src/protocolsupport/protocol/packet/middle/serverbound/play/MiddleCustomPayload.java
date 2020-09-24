@@ -8,6 +8,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -55,6 +56,9 @@ public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 								ProtocolSupport.logWarning("Skipping unsuppored legacy custom payload tag register " + rTag);
 							}
 						}
+					}
+					if (resultTagsJoiner.length() == 0) {
+						throw CancelMiddlePacketException.INSTANCE;
 					}
 					tag = modernTag;
 					data = Unpooled.wrappedBuffer(resultTagsJoiner.toString().getBytes(StandardCharsets.UTF_8));
