@@ -22,7 +22,9 @@ public abstract class AbstractChunkCacheChunkLight extends MiddleChunkLight {
 		boolean chunkLoaded = false;
 		cachedChunk = chunkCache.get(coord);
 		if (cachedChunk != null) {
-			chunkLoaded = true;
+			if (cachedChunk.isFull()) {
+				chunkLoaded = true;
+			}
 		} else {
 			cachedChunk = chunkCache.add(coord);
 		}

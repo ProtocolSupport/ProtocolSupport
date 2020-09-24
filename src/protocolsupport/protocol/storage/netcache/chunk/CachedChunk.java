@@ -27,6 +27,10 @@ public class CachedChunk {
 		}
 	}
 
+	public boolean isFull() {
+		return full;
+	}
+
 	public boolean checkHadFull() {
 		if (!full) {
 			full = true;
