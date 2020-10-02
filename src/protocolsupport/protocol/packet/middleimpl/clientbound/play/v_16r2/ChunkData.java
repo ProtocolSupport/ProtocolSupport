@@ -48,7 +48,7 @@ public class ChunkData extends MiddleChunkData {
 		}
 		MiscSerializer.writeVarIntLengthPrefixedType(chunkdata, this, (to, chunksections) -> {
 			ChunkWriterVaries.writeSectionsPadded(
-				to, chunksections.blockMask, 14,
+				to, chunksections.blockMask, 15,
 				chunksections.blockDataRemappingTable,
 				chunksections.flatteningBlockDataTable,
 				chunksections.sections
