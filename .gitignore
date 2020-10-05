@@ -1,12 +1,12 @@
 # Build Folders #
-bin/
-build/
-target/
-gen/
-libraries_runtime/
-libraries_shade/
-build_libraries/
-logs/
+/bin/
+/build/
+/target/
+/gen/
+/libraries_runtime/
+/libraries_shade/
+/build_libraries/
+/logs/
 
 # Gradle
 .gradle
