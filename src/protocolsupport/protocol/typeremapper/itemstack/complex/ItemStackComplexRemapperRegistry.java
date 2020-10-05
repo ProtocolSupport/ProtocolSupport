@@ -24,6 +24,7 @@ import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.SpawnE
 import protocolsupport.protocol.typeremapper.itemstack.complex.fromclient.SpawnEggFromStringIdComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.AttributesToLegacyComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.BannerToLegacyComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.BedToLegacyComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.BookPagesToLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DisplayNameToLegacyTextComplexRemapper;
 import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHeadToDragonPlayerHeadComplexRemapper;
@@ -85,6 +86,24 @@ public class ItemStackComplexRemapperRegistry {
 			}
 		});
 		registerToClient(Material.SHIELD, new ShieldToLegacyComplexRemapper(), ProtocolVersionsHelper.DOWN_1_12_2);
+
+		BedToLegacyComplexRemapper bedToLegacy = new BedToLegacyComplexRemapper();
+		registerToClient(Material.WHITE_BED, bedToLegacy, ProtocolVersionsHelper.DOWN_1_11_1);
+		registerToClient(Material.ORANGE_BED, bedToLegacy, ProtocolVersionsHelper.DOWN_1_11_1);
+		registerToClient(Material.MAGENTA_BED, bedToLegacy, ProtocolVersionsHelper.DOWN_1_11_1);
+		registerToClient(Material.LIGHT_BLUE_BED, bedToLegacy, ProtocolVersionsHelper.DOWN_1_11_1);
+		registerToClient(Material.YELLOW_BED, bedToLegacy, ProtocolVersionsHelper.DOWN_1_11_1);
+		registerToClient(Material.LIME_BED, bedToLegacy, ProtocolVersionsHelper.DOWN_1_11_1);
+		registerToClient(Material.PINK_BED, bedToLegacy, ProtocolVersionsHelper.DOWN_1_11_1);
+		registerToClient(Material.GRAY_BED, bedToLegacy, ProtocolVersionsHelper.DOWN_1_11_1);
+		registerToClient(Material.LIGHT_GRAY_BED, bedToLegacy, ProtocolVersionsHelper.DOWN_1_11_1);
+		registerToClient(Material.CYAN_BED, bedToLegacy, ProtocolVersionsHelper.DOWN_1_11_1);
+		registerToClient(Material.BLUE_BED, bedToLegacy, ProtocolVersionsHelper.DOWN_1_11_1);
+		registerToClient(Material.PURPLE_BED, bedToLegacy, ProtocolVersionsHelper.DOWN_1_11_1);
+		registerToClient(Material.GREEN_BED, bedToLegacy, ProtocolVersionsHelper.DOWN_1_11_1);
+		registerToClient(Material.BROWN_BED, bedToLegacy, ProtocolVersionsHelper.DOWN_1_11_1);
+		registerToClient(Material.RED_BED, bedToLegacy, ProtocolVersionsHelper.DOWN_1_11_1);
+		registerToClient(Material.BLACK_BED, bedToLegacy, ProtocolVersionsHelper.DOWN_1_11_1);
 
 		{
 			DragonHeadToDragonPlayerHeadComplexRemapper dragonHeadToPlayerHead = new DragonHeadToDragonPlayerHeadComplexRemapper();
