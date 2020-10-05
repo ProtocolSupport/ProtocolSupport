@@ -29,7 +29,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 			windowId,
 			((Number) windowTypeIdMappingTable.get(windowRemapper.toClientWindowType(type))).intValue(),
 			title.toLegacyText(clientCache.getLocale()),
-			windowRemapper.toClientSlots(0)
+			windowRemapper.toClientWindowSlots(0)
 		);
 		codec.write(windowopen);
 	}

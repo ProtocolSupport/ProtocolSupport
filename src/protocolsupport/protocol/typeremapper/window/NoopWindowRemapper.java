@@ -30,7 +30,7 @@ public class NoopWindowRemapper extends SingleWindowIdRemapper {
 	}
 
 	@Override
-	protected void fillClientItems(ClientItems instance, NetworkItemStack[] content) {
+	protected void fillClientItems(ClientItemsArray instance, NetworkItemStack[] content) {
 		instance.items = content;
 	}
 
@@ -40,7 +40,7 @@ public class NoopWindowRemapper extends SingleWindowIdRemapper {
 	}
 
 	@Override
-	public int fromClientSlot(byte windowId, int slot) {
+	protected int fromClientSlot(int slot) {
 		return slot;
 	}
 

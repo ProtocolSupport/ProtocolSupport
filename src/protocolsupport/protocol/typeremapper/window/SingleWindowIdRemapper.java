@@ -15,23 +15,35 @@ public abstract class SingleWindowIdRemapper extends WindowRemapper {
 		super(clientWindowType, clientSlots, windowMetadataCreator);
 	}
 
-	protected final ClientItems clientitems = new ClientItems((byte) 0, null);
-	protected final ClientItems[] clientitemsarray = new ClientItems[] {clientitems};
+	protected final ClientItemsArray clientItemsArray = new ClientItemsArray((byte) 0, null);
+	protected final ClientItems clientItems = new ClientItems(clientItemsArray);
+	protected final WindowSlot windowSlot = new WindowSlot((byte) 0, 0);
 
 	@Override
-	public ClientItems[] toClientItems(byte windowId, NetworkItemStack[] content) {
-		clientitems.windowId = windowId;
-		fillClientItems(clientitems, content);
-		return clientitemsarray;
+	public ClientItems toClientItems(byte windowId, NetworkItemStack[] content) {
+		clientItemsArray.windowId = windowId;
+		fillClientItems(clientItemsArray, content);
+		return clientItems;
 	}
 
 	@Override
-	public int toClientSlot(byte windowId, int slot) {
-		return createClientSlot(windowId, toClientSlot(slot));
+	public WindowSlot toClientSlot(byte windowId, int slot) {
+		windowSlot.windowId = windowId;
+		windowSlot.slot = toClientSlot(slot);
+		return windowSlot;
 	}
 
-	protected abstract void fillClientItems(ClientItems instance, NetworkItemStack[] content);
+	@Override
+	public WindowSlot fromClientSlot(byte windowId, int slot) {
+		windowSlot.windowId = windowId;
+		windowSlot.slot = fromClientSlot(slot);
+		return windowSlot;
+	}
+
+	protected abstract void fillClientItems(ClientItemsArray instance, NetworkItemStack[] content);
 
 	protected abstract int toClientSlot(int slot);
+
+	protected abstract int fromClientSlot(int slot);
 
 }

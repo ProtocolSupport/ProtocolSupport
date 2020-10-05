@@ -11,7 +11,7 @@ public abstract class WindowRemapper {
 	protected static final int ORIGINAL_SLOTS = -1;
 
 	protected final WindowType clientWindowType;
-	protected final int clientSlots;
+	protected final int clientWindowSlots;
 	protected final Supplier<Object> windowMetadataCreator;
 
 	public WindowRemapper(WindowType clientWindowType, int clientSlots) {
@@ -20,7 +20,7 @@ public abstract class WindowRemapper {
 
 	public WindowRemapper(WindowType clientWindowType, int clientSlots, Supplier<Object> windowMetadataCreator) {
 		this.clientWindowType = clientWindowType;
-		this.clientSlots = clientSlots;
+		this.clientWindowSlots = clientSlots;
 		this.windowMetadataCreator = windowMetadataCreator;
 	}
 
@@ -32,34 +32,50 @@ public abstract class WindowRemapper {
 		return clientWindowType != ORIGINAL_WINDOW ? clientWindowType : type;
 	}
 
-	public int toClientSlots(int slots) {
-		return clientSlots != ORIGINAL_SLOTS ? clientSlots : slots;
+	public int toClientWindowSlots(int slots) {
+		return clientWindowSlots != ORIGINAL_SLOTS ? clientWindowSlots : slots;
 	}
 
-	public abstract ClientItems[] toClientItems(byte windowId, NetworkItemStack[] content);
+	public abstract ClientItems toClientItems(byte windowId, NetworkItemStack[] content);
 
-	public abstract int toClientSlot(byte windowId, int slot);
+	public abstract WindowSlot toClientSlot(byte windowId, int slot);
 
-	public abstract int fromClientSlot(byte windowId, int slot);
+	public abstract WindowSlot fromClientSlot(byte windowId, int slot);
 
-	public static int createClientSlot(byte windowId, int slot) {
-		return (slot << 8) | (windowId & 0xFF);
-	}
-
-	public static byte getClientSlotWindowId(int windowSlot) {
-		return (byte) (windowSlot & 0xFF);
-	}
-
-	public static int getClientSlotSlot(int windowSlot) {
-		return windowSlot >>> 8;
-	}
 
 	public static class ClientItems {
+
+		protected static final ClientItemsSingle[] single_slots_empty = new ClientItemsSingle[0];
+
+		protected ClientItemsArray[] itemsArrays;
+		protected ClientItemsSingle[] itemsSingle;
+
+		public ClientItems(ClientItemsArray[] itemsArrays, ClientItemsSingle[] itemsSingle) {
+			this.itemsArrays = itemsArrays;
+			this.itemsSingle = itemsSingle;
+		}
+
+		public ClientItems(ClientItemsArray... itemsArrays) {
+			this.itemsArrays = itemsArrays;
+			this.itemsSingle = single_slots_empty;
+		}
+
+		public ClientItemsArray[] getItemsArrays() {
+			return itemsArrays;
+		}
+
+		public ClientItemsSingle[] getItemsSingle() {
+			return itemsSingle;
+		}
+
+	}
+
+	public static class ClientItemsArray {
 
 		protected byte windowId;
 		protected NetworkItemStack[] items;
 
-		public ClientItems(byte windowId, NetworkItemStack[] content) {
+		public ClientItemsArray(byte windowId, NetworkItemStack[] content) {
 			this.windowId = windowId;
 			this.items = content;
 		}
@@ -74,8 +90,55 @@ public abstract class WindowRemapper {
 
 	}
 
-	public static class SlotDoesntExistException extends RuntimeException {
-		public static final WindowRemapper.SlotDoesntExistException INSTANCE = new SlotDoesntExistException();
+	public static class ClientItemsSingle {
+
+		protected byte windowId;
+		protected int slot;
+		protected NetworkItemStack item;
+
+		public ClientItemsSingle(byte windowId, int slot, NetworkItemStack item) {
+			this.windowId = windowId;
+			this.slot = slot;
+			this.item = item;
+		}
+
+		public byte getWindowId() {
+			return windowId;
+		}
+
+		public int getSlot() {
+			return slot;
+		}
+
+		public NetworkItemStack getItem() {
+			return item;
+		}
+
+	}
+
+	public static class WindowSlot {
+
+		protected byte windowId;
+		protected int slot;
+
+		public WindowSlot(byte windowId, int slot) {
+			this.windowId = windowId;
+			this.slot = slot;
+		}
+
+		public byte getWindowId() {
+			return windowId;
+		}
+
+		public int getSlot() {
+			return slot;
+		}
+
+	}
+
+
+	public static class NoSuchSlotException extends RuntimeException {
+		public static final WindowRemapper.NoSuchSlotException INSTANCE = new NoSuchSlotException();
 		private static final long serialVersionUID = 1L;
 		@Override
 		public synchronized Throwable fillInStackTrace() {

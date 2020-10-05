@@ -108,15 +108,15 @@ public class WindowsRemappersRegistry {
 					if (slot < 45) {
 						return slot;
 					} else {
-						throw SlotDoesntExistException.INSTANCE;
+						throw NoSuchSlotException.INSTANCE;
 					}
 				}
 				@Override
-				public int fromClientSlot(byte windowId, int slot) {
+				protected int fromClientSlot(int slot) {
 					return slot;
 				}
 				@Override
-				protected void fillClientItems(ClientItems instance, NetworkItemStack[] content) {
+				protected void fillClientItems(ClientItemsArray instance, NetworkItemStack[] content) {
 					instance.items = Arrays.copyOf(content, content.length - 1);
 				}
 			})),

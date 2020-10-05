@@ -4,7 +4,8 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.typeremapper.window.WindowRemapper.SlotDoesntExistException;
+import protocolsupport.protocol.typeremapper.window.WindowRemapper.NoSuchSlotException;
+import protocolsupport.protocol.typeremapper.window.WindowRemapper.WindowSlot;
 import protocolsupport.protocol.types.NetworkItemStack;
 
 public class InventoryClick extends MiddleInventoryClick {
@@ -15,18 +16,26 @@ public class InventoryClick extends MiddleInventoryClick {
 
 	@Override
 	protected void readClientData(ByteBuf clientdata) {
+		windowId = clientdata.readByte();
+		slot = clientdata.readShort();
+		button = clientdata.readUnsignedByte();
+		actionNumber = clientdata.readShort();
+		mode = clientdata.readUnsignedByte();
+		itemstack = ItemStackSerializer.readItemStack(clientdata, version);
+	}
+
+	@Override
+	protected void handleReadData() {
 		try {
-			windowId = clientdata.readByte();
-			slot = windowCache.getOpenedWindowRemapper().fromClientSlot(windowId, clientdata.readShort());
-			button = clientdata.readUnsignedByte();
-			actionNumber = clientdata.readShort();
-			mode = clientdata.readUnsignedByte();
-			itemstack = ItemStackSerializer.readItemStack(clientdata, version);
-			if ((button == 0) && (mode == MODE_SHIFT_CLICK)) {
-				itemstack = NetworkItemStack.NULL;
-			}
-		} catch (SlotDoesntExistException e) {
+			WindowSlot windowSlot = windowCache.getOpenedWindowRemapper().fromClientSlot(windowId, slot);
+			windowId = windowSlot.getWindowId();
+			slot = windowSlot.getSlot();
+		} catch (NoSuchSlotException e) {
 			throw CancelMiddlePacketException.INSTANCE;
+		}
+
+		if ((button == 0) && (mode == MODE_SHIFT_CLICK)) {
+			itemstack = NetworkItemStack.NULL;
 		}
 	}
 

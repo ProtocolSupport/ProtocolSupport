@@ -31,7 +31,7 @@ public abstract class MiddleInventoryHorseOpen extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void handleReadData() {
-		windowCache.setOpenedWindow(windowId, WindowType.HORSE, windowsRemapper.get(WindowType.HORSE, slots));
+		windowCache.setOpenedWindow(windowId, WindowType.HORSE, slots, windowsRemapper.get(WindowType.HORSE, slots));
 	}
 
 }

@@ -6,8 +6,11 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySe
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper.ClientItems;
+import protocolsupport.protocol.typeremapper.window.WindowRemapper.ClientItemsArray;
+import protocolsupport.protocol.typeremapper.window.WindowRemapper.ClientItemsSingle;
 import protocolsupport.protocol.types.NetworkItemStack;
 
 public class InventorySetItems extends MiddleInventorySetItems {
@@ -16,13 +19,24 @@ public class InventorySetItems extends MiddleInventorySetItems {
 		super(init);
 	}
 
+	protected final ClientCache clientCache = cache.getClientCache();
+
 	@Override
 	protected void writeToClient() {
-		WindowRemapper remapper = windowId == WINDOW_ID_PLAYER_INVENTORY ? windowCache.getPlayerWindowRemapper() : windowCache.getOpenedWindowRemapper();
+		String locale = clientCache.getLocale();
 
-		String locale = cache.getClientCache().getLocale();
-		for (ClientItems windowitems : remapper.toClientItems(windowId, items)) {
-			codec.write(create(version, locale, windowitems.getWindowId(), windowitems.getItems()));
+		WindowRemapper remapper = windowId == WINDOW_ID_PLAYER_INVENTORY ? windowCache.getPlayerWindowRemapper() : windowCache.getOpenedWindowRemapper();
+		ClientItems clientitems = remapper.toClientItems(windowId, items);
+		for (ClientItemsArray itemsArray : clientitems.getItemsArrays()) {
+			codec.write(create(version, locale, itemsArray.getWindowId(), itemsArray.getItems()));
+		}
+		for (ClientItemsSingle itemSingle : clientitems.getItemsSingle()) {
+			codec.write(InventorySetSlot.create(
+				version, locale,
+				itemSingle.getWindowId(),
+				itemSingle.getSlot(),
+				itemSingle.getItem()
+			));
 		}
 	}
 

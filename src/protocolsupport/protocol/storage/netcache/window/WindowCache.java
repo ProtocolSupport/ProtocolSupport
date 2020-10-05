@@ -12,46 +12,60 @@ public class WindowCache {
 	protected byte windowId = WINDOW_ID_PLAYER;
 
 	protected WindowRemapper playerWindowRemapper;
+	protected Object playerWindowMetadata;
+
 	protected WindowRemapper windowRemapper;
 	protected Object windowMetadata;
 
 	public void setPlayerWindow(WindowRemapper playerWindowRemaper) {
 		this.playerWindowRemapper = playerWindowRemaper;
+		this.playerWindowMetadata = playerWindowRemapper.createWindowMetadata();
 		this.windowRemapper = playerWindowRemaper;
+		this.windowMetadata = playerWindowMetadata;
 	}
 
-	public void setOpenedWindow(byte windowId, WindowType windowType, WindowRemapper windowRemapper) {
+	public void setOpenedWindow(byte windowId, WindowType windowType, int windowSlots, WindowRemapper windowRemapper) {
 		this.windowId = windowId;
 		this.windowType = windowType;
 		this.windowRemapper = windowRemapper;
 		this.windowMetadata = windowRemapper.createWindowMetadata();
+		if (playerWindowMetadata instanceof PlayerWindowMetadata) {
+			((PlayerWindowMetadata) playerWindowMetadata).onWindowOpen(windowType, windowSlots, windowMetadata);
+		}
 	}
 
-	public WindowType getOpenedWindowType() {
-		return windowType;
+	public void closeWindow() {
+		if (playerWindowMetadata instanceof PlayerWindowMetadata) {
+			((PlayerWindowMetadata) playerWindowMetadata).onWindowClose();
+		}
+		this.windowId = WINDOW_ID_PLAYER;
+		this.windowType = WindowType.PLAYER;
+		this.windowRemapper = playerWindowRemapper;
+		this.windowMetadata = playerWindowMetadata;
 	}
 
 	public boolean isValidWindowId(int windowId) {
 		return windowId == this.windowId;
 	}
 
+	public Object getPlayerWindowMetadata() {
+		return playerWindowMetadata;
+	}
+
 	public WindowRemapper getPlayerWindowRemapper() {
 		return playerWindowRemapper;
 	}
 
-	public WindowRemapper getOpenedWindowRemapper() {
-		return windowRemapper;
+	public WindowType getOpenedWindowType() {
+		return windowType;
 	}
 
 	public Object getOpenedWindowMetadata() {
 		return windowMetadata;
 	}
 
-	public void closeWindow() {
-		this.windowId = WINDOW_ID_PLAYER;
-		this.windowType = WindowType.PLAYER;
-		this.windowRemapper = playerWindowRemapper;
-		this.windowMetadata = null;
+	public WindowRemapper getOpenedWindowRemapper() {
+		return windowRemapper;
 	}
 
 	@Override

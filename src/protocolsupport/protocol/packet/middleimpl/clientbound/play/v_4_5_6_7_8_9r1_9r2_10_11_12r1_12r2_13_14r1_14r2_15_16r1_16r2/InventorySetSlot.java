@@ -5,8 +5,9 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySetSlot;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.typeremapper.window.WindowRemapper;
-import protocolsupport.protocol.typeremapper.window.WindowRemapper.SlotDoesntExistException;
+import protocolsupport.protocol.storage.netcache.ClientCache;
+import protocolsupport.protocol.typeremapper.window.WindowRemapper.NoSuchSlotException;
+import protocolsupport.protocol.typeremapper.window.WindowRemapper.WindowSlot;
 import protocolsupport.protocol.types.NetworkItemStack;
 
 public class InventorySetSlot extends MiddleInventorySetSlot {
@@ -15,9 +16,12 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 		super(init);
 	}
 
+	protected final ClientCache clientCache = cache.getClientCache();
+
 	@Override
 	protected void writeToClient() {
-		String locale = cache.getClientCache().getLocale();
+		String locale = clientCache.getLocale();
+
 		if (windowId == WINDOW_ID_PLAYER_CURSOR) {
 			codec.write(create(version, locale, windowId, slot, itemstack));
 			return;
@@ -37,13 +41,9 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 		}
 
 		try {
-			int windowSlot = windowCache.getOpenedWindowRemapper().toClientSlot(windowId, slot);
-			codec.write(create(
-				version, locale,
-				WindowRemapper.getClientSlotWindowId(windowSlot),
-				WindowRemapper.getClientSlotSlot(windowSlot), itemstack
-			));
-		} catch (SlotDoesntExistException e) {
+			WindowSlot windowSlot = windowCache.getOpenedWindowRemapper().toClientSlot(windowId, slot);
+			codec.write(create(version, locale, windowSlot.getWindowId(), windowSlot.getSlot(), itemstack));
+		} catch (NoSuchSlotException e) {
 		}
 	}
 

@@ -25,7 +25,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		windowopen.writeByte(windowId);
 		windowopen.writeByte(((Number) windowTypeIdMappingTable.get(windowRemapper.toClientWindowType(type))).intValue());
 		StringSerializer.writeShortUTF16BEString(windowopen, LegacyChat.clampLegacyText(title.toLegacyText(clientCache.getLocale()), 32));
-		windowopen.writeByte(windowRemapper.toClientSlots(0));
+		windowopen.writeByte(windowRemapper.toClientWindowSlots(0));
 		codec.write(windowopen);
 	}
 

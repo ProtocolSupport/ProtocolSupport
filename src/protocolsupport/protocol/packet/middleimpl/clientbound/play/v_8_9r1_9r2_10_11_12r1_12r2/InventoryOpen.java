@@ -29,7 +29,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 			windowId,
 			(String) windowTypeIdMappingTable.get(windowRemapper.toClientWindowType(type)),
 			ChatSerializer.serialize(version, I18NData.DEFAULT_LOCALE, new TextComponent(title.toLegacyText(clientCache.getLocale()))),
-			windowRemapper.toClientSlots(0)
+			windowRemapper.toClientWindowSlots(0)
 		);
 		codec.write(windowopen);
 	}
