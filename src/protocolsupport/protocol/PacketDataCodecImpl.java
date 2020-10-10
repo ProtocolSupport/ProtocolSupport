@@ -17,12 +17,15 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 
 	protected final ConnectionImpl connection;
 	protected final IPacketIdCodec packetIdCodec;
-	protected final ChannelHandlerContext transformerEncoderCtx;
-	protected final ChannelHandlerContext transformerDecoderCtx;
+	protected ChannelHandlerContext transformerEncoderCtx;
+	protected ChannelHandlerContext transformerDecoderCtx;
 
-	public PacketDataCodecImpl(ConnectionImpl connection, IPacketIdCodec packetIdCodec, ChannelHandlerContext transformerEncoderCtx, ChannelHandlerContext transformerDecoderCtx) {
+	public PacketDataCodecImpl(ConnectionImpl connection, IPacketIdCodec packetIdCodec) {
 		this.connection = connection;
 		this.packetIdCodec = packetIdCodec;
+	}
+
+	protected void setIOContexts(ChannelHandlerContext transformerEncoderCtx, ChannelHandlerContext transformerDecoderCtx) {
 		this.transformerDecoderCtx = transformerDecoderCtx;
 		this.transformerEncoderCtx = transformerEncoderCtx;
 	}
@@ -221,5 +224,40 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 		}
 
 	}
+
+	public static final PacketDataCodecImpl NOOP = new PacketDataCodecImpl(null, null) {
+		{
+			this.transformerEncoderHeadProcessor = null;
+			this.transformerDecoderHeadProcessor = null;
+		}
+		@Override
+		protected void setIOContexts(ChannelHandlerContext transformerEncoderCtx, ChannelHandlerContext transformerDecoderCtx) {
+		}
+		@Override
+		public void setWritePromise(CombinedResultChannelPromise promise) {
+		}
+		@Override
+		public int readPacketId(ByteBuf from) {
+			return 0;
+		}
+		@Override
+		public void addClientboundPacketProcessor(ClientBoundPacketDataProcessor processor) {
+		}
+		@Override
+		public void addServerboundPacketProcessor(ServerBoundPacketDataProcessor processor) {
+		}
+		@Override
+		public void write(ClientBoundPacketData packetadata) {
+		}
+		@Override
+		public void flush() {
+		}
+		@Override
+		public void read(ServerBoundPacketData packetdata) {
+		}
+		@Override
+		public void readComplete() {
+		}
+	};
 
 }

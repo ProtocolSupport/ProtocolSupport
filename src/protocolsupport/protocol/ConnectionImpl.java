@@ -28,8 +28,6 @@ import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.handler.IPacketListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPacketIdCodec;
-import protocolsupport.protocol.pipeline.version.util.decoder.AbstractPacketDecoder;
-import protocolsupport.protocol.pipeline.version.util.encoder.AbstractPacketEncoder;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.utils.authlib.LoginProfile;
@@ -162,7 +160,7 @@ public class ConnectionImpl extends Connection {
 		});
 	}
 
-	protected PacketDataCodecImpl codec;
+	protected PacketDataCodecImpl codec = PacketDataCodecImpl.NOOP;
 	protected ChannelHandlerContext logicCtx;
 	protected ChannelHandlerContext rawSendCtx;
 	protected ChannelHandlerContext rawRecvCtx;
@@ -171,14 +169,16 @@ public class ConnectionImpl extends Connection {
 		return codec;
 	}
 
-	public void initCodec(IPacketIdCodec packetIdCodec, AbstractPacketEncoder encoder, AbstractPacketDecoder decoder) {
+	public void initCodec(IPacketIdCodec packetIdCodec) {
+		this.codec = new PacketDataCodecImpl(this, packetIdCodec);
+	}
+
+	public void initIO() {
 		ChannelPipeline pipeline = networkmanager.getChannel().pipeline();
 		this.logicCtx = pipeline.context(ChannelHandlers.LOGIC);
 		this.rawSendCtx = pipeline.context(ChannelHandlers.RAW_CAPTURE_SEND);
 		this.rawRecvCtx = pipeline.context(ChannelHandlers.RAW_CAPTURE_RECEIVE);
-		this.codec = new PacketDataCodecImpl(this, packetIdCodec, pipeline.context(encoder), pipeline.context(decoder));
-		encoder.init(codec);
-		decoder.init(codec);
+		this.codec.setIOContexts(pipeline.context(ChannelHandlers.ENCODER_TRANSFORMER), pipeline.context(ChannelHandlers.DECODER_TRANSFORMER));
 	}
 
 	@Override

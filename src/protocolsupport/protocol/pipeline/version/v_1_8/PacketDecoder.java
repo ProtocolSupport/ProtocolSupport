@@ -33,9 +33,9 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.SteerVehicle;
 import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.Ping;
 import protocolsupport.protocol.packet.middleimpl.serverbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.ServerInfoRequest;
-import protocolsupport.protocol.pipeline.version.util.decoder.AbstractModernWithReorderPacketDecoder;
+import protocolsupport.protocol.pipeline.version.util.decoder.AbstractModernPacketDecoder;
 
-public class PacketDecoder extends AbstractModernWithReorderPacketDecoder {
+public class PacketDecoder extends AbstractModernPacketDecoder {
 
 	public PacketDecoder(ConnectionImpl connection) {
 		super(connection);

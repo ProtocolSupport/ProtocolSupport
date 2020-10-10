@@ -2,7 +2,6 @@ package protocolsupport.protocol.pipeline.version.v_1_8;
 
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.PacketDataCodecImpl;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.LoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.LoginDisconnect;
@@ -102,18 +101,11 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.Pong;
 import protocolsupport.protocol.packet.middleimpl.clientbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.ServerInfo;
 import protocolsupport.protocol.pipeline.version.util.encoder.AbstractPacketEncoder;
-import protocolsupport.protocol.typeremapper.packet.ChunkSendIntervalPacketQueue;
 
 public class PacketEncoder extends AbstractPacketEncoder {
 
 	public PacketEncoder(ConnectionImpl connection) {
 		super(connection);
-	}
-
-	@Override
-	public void init(PacketDataCodecImpl codec) {
-		super.init(codec);
-		codec.addClientboundPacketProcessor(new ChunkSendIntervalPacketQueue());
 	}
 
 	{

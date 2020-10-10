@@ -10,12 +10,10 @@ public class PipeLineBuilder extends AbstractVarIntFramingPipeLineBuilder {
 
 	@Override
 	public void buildCodec(Channel channel, ConnectionImpl connection) {
+		connection.initCodec(PacketCodec.instance);
 		ChannelPipeline pipeline = channel.pipeline();
-		PacketDecoder decoder = new PacketDecoder(connection);
-		PacketEncoder encoder = new PacketEncoder(connection);
-		pipeline.addAfter(ChannelHandlers.RAW_CAPTURE_RECEIVE, ChannelHandlers.DECODER_TRANSFORMER, decoder);
-		pipeline.addAfter(ChannelHandlers.RAW_CAPTURE_SEND, ChannelHandlers.ENCODER_TRANSFORMER, encoder);
-		connection.initCodec(PacketCodec.instance, encoder, decoder);
+		pipeline.addAfter(ChannelHandlers.RAW_CAPTURE_RECEIVE, ChannelHandlers.DECODER_TRANSFORMER, new PacketDecoder(connection));
+		pipeline.addAfter(ChannelHandlers.RAW_CAPTURE_SEND, ChannelHandlers.ENCODER_TRANSFORMER, new PacketEncoder(connection));
 	}
 
 }
