@@ -7,20 +7,22 @@ import java.util.Map;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.utils.PrimitiveTypeUtils;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupportbuildprocessor.Preload;
 
+//TODO: merge with legacy entity data format
 @Preload
-public class NetworkEntityLocationOffset {
+public class LegacyNetworkEntityLocationOffset {
 
-	protected static final Map<ProtocolVersion, NetworkEntityLocationOffset> registry = new EnumMap<>(ProtocolVersion.class);
+	protected static final Map<ProtocolVersion, LegacyNetworkEntityLocationOffset> registry = new EnumMap<>(ProtocolVersion.class);
 	static {
 		for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
-			registry.put(version, new NetworkEntityLocationOffset());
+			registry.put(version, new LegacyNetworkEntityLocationOffset());
 		}
 	}
 
-	public static NetworkEntityLocationOffset get(ProtocolVersion version) {
+	public static LegacyNetworkEntityLocationOffset get(ProtocolVersion version) {
 		return registry.get(version);
 	}
 
@@ -49,7 +51,8 @@ public class NetworkEntityLocationOffset {
 			),
 			halfBlockUpY, ProtocolVersionsHelper.DOWN_1_7_10
 		);
-		register(NetworkEntityType.BOAT, new Offset(0D, 0.3, 0D, (byte) 0, (byte) 0), ProtocolVersionsHelper.DOWN_1_7_10);
+		register(NetworkEntityType.BOAT, new Offset(0D, 0.35D, 0D, PrimitiveTypeUtils.toAngleB(-90F), (byte) 0), ProtocolVersion.MINECRAFT_1_8);
+		register(NetworkEntityType.BOAT, new Offset(0D, 0.35D, 0D, PrimitiveTypeUtils.toAngleB(-90F), (byte) 0), ProtocolVersionsHelper.DOWN_1_7_10);
 		register(
 			Arrays.asList(NetworkEntityType.TNT, NetworkEntityType.FALLING_OBJECT),
 			halfBlockUpY, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10)

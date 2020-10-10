@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnLiving;
+import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityLocationOffset;
 import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry;
 import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry.LegacyNetworkEntityTable;
 import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry;
@@ -16,6 +17,7 @@ public abstract class AbstractRemappedSpawnLiving extends MiddleSpawnLiving {
 
 	protected final LegacyNetworkEntityTable legacyEntityEntryTable = LegacyNetworkEntityRegistry.INSTANCE.getTable(version);
 	protected final NetworkEntityDataFormatTransformerTable entityDataFormatTable = NetworkEntityDataFormatTransformRegistry.INSTANCE.getTable(version);
+	protected final LegacyNetworkEntityLocationOffset entityOffset = LegacyNetworkEntityLocationOffset.get(version);
 
 	protected NetworkEntityType lType;
 	protected NetworkEntityType fType;
@@ -32,6 +34,14 @@ public abstract class AbstractRemappedSpawnLiving extends MiddleSpawnLiving {
 
 		lType = lLType;
 		fType = entityDataFormatTable.get(lType).getKey();
+		LegacyNetworkEntityLocationOffset.Offset offset = entityOffset.get(lLType);
+		if (offset != null) {
+			x += offset.getX();
+			y += offset.getY();
+			z += offset.getZ();
+			yaw += offset.getYaw();
+			pitch += offset.getPitch();
+		}
 	}
 
 }

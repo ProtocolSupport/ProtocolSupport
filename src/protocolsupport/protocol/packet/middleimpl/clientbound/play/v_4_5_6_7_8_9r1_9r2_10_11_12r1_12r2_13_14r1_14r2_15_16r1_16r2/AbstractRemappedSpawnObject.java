@@ -4,11 +4,11 @@ import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
 import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry;
 import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry.ObjectDataRemappingTable;
+import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityLocationOffset;
 import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry;
 import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry.LegacyNetworkEntityTable;
 import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry;
 import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry.NetworkEntityDataFormatTransformerTable;
-import protocolsupport.protocol.typeremapper.entity.NetworkEntityLocationOffset;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class AbstractRemappedSpawnObject extends MiddleSpawnObject {
@@ -20,7 +20,7 @@ public abstract class AbstractRemappedSpawnObject extends MiddleSpawnObject {
 	protected final LegacyNetworkEntityTable legacyEntityEntryTable = LegacyNetworkEntityRegistry.INSTANCE.getTable(version);
 	protected final NetworkEntityDataFormatTransformerTable entityDataFormatTable = NetworkEntityDataFormatTransformRegistry.INSTANCE.getTable(version);
 	protected final ObjectDataRemappingTable entityObjectDataRemapTable = ObjectDataRemappersRegistry.REGISTRY.getTable(version);
-	protected final NetworkEntityLocationOffset entityOffset = NetworkEntityLocationOffset.get(version);
+	protected final LegacyNetworkEntityLocationOffset entityOffset = LegacyNetworkEntityLocationOffset.get(version);
 
 	protected NetworkEntityType lType;
 	protected NetworkEntityType fType;
@@ -39,7 +39,7 @@ public abstract class AbstractRemappedSpawnObject extends MiddleSpawnObject {
 		lType = lLType;
 		fType = entityDataFormatTable.get(lLType).getKey();
 		rObjectdata = entityObjectDataRemapTable.getRemap(lLType).applyAsInt(objectdata);
-		NetworkEntityLocationOffset.Offset offset = entityOffset.get(lLType);
+		LegacyNetworkEntityLocationOffset.Offset offset = entityOffset.get(lLType);
 		if (offset != null) {
 			x += offset.getX();
 			y += offset.getY();

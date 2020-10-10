@@ -1,19 +1,16 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityRelMoveLook;
-import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractEntityTeleportEntityRelMoveLook;
 
-public class EntityRelMoveLook extends MiddleEntityRelMoveLook {
+public class EntityRelMoveLook extends AbstractEntityTeleportEntityRelMoveLook {
 
 	public EntityRelMoveLook(MiddlePacketInit init) {
 		super(init);
 	}
 
 	@Override
-	protected void writeToClient() {
-		NetworkEntityDataCache ecache = entity.getDataCache();
-
-		codec.write(EntityTeleport.create(entityId, ecache.getX(), ecache.getY(), ecache.getZ(), yaw, pitch, onGround));
+	protected void writeTeleport(double x, double y, double z, byte yaw, byte pitch, boolean onGround) {
+		codec.write(EntityTeleport.create(entityId, x, y, z, yaw, pitch, onGround));
 	}
 
 }
