@@ -48,11 +48,9 @@ public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
 		keepEntityMetadata = serverdata.readBoolean();
 	}
 
-	protected NBTCompound oldDimension;
-
 	@Override
 	protected void handleReadData() {
-		oldDimension = clientCache.setCurrentDimension(dimension);
+		clientCache.setCurrentWorld(world, dimension);
 		entityCache.clearEntities();
 		windowCache.setPlayerWindow(windowsRemapper.get(WindowType.PLAYER, 0));
 	}

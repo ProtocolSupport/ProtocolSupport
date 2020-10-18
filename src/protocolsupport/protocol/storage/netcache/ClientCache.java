@@ -33,14 +33,24 @@ public class ClientCache implements IBiomeRegistry {
 		return respawnScreenEnabled;
 	}
 
+	protected String world;
 	protected NBTCompound dimension;
 	protected boolean dimensionSkyLight;
 
-	public NBTCompound setCurrentDimension(NBTCompound dimension) {
-		NBTCompound oldDimension = this.dimension;
-		this.dimension = dimension;
-		this.dimensionSkyLight = dimension.getNumberTagOrThrow("has_skylight").getAsInt() == 1;
-		return oldDimension;
+	public String getWorld() {
+		return world;
+	}
+
+	public NBTCompound getDimension() {
+		return dimension;
+	}
+
+	public void setCurrentWorld(String world, NBTCompound dimension) {
+		if (!world.equals(this.world)) {
+			this.world = world;
+			this.dimension = dimension;
+			this.dimensionSkyLight = dimension.getNumberTagOrThrow("has_skylight").getAsInt() == 1;
+		}
 	}
 
 	public void setDimensionSkyLight(boolean hasSkyLight) {

@@ -16,7 +16,9 @@ public abstract class AbstractChunkCacheChangeDimension extends AbstractLegacyCh
 	protected void handleReadData() {
 		super.handleReadData();
 		clientCache.setDimensionSkyLight(LegacyDimension.hasSkyLight(dimensionId));
-		chunkCache.clear();
+		if (!sameWorld) {
+			chunkCache.clear();
+		}
 	}
 
 }

@@ -68,12 +68,10 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 		worldFlat = serverdata.readBoolean();
 	}
 
-	protected NBTCompound oldDimension = dimension;
-
 	@Override
 	protected void handleReadData() {
 		clientCache.setDimensionCodec(dimensions);
-		oldDimension = clientCache.setCurrentDimension(dimension);
+		clientCache.setCurrentWorld(world, dimension);
 		clientCache.setRespawnScreenEnabled(respawnScreenEnabled);
 		windowCache.setPlayerWindow(windowsRemapper.get(WindowType.PLAYER, 0));
 		entityCache.clearEntities();

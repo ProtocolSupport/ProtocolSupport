@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleStartGame;
 import protocolsupport.protocol.typeremapper.legacy.LegacyDimension;
+import protocolsupport.protocol.types.nbt.NBTCompound;
 
 public abstract class AbstractLegacyStartGame extends MiddleStartGame {
 
@@ -9,10 +10,13 @@ public abstract class AbstractLegacyStartGame extends MiddleStartGame {
 		super(init);
 	}
 
+	protected NBTCompound oldDimension;
+
 	protected int dimensionId;
 
 	@Override
 	protected void handleReadData() {
+		oldDimension = clientCache.getDimension();
 		super.handleReadData();
 		dimensionId = LegacyDimension.getIntId(dimension);
 	}

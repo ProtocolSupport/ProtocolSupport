@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChangeDimension;
 import protocolsupport.protocol.typeremapper.legacy.LegacyDimension;
+import protocolsupport.protocol.types.nbt.NBTCompound;
 
 public abstract class AbstractLegacyChangeDimension extends MiddleChangeDimension {
 
@@ -9,17 +10,28 @@ public abstract class AbstractLegacyChangeDimension extends MiddleChangeDimensio
 		super(init);
 	}
 
+	protected String oldWorld;
+	protected NBTCompound oldDimension;
+
+	protected boolean sameWorld;
 	protected int dimensionId;
 
 	@Override
 	protected void handleReadData() {
+		oldWorld = clientCache.getWorld();
+		oldDimension = clientCache.getDimension();
 		super.handleReadData();
-		dimensionId = LegacyDimension.getIntId(dimension);
+		sameWorld = world.equals(oldWorld);
+		if (sameWorld) {
+			dimensionId = LegacyDimension.getIntId(oldDimension);
+		} else {
+			dimensionId = LegacyDimension.getIntId(dimension);
+		}
 	}
 
 	@Override
 	protected void writeToClient() {
-		if (LegacyDimension.getIntId(oldDimension) == dimensionId) {
+		if (!sameWorld && (LegacyDimension.getIntId(oldDimension) == dimensionId)) {
 			writeChangeDimension(LegacyDimension.getAlternativeIntId(dimensionId));
 			writeChangeDimension(dimensionId);
 		} else {
