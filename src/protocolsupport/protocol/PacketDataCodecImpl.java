@@ -237,6 +237,9 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 		public void setWritePromise(CombinedResultChannelPromise promise) {
 		}
 		@Override
+		public void clearWritePromise() {
+		}
+		@Override
 		public int readPacketId(ByteBuf from) {
 			return 0;
 		}
@@ -253,10 +256,25 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 		public void flush() {
 		}
 		@Override
+		public void writeAndFlush(ClientBoundPacketData packetdata) {
+		}
+		@Override
+		protected void write0(PacketData<?> packetdata) {
+		}
+		@Override
 		public void read(ServerBoundPacketData packetdata) {
 		}
 		@Override
 		public void readComplete() {
+		}
+		@Override
+		public void readAndComplete(ServerBoundPacketData packetadata) {
+		}
+		@Override
+		protected void read0(PacketData<?> packetdata) {
+		}
+		@Override
+		public void release() {
 		}
 	};
 
