@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.mapcolor.MapColorRemapper;
+import protocolsupport.protocol.typeremapper.mapcolor.MapColorMappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 
 public class UpdateMap extends MiddleUpdateMap {
@@ -33,7 +33,7 @@ public class UpdateMap extends MiddleUpdateMap {
 		});
 		updatemap.writeByte(columns);
 		if (columns > 0) {
-			ArrayBasedIntMappingTable colorRemapper = MapColorRemapper.REMAPPER.getTable(version);
+			ArrayBasedIntMappingTable colorRemapper = MapColorMappingRegistry.INSTANCE.getTable(version);
 			for (int i = 0; i < colors.length; i++) {
 				colors[i] = (byte) colorRemapper.get(colors[i] & 0xFF);
 			}
