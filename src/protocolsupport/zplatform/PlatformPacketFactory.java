@@ -1,6 +1,5 @@
 package protocolsupport.zplatform;
 
-import java.security.PublicKey;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,7 +29,7 @@ public interface PlatformPacketFactory {
 
 	public Object createPlayDisconnectPacket(BaseComponent message);
 
-	public Object createLoginEncryptionBeginPacket(PublicKey publicKey, byte[] randomBytes);
+	public Object createLoginEncryptionBeginPacket(byte[] publicKey, byte[] randomBytes);
 
 	public Object createSetCompressionPacket(int threshold);
 

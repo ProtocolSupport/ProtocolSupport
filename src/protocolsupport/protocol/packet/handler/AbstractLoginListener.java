@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.handler;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -125,7 +126,9 @@ public abstract class AbstractLoginListener implements IPacketListener {
 
 				if (profile.isOnlineMode()) {
 					state = LoginState.KEY;
-					networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginEncryptionBeginPacket(ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic(), randomBytes));
+					networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginEncryptionBeginPacket(
+						ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPublic().getEncoded(), randomBytes
+					));
 				} else {
 					loginOffline();
 				}
@@ -140,9 +143,9 @@ public abstract class AbstractLoginListener implements IPacketListener {
 
 	public static interface EncryptionPacketWrapper {
 
-		public byte[] getNonce(PrivateKey key);
+		public byte[] getNonce(PrivateKey key) throws GeneralSecurityException;
 
-		public SecretKey getSecretKey(PrivateKey key);
+		public SecretKey getSecretKey(PrivateKey key) throws GeneralSecurityException;
 
 	}
 

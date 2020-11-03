@@ -1,10 +1,10 @@
 package protocolsupport.zplatform.impl.spigot.network.handler;
 
-import net.minecraft.server.v1_16_R2.IChatBaseComponent;
-import net.minecraft.server.v1_16_R2.NetworkManager;
-import net.minecraft.server.v1_16_R2.PacketStatusInListener;
-import net.minecraft.server.v1_16_R2.PacketStatusInPing;
-import net.minecraft.server.v1_16_R2.PacketStatusInStart;
+import net.minecraft.server.v1_16_R3.IChatBaseComponent;
+import net.minecraft.server.v1_16_R3.NetworkManager;
+import net.minecraft.server.v1_16_R3.PacketStatusInListener;
+import net.minecraft.server.v1_16_R3.PacketStatusInPing;
+import net.minecraft.server.v1_16_R3.PacketStatusInStart;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;

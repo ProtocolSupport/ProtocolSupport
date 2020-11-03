@@ -3,15 +3,15 @@ package protocolsupport.zplatform.impl.spigot.block;
 import java.lang.reflect.Field;
 import java.util.function.Consumer;
 
-import net.minecraft.server.v1_16_R2.Block;
-import net.minecraft.server.v1_16_R2.BlockCarpet;
-import net.minecraft.server.v1_16_R2.BlockIronBars;
-import net.minecraft.server.v1_16_R2.BlockLadder;
-import net.minecraft.server.v1_16_R2.BlockTall;
-import net.minecraft.server.v1_16_R2.BlockWaterLily;
-import net.minecraft.server.v1_16_R2.Blocks;
-import net.minecraft.server.v1_16_R2.VoxelShape;
-import net.minecraft.server.v1_16_R2.VoxelShapes;
+import net.minecraft.server.v1_16_R3.Block;
+import net.minecraft.server.v1_16_R3.BlockCarpet;
+import net.minecraft.server.v1_16_R3.BlockIronBars;
+import net.minecraft.server.v1_16_R3.BlockLadder;
+import net.minecraft.server.v1_16_R3.BlockTall;
+import net.minecraft.server.v1_16_R3.BlockWaterLily;
+import net.minecraft.server.v1_16_R3.Blocks;
+import net.minecraft.server.v1_16_R3.VoxelShape;
+import net.minecraft.server.v1_16_R3.VoxelShapes;
 import protocolsupport.utils.ReflectionUtils;
 
 public class SpigotBlocksBoundsAdjust {

@@ -42,7 +42,7 @@ public class ProtocolSupport extends JavaPlugin {
 		return buildinfo;
 	}
 
-	protected static final String supported_platform_version = "1.16.3";
+	protected static final String supported_platform_version = "1.16.4";
 
 
 	private boolean loaded = false;

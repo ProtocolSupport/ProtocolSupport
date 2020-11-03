@@ -5,22 +5,22 @@ import java.security.PublicKey;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
 
 import com.mojang.authlib.GameProfile;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_16_R2.*;
-import net.minecraft.server.v1_16_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_16_R2.PacketPlayInFlying.PacketPlayInLook;
-import net.minecraft.server.v1_16_R2.PacketPlayInFlying.PacketPlayInPosition;
-import net.minecraft.server.v1_16_R2.PacketPlayInFlying.PacketPlayInPositionLook;
-import net.minecraft.server.v1_16_R2.PacketPlayOutEntity.PacketPlayOutEntityLook;
-import net.minecraft.server.v1_16_R2.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
-import net.minecraft.server.v1_16_R2.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
-import net.minecraft.server.v1_16_R2.PacketPlayOutTitle.EnumTitleAction;
-import net.minecraft.server.v1_16_R2.ServerPing.ServerData;
-import net.minecraft.server.v1_16_R2.ServerPing.ServerPingPlayerSample;
+import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.server.v1_16_R3.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_16_R3.PacketPlayInFlying.PacketPlayInLook;
+import net.minecraft.server.v1_16_R3.PacketPlayInFlying.PacketPlayInPosition;
+import net.minecraft.server.v1_16_R3.PacketPlayInFlying.PacketPlayInPositionLook;
+import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutEntityLook;
+import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
+import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
+import net.minecraft.server.v1_16_R3.PacketPlayOutTitle.EnumTitleAction;
+import net.minecraft.server.v1_16_R3.ServerPing.ServerData;
+import net.minecraft.server.v1_16_R3.ServerPing.ServerPingPlayerSample;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
@@ -86,7 +86,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public Object createLoginEncryptionBeginPacket(PublicKey publicKey, byte[] randomBytes) {
+	public Object createLoginEncryptionBeginPacket(byte[] publicKey, byte[] randomBytes) {
 		return new PacketLoginOutEncryptionBegin("", publicKey, randomBytes);
 	}
 
