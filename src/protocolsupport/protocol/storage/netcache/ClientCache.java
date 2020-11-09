@@ -120,6 +120,16 @@ public class ClientCache implements IBiomeRegistry {
 		return sneaking;
 	}
 
+	protected int heldSlot;
+
+	public void setHeldSlot(int heldSlot) {
+		this.heldSlot = heldSlot;
+	}
+
+	public int getHeldSlot() {
+		return heldSlot;
+	}
+
 	protected String locale = I18NData.DEFAULT_LOCALE;
 
 	public void setLocale(String locale) {

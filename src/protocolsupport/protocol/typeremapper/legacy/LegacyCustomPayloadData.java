@@ -23,7 +23,6 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.CommonNBTTransformer;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.Position;
-import protocolsupport.protocol.types.UsedHand;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
@@ -38,15 +37,15 @@ public class LegacyCustomPayloadData {
 		return buffer;
 	}
 
-	public static void transformAndWriteBookEdit(PacketDataCodec codec, ProtocolVersion version, ByteBuf data) {
+	public static void transformAndWriteBookEdit(PacketDataCodec codec, ProtocolVersion version, int heldSlot, ByteBuf data) {
 		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version);
 		if (!book.isNull()) {
 			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
-			codec.read(MiddleEditBook.create(book, false, UsedHand.MAIN));
+			codec.read(MiddleEditBook.create(book, false, heldSlot));
 		}
 	}
 
-	public static void transformAndWriteBookSign(PacketDataCodec codec, ProtocolVersion version, ByteBuf data) {
+	public static void transformAndWriteBookSign(PacketDataCodec codec, ProtocolVersion version, int heldSlot, ByteBuf data) {
 		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version);
 		if (!book.isNull()) {
 			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
@@ -56,7 +55,7 @@ public class LegacyCustomPayloadData {
 					CommonNBTTransformer.toLegacyChatList(rootTag.getStringListTagOrNull(CommonNBT.BOOK_PAGES), I18NData.DEFAULT_LOCALE);
 				}
 			}
-			codec.read(MiddleEditBook.create(book, true, UsedHand.MAIN));
+			codec.read(MiddleEditBook.create(book, true, heldSlot));
 		}
 	}
 

@@ -4,9 +4,8 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.NetworkItemStack;
-import protocolsupport.protocol.types.UsedHand;
 
 public abstract class MiddleEditBook extends ServerBoundMiddlePacket {
 
@@ -16,18 +15,18 @@ public abstract class MiddleEditBook extends ServerBoundMiddlePacket {
 
 	protected NetworkItemStack book;
 	protected boolean signing;
-	protected UsedHand hand;
+	protected int slot;
 
 	@Override
 	protected void writeToServer() {
-		codec.read(create(book, signing, hand));
+		codec.read(create(book, signing, slot));
 	}
 
-	public static ServerBoundPacketData create(NetworkItemStack book, boolean signing, UsedHand hand) {
+	public static ServerBoundPacketData create(NetworkItemStack book, boolean signing, int slot) {
 		ServerBoundPacketData editbook = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_EDIT_BOOK);
 		ItemStackSerializer.writeItemStack(editbook, book);
 		editbook.writeBoolean(signing);
-		MiscSerializer.writeVarIntEnum(editbook, hand);
+		VarNumberSerializer.writeVarInt(editbook, slot);
 		return editbook;
 	}
 

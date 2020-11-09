@@ -5,6 +5,7 @@ import protocolsupport.ProtocolSupport;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadData;
 import protocolsupport.zplatform.ServerPlatform;
@@ -14,6 +15,8 @@ public class CustomPayload extends MiddleCustomPayload {
 	public CustomPayload(MiddlePacketInit init) {
 		super(init);
 	}
+
+	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
 	protected void readClientData(ByteBuf clientdata) {
@@ -35,11 +38,11 @@ public class CustomPayload extends MiddleCustomPayload {
 
 		switch (tag) {
 			case LegacyCustomPayloadChannelName.LEGACY_BOOK_EDIT: {
-				LegacyCustomPayloadData.transformAndWriteBookEdit(codec, version, data);
+				LegacyCustomPayloadData.transformAndWriteBookEdit(codec, version, clientCache.getHeldSlot(), data);
 				return;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_BOOK_SIGN: {
-				LegacyCustomPayloadData.transformAndWriteBookSign(codec, version, data);
+				LegacyCustomPayloadData.transformAndWriteBookSign(codec, version, clientCache.getHeldSlot(), data);
 				return;
 			}
 			case LegacyCustomPayloadChannelName.LEGACY_SET_BEACON: {

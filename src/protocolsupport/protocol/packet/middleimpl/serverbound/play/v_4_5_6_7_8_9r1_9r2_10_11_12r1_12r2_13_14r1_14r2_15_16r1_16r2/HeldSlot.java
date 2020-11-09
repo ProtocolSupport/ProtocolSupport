@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleHeldSlot;
+import protocolsupport.protocol.storage.netcache.ClientCache;
 
 public class HeldSlot extends MiddleHeldSlot {
 
@@ -9,9 +10,16 @@ public class HeldSlot extends MiddleHeldSlot {
 		super(init);
 	}
 
+	protected final ClientCache clientCache = cache.getClientCache();
+
 	@Override
 	protected void readClientData(ByteBuf clientdata) {
 		slot = clientdata.readShort();
+	}
+
+	@Override
+	protected void handleReadData() {
+		clientCache.setHeldSlot(slot);
 	}
 
 }
