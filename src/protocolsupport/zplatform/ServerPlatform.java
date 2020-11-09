@@ -12,22 +12,26 @@ public class ServerPlatform {
 
 	private static ServerPlatform current;
 
-	public static boolean detect() {
+	public static void detect() {
 		if (current != null) {
 			throw new IllegalStateException("Implementation already detected");
 		}
+		UnsupportedOperationException e = new UnsupportedOperationException("No supported platform detected");
 		try {
 			NetworkManager.class.getDeclaredFields();
 			SpigotConfig.class.getDeclaredFields();
 			current = new ServerPlatform(ServerPlatformIdentifier.SPIGOT, new SpigotPlatformInjector(), new SpigotMiscUtils(), new SpigotPacketFactory());
+			return;
 		} catch (Throwable t) {
+			e.addSuppressed(new UnsupportedOperationException("Failed to init spigot platform", t));
 		}
 		try {
 //			GlowServer.class.getDeclaredFields();
 //			current = new ServerPlatform(ServerPlatformIdentifier.GLOWSTONE, new GlowstonePlatformInjector(), new GlowStoneMiscUtils(), new GlowStonePacketFactory(), new GlowStoneWrapperFactory());
 		} catch (Throwable t) {
+			e.addSuppressed(new UnsupportedOperationException("Failed to init glowstone platform", t));
 		}
-		return current != null;
+		throw e;
 	}
 
 	public static ServerPlatform get() {

@@ -55,12 +55,14 @@ public class ProtocolSupport extends JavaPlugin {
 			getLogger().severe("Unable to load buildinfo, make sure you built this version using Gradle");
 			return;
 		}
-		if (!ServerPlatform.detect()) {
+		try {
+			ServerPlatform.detect();
+		} catch (Throwable t) {
 			BIG_ERROR_THAT_ANYONE_CAN_SEE("Unsupported platform or version " + Bukkit.getVersion());
+			getLogger().log(Level.SEVERE, "Platform init failed", t);
 			return;
-		} else {
-			getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get().getIdentifier().getName()));
 		}
+		getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get().getIdentifier().getName()));
 		if (!ServerPlatform.get().getMiscUtils().getVersionName().equals(supported_platform_version)) {
 			BIG_ERROR_THAT_ANYONE_CAN_SEE("Unsupported server minecraft version " + ServerPlatform.get().getMiscUtils().getVersionName());
 			return;
