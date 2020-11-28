@@ -6,7 +6,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.MappingRegistry.IntMappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.utils.MappingsData;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftItemData;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
@@ -17,14 +17,14 @@ public class FlatteningItemId {
 	public static final IntMappingRegistry<ArrayBasedIntMappingTable> REGISTRY_TO_CLIENT = new IntMappingRegistry<ArrayBasedIntMappingTable>() {
 		@Override
 		protected ArrayBasedIntMappingTable createTable() {
-			return new ArrayBasedIntMappingTable(MinecraftData.ITEM_COUNT);
+			return new ArrayBasedIntMappingTable(MinecraftItemData.ITEM_COUNT);
 		}
 	};
 
 	public static final IntMappingRegistry<ArrayBasedIntMappingTable> REGISTRY_FROM_CLIENT = new IntMappingRegistry<ArrayBasedIntMappingTable>() {
 		@Override
 		protected ArrayBasedIntMappingTable createTable() {
-			return new ArrayBasedIntMappingTable(MinecraftData.ITEM_COUNT);
+			return new ArrayBasedIntMappingTable(MinecraftItemData.ITEM_COUNT);
 		}
 	};
 

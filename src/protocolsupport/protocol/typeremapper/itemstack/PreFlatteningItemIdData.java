@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import protocolsupport.protocol.utils.MappingsData;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftItemData;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
@@ -19,7 +19,7 @@ import protocolsupportbuildprocessor.Preload;
 public class PreFlatteningItemIdData {
 
 	protected static final int combinedLegacyStoneId = formLegacyCombinedId(Material.LEGACY_STONE.getId(), 0);
-	protected static final int[] toLegacyId = new int[MinecraftData.ITEM_COUNT];
+	protected static final int[] toLegacyId = new int[MinecraftItemData.ITEM_COUNT];
 	protected static final Int2IntMap fromLegacyId = new Int2IntOpenHashMap();
 
 	protected static void register(int modernId, int legacyId) {

@@ -9,14 +9,14 @@ import org.bukkit.entity.EntityType;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftItemData;
 import protocolsupportbuildprocessor.Preload;
 
 @SuppressWarnings("deprecation")
 @Preload
 public class ItemSpawnEggData {
 
-	protected static final NetworkEntityType[] toSpawnedType = new NetworkEntityType[MinecraftData.ITEM_COUNT];
+	protected static final NetworkEntityType[] toSpawnedType = new NetworkEntityType[MinecraftItemData.ITEM_COUNT];
 	protected static final Object2IntMap<NetworkEntityType> fromSpawnedType = new Object2IntOpenHashMap<>();
 
 	protected static void register(Material spawnegg, NetworkEntityType type) {
@@ -28,7 +28,7 @@ public class ItemSpawnEggData {
 	protected static final String spawnEggSuffix = "_SPAWN_EGG";
 
 	public static Stream<Material> getSpawnEggs() {
-		return MinecraftData.getItems().filter(m -> m.toString().endsWith(spawnEggSuffix));
+		return MinecraftItemData.getItems().filter(m -> m.toString().endsWith(spawnEggSuffix));
 	}
 
 	static {

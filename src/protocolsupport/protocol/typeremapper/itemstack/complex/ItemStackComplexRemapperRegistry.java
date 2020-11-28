@@ -47,7 +47,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ItemSpawnEggData;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftItemData;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -77,7 +77,7 @@ public class ItemStackComplexRemapperRegistry {
 
 	static {
 		registerToClient(Material.FILLED_MAP, new MapToLegacyIdComplexRemapper(), ProtocolVersionsHelper.DOWN_1_12_2);
-		MinecraftData.getItems()
+		MinecraftItemData.getItems()
 		.filter(material -> Bukkit.getItemFactory().getItemMeta(material) instanceof BannerMeta)
 		.forEach(material -> {
 			Integer color = LegacyBanner.getColorByMaterial(material);
@@ -139,7 +139,7 @@ public class ItemStackComplexRemapperRegistry {
 		ItemDurabilityToLegacyDataComplexRemapper durabilitytolegacydata = new ItemDurabilityToLegacyDataComplexRemapper();
 		EnchantToLegacyIdComplexRemapper enchanttolegacyid = new EnchantToLegacyIdComplexRemapper();
 		DisplayNameToLegacyTextComplexRemapper dnametolegacytext = new DisplayNameToLegacyTextComplexRemapper();
-		MinecraftData.getItems()
+		MinecraftItemData.getItems()
 		.forEach(material -> {
 			registerToClient(material, enchantfilter, ProtocolVersionsHelper.ALL_PC);
 			registerToClient(material, attributesToLegacyId, ProtocolVersionsHelper.DOWN_1_15_2);
@@ -158,7 +158,7 @@ public class ItemStackComplexRemapperRegistry {
 		ItemDurabilityFromLegacyDataComplexRemapper durabilityfromlegacydata = new ItemDurabilityFromLegacyDataComplexRemapper();
 		EnchantFromLegacyIdComplexRemapper enchantfromlegacyid = new EnchantFromLegacyIdComplexRemapper();
 		DisplayNameFromLegacyTextComplexRemapper dnamefromlegacytext = new DisplayNameFromLegacyTextComplexRemapper();
-		MinecraftData.getItems()
+		MinecraftItemData.getItems()
 		.forEach(material -> {
 			registerFromClient(material, attributesFromLegacyId, ProtocolVersionsHelper.DOWN_1_15_2);
 			registerFromClient(material, lorefromlegacytext, ProtocolVersionsHelper.DOWN_1_13_2);
@@ -170,7 +170,7 @@ public class ItemStackComplexRemapperRegistry {
 		});
 
 		registerFromClient(Material.FILLED_MAP, new MapFromLegacyIdComplexRemapper(), ProtocolVersionsHelper.DOWN_1_12_2);
-		MinecraftData.getItems()
+		MinecraftItemData.getItems()
 		.filter(material -> Bukkit.getItemFactory().getItemMeta(material) instanceof BannerMeta)
 		.filter(material -> LegacyBanner.getColorByMaterial(material) != null)
 		.forEach(material -> registerFromClient(

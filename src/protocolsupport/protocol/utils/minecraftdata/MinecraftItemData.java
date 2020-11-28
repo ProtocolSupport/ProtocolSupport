@@ -1,5 +1,9 @@
 package protocolsupport.protocol.utils.minecraftdata;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
 import com.google.gson.JsonObject;
@@ -11,6 +15,16 @@ import protocolsupportbuildprocessor.Preload;
 
 @Preload
 public class MinecraftItemData {
+
+	public static final int ITEM_COUNT = (int) getItems().count();
+
+	@SuppressWarnings("deprecation")
+	public static Stream<Material> getItems() {
+		return
+			Arrays.stream(Material.values())
+			.filter(mat -> !mat.isLegacy())
+			.filter(Material::isItem);
+	}
 
 	protected static final Object2IntMap<String> nameToId = new Object2IntOpenHashMap<>();
 
