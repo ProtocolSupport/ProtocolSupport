@@ -1,7 +1,6 @@
 package protocolsupport.zplatform.impl.spigot;
 
 import java.io.IOException;
-import java.security.PublicKey;
 import java.util.List;
 import java.util.UUID;
 

@@ -32,7 +32,7 @@ public class PreFlatteningItemIdData {
 
 		Arrays.fill(toLegacyId, combinedLegacyStoneId);
 
-		JsonObject rootObject = ResourceUtils.getAsJson(MappingsData.getResourcePath("preflatteningitemid.json"));
+		JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("preflatteningitemid.json"));
 		for (String blockdataString : rootObject.keySet()) {
 			register(Integer.parseInt(blockdataString), JsonUtils.getInt(rootObject, blockdataString));
 		}

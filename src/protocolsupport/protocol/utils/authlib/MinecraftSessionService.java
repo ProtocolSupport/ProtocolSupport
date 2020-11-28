@@ -10,7 +10,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
 
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.utils.JsonUtils;
@@ -22,7 +21,7 @@ public class MinecraftSessionService {
 	public static void checkHasJoinedServerAndUpdateProfile(LoginProfile profile, String hash, String ip) throws AuthenticationUnavailableException, MalformedURLException {
 		final URL url = new URL(hasJoinedUrl + "?username=" + profile.getOriginalName() + "&serverId=" + hash + (ip != null ? "&ip=" + ip : ""));
 		try {
-			JsonObject root = new JsonParser().parse(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8)).getAsJsonObject();
+			JsonObject root = JsonUtils.readJsonObject(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8));
 			profile.setOriginalName(JsonUtils.getString(root, "name"));
 			profile.setOriginalUUID(UUIDTypeAdapter.fromString(JsonUtils.getString(root, "id")));
 			JsonArray properties = JsonUtils.getJsonArray(root, "properties");

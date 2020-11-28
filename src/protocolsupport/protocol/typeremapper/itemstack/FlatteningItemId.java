@@ -29,7 +29,7 @@ public class FlatteningItemId {
 	};
 
 	static {
-		JsonObject rootObject = ResourceUtils.getAsJson(MappingsData.getResourcePath("flatteningitem.json"));
+		JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("flatteningitem.json"));
 		for (String versionString : rootObject.keySet()) {
 			JsonObject entriesObject = rootObject.get(versionString).getAsJsonObject();
 			ArrayBasedIntMappingTable tableToClient = REGISTRY_TO_CLIENT.getTable(ProtocolVersion.valueOf(versionString));

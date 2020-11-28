@@ -12,7 +12,7 @@ import protocolsupport.ProtocolSupport;
 
 public class ResourceUtils {
 
-	static final String resourcesDirName = "resources";
+	protected static final String resourcesDirName = "resources";
 
 	public static InputStream getAsStream(String name) {
 		return ProtocolSupport.class.getClassLoader().getResourceAsStream(resourcesDirName + "/" + name);
@@ -23,14 +23,14 @@ public class ResourceUtils {
 		return resource != null ? new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8)) : null;
 	}
 
-	public static JsonObject getAsJson(String name) {
+	public static JsonObject getAsJsonObject(String name) {
 		BufferedReader reader = getAsBufferedReader(name);
-		return reader != null ? JsonUtils.GSON.fromJson(reader, JsonObject.class) : null;
+		return reader != null ? JsonUtils.readJsonObject(reader) : null;
 	}
 
 	public static JsonArray getAsJsonArray(String name) {
 		BufferedReader reader = getAsBufferedReader(name);
-		return reader != null ? JsonUtils.GSON.fromJson(reader, JsonArray.class) : null;
+		return reader != null ? JsonUtils.readJsonArray(reader) : null;
 	}
 
 }

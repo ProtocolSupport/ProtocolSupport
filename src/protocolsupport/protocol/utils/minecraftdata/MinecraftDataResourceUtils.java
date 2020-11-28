@@ -11,7 +11,7 @@ public class MinecraftDataResourceUtils {
 	}
 
 	public static JsonObject getResourceAsJsonObject(String name) {
-		return ResourceUtils.getAsJson(getResourcePath(name));
+		return ResourceUtils.getAsJsonObject(getResourcePath(name));
 	}
 
 }

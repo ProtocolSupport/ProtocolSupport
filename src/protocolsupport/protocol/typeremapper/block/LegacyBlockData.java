@@ -25,7 +25,7 @@ public class LegacyBlockData {
 		public void applyDefaultRemaps() {
 			clear();
 
-			JsonObject rootObject = ResourceUtils.getAsJson(MappingsData.getResourcePath("legacyblockdata.json"));
+			JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("legacyblockdata.json"));
 			for (String versionString : rootObject.keySet()) {
 				JsonObject entriesObject = rootObject.get(versionString).getAsJsonObject();
 				ArrayBasedIntMappingTable table = getTable(ProtocolVersion.valueOf(versionString));

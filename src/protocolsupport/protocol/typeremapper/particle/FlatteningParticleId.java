@@ -21,7 +21,7 @@ public class FlatteningParticleId {
 	};
 
 	static {
-		JsonObject rootObject = ResourceUtils.getAsJson(MappingsData.getResourcePath("flatteningparticles.json"));
+		JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("flatteningparticles.json"));
 		for (String versionString : rootObject.keySet()) {
 			JsonObject entriesObject = rootObject.get(versionString).getAsJsonObject();
 			ArrayBasedIntMappingTable table = REGISTRY.getTable(ProtocolVersion.valueOf(versionString));

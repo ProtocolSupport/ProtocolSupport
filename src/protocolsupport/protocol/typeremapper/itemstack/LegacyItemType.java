@@ -21,7 +21,7 @@ public class LegacyItemType {
 			applyDefaultRemaps();
 		}
 		public void applyDefaultRemaps() {
-			JsonObject rootObject = ResourceUtils.getAsJson(MappingsData.getResourcePath("legacyitemtype.json"));
+			JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("legacyitemtype.json"));
 			for (String versionString : rootObject.keySet()) {
 				JsonObject entriesObject = rootObject.get(versionString).getAsJsonObject();
 				ArrayBasedIntMappingTable table = getTable(ProtocolVersion.valueOf(versionString));

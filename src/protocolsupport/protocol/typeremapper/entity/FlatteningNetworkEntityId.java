@@ -21,7 +21,7 @@ public class FlatteningNetworkEntityId {
 	};
 
 	static {
-		JsonObject rootObject = ResourceUtils.getAsJson(MappingsData.getResourcePath("flatteningentity.json"));
+		JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("flatteningentity.json"));
 		for (String versionString : rootObject.keySet()) {
 			JsonObject entriesObject = rootObject.get(versionString).getAsJsonObject();
 			ArrayBasedIntMappingTable table = REGISTRY.getTable(ProtocolVersion.valueOf(versionString));

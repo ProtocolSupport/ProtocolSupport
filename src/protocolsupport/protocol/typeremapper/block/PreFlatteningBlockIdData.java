@@ -21,7 +21,7 @@ public class PreFlatteningBlockIdData {
 	static {
 		Arrays.fill(toLegacyId, Material.LEGACY_BEDROCK.getId() << 4);
 
-		JsonObject rootObject = ResourceUtils.getAsJson(MappingsData.getResourcePath("preflatteningblockdataid.json"));
+		JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("preflatteningblockdataid.json"));
 		for (String blockdataString : rootObject.keySet()) {
 			toLegacyId[Integer.parseInt(blockdataString)] = JsonUtils.getInt(rootObject, blockdataString);
 		}

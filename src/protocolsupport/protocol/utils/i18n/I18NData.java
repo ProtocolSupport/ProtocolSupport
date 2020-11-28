@@ -9,8 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
-import com.google.gson.JsonObject;
-
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
@@ -42,10 +40,10 @@ public class I18NData {
 		return loadAndRegisterI18N(locale, ResourceUtils.getAsBufferedReader(resource_path + locale + ".json"));
 	}
 
-	public static I18N loadAndRegisterI18N(String locale, BufferedReader stream) {
+	public static I18N loadAndRegisterI18N(String locale, BufferedReader reader) {
 		I18N i18n = new I18N(
 			locale,
-			JsonUtils.GSON.fromJson(stream, JsonObject.class).entrySet().stream()
+			JsonUtils.readJsonObject(reader).entrySet().stream()
 			.collect(Collectors.toMap(Entry::getKey, entry -> entry.getValue().getAsString()))
 		);
 		i18ns.put(locale, i18n);

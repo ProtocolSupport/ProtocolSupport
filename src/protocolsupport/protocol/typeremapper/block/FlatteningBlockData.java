@@ -22,7 +22,7 @@ public class FlatteningBlockData {
 	};
 
 	static {
-		JsonObject rootObject = ResourceUtils.getAsJson(MappingsData.getResourcePath("flatteningblockdata.json"));
+		JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("flatteningblockdata.json"));
 		for (String versionString : rootObject.keySet()) {
 			JsonObject entriesObject = rootObject.get(versionString).getAsJsonObject();
 			FlatteningBlockDataTable table = REGISTRY.getTable(ProtocolVersion.valueOf(versionString));
