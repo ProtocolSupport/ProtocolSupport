@@ -1,13 +1,13 @@
 package protocolsupport.protocol.types.chunk;
 
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
 public class ChunkConstants {
 
 	public static final int GLOBAL_PALETTE_BITS_PER_BLOCK = 15;
-	public static final short[] GLOBAL_PALETTE = new short[MinecraftData.BLOCKDATA_COUNT];
+	public static final short[] GLOBAL_PALETTE = new short[MinecraftBlockData.BLOCKDATA_COUNT];
 	static {
 		for (int i = 0; i < GLOBAL_PALETTE.length; i++) {
 			GLOBAL_PALETTE[i] = (short) i;

@@ -1,6 +1,7 @@
 package protocolsupport.api;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -10,7 +11,9 @@ import org.bukkit.entity.EntityType;
 
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
-import protocolsupport.zplatform.ServerPlatform;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData.BlockDataInfo;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData.BlockInfo;
 
 public class MaterialAPI {
 
@@ -27,7 +30,12 @@ public class MaterialAPI {
 		if (!material.isBlock()) {
 			throw new IllegalArgumentException(MessageFormat.format("Material {0} is not a block", material));
 		}
-		return ServerPlatform.get().getMiscUtils().getBlockDataList(material);
+		BlockDataInfo[] blockdataArray = MinecraftBlockData.getBlockInfoByMaterial(material).getBlockDataArray();
+		List<BlockData> blockdataList = new ArrayList<>(blockdataArray.length);
+		for (BlockDataInfo blockdata : blockdataArray) {
+			blockdataList.add(blockdata.getBlockData());
+		}
+		return blockdataList;
 	}
 
 	/**
@@ -36,7 +44,8 @@ public class MaterialAPI {
 	 * @return blockdata network id
 	 */
 	public static int getBlockDataNetworkId(BlockData blockdata) {
-		return ServerPlatform.get().getMiscUtils().getBlockDataNetworkId(blockdata);
+		BlockDataInfo info = MinecraftBlockData.getBlockDataInfoByBlockData(blockdata);
+		return info != null ? info.getNetworkId() : -1;
 	}
 
 	/**
@@ -46,7 +55,8 @@ public class MaterialAPI {
 	 * @return blockdata
 	 */
 	public static BlockData getBlockDataByNetworkId(int id) {
-		return ServerPlatform.get().getMiscUtils().getBlockDataByNetworkId(id);
+		BlockDataInfo info = MinecraftBlockData.getBlockDataInfoByNetworkId(id);
+		return info != null ? info.getBlockData() : null;
 	}
 
 	/**
@@ -62,7 +72,8 @@ public class MaterialAPI {
 		if (!material.isBlock()) {
 			throw new IllegalArgumentException(MessageFormat.format("Material {0} is not a block", material));
 		}
-		return ServerPlatform.get().getMiscUtils().getBlockNetworkId(material);
+		BlockInfo info = MinecraftBlockData.getBlockInfoByMaterial(material);
+		return info != null ? info.getNetworkId() : null;
 	}
 
 	/**
@@ -72,7 +83,8 @@ public class MaterialAPI {
 	 * @return block material
 	 */
 	public static Material getBlockByNetworkId(int id) {
-		return ServerPlatform.get().getMiscUtils().getBlockByNetworkId(id);
+		BlockInfo info = MinecraftBlockData.getBlockInfoByNetworkId(id);
+		return info != null ? info.getMaterial() : null;
 	}
 
 	/**

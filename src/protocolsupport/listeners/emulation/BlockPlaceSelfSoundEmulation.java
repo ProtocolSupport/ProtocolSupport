@@ -13,7 +13,7 @@ import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData.BlockDataEntry;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData.BlockDataInfo;
 
 public class BlockPlaceSelfSoundEmulation implements Listener {
 
@@ -26,7 +26,7 @@ public class BlockPlaceSelfSoundEmulation implements Listener {
 		}
 		ProtocolVersion version = connection.getVersion();
 		if ((version.getProtocolType() == ProtocolType.PC) &&version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_8)) {
-			BlockDataEntry blockdataentry = MinecraftBlockData.get(MaterialAPI.getBlockDataNetworkId(event.getBlock().getBlockData()));
+			BlockDataInfo blockdataentry = MinecraftBlockData.getBlockDataInfoByNetworkId(MaterialAPI.getBlockDataNetworkId(event.getBlock().getBlockData()));
 			player.playSound(
 				event.getBlock().getLocation(),
 				blockdataentry.getBreakSound(),

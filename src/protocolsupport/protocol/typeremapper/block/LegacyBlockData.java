@@ -6,7 +6,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.MappingRegistry.IntMappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.utils.MappingsData;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
@@ -37,7 +37,7 @@ public class LegacyBlockData {
 
 		@Override
 		protected ArrayBasedIntMappingTable createTable() {
-			return new ArrayBasedIntMappingTable(MinecraftData.BLOCKDATA_COUNT);
+			return new ArrayBasedIntMappingTable(MinecraftBlockData.BLOCKDATA_COUNT);
 		}
 
 	}

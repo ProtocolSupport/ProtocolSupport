@@ -7,8 +7,6 @@ import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
-import protocolsupport.zplatform.PlatformUtils;
-import protocolsupport.zplatform.ServerPlatform;
 
 public class BlockRemapperControl {
 
@@ -50,8 +48,7 @@ public class BlockRemapperControl {
 	 * @param to blockstate to which remap will occur
 	 */
 	public void setRemap(BlockData from, BlockData to) {
-		PlatformUtils utils = ServerPlatform.get().getMiscUtils();
-		table.set(utils.getBlockDataNetworkId(from), utils.getBlockDataNetworkId(to));
+		table.set(MaterialAPI.getBlockDataNetworkId(from), MaterialAPI.getBlockDataNetworkId(to));
 	}
 
 	/**

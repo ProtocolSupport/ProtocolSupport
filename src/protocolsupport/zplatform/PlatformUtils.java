@@ -8,8 +8,6 @@ import java.util.concurrent.FutureTask;
 import javax.crypto.SecretKey;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
@@ -32,16 +30,6 @@ public interface PlatformUtils {
 	public ItemStack createBukkitItemStackFromNetwork(NetworkItemStack stack);
 
 	public NetworkItemStack createNetworkItemStackFromBukkit(ItemStack itemstack);
-
-	public int getBlockDataNetworkId(BlockData blockdata);
-
-	public int getBlockNetworkId(Material material);
-
-	public BlockData getBlockDataByNetworkId(int id);
-
-	public Material getBlockByNetworkId(int id);
-
-	public List<BlockData> getBlockDataList(Material material);
 
 	public List<Player> getNearbyPlayers(Location location, double rX, double rY, double rZ);
 

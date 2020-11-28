@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import com.google.gson.JsonObject;
 
 import protocolsupport.protocol.utils.MappingsData;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
@@ -16,7 +16,7 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class PreFlatteningBlockIdData {
 
-	protected static final int[] toLegacyId = new int[MinecraftData.BLOCKDATA_COUNT];
+	protected static final int[] toLegacyId = new int[MinecraftBlockData.BLOCKDATA_COUNT];
 
 	static {
 		Arrays.fill(toLegacyId, Material.LEGACY_BEDROCK.getId() << 4);

@@ -6,7 +6,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.MappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingTable;
 import protocolsupport.protocol.utils.MappingsData;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
+import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
@@ -38,7 +38,7 @@ public class FlatteningBlockData {
 
 	public static class FlatteningBlockDataTable extends MappingTable {
 
-		protected final FlatteningBlockDataEntry[] table = new FlatteningBlockDataEntry[MinecraftData.BLOCKDATA_COUNT];
+		protected final FlatteningBlockDataEntry[] table = new FlatteningBlockDataEntry[MinecraftBlockData.BLOCKDATA_COUNT];
 
 		public FlatteningBlockDataEntry getRemap(int blockdataId) {
 			return table[blockdataId];

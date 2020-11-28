@@ -13,14 +13,11 @@ import javax.crypto.SecretKey;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R3.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_16_R3.util.CraftIconCache;
-import org.bukkit.craftbukkit.v1_16_R3.util.CraftMagicNumbers;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
@@ -41,14 +38,12 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.MultithreadEventLoopGroup;
 import io.netty.channel.epoll.Epoll;
 import net.minecraft.server.v1_16_R3.AxisAlignedBB;
-import net.minecraft.server.v1_16_R3.Block;
 import net.minecraft.server.v1_16_R3.DedicatedServer;
 import net.minecraft.server.v1_16_R3.DedicatedServerProperties;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
 import net.minecraft.server.v1_16_R3.EnumProtocol;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_16_R3.IRegistry;
 import net.minecraft.server.v1_16_R3.Item;
 import net.minecraft.server.v1_16_R3.NBTCompressedStreamTools;
 import net.minecraft.server.v1_16_R3.NBTReadLimiter;
@@ -164,34 +159,6 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public Profile createWrappedProfile(LoginProfile loginProfile, Player player) {
 		return new SpigotWrappedGameProfile(loginProfile, ((CraftPlayer) player).getHandle().getProfile());
-	}
-
-	@Override
-	public int getBlockDataNetworkId(BlockData blockdata) {
-		return Block.getCombinedId(((CraftBlockData) blockdata).getState());
-	}
-
-	@Override
-	public int getBlockNetworkId(Material material) {
-		return IRegistry.BLOCK.a(CraftMagicNumbers.getBlock(material));
-	}
-
-	@Override
-	public BlockData getBlockDataByNetworkId(int id) {
-		return CraftBlockData.fromData(Block.getByCombinedId(id));
-	}
-
-	@Override
-	public Material getBlockByNetworkId(int id) {
-		return CraftMagicNumbers.getMaterial(IRegistry.BLOCK.fromId(id));
-	}
-
-	@Override
-	public List<BlockData> getBlockDataList(Material material) {
-		return
-			CraftMagicNumbers.getBlock(material).getStates().a().stream()
-			.map(CraftBlockData::fromData)
-			.collect(Collectors.toList());
 	}
 
 	@Override
