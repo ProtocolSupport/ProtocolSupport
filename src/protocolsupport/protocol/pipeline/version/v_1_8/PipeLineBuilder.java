@@ -15,7 +15,9 @@ public class PipeLineBuilder extends AbstractVarIntFramingPipeLineBuilder {
 		connection.initCodec(PacketCodec.instance);
 		PacketDataCodecImpl codec = connection.getCodec();
 		codec.addServerboundPacketProcessor(new AnimatePacketReorderer());
-		codec.addClientboundPacketProcessor(new ChunkSendIntervalPacketQueue());
+		if (ChunkSendIntervalPacketQueue.isEnabled()) {
+			codec.addClientboundPacketProcessor(new ChunkSendIntervalPacketQueue());
+		}
 		channel.pipeline()
 		.addAfter(ChannelHandlers.RAW_CAPTURE_RECEIVE, ChannelHandlers.DECODER_TRANSFORMER, new PacketDecoder(connection))
 		.addAfter(ChannelHandlers.RAW_CAPTURE_SEND, ChannelHandlers.ENCODER_TRANSFORMER, new PacketEncoder(connection));

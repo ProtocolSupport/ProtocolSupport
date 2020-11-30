@@ -10,10 +10,15 @@ import protocolsupport.utils.JavaSystemProperty;
 
 public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor {
 
+	protected static final long chunkSendInterval = TimeUnit.MILLISECONDS.toNanos(JavaSystemProperty.getValue("chunksend18interval", 5L, Long::parseLong));
+
+	public static boolean isEnabled() {
+		return chunkSendInterval > 0;
+	}
+
 	protected static boolean shouldLock(PacketData<?> packet) {
 		return packet.getPacketType() == PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE;
 	}
-	protected static final long chunkSendInterval = TimeUnit.MILLISECONDS.toNanos(JavaSystemProperty.getValue("chunksend18interval", 5L, Long::parseLong));
 
 	protected boolean locked = false;
 	protected final ArrayDeque<PacketData<?>> queue = new ArrayDeque<>(1024);
