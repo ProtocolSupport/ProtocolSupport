@@ -7,6 +7,15 @@ import protocolsupport.protocol.utils.i18n.I18NData;
 
 public class ItemStackRemapper {
 
+	public static int remapItemIdClientbound(ProtocolVersion version, int itemId) {
+		itemId = LegacyItemType.REGISTRY.getTable(version).get(itemId);
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13)) {
+			return FlatteningItemId.REGISTRY_TO_CLIENT.getTable(version).get(itemId);
+		} else {
+			return PreFlatteningItemIdData.getIdFromLegacyCombinedId(PreFlatteningItemIdData.getLegacyCombinedIdByModernId(itemId));
+		}
+	}
+
 	public static NetworkItemStack remapToClient(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		itemstack = ItemStackComplexRemapperRegistry.remapToClient(version, locale, itemstack);
 		itemstack.setTypeId(LegacyItemType.REGISTRY.getTable(version).get(itemstack.getTypeId()));
