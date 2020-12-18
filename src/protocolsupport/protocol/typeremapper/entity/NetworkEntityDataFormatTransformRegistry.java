@@ -58,6 +58,7 @@ import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.CargoHorseNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LamaEntityNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LegacyDonkeyNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LegacyMuleNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LegacySkeletonHorseNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.horse.LegacyZombieHorseNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.metadata.types.living.skeleton.LegacySkeletonNetworkEntityMetadataFormatTransformerFactory;
@@ -129,7 +130,10 @@ public class NetworkEntityDataFormatTransformRegistry extends MappingRegistry<Ne
 		.add(NetworkEntityType.COMMON_HORSE, LegacyDonkeyNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_10)
 		.register();
 
-		registerSimple(NetworkEntityType.MULE, CargoHorseNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_11);
+		new Mapping(NetworkEntityType.MULE)
+		.add(NetworkEntityType.MULE, CargoHorseNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+		.add(NetworkEntityType.COMMON_HORSE, LegacyMuleNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_10)
+		.register();
 
 		registerSimple(NetworkEntityType.LAMA, LamaEntityNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_11);
 
