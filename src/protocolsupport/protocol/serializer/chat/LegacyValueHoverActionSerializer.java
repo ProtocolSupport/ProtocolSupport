@@ -9,6 +9,8 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.HoverAction.EntityInfo;
+import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry;
+import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry.LegacyNetworkEntityTable;
 import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry;
 import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry.NetworkEntityDataFormatTransformerTable;
 import protocolsupport.protocol.typeremapper.itemstack.FlatteningItemId;
@@ -32,12 +34,14 @@ import protocolsupport.utils.JsonUtils;
 public class LegacyValueHoverActionSerializer extends HoverActionSerializer {
 
 	protected final ProtocolVersion version;
-	protected final NetworkEntityDataFormatTransformerTable entityRemapTable;
+	protected final LegacyNetworkEntityTable legacyEntityEntryTable;
+	protected final NetworkEntityDataFormatTransformerTable entityDataFormatTable;
 	protected final ArrayBasedIntMappingTable flatteningItemFromClientTable;
 
 	public LegacyValueHoverActionSerializer(ProtocolVersion version) {
 		this.version = version;
-		this.entityRemapTable = NetworkEntityDataFormatTransformRegistry.INSTANCE.getTable(version);
+		this.legacyEntityEntryTable = LegacyNetworkEntityRegistry.INSTANCE.getTable(version);
+		this.entityDataFormatTable = NetworkEntityDataFormatTransformRegistry.INSTANCE.getTable(version);
 		this.flatteningItemFromClientTable = FlatteningItemId.REGISTRY_FROM_CLIENT.getTable(version);
 	}
 
@@ -54,7 +58,10 @@ public class LegacyValueHoverActionSerializer extends HoverActionSerializer {
 			}
 			case SHOW_ENTITY: {
 				EntityInfo entityinfo = (EntityInfo) action.getContents();
-				NetworkEntityType etype = entityRemapTable.get(NetworkEntityType.getByBukkitType(entityinfo.getType())).getKey();
+				NetworkEntityType etype = legacyEntityEntryTable.get(NetworkEntityType.getByBukkitType(entityinfo.getType())).getType();
+				if (etype != NetworkEntityType.NONE) {
+					etype = entityDataFormatTable.get(etype).getKey();
+				}
 				NBTCompound rootTag = new NBTCompound();
 				rootTag.setTag("type", new NBTString(version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_11) ? etype.getKey() : LegacyEntityId.getStringId(etype)));
 				rootTag.setTag("id", new NBTString(entityinfo.getUUID().toString()));
