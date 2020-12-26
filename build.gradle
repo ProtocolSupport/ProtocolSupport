@@ -135,12 +135,17 @@ compileJava {
 
 
 test {
+	Path workingDirectoryPath = projectDirectoryPath.resolve('testsRun');
+
 	doFirst {
 	    classpath -= configurations.runtimeDependencies
 	    classpath += configurations.runtimeDependencies
+		Files.createDirectories(workingDirectoryPath)
 	}
 
 	useJUnitPlatform()
+
+	workingDir = workingDirectoryPath;
 }
 
 
@@ -201,6 +206,7 @@ task copyFinalJarToTarget(type: DefaultTask) {doLast{
 
 compileJava.dependsOn(clean)
 compileJava.dependsOn(setupFolders)
+test.dependsOn(cleanTest)
 compileJava.finalizedBy(test)
 jar.enabled = false
 jar.finalizedBy(shadowJar)

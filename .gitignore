@@ -7,6 +7,7 @@
 /libraries_shade/
 /build_libraries/
 /logs/
+/testsRun/
 
 # Gradle
 .gradle

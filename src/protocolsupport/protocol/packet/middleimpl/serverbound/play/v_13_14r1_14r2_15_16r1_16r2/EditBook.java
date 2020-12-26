@@ -21,7 +21,7 @@ public class EditBook extends MiddleEditBook {
 	protected void readClientData(ByteBuf clientdata) {
 		book = ItemStackSerializer.readItemStack(clientdata, version);
 		signing = clientdata.readBoolean();
-		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_6_4)) {
+		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_16_4)) {
 			slot = VarNumberSerializer.readVarInt(clientdata);
 		} else {
 			UsedHand hand = MiscSerializer.readVarIntEnum(clientdata, UsedHand.CONSTANT_LOOKUP);
