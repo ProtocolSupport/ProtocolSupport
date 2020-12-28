@@ -8,7 +8,7 @@ public class ChunkSectonBlockData extends NumberBitsStoragePadded {
 
 	public static ChunkSectonBlockData readFromStream(ByteBuf stream) {
 		short nonAirBlockCount = stream.readShort();
-		byte bitsPerBlock = stream.readByte();
+		byte bitsPerBlock = normalizeBitsPerBlock(stream.readByte());
 		short[] palette = ChunkConstants.GLOBAL_PALETTE;
 		if (bitsPerBlock != ChunkConstants.GLOBAL_PALETTE_BITS_PER_BLOCK) {
 			palette = new short[VarNumberSerializer.readVarInt(stream)];
@@ -21,6 +21,16 @@ public class ChunkSectonBlockData extends NumberBitsStoragePadded {
 			blockdata[i] = stream.readLong();
 		}
 		return new ChunkSectonBlockData(nonAirBlockCount, palette, bitsPerBlock, blockdata);
+	}
+
+	protected static byte normalizeBitsPerBlock(byte bitsPerBlock) {
+		if (bitsPerBlock <= 4) {
+			return 4;
+		} else if (bitsPerBlock <= 8) {
+			return bitsPerBlock;
+		} else {
+			return ChunkConstants.GLOBAL_PALETTE_BITS_PER_BLOCK;
+		}
 	}
 
 	protected final short nonAirBlockCount;
