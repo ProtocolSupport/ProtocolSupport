@@ -13,7 +13,7 @@ public class UseEntity extends AbstractSneakingCacheUseEntity {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		entityId = clientdata.readInt();
 		action = MiscSerializer.readByteEnum(clientdata, Action.CONSTANT_LOOKUP);
 	}

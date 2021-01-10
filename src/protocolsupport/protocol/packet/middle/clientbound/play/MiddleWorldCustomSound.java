@@ -21,7 +21,7 @@ public abstract class MiddleWorldCustomSound extends ClientBoundMiddlePacket {
 	protected float pitch;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		id = StringSerializer.readVarIntUTF8String(serverdata);
 		category = MiscSerializer.readVarIntEnum(serverdata, SoundCategory.CONSTANT_LOOKUP);
 		x = serverdata.readInt();

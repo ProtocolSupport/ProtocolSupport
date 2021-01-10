@@ -19,7 +19,7 @@ public class EntityAttributes extends MiddleEntityAttributes {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData entityattributes = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_ATTRIBUTES);
 		GenericSkippingTable<String> table = GenericIdSkipper.ATTRIBUTES.getTable(version);
 		ArrayList<Attribute> sendattrs = new ArrayList<>();
@@ -42,7 +42,7 @@ public class EntityAttributes extends MiddleEntityAttributes {
 				}
 			}
 		}
-		codec.write(entityattributes);
+		codec.writeClientbound(entityattributes);
 	}
 
 }

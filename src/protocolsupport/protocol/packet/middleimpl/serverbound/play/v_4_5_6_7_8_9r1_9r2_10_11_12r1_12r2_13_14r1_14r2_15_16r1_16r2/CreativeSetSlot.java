@@ -11,7 +11,7 @@ public class CreativeSetSlot extends MiddleCreativeSetSlot {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		slot = clientdata.readShort();
 		itemstack = ItemStackSerializer.readItemStack(clientdata, version);
 	}

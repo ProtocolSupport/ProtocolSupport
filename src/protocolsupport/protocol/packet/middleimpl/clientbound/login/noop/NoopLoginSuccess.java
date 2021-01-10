@@ -9,7 +9,7 @@ public class NoopLoginSuccess extends MiddleLoginSuccess {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

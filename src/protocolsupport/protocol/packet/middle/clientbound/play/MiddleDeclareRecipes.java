@@ -16,7 +16,7 @@ public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 	protected Recipe[] recipes;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		int count = VarNumberSerializer.readVarInt(serverdata);
 		recipes = new Recipe[count];
 		for (int i = 0; i < count; i++) {

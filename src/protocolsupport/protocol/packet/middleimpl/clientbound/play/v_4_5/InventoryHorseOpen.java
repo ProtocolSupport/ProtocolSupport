@@ -10,8 +10,8 @@ public class InventoryHorseOpen extends MiddleInventoryHorseOpen {
 	}
 
 	@Override
-	protected void writeToClient() {
-		codec.readAndComplete(MiddleInventoryClose.create(windowId));
+	protected void write() {
+		codec.writeServerboundAndFlush(MiddleInventoryClose.create(windowId));
 	}
 
 }

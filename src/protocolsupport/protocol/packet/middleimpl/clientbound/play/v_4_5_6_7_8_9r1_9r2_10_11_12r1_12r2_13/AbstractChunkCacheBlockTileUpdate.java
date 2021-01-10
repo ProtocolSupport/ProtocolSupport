@@ -19,7 +19,7 @@ public abstract class AbstractChunkCacheBlockTileUpdate extends MiddleBlockTileU
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		Position position = tile.getPosition();
 		int x = position.getX();
 		int z = position.getZ();

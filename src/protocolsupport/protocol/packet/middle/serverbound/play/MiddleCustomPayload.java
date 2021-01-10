@@ -36,7 +36,7 @@ public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 	protected boolean custom;
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		String modernTag = getServerTag(tag);
 		if (modernTag != null) {
 			switch (modernTag) {
@@ -85,8 +85,8 @@ public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 	protected abstract String getServerTag(String tag);
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(tag, data));
+	protected void write() {
+		codec.writeServerbound(create(tag, data));
 	}
 
 	@Override

@@ -17,7 +17,7 @@ public class SpawnLiving extends AbstractRemappedSpawnLiving {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData spawnliving = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_LIVING);
 		VarNumberSerializer.writeVarInt(spawnliving, entity.getId());
 		UUIDSerializer.writeUUID2L(spawnliving, entity.getUUID());
@@ -32,7 +32,7 @@ public class SpawnLiving extends AbstractRemappedSpawnLiving {
 		spawnliving.writeShort(motY);
 		spawnliving.writeShort(motZ);
 		NetworkEntityMetadataSerializer.writeData(spawnliving, version, I18NData.DEFAULT_LOCALE, NetworkEntityMetadataList.EMPTY);
-		codec.write(spawnliving);
+		codec.writeClientbound(spawnliving);
 	}
 
 }

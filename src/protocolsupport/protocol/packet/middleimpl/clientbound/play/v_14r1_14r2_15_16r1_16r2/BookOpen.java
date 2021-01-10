@@ -12,10 +12,10 @@ public class BookOpen extends MiddleBookOpen {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData bookopen = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BOOK_OPEN);
 		MiscSerializer.writeVarIntEnum(bookopen, hand);
-		codec.write(bookopen);
+		codec.writeClientbound(bookopen);
 	}
 
 }

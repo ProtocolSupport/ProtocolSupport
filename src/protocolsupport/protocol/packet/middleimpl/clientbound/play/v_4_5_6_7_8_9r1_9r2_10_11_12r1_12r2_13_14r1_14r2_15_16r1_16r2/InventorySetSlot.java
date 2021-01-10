@@ -19,20 +19,20 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		String locale = clientCache.getLocale();
 
 		if (windowId == WINDOW_ID_PLAYER_CURSOR) {
-			codec.write(create(version, locale, windowId, slot, itemstack));
+			codec.writeClientbound(create(version, locale, windowId, slot, itemstack));
 			return;
 		}
 		if (windowId == WINDOW_ID_PLAYER_INVENTORY) {
 			//TODO: remap for versions that don't actually support this special window id
-			codec.write(create(version, locale, windowId, slot, itemstack));
+			codec.writeClientbound(create(version, locale, windowId, slot, itemstack));
 			return;
 		}
 		if ((windowId == WINDOW_ID_PLAYER_HOTBAR) && (slot >= 36) && (slot < 45)) {
-			codec.write(create(version, locale, windowId, slot, itemstack));
+			codec.writeClientbound(create(version, locale, windowId, slot, itemstack));
 			return;
 		}
 
@@ -42,7 +42,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 
 		try {
 			WindowSlot windowSlot = windowCache.getOpenedWindowRemapper().toClientSlot(windowId, slot);
-			codec.write(create(version, locale, windowSlot.getWindowId(), windowSlot.getSlot(), itemstack));
+			codec.writeClientbound(create(version, locale, windowSlot.getWindowId(), windowSlot.getSlot(), itemstack));
 		} catch (NoSuchSlotException e) {
 		}
 	}

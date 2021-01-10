@@ -23,14 +23,14 @@ public abstract class MiddleInventoryHorseOpen extends ClientBoundMiddlePacket {
 	protected int entityId;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		windowId = serverdata.readByte();
 		slots = VarNumberSerializer.readVarInt(serverdata);
 		entityId = serverdata.readInt();
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		windowCache.setOpenedWindow(windowId, WindowType.HORSE, slots, windowsRemapper.get(WindowType.HORSE, slots));
 	}
 

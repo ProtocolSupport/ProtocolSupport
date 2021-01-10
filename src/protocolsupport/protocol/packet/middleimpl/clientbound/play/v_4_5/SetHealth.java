@@ -15,15 +15,15 @@ public class SetHealth extends MiddleSetHealth {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData sethealth = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SET_HEALTH);
 		sethealth.writeShort((int) Math.ceil((health * 20.0F) / cache.getClientCache().getMaxHealth()));
 		sethealth.writeShort(food);
 		sethealth.writeFloat(saturation);
-		codec.write(sethealth);
+		codec.writeClientbound(sethealth);
 
 		if ((health <= 0) && !clientCache.isRespawnScreenEnabled()) {
-			codec.readAndComplete(MiddleClientCommand.create(MiddleClientCommand.Command.REQUEST_RESPAWN));
+			codec.writeServerboundAndFlush(MiddleClientCommand.create(MiddleClientCommand.Command.REQUEST_RESPAWN));
 		}
 	}
 

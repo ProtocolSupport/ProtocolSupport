@@ -28,7 +28,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 	protected final IdMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(full);
@@ -50,7 +50,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 		MiscSerializer.writeVarIntCountPrefixedType(chunkdata, this, (to, chunksections) -> {
 			return ChunkWriterVariesWithLight.writeTiles(to, chunksections.blockMask, chunksections.cachedChunk);
 		});
-		codec.write(chunkdata);
+		codec.writeClientbound(chunkdata);
 	}
 
 }

@@ -18,7 +18,7 @@ public class Advancements extends MiddleAdvancements {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData advancements = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ADVANCEMENTS);
 		advancements.writeBoolean(reset);
 		ArraySerializer.writeVarIntTArray(advancements, advancementsMapping, (to, element) -> {
@@ -30,7 +30,7 @@ public class Advancements extends MiddleAdvancements {
 			StringSerializer.writeVarIntUTF8String(to, element.getObj1());
 			wrtieAdvancementProgress(to, element.getObj2());
 		});
-		codec.write(advancements);
+		codec.writeClientbound(advancements);
 	}
 
 	protected static void writeAdvanvement(ByteBuf to, ProtocolVersion version, String locale, Advancement advancement) {

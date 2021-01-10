@@ -11,14 +11,14 @@ public class VehicleMove extends MiddleVehicleMove {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData vehiclemove = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_VEHICLE_MOVE);
 		vehiclemove.writeDouble(x);
 		vehiclemove.writeDouble(y);
 		vehiclemove.writeDouble(z);
 		vehiclemove.writeFloat(yaw);
 		vehiclemove.writeFloat(pitch);
-		codec.write(vehiclemove);
+		codec.writeClientbound(vehiclemove);
 	}
 
 }

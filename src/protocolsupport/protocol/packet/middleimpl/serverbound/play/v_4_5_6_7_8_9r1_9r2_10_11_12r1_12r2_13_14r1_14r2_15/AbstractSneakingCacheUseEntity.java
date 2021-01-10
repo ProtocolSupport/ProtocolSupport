@@ -12,7 +12,7 @@ public abstract class AbstractSneakingCacheUseEntity extends MiddleUseEntity {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		sneaking = clientCache.isSneaking();
 	}
 

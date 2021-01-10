@@ -17,13 +17,13 @@ public class BlockAction extends MiddleBlockAction {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData blockaction = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_ACTION);
 		PositionSerializer.writeLegacyPositionS(blockaction, position);
 		blockaction.writeByte(actionId);
 		blockaction.writeByte(actionParam);
 		blockaction.writeShort(BlockRemappingHelper.remapPreFlatteningBlockId(blockDataRemappingTable, blockId));
-		codec.write(blockaction);
+		codec.writeClientbound(blockaction);
 	}
 
 }

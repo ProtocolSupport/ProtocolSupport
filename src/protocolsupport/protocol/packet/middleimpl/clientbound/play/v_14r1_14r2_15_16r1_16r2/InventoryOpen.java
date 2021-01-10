@@ -26,7 +26,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 		VarNumberSerializer.writeVarInt(windowopen, windowId);
 		VarNumberSerializer.writeVarInt(windowopen, ((Number) windowTypeIdMappingTable.get(windowRemapper.toClientWindowType(type))).intValue());
 		StringSerializer.writeVarIntUTF8String(windowopen, ChatSerializer.serialize(version, clientCache.getLocale(), title));
-		codec.write(windowopen);
+		codec.writeClientbound(windowopen);
 	}
 
 }

@@ -14,8 +14,8 @@ public abstract class MiddleSteerBoat extends ServerBoundMiddlePacket {
 	protected boolean leftPaddleTurning;
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(rightPaddleTurning, leftPaddleTurning));
+	protected void write() {
+		codec.writeServerbound(create(rightPaddleTurning, leftPaddleTurning));
 	}
 
 	public static ServerBoundPacketData create(boolean rightPaddleTurning, boolean leftPaddleTurning) {

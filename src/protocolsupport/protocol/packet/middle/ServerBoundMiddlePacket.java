@@ -15,20 +15,20 @@ public abstract class ServerBoundMiddlePacket extends MiddlePacket {
 
 	private void decode0(ByteBuf serverdata) {
 		try {
-			readClientData(serverdata);
-			handleReadData();
+			read(serverdata);
+			handle();
 		} catch (CancelMiddlePacketException e) {
 			return;
 		}
-		writeToServer();
+		write();
 	}
 
-	protected abstract void readClientData(ByteBuf clientdata);
+	protected abstract void read(ByteBuf clientdata);
 
-	protected void handleReadData() {
+	protected void handle() {
 	}
 
-	protected abstract void writeToServer();
+	protected abstract void write();
 
 	protected void cleanup() {
 	}

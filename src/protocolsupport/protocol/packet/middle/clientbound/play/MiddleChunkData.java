@@ -28,7 +28,7 @@ public abstract class MiddleChunkData extends ClientBoundMiddlePacket {
 	protected TileEntity[] tiles;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		coord = PositionSerializer.readIntChunkCoord(serverdata);
 		full = serverdata.readBoolean();
 

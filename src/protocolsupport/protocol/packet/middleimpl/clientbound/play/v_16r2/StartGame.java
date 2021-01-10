@@ -15,7 +15,7 @@ public class StartGame extends MiddleStartGame {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData startgame = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_START_GAME);
 		startgame.writeInt(player.getId());
 		startgame.writeBoolean(hardcore);
@@ -32,7 +32,7 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeBoolean(respawnScreenEnabled);
 		startgame.writeBoolean(worldDebug);
 		startgame.writeBoolean(worldFlat);
-		codec.write(startgame);
+		codec.writeClientbound(startgame);
 	}
 
 }

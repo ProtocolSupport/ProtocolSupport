@@ -21,8 +21,8 @@ public abstract class MiddleEntityAttributes extends MiddleEntity {
 	protected final LinkedHashMap<String, Attribute> attributes = new LinkedHashMap<>();
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
-		super.readServerData(serverdata);
+	protected void decode(ByteBuf serverdata) {
+		super.decode(serverdata);
 		int attributesCount = serverdata.readInt();
 		for (int i = 0; i < attributesCount; i++) {
 			Attribute attribute = new Attribute();
@@ -44,7 +44,7 @@ public abstract class MiddleEntityAttributes extends MiddleEntity {
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		if (entityId == entityCache.getSelfId()) {
 			Attribute attr = attributes.get("generic.max_health");
 			if (attr != null) {

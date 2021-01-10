@@ -38,7 +38,7 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 	protected String[] players;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		name = StringSerializer.readVarIntUTF8String(serverdata);
 		mode = MiscSerializer.readByteEnum(serverdata, Mode.CONSTANT_LOOKUP);
 		if ((mode == Mode.CREATE) || (mode == Mode.UPDATE)) {

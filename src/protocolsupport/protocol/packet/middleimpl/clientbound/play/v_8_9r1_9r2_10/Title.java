@@ -20,7 +20,7 @@ public class Title extends MiddleTitle {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		if (action != Action.SET_ACTION_BAR) {
 			ClientBoundPacketData title = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_TITLE);
 			int actionId = action.ordinal();
@@ -45,9 +45,9 @@ public class Title extends MiddleTitle {
 					throw new EncoderException("Should not reach here");
 				}
 			}
-			codec.write(title);
+			codec.writeClientbound(title);
 		} else {
-			codec.write(Chat.create(MessagePosition.HOTBAR, ChatSerializer.serialize(version, clientCache.getLocale(), message)));
+			codec.writeClientbound(Chat.create(MessagePosition.HOTBAR, ChatSerializer.serialize(version, clientCache.getLocale(), message)));
 		}
 	}
 

@@ -12,11 +12,11 @@ public class CraftRecipeConfirm extends MiddleCraftRecipeConfirm {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData craftrecipeconfirm = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CRAFT_RECIPE_CONFIRM);
 		craftrecipeconfirm.writeByte(windowId);
 		StringSerializer.writeVarIntUTF8String(craftrecipeconfirm, recipeId);
-		codec.write(craftrecipeconfirm);
+		codec.writeClientbound(craftrecipeconfirm);
 	}
 
 }

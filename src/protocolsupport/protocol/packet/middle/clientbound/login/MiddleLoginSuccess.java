@@ -17,13 +17,13 @@ public abstract class MiddleLoginSuccess extends ClientBoundMiddlePacket {
 	protected String name;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		uuid = UUIDSerializer.readUUID4I(serverdata);
 		name = StringSerializer.readVarIntUTF8String(serverdata);
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		cache.getClientCache().setUUID(uuid);
 	}
 

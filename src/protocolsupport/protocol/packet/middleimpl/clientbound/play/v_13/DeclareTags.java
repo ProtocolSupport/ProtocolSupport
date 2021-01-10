@@ -11,12 +11,12 @@ public class DeclareTags extends AbstractDeclareTags {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData declaretags = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_DECLARE_TAGS);
 		writeBlocksTags(declaretags, blocks);
 		writeItemsTags(declaretags, items);
 		writeTags(declaretags, fluids);
-		codec.write(declaretags);
+		codec.writeClientbound(declaretags);
 	}
 
 }

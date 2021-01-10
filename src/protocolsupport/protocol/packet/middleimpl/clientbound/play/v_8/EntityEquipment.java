@@ -19,7 +19,7 @@ public class EntityEquipment extends AbstractNoOffhandEntityEquipment {
 
 	@Override
 	protected void writeToClient0(Slot slot, NetworkItemStack itemstack) {
-		codec.write(create(version, clientCache.getLocale(), entityId, slot, itemstack));
+		codec.writeClientbound(create(version, clientCache.getLocale(), entityId, slot, itemstack));
 	}
 
 	public static ClientBoundPacketData create(

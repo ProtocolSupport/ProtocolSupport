@@ -14,7 +14,7 @@ public abstract class AbstractPlayerUseBedAsPacketEntityMetadata extends Abstrac
 	}
 
 	@Override
-	public void writeToClient() {
+	public void write() {
 		writeEntityMetadata(fMetadata);
 
 		if (lType == NetworkEntityType.PLAYER) {

@@ -16,7 +16,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData spawnnamed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
 		VarNumberSerializer.writeVarInt(spawnnamed, entity.getId());
 		UUIDSerializer.writeUUID2L(spawnnamed, entity.getUUID());
@@ -26,7 +26,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		spawnnamed.writeByte(yaw);
 		spawnnamed.writeByte(pitch);
 		NetworkEntityMetadataSerializer.writeData(spawnnamed, version, I18NData.DEFAULT_LOCALE, NetworkEntityMetadataList.EMPTY);
-		codec.write(spawnnamed);
+		codec.writeClientbound(spawnnamed);
 	}
 
 }

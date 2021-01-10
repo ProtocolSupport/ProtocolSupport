@@ -12,7 +12,7 @@ public class CustomPayload extends MiddleCustomPayload {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		tag = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
 		data = MiscSerializer.readAllBytesSlice(clientdata);
 	}

@@ -16,7 +16,7 @@ public abstract class AbstractKnownEntityStatus extends MiddleEntityStatus {
 	protected NetworkEntity entity;
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		entity = entityCache.getEntity(entityId);
 
 		if (entity == null) {

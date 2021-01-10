@@ -9,7 +9,7 @@ public class NoopServerDifficulty extends MiddleServerDifficulty {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

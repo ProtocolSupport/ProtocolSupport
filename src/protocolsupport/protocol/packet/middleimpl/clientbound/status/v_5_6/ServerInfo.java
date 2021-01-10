@@ -14,7 +14,7 @@ public class ServerInfo extends MiddleServerInfo {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData serverinfo = ClientBoundPacketData.create(PacketType.CLIENTBOUND_STATUS_SERVER_INFO);
 		String response = new StringJoiner("\u0000")
 		.add("§1")
@@ -25,7 +25,7 @@ public class ServerInfo extends MiddleServerInfo {
 		.add(String.valueOf(ping.getPlayers().getMax()))
 		.toString();
 		StringSerializer.writeShortUTF16BEString(serverinfo, response);
-		codec.write(serverinfo);
+		codec.writeClientbound(serverinfo);
 	}
 
 }

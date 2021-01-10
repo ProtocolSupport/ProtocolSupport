@@ -16,9 +16,9 @@ public class Explosion extends MiddleExplosion {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_14_4)) {
-			codec.write(WorldCustomSound.create(
+			codec.writeClientbound(WorldCustomSound.create(
 				version,
 				(int) (x * 8), (int) (y * 8), (int) (z * 8),
 				"entity.generic.explode", SoundCategory.BLOCKS,
@@ -40,7 +40,7 @@ public class Explosion extends MiddleExplosion {
 		explosion.writeFloat(pMotX);
 		explosion.writeFloat(pMotY);
 		explosion.writeFloat(pMotZ);
-		codec.write(explosion);
+		codec.writeClientbound(explosion);
 	}
 
 }

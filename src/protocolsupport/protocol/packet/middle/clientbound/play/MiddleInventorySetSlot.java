@@ -23,7 +23,7 @@ public abstract class MiddleInventorySetSlot extends ClientBoundMiddlePacket {
 	protected NetworkItemStack itemstack;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		windowId = serverdata.readByte();
 		slot = serverdata.readShort();
 		itemstack = ItemStackSerializer.readItemStack(serverdata);

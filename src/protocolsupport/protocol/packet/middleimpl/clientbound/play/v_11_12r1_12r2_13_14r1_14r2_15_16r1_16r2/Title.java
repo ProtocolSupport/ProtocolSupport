@@ -17,7 +17,7 @@ public class Title extends MiddleTitle {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_TITLE);
 		VarNumberSerializer.writeVarInt(serializer, action.ordinal());
 		switch (action) {
@@ -38,7 +38,7 @@ public class Title extends MiddleTitle {
 				break;
 			}
 		}
-		codec.write(serializer);
+		codec.writeClientbound(serializer);
 	}
 
 }

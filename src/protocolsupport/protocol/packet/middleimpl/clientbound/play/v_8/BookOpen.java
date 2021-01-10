@@ -12,8 +12,8 @@ public class BookOpen extends MiddleBookOpen {
 	}
 
 	@Override
-	protected void writeToClient() {
-		codec.write(CustomPayload.create(LegacyCustomPayloadChannelName.LEGACY_BOOK_OPEN, Unpooled.EMPTY_BUFFER));
+	protected void write() {
+		codec.writeClientbound(CustomPayload.create(LegacyCustomPayloadChannelName.LEGACY_BOOK_OPEN, Unpooled.EMPTY_BUFFER));
 	}
 
 }

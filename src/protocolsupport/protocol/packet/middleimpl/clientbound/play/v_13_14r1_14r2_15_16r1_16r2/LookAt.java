@@ -11,10 +11,10 @@ public class LookAt extends MiddleLookAt {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData lookat = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_LOOK_AT);
 		lookat.writeBytes(data);
-		codec.write(lookat);
+		codec.writeClientbound(lookat);
 	}
 
 }

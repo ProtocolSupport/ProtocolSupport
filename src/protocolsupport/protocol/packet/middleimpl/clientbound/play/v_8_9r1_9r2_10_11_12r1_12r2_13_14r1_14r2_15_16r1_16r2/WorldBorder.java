@@ -12,7 +12,7 @@ public class WorldBorder extends MiddleWorldBorder {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData worldborder = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_BORDER);
 		VarNumberSerializer.writeVarInt(worldborder, action.ordinal());
 		switch (action) {
@@ -51,7 +51,7 @@ public class WorldBorder extends MiddleWorldBorder {
 				break;
 			}
 		}
-		codec.write(worldborder);
+		codec.writeClientbound(worldborder);
 	}
 
 }

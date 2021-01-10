@@ -18,7 +18,7 @@ public class Ping extends ServerBoundMiddlePacket {
 	protected int port;
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		clientdata.readUnsignedByte();
 		clientdata.readUnsignedByte();
 		StringSerializer.readShortUTF16BEString(clientdata, Short.MAX_VALUE);
@@ -29,15 +29,15 @@ public class Ping extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 		ServerBoundPacketData setprotocol = ServerBoundPacketData.create(PacketType.SERVERBOUND_HANDSHAKE_START);
 		VarNumberSerializer.writeVarInt(setprotocol, ProtocolVersionsHelper.LATEST_PC.getId());
 		StringSerializer.writeVarIntUTF8String(setprotocol, hostname);
 		setprotocol.writeShort(port);
 		VarNumberSerializer.writeVarInt(setprotocol, 1);
-		codec.read(setprotocol);
+		codec.writeServerbound(setprotocol);
 
-		codec.read(ServerBoundPacketData.create(PacketType.SERVERBOUND_STATUS_REQUEST));
+		codec.writeServerbound(ServerBoundPacketData.create(PacketType.SERVERBOUND_STATUS_REQUEST));
 	}
 
 }

@@ -16,8 +16,8 @@ public abstract class MiddleBlockTileUpdate extends MiddleBlock {
 	protected TileEntity tile;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
-		super.readServerData(serverdata);
+	protected void decode(ByteBuf serverdata) {
+		super.decode(serverdata);
 		int type = serverdata.readUnsignedByte();
 		NBTCompound tag = ItemStackSerializer.readDirectTag(serverdata);
 		tile = new TileEntity(TileEntityType.getByNetworkId(type), position, tag);

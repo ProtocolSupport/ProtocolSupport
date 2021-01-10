@@ -13,14 +13,14 @@ public class Statistics extends MiddleStatistics {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData statisticsupdate = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_STATISTICS);
 		ArraySerializer.writeVarIntTArray(statisticsupdate, statistics, (to, statistic) -> {
 			VarNumberSerializer.writeVarInt(to, statistic.category);
 			VarNumberSerializer.writeVarInt(to, statistic.id);
 			VarNumberSerializer.writeVarInt(to, statistic.value);
 		});
-		codec.write(statisticsupdate);
+		codec.writeClientbound(statisticsupdate);
 	}
 
 }

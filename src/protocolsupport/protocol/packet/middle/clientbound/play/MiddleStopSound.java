@@ -18,7 +18,7 @@ public abstract class MiddleStopSound extends ClientBoundMiddlePacket {
 	protected String name;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		int flags = serverdata.readByte();
 		source = (flags & FLAG_SOURCE) == FLAG_SOURCE ? VarNumberSerializer.readVarInt(serverdata) : -1;
 		name = (flags & FLAG_NAME) == FLAG_NAME ? StringSerializer.readVarIntUTF8String(serverdata) : null;

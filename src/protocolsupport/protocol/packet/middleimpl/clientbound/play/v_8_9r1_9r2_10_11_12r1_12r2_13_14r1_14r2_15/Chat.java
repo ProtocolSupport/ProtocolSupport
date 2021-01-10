@@ -18,8 +18,8 @@ public class Chat extends MiddleChat {
 	}
 
 	@Override
-	protected void writeToClient() {
-		codec.write(create(position, ChatSerializer.serialize(version, clientCache.getLocale(), message)));
+	protected void write() {
+		codec.writeClientbound(create(position, ChatSerializer.serialize(version, clientCache.getLocale(), message)));
 	}
 
 	public static ClientBoundPacketData create(MessagePosition position, String messageJson) {

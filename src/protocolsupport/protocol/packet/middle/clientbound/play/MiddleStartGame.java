@@ -46,7 +46,7 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 	protected boolean worldFlat;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		player = NetworkEntity.createPlayer(serverdata.readInt());
 		hardcore = serverdata.readBoolean();
 		gamemodeCurrent = GameMode.getById(serverdata.readByte());
@@ -69,7 +69,7 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		clientCache.setDimensionCodec(dimensions);
 		clientCache.setCurrentWorld(world, dimension);
 		clientCache.setRespawnScreenEnabled(respawnScreenEnabled);

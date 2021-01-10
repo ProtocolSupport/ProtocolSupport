@@ -9,7 +9,7 @@ public class NoopAdvancements extends MiddleAdvancements {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

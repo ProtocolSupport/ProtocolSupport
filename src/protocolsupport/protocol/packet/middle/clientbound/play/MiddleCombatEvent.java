@@ -20,7 +20,7 @@ public abstract class MiddleCombatEvent extends ClientBoundMiddlePacket {
 	protected String message;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		type = MiscSerializer.readVarIntEnum(serverdata, Type.CONSTANT_LOOKUP);
 		switch (type) {
 			case ENTER_COMBAT: {

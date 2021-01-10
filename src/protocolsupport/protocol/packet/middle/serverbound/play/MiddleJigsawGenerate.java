@@ -18,12 +18,12 @@ public abstract class MiddleJigsawGenerate extends ServerBoundMiddlePacket {
 	protected boolean keep;
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 		ServerBoundPacketData jigsawgenerate = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_JIGSAW_GENERATE);
 		PositionSerializer.writePosition(jigsawgenerate, position);
 		VarNumberSerializer.writeVarInt(jigsawgenerate, levels);
 		jigsawgenerate.writeBoolean(keep);
-		codec.read(jigsawgenerate);
+		codec.writeServerbound(jigsawgenerate);
 	}
 
 }

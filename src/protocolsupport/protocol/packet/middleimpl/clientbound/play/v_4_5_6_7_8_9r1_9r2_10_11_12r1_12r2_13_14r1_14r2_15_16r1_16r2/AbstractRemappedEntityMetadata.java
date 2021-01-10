@@ -22,8 +22,8 @@ public abstract class AbstractRemappedEntityMetadata extends AbstractKnownEntity
 	protected final NetworkEntityMetadataList fMetadata = new NetworkEntityMetadataList();
 
 	@Override
-	protected void handleReadData() {
-		super.handleReadData();
+	protected void handle() {
+		super.handle();
 
 		LegacyNetworkEntityEntry legacyEntityEntry = legacyEntityEntryTable.get(entity.getType());
 		lType = legacyEntityEntry.getType();

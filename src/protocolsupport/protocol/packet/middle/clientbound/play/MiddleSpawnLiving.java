@@ -35,7 +35,7 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 	protected int motZ;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		int entityId = VarNumberSerializer.readVarInt(serverdata);
 		UUID uuid = UUIDSerializer.readUUID2L(serverdata);
 		int typeId = VarNumberSerializer.readVarInt(serverdata);
@@ -64,7 +64,7 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		NetworkEntityDataCache ecache = entity.getDataCache();
 		ecache.setLocation(x, y, z, pitch, yaw);
 		ecache.setHeadYaw(yaw);

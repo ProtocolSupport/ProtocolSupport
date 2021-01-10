@@ -13,12 +13,12 @@ public class HeldSlot extends MiddleHeldSlot {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		slot = clientdata.readShort();
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		clientCache.setHeldSlot(slot);
 	}
 

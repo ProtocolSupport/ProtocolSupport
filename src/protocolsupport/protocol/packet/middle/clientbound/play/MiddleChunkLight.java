@@ -25,7 +25,7 @@ public abstract class MiddleChunkLight extends ClientBoundMiddlePacket {
 	protected final byte[][] blockLight = new byte[ChunkConstants.SECTION_COUNT_LIGHT][];
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		coord = PositionSerializer.readVarIntChunkCoord(serverdata);
 		trustEdges = serverdata.readBoolean();
 

@@ -15,7 +15,7 @@ public abstract class AbstractWorldEntitySound extends MiddleEntitySound {
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		String soundName = MinecraftSoundData.getNameById(id);
 		if (soundName == null) {
 			return;

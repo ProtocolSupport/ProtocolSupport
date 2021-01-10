@@ -21,7 +21,7 @@ public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 	protected int fadeOut;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		switch (action) {
 			case SET_TITLE:

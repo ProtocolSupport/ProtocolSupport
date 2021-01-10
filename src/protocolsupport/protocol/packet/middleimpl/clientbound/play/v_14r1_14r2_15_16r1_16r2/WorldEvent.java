@@ -21,7 +21,7 @@ public class WorldEvent extends MiddleWorldEvent {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		if (effectId == 2001) {
 			data = blockDataRemappingTable.get(data);
 		} else if ((effectId == 1010) && (data != 0)) {
@@ -34,7 +34,7 @@ public class WorldEvent extends MiddleWorldEvent {
 		PositionSerializer.writePosition(worldevent, position);
 		worldevent.writeInt(data);
 		worldevent.writeBoolean(disableRelative);
-		codec.write(worldevent);
+		codec.writeClientbound(worldevent);
 	}
 
 }

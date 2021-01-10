@@ -10,7 +10,7 @@ public class InventoryTransaction extends MiddleInventoryTransaction {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		windowId = clientdata.readUnsignedByte();
 		actionNumber = clientdata.readShort();
 		accepted = clientdata.readBoolean();

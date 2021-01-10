@@ -15,7 +15,7 @@ public abstract class MiddleEntityPassengers extends ClientBoundMiddlePacket {
 	protected int[] passengersIds;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		vehicleId = VarNumberSerializer.readVarInt(serverdata);
 		passengersIds = ArraySerializer.readVarIntVarIntArray(serverdata);
 	}

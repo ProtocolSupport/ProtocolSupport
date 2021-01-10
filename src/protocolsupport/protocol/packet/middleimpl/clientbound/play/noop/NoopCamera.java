@@ -9,7 +9,7 @@ public class NoopCamera extends MiddleCamera {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

@@ -12,14 +12,14 @@ public class SpawnExpOrb extends MiddleSpawnExpOrb {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData spawnexporb = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_EXP_ORB);
 		VarNumberSerializer.writeVarInt(spawnexporb, entity.getId());
 		spawnexporb.writeInt((int) (x * 32));
 		spawnexporb.writeInt((int) (y * 32));
 		spawnexporb.writeInt((int) (z * 32));
 		spawnexporb.writeShort(count);
-		codec.write(spawnexporb);
+		codec.writeClientbound(spawnexporb);
 	}
 
 }

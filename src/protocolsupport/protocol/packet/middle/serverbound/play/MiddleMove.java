@@ -16,13 +16,13 @@ public abstract class MiddleMove extends ServerBoundMiddlePacket {
 	protected boolean onGround;
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 		ServerBoundPacketData move = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_POSITION);
 		move.writeDouble(x);
 		move.writeDouble(y);
 		move.writeDouble(z);
 		move.writeBoolean(onGround);
-		codec.read(move);
+		codec.writeServerbound(move);
 	}
 
 }

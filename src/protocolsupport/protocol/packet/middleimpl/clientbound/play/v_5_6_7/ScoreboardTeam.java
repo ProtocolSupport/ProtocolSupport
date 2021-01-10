@@ -17,7 +17,7 @@ public class ScoreboardTeam extends AbstractScoreboardTeam {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData scoreboardteam = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_TEAM);
 		StringSerializer.writeString(scoreboardteam, version, name);
 		MiscSerializer.writeByteEnum(scoreboardteam, mode);
@@ -31,7 +31,7 @@ public class ScoreboardTeam extends AbstractScoreboardTeam {
 		if ((mode == Mode.CREATE) || (mode == Mode.PLAYERS_ADD) || (mode == Mode.PLAYERS_REMOVE)) {
 			ArraySerializer.writeShortTArray(scoreboardteam, players, (to, element) -> StringSerializer.writeString(to, version, Utils.clampString(element, 16)));
 		}
-		codec.write(scoreboardteam);
+		codec.writeClientbound(scoreboardteam);
 	}
 
 }

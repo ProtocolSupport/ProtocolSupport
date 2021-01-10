@@ -21,13 +21,13 @@ public class BlockBreakConfirm extends MiddleBlockBreakConfirm {
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData blockbreakconfirm = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_CONFIRM);
 		PositionSerializer.writePosition(blockbreakconfirm, position);
 		VarNumberSerializer.writeVarInt(blockbreakconfirm, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, blockId));
 		VarNumberSerializer.writeVarInt(blockbreakconfirm, status);
 		blockbreakconfirm.writeBoolean(successful);
-		codec.write(blockbreakconfirm);
+		codec.writeClientbound(blockbreakconfirm);
 	}
 
 }

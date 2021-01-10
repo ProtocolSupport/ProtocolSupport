@@ -9,7 +9,7 @@ public class NoopVehicleMove extends MiddleVehicleMove {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

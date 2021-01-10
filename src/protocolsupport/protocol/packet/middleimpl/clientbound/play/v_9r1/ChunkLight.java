@@ -28,7 +28,7 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(false); //full
@@ -41,13 +41,13 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 				chunksections.clientCache.hasDimensionSkyLight()
 			);
 		});
-		codec.write(chunkdata);
+		codec.writeClientbound(chunkdata);
 
 		Map<Position, TileEntity>[] tiles = cachedChunk.getTiles();
 		for (int sectionNumber = 0; sectionNumber < tiles.length; sectionNumber++) {
 			if (BitUtils.isIBitSet(blockMask, sectionNumber)) {
 				for (TileEntity tile : tiles[sectionNumber].values()) {
-					codec.write(BlockTileUpdate.create(version, tile));
+					codec.writeClientbound(BlockTileUpdate.create(version, tile));
 				}
 			}
 		}

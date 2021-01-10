@@ -15,7 +15,7 @@ public abstract class MiddleSetExperience extends ClientBoundMiddlePacket {
 	protected int totalExp;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		exp = serverdata.readFloat();
 		level = VarNumberSerializer.readVarInt(serverdata);
 		totalExp = VarNumberSerializer.readVarInt(serverdata);

@@ -17,8 +17,8 @@ public abstract class AbstractLocationOffsetEntityRelMoveLook extends MiddleEnti
 	protected LegacyNetworkEntityLocationOffset.Offset entityOffsetEntry;
 
 	@Override
-	protected void handleReadData() {
-		super.handleReadData();
+	protected void handle() {
+		super.handle();
 
 		entityOffsetEntry = entityOffset.get(legacyEntityEntryTable.get(entity.getType()).getType());
 		if (entityOffsetEntry != null) {

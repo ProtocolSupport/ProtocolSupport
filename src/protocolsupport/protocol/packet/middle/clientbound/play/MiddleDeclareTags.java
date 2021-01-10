@@ -17,7 +17,7 @@ public abstract class MiddleDeclareTags extends ClientBoundMiddlePacket {
 	protected Tag[] entities;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		blocks = readTags(serverdata);
 		items = readTags(serverdata);
 		fluids = readTags(serverdata);

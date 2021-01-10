@@ -15,7 +15,7 @@ public class InventoryClick extends MiddleInventoryClick {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		windowId = clientdata.readByte();
 		slot = clientdata.readShort();
 		button = clientdata.readUnsignedByte();
@@ -25,7 +25,7 @@ public class InventoryClick extends MiddleInventoryClick {
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		try {
 			WindowSlot windowSlot = windowCache.getOpenedWindowRemapper().fromClientSlot(windowId, slot);
 			windowId = windowSlot.getWindowId();

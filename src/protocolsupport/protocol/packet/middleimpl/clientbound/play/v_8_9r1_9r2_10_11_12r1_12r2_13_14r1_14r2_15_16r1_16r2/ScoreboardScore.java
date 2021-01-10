@@ -13,7 +13,7 @@ public class ScoreboardScore extends MiddleScoreboardScore {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData scoreboardscore = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_SCORE);
 		StringSerializer.writeVarIntUTF8String(scoreboardscore, name);
 		scoreboardscore.writeByte(mode);
@@ -21,7 +21,7 @@ public class ScoreboardScore extends MiddleScoreboardScore {
 		if (mode != 1) {
 			VarNumberSerializer.writeVarInt(scoreboardscore, value);
 		}
-		codec.write(scoreboardscore);
+		codec.writeClientbound(scoreboardscore);
 	}
 
 }

@@ -11,7 +11,7 @@ public class RecipeBookData extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		int type = VarNumberSerializer.readVarInt(clientdata);
 		switch (type) {
 			case 0: {
@@ -27,7 +27,7 @@ public class RecipeBookData extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 	}
 
 }

@@ -18,7 +18,7 @@ public abstract class MiddleTabComplete extends ClientBoundMiddlePacket {
 	protected CommandMatch[] matches;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		id = VarNumberSerializer.readVarInt(serverdata);
 		start = VarNumberSerializer.readVarInt(serverdata);
 		length = VarNumberSerializer.readVarInt(serverdata);

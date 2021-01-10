@@ -10,7 +10,7 @@ public class Look extends MiddleLook {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		yaw = clientdata.readFloat();
 		pitch = clientdata.readFloat();
 		onGround = clientdata.readBoolean();

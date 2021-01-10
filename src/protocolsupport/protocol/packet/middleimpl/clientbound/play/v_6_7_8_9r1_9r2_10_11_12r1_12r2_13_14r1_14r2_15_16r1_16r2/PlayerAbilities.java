@@ -11,12 +11,12 @@ public class PlayerAbilities extends MiddlePlayerAbilities {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData playerabilities = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_PLAYER_ABILITIES);
 		playerabilities.writeByte(flags);
 		playerabilities.writeFloat(flyspeed);
 		playerabilities.writeFloat(walkspeed);
-		codec.write(playerabilities);
+		codec.writeClientbound(playerabilities);
 	}
 
 }

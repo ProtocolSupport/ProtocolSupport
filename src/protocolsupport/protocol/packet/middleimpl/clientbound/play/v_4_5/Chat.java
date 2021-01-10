@@ -16,14 +16,14 @@ public class Chat extends MiddleChat {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		if (position == MessagePosition.HOTBAR) {
 			return;
 		}
 
 		ClientBoundPacketData chat = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHAT);
 		StringSerializer.writeShortUTF16BEString(chat, message.toLegacyText(clientCache.getLocale()));
-		codec.write(chat);
+		codec.writeClientbound(chat);
 	}
 
 }

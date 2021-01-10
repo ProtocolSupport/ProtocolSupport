@@ -12,14 +12,14 @@ public class EntityRelMove extends MiddleEntityRelMove {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData entityrelmove = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE);
 		VarNumberSerializer.writeVarInt(entityrelmove, entityId);
 		entityrelmove.writeShort(relX);
 		entityrelmove.writeShort(relY);
 		entityrelmove.writeShort(relZ);
 		entityrelmove.writeBoolean(onGround);
-		codec.write(entityrelmove);
+		codec.writeClientbound(entityrelmove);
 	}
 
 }

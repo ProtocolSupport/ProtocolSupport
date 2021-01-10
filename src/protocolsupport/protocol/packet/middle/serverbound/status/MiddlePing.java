@@ -13,10 +13,10 @@ public abstract class MiddlePing extends ServerBoundMiddlePacket {
 	protected long pingId;
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 		ServerBoundPacketData ping = ServerBoundPacketData.create(PacketType.SERVERBOUND_STATUS_PING);
 		ping.writeLong(pingId);
-		codec.read(ping);
+		codec.writeServerbound(ping);
 	}
 
 }

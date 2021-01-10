@@ -11,7 +11,7 @@ public class TeleportAccept extends MiddleTeleportAccept {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		teleportConfirmId = VarNumberSerializer.readVarInt(clientdata);
 	}
 

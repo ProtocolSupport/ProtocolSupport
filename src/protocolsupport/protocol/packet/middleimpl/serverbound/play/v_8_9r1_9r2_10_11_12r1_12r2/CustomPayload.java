@@ -19,7 +19,7 @@ public class CustomPayload extends MiddleCustomPayload {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		tag = StringSerializer.readVarIntUTF8String(clientdata, 20);
 		data = MiscSerializer.readAllBytesSlice(clientdata, Short.MAX_VALUE);
 	}
@@ -30,9 +30,9 @@ public class CustomPayload extends MiddleCustomPayload {
 	}
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 		if (custom) {
-			super.writeToServer();
+			super.write();
 			return;
 		}
 
@@ -87,7 +87,7 @@ public class CustomPayload extends MiddleCustomPayload {
 			}
 		}
 
-		super.writeToServer();
+		super.write();
 	}
 
 }

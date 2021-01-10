@@ -12,7 +12,7 @@ public class JigsawGenerate extends MiddleJigsawGenerate {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		PositionSerializer.readPositionTo(clientdata, position);
 		levels = VarNumberSerializer.readVarInt(clientdata);
 		keep = clientdata.readBoolean();

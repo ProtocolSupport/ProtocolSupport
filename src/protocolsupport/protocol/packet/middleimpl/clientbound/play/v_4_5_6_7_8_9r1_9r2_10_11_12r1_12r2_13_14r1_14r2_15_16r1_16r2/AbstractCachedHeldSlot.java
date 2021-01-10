@@ -12,7 +12,7 @@ public abstract class AbstractCachedHeldSlot extends MiddleHeldSlot {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		clientCache.setHeldSlot(slot);
 	}
 

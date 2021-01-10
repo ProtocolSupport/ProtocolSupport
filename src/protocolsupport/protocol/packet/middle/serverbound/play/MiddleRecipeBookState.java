@@ -17,8 +17,8 @@ public abstract class MiddleRecipeBookState extends ServerBoundMiddlePacket {
 	protected boolean bookFiltering;
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(bookType, bookOpen, bookFiltering));
+	protected void write() {
+		codec.writeServerbound(create(bookType, bookOpen, bookFiltering));
 	}
 
 	public static ServerBoundPacketData create(RecipeBookType bookType, boolean bookOpen, boolean bookFiltering) {

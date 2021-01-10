@@ -22,8 +22,8 @@ public abstract class MiddleEntityTeleport extends MiddleEntity {
 	protected boolean onGround;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
-		super.readServerData(serverdata);
+	protected void decode(ByteBuf serverdata) {
+		super.decode(serverdata);
 		entity = entityCache.getEntity(entityId);
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();
@@ -38,7 +38,7 @@ public abstract class MiddleEntityTeleport extends MiddleEntity {
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		entity.getDataCache().setLocation(x, y, z, pitch, yaw);
 	}
 

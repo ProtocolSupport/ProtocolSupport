@@ -10,7 +10,7 @@ public abstract class AbstractThunderboltSpawnObject extends AbstractRemappedSpa
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		if (fType != NetworkEntityType.THUNDERBOLT) {
 			writeSpawnObject();
 		} else {

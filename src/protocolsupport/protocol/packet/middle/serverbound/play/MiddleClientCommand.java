@@ -14,9 +14,9 @@ public abstract class MiddleClientCommand extends ServerBoundMiddlePacket {
 	protected Command command;
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 		if (command != null) {
-			codec.read(create(command));
+			codec.writeServerbound(create(command));
 		}
 	}
 

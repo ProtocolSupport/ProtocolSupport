@@ -25,7 +25,7 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(false); //full
@@ -40,7 +40,7 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 		MiscSerializer.writeVarIntCountPrefixedType(chunkdata, this, (to, chunksections) -> {
 			return ChunkWriterVariesWithLight.writeTiles(to, chunksections.blockMask, chunksections.cachedChunk);
 		});
-		codec.write(chunkdata);
+		codec.writeClientbound(chunkdata);
 	}
 
 }

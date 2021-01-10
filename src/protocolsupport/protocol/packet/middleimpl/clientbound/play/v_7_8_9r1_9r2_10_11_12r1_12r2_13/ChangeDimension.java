@@ -21,7 +21,7 @@ public class ChangeDimension extends AbstractChunkCacheChangeDimension {
 		MiscSerializer.writeByteEnum(changedimension, Difficulty.HARD);
 		changedimension.writeByte(gamemodeCurrent.getId());
 		StringSerializer.writeVarIntUTF8String(changedimension, LegacyDimension.getWorldType(worldFlat));
-		codec.write(changedimension);
+		codec.writeClientbound(changedimension);
 	}
 
 }

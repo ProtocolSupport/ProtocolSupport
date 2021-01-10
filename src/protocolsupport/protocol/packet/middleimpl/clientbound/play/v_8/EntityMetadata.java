@@ -35,7 +35,7 @@ public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata
 		ClientBoundPacketData entitymetadata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
 		VarNumberSerializer.writeVarInt(entitymetadata, entityId);
 		NetworkEntityMetadataSerializer.writeLegacyData(entitymetadata, version, clientCache.getLocale(), remappedMetadata);
-		codec.write(entitymetadata);
+		codec.writeClientbound(entitymetadata);
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata
 		ClientBoundPacketData usebed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED);
 		VarNumberSerializer.writeVarInt(usebed, entityId);
 		PositionSerializer.writeLegacyPositionL(usebed, position);
-		codec.write(usebed);
+		codec.writeClientbound(usebed);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata
 			entity -> AbstractPassengerStackEntityPassengers.writeLeaveVehicleConnectStack(codec, EntityPassengers::create, entity),
 			entitiesIds -> EntityDestroy.writeDestroyEntities(codec, entitiesIds)
 		);
-		codec.write(SpawnObject.create(
+		codec.writeClientbound(SpawnObject.create(
 			entityId, entityDataFormatTable.get(lType).getKey(),
 			ecache.getX(), ecache.getY(), ecache.getZ(),
 			ecache.getPitchB(), ecache.getYawB(),
@@ -70,7 +70,7 @@ public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata
 			velocity.getX(), velocity.getY(), velocity.getZ()
 		));
 		if (objectdata <= 0) {
-			codec.write(EntityVelocity.create(entityId, velocity.getX(), velocity.getY(), velocity.getZ()));
+			codec.writeClientbound(EntityVelocity.create(entityId, velocity.getX(), velocity.getY(), velocity.getZ()));
 		}
 	}
 

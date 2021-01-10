@@ -11,7 +11,7 @@ public class Animation extends MiddleAnimation {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		clientdata.readInt();
 		clientdata.readByte();
 		hand = UsedHand.MAIN;

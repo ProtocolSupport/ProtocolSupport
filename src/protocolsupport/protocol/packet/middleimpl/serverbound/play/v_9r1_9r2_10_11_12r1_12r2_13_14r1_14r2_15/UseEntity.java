@@ -22,7 +22,7 @@ public class UseEntity extends AbstractSneakingCacheUseEntity {
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		entityId = VarNumberSerializer.readVarInt(clientdata);
 		action = MiscSerializer.readVarIntEnum(clientdata, Action.CONSTANT_LOOKUP);
 		switch (action) {
@@ -42,7 +42,7 @@ public class UseEntity extends AbstractSneakingCacheUseEntity {
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		if ((hand == UsedHand.OFF) && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_14_4)) {
 			NetworkEntity entity = entityCache.getEntity(entityId);
 			if ((entity != null) && clientCache.getUUID().equals(entity.getDataCache().getData(TameableNetworkEntityMetadataFormatTransformerFactory.DATA_KEY_OWNER))) {
@@ -50,7 +50,7 @@ public class UseEntity extends AbstractSneakingCacheUseEntity {
 			}
 		}
 
-		super.handleReadData();
+		super.handle();
 	}
 
 }

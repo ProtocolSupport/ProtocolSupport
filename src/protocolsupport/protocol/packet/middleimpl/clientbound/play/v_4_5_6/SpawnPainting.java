@@ -14,7 +14,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		switch (direction) {
 			case 0: {
 				position.modifyZ(-1);
@@ -38,7 +38,7 @@ public class SpawnPainting extends MiddleSpawnPainting {
 		StringSerializer.writeShortUTF16BEString(spawnpainting, LegacyPainting.getName(type));
 		PositionSerializer.writeLegacyPositionI(spawnpainting, position);
 		spawnpainting.writeInt(direction);
-		codec.write(spawnpainting);
+		codec.writeClientbound(spawnpainting);
 	}
 
 }

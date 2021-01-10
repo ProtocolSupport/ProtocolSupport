@@ -13,7 +13,7 @@ public class MoveLook extends AbstractMoveLook {
 	protected double yhead;
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		x = clientdata.readDouble();
 		y = clientdata.readDouble();
 		yhead = clientdata.readDouble();
@@ -24,11 +24,11 @@ public class MoveLook extends AbstractMoveLook {
 	}
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 		if ((y == -999.0D) && (yhead == -999.0D)) {
-			codec.read(MiddleLook.create(yaw, pitch, onGround));
+			codec.writeServerbound(MiddleLook.create(yaw, pitch, onGround));
 		} else {
-			super.writeToServer();
+			super.write();
 		}
 	}
 

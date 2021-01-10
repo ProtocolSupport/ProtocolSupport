@@ -15,7 +15,7 @@ public abstract class MiddleLoginDisconnect extends ClientBoundMiddlePacket {
 	protected BaseComponent message;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		message = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 	}
 

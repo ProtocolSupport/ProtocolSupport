@@ -32,7 +32,7 @@ public abstract class MiddleSetPosition extends ClientBoundMiddlePacket {
 	protected int teleportConfirmId;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		self = entityCache.getSelf();
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();
@@ -44,7 +44,7 @@ public abstract class MiddleSetPosition extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		NetworkEntityDataCache ecache = self.getDataCache();
 
 		if (BitUtils.isIBitSet(flags, FLAGS_BIT_X)) {

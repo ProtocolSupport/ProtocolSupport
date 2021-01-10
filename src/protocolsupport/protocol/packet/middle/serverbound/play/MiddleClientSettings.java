@@ -23,10 +23,10 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 	protected MainHand mainHand;
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 		cache.getClientCache().setLocale(locale);
 
-		codec.read(create(locale, viewDist, chatMode, chatColors, skinFlags, mainHand));
+		codec.writeServerbound(create(locale, viewDist, chatMode, chatColors, skinFlags, mainHand));
 	}
 
 	public static ServerBoundPacketData create(String locale, int viewDist, ChatMode chatMode, boolean chatColors, int skinFlags, MainHand mainHand) {

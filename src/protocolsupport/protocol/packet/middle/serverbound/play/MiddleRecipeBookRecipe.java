@@ -14,8 +14,8 @@ public abstract class MiddleRecipeBookRecipe extends ServerBoundMiddlePacket {
 	protected String recipeId;
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(recipeId));
+	protected void write() {
+		codec.writeServerbound(create(recipeId));
 	}
 
 	public static ServerBoundPacketData create(String recipeId) {

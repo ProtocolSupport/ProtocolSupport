@@ -16,12 +16,12 @@ public abstract class MiddleCraftRecipeRequest extends ServerBoundMiddlePacket {
 	protected boolean all;
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 		ServerBoundPacketData craftreciperequest = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_CRAFT_RECIPE_REQUEST);
 		craftreciperequest.writeByte(windowId);
 		StringSerializer.writeVarIntUTF8String(craftreciperequest, recipeId);
 		craftreciperequest.writeBoolean(all);
-		codec.read(craftreciperequest);
+		codec.writeServerbound(craftreciperequest);
 	}
 
 }

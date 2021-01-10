@@ -12,8 +12,8 @@ public class EntityDestroy extends MiddleEntityDestroy {
 	}
 
 	@Override
-	protected void writeToClient() {
-		codec.write(create(entityIds));
+	protected void write() {
+		codec.writeClientbound(create(entityIds));
 	}
 
 	public static ClientBoundPacketData create(int... entityIds) {

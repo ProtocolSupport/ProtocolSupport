@@ -9,7 +9,7 @@ public class NoopCombatEvent extends MiddleCombatEvent {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

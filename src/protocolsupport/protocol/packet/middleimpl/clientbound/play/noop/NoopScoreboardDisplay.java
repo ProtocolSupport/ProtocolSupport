@@ -9,7 +9,7 @@ public class NoopScoreboardDisplay extends MiddleScoreboardDisplay {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

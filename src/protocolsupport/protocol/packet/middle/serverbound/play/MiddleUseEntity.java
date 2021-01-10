@@ -23,8 +23,8 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 	protected boolean sneaking;
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(entityId, action, interactedAt, hand, sneaking));
+	protected void write() {
+		codec.writeServerbound(create(entityId, action, interactedAt, hand, sneaking));
 	}
 
 	public static ServerBoundPacketData create(int entityId, Action action, Vector interactedAt, UsedHand hand, boolean sneaking) {

@@ -12,7 +12,7 @@ public class UpdateCommandMinecart extends MiddleUpdateCommandMinecart {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		entityId = VarNumberSerializer.readVarInt(clientdata);
 		command = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
 		trackOutput = clientdata.readBoolean();

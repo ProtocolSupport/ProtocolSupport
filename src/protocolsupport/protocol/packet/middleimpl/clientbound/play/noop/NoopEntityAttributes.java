@@ -9,7 +9,7 @@ public class NoopEntityAttributes extends MiddleEntityAttributes {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

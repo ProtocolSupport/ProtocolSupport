@@ -5,22 +5,22 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
 public abstract class PacketDataCodec {
 
-	public abstract void write(ClientBoundPacketData packetadata);
+	public abstract void writeClientbound(ClientBoundPacketData packetadata);
 
-	public abstract void read(ServerBoundPacketData packetdata);
+	public abstract void writeServerbound(ServerBoundPacketData packetdata);
 
-	public void writeAndFlush(ClientBoundPacketData packetdata) {
-		write(packetdata);
-		flush();
+	public void writeClientboundAndFlush(ClientBoundPacketData packetdata) {
+		writeClientbound(packetdata);
+		flushClientnbound();
 	}
 
-	public void readAndComplete(ServerBoundPacketData packetadata) {
-		read(packetadata);
-		readComplete();
+	public void writeServerboundAndFlush(ServerBoundPacketData packetadata) {
+		writeServerbound(packetadata);
+		flushServerbound();
 	}
 
-	public abstract void flush();
+	public abstract void flushClientnbound();
 
-	public abstract void readComplete();
+	public abstract void flushServerbound();
 
 }

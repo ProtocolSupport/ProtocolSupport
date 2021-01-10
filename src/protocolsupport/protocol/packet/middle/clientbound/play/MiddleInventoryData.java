@@ -18,7 +18,7 @@ public abstract class MiddleInventoryData extends ClientBoundMiddlePacket {
 	protected int value;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		windowId = serverdata.readByte();
 		type = serverdata.readShort();
 		value = serverdata.readShort();

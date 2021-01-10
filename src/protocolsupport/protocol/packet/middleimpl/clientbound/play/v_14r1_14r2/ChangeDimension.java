@@ -18,7 +18,7 @@ public class ChangeDimension extends AbstractLegacyChangeDimension {
 		changedimension.writeInt(dimensionId);
 		changedimension.writeByte(gamemodeCurrent.getId());
 		StringSerializer.writeVarIntUTF8String(changedimension, LegacyDimension.getWorldType(worldFlat));
-		codec.write(changedimension);
+		codec.writeClientbound(changedimension);
 	}
 
 }

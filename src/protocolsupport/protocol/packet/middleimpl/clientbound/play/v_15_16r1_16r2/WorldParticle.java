@@ -23,7 +23,7 @@ public class WorldParticle extends MiddleWorldParticle {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		particle = remapper.getRemap(particle.getClass()).apply(particle);
 		if (particle != null) {
 			ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
@@ -38,7 +38,7 @@ public class WorldParticle extends MiddleWorldParticle {
 			serializer.writeFloat(particle.getData());
 			serializer.writeInt(particle.getCount());
 			dataSerializer.write(serializer, particle);
-			codec.write(serializer);
+			codec.writeClientbound(serializer);
 		}
 	}
 

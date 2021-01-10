@@ -14,7 +14,7 @@ public class TabComplete extends MiddleTabComplete {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData tabcomplete = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_TAB_COMPLETE);
 		VarNumberSerializer.writeVarInt(tabcomplete, id);
 		VarNumberSerializer.writeVarInt(tabcomplete, start);
@@ -26,7 +26,7 @@ public class TabComplete extends MiddleTabComplete {
 				StringSerializer.writeVarIntUTF8String(to, match.getTooltip());
 			}
 		});
-		codec.write(tabcomplete);
+		codec.writeClientbound(tabcomplete);
 	}
 
 }

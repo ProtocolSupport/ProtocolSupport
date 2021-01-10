@@ -16,13 +16,13 @@ public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
 	protected byte windowId;
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		windowCache.closeWindow();
 	}
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(windowId));
+	protected void write() {
+		codec.writeServerbound(create(windowId));
 	}
 
 	public static ServerBoundPacketData create(int windowId) {

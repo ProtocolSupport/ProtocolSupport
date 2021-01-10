@@ -10,7 +10,7 @@ public class SteerBoat extends MiddleSteerBoat {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		rightPaddleTurning = clientdata.readBoolean();
 		leftPaddleTurning = clientdata.readBoolean();
 	}

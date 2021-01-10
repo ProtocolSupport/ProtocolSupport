@@ -21,7 +21,7 @@ public class EntityAction extends AbstractSneakingCacheEntityAction {
 	);
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		entityId = VarNumberSerializer.readVarInt(clientdata);
 		int actionId = VarNumberSerializer.readVarInt(clientdata);
 		jumpBoost = VarNumberSerializer.readVarInt(clientdata);

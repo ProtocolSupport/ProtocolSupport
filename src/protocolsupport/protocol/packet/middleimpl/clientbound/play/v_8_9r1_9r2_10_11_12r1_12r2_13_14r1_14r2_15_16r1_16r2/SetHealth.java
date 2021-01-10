@@ -17,15 +17,15 @@ public class SetHealth extends MiddleSetHealth {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData sethealth = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SET_HEALTH);
 		sethealth.writeFloat(health);
 		VarNumberSerializer.writeVarInt(sethealth, food);
 		sethealth.writeFloat(saturation);
-		codec.write(sethealth);
+		codec.writeClientbound(sethealth);
 
 		if ((health <= 0) && !clientCache.isRespawnScreenEnabled() && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_14_4)) {
-			codec.readAndComplete(MiddleClientCommand.create(MiddleClientCommand.Command.REQUEST_RESPAWN));
+			codec.writeServerboundAndFlush(MiddleClientCommand.create(MiddleClientCommand.Command.REQUEST_RESPAWN));
 		}
 	}
 

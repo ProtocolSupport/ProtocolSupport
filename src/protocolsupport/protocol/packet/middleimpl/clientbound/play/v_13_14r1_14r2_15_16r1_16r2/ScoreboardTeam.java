@@ -18,7 +18,7 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		String locale = clientCache.getLocale();
 
 		ClientBoundPacketData scoreboardteam = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_TEAM);
@@ -36,7 +36,7 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 		if ((mode == Mode.CREATE) || (mode == Mode.PLAYERS_ADD) || (mode == Mode.PLAYERS_REMOVE)) {
 			ArraySerializer.writeVarIntVarIntUTF8StringArray(scoreboardteam, players);
 		}
-		codec.write(scoreboardteam);
+		codec.writeClientbound(scoreboardteam);
 	}
 
 }

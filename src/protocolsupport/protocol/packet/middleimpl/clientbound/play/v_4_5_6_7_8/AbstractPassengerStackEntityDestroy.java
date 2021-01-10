@@ -18,12 +18,12 @@ public abstract class AbstractPassengerStackEntityDestroy extends MiddleEntityDe
 	protected ArrayList<NetworkEntity> entities;
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		entities = entityCache.popEntities(entityIds);
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		writeDestroy(entities, this::writeRemovePassengers, this::writeLeaveVehicle, this::writeDestroyEntities);
 	}
 

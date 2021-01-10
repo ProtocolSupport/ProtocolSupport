@@ -11,8 +11,8 @@ public abstract class AbstractPotionItemAsObjectDataSpawnObject extends Abstract
 	}
 
 	@Override
-	protected void handleReadData() {
-		super.handleReadData();
+	protected void handle() {
+		super.handle();
 
 		if (lType == NetworkEntityType.POTION) {
 			PotionNetworkEntityData potiondata = new PotionNetworkEntityData();

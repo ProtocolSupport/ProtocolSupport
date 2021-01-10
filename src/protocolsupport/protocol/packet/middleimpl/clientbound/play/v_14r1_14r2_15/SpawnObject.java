@@ -31,7 +31,7 @@ public class SpawnObject extends AbstractThunderboltSpawnObject {
 		serializer.writeShort(velX);
 		serializer.writeShort(velY);
 		serializer.writeShort(velZ);
-		codec.write(serializer);
+		codec.writeClientbound(serializer);
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class SpawnObject extends AbstractThunderboltSpawnObject {
 		spawnglobal.writeDouble(x);
 		spawnglobal.writeDouble(y);
 		spawnglobal.writeDouble(z);
-		codec.write(spawnglobal);
+		codec.writeClientbound(spawnglobal);
 	}
 
 }

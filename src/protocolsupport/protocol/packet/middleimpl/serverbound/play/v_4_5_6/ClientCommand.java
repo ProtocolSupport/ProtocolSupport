@@ -10,7 +10,7 @@ public class ClientCommand extends MiddleClientCommand {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		clientdata.readByte();
 		command = Command.REQUEST_RESPAWN;
 	}

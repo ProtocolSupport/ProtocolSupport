@@ -26,7 +26,7 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 	protected byte pitch;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		int playerEntityId = VarNumberSerializer.readVarInt(serverdata);
 		UUID uuid = UUIDSerializer.readUUID2L(serverdata);
 		entity = NetworkEntity.createPlayer(uuid, playerEntityId);
@@ -38,7 +38,7 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		NetworkEntityDataCache ecache = entity.getDataCache();
 		ecache.setLocation(x, y, z, pitch, yaw);
 		ecache.setHeadYaw(yaw);

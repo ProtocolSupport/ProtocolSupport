@@ -14,8 +14,8 @@ public abstract class MiddleInventoryButton extends ServerBoundMiddlePacket {
 	protected int button;
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(windowId, button));
+	protected void write() {
+		codec.writeServerbound(create(windowId, button));
 	}
 
 	public static ServerBoundPacketData create(int windowId, int enchantment) {

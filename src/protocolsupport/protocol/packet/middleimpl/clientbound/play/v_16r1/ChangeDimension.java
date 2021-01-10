@@ -13,7 +13,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData changedimension = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_RESPAWN);
 		StringSerializer.writeVarIntUTF8String(changedimension, LegacyDimension.getStringId(dimension));
 		StringSerializer.writeVarIntUTF8String(changedimension, world);
@@ -23,7 +23,7 @@ public class ChangeDimension extends MiddleChangeDimension {
 		changedimension.writeBoolean(worldDebug);
 		changedimension.writeBoolean(worldFlat);
 		changedimension.writeBoolean(keepEntityMetadata);
-		codec.write(changedimension);
+		codec.writeClientbound(changedimension);
 	}
 
 }

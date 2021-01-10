@@ -13,7 +13,7 @@ public class UnlockRecipes extends MiddleUnlockRecipes {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData unlockrecipes = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UNLOCK_RECIPES);
 		MiscSerializer.writeVarIntEnum(unlockrecipes, action);
 		unlockrecipes.writeBoolean(craftRecipeBookOpen);
@@ -28,7 +28,7 @@ public class UnlockRecipes extends MiddleUnlockRecipes {
 		if (action == Action.INIT) {
 			ArraySerializer.writeVarIntVarIntUTF8StringArray(unlockrecipes, recipes2);
 		}
-		codec.write(unlockrecipes);
+		codec.writeClientbound(unlockrecipes);
 	}
 
 }

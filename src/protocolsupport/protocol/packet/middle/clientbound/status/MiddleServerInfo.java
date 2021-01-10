@@ -14,7 +14,7 @@ public abstract class MiddleServerInfo extends ClientBoundMiddlePacket {
 	protected PingResponse ping;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		ping = PingResponse.fromJson(StringSerializer.readVarIntUTF8String(serverdata));
 	}
 

@@ -16,8 +16,8 @@ public abstract class MiddleCreativeSetSlot extends ServerBoundMiddlePacket {
 	protected NetworkItemStack itemstack;
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(slot, itemstack));
+	protected void write() {
+		codec.writeServerbound(create(slot, itemstack));
 	}
 
 	public static ServerBoundPacketData create(int slot, NetworkItemStack itemstack) {

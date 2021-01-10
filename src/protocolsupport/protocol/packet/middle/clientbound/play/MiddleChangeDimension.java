@@ -37,7 +37,7 @@ public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
 	protected boolean keepEntityMetadata;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		dimension = ItemStackSerializer.readDirectTag(serverdata);
 		world = StringSerializer.readVarIntUTF8String(serverdata);
 		hashedSeed = serverdata.readLong();
@@ -49,7 +49,7 @@ public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		clientCache.setCurrentWorld(world, dimension);
 		entityCache.clearEntities();
 		windowCache.setPlayerWindow(windowsRemapper.get(WindowType.PLAYER, 0));

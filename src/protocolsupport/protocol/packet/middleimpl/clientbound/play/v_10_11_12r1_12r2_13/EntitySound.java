@@ -11,7 +11,7 @@ public class EntitySound extends AbstractWorldEntitySound {
 
 	@Override
 	protected void writeWorldSound(String sound, double x, double y, double z) {
-		codec.write(WorldCustomSound.create(version, x, y, z, sound, category, volume, pitch));
+		codec.writeClientbound(WorldCustomSound.create(version, x, y, z, sound, category, volume, pitch));
 	}
 
 }

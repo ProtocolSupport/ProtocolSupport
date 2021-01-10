@@ -33,7 +33,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 	protected final IdMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(full);
@@ -51,11 +51,11 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 				}
 			}
 		});
-		codec.write(chunkdata);
+		codec.writeClientbound(chunkdata);
 
 		for (Map<Position, TileEntity> sectionTiles : cachedChunk.getTiles()) {
 			for (TileEntity tile : sectionTiles.values()) {
-				codec.write(BlockTileUpdate.create(version, tile));
+				codec.writeClientbound(BlockTileUpdate.create(version, tile));
 			}
 		}
 	}

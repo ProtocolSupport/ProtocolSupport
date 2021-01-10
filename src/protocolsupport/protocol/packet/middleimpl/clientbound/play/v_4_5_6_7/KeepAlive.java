@@ -11,10 +11,10 @@ public class KeepAlive extends MiddleKeepAlive {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData keepalive = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_KEEP_ALIVE);
 		keepalive.writeInt(keepAliveId);
-		codec.write(keepalive);
+		codec.writeClientbound(keepalive);
 	}
 
 }

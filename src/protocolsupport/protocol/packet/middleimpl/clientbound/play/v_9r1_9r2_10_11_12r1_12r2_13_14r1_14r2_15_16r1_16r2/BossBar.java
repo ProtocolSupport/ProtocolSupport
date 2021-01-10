@@ -19,7 +19,7 @@ public class BossBar extends MiddleBossBar {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData bossbar = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BOSS_BAR);
 		UUIDSerializer.writeUUID2L(bossbar, uuid);
 		MiscSerializer.writeVarIntEnum(bossbar, action);
@@ -53,7 +53,7 @@ public class BossBar extends MiddleBossBar {
 				break;
 			}
 		}
-		codec.write(bossbar);
+		codec.writeClientbound(bossbar);
 	}
 
 }

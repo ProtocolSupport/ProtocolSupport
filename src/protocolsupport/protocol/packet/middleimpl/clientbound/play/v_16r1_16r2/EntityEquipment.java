@@ -16,7 +16,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		String locale = clientCache.getLocale();
 
 		ClientBoundPacketData entityequipment = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_EQUIPMENT);
@@ -27,7 +27,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 			entityequipment.writeByte(entry.getSlot().ordinal() | (entryIndex != lastEntryIndex ? Byte.MIN_VALUE : 0));
 			ItemStackSerializer.writeItemStack(entityequipment, version, locale, entry.getItemStack());
 		}
-		codec.write(entityequipment);
+		codec.writeClientbound(entityequipment);
 	}
 
 }

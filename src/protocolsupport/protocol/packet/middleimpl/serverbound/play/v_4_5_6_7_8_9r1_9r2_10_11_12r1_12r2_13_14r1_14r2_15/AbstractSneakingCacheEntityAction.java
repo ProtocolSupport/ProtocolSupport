@@ -12,7 +12,7 @@ public abstract class AbstractSneakingCacheEntityAction extends MiddleEntityActi
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		switch (action) {
 			case START_SNEAK: {
 				clientCache.setSneaking(true);

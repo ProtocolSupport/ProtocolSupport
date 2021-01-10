@@ -14,7 +14,7 @@ public abstract class MiddlePlayerListHeaderFooter extends ClientBoundMiddlePack
 	protected String footerJson;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		headerJson = StringSerializer.readVarIntUTF8String(serverdata);
 		footerJson = StringSerializer.readVarIntUTF8String(serverdata);
 	}

@@ -11,10 +11,10 @@ public class DeclareCommands extends MiddleDeclareCommands {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData declarecommands = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_DECLARE_COMMANDS);
 		declarecommands.writeBytes(data);
-		codec.write(declarecommands);
+		codec.writeClientbound(declarecommands);
 	}
 
 }

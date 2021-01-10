@@ -14,7 +14,7 @@ public abstract class MiddleBookOpen extends ClientBoundMiddlePacket {
 	protected UsedHand hand;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		hand = MiscSerializer.readVarIntEnum(serverdata, UsedHand.CONSTANT_LOOKUP);
 	}
 

@@ -19,7 +19,7 @@ public abstract class MiddleEntityEquipment extends ClientBoundMiddlePacket {
 	protected final ArrayList<Entry> entries = new ArrayList<>(Slot.CONSTANT_LOOKUP.getCount());
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		entityId = VarNumberSerializer.readVarInt(serverdata);
 		byte slotId;
 		do {

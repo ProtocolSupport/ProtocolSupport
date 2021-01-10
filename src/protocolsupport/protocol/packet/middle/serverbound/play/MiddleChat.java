@@ -14,8 +14,8 @@ public abstract class MiddleChat extends ServerBoundMiddlePacket {
 	protected String message;
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(message));
+	protected void write() {
+		codec.writeServerbound(create(message));
 	}
 
 	public static ServerBoundPacketData create(String message) {

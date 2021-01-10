@@ -17,10 +17,10 @@ public abstract class AbstractLegacyChangeDimension extends MiddleChangeDimensio
 	protected int dimensionId;
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		oldWorld = clientCache.getWorld();
 		oldDimension = clientCache.getDimension();
-		super.handleReadData();
+		super.handle();
 		sameWorld = world.equals(oldWorld);
 		if (sameWorld) {
 			dimensionId = LegacyDimension.getIntId(oldDimension);
@@ -30,7 +30,7 @@ public abstract class AbstractLegacyChangeDimension extends MiddleChangeDimensio
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		if (!sameWorld && (LegacyDimension.getIntId(oldDimension) == dimensionId)) {
 			writeChangeDimension(LegacyDimension.getAlternativeIntId(dimensionId));
 			writeChangeDimension(dimensionId);

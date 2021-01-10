@@ -15,7 +15,7 @@ public abstract class MiddleMerchantTradeList extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		merchantData = MerchantDataSerializer.readMerchantData(serverdata);
 	}
 

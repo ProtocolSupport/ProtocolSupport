@@ -21,7 +21,7 @@ public abstract class MiddleJigsawUpdate extends ServerBoundMiddlePacket {
 	protected String jointType;
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 		ServerBoundPacketData jigsawupdate = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_JIGSAW_UPDATE);
 		PositionSerializer.writePosition(jigsawupdate, position);
 		StringSerializer.writeVarIntUTF8String(jigsawupdate, name);
@@ -29,7 +29,7 @@ public abstract class MiddleJigsawUpdate extends ServerBoundMiddlePacket {
 		StringSerializer.writeVarIntUTF8String(jigsawupdate, pool);
 		StringSerializer.writeVarIntUTF8String(jigsawupdate, finalState);
 		StringSerializer.writeVarIntUTF8String(jigsawupdate, jointType);
-		codec.read(jigsawupdate);
+		codec.writeServerbound(jigsawupdate);
 	}
 
 }

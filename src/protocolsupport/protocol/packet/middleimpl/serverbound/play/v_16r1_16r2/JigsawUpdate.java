@@ -12,7 +12,7 @@ public class JigsawUpdate extends MiddleJigsawUpdate {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		PositionSerializer.readPositionTo(clientdata, position);
 		name = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
 		target = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);

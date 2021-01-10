@@ -13,13 +13,13 @@ public abstract class MiddleEntityEffectRemove extends MiddleEntity {
 	protected int effectId;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
-		super.readServerData(serverdata);
+	protected void decode(ByteBuf serverdata) {
+		super.decode(serverdata);
 		effectId = serverdata.readByte();
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		if (GenericIdSkipper.EFFECT.getTable(version).isSet(effectId)) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}

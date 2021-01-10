@@ -15,8 +15,8 @@ public abstract class AbstractLocationOffsetEntityLook extends MiddleEntityLook 
 	protected final LegacyNetworkEntityLocationOffset entityOffset = LegacyNetworkEntityLocationOffset.get(version);
 
 	@Override
-	protected void handleReadData() {
-		super.handleReadData();
+	protected void handle() {
+		super.handle();
 
 		LegacyNetworkEntityLocationOffset.Offset offset = entityOffset.get(legacyEntityEntryTable.get(entity.getType()).getType());
 		if (offset != null) {

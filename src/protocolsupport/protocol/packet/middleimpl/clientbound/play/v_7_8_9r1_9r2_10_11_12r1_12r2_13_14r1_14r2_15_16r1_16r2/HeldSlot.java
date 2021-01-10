@@ -11,10 +11,10 @@ public class HeldSlot extends AbstractCachedHeldSlot {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData heldslot = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_HELD_SLOT);
 		heldslot.writeByte(slot);
-		codec.write(heldslot);
+		codec.writeClientbound(heldslot);
 	}
 
 }

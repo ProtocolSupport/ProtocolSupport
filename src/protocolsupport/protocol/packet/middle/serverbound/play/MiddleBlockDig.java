@@ -19,8 +19,8 @@ public abstract class MiddleBlockDig extends ServerBoundMiddlePacket {
 	protected int face;
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(status, position, face));
+	protected void write() {
+		codec.writeServerbound(create(status, position, face));
 	}
 
 	public static ServerBoundPacketData create(Action status, Position position, int face) {

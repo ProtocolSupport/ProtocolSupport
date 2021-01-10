@@ -20,8 +20,8 @@ public class CustomPayload extends MiddleCustomPayload {
 	}
 
 	@Override
-	protected void writeToClient() {
-		codec.write(create(tag, data));
+	protected void write() {
+		codec.writeClientbound(create(tag, data));
 	}
 
 	public static ClientBoundPacketData create(String tag, Consumer<ByteBuf> dataWriter) {

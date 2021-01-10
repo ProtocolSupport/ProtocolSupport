@@ -14,8 +14,8 @@ public abstract class MiddleSelectTrade extends ServerBoundMiddlePacket {
 	protected int slot;
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(slot));
+	protected void write() {
+		codec.writeServerbound(create(slot));
 	}
 
 	public static ServerBoundPacketData create(int slot) {

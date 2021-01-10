@@ -19,12 +19,12 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData blockchangemulti = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI);
 		blockchangemulti.writeLong(chunkCoordWithSection);
 		blockchangemulti.writeBoolean(large);
 		ArraySerializer.writeVarIntVarLongArray(blockchangemulti, records);
-		codec.write(blockchangemulti);
+		codec.writeClientbound(blockchangemulti);
 	}
 
 }

@@ -12,8 +12,8 @@ public abstract class MiddleBlockChangeSingle extends MiddleBlock {
 	protected int id;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
-		super.readServerData(serverdata);
+	protected void decode(ByteBuf serverdata) {
+		super.decode(serverdata);
 		id = VarNumberSerializer.readVarInt(serverdata);
 	}
 

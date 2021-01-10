@@ -16,7 +16,7 @@ public abstract class AbstractKnownEntityPassengers extends MiddleEntityPassenge
 	protected NetworkEntity vehicle;
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		vehicle = entityCache.getEntity(vehicleId);
 
 		if (vehicle == null) {

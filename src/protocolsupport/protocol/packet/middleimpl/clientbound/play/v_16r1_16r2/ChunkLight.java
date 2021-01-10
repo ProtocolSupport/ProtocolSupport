@@ -16,7 +16,7 @@ public class ChunkLight extends MiddleChunkLight {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData chunklight = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_LIGHT);
 		PositionSerializer.writeVarIntChunkCoord(chunklight, coord);
 		chunklight.writeBoolean(trustEdges);
@@ -34,7 +34,7 @@ public class ChunkLight extends MiddleChunkLight {
 				ArraySerializer.writeVarIntByteArray(chunklight, blockLight[i]);
 			}
 		}
-		codec.write(chunklight);
+		codec.writeClientbound(chunklight);
 	}
 
 }

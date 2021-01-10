@@ -14,8 +14,8 @@ public abstract class MiddleNameItem extends ServerBoundMiddlePacket {
 	protected String name;
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(name));
+	protected void write() {
+		codec.writeServerbound(create(name));
 	}
 
 	public static ServerBoundPacketData create(String name) {

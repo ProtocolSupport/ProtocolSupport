@@ -17,12 +17,12 @@ public class CollectEffect extends AbstractSoundCollectEffect {
 		ClientBoundPacketData collecteffect = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_COLLECT_EFFECT);
 		VarNumberSerializer.writeVarInt(collecteffect, entityId);
 		VarNumberSerializer.writeVarInt(collecteffect, collectorId);
-		codec.write(collecteffect);
+		codec.writeClientbound(collecteffect);
 	}
 
 	@Override
 	protected void writeCollectSound(String sound, double x, double y, double z, float volume, float pitch) {
-		codec.write(WorldCustomSound.create(version, x, y, z, sound, volume, pitch));
+		codec.writeClientbound(WorldCustomSound.create(version, x, y, z, sound, volume, pitch));
 	}
 
 }

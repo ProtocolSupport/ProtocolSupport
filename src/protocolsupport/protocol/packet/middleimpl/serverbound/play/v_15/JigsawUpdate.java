@@ -14,11 +14,11 @@ public class JigsawUpdate extends MiddleJigsawUpdate {
 	}
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		PositionSerializer.readPositionTo(clientdata, position);
 		StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE); //attachment type
 		pool = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);

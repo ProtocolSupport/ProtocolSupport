@@ -14,7 +14,7 @@ public class ScoreboardObjective extends MiddleScoreboardObjective {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData scoreboardobjective = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_OBJECTIVE);
 		StringSerializer.writeVarIntUTF8String(scoreboardobjective, name);
 		MiscSerializer.writeByteEnum(scoreboardobjective, mode);
@@ -22,7 +22,7 @@ public class ScoreboardObjective extends MiddleScoreboardObjective {
 			StringSerializer.writeVarIntUTF8String(scoreboardobjective, LegacyChat.clampLegacyText(value.toLegacyText(cache.getClientCache().getLocale()), 32));
 			StringSerializer.writeVarIntUTF8String(scoreboardobjective, getTypeString(type));
 		}
-		codec.write(scoreboardobjective);
+		codec.writeClientbound(scoreboardobjective);
 	}
 
 	protected static String getTypeString(Type type) {

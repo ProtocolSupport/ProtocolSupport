@@ -41,7 +41,7 @@ public class LegacyCustomPayloadData {
 		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version);
 		if (!book.isNull()) {
 			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
-			codec.read(MiddleEditBook.create(book, false, heldSlot));
+			codec.writeServerbound(MiddleEditBook.create(book, false, heldSlot));
 		}
 	}
 
@@ -55,7 +55,7 @@ public class LegacyCustomPayloadData {
 					CommonNBTTransformer.toLegacyChatList(rootTag.getStringListTagOrNull(CommonNBT.BOOK_PAGES), I18NData.DEFAULT_LOCALE);
 				}
 			}
-			codec.read(MiddleEditBook.create(book, true, heldSlot));
+			codec.writeServerbound(MiddleEditBook.create(book, true, heldSlot));
 		}
 	}
 
@@ -79,7 +79,7 @@ public class LegacyCustomPayloadData {
 		float integrity = data.readFloat();
 		long seed = VarNumberSerializer.readVarLong(data);
 		byte flags = (byte) (ignoreEntities | showAir | showBoundingBox);
-		codec.read(MiddleUpdateStructureBlock.create(
+		codec.writeServerbound(MiddleUpdateStructureBlock.create(
 			position, action, mode, name,
 			offsetX, offsetY, offsetZ, sizeX, sizeY, sizeZ,
 			mirror, rotation, metadata, integrity, seed, flags
@@ -89,32 +89,32 @@ public class LegacyCustomPayloadData {
 	public static void transformAndWriteSetBeaconEffect(PacketDataCodec codec, ByteBuf data) {
 		int primary = data.readInt();
 		int secondary = data.readInt();
-		codec.read(MiddleSetBeaconEffect.create(primary, secondary));
+		codec.writeServerbound(MiddleSetBeaconEffect.create(primary, secondary));
 	}
 
 	public static void transformAndWriteNameItemSString(PacketDataCodec codec, ByteBuf data) {
-		codec.read(MiddleNameItem.create(StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE)));
+		codec.writeServerbound(MiddleNameItem.create(StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE)));
 	}
 
 	public static void transformAndWriteNameItemDString(PacketDataCodec codec, ByteBuf data) {
 		String name = data.toString(StandardCharsets.UTF_8);
-		codec.read(MiddleNameItem.create(name));
+		codec.writeServerbound(MiddleNameItem.create(name));
 	}
 
 	public static void transformAndWritePickItem(PacketDataCodec codec, ByteBuf data) {
 		int slot = VarNumberSerializer.readVarInt(data);
-		codec.read(MiddlePickItem.create(slot));
+		codec.writeServerbound(MiddlePickItem.create(slot));
 	}
 
 	public static void transformAndWriteTradeSelect(PacketDataCodec codec, ByteBuf data) {
 		int slot = data.readInt();
-		codec.read(MiddleSelectTrade.create(slot));
+		codec.writeServerbound(MiddleSelectTrade.create(slot));
 	}
 
 	public static void transformAndWriteBasicCommandBlockEdit(PacketDataCodec codec, ByteBuf data) {
 		Position position = PositionSerializer.readLegacyPositionI(data);
 		String command = StringSerializer.readShortUTF16BEString(data, Short.MAX_VALUE);
-		codec.read(MiddleUpdateCommandBlock.create(
+		codec.writeServerbound(MiddleUpdateCommandBlock.create(
 			position, command, MiddleUpdateCommandBlock.Mode.REDSTONE, 0
 		));
 	}
@@ -126,7 +126,7 @@ public class LegacyCustomPayloadData {
 				Position position = PositionSerializer.readLegacyPositionI(data);
 				String command = StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE);
 				int trackOutput = useTrackOutput ? data.readByte() : 0;
-				codec.read(MiddleUpdateCommandBlock.create(
+				codec.writeServerbound(MiddleUpdateCommandBlock.create(
 					position, command, MiddleUpdateCommandBlock.Mode.REDSTONE,
 					BitUtils.createIBitMaskFromBit(MiddleUpdateCommandBlock.FLAGS_BIT_TRACK_OUTPUT, trackOutput)
 				));
@@ -136,7 +136,7 @@ public class LegacyCustomPayloadData {
 				int entityId = data.readInt();
 				String command = StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE);
 				boolean trackOutput = useTrackOutput ? data.readBoolean() : false;
-				codec.read(MiddleUpdateCommandMinecart.create(
+				codec.writeServerbound(MiddleUpdateCommandMinecart.create(
 					entityId, command, trackOutput
 				));
 				break;
@@ -172,7 +172,7 @@ public class LegacyCustomPayloadData {
 		}
 		int conditional = data.readByte();
 		int auto = data.readByte();
-		codec.read(MiddleUpdateCommandBlock.create(
+		codec.writeServerbound(MiddleUpdateCommandBlock.create(
 			position, command, mode,
 			BitUtils.createIBitMaskFromBits(auto_command_block_bits, new int[] {trackOutput, conditional, auto})
 		));

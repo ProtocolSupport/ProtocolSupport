@@ -10,7 +10,7 @@ public abstract class AbstractEntityTeleportEntityRelMoveLook extends AbstractLo
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		NetworkEntityDataCache ecache = entity.getDataCache();
 
 		double x = ecache.getX();

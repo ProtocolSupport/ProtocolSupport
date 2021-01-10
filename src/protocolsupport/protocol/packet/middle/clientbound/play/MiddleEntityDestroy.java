@@ -16,12 +16,12 @@ public abstract class MiddleEntityDestroy extends ClientBoundMiddlePacket {
 	protected int[] entityIds;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		entityIds = ArraySerializer.readVarIntVarIntArray(serverdata);
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		entityCache.removeEntities(entityIds);
 	}
 

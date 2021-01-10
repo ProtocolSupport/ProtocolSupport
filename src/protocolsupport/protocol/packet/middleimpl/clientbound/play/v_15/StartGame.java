@@ -25,7 +25,7 @@ public class StartGame extends AbstractLegacyStartGame {
 		VarNumberSerializer.writeVarInt(startgame, renderDistance);
 		startgame.writeBoolean(reducedDebugInfo);
 		startgame.writeBoolean(respawnScreenEnabled);
-		codec.write(startgame);
+		codec.writeClientbound(startgame);
 	}
 
 }

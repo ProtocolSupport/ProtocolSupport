@@ -25,7 +25,7 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		reset = serverdata.readBoolean();
 		advancementsMapping = ArraySerializer.readVarIntTArray(
 			serverdata, Any.class,

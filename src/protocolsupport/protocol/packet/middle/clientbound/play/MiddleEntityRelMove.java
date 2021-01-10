@@ -20,8 +20,8 @@ public abstract class MiddleEntityRelMove extends MiddleEntity {
 	protected boolean onGround;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
-		super.readServerData(serverdata);
+	protected void decode(ByteBuf serverdata) {
+		super.decode(serverdata);
 		entity = entityCache.getEntity(entityId);
 		relX = serverdata.readShort();
 		relY = serverdata.readShort();
@@ -34,7 +34,7 @@ public abstract class MiddleEntityRelMove extends MiddleEntity {
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		entity.getDataCache().addLocation(relX, relY, relZ);
 	}
 

@@ -14,7 +14,7 @@ public class PrepareCraftingGrid extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		clientdata.readByte();
 		clientdata.readShort();
 		Function<ByteBuf, Void> elementReader = from -> {
@@ -28,7 +28,7 @@ public class PrepareCraftingGrid extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 	}
 
 }

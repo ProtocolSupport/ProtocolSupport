@@ -13,7 +13,7 @@ public abstract class MiddleCamera extends ClientBoundMiddlePacket {
 	protected int entityId;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		entityId = VarNumberSerializer.readVarInt(serverdata);
 	}
 

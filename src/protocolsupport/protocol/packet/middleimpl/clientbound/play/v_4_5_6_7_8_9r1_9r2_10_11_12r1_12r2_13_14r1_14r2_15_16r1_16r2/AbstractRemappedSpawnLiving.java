@@ -23,14 +23,14 @@ public abstract class AbstractRemappedSpawnLiving extends MiddleSpawnLiving {
 	protected NetworkEntityType fType;
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		NetworkEntityType lLType = legacyEntityEntryTable.get(entity.getType()).getType();
 
 		if (lLType == NetworkEntityType.NONE) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
 
-		super.handleReadData();
+		super.handle();
 
 		lType = lLType;
 		fType = entityDataFormatTable.get(lType).getKey();

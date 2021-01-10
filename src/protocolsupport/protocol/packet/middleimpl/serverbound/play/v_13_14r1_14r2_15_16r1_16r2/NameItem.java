@@ -11,7 +11,7 @@ public class NameItem extends MiddleNameItem {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		name = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
 	}
 

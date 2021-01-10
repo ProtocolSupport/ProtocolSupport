@@ -13,12 +13,12 @@ public class BlockBreakAnimation extends MiddleBlockBreakAnimation {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData blockbreakanimation = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_BREAK_ANIMATION);
 		VarNumberSerializer.writeVarInt(blockbreakanimation, entityId);
 		PositionSerializer.writeLegacyPositionI(blockbreakanimation, position);
 		blockbreakanimation.writeByte(stage);
-		codec.write(blockbreakanimation);
+		codec.writeClientbound(blockbreakanimation);
 	}
 
 }

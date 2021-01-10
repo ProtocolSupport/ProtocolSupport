@@ -17,8 +17,8 @@ public abstract class MiddleUpdateSign extends ServerBoundMiddlePacket {
 	protected String[] lines = new String[4];
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(position, lines));
+	protected void write() {
+		codec.writeServerbound(create(position, lines));
 	}
 
 	public static ServerBoundPacketData create(Position position, String[] lines) {

@@ -23,7 +23,7 @@ public class StartGame extends AbstractLegacyStartGame {
 		StringSerializer.writeVarIntUTF8String(startgame, LegacyDimension.getWorldType(worldFlat));
 		VarNumberSerializer.writeVarInt(startgame, renderDistance);
 		startgame.writeBoolean(reducedDebugInfo);
-		codec.write(startgame);
+		codec.writeClientbound(startgame);
 	}
 
 }

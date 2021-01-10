@@ -13,7 +13,7 @@ public class StopSound extends MiddleStopSound {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData stopsound = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_STOP_SOUND);
 		stopsound.writeByte((source != -1 ? FLAG_SOURCE : 0) | (name != null ? FLAG_NAME : 0));
 		if (source != -1) {
@@ -22,7 +22,7 @@ public class StopSound extends MiddleStopSound {
 		if (name != null) {
 			StringSerializer.writeVarIntUTF8String(stopsound, name);
 		}
-		codec.write(stopsound);
+		codec.writeClientbound(stopsound);
 	}
 
 }

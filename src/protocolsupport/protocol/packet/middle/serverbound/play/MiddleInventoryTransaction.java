@@ -15,8 +15,8 @@ public abstract class MiddleInventoryTransaction extends ServerBoundMiddlePacket
 	protected boolean accepted;
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(windowId, actionNumber, accepted));
+	protected void write() {
+		codec.writeServerbound(create(windowId, actionNumber, accepted));
 	}
 
 	public static ServerBoundPacketData create(int windowId, int actionNumber, boolean accepted) {

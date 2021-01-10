@@ -9,7 +9,7 @@ public class NoopWorldParticle extends MiddleWorldParticle {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

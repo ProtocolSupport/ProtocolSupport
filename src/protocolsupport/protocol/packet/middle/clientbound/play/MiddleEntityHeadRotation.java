@@ -17,8 +17,8 @@ public abstract class MiddleEntityHeadRotation extends MiddleEntity {
 	protected byte headRot;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
-		super.readServerData(serverdata);
+	protected void decode(ByteBuf serverdata) {
+		super.decode(serverdata);
 		entity = entityCache.getEntity(entityId);
 		headRot = serverdata.readByte();
 
@@ -28,7 +28,7 @@ public abstract class MiddleEntityHeadRotation extends MiddleEntity {
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		entity.getDataCache().setHeadYaw(headRot);
 	}
 

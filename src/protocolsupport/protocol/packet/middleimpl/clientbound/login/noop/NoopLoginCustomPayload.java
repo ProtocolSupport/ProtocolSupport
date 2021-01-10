@@ -9,7 +9,7 @@ public class NoopLoginCustomPayload extends MiddleLoginCustomPayload {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

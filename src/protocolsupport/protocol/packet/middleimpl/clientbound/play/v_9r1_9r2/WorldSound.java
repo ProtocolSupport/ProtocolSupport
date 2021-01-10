@@ -10,12 +10,12 @@ public class WorldSound extends MiddleWorldSound {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		String soundname = MinecraftSoundData.getNameById(id);
 		if (soundname == null) {
 			return;
 		}
-		codec.write(WorldCustomSound.create(version, x, y, z, soundname, category, volume, pitch));
+		codec.writeClientbound(WorldCustomSound.create(version, x, y, z, soundname, category, volume, pitch));
 	}
 
 }

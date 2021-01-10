@@ -9,7 +9,7 @@ public class NoopLookAt extends MiddleLookAt {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

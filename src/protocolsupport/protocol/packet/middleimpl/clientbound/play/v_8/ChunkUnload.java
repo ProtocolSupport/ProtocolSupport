@@ -13,13 +13,13 @@ public class ChunkUnload extends AbstractChunkCacheChunkUnload {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData chunkunload = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkunload, chunk);
 		chunkunload.writeBoolean(true);
 		chunkunload.writeShort(0);
 		VarNumberSerializer.writeVarInt(chunkunload, 0);
-		codec.write(chunkunload);
+		codec.writeClientbound(chunkunload);
 	}
 
 }

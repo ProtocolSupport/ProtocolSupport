@@ -31,7 +31,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 			title.toLegacyText(clientCache.getLocale()),
 			windowRemapper.toClientWindowSlots(0)
 		);
-		codec.write(windowopen);
+		codec.writeClientbound(windowopen);
 	}
 
 	public static void writeData(ClientBoundPacketData to, ProtocolVersion version, int windowId, int type, String title, int slots) {

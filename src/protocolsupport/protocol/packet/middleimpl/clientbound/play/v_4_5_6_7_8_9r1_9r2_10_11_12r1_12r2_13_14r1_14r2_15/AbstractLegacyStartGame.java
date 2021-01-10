@@ -15,14 +15,14 @@ public abstract class AbstractLegacyStartGame extends MiddleStartGame {
 	protected int dimensionId;
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		oldDimension = clientCache.getDimension();
-		super.handleReadData();
+		super.handle();
 		dimensionId = LegacyDimension.getIntId(dimension);
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		if ((oldDimension != null) && (LegacyDimension.getIntId(oldDimension) == dimensionId)) {
 			writeStartGame(LegacyDimension.getAlternativeIntId(dimensionId));
 			writeStartGame(dimensionId);

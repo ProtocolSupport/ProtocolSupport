@@ -12,10 +12,10 @@ public class MerchantTradeList extends MiddleMerchantTradeList {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData merchanttradelist = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_MERCHANT_TRADE_LIST);
 		MerchantDataSerializer.writeMerchantData(merchanttradelist, version, cache.getClientCache().getLocale(), merchantData);
-		codec.write(merchanttradelist);
+		codec.writeClientbound(merchanttradelist);
 	}
 
 }

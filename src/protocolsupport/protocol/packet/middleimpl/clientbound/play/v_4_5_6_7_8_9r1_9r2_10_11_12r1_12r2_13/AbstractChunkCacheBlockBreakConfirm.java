@@ -15,7 +15,7 @@ public abstract class AbstractChunkCacheBlockBreakConfirm extends MiddleBlockBre
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		int y = position.getY();
 
 		if (y >= 256) {

@@ -11,7 +11,7 @@ public class SelectTrade extends MiddleSelectTrade {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		slot = VarNumberSerializer.readVarInt(clientdata);
 	}
 

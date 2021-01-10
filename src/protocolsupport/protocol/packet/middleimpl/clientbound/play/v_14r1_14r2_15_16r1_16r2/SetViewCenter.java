@@ -12,10 +12,10 @@ public class SetViewCenter extends MiddleSetViewCenter {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData setviewcenter = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SET_VIEW_CENTER);
 		PositionSerializer.writeVarIntChunkCoord(setviewcenter, chunk);
-		codec.write(setviewcenter);
+		codec.writeClientbound(setviewcenter);
 	}
 
 }

@@ -19,8 +19,8 @@ public abstract class MiddleEntityLook extends MiddleEntity {
 	protected boolean onGround;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
-		super.readServerData(serverdata);
+	protected void decode(ByteBuf serverdata) {
+		super.decode(serverdata);
 		entity = entityCache.getEntity(entityId);
 		yaw = serverdata.readByte();
 		pitch = serverdata.readByte();
@@ -32,7 +32,7 @@ public abstract class MiddleEntityLook extends MiddleEntity {
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		entity.getDataCache().setLook(pitch, yaw);
 	}
 

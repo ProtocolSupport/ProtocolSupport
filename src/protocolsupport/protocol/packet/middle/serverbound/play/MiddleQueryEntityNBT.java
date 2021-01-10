@@ -15,11 +15,11 @@ public abstract class MiddleQueryEntityNBT extends ServerBoundMiddlePacket {
 	protected int entityId;
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 		ServerBoundPacketData queryentitynbt = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_QUERY_ENTITY_NBT);
 		VarNumberSerializer.writeVarInt(queryentitynbt, id);
 		VarNumberSerializer.writeVarInt(queryentitynbt, entityId);
-		codec.read(queryentitynbt);
+		codec.writeServerbound(queryentitynbt);
 	}
 
 }

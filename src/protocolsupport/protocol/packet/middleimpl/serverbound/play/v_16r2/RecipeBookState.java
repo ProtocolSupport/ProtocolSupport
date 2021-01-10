@@ -11,7 +11,7 @@ public class RecipeBookState extends MiddleRecipeBookState {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		bookType = MiscSerializer.readVarIntEnum(clientdata, RecipeBookType.CONSTANT_LOOKUP);
 		bookOpen = clientdata.readBoolean();
 		bookFiltering = clientdata.readBoolean();

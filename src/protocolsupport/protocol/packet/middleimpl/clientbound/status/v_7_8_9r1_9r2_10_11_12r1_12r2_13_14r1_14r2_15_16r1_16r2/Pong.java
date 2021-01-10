@@ -11,10 +11,10 @@ public class Pong extends MiddlePong {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData pong = ClientBoundPacketData.create(PacketType.CLIENTBOUND_STATUS_PONG);
 		pong.writeLong(pingId);
-		codec.write(pong);
+		codec.writeClientbound(pong);
 	}
 
 }

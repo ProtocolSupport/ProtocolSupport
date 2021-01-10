@@ -26,16 +26,16 @@ public class InventoryData extends MiddleInventoryData {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		switch (windowCache.getOpenedWindowType()) {
 			case ENCHANTMENT: {
 				if (version.isBetween(ProtocolVersion.MINECRAFT_1_9_4, ProtocolVersion.MINECRAFT_1_8)) {
 					WindowEnchantmentCache enchantmentCache = (WindowEnchantmentCache) windowCache.getOpenedWindowMetadata();
 					if ((type >= ENCHANTMENT_TYPE_ID_TOP) && (type <= ENCHANTMENT_TYPE_ID_BOTTOM)) {
-						codec.write(create(windowId, type, enchantmentCache.updateEnchantmentId(type - ENCHANTMENT_TYPE_ID_TOP, value)));
+						codec.writeClientbound(create(windowId, type, enchantmentCache.updateEnchantmentId(type - ENCHANTMENT_TYPE_ID_TOP, value)));
 						return;
 					} else if ((type >= ENCHANTMENT_TYPE_LEVEL_TOP) && (type <= EHCNAHTMENT_TYPE_LEVEL_BOTTOM)) {
-						codec.write(create(windowId, type - 3, enchantmentCache.updateEnchantmentLevel(type - ENCHANTMENT_TYPE_LEVEL_TOP, value)));
+						codec.writeClientbound(create(windowId, type - 3, enchantmentCache.updateEnchantmentLevel(type - ENCHANTMENT_TYPE_LEVEL_TOP, value)));
 						return;
 					}
 				}
@@ -46,7 +46,7 @@ public class InventoryData extends MiddleInventoryData {
 					WindowFurnaceCache furnaceCache = (WindowFurnaceCache) windowCache.getOpenedWindowMetadata();
 					switch (type) {
 						case FURNACE_TYPE_FUEL_TIME_CURRENT: {
-							codec.write(create(windowId, 1, furnaceCache.scaleCurrentFuelBurnTime(value)));
+							codec.writeClientbound(create(windowId, 1, furnaceCache.scaleCurrentFuelBurnTime(value)));
 							return;
 						}
 						case FURNACE_TYPE_FUEL_TIME_MAX: {
@@ -54,7 +54,7 @@ public class InventoryData extends MiddleInventoryData {
 							return;
 						}
 						case FURNACE_TYPE_PROGRESS_CURRENT: {
-							codec.write(create(windowId, 0, furnaceCache.scaleCurrentCurrentProgress(value)));
+							codec.writeClientbound(create(windowId, 0, furnaceCache.scaleCurrentCurrentProgress(value)));
 							return;
 						}
 						case FURNACE_TYPE_PROGRESS_MAX: {
@@ -69,7 +69,7 @@ public class InventoryData extends MiddleInventoryData {
 				break;
 			}
 		}
-		codec.write(create(windowId, type, value));
+		codec.writeClientbound(create(windowId, type, value));
 	}
 
 	protected static ClientBoundPacketData create(byte windowId, int type, int value) {

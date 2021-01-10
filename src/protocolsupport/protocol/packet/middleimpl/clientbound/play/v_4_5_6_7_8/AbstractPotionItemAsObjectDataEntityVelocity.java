@@ -14,8 +14,8 @@ public abstract class AbstractPotionItemAsObjectDataEntityVelocity extends Middl
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
 	@Override
-	protected void handleReadData() {
-		super.handleReadData();
+	protected void handle() {
+		super.handle();
 
 		NetworkEntity entity = entityCache.getEntity(entityId);
 		if (entity != null) {

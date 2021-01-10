@@ -12,7 +12,7 @@ public class SetPosition extends MiddleSetPosition {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData setposition = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_POSITION);
 		setposition.writeDouble(x);
 		setposition.writeDouble(y);
@@ -21,7 +21,7 @@ public class SetPosition extends MiddleSetPosition {
 		setposition.writeFloat(pitch);
 		setposition.writeByte(flags);
 		VarNumberSerializer.writeVarInt(setposition, teleportConfirmId);
-		codec.write(setposition);
+		codec.writeClientbound(setposition);
 	}
 
 }

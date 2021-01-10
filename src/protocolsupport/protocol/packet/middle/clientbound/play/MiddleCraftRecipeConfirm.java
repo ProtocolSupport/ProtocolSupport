@@ -14,7 +14,7 @@ public abstract class MiddleCraftRecipeConfirm extends ClientBoundMiddlePacket {
 	protected String recipeId;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		windowId = serverdata.readUnsignedByte();
 		recipeId = StringSerializer.readVarIntUTF8String(serverdata);
 	}

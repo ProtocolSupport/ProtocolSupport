@@ -25,8 +25,8 @@ public class CustomPayload extends MiddleCustomPayload {
 	}
 
 	@Override
-	protected void writeToClient() {
-		codec.write(create(version, tag, data));
+	protected void write() {
+		codec.writeClientbound(create(version, tag, data));
 	}
 
 	public static <T> ClientBoundPacketData create(ProtocolVersion version, String tag, T type, BiConsumer<ByteBuf, T> typeWriter) {

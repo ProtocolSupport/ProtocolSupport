@@ -9,7 +9,7 @@ public class NoopScoreboardTeam extends MiddleScoreboardTeam {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

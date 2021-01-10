@@ -18,13 +18,13 @@ public abstract class MiddleSetProtocol extends ServerBoundMiddlePacket {
 	protected int nextState;
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 		ServerBoundPacketData setprotocol = ServerBoundPacketData.create(PacketType.SERVERBOUND_HANDSHAKE_START);
 		VarNumberSerializer.writeVarInt(setprotocol, ProtocolVersionsHelper.LATEST_PC.getId());
 		StringSerializer.writeVarIntUTF8String(setprotocol, hostname);
 		setprotocol.writeShort(port);
 		VarNumberSerializer.writeVarInt(setprotocol, nextState);
-		codec.read(setprotocol);
+		codec.writeServerbound(setprotocol);
 	}
 
 }

@@ -9,7 +9,7 @@ public class NoopDeclareCommands extends MiddleDeclareCommands {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

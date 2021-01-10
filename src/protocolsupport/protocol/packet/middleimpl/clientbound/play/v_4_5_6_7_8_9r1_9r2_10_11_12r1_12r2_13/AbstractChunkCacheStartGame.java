@@ -13,8 +13,8 @@ public abstract class AbstractChunkCacheStartGame extends AbstractLegacyStartGam
 	}
 
 	@Override
-	protected void handleReadData() {
-		super.handleReadData();
+	protected void handle() {
+		super.handle();
 		clientCache.setDimensionSkyLight(LegacyDimension.hasSkyLight(dimensionId));
 		chunkCache.clear();
 	}

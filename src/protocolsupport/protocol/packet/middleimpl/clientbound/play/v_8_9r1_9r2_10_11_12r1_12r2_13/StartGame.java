@@ -29,7 +29,7 @@ public class StartGame extends AbstractChunkCacheStartGame {
 		startgame.writeByte(maxplayers);
 		StringSerializer.writeVarIntUTF8String(startgame, LegacyDimension.getWorldType(worldFlat));
 		startgame.writeBoolean(reducedDebugInfo);
-		codec.write(startgame);
+		codec.writeClientbound(startgame);
 	}
 
 }

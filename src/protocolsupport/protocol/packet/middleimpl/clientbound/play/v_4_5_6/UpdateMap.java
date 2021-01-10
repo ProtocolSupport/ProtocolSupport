@@ -20,14 +20,14 @@ public class UpdateMap extends MiddleUpdateMap {
 	private static final int mapId = Material.LEGACY_MAP.getId();
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData scaledata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 		scaledata.writeShort(mapId);
 		scaledata.writeShort(id);
 		scaledata.writeShort(2);
 		scaledata.writeByte(2);
 		scaledata.writeByte(scale);
-		codec.write(scaledata);
+		codec.writeClientbound(scaledata);
 
 		if (icons.length > 0) {
 			ClientBoundPacketData iconsdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
@@ -40,7 +40,7 @@ public class UpdateMap extends MiddleUpdateMap {
 				iconsdata.writeByte(icon.x);
 				iconsdata.writeByte(icon.z);
 			}
-			codec.write(iconsdata);
+			codec.writeClientbound(iconsdata);
 		}
 
 		if (columns > 0) {
@@ -60,7 +60,7 @@ public class UpdateMap extends MiddleUpdateMap {
 					colors[i] = (byte) colorRemapper.get(colors[i] & 0xFF);
 				}
 				mapdata.writeBytes(colors);
-				codec.write(mapdata);
+				codec.writeClientbound(mapdata);
 			}
 		}
 	}

@@ -16,8 +16,8 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 	}
 
 	@Override
-	protected void writeToClient() {
-		codec.write(create(version, x, y, z, id, category, volume, pitch));
+	protected void write() {
+		codec.writeClientbound(create(version, x, y, z, id, category, volume, pitch));
 	}
 
 	public static ClientBoundPacketData create(

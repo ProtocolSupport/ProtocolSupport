@@ -11,7 +11,7 @@ public class Chat extends MiddleChat {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		message = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
 	}
 

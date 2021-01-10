@@ -13,10 +13,10 @@ public abstract class MiddlePlayerAbilities extends ServerBoundMiddlePacket {
 	protected int flags;
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 		ServerBoundPacketData abilities = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_ABILITIES);
 		abilities.writeByte(flags);
-		codec.read(abilities);
+		codec.writeServerbound(abilities);
 	}
 
 }

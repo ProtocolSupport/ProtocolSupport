@@ -22,7 +22,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		int chunkAbsY = getChunkSectionY(chunkCoordWithSection) << 4;
 
 		ClientBoundPacketData blockchangemulti = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI);
@@ -32,7 +32,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 			blockchangemulti.writeShort((getRecordRelX(record) << 12) | (getRecordRelZ(record) << 8) | chunkAbsY | getRecordRelY(record));
 			VarNumberSerializer.writeVarInt(blockchangemulti, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, getRecordBlockData(record)));
 		}
-		codec.write(blockchangemulti);
+		codec.writeClientbound(blockchangemulti);
 	}
 
 }

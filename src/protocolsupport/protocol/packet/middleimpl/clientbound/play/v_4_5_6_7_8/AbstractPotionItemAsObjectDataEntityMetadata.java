@@ -20,7 +20,7 @@ public abstract class AbstractPotionItemAsObjectDataEntityMetadata extends Abstr
 	}
 
 	@Override
-	public void writeToClient() {
+	public void write() {
 		NetworkEntityDataCache edata = entity.getDataCache();
 		PotionNetworkEntityData potiondata = edata.getData(AbstractPotionItemAsObjectDataEntityMetadata.DATA_KEY);
 		if (potiondata != null) {
@@ -36,7 +36,7 @@ public abstract class AbstractPotionItemAsObjectDataEntityMetadata extends Abstr
 			}
 		}
 
-		super.writeToClient();
+		super.write();
 	}
 
 	protected abstract void writePotionReplaceSpawn(NetworkItemStack item, Vector3S velocity);

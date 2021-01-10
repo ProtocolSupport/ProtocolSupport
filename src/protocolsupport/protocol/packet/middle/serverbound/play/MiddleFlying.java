@@ -13,10 +13,10 @@ public abstract class MiddleFlying extends ServerBoundMiddlePacket {
 	protected boolean onGround;
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 		ServerBoundPacketData flying = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_PLAYER);
 		flying.writeBoolean(onGround);
-		codec.read(flying);
+		codec.writeServerbound(flying);
 	}
 
 }

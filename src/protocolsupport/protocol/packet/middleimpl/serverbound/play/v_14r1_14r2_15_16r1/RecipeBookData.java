@@ -27,7 +27,7 @@ public class RecipeBookData extends ServerBoundMiddlePacket {
 	protected boolean smokingRecipeBookFiltering;
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		type = MiscSerializer.readVarIntEnum(clientdata, Type.CONSTANT_LOOKUP);
 		switch (type) {
 			case DISPLAYED_RECIPE: {
@@ -49,17 +49,17 @@ public class RecipeBookData extends ServerBoundMiddlePacket {
 	}
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 		switch (type) {
 			case DISPLAYED_RECIPE: {
-				codec.read(MiddleRecipeBookRecipe.create(recipeId));
+				codec.writeServerbound(MiddleRecipeBookRecipe.create(recipeId));
 				break;
 			}
 			case RECIPE_BOOK_STATUS: {
-				codec.read(MiddleRecipeBookState.create(RecipeBookType.CRAFTING, craftRecipeBookOpen, craftRecipeBookFiltering));
-				codec.read(MiddleRecipeBookState.create(RecipeBookType.FURNACE, smeltingRecipeBookOpen, smeltingRecipeBookFiltering));
-				codec.read(MiddleRecipeBookState.create(RecipeBookType.BLAST_FURNACE, blastingRecipeBookOpen, blastingRecipeBookFiltering));
-				codec.read(MiddleRecipeBookState.create(RecipeBookType.SMOKER, smokingRecipeBookOpen, smokingRecipeBookFiltering));
+				codec.writeServerbound(MiddleRecipeBookState.create(RecipeBookType.CRAFTING, craftRecipeBookOpen, craftRecipeBookFiltering));
+				codec.writeServerbound(MiddleRecipeBookState.create(RecipeBookType.FURNACE, smeltingRecipeBookOpen, smeltingRecipeBookFiltering));
+				codec.writeServerbound(MiddleRecipeBookState.create(RecipeBookType.BLAST_FURNACE, blastingRecipeBookOpen, blastingRecipeBookFiltering));
+				codec.writeServerbound(MiddleRecipeBookState.create(RecipeBookType.SMOKER, smokingRecipeBookOpen, smokingRecipeBookFiltering));
 				break;
 			}
 		}

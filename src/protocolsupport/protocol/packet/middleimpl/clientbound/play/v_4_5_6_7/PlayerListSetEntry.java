@@ -19,38 +19,38 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		String locale = cache.getClientCache().getLocale();
 		switch (action) {
 			case ADD: {
 				for (Entry<UUID, PlayerListOldNewEntry> entry : infos.entrySet()) {
 					PlayerListEntry oldEntry = entry.getValue().getOldEntry();
 					if (oldEntry != null) {
-						codec.write(createRemove(codec, version, oldEntry.getCurrentName(locale)));
+						codec.writeClientbound(createRemove(codec, version, oldEntry.getCurrentName(locale)));
 					}
 					PlayerListEntry currentEntry = entry.getValue().getNewEntry();
-					codec.write(createAddOrUpdate(codec, version, currentEntry.getCurrentName(locale), (short) currentEntry.getPing()));
+					codec.writeClientbound(createAddOrUpdate(codec, version, currentEntry.getCurrentName(locale), (short) currentEntry.getPing()));
 				}
 				break;
 			}
 			case PING: {
 				for (Entry<UUID, PlayerListOldNewEntry> entry : infos.entrySet()) {
 					PlayerListEntry currentEntry = entry.getValue().getNewEntry();
-					codec.write(createAddOrUpdate(codec, version, currentEntry.getCurrentName(locale), (short) currentEntry.getPing()));
+					codec.writeClientbound(createAddOrUpdate(codec, version, currentEntry.getCurrentName(locale), (short) currentEntry.getPing()));
 				}
 				break;
 			}
 			case DISPLAY_NAME: {
 				for (Entry<UUID, PlayerListOldNewEntry> entry : infos.entrySet()) {
-					codec.write(createRemove(codec, version, entry.getValue().getOldEntry().getCurrentName(locale)));
+					codec.writeClientbound(createRemove(codec, version, entry.getValue().getOldEntry().getCurrentName(locale)));
 					PlayerListEntry currentEntry = entry.getValue().getNewEntry();
-					codec.write(createAddOrUpdate(codec, version, currentEntry.getCurrentName(locale), (short) currentEntry.getPing()));
+					codec.writeClientbound(createAddOrUpdate(codec, version, currentEntry.getCurrentName(locale), (short) currentEntry.getPing()));
 				}
 				break;
 			}
 			case REMOVE: {
 				for (Entry<UUID, PlayerListOldNewEntry> entry : infos.entrySet()) {
-					codec.write(createRemove(codec, version, entry.getValue().getOldEntry().getCurrentName(locale)));
+					codec.writeClientbound(createRemove(codec, version, entry.getValue().getOldEntry().getCurrentName(locale)));
 				}
 				break;
 			}

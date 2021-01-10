@@ -14,8 +14,8 @@ public class BlockBreakConfirm extends AbstractChunkCacheBlockBreakConfirm {
 	protected final ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	@Override
-	protected void writeToClient() {
-		codec.write(BlockChangeSingle.create(position, BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, blockId)));
+	protected void write() {
+		codec.writeClientbound(BlockChangeSingle.create(position, BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, blockId)));
 	}
 
 }

@@ -9,7 +9,7 @@ public class NoopAdvanementsTab extends MiddleAdvancementsTab {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

@@ -16,7 +16,7 @@ public abstract class AbstractEntityTeleportEntityRelMove extends MiddleEntityRe
 	protected final LegacyNetworkEntityLocationOffset entityOffset = LegacyNetworkEntityLocationOffset.get(version);
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		NetworkEntityDataCache ecache = entity.getDataCache();
 
 		double x = ecache.getX();

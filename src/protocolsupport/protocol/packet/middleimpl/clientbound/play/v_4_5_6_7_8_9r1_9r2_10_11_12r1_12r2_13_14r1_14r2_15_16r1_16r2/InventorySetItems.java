@@ -22,16 +22,16 @@ public class InventorySetItems extends MiddleInventorySetItems {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		String locale = clientCache.getLocale();
 
 		WindowRemapper remapper = windowId == WINDOW_ID_PLAYER_INVENTORY ? windowCache.getPlayerWindowRemapper() : windowCache.getOpenedWindowRemapper();
 		ClientItems clientitems = remapper.toClientItems(windowId, items);
 		for (ClientItemsArray itemsArray : clientitems.getItemsArrays()) {
-			codec.write(create(version, locale, itemsArray.getWindowId(), itemsArray.getItems()));
+			codec.writeClientbound(create(version, locale, itemsArray.getWindowId(), itemsArray.getItems()));
 		}
 		for (ClientItemsSingle itemSingle : clientitems.getItemsSingle()) {
-			codec.write(InventorySetSlot.create(
+			codec.writeClientbound(InventorySetSlot.create(
 				version, locale,
 				itemSingle.getWindowId(),
 				itemSingle.getSlot(),

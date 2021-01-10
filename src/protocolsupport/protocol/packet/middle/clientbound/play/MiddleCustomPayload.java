@@ -28,7 +28,7 @@ public abstract class MiddleCustomPayload extends ClientBoundMiddlePacket {
 	protected ByteBuf data;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		tag = StringSerializer.readVarIntUTF8String(serverdata);
 		data = serverdata.readSlice(serverdata.readableBytes());
 	}
@@ -36,7 +36,7 @@ public abstract class MiddleCustomPayload extends ClientBoundMiddlePacket {
 	protected boolean custom;
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		String legacyTag = getClientTag(tag);
 		switch (tag) {
 			case LegacyCustomPayloadChannelName.MODERN_REGISTER:

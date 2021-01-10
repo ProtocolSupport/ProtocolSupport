@@ -13,12 +13,12 @@ public class LoginCustomPayload extends MiddleLoginCustomPayload {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData logincustompayload = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LOGIN_CUSTOM_PAYLOAD);
 		VarNumberSerializer.writeVarInt(logincustompayload, id);
 		StringSerializer.writeVarIntUTF8String(logincustompayload, tag);
 		logincustompayload.writeBytes(data);
-		codec.write(logincustompayload);
+		codec.writeClientbound(logincustompayload);
 	}
 
 }

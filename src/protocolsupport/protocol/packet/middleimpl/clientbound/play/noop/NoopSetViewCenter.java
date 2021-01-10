@@ -9,7 +9,7 @@ public class NoopSetViewCenter extends MiddleSetViewCenter {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

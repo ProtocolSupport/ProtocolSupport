@@ -12,7 +12,7 @@ public class UseEntity extends AbstractSneakingCacheUseEntity {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		clientdata.skipBytes(Integer.BYTES);
 		entityId = clientdata.readInt();
 		action = clientdata.readBoolean() ? Action.ATTACK : Action.INTERACT;

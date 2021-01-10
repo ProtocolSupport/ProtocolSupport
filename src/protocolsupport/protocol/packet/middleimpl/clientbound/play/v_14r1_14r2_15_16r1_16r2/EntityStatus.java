@@ -11,11 +11,11 @@ public class EntityStatus extends AbstractKnownEntityStatus {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData entitystatus = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_STATUS);
 		entitystatus.writeInt(entityId);
 		entitystatus.writeByte(status);
-		codec.write(entitystatus);
+		codec.writeClientbound(entitystatus);
 	}
 
 }

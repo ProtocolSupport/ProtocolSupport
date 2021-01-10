@@ -29,7 +29,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 			ChatSerializer.serialize(version, clientCache.getLocale(), title),
 			windowRemapper.toClientWindowSlots(0)
 		);
-		codec.write(windowopen);
+		codec.writeClientbound(windowopen);
 	}
 
 	public static void writeData(ClientBoundPacketData to, int windowId, String type, String titleJson, int slots) {

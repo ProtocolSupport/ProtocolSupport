@@ -21,8 +21,8 @@ public class Chat extends MiddleChat {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	protected void writeToClient() {
-		codec.write(create(position, ChatSerializer.serialize(version, clientCache.getLocale(), message), sender));
+	protected void write() {
+		codec.writeClientbound(create(position, ChatSerializer.serialize(version, clientCache.getLocale(), message), sender));
 	}
 
 	public static ClientBoundPacketData create(MessagePosition position, String messageJson, UUID sender) {

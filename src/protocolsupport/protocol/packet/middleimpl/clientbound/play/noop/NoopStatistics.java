@@ -9,7 +9,7 @@ public class NoopStatistics extends MiddleStatistics {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

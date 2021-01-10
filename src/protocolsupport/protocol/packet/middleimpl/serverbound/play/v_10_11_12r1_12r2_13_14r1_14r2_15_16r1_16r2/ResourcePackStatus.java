@@ -11,7 +11,7 @@ public class ResourcePackStatus extends MiddleResourcePackStatus {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		result = VarNumberSerializer.readVarInt(clientdata);
 	}
 

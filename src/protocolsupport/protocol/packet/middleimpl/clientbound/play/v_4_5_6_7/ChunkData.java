@@ -31,7 +31,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 	protected final IdMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		String locale = clientCache.getLocale();
 		boolean hasSkyLight = clientCache.hasDimensionSkyLight();
 
@@ -55,11 +55,11 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 			chunkdata.writeInt(compressed.length);
 			chunkdata.writeBytes(compressed);
 		}
-		codec.write(chunkdata);
+		codec.writeClientbound(chunkdata);
 
 		for (Map<Position, TileEntity> sectionTiles : cachedChunk.getTiles()) {
 			for (TileEntity tile : sectionTiles.values()) {
-				codec.write(BlockTileUpdate.create(version, locale, tile));
+				codec.writeClientbound(BlockTileUpdate.create(version, locale, tile));
 			}
 		}
 	}

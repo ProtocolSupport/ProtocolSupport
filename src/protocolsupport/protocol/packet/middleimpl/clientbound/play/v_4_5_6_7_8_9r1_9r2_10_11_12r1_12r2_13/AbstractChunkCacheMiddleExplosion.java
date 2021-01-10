@@ -17,7 +17,7 @@ public abstract class AbstractChunkCacheMiddleExplosion extends MiddleExplosion 
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		int xOrigin = NumberConversions.floor(x);
 		x = xOrigin;
 		int yOrigin = NumberConversions.floor(y);

@@ -34,16 +34,16 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 	protected WindowRemapper windowRemapper;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		windowId = (byte) VarNumberSerializer.readVarInt(serverdata);
 		type = MiscSerializer.readVarIntEnum(serverdata, WindowType.CONSTANT_LOOKUP);
 		title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		if (windowSkipper.isSet(type)) {
-			codec.readAndComplete(MiddleInventoryClose.create(windowId));
+			codec.writeServerboundAndFlush(MiddleInventoryClose.create(windowId));
 		} else {
 			windowRemapper = windowsRemapper.get(type, 0);
 			windowCache.setOpenedWindow(windowId, type, 0, windowRemapper);

@@ -12,7 +12,7 @@ public class AdvancementTab extends MiddleAdvancementTab {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		action = MiscSerializer.readVarIntEnum(clientdata, Action.CONSTANT_LOOKUP);
 		if (action == Action.OPEN) {
 			identifier = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);

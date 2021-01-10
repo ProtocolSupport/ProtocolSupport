@@ -16,7 +16,7 @@ public abstract class AbstractKnownEntityMetadata extends MiddleEntityMetadata {
 	protected NetworkEntity entity;
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		entity = entityCache.getEntity(entityId);
 
 		if (entity == null) {

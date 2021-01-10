@@ -9,7 +9,7 @@ public class NoopSetCooldown extends MiddleSetCooldown {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

@@ -11,7 +11,7 @@ public class RecipeBookRecipe extends MiddleRecipeBookRecipe {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		recipeId = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
 	}
 

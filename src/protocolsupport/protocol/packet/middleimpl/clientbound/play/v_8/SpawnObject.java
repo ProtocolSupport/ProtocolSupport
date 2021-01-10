@@ -16,7 +16,7 @@ public class SpawnObject extends AbstractPotionItemAsObjectDataSpawnObject {
 
 	@Override
 	protected void writeSpawnObject() {
-		codec.write(create(entity.getId(), fType, x, y, z, pitch, yaw, rObjectdata, velX, velY, velZ));
+		codec.writeClientbound(create(entity.getId(), fType, x, y, z, pitch, yaw, rObjectdata, velX, velY, velZ));
 	}
 
 	public static ClientBoundPacketData create(
@@ -51,7 +51,7 @@ public class SpawnObject extends AbstractPotionItemAsObjectDataSpawnObject {
 		spawnglobal.writeInt(PrimitiveTypeUtils.toFixedPoint32(x));
 		spawnglobal.writeInt(PrimitiveTypeUtils.toFixedPoint32(y));
 		spawnglobal.writeInt(PrimitiveTypeUtils.toFixedPoint32(z));
-		codec.write(spawnglobal);
+		codec.writeClientbound(spawnglobal);
 	}
 
 }

@@ -9,7 +9,7 @@ public class NoopScoreboardObjective extends MiddleScoreboardObjective {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

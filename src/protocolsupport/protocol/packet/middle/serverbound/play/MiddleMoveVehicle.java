@@ -17,8 +17,8 @@ public abstract class MiddleMoveVehicle extends ServerBoundMiddlePacket {
 	protected float pitch;
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(x, y, z, yaw, pitch));
+	protected void write() {
+		codec.writeServerbound(create(x, y, z, yaw, pitch));
 	}
 
 	public static ServerBoundPacketData create(double x, double y, double z, float yaw, float pitch) {

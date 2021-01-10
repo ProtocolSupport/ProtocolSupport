@@ -14,11 +14,11 @@ public class InventoryHorseOpen extends MiddleInventoryHorseOpen {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData inventoryopen = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
 		InventoryOpen.writeData(inventoryopen, windowId, "EntityHorse", ChatSerializer.serialize(version, I18NData.DEFAULT_LOCALE, new TextComponent("Horse")), slots);
 		inventoryopen.writeInt(entityId);
-		codec.write(inventoryopen);
+		codec.writeClientbound(inventoryopen);
 	}
 
 }

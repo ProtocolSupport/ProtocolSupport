@@ -16,11 +16,11 @@ public class EntityMetadata extends AbstractRemappedEntityMetadata {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	public void writeToClient() {
+	public void write() {
 		ClientBoundPacketData entitymetadata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
 		VarNumberSerializer.writeVarInt(entitymetadata, entityId);
 		NetworkEntityMetadataSerializer.writeData(entitymetadata, version, clientCache.getLocale(), fMetadata);
-		codec.write(entitymetadata);
+		codec.writeClientbound(entitymetadata);
 	}
 
 }

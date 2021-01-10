@@ -13,8 +13,8 @@ public abstract class MiddleEntityVelocity extends MiddleEntity {
 	protected short velZ;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
-		super.readServerData(serverdata);
+	protected void decode(ByteBuf serverdata) {
+		super.decode(serverdata);
 		velX = serverdata.readShort();
 		velY = serverdata.readShort();
 		velZ = serverdata.readShort();

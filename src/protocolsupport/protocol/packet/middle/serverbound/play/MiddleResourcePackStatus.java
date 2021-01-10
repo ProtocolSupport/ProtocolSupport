@@ -14,10 +14,10 @@ public abstract class MiddleResourcePackStatus extends ServerBoundMiddlePacket {
 	protected int result;
 
 	@Override
-	protected void writeToServer() {
+	protected void write() {
 		ServerBoundPacketData resourcepackstatus = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_RESOURCE_PACK_STATUS);
 		VarNumberSerializer.writeVarInt(resourcepackstatus, result);
-		codec.read(resourcepackstatus);
+		codec.writeServerbound(resourcepackstatus);
 	}
 
 }

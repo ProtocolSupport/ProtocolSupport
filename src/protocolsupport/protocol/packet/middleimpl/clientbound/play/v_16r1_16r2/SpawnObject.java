@@ -17,7 +17,7 @@ public class SpawnObject extends AbstractRemappedSpawnObject {
 	protected final ArrayBasedIntMappingTable flatteningEntityIdTable = FlatteningNetworkEntityId.REGISTRY.getTable(version);
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		UUIDSerializer.writeUUID2L(serializer, entity.getUUID());
@@ -31,7 +31,7 @@ public class SpawnObject extends AbstractRemappedSpawnObject {
 		serializer.writeShort(velX);
 		serializer.writeShort(velY);
 		serializer.writeShort(velZ);
-		codec.write(serializer);
+		codec.writeClientbound(serializer);
 	}
 
 }

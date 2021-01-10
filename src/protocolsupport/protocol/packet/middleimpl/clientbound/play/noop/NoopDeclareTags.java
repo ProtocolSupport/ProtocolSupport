@@ -9,7 +9,7 @@ public class NoopDeclareTags extends MiddleDeclareTags {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

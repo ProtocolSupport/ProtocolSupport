@@ -11,7 +11,7 @@ public class Spectate extends MiddleSpectate {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		entityUUID = UUIDSerializer.readUUID2L(clientdata);
 	}
 

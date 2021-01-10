@@ -13,8 +13,8 @@ public abstract class AbstractSetPosition extends MiddleSetPosition {
 	}
 
 	@Override
-	protected void handleReadData() {
-		super.handleReadData();
+	protected void handle() {
+		super.handle();
 
 		NetworkEntityDataCache ecache = self.getDataCache();
 		x = ecache.getX();

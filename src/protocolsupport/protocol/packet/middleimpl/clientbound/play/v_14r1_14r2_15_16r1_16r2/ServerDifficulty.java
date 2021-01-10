@@ -12,11 +12,11 @@ public class ServerDifficulty extends MiddleServerDifficulty {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData serverdifficulty = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SERVER_DIFFICULTY);
 		MiscSerializer.writeByteEnum(serverdifficulty, difficulty);
 		serverdifficulty.writeBoolean(locked);
-		codec.write(serverdifficulty);
+		codec.writeClientbound(serverdifficulty);
 	}
 
 }

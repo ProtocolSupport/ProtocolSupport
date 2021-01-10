@@ -16,7 +16,7 @@ public abstract class AbstractSoundCollectEffect extends MiddleCollectEffect {
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		NetworkEntity entity = entityCache.getEntity(entityId);
 		if (entity != null) {
 			switch (entity.getType()) {

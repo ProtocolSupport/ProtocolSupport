@@ -17,8 +17,8 @@ public abstract class MiddleEntityEffectAdd extends MiddleEntity {
 	protected int flags;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
-		super.readServerData(serverdata);
+	protected void decode(ByteBuf serverdata) {
+		super.decode(serverdata);
 		effectId = serverdata.readByte();
 		amplifier = serverdata.readByte();
 		duration = VarNumberSerializer.readVarInt(serverdata);
@@ -26,7 +26,7 @@ public abstract class MiddleEntityEffectAdd extends MiddleEntity {
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		if (GenericIdSkipper.EFFECT.getTable(version).isSet(effectId)) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}

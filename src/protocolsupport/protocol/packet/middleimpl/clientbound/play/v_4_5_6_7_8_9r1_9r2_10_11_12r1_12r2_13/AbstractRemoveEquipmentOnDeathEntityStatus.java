@@ -12,7 +12,7 @@ public abstract class AbstractRemoveEquipmentOnDeathEntityStatus extends Abstrac
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		if (
 			(status == STATUS_LIVING_DEATH) &&
 			(entity.getType() == NetworkEntityType.PLAYER) &&
@@ -24,7 +24,7 @@ public abstract class AbstractRemoveEquipmentOnDeathEntityStatus extends Abstrac
 		ClientBoundPacketData entitystatus = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_STATUS);
 		entitystatus.writeInt(entityId);
 		entitystatus.writeByte(status);
-		codec.write(entitystatus);
+		codec.writeClientbound(entitystatus);
 	}
 
 	protected abstract void writeEquipmentRemove();

@@ -37,13 +37,13 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 	protected ClientBoundPacketDataProcessor transformerEncoderHeadProcessor = new ClientBoundPacketDataProcessor() {
 		@Override
 		protected void write(PacketData<?> packet) {
-			write0(packet);
+			writeClientboundInternal(packet);
 		}
 	};
 	protected ServerBoundPacketDataProcessor transformerDecoderHeadProcessor = new ServerBoundPacketDataProcessor() {
 		@Override
 		protected void read(PacketData<?> packet) {
-			read0(packet);
+			writeServerboundInternal(packet);
 		}
 	};
 
@@ -64,22 +64,22 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 	}
 
 	@Override
-	public void write(ClientBoundPacketData packetadata) {
+	public void writeClientbound(ClientBoundPacketData packetadata) {
 		transformerEncoderHeadProcessor.process(packetadata);
 	}
 
 	@Override
-	public void read(ServerBoundPacketData packetdata) {
+	public void writeServerbound(ServerBoundPacketData packetdata) {
 		transformerDecoderHeadProcessor.process(packetdata);
 	}
 
 	@Override
-	public void flush() {
+	public void flushClientnbound() {
 		transformerEncoderCtx.flush();
 	}
 
 	@Override
-	public void readComplete() {
+	public void flushServerbound() {
 		transformerDecoderCtx.fireChannelReadComplete();
 	}
 
@@ -93,7 +93,7 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 		this.promise = null;
 	}
 
-	protected void write0(PacketData<?> packetdata) {
+	protected void writeClientboundInternal(PacketData<?> packetdata) {
 		try {
 			packetIdCodec.writeClientBoundPacketId(packetdata);
 			CombinedResultChannelPromise combinedPromise = promise;
@@ -109,7 +109,7 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 		}
 	}
 
-	protected void read0(PacketData<?> packetdata) {
+	protected void writeServerboundInternal(PacketData<?> packetdata) {
 		try {
 			packetIdCodec.writeServerBoundPacketId(packetdata);
 			transformerDecoderCtx.fireChannelRead(packetdata);
@@ -157,7 +157,7 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 		}
 
 		/**
-		 * Actually reads/writes packet
+		 * Actually writes packet
 		 * @param packet packet
 		 */
 		protected void write(PacketData<?> packet) {
@@ -202,7 +202,7 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 		}
 
 		/**
-		 * Actually reads/writes packet
+		 * Actually writes packet
 		 * @param packet packet
 		 */
 		protected void read(PacketData<?> packet) {
@@ -250,28 +250,28 @@ public class PacketDataCodecImpl extends PacketDataCodec {
 		public void addServerboundPacketProcessor(ServerBoundPacketDataProcessor processor) {
 		}
 		@Override
-		public void write(ClientBoundPacketData packetadata) {
+		public void writeClientbound(ClientBoundPacketData packetadata) {
 		}
 		@Override
-		public void flush() {
+		public void flushClientnbound() {
 		}
 		@Override
-		public void writeAndFlush(ClientBoundPacketData packetdata) {
+		public void writeClientboundAndFlush(ClientBoundPacketData packetdata) {
 		}
 		@Override
-		protected void write0(PacketData<?> packetdata) {
+		protected void writeClientboundInternal(PacketData<?> packetdata) {
 		}
 		@Override
-		public void read(ServerBoundPacketData packetdata) {
+		public void writeServerbound(ServerBoundPacketData packetdata) {
 		}
 		@Override
-		public void readComplete() {
+		public void flushServerbound() {
 		}
 		@Override
-		public void readAndComplete(ServerBoundPacketData packetadata) {
+		public void writeServerboundAndFlush(ServerBoundPacketData packetadata) {
 		}
 		@Override
-		protected void read0(PacketData<?> packetdata) {
+		protected void writeServerboundInternal(PacketData<?> packetdata) {
 		}
 		@Override
 		public void release() {

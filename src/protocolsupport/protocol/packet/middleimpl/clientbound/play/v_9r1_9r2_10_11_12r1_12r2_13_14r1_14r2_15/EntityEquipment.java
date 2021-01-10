@@ -21,7 +21,7 @@ public class EntityEquipment extends AbstractSingleEntityEquipment {
 
 	@Override
 	protected void writeToClientSingle(Slot slot, NetworkItemStack itemstack) {
-		codec.write(create(version, clientCache.getLocale(), entityId, slot, itemstack));
+		codec.writeClientbound(create(version, clientCache.getLocale(), entityId, slot, itemstack));
 	}
 
 	public static final MiddleEntityEquipment.Slot[] SUPPORTED_SLOTS = MiddleEntityEquipment.Slot.values();

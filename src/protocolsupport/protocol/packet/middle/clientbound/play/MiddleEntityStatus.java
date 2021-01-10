@@ -16,7 +16,7 @@ public abstract class MiddleEntityStatus extends ClientBoundMiddlePacket {
 	protected int status;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		entityId = serverdata.readInt();
 		status = serverdata.readUnsignedByte();
 	}

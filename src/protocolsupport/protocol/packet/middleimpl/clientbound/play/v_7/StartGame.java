@@ -23,7 +23,7 @@ public class StartGame extends AbstractChunkCacheStartGame {
 		MiscSerializer.writeByteEnum(startgame, Difficulty.HARD);
 		startgame.writeByte(Math.min(maxplayers, 60));
 		StringSerializer.writeVarIntUTF8String(startgame, LegacyDimension.getWorldType(worldFlat));
-		codec.write(startgame);
+		codec.writeClientbound(startgame);
 	}
 
 }

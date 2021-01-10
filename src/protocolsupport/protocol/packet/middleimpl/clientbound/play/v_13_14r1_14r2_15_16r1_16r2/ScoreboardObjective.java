@@ -17,7 +17,7 @@ public class ScoreboardObjective extends MiddleScoreboardObjective {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData scoreboardobjective = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_OBJECTIVE);
 		StringSerializer.writeVarIntUTF8String(scoreboardobjective, name);
 		scoreboardobjective.writeByte(mode.ordinal());
@@ -25,7 +25,7 @@ public class ScoreboardObjective extends MiddleScoreboardObjective {
 			StringSerializer.writeVarIntUTF8String(scoreboardobjective, ChatSerializer.serialize(version, clientCache.getLocale(), value));
 			MiscSerializer.writeVarIntEnum(scoreboardobjective, type);
 		}
-		codec.write(scoreboardobjective);
+		codec.writeClientbound(scoreboardobjective);
 	}
 
 }

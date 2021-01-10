@@ -14,7 +14,7 @@ public abstract class MiddleChunkUnload extends ClientBoundMiddlePacket {
 	protected ChunkCoord chunk;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		chunk = PositionSerializer.readIntChunkCoord(serverdata);
 	}
 

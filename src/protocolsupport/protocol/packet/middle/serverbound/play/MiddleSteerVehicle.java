@@ -18,8 +18,8 @@ public abstract class MiddleSteerVehicle extends ServerBoundMiddlePacket {
 	protected int flags;
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(sideForce, forwardForce, flags));
+	protected void write() {
+		codec.writeServerbound(create(sideForce, forwardForce, flags));
 	}
 
 	public static ServerBoundPacketData create(float sideForce, float forwardForce, int flags) {

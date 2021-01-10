@@ -10,7 +10,7 @@ public abstract class AbstractSingleEntityEquipment extends MiddleEntityEquipmen
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		for (Entry entry : entries) {
 			writeToClientSingle(entry.getSlot(), entry.getItemStack());
 		}

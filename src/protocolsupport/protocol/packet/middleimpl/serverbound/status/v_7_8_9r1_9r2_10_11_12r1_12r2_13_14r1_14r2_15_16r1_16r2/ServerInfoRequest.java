@@ -10,7 +10,7 @@ public class ServerInfoRequest extends MiddleServerInfoRequest {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 	}
 
 }

@@ -42,7 +42,7 @@ public class EntityDestroy extends AbstractPassengerStackEntityDestroy {
 		for (A partEntityIds : Utils.splitList(entities, 120)) {
 			ClientBoundPacketData entitydestroy = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY);
 			ArraySerializer.writeTArray(entitydestroy, partEntityIds, ByteBuf::writeByte, (to, entity) -> to.writeInt(entity.getId()));
-			codec.write(entitydestroy);
+			codec.writeClientbound(entitydestroy);
 		}
 	}
 

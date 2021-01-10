@@ -13,7 +13,7 @@ public class SteerVehicle extends MiddleSteerVehicle {
 	protected static final int[] flags_mask = new int[] {FLAGS_BIT_JUMPING, FLAGS_BIT_UNMOUNT};
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		sideForce = clientdata.readFloat();
 		forwardForce = clientdata.readFloat();
 		flags = BitUtils.createIBitMaskFromBits(flags_mask, new int[] {clientdata.readByte(), clientdata.readByte()});

@@ -20,8 +20,8 @@ public class BlockTileUpdate extends AbstractChunkCacheBlockTileUpdate {
 	}
 
 	@Override
-	protected void writeToClient() {
-		codec.write(create(version, cache.getClientCache().getLocale(), tile));
+	protected void write() {
+		codec.writeClientbound(create(version, cache.getClientCache().getLocale(), tile));
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, String locale, TileEntity tile) {

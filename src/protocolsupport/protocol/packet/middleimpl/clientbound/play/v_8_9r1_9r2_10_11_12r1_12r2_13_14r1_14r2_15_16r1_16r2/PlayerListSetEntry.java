@@ -19,7 +19,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData playerlistsetentry = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_PLAYER_INFO);
 		VarNumberSerializer.writeVarInt(playerlistsetentry, action.ordinal());
 		VarNumberSerializer.writeVarInt(playerlistsetentry, infos.size());
@@ -67,7 +67,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 				}
 			}
 		}
-		codec.write(playerlistsetentry);
+		codec.writeClientbound(playerlistsetentry);
 	}
 
 }

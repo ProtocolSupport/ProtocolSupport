@@ -10,7 +10,7 @@ public class PositionLook extends AbstractMoveLook {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		x = clientdata.readDouble();
 		y = clientdata.readDouble();
 		z = clientdata.readDouble();

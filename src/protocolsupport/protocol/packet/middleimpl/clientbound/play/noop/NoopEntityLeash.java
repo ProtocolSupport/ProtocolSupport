@@ -9,7 +9,7 @@ public class NoopEntityLeash extends MiddleEntityLeash {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 	}
 
 }

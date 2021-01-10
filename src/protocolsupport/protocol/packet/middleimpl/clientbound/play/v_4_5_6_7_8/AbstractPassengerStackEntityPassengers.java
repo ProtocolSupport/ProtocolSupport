@@ -121,7 +121,7 @@ public abstract class AbstractPassengerStackEntityPassengers extends AbstractKno
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		writeVehiclePassengers(
 			codec, this::createEntityVehicle,
 			vehicle.getDataCache().computeDataIfAbsent(NetworkEntityVehicleData.DATA_KEY, k -> new NetworkEntityVehicleData(vehicle)),
@@ -131,7 +131,7 @@ public abstract class AbstractPassengerStackEntityPassengers extends AbstractKno
 
 
 	public static void writeVehiclePassengers(PacketDataCodec codec, SetEntityVehiclePacketSupplier packet, NetworkEntityVehicleData vehicle, List<NetworkEntity> passenegersEntities) {
-		vehicle.removePassengers(passeneger -> codec.write(packet.create(passeneger.getEntity().getId(), -1)));
+		vehicle.removePassengers(passeneger -> codec.writeClientbound(packet.create(passeneger.getEntity().getId(), -1)));
 
 		NetworkEntityVehicleData stackVehicleBase = vehicle;
 
@@ -143,14 +143,14 @@ public abstract class AbstractPassengerStackEntityPassengers extends AbstractKno
 				}
 				NetworkEntityVehicleData stackVehicle = findStackVehicle(stackVehicleBase);
 				vehicle.addPassenger(newPassenger);
-				codec.write(packet.create(newPassengerEntity.getId(), stackVehicle.getEntity().getId()));
+				codec.writeClientbound(packet.create(newPassengerEntity.getId(), stackVehicle.getEntity().getId()));
 				stackVehicleBase = newPassenger;
 			}
 		}
 
 		NetworkEntityVehicleData stackPassenger = findStackPassenger(vehicle);
 		if (stackPassenger != null) {
-			codec.write(packet.create(stackPassenger.entity.getId(), findStackVehicle(stackVehicleBase).getEntity().getId()));
+			codec.writeClientbound(packet.create(stackPassenger.entity.getId(), findStackVehicle(stackVehicleBase).getEntity().getId()));
 		}
 	}
 
@@ -160,15 +160,15 @@ public abstract class AbstractPassengerStackEntityPassengers extends AbstractKno
 		NetworkEntityVehicleData vehicleNextPassenger = entity.getVehiclePassengerNext();
 
 		vehicle.removePassenger(entity);
-		codec.write(packet.create(entity.getEntity().getId(), -1));
+		codec.writeClientbound(packet.create(entity.getEntity().getId(), -1));
 
 		NetworkEntityVehicleData stackVehicle = findStackVehicle(vehiclePrevPassenger != null ? vehiclePrevPassenger : vehicle);
 		if (vehicleNextPassenger != null) {
-			codec.write(packet.create(vehicleNextPassenger.getEntity().getId(), stackVehicle.getEntity().getId()));
+			codec.writeClientbound(packet.create(vehicleNextPassenger.getEntity().getId(), stackVehicle.getEntity().getId()));
 		} else {
 			NetworkEntityVehicleData stackPassenger = findStackPassenger(vehicle);
 			if (stackPassenger != null) {
-				codec.write(packet.create(stackPassenger.getEntity().getId(), stackVehicle.getEntity().getId()));
+				codec.writeClientbound(packet.create(stackPassenger.getEntity().getId(), stackVehicle.getEntity().getId()));
 			}
 		}
 	}

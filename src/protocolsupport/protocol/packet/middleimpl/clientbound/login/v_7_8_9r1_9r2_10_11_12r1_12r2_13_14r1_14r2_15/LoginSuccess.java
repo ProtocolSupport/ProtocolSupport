@@ -13,7 +13,7 @@ public class LoginSuccess extends MiddleLoginSuccess {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		String uuidstring = uuid.toString();
 		if (version == ProtocolVersion.MINECRAFT_1_7_5) {
 			uuidstring = uuidstring.replace("-", "");
@@ -21,7 +21,7 @@ public class LoginSuccess extends MiddleLoginSuccess {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LOGIN_SUCCESS);
 		StringSerializer.writeVarIntUTF8String(serializer, uuidstring);
 		StringSerializer.writeVarIntUTF8String(serializer, name);
-		codec.write(serializer);
+		codec.writeClientbound(serializer);
 	}
 
 }

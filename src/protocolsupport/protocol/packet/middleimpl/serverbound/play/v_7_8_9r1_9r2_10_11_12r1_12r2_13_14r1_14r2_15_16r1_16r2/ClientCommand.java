@@ -14,7 +14,7 @@ public class ClientCommand extends MiddleClientCommand {
 	private static final Command[] commandsById = new Command[] { Command.REQUEST_RESPAWN, Command.GET_STATS };
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		command = Utils.getFromArrayOrNull(commandsById, VarNumberSerializer.readVarInt(clientdata));
 	}
 

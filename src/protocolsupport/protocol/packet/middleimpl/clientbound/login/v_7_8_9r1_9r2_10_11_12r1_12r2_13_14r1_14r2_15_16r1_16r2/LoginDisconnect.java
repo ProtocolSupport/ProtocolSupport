@@ -13,10 +13,10 @@ public class LoginDisconnect extends MiddleLoginDisconnect {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData logindisconnect = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LOGIN_DISCONNECT);
 		StringSerializer.writeVarIntUTF8String(logindisconnect, ChatSerializer.serialize(version, cache.getClientCache().getLocale(), message));
-		codec.write(logindisconnect);
+		codec.writeClientbound(logindisconnect);
 	}
 
 }

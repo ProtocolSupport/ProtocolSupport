@@ -35,7 +35,7 @@ public class ChunkData extends MiddleChunkData {
 	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(full);
@@ -60,7 +60,7 @@ public class ChunkData extends MiddleChunkData {
 			tiles,
 			(to, tile) -> ItemStackSerializer.writeDirectTag(to, tileRemapper.remap(tile).getNBT())
 		);
-		codec.write(chunkdata);
+		codec.writeClientbound(chunkdata);
 	}
 
 }

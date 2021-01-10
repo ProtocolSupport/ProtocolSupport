@@ -22,11 +22,11 @@ public class EntityAnimation extends MiddleEntityAnimation {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData entityanimation = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_ANIMATION);
 		entityanimation.writeInt(entityId);
 		entityanimation.writeByte(animationIds.get(animation));
-		codec.write(entityanimation);
+		codec.writeClientbound(entityanimation);
 	}
 
 }

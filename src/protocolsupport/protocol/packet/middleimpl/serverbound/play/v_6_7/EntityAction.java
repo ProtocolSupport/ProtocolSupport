@@ -19,7 +19,7 @@ public class EntityAction extends AbstractSneakingCacheEntityAction {
 	);
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		entityId = clientdata.readInt();
 		action = actionById.get(clientdata.readByte());
 		jumpBoost = clientdata.readInt();

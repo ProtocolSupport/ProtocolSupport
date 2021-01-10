@@ -18,7 +18,7 @@ public class EditBook extends MiddleEditBook {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		book = ItemStackSerializer.readItemStack(clientdata, version);
 		signing = clientdata.readBoolean();
 		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_16_4)) {

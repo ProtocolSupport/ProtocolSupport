@@ -24,7 +24,7 @@ public class StartGame extends AbstractChunkCacheStartGame {
 		MiscSerializer.writeByteEnum(startgame, Difficulty.HARD);
 		startgame.writeByte(0);
 		startgame.writeByte(maxplayers);
-		codec.write(startgame);
+		codec.writeClientbound(startgame);
 	}
 
 }

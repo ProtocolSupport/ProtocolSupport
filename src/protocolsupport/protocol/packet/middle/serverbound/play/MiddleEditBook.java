@@ -18,8 +18,8 @@ public abstract class MiddleEditBook extends ServerBoundMiddlePacket {
 	protected int slot;
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(book, signing, slot));
+	protected void write() {
+		codec.writeServerbound(create(book, signing, slot));
 	}
 
 	public static ServerBoundPacketData create(NetworkItemStack book, boolean signing, int slot) {

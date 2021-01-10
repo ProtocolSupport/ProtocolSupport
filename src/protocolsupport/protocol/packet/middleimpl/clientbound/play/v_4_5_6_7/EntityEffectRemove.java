@@ -11,11 +11,11 @@ public class EntityEffectRemove extends MiddleEntityEffectRemove {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData entityeffectremove = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_EFFECT_REMOVE);
 		entityeffectremove.writeInt(entityId);
 		entityeffectremove.writeByte(effectId);
-		codec.write(entityeffectremove);
+		codec.writeClientbound(entityeffectremove);
 	}
 
 }

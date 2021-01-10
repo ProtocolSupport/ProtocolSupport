@@ -13,10 +13,10 @@ public class KickDisconnect extends MiddleKickDisconnect {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData kickdisconnect = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_KICK_DISCONNECT);
 		StringSerializer.writeVarIntUTF8String(kickdisconnect, ChatSerializer.serialize(version, cache.getClientCache().getLocale(), message));
-		codec.write(kickdisconnect);
+		codec.writeClientbound(kickdisconnect);
 	}
 
 }

@@ -14,8 +14,8 @@ public abstract class MiddleEntityMetadata extends MiddleEntity {
 	protected final ArrayMap<NetworkEntityMetadataObject<?>> metadata = new ArrayMap<>(31);
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
-		super.readServerData(serverdata);
+	protected void decode(ByteBuf serverdata) {
+		super.decode(serverdata);
 		NetworkEntityMetadataSerializer.readDataTo(serverdata, metadata);
 	}
 

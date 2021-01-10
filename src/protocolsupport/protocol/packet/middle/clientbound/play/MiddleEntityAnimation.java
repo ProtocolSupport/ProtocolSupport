@@ -17,7 +17,7 @@ public abstract class MiddleEntityAnimation extends ClientBoundMiddlePacket {
 	protected Animation animation;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		entityId = VarNumberSerializer.readVarInt(serverdata);
 		animation = Animation.BY_ID.get(serverdata.readUnsignedByte());
 

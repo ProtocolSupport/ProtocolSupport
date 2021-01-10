@@ -26,7 +26,7 @@ public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 	protected int direction;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		int entityId = VarNumberSerializer.readVarInt(serverdata);
 		UUID uuid = UUIDSerializer.readUUID2L(serverdata);
 		entity = new NetworkEntity(uuid, entityId, NetworkEntityType.PAINTING);
@@ -36,7 +36,7 @@ public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		entityCache.addEntity(entity);
 	}
 

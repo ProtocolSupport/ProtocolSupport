@@ -10,7 +10,7 @@ public class Ping extends MiddlePing {
 	}
 
 	@Override
-	protected void readClientData(ByteBuf clientdata) {
+	protected void read(ByteBuf clientdata) {
 		pingId = clientdata.readLong();
 	}
 

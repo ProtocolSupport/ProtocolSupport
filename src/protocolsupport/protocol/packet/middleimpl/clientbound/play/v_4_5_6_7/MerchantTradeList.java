@@ -14,8 +14,8 @@ public class MerchantTradeList extends MiddleMerchantTradeList {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	@Override
-	protected void writeToClient() {
-		codec.write(CustomPayload.create(
+	protected void write() {
+		codec.writeClientbound(CustomPayload.create(
 			version,
 			LegacyCustomPayloadChannelName.LEGACY_TRADE_LIST,
 			merchantData,

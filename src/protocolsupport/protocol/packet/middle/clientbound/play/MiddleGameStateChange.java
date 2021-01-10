@@ -18,13 +18,13 @@ public abstract class MiddleGameStateChange extends ClientBoundMiddlePacket {
 	protected float value;
 
 	@Override
-	protected void readServerData(ByteBuf serverdata) {
+	protected void decode(ByteBuf serverdata) {
 		action = MiscSerializer.readByteEnum(serverdata, Action.CONSTANT_LOOKUP);
 		value = serverdata.readFloat();
 	}
 
 	@Override
-	protected void handleReadData() {
+	protected void handle() {
 		clientCache.setRespawnScreenEnabled(value == 0);
 	}
 

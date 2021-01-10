@@ -18,7 +18,7 @@ public class WorldParticle extends MiddleWorldParticle {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		particle = remapper.getRemap(particle.getClass()).apply(particle);
 		if (particle != null) {
 			ClientBoundPacketData worldparticle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
@@ -35,7 +35,7 @@ public class WorldParticle extends MiddleWorldParticle {
 			worldparticle.writeFloat(particle.getOffsetZ());
 			worldparticle.writeFloat(particle.getData());
 			worldparticle.writeInt(count);
-			codec.write(worldparticle);
+			codec.writeClientbound(worldparticle);
 		}
 	}
 

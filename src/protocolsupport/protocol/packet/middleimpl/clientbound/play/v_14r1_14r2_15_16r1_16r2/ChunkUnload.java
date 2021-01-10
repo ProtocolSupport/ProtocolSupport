@@ -12,10 +12,10 @@ public class ChunkUnload extends MiddleChunkUnload {
 	}
 
 	@Override
-	protected void writeToClient() {
+	protected void write() {
 		ClientBoundPacketData chunkunload = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_UNLOAD);
 		PositionSerializer.writeIntChunkCoord(chunkunload, chunk);
-		codec.write(chunkunload);
+		codec.writeClientbound(chunkunload);
 	}
 
 }

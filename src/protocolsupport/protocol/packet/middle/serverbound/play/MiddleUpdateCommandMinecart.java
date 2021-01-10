@@ -17,8 +17,8 @@ public abstract class MiddleUpdateCommandMinecart extends ServerBoundMiddlePacke
 	protected boolean trackOutput;
 
 	@Override
-	protected void writeToServer() {
-		codec.read(create(entityId, command, trackOutput));
+	protected void write() {
+		codec.writeServerbound(create(entityId, command, trackOutput));
 	}
 
 	public static ServerBoundPacketData create(int entityId, String command, boolean trackOutput) {
