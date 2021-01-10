@@ -1,7 +1,7 @@
 ProtocolSupport
 ===============
 
-[![Build Status](https://build.true-games.org/buildStatus/icon?job=ProtocolSupport)](https://build.true-games.org/job/ProtocolSupport/)
+[![Build Status](https://build.hurricanegames.org/buildStatus/icon?job=ProtocolSupport)](https://build.true-games.org/job/ProtocolSupport/)
 [![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/x935y8p)
 <span class="badge-paypal"><a href="https://www.paypal.com/cgi-bin/webscr?business=shev4chik.den%40gmail.com&lc=US&item_name=ProtocolSupport&cmd=_donations&rm=1&no_shipping=1&currency_code=USD" title="Donate to this project using Paypal"><img src="https://img.shields.io/badge/paypal-donate-yellow.svg" alt="PayPal donate button" /></a></span>
 
@@ -28,7 +28,7 @@ Spigot: https://www.spigotmc.org/resources/protocolsupport.7201/
 
 BukkitDev: https://dev.bukkit.org/projects/protocolsupport/
 
-Main Jenkins: https://build.true-games.org/job/ProtocolSupport/<br>
+Main Jenkins: https://build.hurricanegames.org/job/ProtocolSupport/<br>
 Backup Jenkins: https://ci.velocitypowered.com/job/ProtocolSupport/
 
 ---
