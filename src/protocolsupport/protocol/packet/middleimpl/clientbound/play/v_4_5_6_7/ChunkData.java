@@ -17,7 +17,7 @@ import protocolsupport.protocol.typeremapper.utils.MappingTable.EnumMappingTable
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
-import protocolsupport.utils.netty.Compressor;
+import protocolsupport.utils.netty.RecyclableWrapCompressor;
 
 public class ChunkData extends AbstractChunkCacheChunkData {
 
@@ -47,7 +47,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 		} else {
 			chunkdata.writeShort(blockMask);
 			chunkdata.writeShort(0);
-			byte[] compressed = Compressor.compressStatic(ChunkWriterByte.serializeSectionsAndBiomes(
+			byte[] compressed = RecyclableWrapCompressor.compressStatic(ChunkWriterByte.serializeSectionsAndBiomes(
 				blockMask,
 				cachedChunk, blockDataRemappingTable, hasSkyLight,
 				full ? biomes : null, clientCache, biomeRemappingTable

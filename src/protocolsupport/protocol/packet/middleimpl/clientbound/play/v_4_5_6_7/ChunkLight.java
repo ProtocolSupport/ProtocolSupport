@@ -13,7 +13,7 @@ import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMap
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.utils.BitUtils;
-import protocolsupport.utils.netty.Compressor;
+import protocolsupport.utils.netty.RecyclableWrapCompressor;
 
 public class ChunkLight extends AbstractChunkCacheChunkLight {
 
@@ -35,7 +35,7 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 		chunkdata.writeBoolean(false); //full
 		chunkdata.writeShort(blockMask);
 		chunkdata.writeShort(0);
-		byte[] compressed = Compressor.compressStatic(ChunkWriterByte.serializeSectionsAndBiomes(
+		byte[] compressed = RecyclableWrapCompressor.compressStatic(ChunkWriterByte.serializeSectionsAndBiomes(
 			blockMask,
 			cachedChunk, blockDataRemappingTable, hasSkyLight,
 			null, null, null

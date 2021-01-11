@@ -3,12 +3,12 @@ package protocolsupport.zplatform.impl.spigot.network.pipeline;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.netty.Compressor;
+import protocolsupport.utils.netty.RecyclableWrapCompressor;
 import protocolsupport.utils.netty.ReusableReadHeapBuffer;
 
 public class SpigotPacketCompressor extends net.minecraft.server.v1_16_R3.PacketCompressor {
 
-	protected final Compressor compressor = Compressor.create();
+	protected final RecyclableWrapCompressor compressor = RecyclableWrapCompressor.create();
 	protected final int threshold;
 
 	public SpigotPacketCompressor(int threshold) {

@@ -4,13 +4,9 @@ import java.util.Arrays;
 import java.util.zip.Deflater;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.util.Recycler;
-import io.netty.util.Recycler.Handle;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.utils.JavaSystemProperty;
-import protocolsupportbuildprocessor.Preload;
 
-@Preload
 public class Compressor {
 
 	protected static final int compressionLevel = JavaSystemProperty.getValue("compressionlevel", 3, Integer::parseInt);
@@ -19,21 +15,22 @@ public class Compressor {
 		ProtocolSupport.logInfo("Compression level: " + compressionLevel);
 	}
 
-	protected static final Recycler<Compressor> recycler = new Recycler<Compressor>() {
-		@Override
-		protected Compressor newObject(Handle<Compressor> handle) {
-			return new Compressor(handle);
-		}
-	};
+	protected final Deflater deflater;
 
-	public static Compressor create() {
-		return recycler.get();
+	public Compressor(Deflater deflater) {
+		this.deflater = deflater;
 	}
 
-	protected final Deflater deflater = new Deflater(compressionLevel);
-	protected final Handle<Compressor> handle;
-	protected Compressor(Handle<Compressor> handle) {
-		this.handle = handle;
+	public Compressor(int level, boolean nowrap) {
+		this(new Deflater(level, nowrap));
+	}
+
+	public Compressor(boolean nowrap) {
+		this(compressionLevel, nowrap);
+	}
+
+	public Compressor() {
+		this(compressionLevel, false);
 	}
 
 	protected final ReusableWriteHeapBuffer writeBuffer = new ReusableWriteHeapBuffer();
@@ -56,20 +53,6 @@ public class Compressor {
 		deflater.finish();
 		writeBuffer.writeTo(to, getMaxCompressedSize(length), deflater::deflate);
 		deflater.reset();
-	}
-
-	public void recycle() {
-		deflater.reset();
-		handle.recycle(this);
-	}
-
-	public static byte[] compressStatic(byte[] input) {
-		Compressor compressor = create();
-		try {
-			return compressor.compress(input, 0, input.length);
-		} finally {
-			compressor.recycle();
-		}
 	}
 
 }

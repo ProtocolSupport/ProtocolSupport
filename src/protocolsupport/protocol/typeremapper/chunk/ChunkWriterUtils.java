@@ -2,7 +2,7 @@ package protocolsupport.protocol.typeremapper.chunk;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.utils.netty.Compressor;
+import protocolsupport.utils.netty.RecyclableWrapCompressor;
 
 public class ChunkWriterUtils {
 
@@ -32,8 +32,8 @@ public class ChunkWriterUtils {
 		return hasSkyLight ? emptySectionShortSky : emptySectonShortNoSky;
 	}
 
-	protected static final byte[] emptySectionByteSky = Compressor.compressStatic(new byte[4096 + 2048 + 2048 + 2048 + 256]);
-	protected static final byte[] emptySectonByteNoSky = Compressor.compressStatic(new byte[4096 + 2048 + 2048 + 256]);
+	protected static final byte[] emptySectionByteSky = RecyclableWrapCompressor.compressStatic(new byte[4096 + 2048 + 2048 + 2048 + 256]);
+	protected static final byte[] emptySectonByteNoSky = RecyclableWrapCompressor.compressStatic(new byte[4096 + 2048 + 2048 + 256]);
 	public static byte[] getEmptySectionByte(boolean hasSkyLight) {
 		return hasSkyLight ? emptySectionByteSky : emptySectonByteNoSky;
 	}
