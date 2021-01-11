@@ -6,7 +6,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath group: 'com.github.HurricaneGamesOrg', name: 'ManualGradleDependencySupplier', version: '4f4893da88'
+		classpath group: 'com.github.HurricaneGamesOrg', name: 'ManualGradleDependencySupplier', version: '1e9e953fb4'
 	}
 }
 
