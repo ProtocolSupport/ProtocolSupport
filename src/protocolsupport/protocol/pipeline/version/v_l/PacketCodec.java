@@ -1,9 +1,9 @@
 package protocolsupport.protocol.pipeline.version.v_l;
 
 import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.protocol.pipeline.version.util.codec.LegacyPacketCodec;
+import protocolsupport.protocol.pipeline.version.util.codec.BytePacketCodec;
 
-public class PacketCodec extends LegacyPacketCodec {
+public class PacketCodec extends BytePacketCodec {
 
 	protected static final PacketCodec instance = new PacketCodec();
 

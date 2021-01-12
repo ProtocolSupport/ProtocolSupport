@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.PacketData;
 import protocolsupport.protocol.pipeline.IPacketIdCodec;
 
-public abstract class LegacyPacketCodec extends IPacketIdCodec {
+public abstract class BytePacketCodec extends IPacketIdCodec {
 
 	@Override
 	public int readPacketId(ByteBuf from) {

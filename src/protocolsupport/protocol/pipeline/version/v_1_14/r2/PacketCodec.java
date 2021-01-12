@@ -1,9 +1,9 @@
 package protocolsupport.protocol.pipeline.version.v_1_14.r2;
 
 import protocolsupport.protocol.packet.PacketType;
-import protocolsupport.protocol.pipeline.version.util.codec.ModernPacketCodec;
+import protocolsupport.protocol.pipeline.version.util.codec.VarIntPacketCodec;
 
-public class PacketCodec extends ModernPacketCodec {
+public class PacketCodec extends VarIntPacketCodec {
 
 	protected static final PacketCodec instance = new PacketCodec();
 
