@@ -7,7 +7,6 @@ import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache;
-import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.Utils;
 
@@ -23,8 +22,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 	protected void write() {
 		ClientBoundPacketData spawnnamed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
 		spawnnamed.writeInt(entity.getId());
-		PlayerListEntry entry = playerlistCache.getEntry(entity.getUUID());
-		StringSerializer.writeShortUTF16BEString(spawnnamed, entry != null ? Utils.clampString(entry.getUserName(), 16) : "UNKNOWN");
+		StringSerializer.writeShortUTF16BEString(spawnnamed, Utils.clampString(playerlistEntry.getUserName(), 16));
 		spawnnamed.writeInt((int) (x * 32));
 		spawnnamed.writeInt((int) (y * 32));
 		spawnnamed.writeInt((int) (z * 32));

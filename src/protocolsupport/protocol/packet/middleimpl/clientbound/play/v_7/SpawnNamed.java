@@ -12,14 +12,10 @@ import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.PlayerListCache;
-import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.Utils;
 
 public class SpawnNamed extends MiddleSpawnNamed {
-
-	protected final PlayerListCache playerlistCache = cache.getPlayerListCache();
 
 	public SpawnNamed(MiddlePacketInit init) {
 		super(init);
@@ -31,30 +27,22 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		VarNumberSerializer.writeVarInt(spawnnamed, entity.getId());
 		UUID uuid = entity.getUUID();
 		StringSerializer.writeVarIntUTF8String(spawnnamed, version == ProtocolVersion.MINECRAFT_1_7_10 ? uuid.toString() : uuid.toString().replace("-", ""));
-		PlayerListEntry entry = playerlistCache.getEntry(uuid);
-		if (entry != null) {
-			StringSerializer.writeVarIntUTF8String(spawnnamed, Utils.clampString(entry.getUserName(), 16));
-			if (version == ProtocolVersion.MINECRAFT_1_7_10) {
-				MiscSerializer.writeVarIntCountPrefixedType(spawnnamed, entry.getProperties(), (to, properties) -> {
-					int signedCount = properties.size();
-					for (int i = 0; i < properties.size(); i++) {
-						ProfileProperty property = properties.get(i);
-						if (property.hasSignature()) {
-							StringSerializer.writeVarIntUTF8String(to, property.getName());
-							StringSerializer.writeVarIntUTF8String(to, property.getValue());
-							StringSerializer.writeVarIntUTF8String(to, property.getSignature());
-						} else {
-							signedCount--;
-						}
+		StringSerializer.writeVarIntUTF8String(spawnnamed, Utils.clampString(playerlistEntry.getUserName(), 16));
+		if (version == ProtocolVersion.MINECRAFT_1_7_10) {
+			MiscSerializer.writeVarIntCountPrefixedType(spawnnamed, playerlistEntry.getProperties(), (to, properties) -> {
+				int signedCount = properties.size();
+				for (int i = 0; i < properties.size(); i++) {
+					ProfileProperty property = properties.get(i);
+					if (property.hasSignature()) {
+						StringSerializer.writeVarIntUTF8String(to, property.getName());
+						StringSerializer.writeVarIntUTF8String(to, property.getValue());
+						StringSerializer.writeVarIntUTF8String(to, property.getSignature());
+					} else {
+						signedCount--;
 					}
-					return signedCount;
-				});
-			}
-		} else {
-			StringSerializer.writeVarIntUTF8String(spawnnamed, "UNKNOWN");
-			if (version == ProtocolVersion.MINECRAFT_1_7_10) {
-				VarNumberSerializer.writeVarInt(spawnnamed, 0);
-			}
+				}
+				return signedCount;
+			});
 		}
 		spawnnamed.writeInt((int) (x * 32));
 		spawnnamed.writeInt((int) (y * 32));

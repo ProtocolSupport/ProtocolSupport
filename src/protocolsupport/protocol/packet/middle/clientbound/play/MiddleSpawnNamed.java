@@ -1,24 +1,32 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import java.text.MessageFormat;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.ProtocolSupport;
+import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.UUIDSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
+import protocolsupport.protocol.storage.netcache.PlayerListCache;
+import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
+import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 
+	protected final PlayerListCache playerlistCache = cache.getPlayerListCache();
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
-	public MiddleSpawnNamed(MiddlePacketInit init) {
+	protected MiddleSpawnNamed(MiddlePacketInit init) {
 		super(init);
 	}
 
 	protected NetworkEntity entity;
+	protected PlayerListEntry playerlistEntry;
 	protected double x;
 	protected double y;
 	protected double z;
@@ -35,6 +43,17 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 		z = serverdata.readDouble();
 		yaw = serverdata.readByte();
 		pitch = serverdata.readByte();
+
+		playerlistEntry = playerlistCache.getEntry(uuid);
+		if (playerlistEntry == null) {
+			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
+				ProtocolSupport.logWarning(MessageFormat.format(
+					"Attempted to spawn unknown (not added to playerlist) named entity uid {0} at {1},{2},{3}",
+					uuid, x, y, z
+				));
+			}
+			throw CancelMiddlePacketException.INSTANCE;
+		}
 	}
 
 	@Override
