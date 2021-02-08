@@ -12,6 +12,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.unix.Errors.NativeIoException;
 import io.netty.handler.timeout.ReadTimeoutException;
 import protocolsupport.ProtocolSupport;
+import protocolsupport.ProtocolSupportFileLog;
 import protocolsupport.api.events.ConnectionCloseEvent;
 import protocolsupport.api.events.ConnectionOpenEvent;
 import protocolsupport.protocol.ConnectionImpl;
@@ -56,7 +57,11 @@ public class LogicHandler extends MessageToMessageCodec<Object, Object> {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) throws Exception {
-		if (ServerPlatform.get().getMiscUtils().isDebugging() && !ignoreExceptions.contains(e.getClass())) {
+		boolean ignored = ignoreExceptions.contains(e.getClass());
+		if (!ignored && ProtocolSupportFileLog.isEnabled()) {
+			ProtocolSupportFileLog.logException("Network exception occured(connection: " + connection + ")", e);
+		}
+		if (ServerPlatform.get().getMiscUtils().isDebugging() && !ignored) {
 			super.exceptionCaught(ctx, new NetworkException(e, connection));
 		} else {
 			super.exceptionCaught(ctx, e);
