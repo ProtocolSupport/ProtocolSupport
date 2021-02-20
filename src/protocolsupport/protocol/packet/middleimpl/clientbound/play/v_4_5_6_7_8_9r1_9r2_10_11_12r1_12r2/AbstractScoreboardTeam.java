@@ -55,10 +55,10 @@ public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 		String prefixLastFormatString = ChatColor.getLastColors(prefix);
 		String formatString = format.toString();
 		if (
-			(format != ChatColor.RESET) && (prefixLastFormatString.isEmpty() ||
-			!formatString.equals(prefixLastFormatString))
+			(prefixLastFormatString.isEmpty() && (format != ChatColor.RESET)) ||
+			!formatString.equals(prefixLastFormatString)
 		) {
-			if (format.isColor()) {
+			if (format.isColor() || format == ChatColor.RESET) {
 				return LegacyChat.clampLegacyText(prefix, NFIX_LIMIT_1F) + formatString;
 			} else {
 				return LegacyChat.clampLegacyText(prefix, NFIX_LIMIT_2F) + ChatColor.RESET + formatString;
