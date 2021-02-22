@@ -58,10 +58,10 @@ public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 			(prefixLastFormatString.isEmpty() && (format != ChatColor.RESET)) ||
 			!formatString.equals(prefixLastFormatString)
 		) {
-			if (format.isColor() || format == ChatColor.RESET) {
-				return LegacyChat.clampLegacyText(prefix, NFIX_LIMIT_1F) + formatString;
-			} else {
+			if (format.isFormat()) {
 				return LegacyChat.clampLegacyText(prefix, NFIX_LIMIT_2F) + ChatColor.RESET + formatString;
+			} else {
+				return LegacyChat.clampLegacyText(prefix, NFIX_LIMIT_1F) + formatString;
 			}
 		}
 		return LegacyChat.clampLegacyText(prefix, NFIX_LIMIT);
