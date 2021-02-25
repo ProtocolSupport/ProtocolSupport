@@ -25,7 +25,9 @@ public abstract class MiddleGameStateChange extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void handle() {
-		clientCache.setRespawnScreenEnabled(value == 0);
+		if (action == Action.SET_RESPAWN_SCREEN_ENABLED) {
+			clientCache.setRespawnScreenEnabled(value == 0);
+		}
 	}
 
 	protected static enum Action {
