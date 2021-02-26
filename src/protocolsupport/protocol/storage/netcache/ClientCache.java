@@ -36,6 +36,7 @@ public class ClientCache implements IBiomeRegistry {
 	protected String world;
 	protected NBTCompound dimension;
 	protected boolean dimensionSkyLight;
+	protected boolean raining;
 
 	public String getWorld() {
 		return world;
@@ -50,6 +51,7 @@ public class ClientCache implements IBiomeRegistry {
 			this.world = world;
 			this.dimension = dimension;
 			this.dimensionSkyLight = dimension.getNumberTagOrThrow("has_skylight").getAsInt() == 1;
+			this.raining = false;
 		}
 	}
 
@@ -59,6 +61,18 @@ public class ClientCache implements IBiomeRegistry {
 
 	public boolean hasDimensionSkyLight() {
 		return dimensionSkyLight;
+	}
+
+	public boolean isRanining() {
+		return raining;
+	}
+
+	public boolean updateRain(boolean raining) {
+		if (raining != this.raining) {
+			this.raining = raining;
+			return true;
+		}
+		return false;
 	}
 
 	protected final Biome[] biomeById = new Biome[256];
