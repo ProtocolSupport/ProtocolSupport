@@ -23,7 +23,7 @@ defaultTasks 'build'
 
 
 group 'protocolsupport'
-version '1.16.5-1-dev'
+version '1.16.5-1'
 
 
 import java.nio.file.Path
@@ -173,6 +173,12 @@ task generateInfo(type: DefaultTask) {doLast{
 	properties.setProperty("buildgit", System.getProperty("protocolsupport.buildgit", "unknown"))
 	Files.newBufferedWriter(generatedResourcesResourcesDirectoryPath.resolve("buildinfo")).withCloseable({ properties.store(it, "Build info") })
 }}
+
+processResources {
+    filesMatching('plugin.yml') {
+        expand 'version': project.version
+    }
+}
 
 shadowJar {
 	from sourceSets.main.java.srcDirs
