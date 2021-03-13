@@ -87,7 +87,7 @@ public class VarNumberSerializer {
 	public static int readVarInt(ByteBuf from) {
 		int value = 0;
 		int length = 0;
-		byte part;
+		int part;
 		do {
 			part = from.readByte();
 			value |= (part & 0x7F) << (length++ * 7);
@@ -109,7 +109,7 @@ public class VarNumberSerializer {
 	public static long readVarLong(ByteBuf from) {
 		long varlong = 0L;
 		int length = 0;
-		byte part;
+		long part;
 		do {
 			part = from.readByte();
 			varlong |= (part & 0x7F) << (length++ * 7);
