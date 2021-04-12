@@ -1,11 +1,11 @@
 package protocolsupport.protocol.storage.netcache;
 
-import java.util.Arrays;
 import java.util.UUID;
 
-import org.bukkit.Registry;
-import org.bukkit.block.Biome;
+import org.bukkit.NamespacedKey;
 
+import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.NamespacedKeyUtils;
 import protocolsupport.protocol.utils.i18n.I18NData;
@@ -75,20 +75,16 @@ public class ClientCache implements IBiomeRegistry {
 		return false;
 	}
 
-	protected final Biome[] biomeById = new Biome[256];
-	protected final int[] biomeToId = new int[Biome.values().length];
+	protected final NamespacedKey[] biomeById = new NamespacedKey[256];
+	protected final Object2IntMap<NamespacedKey> biomeId = new Object2IntLinkedOpenHashMap<>();
 
-	{
-		Arrays.fill(biomeToId, -1);
-	}
-
-	protected void registerBiome(Biome biome, int id) {
+	protected void registerBiome(NamespacedKey biome, int id) {
 		biomeById[id] = biome;
-		biomeToId[biome.ordinal()] = id;
+		biomeId.put(biome, id);
 	}
 
 	@Override
-	public Biome getBiome(int id) {
+	public NamespacedKey getBiomeKey(int id) {
 		if ((id >= 0) && (id < biomeById.length)) {
 			return biomeById[id];
 		} else {
@@ -97,19 +93,27 @@ public class ClientCache implements IBiomeRegistry {
 	}
 
 	@Override
-	public int getBiomeId(Biome biome) {
-		return biomeToId[biome.ordinal()];
+	public int getBiomeId(NamespacedKey biome) {
+		return biomeId.getOrDefault(biome, -1);
+	}
+
+	@Override
+	public NamespacedKey getAnyBiomeKey() {
+		return biomeId.keySet().iterator().next();
+	}
+
+	@Override
+	public int getAnyBiomeId() {
+		return biomeId.values().iterator().nextInt();
 	}
 
 	public void setDimensionCodec(NBTCompound dimensionCodec) {
 		NBTCompound biomeRegistry = dimensionCodec.getCompoundTagOrNull("minecraft:worldgen/biome");
-		if (biomeRegistry != null) {
-			for (NBTCompound biomeData : biomeRegistry.getCompoundListTagOrThrow("value").getTags()) {
-				registerBiome(
-					Registry.BIOME.get(NamespacedKeyUtils.fromString(biomeData.getStringTagValueOrThrow("name"))),
-					biomeData.getNumberTagOrThrow("id").getAsInt()
-				);
-			}
+		if ((biomeRegistry == null) || biomeRegistry.isEmpty()) {
+			throw new IllegalStateException("Dimension biome registry is empty");
+		}
+		for (NBTCompound biomeData : biomeRegistry.getCompoundListTagOrThrow("value").getTags()) {
+			registerBiome(NamespacedKeyUtils.fromString(biomeData.getStringTagValueOrThrow("name")), biomeData.getNumberTagOrThrow("id").getAsInt());
 		}
 	}
 

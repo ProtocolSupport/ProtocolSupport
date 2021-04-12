@@ -1,6 +1,6 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
-import org.bukkit.block.Biome;
+import org.bukkit.NamespacedKey;
 
 import protocolsupport.protocol.storage.netcache.IBiomeRegistry;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
@@ -9,7 +9,7 @@ import protocolsupport.protocol.typeremapper.basic.BiomeRemapper;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
-import protocolsupport.protocol.typeremapper.utils.MappingTable.EnumMappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.utils.BitUtils;
@@ -19,7 +19,7 @@ public class ChunkWriterByte {
 	public static byte[] serializeSectionsAndBiomes(
 		int mask,
 		CachedChunk chunk, IdMappingTable blockDataRemappingTable, boolean hasSkyLight,
-		int[] biomeData, IBiomeRegistry biomeRegistry, EnumMappingTable<Biome> biomeRemappingTable
+		int[] biomeData, IBiomeRegistry biomeRegistry, GenericMappingTable<NamespacedKey> biomeRemappingTable
 	) {
 		int columnsCount = Integer.bitCount(mask);
 		byte[] data = new byte[((hasSkyLight ? 10240 : 8192) * columnsCount) + (biomeData != null ? 256 : 0)];
@@ -63,7 +63,7 @@ public class ChunkWriterByte {
 			int biomeDataOffset = data.length - 256;
 			int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(biomeData);
 			for (int i = 0; i < legacyBiomeData.length; i++) {
-				data[biomeDataOffset + i] = (byte) BiomeRemapper.mapBiome(legacyBiomeData[i], biomeRegistry, biomeRemappingTable);
+				data[biomeDataOffset + i] = (byte) BiomeRemapper.mapLegacyBiome(biomeRegistry, biomeRemappingTable, legacyBiomeData[i]);
 			}
 		}
 

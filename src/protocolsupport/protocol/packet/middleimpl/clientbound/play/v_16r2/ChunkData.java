@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2;
 
-import org.bukkit.block.Biome;
+import org.bukkit.NamespacedKey;
 
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunkData;
@@ -17,7 +17,7 @@ import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.Flattenin
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVaries;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
-import protocolsupport.protocol.typeremapper.utils.MappingTable.EnumMappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
 
 public class ChunkData extends MiddleChunkData {
@@ -28,7 +28,7 @@ public class ChunkData extends MiddleChunkData {
 
 	protected final ClientCache clientCache = cache.getClientCache();
 
-	protected final EnumMappingTable<Biome> biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
+	protected final GenericMappingTable<NamespacedKey> biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
 	protected final IdMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
@@ -43,7 +43,7 @@ public class ChunkData extends MiddleChunkData {
 		if (full) {
 			VarNumberSerializer.writeVarInt(chunkdata, biomes.length);
 			for (int biome : biomes) {
-				VarNumberSerializer.writeVarInt(chunkdata, BiomeRemapper.mapBiome(biome, clientCache, biomeRemappingTable));
+				VarNumberSerializer.writeVarInt(chunkdata, BiomeRemapper.mapCustomBiome(clientCache, biomeRemappingTable, biome));
 			}
 		}
 		MiscSerializer.writeVarIntLengthPrefixedType(chunkdata, this, (to, chunksections) -> {

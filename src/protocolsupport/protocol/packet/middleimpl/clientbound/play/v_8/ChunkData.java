@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
 import java.util.Map;
 
-import org.bukkit.block.Biome;
+import org.bukkit.NamespacedKey;
 
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -17,7 +17,7 @@ import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterShort;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterUtils;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
-import protocolsupport.protocol.typeremapper.utils.MappingTable.EnumMappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
@@ -30,7 +30,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 
 	protected final ClientCache clientCache = cache.getClientCache();
 
-	protected final EnumMappingTable<Biome> biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
+	protected final GenericMappingTable<NamespacedKey> biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
 	protected final IdMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 
 	@Override
@@ -53,7 +53,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 				if (chunksections.full) {
 					int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(chunksections.biomes);
 					for (int biomeId : legacyBiomeData) {
-						to.writeByte(BiomeRemapper.mapBiome(biomeId, chunksections.clientCache, chunksections.biomeRemappingTable));
+						to.writeByte(BiomeRemapper.mapLegacyBiome(chunksections.clientCache, chunksections.biomeRemappingTable, biomeId));
 					}
 				}
 			});

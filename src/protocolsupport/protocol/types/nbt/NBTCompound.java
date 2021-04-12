@@ -15,6 +15,10 @@ public class NBTCompound extends NBT {
 
 	protected final Map<String, NBT> tags = new LinkedHashMap<>();
 
+	public boolean isEmpty() {
+		return tags.isEmpty();
+	}
+
 	public Set<String> getTagNames() {
 		return Collections.unmodifiableSet(tags.keySet());
 	}

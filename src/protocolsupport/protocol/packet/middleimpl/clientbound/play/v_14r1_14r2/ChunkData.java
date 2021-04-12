@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2;
 
-import org.bukkit.block.Biome;
+import org.bukkit.NamespacedKey;
 
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunkData;
@@ -19,7 +19,7 @@ import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVaries;
 import protocolsupport.protocol.typeremapper.chunk.HeightMapTransformer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
-import protocolsupport.protocol.typeremapper.utils.MappingTable.EnumMappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
 
 public class ChunkData extends MiddleChunkData {
@@ -30,7 +30,7 @@ public class ChunkData extends MiddleChunkData {
 
 	protected final ClientCache clientCache = cache.getClientCache();
 
-	protected final EnumMappingTable<Biome> biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
+	protected final GenericMappingTable<NamespacedKey> biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
 	protected final IdMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
 	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
@@ -52,7 +52,7 @@ public class ChunkData extends MiddleChunkData {
 			if (chunksections.full) {
 				int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(chunksections.biomes);
 				for (int biomeId : legacyBiomeData) {
-					to.writeInt(BiomeRemapper.mapBiome(biomeId, chunksections.clientCache, chunksections.biomeRemappingTable));
+					to.writeInt(BiomeRemapper.mapLegacyBiome(chunksections.clientCache, chunksections.biomeRemappingTable, biomeId));
 				}
 			}
 		});

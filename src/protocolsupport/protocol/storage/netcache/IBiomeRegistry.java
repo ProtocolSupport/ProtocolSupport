@@ -1,11 +1,15 @@
 package protocolsupport.protocol.storage.netcache;
 
-import org.bukkit.block.Biome;
+import org.bukkit.NamespacedKey;
 
 public interface IBiomeRegistry {
 
-	public Biome getBiome(int id);
+	public NamespacedKey getBiomeKey(int id);
 
-	public int getBiomeId(Biome biome);
+	public int getBiomeId(NamespacedKey biome);
+
+	public NamespacedKey getAnyBiomeKey();
+
+	public int getAnyBiomeId();
 
 }
