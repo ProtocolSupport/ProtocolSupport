@@ -45,8 +45,7 @@ public class NetworkEntityMetadataFormatTransformerFactory {
 		protected final List<NetworkEntityMetadataFormatTransformer> post = new ArrayList<>();
 
 		public List<NetworkEntityMetadataFormatTransformer> getCombined() {
-			List<NetworkEntityMetadataFormatTransformer> combined = new ArrayList<>();
-			combined.addAll(normal);
+			List<NetworkEntityMetadataFormatTransformer> combined = new ArrayList<>(normal);
 			combined.addAll(post);
 			return combined;
 		}

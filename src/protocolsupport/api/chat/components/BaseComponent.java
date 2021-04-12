@@ -67,9 +67,7 @@ public abstract class BaseComponent {
 	 * @param siblings chat component siblings
 	 */
 	public void addSiblings(BaseComponent... siblings) {
-		for (BaseComponent sibling : siblings) {
-			this.siblings.add(sibling);
-		}
+		Collections.addAll(this.siblings, siblings);
 	}
 
 	/**

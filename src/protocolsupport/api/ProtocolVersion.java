@@ -2,6 +2,7 @@ package protocolsupport.api;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.stream.Collectors;
 
@@ -78,7 +79,7 @@ public enum ProtocolVersion {
 				byOrderId.put(type,
 					Arrays.stream(ProtocolVersion.values())
 					.filter(version -> version.getProtocolType() == type)
-					.sorted((o1, o2) -> o1.orderId.compareTo(o2.orderId))
+					.sorted(Comparator.comparing(o1 -> o1.orderId))
 					.toArray(size -> new ProtocolVersion[size])
 				);
 			}

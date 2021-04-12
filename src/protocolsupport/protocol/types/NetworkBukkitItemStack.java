@@ -14,7 +14,7 @@ public class NetworkBukkitItemStack extends ItemStack {
 			(itemstack instanceof NetworkBukkitItemStack) ?
 			((NetworkBukkitItemStack) itemstack).getNetworkItemStack() :
 			ServerPlatform.get().getMiscUtils().createNetworkItemStackFromBukkit(itemstack);
-	};
+	}
 
 	protected NetworkItemStack networkItemStack;
 

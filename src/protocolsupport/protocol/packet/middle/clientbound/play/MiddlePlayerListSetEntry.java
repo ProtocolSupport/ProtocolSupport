@@ -50,7 +50,7 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 							signature = StringSerializer.readVarIntUTF8String(serverdata);
 						}
 						properties.add(new ProfileProperty(name, value, signature));
-					};
+					}
 					GameMode gamemode = GameMode.getById(VarNumberSerializer.readVarInt(serverdata));
 					int ping = VarNumberSerializer.readVarInt(serverdata);
 					String displayNameJson = null;
@@ -103,7 +103,7 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 					break;
 				}
 			}
-		};
+		}
 	}
 
 	@Override
