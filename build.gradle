@@ -93,7 +93,7 @@ dependencies {
 		[
 			new BuildDependencySupplier(
 				'spigot-1.16.5-1.jar',
-				new URL('https://hub.spigotmc.org/jenkins/job/BuildTools/120/artifact/target/BuildTools.jar'),
+				new URL('https://hub.spigotmc.org/jenkins/job/BuildTools/126/artifact/target/BuildTools.jar'),
 				spigotBuildDirectoryPath,
 				'BuildTools.jar',
 				['java', '-jar', 'BuildTools.jar', '--rev', '1.16.5'],
