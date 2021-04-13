@@ -19,6 +19,9 @@ plugins {
 apply plugin: 'org.hurricanegames.ManualGradleDependencySupplier'
 
 
+gradle.startParameter.showStacktrace = org.gradle.api.logging.configuration.ShowStacktrace.ALWAYS
+
+
 defaultTasks 'build'
 
 
