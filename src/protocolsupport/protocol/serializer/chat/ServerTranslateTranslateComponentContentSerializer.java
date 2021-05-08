@@ -51,6 +51,7 @@ public class ServerTranslateTranslateComponentContentSerializer implements Compo
 		if (matchEndIndex < translation.length()) {
 			translatedComponent.addSibling(new TextComponent(translation.substring(matchEndIndex)));
 		}
+		translatedComponent.addSiblings(component.getSiblings());
 		ComponentSerializer.serializeAndAdd(serializer, json, translatedComponent, locale);
 	}
 
