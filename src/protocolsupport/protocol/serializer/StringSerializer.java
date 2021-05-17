@@ -2,13 +2,20 @@ package protocolsupport.protocol.serializer;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.text.MessageFormat;
+import java.util.AbstractMap;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.api.ProtocolType;
+import io.netty.buffer.ByteBufUtil;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+import protocolsupport.protocol.utils.SimpleTypeSerializer;
 
 public class StringSerializer {
+
+	public static final SimpleTypeSerializer<String> SERIALIZER = new SimpleTypeSerializer<String>(
+		new AbstractMap.SimpleEntry<>(StringSerializer::writeVarIntUTF8String, ProtocolVersionsHelper.UP_1_7),
+		new AbstractMap.SimpleEntry<>(StringSerializer::writeShortUTF16BEString, ProtocolVersionsHelper.DOWN_1_6_4)
+	);
 
 	public static String readVarIntUTF8String(ByteBuf from) {
 		return readString(from, VarNumberSerializer.readVarInt(from), StandardCharsets.UTF_8);
@@ -33,32 +40,17 @@ public class StringSerializer {
 	}
 
 	public static void writeVarIntUTF8String(ByteBuf to, String string) {
-		byte[] data = string.getBytes(StandardCharsets.UTF_8);
-		VarNumberSerializer.writeVarInt(to, data.length);
-		to.writeBytes(data);
+		VarNumberSerializer.writeVarInt(to, ByteBufUtil.utf8Bytes(string));
+		to.writeCharSequence(string, StandardCharsets.UTF_8);
 	}
 
 	public static void writeShortUTF16BEString(ByteBuf to, String string) {
 		to.writeShort(string.length());
-		to.writeBytes(string.getBytes(StandardCharsets.UTF_16BE));
+		to.writeCharSequence(string, StandardCharsets.UTF_16BE);
 	}
 
 	public static void writeString(ByteBuf to, ProtocolVersion version, String string) {
-		if (isUsingUTF16(version)) {
-			writeShortUTF16BEString(to, string);
-		} else if (isUsingUTF8(version)) {
-			writeVarIntUTF8String(to, string);
-		} else {
-			throw new IllegalArgumentException(MessageFormat.format("Dont know how to write string of version {0}", version));
-		}
-	}
-
-	private static boolean isUsingUTF16(ProtocolVersion version) {
-		return (version.getProtocolType() == ProtocolType.PC) && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4);
-	}
-
-	private static boolean isUsingUTF8(ProtocolVersion version) {
-		return (version.getProtocolType() == ProtocolType.PC) && version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_7_5);
+		SERIALIZER.get(version).accept(to, string);
 	}
 
 }
