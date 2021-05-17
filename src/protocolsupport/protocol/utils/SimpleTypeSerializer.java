@@ -12,6 +12,19 @@ public class SimpleTypeSerializer<T> {
 
 	protected final Map<ProtocolVersion, BiConsumer<ByteBuf, T>> entries = new EnumMap<>(ProtocolVersion.class);
 
+	public SimpleTypeSerializer() {
+	}
+
+	@SafeVarargs
+	public SimpleTypeSerializer(Map.Entry<BiConsumer<ByteBuf, T>, ProtocolVersion[]>... entries) {
+		for (Map.Entry<BiConsumer<ByteBuf, T>, ProtocolVersion[]> entry : entries) {
+			BiConsumer<ByteBuf, T> serializer = entry.getKey();
+			for (ProtocolVersion version : entry.getValue()) {
+				this.entries.put(version, serializer);
+			}
+		}
+	}
+
 	public BiConsumer<ByteBuf, T> get(ProtocolVersion version) {
 		BiConsumer<ByteBuf, T> serializer = entries.get(version);
 		if (serializer == null) {
