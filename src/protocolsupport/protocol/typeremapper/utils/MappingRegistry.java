@@ -23,9 +23,11 @@ public abstract class MappingRegistry<T extends MappingTable> {
 	}
 
 	public T getTable(ProtocolVersion version) {
-		return registry.computeIfAbsent(version, k -> {
-			throw new IllegalArgumentException(MessageFormat.format("Missing mapping table for version {0}", k));
-		});
+		T table = registry.get(version);
+		if (table == null) {
+			throw new IllegalArgumentException(MessageFormat.format("Missing mapping table for version {0}", version));
+		}
+		return table;
 	}
 
 	protected abstract T createTable();

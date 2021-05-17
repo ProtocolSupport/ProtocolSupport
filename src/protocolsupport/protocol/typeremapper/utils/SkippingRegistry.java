@@ -10,9 +10,9 @@ import protocolsupport.protocol.typeremapper.utils.SkippingTable.IntSkippingTabl
 
 public abstract class SkippingRegistry<T extends SkippingTable> {
 
-	private final EnumMap<ProtocolVersion, T> registry = new EnumMap<>(ProtocolVersion.class);
+	protected final EnumMap<ProtocolVersion, T> registry = new EnumMap<>(ProtocolVersion.class);
 
-	public SkippingRegistry() {
+	protected SkippingRegistry() {
 		clear();
 	}
 
@@ -23,9 +23,11 @@ public abstract class SkippingRegistry<T extends SkippingTable> {
 	}
 
 	public T getTable(ProtocolVersion version) {
-		return registry.computeIfAbsent(version, k -> {
-			throw new IllegalArgumentException(MessageFormat.format("Missing remapping table for version {0}", k));
-		});
+		T table = registry.get(version);
+		if (table == null) {
+			throw new IllegalArgumentException(MessageFormat.format("Missing skipping table for version {0}", version));
+		}
+		return table;
 	}
 
 	protected abstract T createTable();
