@@ -33,10 +33,4 @@ public class SimpleTypeSerializer<T> {
 		return entries.get(version);
 	}
 
-	protected void register(BiConsumer<ByteBuf, T> serializer, ProtocolVersion... versions) {
-		for (ProtocolVersion version : versions) {
-			entries.put(version, serializer);
-		}
-	}
-
 }

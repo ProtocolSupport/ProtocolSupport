@@ -3,6 +3,7 @@ package protocolsupport.protocol.serializer;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -71,10 +72,9 @@ public class ItemStackSerializer {
 		}, ProtocolVersionsHelper.DOWN_1_7_10);
 	}};
 
-	public static final SimpleTypeSerializer<NetworkItemStack> ITEMSTACK_SERIALIZER = new SimpleTypeSerializer<NetworkItemStack>() {{
-		register(ItemStackSerializer::writeItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2));
-
-		register((to, itemstack) -> {
+	public static final SimpleTypeSerializer<NetworkItemStack> ITEMSTACK_SERIALIZER = new SimpleTypeSerializer<NetworkItemStack>(
+		new AbstractMap.SimpleEntry<>(ItemStackSerializer::writeItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2)),
+		new AbstractMap.SimpleEntry<>((to, itemstack) -> {
 			if (itemstack.isNull()) {
 				to.writeShort(-1);
 			} else {
@@ -82,9 +82,8 @@ public class ItemStackSerializer {
 				to.writeByte(itemstack.getAmount());
 				writeDirectTag(to, itemstack.getNBT());
 			}
-		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_13, ProtocolVersion.MINECRAFT_1_13_1));
-
-		register((to, itemstack) -> {
+		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_13, ProtocolVersion.MINECRAFT_1_13_1)),
+		new AbstractMap.SimpleEntry<>((to, itemstack) -> {
 			if (itemstack.isNull()) {
 				to.writeShort(-1);
 			} else {
@@ -93,9 +92,8 @@ public class ItemStackSerializer {
 				to.writeShort(itemstack.getLegacyData());
 				writeDirectTag(to, itemstack.getNBT());
 			}
-		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_12_2, ProtocolVersion.MINECRAFT_1_8));
-
-		register((to, itemstack) -> {
+		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_12_2, ProtocolVersion.MINECRAFT_1_8)),
+		new AbstractMap.SimpleEntry<>((to, itemstack) -> {
 			if (itemstack.isNull()) {
 				to.writeShort(-1);
 			} else {
@@ -104,8 +102,8 @@ public class ItemStackSerializer {
 				to.writeShort(itemstack.getLegacyData());
 				writeShortTag(to, itemstack.getNBT());
 			}
-		}, ProtocolVersionsHelper.DOWN_1_7_10);
-	}};
+		}, ProtocolVersionsHelper.DOWN_1_7_10)
+	);
 
 	/**
 	 * Reads itemstack using latest protocol version format
@@ -188,10 +186,10 @@ public class ItemStackSerializer {
 		register(ItemStackSerializer::readShortTag, ProtocolVersionsHelper.DOWN_1_7_10);
 	}};
 
-	public static final SimpleTypeSerializer<NBTCompound> TAG_SERIALIZER = new SimpleTypeSerializer<NBTCompound>() {{
-		register(ItemStackSerializer::writeDirectTag, ProtocolVersionsHelper.UP_1_8);
-		register(ItemStackSerializer::writeShortTag, ProtocolVersionsHelper.DOWN_1_7_10);
-	}};
+	public static final SimpleTypeSerializer<NBTCompound> TAG_SERIALIZER = new SimpleTypeSerializer<NBTCompound>(
+		new AbstractMap.SimpleEntry<>(ItemStackSerializer::writeDirectTag, ProtocolVersionsHelper.UP_1_8),
+		new AbstractMap.SimpleEntry<>(ItemStackSerializer::writeShortTag, ProtocolVersionsHelper.DOWN_1_7_10)
+	);
 
 	public static NBTCompound readTag(ByteBuf from, ProtocolVersion version) {
 		return TAG_DESERIALIZER.get(version).apply(from);
