@@ -27,10 +27,9 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class ItemStackSerializer {
 
-	public static final SimpleTypeDeserializer<NetworkItemStack> ITEMSTACK_DESERIALIZER = new SimpleTypeDeserializer<NetworkItemStack>() {{
-		register(ItemStackSerializer::readItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2));
-
-		register(from -> {
+	public static final SimpleTypeDeserializer<NetworkItemStack> ITEMSTACK_DESERIALIZER = new SimpleTypeDeserializer<NetworkItemStack>(
+		new AbstractMap.SimpleEntry<>(ItemStackSerializer::readItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2)),
+		new AbstractMap.SimpleEntry<>(from -> {
 			int typeId = from.readShort();
 			if (typeId < 0) {
 				return NetworkItemStack.NULL;
@@ -41,9 +40,8 @@ public class ItemStackSerializer {
 				itemstack.setNBT(readDirectTag(from));
 				return itemstack;
 			}
-		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_13, ProtocolVersion.MINECRAFT_1_13_1));
-
-		register(from -> {
+		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_13, ProtocolVersion.MINECRAFT_1_13_1)),
+		new AbstractMap.SimpleEntry<>(from -> {
 			int typeId = from.readShort();
 			if (typeId < 0) {
 				return NetworkItemStack.NULL;
@@ -55,9 +53,8 @@ public class ItemStackSerializer {
 				itemstack.setNBT(readDirectTag(from));
 				return itemstack;
 			}
-		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_12_2, ProtocolVersion.MINECRAFT_1_8));
-
-		register(from -> {
+		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_12_2, ProtocolVersion.MINECRAFT_1_8)),
+		new AbstractMap.SimpleEntry<>(from -> {
 			int typeId = from.readShort();
 			if (typeId < 0) {
 				return NetworkItemStack.NULL;
@@ -69,8 +66,8 @@ public class ItemStackSerializer {
 				itemstack.setNBT(readShortTag(from));
 				return itemstack;
 			}
-		}, ProtocolVersionsHelper.DOWN_1_7_10);
-	}};
+		}, ProtocolVersionsHelper.DOWN_1_7_10)
+	);
 
 	public static final SimpleTypeSerializer<NetworkItemStack> ITEMSTACK_SERIALIZER = new SimpleTypeSerializer<NetworkItemStack>(
 		new AbstractMap.SimpleEntry<>(ItemStackSerializer::writeItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2)),
@@ -181,10 +178,10 @@ public class ItemStackSerializer {
 
 
 
-	public static final SimpleTypeDeserializer<NBTCompound> TAG_DESERIALIZER = new SimpleTypeDeserializer<NBTCompound>() {{
-		register(ItemStackSerializer::readDirectTag, ProtocolVersionsHelper.UP_1_8);
-		register(ItemStackSerializer::readShortTag, ProtocolVersionsHelper.DOWN_1_7_10);
-	}};
+	public static final SimpleTypeDeserializer<NBTCompound> TAG_DESERIALIZER = new SimpleTypeDeserializer<NBTCompound>(
+		new AbstractMap.SimpleEntry<>(ItemStackSerializer::readDirectTag, ProtocolVersionsHelper.UP_1_8),
+		new AbstractMap.SimpleEntry<>(ItemStackSerializer::readShortTag, ProtocolVersionsHelper.DOWN_1_7_10)
+	);
 
 	public static final SimpleTypeSerializer<NBTCompound> TAG_SERIALIZER = new SimpleTypeSerializer<NBTCompound>(
 		new AbstractMap.SimpleEntry<>(ItemStackSerializer::writeDirectTag, ProtocolVersionsHelper.UP_1_8),
