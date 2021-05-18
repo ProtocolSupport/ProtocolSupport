@@ -14,9 +14,6 @@ public class TabComplete extends MiddleTabComplete {
 	protected void read(ByteBuf clientdata) {
 		id = 0;
 		string = StringSerializer.readShortUTF16BEString(clientdata, 256);
-		if (string.equals("/")) {
-			string = "";
-		}
 	}
 
 }
