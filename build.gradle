@@ -227,6 +227,10 @@ shadowJar.dependsOn(generateLocaleList)
 shadowJar.finalizedBy(copyFinalJarToTarget)
 
 
+tasks.withType(GenerateModuleMetadata) {
+	enabled = false
+}
+
 publishing {
 	publications {
 		release(MavenPublication) {
