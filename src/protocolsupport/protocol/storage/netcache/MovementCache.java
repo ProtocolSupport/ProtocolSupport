@@ -4,8 +4,6 @@ import protocolsupport.utils.Utils;
 
 public class MovementCache {
 
-	protected static final double acceptableError = 0.1;
-
 	protected double x;
 	protected double y;
 	protected double z;
@@ -15,11 +13,7 @@ public class MovementCache {
 		if (teleportConfirmId == -1) {
 			return -1;
 		}
-		if (
-			(Math.abs(this.x - x) < acceptableError) &&
-			(Math.abs(this.y - y) < acceptableError) &&
-			(Math.abs(this.z - z) < acceptableError)
-		) {
+		if ((this.x == x) && (this.y == y) && (this.z == z)) {
 			int r = teleportConfirmId;
 			teleportConfirmId = -1;
 			return r;
