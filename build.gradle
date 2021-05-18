@@ -178,10 +178,13 @@ task generateInfo(type: DefaultTask) {doLast{
 }}
 
 processResources {
-    filesMatching('plugin.yml') {
-        expand 'version': project.version
-    }
+	from generatedResourcesDirectoryPath
+
+	filesMatching('plugin.yml') {
+		expand 'version': project.version
+	}
 }
+
 
 shadowJar {
 	duplicatesStrategy = DuplicatesStrategy.INCLUDE
@@ -190,7 +193,6 @@ shadowJar {
 
 	from sourceSets.main.java.srcDirs
 	from 'LICENSE'
-	from generatedResourcesDirectoryPath
 
 	exclude 'META-INF/**'
 	exclude 'module-info.class'
@@ -220,10 +222,10 @@ compileJava.dependsOn(clean)
 compileJava.dependsOn(setupFolders)
 test.dependsOn(cleanTest)
 compileJava.finalizedBy(test)
+processResources.dependsOn(generateInfo)
+processResources.dependsOn(generateLocaleList)
 jar.enabled = false
 jar.finalizedBy(shadowJar)
-shadowJar.dependsOn(generateInfo)
-shadowJar.dependsOn(generateLocaleList)
 shadowJar.finalizedBy(copyFinalJarToTarget)
 
 
