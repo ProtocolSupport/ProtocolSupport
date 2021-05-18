@@ -6,6 +6,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCollectEffe
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class AbstractSoundCollectEffect extends MiddleCollectEffect {
 
@@ -19,28 +20,19 @@ public abstract class AbstractSoundCollectEffect extends MiddleCollectEffect {
 	protected void write() {
 		NetworkEntity entity = entityCache.getEntity(entityId);
 		if (entity != null) {
-			switch (entity.getType()) {
-				case ITEM: {
-					NetworkEntityDataCache ecache = entity.getDataCache();
-					writeCollectSound(
-						"entity.item.pickup",
-						ecache.getX(), ecache.getY(), ecache.getZ(),
-						0.2F, (((ThreadLocalRandom.current().nextFloat() - ThreadLocalRandom.current().nextFloat()) * 0.7F) + 1.0F) * 2.0F
-					);
-					break;
-				}
-				case EXP_ORB: {
-					NetworkEntityDataCache ecache = entity.getDataCache();
-					writeCollectSound(
-						"entity.experience_orb.pickup",
-						ecache.getX(), ecache.getY(), ecache.getZ(),
-						0.2F, (((ThreadLocalRandom.current().nextFloat() - ThreadLocalRandom.current().nextFloat()) * 0.7F) + 1.0F) * 2.0F
-					);
-					break;
-				}
-				default: {
-					break;
-				}
+			NetworkEntityDataCache ecache = entity.getDataCache();
+			if (entity.getType() == NetworkEntityType.EXP_ORB) {
+				writeCollectSound(
+					"entity.experience_orb.pickup",
+					ecache.getX(), ecache.getY(), ecache.getZ(),
+					0.1F, ((ThreadLocalRandom.current().nextFloat() - ThreadLocalRandom.current().nextFloat()) * 0.35F) + 0.9F
+				);
+			} else {
+				writeCollectSound(
+					"entity.item.pickup",
+					ecache.getX(), ecache.getY(), ecache.getZ(),
+					0.2F, ((ThreadLocalRandom.current().nextFloat() - ThreadLocalRandom.current().nextFloat()) * 1.4F) + 2.0F
+				);
 			}
 		}
 
