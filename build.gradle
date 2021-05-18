@@ -186,11 +186,11 @@ processResources {
 shadowJar {
 	duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
+	archiveClassifier = ""
+
 	from sourceSets.main.java.srcDirs
 	from 'LICENSE'
 	from generatedResourcesDirectoryPath
-
-	archiveName = jar.archiveName
 
 	exclude 'META-INF/**'
 	exclude 'module-info.class'
@@ -228,13 +228,11 @@ shadowJar.finalizedBy(copyFinalJarToTarget)
 
 
 publishing {
-    publications {
-        release(MavenPublication) {
-            groupId = project.group
-            artifactId = project.name
-            version = project.version
+	publications {
+		release(MavenPublication) {
+			from components.java
 
-            from components.java
-        }
-    }
+			artifacts = [shadowJar]
+		}
+	}
 }
