@@ -39,7 +39,7 @@ public class TileEntityRemapper {
 
 	protected static final EnumMap<ProtocolVersion, TileEntityRemapper> tileEntityRemappers = new EnumMap<>(ProtocolVersion.class);
 	static {
-		for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
+		for (ProtocolVersion version : ProtocolVersionsHelper.ALL) {
 			tileEntityRemappers.put(version, new TileEntityRemapper());
 		}
 	}

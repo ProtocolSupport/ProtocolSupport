@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class PlayerListSubCommand implements SubCommand {
 
@@ -22,7 +23,7 @@ public class PlayerListSubCommand implements SubCommand {
 	public boolean handle(CommandSender sender, String[] args) {
 		boolean verbose = (args.length == 1) && (args[0].equalsIgnoreCase("v") || args[0].equalsIgnoreCase("verbose"));
 		sender.sendMessage(ChatColor.YELLOW + "ProtocolSupport Players:");
-		for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
+		for (ProtocolVersion version : ProtocolVersionsHelper.ALL) {
 			List<String> players = Bukkit.getOnlinePlayers().stream()
 			.filter(player -> ProtocolSupportAPI.getProtocolVersion(player) == version)
 			.map(Player::getName)

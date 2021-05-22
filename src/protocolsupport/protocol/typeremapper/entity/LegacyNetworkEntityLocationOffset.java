@@ -17,7 +17,7 @@ public class LegacyNetworkEntityLocationOffset {
 
 	protected static final Map<ProtocolVersion, LegacyNetworkEntityLocationOffset> registry = new EnumMap<>(ProtocolVersion.class);
 	static {
-		for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
+		for (ProtocolVersion version : ProtocolVersionsHelper.ALL) {
 			registry.put(version, new LegacyNetworkEntityLocationOffset());
 		}
 	}

@@ -7,6 +7,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.EnumMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MappingRegistry<T extends MappingTable> {
 
@@ -17,7 +18,7 @@ public abstract class MappingRegistry<T extends MappingTable> {
 	}
 
 	public void clear() {
-		for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
+		for (ProtocolVersion version : ProtocolVersionsHelper.ALL) {
 			registry.put(version, createTable());
 		}
 	}

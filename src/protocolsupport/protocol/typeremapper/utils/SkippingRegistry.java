@@ -7,6 +7,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.IntSkippingTable;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class SkippingRegistry<T extends SkippingTable> {
 
@@ -17,7 +18,7 @@ public abstract class SkippingRegistry<T extends SkippingTable> {
 	}
 
 	public void clear() {
-		for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
+		for (ProtocolVersion version : ProtocolVersionsHelper.ALL) {
 			registry.put(version, createTable());
 		}
 	}

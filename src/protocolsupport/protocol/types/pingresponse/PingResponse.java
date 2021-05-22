@@ -29,7 +29,7 @@ public class PingResponse {
 	private static final Gson deserializer;
 
 	static {
-		for (ProtocolVersion version : ProtocolVersion.getAllSupported()) {
+		for (ProtocolVersion version : ProtocolVersionsHelper.ALL) {
 			serializers.put(
 				version,
 				new GsonBuilder()
