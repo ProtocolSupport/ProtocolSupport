@@ -5,12 +5,12 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldPartic
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyParticle;
-import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
-import protocolsupport.protocol.typeremapper.particle.ParticleRemapper.ParticleRemappingTable;
+import protocolsupport.protocol.typeremapper.particle.LegacyParticleData;
+import protocolsupport.protocol.typeremapper.particle.LegacyParticleData.LegacyParticleDataTable;
 
 public class WorldParticle extends MiddleWorldParticle {
 
-	protected final ParticleRemappingTable remapper = ParticleRemapper.REGISTRY.getTable(version);
+	protected final LegacyParticleDataTable legacyParticleTable = LegacyParticleData.REGISTRY.getTable(version);
 
 	public WorldParticle(MiddlePacketInit init) {
 		super(init);
@@ -18,7 +18,7 @@ public class WorldParticle extends MiddleWorldParticle {
 
 	@Override
 	protected void write() {
-		particle = remapper.getRemap(particle.getClass()).apply(particle);
+		particle = legacyParticleTable.get(particle.getClass()).apply(particle);
 		if (particle != null) {
 			ClientBoundPacketData spawnparticle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
 			spawnparticle.writeInt(LegacyParticle.IntId.getId(particle));
@@ -31,7 +31,7 @@ public class WorldParticle extends MiddleWorldParticle {
 			spawnparticle.writeFloat(particle.getOffsetZ());
 			spawnparticle.writeFloat(particle.getData());
 			spawnparticle.writeInt(particle.getCount());
-			for (int data : LegacyParticle.IntId.getData(particle)) {
+			for (int data : LegacyParticle.IntId.getData(version, particle)) {
 				VarNumberSerializer.writeVarInt(spawnparticle, data);
 			}
 			codec.writeClientbound(spawnparticle);

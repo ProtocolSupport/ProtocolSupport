@@ -69,32 +69,32 @@ import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
-public class ParticleRemapper {
+public class LegacyParticleData {
 
 	//TODO: single -> multiple particles
-	public static final MappingRegistry<ParticleRemappingTable> REGISTRY = new MappingRegistry<ParticleRemappingTable>() {
+	public static final MappingRegistry<LegacyParticleDataTable> REGISTRY = new MappingRegistry<LegacyParticleDataTable>() {
 		{
-			Arrays.stream(ProtocolVersion.getAllSupported())
+			Arrays.stream(ProtocolVersionsHelper.ALL)
 			.forEach(version -> {
 				ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
-				registerRemap(ParticleBlock.class, original -> new ParticleBlock(
+				register(ParticleBlock.class, original -> new ParticleBlock(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
 					original.getData(), original.getCount(),
 					blockDataRemappingTable.get(original.getBlockData())
 				), version);
-				registerRemap(ParticleFallingDust.class, original -> new ParticleFallingDust(
+				register(ParticleFallingDust.class, original -> new ParticleFallingDust(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
 					original.getData(), original.getCount(),
 					blockDataRemappingTable.get(original.getBlockData())
-				));
-				registerRemap(ParticleItem.class, original -> new ParticleItem(
+				), version);
+				register(ParticleItem.class, original -> new ParticleItem(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
 					original.getData(), original.getCount(),
-					ItemStackRemappingHelper.toLegacyItemDataFormat(version, I18NData.DEFAULT_LOCALE, original.getItemStack())
-				));
+					ItemStackRemappingHelper.toLegacyItemData(version, I18NData.DEFAULT_LOCALE, original.getItemStack())
+				), version);
 			});
 
-			registerRemap(
+			register(
 				ParticleSoulFlame.class,
 				original -> new ParticleFlame(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
@@ -102,7 +102,7 @@ public class ParticleRemapper {
 				),
 				ProtocolVersionsHelper.DOWN_1_15_2
 			);
-			registerRemap(
+			register(
 				ParticleReversePortal.class,
 				original -> new ParticlePortal(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
@@ -111,7 +111,7 @@ public class ParticleRemapper {
 				ProtocolVersionsHelper.DOWN_1_15_2
 			);
 
-			registerRemap(
+			register(
 				ParticleFallingLava.class,
 				original -> new ParticleDrippingLava(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
@@ -119,7 +119,7 @@ public class ParticleRemapper {
 				),
 				ProtocolVersionsHelper.DOWN_1_13_2
 			);
-			registerRemap(
+			register(
 				ParticleLandingLava.class,
 				original -> new ParticleDrippingLava(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
@@ -127,7 +127,7 @@ public class ParticleRemapper {
 				),
 				ProtocolVersionsHelper.DOWN_1_13_2
 			);
-			registerRemap(
+			register(
 				ParticleFallingWater.class,
 				original -> new ParticleDrippingWater(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
@@ -135,7 +135,7 @@ public class ParticleRemapper {
 				),
 				ProtocolVersionsHelper.DOWN_1_13_2
 			);
-			registerRemap(
+			register(
 				ParticleComposter.class,
 				original -> new ParticleHappyVillager(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
@@ -143,15 +143,15 @@ public class ParticleRemapper {
 				),
 				ProtocolVersionsHelper.DOWN_1_13_2
 			);
-			registerRemap(
+			register(
 				ParticleSneeze.class,
 				original -> new ParticleCloud(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
 					original.getData(), original.getCount()
 				),
 				ProtocolVersionsHelper.DOWN_1_13_2
-			); //TODO: remap to colored dust instead
-			registerRemap(
+			); //TODO: map to colored dust instead
+			register(
 				ParticleDragonBreath.class,
 				original -> new ParticlePoof(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
@@ -159,7 +159,7 @@ public class ParticleRemapper {
 				),
 				ProtocolVersionsHelper.DOWN_1_12_2
 			);
-			registerRemap(
+			register(
 				ParticleDust.class,
 				original -> new ParticleDust(
 					original.getRed(), original.getGreen(), original.getBlue(), 1F, 0,
@@ -167,14 +167,14 @@ public class ParticleRemapper {
 				),
 				ProtocolVersionsHelper.DOWN_1_12_2
 			);
-			registerRemap(
+			register(
 				ParticleSquidInk.class,
 				original -> new ParticleDust(
 					0, 0, 0, 1F, 0,
 					0, 0, 0, 0
 				), ProtocolVersionsHelper.DOWN_1_12_2
 			);
-			registerRemap(
+			register(
 				ParticleBubblePop.class,
 				original -> new ParticleBubble(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
@@ -182,7 +182,7 @@ public class ParticleRemapper {
 				),
 				ProtocolVersionsHelper.DOWN_1_12_2
 			);
-			registerRemap(
+			register(
 				ParticleCurrentDown.class,
 				original -> new ParticleBubble(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
@@ -190,7 +190,7 @@ public class ParticleRemapper {
 				),
 				ProtocolVersionsHelper.DOWN_1_12_2
 			);
-			registerRemap(
+			register(
 				ParticleBubbleColumnUp.class,
 				original -> new ParticleBubble(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
@@ -198,7 +198,7 @@ public class ParticleRemapper {
 				),
 				ProtocolVersionsHelper.DOWN_1_12_2
 			);
-			registerRemap(
+			register(
 				ParticleSpit.class,
 				original -> new ParticleCloud(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
@@ -206,7 +206,7 @@ public class ParticleRemapper {
 				),
 				ProtocolVersionsHelper.DOWN_1_10
 			);
-			registerRemap(
+			register(
 				ParticleRain.class,
 				original -> new ParticleSplash(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
@@ -214,7 +214,7 @@ public class ParticleRemapper {
 				),
 				ProtocolVersionsHelper.DOWN_1_7_10
 			);
-			registerRemap(
+			register(
 				ParticleFishing.class,
 				original -> new ParticleSplash(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
@@ -223,7 +223,7 @@ public class ParticleRemapper {
 				ProtocolVersionsHelper.DOWN_1_6_4
 			);
 
-			//TODO: think of possible remaps
+			//TODO: think of possible mappings
 			registerSkip(ParticleSoul.class, ProtocolVersionsHelper.DOWN_1_15_2);
 			registerSkip(ParticleAsh.class, ProtocolVersionsHelper.DOWN_1_15_2);
 			registerSkip(ParticleWhiteAsh.class, ProtocolVersionsHelper.DOWN_1_15_2);
@@ -243,7 +243,7 @@ public class ParticleRemapper {
 			registerSkip(ParticleNautilus.class, ProtocolVersionsHelper.DOWN_1_12_2);
 			registerSkip(ParticleDolphin.class, ProtocolVersionsHelper.DOWN_1_12_2);
 			registerSkip(ParticleTotemOfUndying.class, ProtocolVersionsHelper.DOWN_1_10);
-			registerSkip(ParticleFallingDust.class, ProtocolVersionsHelper.DOWN_1_9_4); //TODO: remap to colored dust, after building blockdata -> color table
+			registerSkip(ParticleFallingDust.class, ProtocolVersionsHelper.DOWN_1_9_4); //TODO: map to colored dust, after building blockdata -> color table
 			registerSkip(ParticleEndRod.class, ProtocolVersionsHelper.DOWN_1_8);
 			registerSkip(ParticleDamageIndicator.class, ProtocolVersionsHelper.DOWN_1_8);
 			registerSkip(ParticleSweepAttack.class, ProtocolVersionsHelper.DOWN_1_8);
@@ -252,37 +252,37 @@ public class ParticleRemapper {
 		}
 
 		@SuppressWarnings("unchecked")
-		protected <T extends Particle> void registerRemap(Class<T> from, Function<T, Particle> remapFunction, ProtocolVersion... versions) {
+		protected <T extends Particle> void register(Class<T> from, Function<T, Particle> remapFunction, ProtocolVersion... versions) {
 			Arrays.stream(versions)
-			.forEach(version -> getTable(version).setRemap(from, (Function<Particle, Particle>) remapFunction));
+			.forEach(version -> getTable(version).set(from, (Function<Particle, Particle>) remapFunction));
 		}
 
 		protected void registerSkip(Class<? extends Particle> from, ProtocolVersion... versions) {
-			registerRemap(from, original -> null, versions);
+			register(from, original -> null, versions);
 		}
 
 		@Override
-		protected ParticleRemappingTable createTable() {
-			return new ParticleRemappingTable();
+		protected LegacyParticleDataTable createTable() {
+			return new LegacyParticleDataTable();
 		}
+
 	};
 
-	public static class ParticleRemappingTable extends MappingTable {
+	public static class LegacyParticleDataTable extends MappingTable {
 
 		protected final Map<Class<? extends Particle>, Function<Particle, Particle>> table = new HashMap<>();
 
-		public void setRemap(Class<? extends Particle> particle, Function<Particle, Particle> remap) {
+		public void set(Class<? extends Particle> particle, Function<Particle, Particle> remap) {
 			table.put(particle, remap);
 		}
 
 		/**
-		 * Returns a remapping function for provided particle type <br>
-		 * Returned remapping function is never null <br>
-		 * The remapping function itself however can return new particle or null (which means that particle should be skipped)
+		 * Returns a mapping function for provided particle type <br>
+		 * The mapping function itself can return new particle or null (which means that particle should be skipped)
 		 * @param particle particle type
-		 * @return remapping function
+		 * @return mapping function
 		 */
-		public Function<Particle, Particle> getRemap(Class<? extends Particle> particle) {
+		public Function<Particle, Particle> get(Class<? extends Particle> particle) {
 			Function<Particle, Particle> function = table.get(particle);
 			return function != null ? function : UnaryOperator.identity();
 		}

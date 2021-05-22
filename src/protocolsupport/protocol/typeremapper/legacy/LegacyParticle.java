@@ -3,11 +3,15 @@ package protocolsupport.protocol.typeremapper.legacy;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
+import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemappingHelper;
+import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.particle.Particle;
 import protocolsupport.protocol.types.particle.types.ParticleAmbientEntityEffect;
 import protocolsupport.protocol.types.particle.types.ParticleAngryVillager;
@@ -53,6 +57,7 @@ import protocolsupport.protocol.types.particle.types.ParticleSweepAttack;
 import protocolsupport.protocol.types.particle.types.ParticleTotemOfUndying;
 import protocolsupport.protocol.types.particle.types.ParticleUnderwater;
 import protocolsupport.protocol.types.particle.types.ParticleWitch;
+import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.CachedInstanceOfChain;
 import protocolsupportbuildprocessor.Preload;
 
@@ -62,6 +67,7 @@ public class LegacyParticle {
 	public static class IntId {
 
 		protected static final Object2IntMap<Class<? extends Particle>> classToId = new Object2IntOpenHashMap<>();
+
 		static {
 			classToId.defaultReturnValue(-1);
 			classToId.put(ParticlePoof.class, 0);
@@ -110,16 +116,23 @@ public class LegacyParticle {
 			classToId.put(ParticleSpit.class, 48);
 		}
 
-		protected static final CachedInstanceOfChain<Function<Particle, int[]>> toData = new CachedInstanceOfChain<>();
+		protected static final CachedInstanceOfChain<BiFunction<ProtocolVersion, Particle, int[]>> toData = new CachedInstanceOfChain<>();
 		protected static final int[] data_none = new int[0];
-		@SuppressWarnings("unchecked")
+
 		protected static <L extends Particle> void register(Class<L> clazz, Function<L, int[]> function) {
-			toData.setKnownPath(clazz, (Function<Particle, int[]>) function);
+			register(clazz, (protocol, particle) -> function.apply(particle));
 		}
+
+		@SuppressWarnings("unchecked")
+		protected static <L extends Particle> void register(Class<L> clazz, BiFunction<ProtocolVersion, L, int[]> function) {
+			toData.setKnownPath(clazz, (BiFunction<ProtocolVersion, Particle, int[]>) function);
+		}
+
 		static {
 			register(Particle.class, particle -> data_none);
-			register(ParticleItem.class, particle -> new int[] {
-				particle.getItemStack().getTypeId(), particle.getItemStack().getLegacyData()
+			register(ParticleItem.class, (version, particle) -> {
+				NetworkItemStack itemstack = ItemStackRemappingHelper.toLegacyItemFormat(version, I18NData.DEFAULT_LOCALE, particle.getItemStack());
+				return new int[] { itemstack.getTypeId(), itemstack.getLegacyData() };
 			});
 			register(ParticleBlock.class, particle -> new int[] {
 				PreFlatteningBlockIdData.convertCombinedIdToM12(PreFlatteningBlockIdData.getCombinedId(particle.getBlockData()))
@@ -137,19 +150,25 @@ public class LegacyParticle {
 			return id;
 		}
 
-		public static int[] getData(Particle particle) {
-			return toData.selectPath(particle.getClass()).apply(particle);
+		public static int[] getData(ProtocolVersion version, Particle particle) {
+			return toData.selectPath(particle.getClass()).apply(version, particle);
 		}
 
 	}
 
 	public static class StringId {
 
-		protected static final Map<Class<Particle>, Function<Particle, String>> toIdData = new HashMap<>();
-		@SuppressWarnings("unchecked")
+		protected static final Map<Class<Particle>, BiFunction<ProtocolVersion, Particle, String>> toIdData = new HashMap<>();
+
 		protected static <L extends Particle> void register(Class<L> clazz, Function<L, String> function) {
-			toIdData.put((Class<Particle>) clazz, (Function<Particle, String>) function);
+			register(clazz, (protocol, particle) -> function.apply(particle));
 		}
+
+		@SuppressWarnings("unchecked")
+		protected static <L extends Particle> void register(Class<L> clazz, BiFunction<ProtocolVersion, L, String> function) {
+			toIdData.put((Class<Particle>) clazz, (BiFunction<ProtocolVersion, Particle, String>) function);
+		}
+
 		static {
 			register(ParticlePoof.class, particle -> "explode");
 			register(ParticleExplosion.class, particle -> "largeexplode");
@@ -183,7 +202,10 @@ public class LegacyParticle {
 			register(ParticleItemSnowball.class, particle -> "snowballpoof");
 			register(ParticleItemSlime.class, particle -> "slime");
 			register(ParticleHeart.class, particle -> "heart");
-			register(ParticleItem.class, particle -> "iconcrack_" + particle.getItemStack().getTypeId() + "_" + particle.getItemStack().getLegacyData());
+			register(ParticleItem.class, (version, particle) -> {
+				NetworkItemStack itemstack = ItemStackRemappingHelper.toLegacyItemFormat(version, I18NData.DEFAULT_LOCALE, particle.getItemStack());
+				return "iconcrack_" + itemstack.getTypeId() + "_" + itemstack.getLegacyData();
+			});
 			register(ParticleBlock.class, particle -> {
 				int lBlockData = PreFlatteningBlockIdData.getCombinedId(particle.getBlockData());
 				return "blockcrack_" + PreFlatteningBlockIdData.getIdFromCombinedId(lBlockData) + "_" + PreFlatteningBlockIdData.getDataFromCombinedId(lBlockData);
@@ -194,12 +216,12 @@ public class LegacyParticle {
 			});
 		}
 
-		public static String getIdData(Particle particle) {
-			Function<Particle, String> function = toIdData.get(particle.getClass());
+		public static String getIdData(ProtocolVersion version, Particle particle) {
+			BiFunction<ProtocolVersion, Particle, String> function = toIdData.get(particle.getClass());
 			if (function == null) {
 				throw new IllegalArgumentException(MessageFormat.format("No legacy id exists for particle {0}", particle.getClass()));
 			}
-			return function.apply(particle);
+			return function.apply(version, particle);
 		}
 
 	}

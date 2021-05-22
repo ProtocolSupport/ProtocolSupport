@@ -6,12 +6,12 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldPartic
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyParticle;
-import protocolsupport.protocol.typeremapper.particle.ParticleRemapper;
-import protocolsupport.protocol.typeremapper.particle.ParticleRemapper.ParticleRemappingTable;
+import protocolsupport.protocol.typeremapper.particle.LegacyParticleData;
+import protocolsupport.protocol.typeremapper.particle.LegacyParticleData.LegacyParticleDataTable;
 
 public class WorldParticle extends MiddleWorldParticle {
 
-	protected final ParticleRemappingTable remapper = ParticleRemapper.REGISTRY.getTable(version);
+	protected final LegacyParticleDataTable legacyParticleTable = LegacyParticleData.REGISTRY.getTable(version);
 
 	public WorldParticle(MiddlePacketInit init) {
 		super(init);
@@ -19,14 +19,14 @@ public class WorldParticle extends MiddleWorldParticle {
 
 	@Override
 	protected void write() {
-		particle = remapper.getRemap(particle.getClass()).apply(particle);
+		particle = legacyParticleTable.get(particle.getClass()).apply(particle);
 		if (particle != null) {
 			ClientBoundPacketData worldparticle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
 			int count = particle.getCount();
 			if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_6_4) && (count == 0)) {
 				count = 1;
 			}
-			StringSerializer.writeString(worldparticle, version, LegacyParticle.StringId.getIdData(particle));
+			StringSerializer.writeString(worldparticle, version, LegacyParticle.StringId.getIdData(version, particle));
 			worldparticle.writeFloat((float) x);
 			worldparticle.writeFloat((float) y);
 			worldparticle.writeFloat((float) z);
