@@ -13,10 +13,8 @@ import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry;
 import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry.LegacyNetworkEntityTable;
 import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry;
 import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry.NetworkEntityDataFormatTransformerTable;
-import protocolsupport.protocol.typeremapper.itemstack.FlatteningItemId;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemappingHelper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
-import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.types.NetworkBukkitItemStack;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTByte;
@@ -36,13 +34,11 @@ public class LegacyValueHoverActionSerializer extends HoverActionSerializer {
 	protected final ProtocolVersion version;
 	protected final LegacyNetworkEntityTable legacyEntityEntryTable;
 	protected final NetworkEntityDataFormatTransformerTable entityDataFormatTable;
-	protected final ArrayBasedIntMappingTable flatteningItemFromClientTable;
 
 	public LegacyValueHoverActionSerializer(ProtocolVersion version) {
 		this.version = version;
 		this.legacyEntityEntryTable = LegacyNetworkEntityRegistry.INSTANCE.getTable(version);
 		this.entityDataFormatTable = NetworkEntityDataFormatTransformRegistry.INSTANCE.getTable(version);
-		this.flatteningItemFromClientTable = FlatteningItemId.REGISTRY_FROM_CLIENT.getTable(version);
 	}
 
 	@Override
@@ -75,12 +71,13 @@ public class LegacyValueHoverActionSerializer extends HoverActionSerializer {
 			case SHOW_ITEM: {
 				NetworkItemStack itemstack = NetworkBukkitItemStack.create((ItemStack) action.getContents());
 				ItemStackWriteEventHelper.callEvent(version, locale, itemstack);
-				itemstack = ItemStackRemappingHelper.toLegacyItemDataFormat(version, locale, itemstack);
+				itemstack = ItemStackRemappingHelper.toLegacyItemData(version, locale, itemstack);
 				NBTCompound rootTag = new NBTCompound();
 				if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13)) {
-					//TODO: create and use mappings for legacy item id -> item material
-					rootTag.setTag("id", new NBTString(ItemMaterialLookup.getByRuntimeId(flatteningItemFromClientTable.get(itemstack.getTypeId())).getKey().toString()));
+					//TODO: also apply legacy string id (after creating one)
+					rootTag.setTag("id", new NBTString(ItemMaterialLookup.getByRuntimeId(itemstack.getTypeId()).getKey().toString()));
 				} else {
+					itemstack = ItemStackRemappingHelper.toLegacyItemFormat(version, locale, itemstack);
 					if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_8)) {
 						rootTag.setTag("id", new NBTString(String.valueOf(itemstack.getTypeId())));
 					} else {
@@ -91,6 +88,7 @@ public class LegacyValueHoverActionSerializer extends HoverActionSerializer {
 				rootTag.setTag("Count", new NBTByte((byte) itemstack.getAmount()));
 				rootTag.setTag("tag", itemstack.getNBT());
 				json.addProperty("value", serializeTagToMojanson(rootTag));
+				break;
 			}
 		}
 
