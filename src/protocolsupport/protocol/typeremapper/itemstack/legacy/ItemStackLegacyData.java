@@ -36,6 +36,8 @@ public class ItemStackLegacyData {
 		}
 
 		public void applyDefaultRemaps() {
+			clear();
+
 			JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("legacyitemtype.json"));
 			for (String versionString : rootObject.keySet()) {
 				ProtocolVersion version = ProtocolVersion.valueOf(versionString);
