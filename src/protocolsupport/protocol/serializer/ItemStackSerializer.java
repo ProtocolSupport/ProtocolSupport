@@ -13,12 +13,11 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemappingHelper;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTEnd;
 import protocolsupport.protocol.types.nbt.serializer.DefaultNBTSerializer;
-import protocolsupport.protocol.utils.ItemStackWriteEventHelper;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.SimpleTypeDeserializer;
 import protocolsupport.protocol.utils.SimpleTypeSerializer;
@@ -119,7 +118,7 @@ public class ItemStackSerializer {
 	}
 
 	/**
-	 * Reads itemstack using provided protocol version format and remaps it <br>
+	 * Reads itemstack using provided protocol version format<br>
 	 * @param from buffer to read from
 	 * @param version protocol version
 	 * @return itemstack itemstack
@@ -127,7 +126,7 @@ public class ItemStackSerializer {
 	public static NetworkItemStack readItemStack(ByteBuf from, ProtocolVersion version) {
 		NetworkItemStack itemstack = ITEMSTACK_DESERIALIZER.get(version).apply(from);
 		if (!itemstack.isNull()) {
-			itemstack = ItemStackRemapper.remapFromClient(version, itemstack);
+			itemstack = ItemStackRemappingHelper.fromLegacyItemFormat(version, itemstack);
 		}
 		return itemstack;
 	}
@@ -160,20 +159,14 @@ public class ItemStackSerializer {
 	}
 
 	/**
-	 * Remaps and writes itemstack using provided protocol version format
+	 * Transforms and writes itemstack using provided protocol version format
 	 * @param to buffer to write to
 	 * @param version protocol version
 	 * @param locale client locale
 	 * @param itemstack itemstack
 	 */
 	public static void writeItemStack(ByteBuf to, ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		if (!itemstack.isNull()) {
-			ItemStackWriteEventHelper.callEvent(version, locale, itemstack);
-
-			itemstack = ItemStackRemapper.remapToClient(version, locale, itemstack);
-		}
-
-		writeItemStack(to, version, itemstack);
+		writeItemStack(to, version, ItemStackRemappingHelper.toLegacyItemDataFormat(version, locale, itemstack));
 	}
 
 

@@ -4,9 +4,12 @@ import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.itemstack.LegacyItemType;
-import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
+import protocolsupport.protocol.typeremapper.itemstack.legacy.ItemStackLegacyData;
+import protocolsupport.protocol.typeremapper.itemstack.legacy.ItemStackLegacyData.ItemStackLegacyDataTable;
+import protocolsupport.protocol.typeremapper.itemstack.legacy.ItemStackLegacyDataTypeMappingOperator;
+import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
+import protocolsupport.utils.Utils;
 
 public class ItemRemapperControl {
 
@@ -14,14 +17,14 @@ public class ItemRemapperControl {
 	 * Resets all items remaps to default ones
 	 */
 	public static void resetToDefault() {
-		LegacyItemType.REGISTRY.applyDefaultRemaps();
+		ItemStackLegacyData.REGISTRY.applyDefaultRemaps();
 	}
 
-	private final ArrayBasedIntMappingTable table;
+	private final ItemStackLegacyDataTable table;
 
 	public ItemRemapperControl(ProtocolVersion version) {
 		Validate.isTrue(version.isSupported(), "Can't control item remapping for unsupported version");
-		table = LegacyItemType.REGISTRY.getTable(version);
+		table = ItemStackLegacyData.REGISTRY.getTable(version);
 	}
 
 	/**
@@ -39,7 +42,7 @@ public class ItemRemapperControl {
 	 * @return remap for specified item id
 	 */
 	public int getRemap(int id) {
-		return table.get(id);
+		return table.apply(new NetworkItemStack(id)).getTypeId();
 	}
 
 	/**
@@ -57,7 +60,7 @@ public class ItemRemapperControl {
 	 * @param to runtime item id to which remap will occur
 	 */
 	public void setRemap(int from, int to) {
-		table.set(from, to);
+		table.set(from, Utils.createSingletonArrayList(new ItemStackLegacyDataTypeMappingOperator(to)));
 	}
 
 }

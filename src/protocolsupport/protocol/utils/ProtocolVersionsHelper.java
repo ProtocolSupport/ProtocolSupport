@@ -12,6 +12,8 @@ public class ProtocolVersionsHelper {
 
 	public static final ProtocolVersion LATEST_PC = ProtocolVersion.getLatest(ProtocolType.PC);
 
+	public static final ProtocolVersion[] ALL = ProtocolVersion.getAllSupported();
+
 	public static final ProtocolVersion[] UP_1_6 = ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_6_1);
 
 	public static final ProtocolVersion[] UP_1_7 = ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_7_5);

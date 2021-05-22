@@ -12,6 +12,13 @@ public class NetworkItemStack {
 	protected int legacyData = DEFAULT_LEGACY_DATA;
 	protected NBTCompound nbt;
 
+	public NetworkItemStack() {
+	}
+
+	public NetworkItemStack(int runtimeId) {
+		this.runtimeId = runtimeId;
+	}
+
 	public boolean isNull() {
 		return false;
 	}

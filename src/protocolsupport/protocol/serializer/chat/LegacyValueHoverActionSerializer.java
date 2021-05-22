@@ -14,7 +14,7 @@ import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry.
 import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry;
 import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry.NetworkEntityDataFormatTransformerTable;
 import protocolsupport.protocol.typeremapper.itemstack.FlatteningItemId;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemappingHelper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.types.NetworkBukkitItemStack;
@@ -75,7 +75,7 @@ public class LegacyValueHoverActionSerializer extends HoverActionSerializer {
 			case SHOW_ITEM: {
 				NetworkItemStack itemstack = NetworkBukkitItemStack.create((ItemStack) action.getContents());
 				ItemStackWriteEventHelper.callEvent(version, locale, itemstack);
-				itemstack = ItemStackRemapper.remapToClient(version, locale, itemstack);
+				itemstack = ItemStackRemappingHelper.toLegacyItemDataFormat(version, locale, itemstack);
 				NBTCompound rootTag = new NBTCompound();
 				if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13)) {
 					//TODO: create and use mappings for legacy item id -> item material

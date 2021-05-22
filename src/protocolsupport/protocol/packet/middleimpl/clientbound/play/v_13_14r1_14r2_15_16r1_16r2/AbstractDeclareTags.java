@@ -11,8 +11,10 @@ import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.Flattenin
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
 import protocolsupport.protocol.typeremapper.itemstack.FlatteningItemId;
-import protocolsupport.protocol.typeremapper.itemstack.LegacyItemType;
+import protocolsupport.protocol.typeremapper.itemstack.legacy.ItemStackLegacyData;
+import protocolsupport.protocol.typeremapper.itemstack.legacy.ItemStackLegacyData.ItemStackLegacyDataTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
+import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.utils.BlockBlockDataLookup;
 
 //TODO: implement special handling for entity tags
@@ -44,14 +46,14 @@ public abstract class AbstractDeclareTags extends MiddleDeclareTags {
 	}
 
 	protected void writeItemsTags(ByteBuf to, Tag[] tags) {
-		IdMappingTable itemTypeRemappingTable = LegacyItemType.REGISTRY.getTable(version);
+		ItemStackLegacyDataTable legacyitemdataTable = ItemStackLegacyData.REGISTRY.getTable(version);
 		IdMappingTable flatteningItemTypeTable = FlatteningItemId.REGISTRY_TO_CLIENT.getTable(version);
 		ArraySerializer.writeVarIntTArray(to, tags, (tagsTo, tag) -> {
 			StringSerializer.writeVarIntUTF8String(tagsTo, tag.getTagId());
 			MiscSerializer.writeVarIntCountPrefixedType(tagsTo, tag.getTaggedIds(), (taggedIdsTo, itemsIds) -> {
 				int count = itemsIds.length;
 				for (int itemId : itemsIds) {
-					if (itemTypeRemappingTable.get(itemId) == itemId) {
+					if (itemId == legacyitemdataTable.apply(new NetworkItemStack(itemId)).getTypeId()) {
 						VarNumberSerializer.writeVarInt(taggedIdsTo, flatteningItemTypeTable.get(itemId));
 					} else {
 						count--;

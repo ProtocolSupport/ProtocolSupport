@@ -15,9 +15,9 @@ import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry;
 import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry.LegacyNetworkEntityTable;
 import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry;
 import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry.NetworkEntityDataFormatTransformerTable;
-import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.DragonHeadToDragonPlayerHeadComplexRemapper;
-import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyOwnerComplexRemapper;
-import protocolsupport.protocol.typeremapper.itemstack.complex.toclient.PlayerHeadToLegacyUUIDComplexRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.format.from.ItemStackLegacyFormatOperatorPlayerHeadToLegacyOwner;
+import protocolsupport.protocol.typeremapper.itemstack.format.from.ItemStackLegacyFormatOperatorPlayerHeadToLegacyUUID;
+import protocolsupport.protocol.typeremapper.itemstack.legacy.ItemStackLegacyDataOperatorDragonHeadToDragonPlayerHead;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.protocol.types.TileEntityType;
@@ -194,14 +194,14 @@ public class TileEntityRemapper {
 				NBTNumber skulltype = nbt.getNumberTagOrNull("SkullType");
 				if ((skulltype != null) && (skulltype.getAsInt() == 5)) {
 					nbt.setTag("SkullType", new NBTByte((byte) 3));
-					nbt.setTag(CommonNBT.PLAYERHEAD_PROFILE, DragonHeadToDragonPlayerHeadComplexRemapper.createTag());
+					nbt.setTag(CommonNBT.PLAYERHEAD_PROFILE, ItemStackLegacyDataOperatorDragonHeadToDragonPlayerHead.createTag());
 				}
 			},
 			ProtocolVersionsHelper.DOWN_1_8
 		);
 		register(
 			TileEntityType.SKULL,
-			tile -> PlayerHeadToLegacyUUIDComplexRemapper.remap(tile.getNBT()),
+			tile -> ItemStackLegacyFormatOperatorPlayerHeadToLegacyUUID.apply(tile.getNBT()),
 			ProtocolVersionsHelper.RANGE__1_7_10__1_15_2
 		);
 		register(
@@ -214,7 +214,7 @@ public class TileEntityRemapper {
 		);
 		register(
 			TileEntityType.SKULL,
-			tile -> PlayerHeadToLegacyOwnerComplexRemapper.remap(tile.getNBT(), "ExtraType"),
+			tile -> ItemStackLegacyFormatOperatorPlayerHeadToLegacyOwner.apply(tile.getNBT(), "ExtraType"),
 			ProtocolVersionsHelper.DOWN_1_7_5
 		);
 	}

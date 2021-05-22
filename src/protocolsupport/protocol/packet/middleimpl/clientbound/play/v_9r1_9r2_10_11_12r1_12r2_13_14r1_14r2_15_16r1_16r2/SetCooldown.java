@@ -4,7 +4,7 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetCooldown;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemappingHelper;
 
 public class SetCooldown extends MiddleSetCooldown {
 
@@ -15,7 +15,7 @@ public class SetCooldown extends MiddleSetCooldown {
 	@Override
 	protected void write() {
 		ClientBoundPacketData setcooldown = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SET_COOLDOWN);
-		VarNumberSerializer.writeVarInt(setcooldown, ItemStackRemapper.remapItemIdClientbound(version, itemId));
+		VarNumberSerializer.writeVarInt(setcooldown, ItemStackRemappingHelper.toLegacyItemDataFormat(version, itemId));
 		VarNumberSerializer.writeVarInt(setcooldown, cooldown);
 		codec.writeClientbound(setcooldown);
 	}

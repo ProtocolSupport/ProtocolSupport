@@ -8,7 +8,7 @@ import java.util.function.UnaryOperator;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
-import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemapper;
+import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemappingHelper;
 import protocolsupport.protocol.typeremapper.utils.MappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
@@ -90,7 +90,7 @@ public class ParticleRemapper {
 				registerRemap(ParticleItem.class, original -> new ParticleItem(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
 					original.getData(), original.getCount(),
-					ItemStackRemapper.remapToClient(version, I18NData.DEFAULT_LOCALE, original.getItemStack())
+					ItemStackRemappingHelper.toLegacyItemDataFormat(version, I18NData.DEFAULT_LOCALE, original.getItemStack())
 				));
 			});
 
