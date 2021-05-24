@@ -39,4 +39,9 @@ public class NBTString extends NBT {
 		return Objects.hash(string);
 	}
 
+	@Override
+	public NBTString clone() {
+		return new NBTString(string);
+	}
+
 }

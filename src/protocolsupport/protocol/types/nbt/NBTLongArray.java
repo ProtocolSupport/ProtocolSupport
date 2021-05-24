@@ -39,4 +39,9 @@ public class NBTLongArray extends NBT {
 		return Arrays.hashCode(array);
 	}
 
+	@Override
+	public NBTLongArray clone() {
+		return new NBTLongArray(array);
+	}
+
 }

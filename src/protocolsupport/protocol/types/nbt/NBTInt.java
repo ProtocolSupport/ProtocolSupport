@@ -63,4 +63,9 @@ public class NBTInt extends NBTNumber {
 		return Integer.hashCode(value);
 	}
 
+	@Override
+	public NBTInt clone() {
+		return new NBTInt(value);
+	}
+
 }

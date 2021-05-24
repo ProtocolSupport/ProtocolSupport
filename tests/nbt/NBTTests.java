@@ -65,4 +65,24 @@ public class NBTTests {
 		Assertions.assertEquals(new NBTString("5"), new NBTString("5"));
 	}
 
+	@Test
+	public void testClone() {
+		{
+			NBTCompound testTag = new NBTCompound();
+			testTag.setTag("test", new NBTString("test"));
+			NBTCompound testTagClone = testTag.clone();
+			Assertions.assertEquals(testTag, testTagClone);
+			testTagClone.setTag("test1", new NBTInt(0));
+			Assertions.assertNotEquals(testTag, testTagClone);
+		}
+		{
+			NBTList<NBTString> testTag = new NBTList<>(NBTType.STRING);
+			testTag.addTag(new NBTString("test"));
+			NBTList<NBTString> testTagClone = testTag.clone();
+			Assertions.assertEquals(testTag, testTagClone);
+			testTagClone.addTag(new NBTString("test1"));
+			Assertions.assertNotEquals(testTag, testTagClone);
+		}
+	}
+
 }

@@ -15,6 +15,15 @@ public class NBTCompound extends NBT {
 
 	protected final Map<String, NBT> tags = new LinkedHashMap<>();
 
+	public NBTCompound() {
+	}
+
+	public NBTCompound(Map<String, NBT> tags) {
+		for (Map.Entry<String, NBT> entry : tags.entrySet()) {
+			this.tags.put(entry.getKey(), entry.getValue().clone());
+		}
+	}
+
 	public boolean isEmpty() {
 		return tags.isEmpty();
 	}
@@ -182,6 +191,11 @@ public class NBTCompound extends NBT {
 	@Override
 	public int hashCode() {
 		return tags.hashCode();
+	}
+
+	@Override
+	public NBTCompound clone() {
+		return new NBTCompound(tags);
 	}
 
 }

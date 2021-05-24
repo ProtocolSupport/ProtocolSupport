@@ -3,10 +3,11 @@ package protocolsupport.protocol.types.nbt;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-public class NBTList<T extends NBT> extends NBT {
+public class NBTList<T extends NBT> extends NBT implements Iterable<T> {
 
 	public static NBTList<NBTCompound> createCompoundList() {
 		return new NBTList<>(NBTType.COMPOUND);
@@ -23,15 +24,20 @@ public class NBTList<T extends NBT> extends NBT {
 	}
 
 	protected final NBTType<T> type;
-	protected final List<T> tags = new ArrayList<>();
+	protected final List<T> tags;
 
 	public NBTList(NBTType<T> type) {
 		this.type = type;
+		this.tags = new ArrayList<>();
 	}
 
+	@SuppressWarnings("unchecked")
 	public NBTList(NBTType<T> type, List<T> tags) {
 		this.type = type;
-		this.tags.addAll(tags);
+		this.tags = new ArrayList<>(tags.size());
+		for (T tag : tags) {
+			this.tags.add((T) tag.clone());
+		}
 	}
 
 	public NBTType<T> getTagsType() {
@@ -69,10 +75,19 @@ public class NBTList<T extends NBT> extends NBT {
 		tags.add(tag);
 	}
 
+	public T removeTag(int index) {
+		return tags.remove(index);
+	}
+
 	protected void validateAddTag(T tag) {
 		if (type != tag.getType()) {
 			throw new IllegalArgumentException(MessageFormat.format("Invalid tag type. Expected {0}, got {1}.", type.getNBTClass(), tag.getClass()));
 		}
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return tags.iterator();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -94,6 +109,11 @@ public class NBTList<T extends NBT> extends NBT {
 	@Override
 	public int hashCode() {
 		return Objects.hash(type, tags);
+	}
+
+	@Override
+	public NBTList<T> clone() {
+		return new NBTList<>(type, tags);
 	}
 
 }

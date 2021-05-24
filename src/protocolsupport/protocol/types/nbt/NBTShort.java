@@ -63,4 +63,9 @@ public class NBTShort extends NBTNumber {
 		return Short.hashCode(value);
 	}
 
+	@Override
+	public NBTShort clone() {
+		return new NBTShort(value);
+	}
+
 }

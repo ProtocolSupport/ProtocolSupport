@@ -28,4 +28,9 @@ public class NBTEnd extends NBT {
 		return 0;
 	}
 
+	@Override
+	public NBT clone() {
+		return INSTANCE;
+	}
+
 }

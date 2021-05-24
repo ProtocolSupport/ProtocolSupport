@@ -63,4 +63,9 @@ public class NBTLong extends NBTNumber {
 		return Long.hashCode(value);
 	}
 
+	@Override
+	public NBTLong clone() {
+		return new NBTLong(value);
+	}
+
 }
