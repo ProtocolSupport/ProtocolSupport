@@ -97,11 +97,27 @@ public class NetworkItemStack {
 			throw reject();
 		}
 
+		@Override
+		public NetworkItemStack clone() {
+			return NULL;
+		}
+
 	};
 
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);
+	}
+
+	@Override
+	public NetworkItemStack clone() {
+		NetworkItemStack itemstack = new NetworkItemStack(runtimeId);
+		itemstack.amount = amount;
+		itemstack.legacyData = legacyData;
+		if (nbt != null) {
+			itemstack.nbt = nbt.clone();
+		}
+		return itemstack;
 	}
 
 }
