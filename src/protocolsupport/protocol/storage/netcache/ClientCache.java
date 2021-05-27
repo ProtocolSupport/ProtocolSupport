@@ -1,5 +1,6 @@
 package protocolsupport.protocol.storage.netcache;
 
+import java.util.Locale;
 import java.util.UUID;
 
 import org.bukkit.NamespacedKey;
@@ -151,7 +152,7 @@ public class ClientCache implements IBiomeRegistry {
 	protected String locale = I18NData.DEFAULT_LOCALE;
 
 	public void setLocale(String locale) {
-		this.locale = locale.toLowerCase();
+		this.locale = locale.toLowerCase(Locale.ENGLISH);
 	}
 
 	public String getLocale() {

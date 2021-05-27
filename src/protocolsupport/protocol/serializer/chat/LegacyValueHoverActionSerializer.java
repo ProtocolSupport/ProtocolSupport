@@ -1,5 +1,7 @@
 package protocolsupport.protocol.serializer.chat;
 
+import java.util.Locale;
+
 import org.bukkit.inventory.ItemStack;
 
 import com.google.gson.JsonElement;
@@ -45,7 +47,7 @@ public class LegacyValueHoverActionSerializer extends HoverActionSerializer {
 	public JsonElement serialize(SimpleJsonTreeSerializer<String> serializer, HoverAction action, String locale) {
 		JsonObject json = new JsonObject();
 
-		json.addProperty(key_action, action.getType().toString().toLowerCase());
+		json.addProperty(key_action, action.getType().toString().toLowerCase(Locale.ENGLISH));
 
 		switch (action.getType()) {
 			case SHOW_TEXT: {

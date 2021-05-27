@@ -2,6 +2,7 @@ package protocolsupport.api.chat;
 
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -77,7 +78,7 @@ public class ChatColor {
 		this.g = (rgb >> 8) & 0xFF;
 		this.b = rgb & 0xFF;
 		if (basic) {
-			this.bukkitColor = org.bukkit.ChatColor.valueOf(identifier.toUpperCase());
+			this.bukkitColor = org.bukkit.ChatColor.valueOf(identifier.toUpperCase(Locale.ENGLISH));
 			BASIC_BY_BUKKIT.put(bukkitColor, this);
 			BASIC_BY_RGB.put(rgb, this);
 			BASIC_BY_NAME.put(identifier, this);

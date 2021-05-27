@@ -1,5 +1,6 @@
 package protocolsupport.protocol.types.recipe;
 
+import java.util.Locale;
 import java.util.Map;
 
 import org.bukkit.NamespacedKey;
@@ -74,7 +75,7 @@ public enum RecipeType {
 
 	private static final Map<String, RecipeType> byInternalName = CollectionsUtils.makeEnumMappingMap(RecipeType.class, RecipeType::getInternalName);
 
-	private final String internalName = NamespacedKey.minecraft(name().toLowerCase()).toString();
+	private final String internalName = NamespacedKey.minecraft(name().toLowerCase(Locale.ENGLISH)).toString();
 
 	public static RecipeType getByInternalName(String name) {
 		RecipeType recipeType = byInternalName.get(name);

@@ -1,6 +1,7 @@
 package protocolsupport.protocol.serializer.chat;
 
 import java.lang.reflect.Type;
+import java.util.Locale;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -33,13 +34,13 @@ public class ClickActionSerializer implements JsonDeserializer<ClickAction>, Sim
 		if (valueJson == null) {
 			return null;
 		}
-		return new ClickAction(ClickAction.Type.valueOf(actionJson.getAsString().toUpperCase()), valueJson.getAsString());
+		return new ClickAction(ClickAction.Type.valueOf(actionJson.getAsString().toUpperCase(Locale.ENGLISH)), valueJson.getAsString());
 	}
 
 	@Override
 	public JsonElement serialize(SimpleJsonTreeSerializer<String> serializer, ClickAction action, String locale) {
 		JsonObject json = new JsonObject();
-		json.addProperty(key_action, action.getType().toString().toLowerCase());
+		json.addProperty(key_action, action.getType().toString().toLowerCase(Locale.ENGLISH));
 		json.addProperty(key_value, action.getValue());
 		return json;
 	}

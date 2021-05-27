@@ -1,6 +1,7 @@
 package protocolsupport.protocol.utils;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.stream.Stream;
 
 import org.bukkit.Material;
@@ -33,7 +34,7 @@ public class ItemSpawnEggData {
 
 	static {
 		Arrays.fill(toSpawnedType, NetworkEntityType.NONE);
-		getSpawnEggs().forEach(m -> register(m, NetworkEntityType.getByBukkitType(EntityType.fromName(m.toString().replace(spawnEggSuffix, "").toLowerCase()))));
+		getSpawnEggs().forEach(m -> register(m, NetworkEntityType.getByBukkitType(EntityType.fromName(m.toString().replace(spawnEggSuffix, "").toLowerCase(Locale.ENGLISH)))));
 	}
 
 	/**

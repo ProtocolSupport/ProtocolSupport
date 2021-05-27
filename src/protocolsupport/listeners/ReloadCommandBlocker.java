@@ -1,6 +1,7 @@
 package protocolsupport.listeners;
 
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import org.bukkit.ChatColor;
@@ -25,7 +26,7 @@ public class ReloadCommandBlocker implements Listener {
 
 	@EventHandler
 	public void onCommand(PlayerCommandPreprocessEvent event) {
-		String command = event.getMessage().toLowerCase();
+		String command = event.getMessage().toLowerCase(Locale.ENGLISH);
 		if (command.startsWith("/") && blacklist.contains(command.substring(1))) {
 			event.setCancelled(true);
 			event.getPlayer().sendMessage(ChatColor.DARK_RED + "The reload command has been disabled by ProtocolSupport");
@@ -34,7 +35,7 @@ public class ReloadCommandBlocker implements Listener {
 
 	@EventHandler
 	public void onConsoleCommand(ServerCommandEvent event) {
-		String command = event.getCommand().toLowerCase();
+		String command = event.getCommand().toLowerCase(Locale.ENGLISH);
 		if (command.startsWith("/")) {
 			command = command.substring(1);
 		}

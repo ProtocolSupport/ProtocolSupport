@@ -2,6 +2,7 @@ package protocolsupport.protocol.serializer.chat;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.bukkit.Registry;
@@ -47,7 +48,7 @@ public class HoverActionSerializer implements JsonDeserializer<HoverAction>, Sim
 		if (actionJson == null) {
 			return null;
 		}
-		HoverAction.Type atype = HoverAction.Type.valueOf(actionJson.getAsString().toUpperCase());
+		HoverAction.Type atype = HoverAction.Type.valueOf(actionJson.getAsString().toUpperCase(Locale.ENGLISH));
 
 		JsonElement contentsJson = rootJson.get(key_contents);
 		if (contentsJson != null) {
@@ -105,7 +106,7 @@ public class HoverActionSerializer implements JsonDeserializer<HoverAction>, Sim
 	public JsonElement serialize(SimpleJsonTreeSerializer<String> serializer, HoverAction action, String locale) {
 		JsonObject json = new JsonObject();
 
-		json.addProperty(key_action, action.getType().toString().toLowerCase());
+		json.addProperty(key_action, action.getType().toString().toLowerCase(Locale.ENGLISH));
 
 		switch (action.getType()) {
 			case SHOW_TEXT: {
