@@ -1,0 +1,18 @@
+package protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.skeleton;
+
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataInsentientAttackingToLegacySwingingHandsTransformer;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.base.InsentientNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+
+public class LegacySkeletonNetworkEntityMetadataFormatTransformerFactory extends InsentientNetworkEntityMetadataFormatTransformerFactory {
+
+	public static final LegacySkeletonNetworkEntityMetadataFormatTransformerFactory INSTANCE = new LegacySkeletonNetworkEntityMetadataFormatTransformerFactory();
+
+	protected LegacySkeletonNetworkEntityMetadataFormatTransformerFactory() {
+		add(new NetworkEntityMetadataInsentientAttackingToLegacySwingingHandsTransformer(12), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
+		add(new NetworkEntityMetadataInsentientAttackingToLegacySwingingHandsTransformer(13), ProtocolVersion.MINECRAFT_1_10);
+		add(new NetworkEntityMetadataInsentientAttackingToLegacySwingingHandsTransformer(12), ProtocolVersionsHelper.ALL_1_9);
+	}
+
+}

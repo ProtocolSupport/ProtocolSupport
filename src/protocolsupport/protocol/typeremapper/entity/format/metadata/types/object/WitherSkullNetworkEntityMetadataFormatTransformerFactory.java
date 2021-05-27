@@ -1,0 +1,20 @@
+package protocolsupport.protocol.typeremapper.entity.format.metadata.types.object;
+
+import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataObjectIndexValueBooleanToByteTransformer;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.base.BaseNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+
+public class WitherSkullNetworkEntityMetadataFormatTransformerFactory extends BaseNetworkEntityMetadataFormatTransformerFactory {
+
+	public static final WitherSkullNetworkEntityMetadataFormatTransformerFactory INSTANCE = new WitherSkullNetworkEntityMetadataFormatTransformerFactory();
+
+	protected WitherSkullNetworkEntityMetadataFormatTransformerFactory() {
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.WitherSkull.CHARGED, 7), ProtocolVersionsHelper.UP_1_14);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.WitherSkull.CHARGED, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.WitherSkull.CHARGED, 5), ProtocolVersionsHelper.ALL_1_9);
+		add(new NetworkEntityMetadataObjectIndexValueBooleanToByteTransformer(NetworkEntityMetadataObjectIndex.WitherSkull.CHARGED, 10), ProtocolVersionsHelper.DOWN_1_8);
+	}
+
+}

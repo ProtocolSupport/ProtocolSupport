@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.particle.FlatteningParticleId;
-import protocolsupport.protocol.typeremapper.particle.LegacyParticleData;
 import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEntityMetadataObject;
 import protocolsupport.protocol.types.particle.Particle;
 import protocolsupport.protocol.types.particle.ParticleDataSerializer;
@@ -27,7 +26,6 @@ public class NetworkEntityMetadataObjectParticle extends ReadableNetworkEntityMe
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
-		value = LegacyParticleData.REGISTRY.getTable(version).get(value.getClass()).apply(value);
 		VarNumberSerializer.writeVarInt(to, FlatteningParticleId.REGISTRY.getTable(version).get(ParticleRegistry.getId(value)));
 		ParticleDataSerializer.INSTANCE.get(version).write(to, value);
 	}

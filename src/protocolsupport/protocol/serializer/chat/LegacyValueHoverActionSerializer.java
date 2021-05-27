@@ -9,10 +9,10 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.HoverAction.EntityInfo;
-import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry;
-import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry.LegacyNetworkEntityTable;
-import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry;
-import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry.NetworkEntityDataFormatTransformerTable;
+import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry;
+import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry.NetworkEntityLegacyFormatTable;
+import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry;
+import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry.NetworkEntityLegacyDataTable;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemappingHelper;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityId;
 import protocolsupport.protocol.types.NetworkBukkitItemStack;
@@ -32,13 +32,13 @@ import protocolsupport.utils.JsonUtils;
 public class LegacyValueHoverActionSerializer extends HoverActionSerializer {
 
 	protected final ProtocolVersion version;
-	protected final LegacyNetworkEntityTable legacyEntityEntryTable;
-	protected final NetworkEntityDataFormatTransformerTable entityDataFormatTable;
+	protected final NetworkEntityLegacyDataTable legacyEntityEntryTable;
+	protected final NetworkEntityLegacyFormatTable entityDataFormatTable;
 
 	public LegacyValueHoverActionSerializer(ProtocolVersion version) {
 		this.version = version;
-		this.legacyEntityEntryTable = LegacyNetworkEntityRegistry.INSTANCE.getTable(version);
-		this.entityDataFormatTable = NetworkEntityDataFormatTransformRegistry.INSTANCE.getTable(version);
+		this.legacyEntityEntryTable = NetworkEntityLegacyDataRegistry.INSTANCE.getTable(version);
+		this.entityDataFormatTable = NetworkEntityLegacyFormatRegistry.INSTANCE.getTable(version);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class LegacyValueHoverActionSerializer extends HoverActionSerializer {
 				EntityInfo entityinfo = (EntityInfo) action.getContents();
 				NetworkEntityType etype = legacyEntityEntryTable.get(NetworkEntityType.getByBukkitType(entityinfo.getType())).getType();
 				if (etype != NetworkEntityType.NONE) {
-					etype = entityDataFormatTable.get(etype).getKey();
+					etype = entityDataFormatTable.get(etype).getType();
 				}
 				NBTCompound rootTag = new NBTCompound();
 				rootTag.setTag("type", new NBTString(version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_11) ? etype.getKey() : LegacyEntityId.getStringId(etype)));

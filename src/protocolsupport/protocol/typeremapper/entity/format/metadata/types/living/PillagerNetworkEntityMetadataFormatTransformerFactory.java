@@ -1,0 +1,17 @@
+package protocolsupport.protocol.typeremapper.entity.format.metadata.types.living;
+
+import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.base.RaidParticipantNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+
+public class PillagerNetworkEntityMetadataFormatTransformerFactory extends RaidParticipantNetworkEntityMetadataFormatTransformerFactory {
+
+	public static final PillagerNetworkEntityMetadataFormatTransformerFactory INSTANCE = new PillagerNetworkEntityMetadataFormatTransformerFactory();
+
+	protected PillagerNetworkEntityMetadataFormatTransformerFactory() {
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Pillager.USING_CROSSBOW, 16), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Pillager.USING_CROSSBOW, 15), ProtocolVersionsHelper.ALL_1_14);
+	}
+
+}

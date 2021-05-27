@@ -9,7 +9,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
-import protocolsupport.protocol.typeremapper.entity.metadata.types.base.TameableNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.base.TameableNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.types.UsedHand;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 

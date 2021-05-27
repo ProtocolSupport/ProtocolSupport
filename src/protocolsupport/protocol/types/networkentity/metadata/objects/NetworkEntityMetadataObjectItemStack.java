@@ -8,6 +8,13 @@ import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEnti
 
 public class NetworkEntityMetadataObjectItemStack extends ReadableNetworkEntityMetadataObject<NetworkItemStack> {
 
+	public NetworkEntityMetadataObjectItemStack() {
+	}
+
+	public NetworkEntityMetadataObjectItemStack(NetworkItemStack itemstack) {
+		value = itemstack;
+	}
+
 	@Override
 	public void readFromStream(ByteBuf from) {
 		value = ItemStackSerializer.readItemStack(from);
@@ -15,7 +22,7 @@ public class NetworkEntityMetadataObjectItemStack extends ReadableNetworkEntityM
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
-		ItemStackSerializer.writeItemStack(to, version, locale, value);
+		ItemStackSerializer.writeItemStack(to, version, value);
 	}
 
 }

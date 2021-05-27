@@ -1,0 +1,18 @@
+package protocolsupport.protocol.typeremapper.entity.format.metadata.types.living;
+
+import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.base.InsentientNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+
+public class PhantomNetworkEntityMetadataFormatTransformerFactory extends InsentientNetworkEntityMetadataFormatTransformerFactory {
+
+	public static final PhantomNetworkEntityMetadataFormatTransformerFactory INSTANCE = new PhantomNetworkEntityMetadataFormatTransformerFactory();
+
+	protected PhantomNetworkEntityMetadataFormatTransformerFactory() {
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Phantom.SIZE, 15), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Phantom.SIZE, 14), ProtocolVersionsHelper.ALL_1_14);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Phantom.SIZE, 12), ProtocolVersionsHelper.ALL_1_13);
+	}
+
+}

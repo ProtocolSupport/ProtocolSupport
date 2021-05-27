@@ -8,11 +8,15 @@ public abstract class NetworkEntityMetadataObject<T> {
 
 	protected T value;
 
-	public abstract void writeToStream(ByteBuf to, ProtocolVersion version, String locale);
-
 	public T getValue() {
 		return value;
 	}
+
+	public void setValue(T value) {
+		this.value = value;
+	}
+
+	public abstract void writeToStream(ByteBuf to, ProtocolVersion version, String locale);
 
 	@Override
 	public String toString() {

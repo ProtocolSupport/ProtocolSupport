@@ -1,0 +1,14 @@
+package protocolsupport.protocol.typeremapper.entity.format.metadata.types.base;
+
+import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+
+public class RaidParticipantNetworkEntityMetadataFormatTransformerFactory extends InsentientNetworkEntityMetadataFormatTransformerFactory {
+
+	protected RaidParticipantNetworkEntityMetadataFormatTransformerFactory() {
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.RaidParticipant.CELEBRATING, 15), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.RaidParticipant.CELEBRATING, 14), ProtocolVersionsHelper.ALL_1_14);
+	}
+
+}

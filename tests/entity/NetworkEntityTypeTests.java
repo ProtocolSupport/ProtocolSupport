@@ -5,8 +5,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
+import zinit.PlatformInit;
 
-public class NetworkEntityTypeTests {
+public class NetworkEntityTypeTests extends PlatformInit {
 
 	@Test
 	protected void testFilled() {

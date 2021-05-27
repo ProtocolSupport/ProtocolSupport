@@ -11,10 +11,10 @@ import java.util.function.Function;
 import java.util.function.ObjIntConsumer;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry;
-import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry.LegacyNetworkEntityTable;
-import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry;
-import protocolsupport.protocol.typeremapper.entity.NetworkEntityDataFormatTransformRegistry.NetworkEntityDataFormatTransformerTable;
+import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry;
+import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry.NetworkEntityLegacyFormatTable;
+import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry;
+import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry.NetworkEntityLegacyDataTable;
 import protocolsupport.protocol.typeremapper.itemstack.format.from.ItemStackLegacyFormatOperatorPlayerHeadToLegacyOwner;
 import protocolsupport.protocol.typeremapper.itemstack.format.from.ItemStackLegacyFormatOperatorPlayerHeadToLegacyUUID;
 import protocolsupport.protocol.typeremapper.itemstack.legacy.ItemStackLegacyDataOperatorDragonHeadToDragonPlayerHead;
@@ -94,8 +94,8 @@ public class TileEntityRemapper {
 		registerPerVersion(
 			TileEntityType.MOB_SPAWNER,
 			version -> {
-				LegacyNetworkEntityTable legacyEntityEntryTable = LegacyNetworkEntityRegistry.INSTANCE.getTable(version);
-				NetworkEntityDataFormatTransformerTable entityDataFormatTable = NetworkEntityDataFormatTransformRegistry.INSTANCE.getTable(version);
+				NetworkEntityLegacyDataTable legacyEntityEntryTable = NetworkEntityLegacyDataRegistry.INSTANCE.getTable(version);
+				NetworkEntityLegacyFormatTable entityDataFormatTable = NetworkEntityLegacyFormatRegistry.INSTANCE.getTable(version);
 				return tile -> {
 					NBTCompound nbt = tile.getNBT();
 					NBTCompound spawndataTag = nbt.getCompoundTagOrNull(CommonNBT.MOB_SPAWNER_SPAWNDATA);
@@ -111,7 +111,7 @@ public class TileEntityRemapper {
 						}
 					}
 					//TODO: also handle additioanl nbt data
-					spawndataTag.setTag("id", new NBTString(entityDataFormatTable.get(legacyEntityEntryTable.get(type).getType()).getKey().getKey()));
+					spawndataTag.setTag("id", new NBTString(entityDataFormatTable.get(legacyEntityEntryTable.get(type).getType()).getType().getKey()));
 				};
 			},
 			ProtocolVersionsHelper.ALL_PC

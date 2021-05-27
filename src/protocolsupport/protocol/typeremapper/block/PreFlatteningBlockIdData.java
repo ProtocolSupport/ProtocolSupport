@@ -29,7 +29,7 @@ public class PreFlatteningBlockIdData {
 
 	/**
 	 * Returns the legacy block id + data combined into int <br>
-	 * Currently the way how it is combined is the same as 1.8 combined id format
+	 * This combined id is encoded the same as follows: ((blockId << 4) | (data))
 	 * @param modernId modern block id
 	 * @return legacy block id + data combined into int
 	 */
@@ -53,6 +53,26 @@ public class PreFlatteningBlockIdData {
 	 */
 	public static int getDataFromCombinedId(int legacyId) {
 		return legacyId & 0xF;
+	}
+
+	/**
+	 * Returns the legacy block id + data combined into int <br>
+	 * This combined id is encoded as follows: ((block id) | (data << 12))
+	 * @param modernId modern block id
+	 * @return legacy block id + data combined into int
+	 */
+	public static int getCombinedIdM12(int modernId) {
+		return convertCombinedIdToM12(getCombinedId(modernId));
+	}
+
+	/**
+	 * Returns the legacy block id + data combined into int <br>
+	 * This combined id is encoded as follows: ((block id) | (data << 16))
+	 * @param modernId modern block id
+	 * @return legacy block id + data combined into int
+	 */
+	public static int getCombinedIdM16(int modernId) {
+		return convertCombinedIdToM16(getCombinedId(modernId));
 	}
 
 	/**

@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8;
 
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityRelMove;
-import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityLocationOffset;
-import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry;
-import protocolsupport.protocol.typeremapper.entity.LegacyNetworkEntityRegistry.LegacyNetworkEntityTable;
+import protocolsupport.protocol.typeremapper.entity.NetworkEntityLegacyLocationOffset;
+import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry;
+import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry.NetworkEntityLegacyDataTable;
 import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 
 public abstract class AbstractEntityTeleportEntityRelMove extends MiddleEntityRelMove {
@@ -12,8 +12,8 @@ public abstract class AbstractEntityTeleportEntityRelMove extends MiddleEntityRe
 		super(init);
 	}
 
-	protected final LegacyNetworkEntityTable legacyEntityEntryTable = LegacyNetworkEntityRegistry.INSTANCE.getTable(version);
-	protected final LegacyNetworkEntityLocationOffset entityOffset = LegacyNetworkEntityLocationOffset.get(version);
+	protected final NetworkEntityLegacyDataTable legacyEntityEntryTable = NetworkEntityLegacyDataRegistry.INSTANCE.getTable(version);
+	protected final NetworkEntityLegacyLocationOffset entityOffset = NetworkEntityLegacyLocationOffset.get(version);
 
 	@Override
 	protected void write() {
@@ -24,7 +24,7 @@ public abstract class AbstractEntityTeleportEntityRelMove extends MiddleEntityRe
 		double z = ecache.getZ();
 		byte yaw = ecache.getYawB();
 		byte pitch = ecache.getPitchB();
-		LegacyNetworkEntityLocationOffset.Offset entityOffsetEntry = entityOffset.get(legacyEntityEntryTable.get(entity.getType()).getType());
+		NetworkEntityLegacyLocationOffset.Offset entityOffsetEntry = entityOffset.get(legacyEntityEntryTable.get(entity.getType()).getType());
 		if (entityOffsetEntry != null) {
 			x += entityOffsetEntry.getX();
 			y += entityOffsetEntry.getY();

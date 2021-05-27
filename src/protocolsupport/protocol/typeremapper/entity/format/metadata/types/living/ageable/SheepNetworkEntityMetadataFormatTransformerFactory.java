@@ -1,0 +1,20 @@
+package protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ageable;
+
+import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.base.AgeableNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+
+public class SheepNetworkEntityMetadataFormatTransformerFactory extends AgeableNetworkEntityMetadataFormatTransformerFactory {
+
+	public static final SheepNetworkEntityMetadataFormatTransformerFactory INSTANCE = new SheepNetworkEntityMetadataFormatTransformerFactory();
+
+	protected SheepNetworkEntityMetadataFormatTransformerFactory() {
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Sheep.SHEEP_FLAGS, 16), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Sheep.SHEEP_FLAGS, 15), ProtocolVersionsHelper.ALL_1_14);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Sheep.SHEEP_FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Sheep.SHEEP_FLAGS, 12), ProtocolVersionsHelper.ALL_1_9);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Sheep.SHEEP_FLAGS, 16), ProtocolVersionsHelper.DOWN_1_8);
+	}
+
+}
