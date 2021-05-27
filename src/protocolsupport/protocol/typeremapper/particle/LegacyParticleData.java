@@ -7,7 +7,7 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
+import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemappingHelper;
 import protocolsupport.protocol.typeremapper.utils.MappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingTable;
@@ -76,7 +76,7 @@ public class LegacyParticleData {
 		{
 			Arrays.stream(ProtocolVersionsHelper.ALL)
 			.forEach(version -> {
-				ArrayBasedIntMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+				ArrayBasedIntMappingTable blockDataRemappingTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 				register(ParticleBlock.class, original -> new ParticleBlock(
 					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
 					original.getData(), original.getCount(),

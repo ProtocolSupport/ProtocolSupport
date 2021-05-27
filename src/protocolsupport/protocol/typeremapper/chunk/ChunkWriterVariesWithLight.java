@@ -12,7 +12,7 @@ import protocolsupport.protocol.storage.netcache.chunk.BlockStorageBytePaletted;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunkSectionBlockStorage;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
-import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;

@@ -5,7 +5,7 @@ import org.bukkit.block.data.BlockData;
 
 import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
+import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 
 public class BlockRemapperControl {
@@ -14,14 +14,14 @@ public class BlockRemapperControl {
 	 * Resets all block remaps to default ones
 	 */
 	public static void resetToDefault() {
-		LegacyBlockData.REGISTRY.applyDefaultRemaps();
+		BlockDataLegacyDataRegistry.INSTANCE.applyDefault();
 	}
 
 	protected final ArrayBasedIntMappingTable table;
 
 	public BlockRemapperControl(ProtocolVersion version) {
 		Validate.isTrue(version.isSupported(), "Can't control block remapping for unsupported version");
-		table = LegacyBlockData.REGISTRY.getTable(version);
+		table = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 	}
 
 	/**

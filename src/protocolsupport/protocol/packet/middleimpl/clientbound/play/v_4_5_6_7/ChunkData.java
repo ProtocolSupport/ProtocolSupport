@@ -10,7 +10,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.basic.BiomeRemapper;
-import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
+import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterByte;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterUtils;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
@@ -28,7 +28,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 	protected final ClientCache clientCache = cache.getClientCache();
 
 	protected final GenericMappingTable<NamespacedKey> biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
-	protected final IdMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
+	protected final IdMappingTable blockDataRemappingTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 
 	@Override
 	protected void write() {

@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
+import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry.NetworkEntityLegacyDataTable;
 import protocolsupport.protocol.typeremapper.entity.legacy.metadata.BatInitDefaultMetadataTranfromer;
 import protocolsupport.protocol.typeremapper.entity.legacy.metadata.BattleHorseInitDefaultMetadataTransformer;
@@ -113,7 +113,7 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		.add(NetworkEntityType.CHICKEN, ProtocolVersionsHelper.DOWN_1_11_1)
 		.register();
 
-		register(NetworkEntityType.ENDERMAN, version -> new NetworkEntityLegacyDataEntry(NetworkEntityType.ENDERMAN, new GenericEntityDirectBlockDataMetadataTransformer(LegacyBlockData.REGISTRY.getTable(version), NetworkEntityMetadataObjectIndex.Enderman.CARRIED_BLOCK)));
+		register(NetworkEntityType.ENDERMAN, version -> new NetworkEntityLegacyDataEntry(NetworkEntityType.ENDERMAN, new GenericEntityDirectBlockDataMetadataTransformer(BlockDataLegacyDataRegistry.INSTANCE.getTable(version), NetworkEntityMetadataObjectIndex.Enderman.CARRIED_BLOCK)));
 
 		registerNoop(NetworkEntityType.GIANT);
 
@@ -420,7 +420,7 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		.add(NetworkEntityLegacyDataEntry.NONE, ProtocolVersionsHelper.DOWN_1_7_10)
 		.register();
 
-		register(NetworkEntityType.MINECART, version -> new NetworkEntityLegacyDataEntry(NetworkEntityType.MINECART, new GenericEntityVarIntBlockDataMetadataTransformer(LegacyBlockData.REGISTRY.getTable(version), NetworkEntityMetadataObjectIndex.Minecart.BLOCK)));
+		register(NetworkEntityType.MINECART, version -> new NetworkEntityLegacyDataEntry(NetworkEntityType.MINECART, new GenericEntityVarIntBlockDataMetadataTransformer(BlockDataLegacyDataRegistry.INSTANCE.getTable(version), NetworkEntityMetadataObjectIndex.Minecart.BLOCK)));
 
 		registerNoop(NetworkEntityType.MINECART_CHEST);
 

@@ -6,10 +6,10 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.block.FlatteningBlockData;
-import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataEntry;
-import protocolsupport.protocol.typeremapper.block.FlatteningBlockData.FlatteningBlockDataTable;
-import protocolsupport.protocol.typeremapper.block.LegacyBlockData;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataEntry;
+import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
+import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.itemstack.FlatteningItemId;
 import protocolsupport.protocol.typeremapper.itemstack.legacy.ItemStackLegacyData;
 import protocolsupport.protocol.typeremapper.itemstack.legacy.ItemStackLegacyData.ItemStackLegacyDataTable;
@@ -25,8 +25,8 @@ public abstract class AbstractDeclareTags extends MiddleDeclareTags {
 	}
 
 	protected void writeBlocksTags(ByteBuf to, Tag[] tags) {
-		IdMappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);
-		FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockData.REGISTRY.getTable(version);
+		IdMappingTable blockDataRemappingTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
+		FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockDataRegistry.INSTANCE.getTable(version);
 		ArraySerializer.writeVarIntTArray(to, tags, (tagsTo, tag) -> {
 			StringSerializer.writeVarIntUTF8String(tagsTo, tag.getTagId());
 			MiscSerializer.writeVarIntCountPrefixedType(tagsTo, tag.getTaggedIds(), (taggedIdsTo, blocksIds) -> {
@@ -34,7 +34,7 @@ public abstract class AbstractDeclareTags extends MiddleDeclareTags {
 				for (int blockId : blocksIds) {
 					int blockData = BlockBlockDataLookup.getBlockDataId(blockId);
 					if (blockDataRemappingTable.get(blockData) == blockData) {
-						FlatteningBlockDataEntry fEntry = flatteningBlockDataTable.getRemap(blockData);
+						FlatteningBlockDataEntry fEntry = flatteningBlockDataTable.get(blockData);
 						VarNumberSerializer.writeVarInt(taggedIdsTo, fEntry != null ? fEntry.getBlockId() : blockId);
 					} else {
 						count--;
