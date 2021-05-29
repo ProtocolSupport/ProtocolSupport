@@ -25,8 +25,8 @@ import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.JavaSystemProperty;
 import protocolsupport.utils.netty.Decompressor;
-import protocolsupport.utils.netty.ReplayingDecoderBuffer;
-import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
+import protocolsupport.utils.netty.ReplayingDecoderByteBuf;
+import protocolsupport.utils.netty.ReplayingDecoderByteBuf.EOFSignal;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.impl.encapsulated.EncapsulatedProtocolInfo;
@@ -96,7 +96,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_LEGACY, new protocolsupport.protocol.pipeline.version.v_l.PipeLineBuilder());
 	}
 
-	protected final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer(Unpooled.buffer());
+	protected final ReplayingDecoderByteBuf buffer = new ReplayingDecoderByteBuf(Unpooled.buffer());
 
 	protected Future<?> responseTask;
 
@@ -128,7 +128,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		if (!buf.isReadable()) {
 			return;
 		}
-		buffer.writeBytes(buf);
+		buffer.unwrap().writeBytes(buf);
 		buffer.readerIndex(0);
 		decode(ctx);
 	}

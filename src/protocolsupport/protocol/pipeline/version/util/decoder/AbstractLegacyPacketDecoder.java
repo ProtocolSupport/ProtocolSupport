@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.utils.netty.ReplayingDecoderBuffer;
-import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
+import protocolsupport.utils.netty.ReplayingDecoderByteBuf;
+import protocolsupport.utils.netty.ReplayingDecoderByteBuf.EOFSignal;
 
 public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 
@@ -13,14 +13,14 @@ public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder 
 		super(connection);
 	}
 
-	protected final ReplayingDecoderBuffer buffer = new ReplayingDecoderBuffer(Unpooled.buffer());
+	protected final ReplayingDecoderByteBuf buffer = new ReplayingDecoderByteBuf(Unpooled.buffer());
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, ByteBuf input) throws Exception {
 		if (!input.isReadable()) {
 			return;
 		}
-		buffer.writeBytes(input);
+		buffer.unwrap().writeBytes(input);
 		while (buffer.isReadable()) {
 			buffer.markReaderIndex();
 			try {
@@ -37,7 +37,7 @@ public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder 
 				}
 			}
 		}
-		buffer.discardReadBytes();
+		buffer.unwrap().discardReadBytes();
 	}
 
 }
