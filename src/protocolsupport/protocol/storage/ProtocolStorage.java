@@ -14,6 +14,9 @@ import protocolsupport.protocol.ConnectionImpl;
 
 public class ProtocolStorage {
 
+	private ProtocolStorage() {
+	}
+
 	private static final Map<SocketAddress, Data> primaryStorage = new ConcurrentHashMap<>(1000);
 	private static final Map<SocketAddress, ConnectionImpl> secondaryStorage = new ConcurrentHashMap<>(2000);
 

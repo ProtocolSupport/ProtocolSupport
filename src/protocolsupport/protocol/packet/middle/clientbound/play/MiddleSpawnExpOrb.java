@@ -11,7 +11,7 @@ public abstract class MiddleSpawnExpOrb extends ClientBoundMiddlePacket {
 
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
-	public MiddleSpawnExpOrb(MiddlePacketInit init) {
+	protected MiddleSpawnExpOrb(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -1,5 +1,8 @@
 package protocolsupport.protocol.utils;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
 public class NumberBitsStoragePadded {
 
 	//precomputed table for fast division by numbersPerLong
@@ -27,7 +30,7 @@ public class NumberBitsStoragePadded {
 	protected final long indexAdd;
 	protected final int indexShift;
 
-	public NumberBitsStoragePadded(int bitsPerNumber, int size) {
+	public NumberBitsStoragePadded(@Nonnegative int bitsPerNumber, @Nonnegative int size) {
 		this.bitsPerNumber = bitsPerNumber;
 		this.singleNumberMask = (1L << bitsPerNumber) - 1L;
 		this.numbersPerLong = Long.SIZE / bitsPerNumber;
@@ -38,7 +41,7 @@ public class NumberBitsStoragePadded {
 		this.storage = new long[((size + numbersPerLong) - 1) / numbersPerLong];
 	}
 
-	public NumberBitsStoragePadded(int bitsPerNumber, long[] storage) {
+	public NumberBitsStoragePadded(@Nonnegative int bitsPerNumber, @Nonnull long[] storage) {
 		this.bitsPerNumber = bitsPerNumber;
 		this.singleNumberMask = (1L << bitsPerNumber) - 1L;
 		this.numbersPerLong = Long.SIZE / bitsPerNumber;
@@ -49,29 +52,29 @@ public class NumberBitsStoragePadded {
 		this.storage = storage;
 	}
 
-	public int getBitsPerNumber() {
+	public @Nonnegative int getBitsPerNumber() {
 		return bitsPerNumber;
 	}
 
-	public long[] getStorage() {
+	public @Nonnull long[] getStorage() {
 		return storage;
 	}
 
-	protected final int getStorageIndex(int index) {
+	protected final @Nonnegative int getStorageIndex(@Nonnegative int index) {
 		//fast division by numbersPerLong
 		return (int) (((index * indexMul) + indexAdd) >> indexShift);
 	}
 
-	protected final int getStorageValueShift(int index, int storageIndex) {
+	protected final @Nonnegative int getStorageValueShift(@Nonnegative int index, @Nonnegative int storageIndex) {
 		return (index - (storageIndex * numbersPerLong)) * bitsPerNumber;
 	}
 
-	public int getNumber(int index) {
+	public int getNumber(@Nonnegative int index) {
 		int storageIndex = getStorageIndex(index);
 		return (int) ((storage[storageIndex] >> getStorageValueShift(index, storageIndex)) & singleNumberMask);
 	}
 
-	public void setNumber(int index, int number) {
+	public void setNumber(@Nonnegative int index, int number) {
 		int storageIndex = getStorageIndex(index);
 		int storageValueShift = getStorageValueShift(index, storageIndex);
 		storage[storageIndex] = (storage[storageIndex] & ~(singleNumberMask << storageValueShift)) | ((number & singleNumberMask) << storageValueShift);

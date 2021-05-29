@@ -10,7 +10,7 @@ public abstract class MiddleStopSound extends ClientBoundMiddlePacket {
 	protected static final int FLAG_SOURCE = 0x1;
 	protected static final int FLAG_NAME = 0x2;
 
-	public MiddleStopSound(MiddlePacketInit init) {
+	protected MiddleStopSound(MiddlePacketInit init) {
 		super(init);
 	}
 

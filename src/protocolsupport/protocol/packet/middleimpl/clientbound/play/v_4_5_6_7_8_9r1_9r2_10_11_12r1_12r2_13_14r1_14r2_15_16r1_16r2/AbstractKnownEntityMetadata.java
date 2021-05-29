@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class AbstractKnownEntityMetadata extends MiddleEntityMetadata {
 
-	public AbstractKnownEntityMetadata(MiddlePacketInit init) {
+	protected AbstractKnownEntityMetadata(MiddlePacketInit init) {
 		super(init);
 	}
 

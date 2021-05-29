@@ -1,5 +1,9 @@
 package protocolsupport.protocol.typeremapper.legacy;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.bukkit.NamespacedKey;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -10,6 +14,9 @@ import protocolsupportbuildprocessor.Preload;
 
 @Preload
 public class LegacyPotionId {
+
+	private LegacyPotionId() {
+	}
 
 	private static final Object2IntOpenHashMap<String> toLegacyTypeId = new Object2IntOpenHashMap<>();
 	private static final Int2ObjectOpenHashMap<String> fromLegacyTypeId = new Int2ObjectOpenHashMap<>();
@@ -88,16 +95,16 @@ public class LegacyPotionId {
 		register("long_invisibility", makeExtended(14));
 	}
 
-	public static int toLegacyId(String nbttag, boolean isThrowable) {
+	public static @Nonnegative int toLegacyId(@Nonnull String nbttag, boolean isThrowable) {
 		int value = toLegacyTypeId.getInt(nbttag);
 		return isThrowable ? value | bitmaskThrowable : value | bitmaskDrinkable;
 	}
 
-	public static boolean isThrowable(int legacyId) {
+	public static boolean isThrowable(@Nonnegative int legacyId) {
 		return (legacyId & bitmaskThrowable) != 0;
 	}
 
-	public static String fromLegacyId(int legacyId) {
+	public static @Nullable String fromLegacyId(@Nonnegative int legacyId) {
 		return fromLegacyTypeId.get(legacyId & bitmaskType);
 	}
 

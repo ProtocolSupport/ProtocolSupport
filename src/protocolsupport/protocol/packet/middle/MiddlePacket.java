@@ -11,7 +11,7 @@ public abstract class MiddlePacket {
 	protected final NetworkDataCache cache;
 	protected final ProtocolVersion version;
 
-	public MiddlePacket(MiddlePacketInit init) {
+	protected MiddlePacket(MiddlePacketInit init) {
 		this.codec = init.getCodec();
 		this.cache = init.getCache();
 		this.version = init.getVersion();

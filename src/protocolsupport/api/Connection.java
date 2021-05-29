@@ -8,6 +8,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.BiFunction;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.bukkit.entity.Player;
 
 import io.netty.buffer.ByteBuf;
@@ -28,7 +31,7 @@ public abstract class Connection {
 	 * This can be anything, but for now it's NetworkManager for spigot and GlowSession for GlowStone
 	 * @return native network manager object
 	 */
-	public abstract Object getNetworkManager();
+	public abstract @Nonnull Object getNetworkManager();
 
 	/**
 	 * Returns if this connection is active
@@ -46,46 +49,46 @@ public abstract class Connection {
 	 * If sending disconnect message is impossible, just closes the connection
 	 * @param message disconnect message
 	 */
-	public abstract void disconnect(BaseComponent message);
+	public abstract void disconnect(@Nonnull BaseComponent message);
 
 	/**
 	 * Disconnects client with sending disconnect message <br>
 	 * If sending disconnect message is impossible, just closes the connection
 	 * @param message disconnect message
 	 */
-	public abstract void disconnect(String message);
+	public abstract void disconnect(@Nonnull String message);
 
 	/**
 	 * Returns address the player connected to/pinged
 	 * @return address the player connected to/pinged
 	 */
-	public abstract InetSocketAddress getVirtualHost();
+	public abstract @Nullable InetSocketAddress getVirtualHost();
 
 	/**
 	 * Returns real remote address
 	 * @return real remote address
 	 */
-	public abstract InetSocketAddress getRawAddress();
+	public abstract @Nonnull InetSocketAddress getRawAddress();
 
 	/**
 	 * Returns remote address <br>
 	 * This address can be spoofed
 	 * @return remote address
 	 */
-	public abstract InetSocketAddress getAddress();
+	public abstract @Nonnull InetSocketAddress getAddress();
 
 	/**
 	 * Changes remote address <br>
 	 * This address will be available as parameter for ProtocolSupportAPI until connection close
 	 * @param newRemote new remote address
 	 */
-	public abstract void changeAddress(InetSocketAddress newRemote);
+	public abstract void changeAddress(@Nonnull InetSocketAddress newRemote);
 
 	/**
 	 * Returns {@link Profile} object
 	 * @return {@link Profile} object
 	 */
-	public Profile getProfile() {
+	public @Nonnull Profile getProfile() {
 		return profile;
 	}
 
@@ -93,7 +96,7 @@ public abstract class Connection {
 	 * Returns {@link Player} object if possible
 	 * @return {@link Player} object or null
 	 */
-	public abstract Player getPlayer();
+	public abstract @Nullable Player getPlayer();
 
 	/**
 	 * Returns {@link ProtocolVersion} <br>
@@ -109,41 +112,41 @@ public abstract class Connection {
 	 * This can be anything, but it's EventLoop on netty based servers
 	 * @return {@link ScheduledExecutorService} which executes tasks in network i/o threads
 	 */
-	public abstract ScheduledExecutorService getIOExecutor();
+	public abstract @Nonnull ScheduledExecutorService getIOExecutor();
 
 	/**
 	 * Receives packet from client <br>
 	 * Packet received by this method skips receive packet listener
 	 * @param packet packet
 	 */
-	public abstract void receivePacket(Object packet);
+	public abstract void receivePacket(@Nonnull Object packet);
 
 	/**
 	 * Sends packet to player <br>
 	 * Packet sent by this method skips send packet listener
 	 * @param packet packet
 	 */
-	public abstract void sendPacket(Object packet);
+	public abstract void sendPacket(@Nonnull Object packet);
 
 	/**
 	 * Sends packet data to player <br>
 	 * Packet sent by this method should use native client protocol (packet data including packet id)
 	 * @param data packet data
 	 */
-	public abstract void sendRawPacket(byte[] data);
+	public abstract void sendRawPacket(@Nonnull byte[] data);
 
 	/**
 	 * Receives raw packet data from client <br>
 	 * Packet received by this method should use native client protocol (packet data including packet id)
 	 * @param data packet data
 	 */
-	public abstract void receiveRawPacket(byte[] data);
+	public abstract void receiveRawPacket(@Nonnull byte[] data);
 
 	/**
 	 * Gets the state at which server network is now
 	 * @return network state
 	 */
-	public abstract NetworkState getNetworkState();
+	public abstract @Nonnull NetworkState getNetworkState();
 
 
 	protected final CopyOnWriteArrayList<PacketListener> packetlisteners = new CopyOnWriteArrayList<>();
@@ -152,7 +155,7 @@ public abstract class Connection {
 	 * Adds packet listener
 	 * @param listener packet listener
 	 */
-	public void addPacketListener(PacketListener listener) {
+	public void addPacketListener(@Nonnull PacketListener listener) {
 		packetlisteners.add(listener);
 	}
 
@@ -160,7 +163,7 @@ public abstract class Connection {
 	 * Removes packet listener
 	 * @param listener packet listener
 	 */
-	public void removePacketListener(PacketListener listener) {
+	public void removePacketListener(@Nonnull PacketListener listener) {
 		packetlisteners.remove(listener);
 	}
 
@@ -171,7 +174,7 @@ public abstract class Connection {
 	 * @param key map key
 	 * @param obj value
 	 */
-	public void addMetadata(String key, Object obj) {
+	public void addMetadata(@Nonnull String key, @Nonnull Object obj) {
 		metadata.put(key, obj);
 	}
 
@@ -182,7 +185,7 @@ public abstract class Connection {
 	 * @return value from internal map
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T getMetadata(String key) {
+	public <T> T getMetadata(@Nonnull String key) {
 		return (T) metadata.get(key);
 	}
 
@@ -193,7 +196,7 @@ public abstract class Connection {
 	 * @return deleted value from internal map
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T removeMetadata(String key) {
+	public <T> T removeMetadata(@Nonnull String key) {
 		return (T) metadata.remove(key);
 	}
 
@@ -202,7 +205,7 @@ public abstract class Connection {
 	 * @param key map key
 	 * @return true is there was any object by map key
 	 */
-	public boolean hasMetadata(String key) {
+	public boolean hasMetadata(@Nonnull String key) {
 		return metadata.containsKey(key);
 	}
 
@@ -214,7 +217,7 @@ public abstract class Connection {
 	 * @return computed value
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <V> V computeMetadata(String key, BiFunction<String, V, V> function) {
+	public <V> V computeMetadata(@Nonnull String key, @Nonnull BiFunction<String, V, V> function) {
 		return (V) metadata.compute(key, (BiFunction) function);
 	}
 
@@ -225,7 +228,7 @@ public abstract class Connection {
 		 * PacketEvent and it's data is only valid while handling the packet
 		 * @param event packet event
 		 */
-		public void onPacketSending(PacketEvent event) {
+		public void onPacketSending(@Nonnull PacketEvent event) {
 		}
 
 		/**
@@ -234,7 +237,7 @@ public abstract class Connection {
 		 * Based on client version this the received data might be a part of packet, not a full one
 		 * @param event packet event
 		 */
-		public void onPacketReceiving(PacketEvent event) {
+		public void onPacketReceiving(@Nonnull PacketEvent event) {
 		}
 
 		/**
@@ -242,14 +245,14 @@ public abstract class Connection {
 		 * PacketEvent and it's data is only valid while handling the packet
 		 * @param event packet event
 		 */
-		public void onRawPacketSending(RawPacketEvent event) {
+		public void onRawPacketSending(@Nonnull RawPacketEvent event) {
 		}
 
 		/**
 		 * Override to handle raw packet sending
 		 * @param event packet event
 		 */
-		public void onRawPacketReceiving(RawPacketEvent event) {
+		public void onRawPacketReceiving(@Nonnull RawPacketEvent event) {
 		}
 
 		public static class PacketEvent {
@@ -262,7 +265,7 @@ public abstract class Connection {
 			 * Returns main packet (packet that triggered this event)
 			 * @return native packet instance
 			 */
-			public Object getPacket() {
+			public @Nonnull Object getPacket() {
 				return mainpacket;
 			}
 
@@ -271,7 +274,7 @@ public abstract class Connection {
 			 * This collection can be used to manually position additional packets when interop with other plugins is required
 			 * @return all native packets instances that will be processed
 			 */
-			public List<Object> getPackets() {
+			public @Nonnull List<Object> getPackets() {
 				return packets;
 			}
 
@@ -280,7 +283,7 @@ public abstract class Connection {
 			 * This packet will be processed before the main packet
 			 * @param packet native packet instance
 			 */
-			public void addPacketBefore(Object packet) {
+			public void addPacketBefore(@Nonnull Object packet) {
 				packets.add(packets.indexOf(mainpacket), packet);
 			}
 
@@ -289,7 +292,7 @@ public abstract class Connection {
 			 * This packet will be processed after the main packet
 			 * @param packet native packet instance
 			 */
-			public void addPacketAfter(Object packet) {
+			public void addPacketAfter(@Nonnull Object packet) {
 				packets.add(packets.indexOf(mainpacket) + 1, packet);
 			}
 
@@ -297,7 +300,7 @@ public abstract class Connection {
 			 * Sets main packet
 			 * @param packet native packet instance
 			 */
-			public void setPacket(Object packet) {
+			public void setPacket(@Nonnull Object packet) {
 				this.mainpacket = packet;
 			}
 
@@ -327,7 +330,7 @@ public abstract class Connection {
 			 * Returns read only packet data
 			 * @return read only packet data
 			 */
-			public ByteBuf getData() {
+			public @Nonnull ByteBuf getData() {
 				return new ReadOnlyByteBuf(data);
 			}
 
@@ -336,7 +339,7 @@ public abstract class Connection {
 			 * A copy of passed ByteBuf is made, and passed ByteBuf is not released
 			 * @param data packet data
 			 */
-			public void setData(ByteBuf data) {
+			public void setData(@Nonnull ByteBuf data) {
 				this.data.release();
 				this.data = data.copy();
 			}

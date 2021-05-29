@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleRecipeBookS
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleRecipeBookState.RecipeBookType;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public class RecipeBookData extends ServerBoundMiddlePacket {
 
@@ -55,7 +55,7 @@ public class RecipeBookData extends ServerBoundMiddlePacket {
 		}
 	}
 
-	protected static enum Type {
+	protected enum Type {
 		DISPLAYED_RECIPE, RECIPE_BOOK_STATUS;
 		public static final EnumConstantLookup<Type> CONSTANT_LOOKUP = new EnumConstantLookup<>(Type.class);
 	}

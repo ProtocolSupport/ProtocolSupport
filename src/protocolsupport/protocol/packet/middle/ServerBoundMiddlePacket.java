@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 
 public abstract class ServerBoundMiddlePacket extends MiddlePacket {
 
-	public ServerBoundMiddlePacket(MiddlePacketInit init) {
+	protected ServerBoundMiddlePacket(MiddlePacketInit init) {
 		super(init);
 	}
 

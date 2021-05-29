@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class AbstractKnownEntityPassengers extends MiddleEntityPassengers {
 
-	public AbstractKnownEntityPassengers(MiddlePacketInit init) {
+	protected AbstractKnownEntityPassengers(MiddlePacketInit init) {
 		super(init);
 	}
 

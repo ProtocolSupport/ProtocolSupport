@@ -5,11 +5,11 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleEntityAction extends ServerBoundMiddlePacket {
 
-	public MiddleEntityAction(MiddlePacketInit init) {
+	protected MiddleEntityAction(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -30,9 +30,9 @@ public abstract class MiddleEntityAction extends ServerBoundMiddlePacket {
 		return creator;
 	}
 
-	protected static enum Action {
+	protected enum Action {
 		START_SNEAK, STOP_SNEAK, LEAVE_BED, START_SPRINT, STOP_SPRINT, START_JUMP, STOP_JUMP, OPEN_HORSE_INV, START_ELYTRA_FLY;
-		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
+		public static final EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookup<>(Action.class);
 	}
 
 }

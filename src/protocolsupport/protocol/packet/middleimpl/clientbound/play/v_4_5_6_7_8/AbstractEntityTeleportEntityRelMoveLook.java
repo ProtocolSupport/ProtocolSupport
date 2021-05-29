@@ -5,7 +5,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 
 public abstract class AbstractEntityTeleportEntityRelMoveLook extends AbstractLocationOffsetEntityRelMoveLook {
 
-	public AbstractEntityTeleportEntityRelMoveLook(MiddlePacketInit init) {
+	protected AbstractEntityTeleportEntityRelMoveLook(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -16,10 +16,10 @@ public abstract class AbstractEntityTeleportEntityRelMoveLook extends AbstractLo
 		double x = ecache.getX();
 		double y = ecache.getY();
 		double z = ecache.getZ();
-		if (entityOffsetEntry != null) {
-			x += entityOffsetEntry.getX();
-			y += entityOffsetEntry.getY();
-			z += entityOffsetEntry.getZ();
+		if (entityLegacyOffsetEntry != null) {
+			x += entityLegacyOffsetEntry.getX();
+			y += entityLegacyOffsetEntry.getY();
+			z += entityLegacyOffsetEntry.getZ();
 		}
 		writeTeleport(x, y, z, yaw, pitch, onGround);
 	}

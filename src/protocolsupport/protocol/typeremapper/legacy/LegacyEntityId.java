@@ -1,8 +1,13 @@
 package protocolsupport.protocol.typeremapper.legacy;
 
+import java.text.MessageFormat;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.CheckForSigned;
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
 
 import org.bukkit.entity.EntityType;
 
@@ -12,10 +17,13 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class LegacyEntityId {
 
-	protected static final Map<NetworkEntityType, String> toLegacyStringId = new EnumMap<>(NetworkEntityType.class);
-	protected static final Map<String, NetworkEntityType> fromLegacyStringId = new HashMap<>();
+	private LegacyEntityId() {
+	}
 
-	protected static void register(NetworkEntityType type, String stringId) {
+	private static final Map<NetworkEntityType, String> toLegacyStringId = new EnumMap<>(NetworkEntityType.class);
+	private static final Map<String, NetworkEntityType> fromLegacyStringId = new HashMap<>();
+
+	private static void register(@Nonnull NetworkEntityType type, @Nonnull String stringId) {
 		toLegacyStringId.put(type, stringId);
 		fromLegacyStringId.put(stringId, type);
 	}
@@ -102,67 +110,70 @@ public class LegacyEntityId {
 		register(NetworkEntityType.SQUID, "Squid");
 	}
 
-	public static String getStringId(NetworkEntityType type) {
+	public static @Nonnull String getStringId(@Nonnull NetworkEntityType type) {
 		return toLegacyStringId.getOrDefault(type, type.getKey());
 	}
 
 	@SuppressWarnings("deprecation")
-	public static int getIntId(NetworkEntityType type) {
-		EntityType btype = type.getBukkitType();
-		return btype != null ? btype.getTypeId() : -1;
+	public static @CheckForSigned int getIntId(@Nonnull NetworkEntityType type) {
+		return type.getBukkitType().getTypeId();
 	}
 
-	public static NetworkEntityType getTypeByStringId(String stringId) {
+	public static @Nonnull NetworkEntityType getTypeByStringId(@Nonnull String stringId) {
 		return fromLegacyStringId.getOrDefault(stringId, NetworkEntityType.NONE);
 	}
 
 	@SuppressWarnings("deprecation")
-	public static NetworkEntityType getTypeByIntId(int intId) {
+	public static @Nonnull NetworkEntityType getTypeByIntId(@Nonnegative int intId) {
 		EntityType btype = EntityType.fromId(intId);
 		return btype != null ? NetworkEntityType.getByBukkitType(btype) : NetworkEntityType.NONE;
 	}
 
-	protected static final Map<NetworkEntityType, Integer> toLegacyIntId = new EnumMap<>(NetworkEntityType.class);
+	private static final Map<NetworkEntityType, Integer> legacyEntityObjectIntId = new EnumMap<>(NetworkEntityType.class);
 	static {
-		toLegacyIntId.put(NetworkEntityType.BOAT, 1);
-		toLegacyIntId.put(NetworkEntityType.TNT, 50);
-		toLegacyIntId.put(NetworkEntityType.SNOWBALL, 61);
-		toLegacyIntId.put(NetworkEntityType.EGG, 62);
-		toLegacyIntId.put(NetworkEntityType.FIREBALL, 63);
-		toLegacyIntId.put(NetworkEntityType.FIRECHARGE, 64);
-		toLegacyIntId.put(NetworkEntityType.ENDERPEARL, 65);
-		toLegacyIntId.put(NetworkEntityType.WITHER_SKULL, 66);
-		toLegacyIntId.put(NetworkEntityType.FALLING_OBJECT, 70);
-		toLegacyIntId.put(NetworkEntityType.ENDEREYE, 72);
-		toLegacyIntId.put(NetworkEntityType.POTION, 73);
-		toLegacyIntId.put(NetworkEntityType.EXP_BOTTLE, 75);
-		toLegacyIntId.put(NetworkEntityType.LEASH_KNOT, 77);
-		toLegacyIntId.put(NetworkEntityType.FISHING_FLOAT, 90);
-		toLegacyIntId.put(NetworkEntityType.ITEM, 2);
-		toLegacyIntId.put(NetworkEntityType.ARROW, 60);
-		toLegacyIntId.put(NetworkEntityType.TIPPED_ARROW, 60);
-		toLegacyIntId.put(NetworkEntityType.SPECTRAL_ARROW, 91);
-		toLegacyIntId.put(NetworkEntityType.THROWN_TRIDENT, 94);
-		toLegacyIntId.put(NetworkEntityType.FIREWORK, 76);
-		toLegacyIntId.put(NetworkEntityType.ITEM_FRAME, 71);
-		toLegacyIntId.put(NetworkEntityType.ENDER_CRYSTAL, 51);
-		toLegacyIntId.put(NetworkEntityType.AREA_EFFECT_CLOUD, 3);
-		toLegacyIntId.put(NetworkEntityType.SHULKER_BULLET, 67);
-		toLegacyIntId.put(NetworkEntityType.LAMA_SPIT, 68);
-		toLegacyIntId.put(NetworkEntityType.DRAGON_FIREBALL, 93);
-		toLegacyIntId.put(NetworkEntityType.EVOCATOR_FANGS, 79);
-		toLegacyIntId.put(NetworkEntityType.ARMOR_STAND_OBJECT, 78);
-		toLegacyIntId.put(NetworkEntityType.MINECART, 10);
-		toLegacyIntId.put(NetworkEntityType.MINECART_CHEST, 10);
-		toLegacyIntId.put(NetworkEntityType.MINECART_FURNACE, 10);
-		toLegacyIntId.put(NetworkEntityType.MINECART_TNT, 10);
-		toLegacyIntId.put(NetworkEntityType.MINECART_MOB_SPAWNER, 10);
-		toLegacyIntId.put(NetworkEntityType.MINECART_HOPPER, 10);
-		toLegacyIntId.put(NetworkEntityType.MINECART_COMMAND, 10);
+		legacyEntityObjectIntId.put(NetworkEntityType.BOAT, 1);
+		legacyEntityObjectIntId.put(NetworkEntityType.TNT, 50);
+		legacyEntityObjectIntId.put(NetworkEntityType.SNOWBALL, 61);
+		legacyEntityObjectIntId.put(NetworkEntityType.EGG, 62);
+		legacyEntityObjectIntId.put(NetworkEntityType.FIREBALL, 63);
+		legacyEntityObjectIntId.put(NetworkEntityType.FIRECHARGE, 64);
+		legacyEntityObjectIntId.put(NetworkEntityType.ENDERPEARL, 65);
+		legacyEntityObjectIntId.put(NetworkEntityType.WITHER_SKULL, 66);
+		legacyEntityObjectIntId.put(NetworkEntityType.FALLING_OBJECT, 70);
+		legacyEntityObjectIntId.put(NetworkEntityType.ENDEREYE, 72);
+		legacyEntityObjectIntId.put(NetworkEntityType.POTION, 73);
+		legacyEntityObjectIntId.put(NetworkEntityType.EXP_BOTTLE, 75);
+		legacyEntityObjectIntId.put(NetworkEntityType.LEASH_KNOT, 77);
+		legacyEntityObjectIntId.put(NetworkEntityType.FISHING_FLOAT, 90);
+		legacyEntityObjectIntId.put(NetworkEntityType.ITEM, 2);
+		legacyEntityObjectIntId.put(NetworkEntityType.ARROW, 60);
+		legacyEntityObjectIntId.put(NetworkEntityType.TIPPED_ARROW, 60);
+		legacyEntityObjectIntId.put(NetworkEntityType.SPECTRAL_ARROW, 91);
+		legacyEntityObjectIntId.put(NetworkEntityType.THROWN_TRIDENT, 94);
+		legacyEntityObjectIntId.put(NetworkEntityType.FIREWORK, 76);
+		legacyEntityObjectIntId.put(NetworkEntityType.ITEM_FRAME, 71);
+		legacyEntityObjectIntId.put(NetworkEntityType.ENDER_CRYSTAL, 51);
+		legacyEntityObjectIntId.put(NetworkEntityType.AREA_EFFECT_CLOUD, 3);
+		legacyEntityObjectIntId.put(NetworkEntityType.SHULKER_BULLET, 67);
+		legacyEntityObjectIntId.put(NetworkEntityType.LAMA_SPIT, 68);
+		legacyEntityObjectIntId.put(NetworkEntityType.DRAGON_FIREBALL, 93);
+		legacyEntityObjectIntId.put(NetworkEntityType.EVOCATOR_FANGS, 79);
+		legacyEntityObjectIntId.put(NetworkEntityType.ARMOR_STAND_OBJECT, 78);
+		legacyEntityObjectIntId.put(NetworkEntityType.MINECART, 10);
+		legacyEntityObjectIntId.put(NetworkEntityType.MINECART_CHEST, 10);
+		legacyEntityObjectIntId.put(NetworkEntityType.MINECART_FURNACE, 10);
+		legacyEntityObjectIntId.put(NetworkEntityType.MINECART_TNT, 10);
+		legacyEntityObjectIntId.put(NetworkEntityType.MINECART_MOB_SPAWNER, 10);
+		legacyEntityObjectIntId.put(NetworkEntityType.MINECART_HOPPER, 10);
+		legacyEntityObjectIntId.put(NetworkEntityType.MINECART_COMMAND, 10);
 	}
 
-	public static int getObjectIntId(NetworkEntityType type) {
-		return toLegacyIntId.get(type);
+	public static int getObjectIntId(@Nonnull NetworkEntityType type) {
+		Integer legacyId = legacyEntityObjectIntId.get(type);
+		if (legacyId == null) {
+			throw new IllegalArgumentException(MessageFormat.format("Missing entity object {0} legacy id", legacyId));
+		}
+		return legacyId;
 	}
 
 }

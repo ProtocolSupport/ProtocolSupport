@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.Position;
 
 public abstract class MiddleSpawnPosition extends ClientBoundMiddlePacket {
 
-	public MiddleSpawnPosition(MiddlePacketInit init) {
+	protected MiddleSpawnPosition(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -9,7 +9,7 @@ import protocolsupport.protocol.types.Position;
 
 public abstract class MiddleUpdateSign extends ServerBoundMiddlePacket {
 
-	public MiddleUpdateSign(MiddlePacketInit init) {
+	protected MiddleUpdateSign(MiddlePacketInit init) {
 		super(init);
 	}
 

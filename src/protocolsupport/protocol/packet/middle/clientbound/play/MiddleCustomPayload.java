@@ -16,7 +16,7 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelNa
 
 public abstract class MiddleCustomPayload extends ClientBoundMiddlePacket {
 
-	public MiddleCustomPayload(MiddlePacketInit init) {
+	protected MiddleCustomPayload(MiddlePacketInit init) {
 		super(init);
 	}
 

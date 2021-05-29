@@ -15,7 +15,7 @@ public class LocaleUseLoader implements Listener {
 		if (TranslationAPI.isBuiltInLoaderEnabled()) {
 			String locale = event.getLocale();
 			if (TranslationAPI.getBuiltInTranslations().contains(locale) && !TranslationAPI.isTranslationRegistered(locale)) {
-				Bukkit.getScheduler().runTaskAsynchronously(ProtocolSupport.getInstance(), () -> TranslationAPI.loadBuiltTranslation(locale));
+				Bukkit.getScheduler().runTaskAsynchronously(ProtocolSupport.getInstance(), () -> TranslationAPI.loadBuiltInTranslation(locale));
 			}
 		}
 	}

@@ -6,6 +6,9 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class ChannelHandlers {
 
+	private ChannelHandlers() {
+	}
+
 	public static final String INITIAL_DECODER = "ps_initial_decoder";
 	public static final String DECODER_TRANSFORMER = "ps_decoder_transformer";
 	public static final String ENCODER_TRANSFORMER = "ps_encoder_transformer";

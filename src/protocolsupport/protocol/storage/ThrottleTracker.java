@@ -10,9 +10,12 @@ import protocolsupport.utils.Utils;
 
 public class ThrottleTracker {
 
-	protected static final long time = Bukkit.getConnectionThrottle();
+	private ThrottleTracker() {
+	}
 
-	protected static final Object2LongOpenHashMap<InetAddress> tracker = new Object2LongOpenHashMap<>();
+	private static final long time = Bukkit.getConnectionThrottle();
+
+	private static final Object2LongOpenHashMap<InetAddress> tracker = new Object2LongOpenHashMap<>();
 	static {
 		tracker.defaultReturnValue(-1);
 	}

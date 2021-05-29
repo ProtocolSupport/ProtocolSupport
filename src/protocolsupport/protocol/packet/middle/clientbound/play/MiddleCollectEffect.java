@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleCollectEffect extends ClientBoundMiddlePacket {
 
-	public MiddleCollectEffect(MiddlePacketInit init) {
+	protected MiddleCollectEffect(MiddlePacketInit init) {
 		super(init);
 	}
 

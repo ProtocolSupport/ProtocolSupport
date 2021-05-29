@@ -5,6 +5,9 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class PingResponseHandlerProvider {
 
+	private PingResponseHandlerProvider() {
+	}
+
 	private static final PingResponseHandler handler = createHandler();
 
 	protected static PingResponseHandler createHandler() {

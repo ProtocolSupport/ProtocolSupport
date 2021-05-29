@@ -8,7 +8,7 @@ import protocolsupport.protocol.types.NetworkItemStack;
 
 public abstract class MiddleCreativeSetSlot extends ServerBoundMiddlePacket {
 
-	public MiddleCreativeSetSlot(MiddlePacketInit init) {
+	protected MiddleCreativeSetSlot(MiddlePacketInit init) {
 		super(init);
 	}
 

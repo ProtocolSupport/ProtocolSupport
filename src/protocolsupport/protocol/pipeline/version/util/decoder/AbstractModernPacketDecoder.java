@@ -7,7 +7,7 @@ import protocolsupport.protocol.ConnectionImpl;
 
 public abstract class AbstractModernPacketDecoder extends AbstractPacketDecoder {
 
-	public AbstractModernPacketDecoder(ConnectionImpl connection) {
+	protected AbstractModernPacketDecoder(ConnectionImpl connection) {
 		super(connection);
 	}
 

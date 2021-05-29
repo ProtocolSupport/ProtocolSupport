@@ -4,11 +4,11 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleUnlockRecipes extends ClientBoundMiddlePacket {
 
-	public MiddleUnlockRecipes(MiddlePacketInit init) {
+	protected MiddleUnlockRecipes(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -41,9 +41,9 @@ public abstract class MiddleUnlockRecipes extends ClientBoundMiddlePacket {
 		}
 	}
 
-	protected static enum Action {
+	protected enum Action {
 		INIT, ADD, REMOVE;
-		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
+		public static final EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookup<>(Action.class);
 	}
 
 }

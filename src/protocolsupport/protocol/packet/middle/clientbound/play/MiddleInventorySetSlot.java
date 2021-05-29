@@ -14,7 +14,7 @@ public abstract class MiddleInventorySetSlot extends ClientBoundMiddlePacket {
 
 	protected final WindowCache windowCache = cache.getWindowCache();
 
-	public MiddleInventorySetSlot(MiddlePacketInit init) {
+	protected MiddleInventorySetSlot(MiddlePacketInit init) {
 		super(init);
 	}
 

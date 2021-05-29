@@ -5,7 +5,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 
 public abstract class MiddleVehicleMove extends ClientBoundMiddlePacket {
 
-	public MiddleVehicleMove(MiddlePacketInit init) {
+	protected MiddleVehicleMove(MiddlePacketInit init) {
 		super(init);
 	}
 

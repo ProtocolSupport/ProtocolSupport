@@ -14,7 +14,7 @@ import protocolsupport.utils.JavaSystemProperty;
  */
 public abstract class AbstractPassengerStackEntityPassengers extends AbstractKnownEntityPassengers {
 
-	public AbstractPassengerStackEntityPassengers(MiddlePacketInit init) {
+	protected AbstractPassengerStackEntityPassengers(MiddlePacketInit init) {
 		super(init);
 	}
 

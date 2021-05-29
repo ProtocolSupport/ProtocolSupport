@@ -9,7 +9,7 @@ public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
 
 	protected final WindowCache windowCache = cache.getWindowCache();
 
-	public MiddleInventoryClose(MiddlePacketInit init) {
+	protected MiddleInventoryClose(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleEntityTeleport extends MiddleEntity {
 
-	public MiddleEntityTeleport(MiddlePacketInit init) {
+	protected MiddleEntityTeleport(MiddlePacketInit init) {
 		super(init);
 	}
 

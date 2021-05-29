@@ -8,7 +8,7 @@ public abstract class AbstractChunkCacheChangeDimension extends AbstractLegacyCh
 
 	protected final ChunkCache chunkCache = cache.getChunkCache();
 
-	public AbstractChunkCacheChangeDimension(MiddlePacketInit init) {
+	protected AbstractChunkCacheChangeDimension(MiddlePacketInit init) {
 		super(init);
 	}
 

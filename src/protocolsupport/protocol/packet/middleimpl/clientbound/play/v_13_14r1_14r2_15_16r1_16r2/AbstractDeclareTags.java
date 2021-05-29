@@ -6,10 +6,10 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataEntry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
-import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.itemstack.FlatteningItemId;
 import protocolsupport.protocol.typeremapper.itemstack.legacy.ItemStackLegacyData;
 import protocolsupport.protocol.typeremapper.itemstack.legacy.ItemStackLegacyData.ItemStackLegacyDataTable;
@@ -20,7 +20,7 @@ import protocolsupport.protocol.utils.BlockBlockDataLookup;
 //TODO: implement special handling for entity tags
 public abstract class AbstractDeclareTags extends MiddleDeclareTags {
 
-	public AbstractDeclareTags(MiddlePacketInit init) {
+	protected AbstractDeclareTags(MiddlePacketInit init) {
 		super(init);
 	}
 

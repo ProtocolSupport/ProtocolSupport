@@ -10,7 +10,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class AbstractSoundCollectEffect extends MiddleCollectEffect {
 
-	public AbstractSoundCollectEffect(MiddlePacketInit init) {
+	protected AbstractSoundCollectEffect(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -2,15 +2,20 @@ package protocolsupport.protocol.typeremapper.legacy;
 
 import java.text.MessageFormat;
 
+import javax.annotation.Nonnull;
+
 import protocolsupport.protocol.types.nbt.NBTCompound;
 
 public class LegacyDimension {
 
-	public static String getStringId(NBTCompound dimension) {
+	private LegacyDimension() {
+	}
+
+	public static @Nonnull String getStringId(@Nonnull NBTCompound dimension) {
 		return dimension.getStringTagValueOrThrow("effects");
 	}
 
-	public static int getIntId(NBTCompound dimension) {
+	public static int getIntId(@Nonnull NBTCompound dimension) {
 		switch (dimension.getStringTagValueOrThrow("effects")) {
 			case "overworld":
 			case "minecraft:overworld": {
@@ -38,7 +43,7 @@ public class LegacyDimension {
 		return dimensionId != 0 ? 0 : -1;
 	}
 
-	public static String getWorldType(boolean flat) {
+	public static @Nonnull String getWorldType(boolean flat) {
 		return flat ? "flat" : "default";
 	}
 

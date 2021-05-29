@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.function.IntUnaryOperator;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
-import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
@@ -21,6 +21,9 @@ import protocolsupportbuildprocessor.Preload;
 //TODO: combine with entity remapping
 @Preload
 public class ObjectDataRemappersRegistry {
+
+	private ObjectDataRemappersRegistry() {
+	}
 
 	public static final MappingRegistry<ObjectDataRemappingTable> REGISTRY = new MappingRegistry<ObjectDataRemappingTable>() {
 

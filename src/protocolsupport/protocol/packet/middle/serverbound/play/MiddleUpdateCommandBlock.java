@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.types.Position;
-import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleUpdateCommandBlock extends ServerBoundMiddlePacket {
 
@@ -15,7 +15,7 @@ public abstract class MiddleUpdateCommandBlock extends ServerBoundMiddlePacket {
 	public static final int FLAGS_BIT_CONDITIONAL = 1;
 	public static final int FLAGS_BIT_AUTO = 2;
 
-	public MiddleUpdateCommandBlock(MiddlePacketInit init) {
+	protected MiddleUpdateCommandBlock(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -29,7 +29,7 @@ public abstract class MiddleUpdateCommandBlock extends ServerBoundMiddlePacket {
 		codec.writeServerbound(create(position, command, mode, flags));
 	}
 
-	public static enum Mode {
+	public enum Mode {
 		SEQUENCE, AUTO, REDSTONE;
 		public static final EnumConstantLookup<Mode> CONSTANT_LOOKUP = new EnumConstantLookup<>(Mode.class);
 	}

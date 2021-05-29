@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class AbstractPotionItemAsObjectDataEntityVelocity extends MiddleEntityVelocity {
 
-	public AbstractPotionItemAsObjectDataEntityVelocity(MiddlePacketInit init) {
+	protected AbstractPotionItemAsObjectDataEntityVelocity(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -6,11 +6,11 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.types.Position;
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleBlockDig extends ServerBoundMiddlePacket {
 
-	public MiddleBlockDig(MiddlePacketInit init) {
+	protected MiddleBlockDig(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -31,9 +31,9 @@ public abstract class MiddleBlockDig extends ServerBoundMiddlePacket {
 		return creator;
 	}
 
-	protected static enum Action {
+	protected enum Action {
 		START_DIG, CANCEL_DIG, FINISH_DIG, DROP_ITEM_ALL, DROP_ITEM_SINGLE, FINISH_USE, SWAP_ITEMS;
-		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
+		public static final EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookup<>(Action.class);
 	}
 
 }

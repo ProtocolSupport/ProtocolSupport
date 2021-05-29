@@ -6,7 +6,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class AbstractPotionItemAsObjectDataSpawnObject extends AbstractThunderboltSpawnObject {
 
-	public AbstractPotionItemAsObjectDataSpawnObject(MiddlePacketInit init) {
+	protected AbstractPotionItemAsObjectDataSpawnObject(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleSetBeaconEffect extends ServerBoundMiddlePacket {
 
-	public MiddleSetBeaconEffect(MiddlePacketInit init) {
+	protected MiddleSetBeaconEffect(MiddlePacketInit init) {
 		super(init);
 	}
 

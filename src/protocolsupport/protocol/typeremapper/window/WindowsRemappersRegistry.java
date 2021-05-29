@@ -18,9 +18,12 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class WindowsRemappersRegistry {
 
-	protected static final Map<ProtocolVersion, WindowsRemapper> registry = new EnumMap<>(ProtocolVersion.class);
+	private WindowsRemappersRegistry() {
+	}
 
-	protected static void register(WindowsRemapper remapper, ProtocolVersion... versions) {
+	private static final Map<ProtocolVersion, WindowsRemapper> registry = new EnumMap<>(ProtocolVersion.class);
+
+	private static void register(WindowsRemapper remapper, ProtocolVersion... versions) {
 		for (ProtocolVersion version : versions) {
 			registry.put(version, remapper);
 		}

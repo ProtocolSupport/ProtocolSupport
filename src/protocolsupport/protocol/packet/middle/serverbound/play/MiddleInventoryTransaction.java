@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
 public abstract class MiddleInventoryTransaction extends ServerBoundMiddlePacket {
 
-	public MiddleInventoryTransaction(MiddlePacketInit init) {
+	protected MiddleInventoryTransaction(MiddlePacketInit init) {
 		super(init);
 	}
 

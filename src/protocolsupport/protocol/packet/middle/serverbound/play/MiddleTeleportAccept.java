@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleTeleportAccept extends ServerBoundMiddlePacket {
 
-	public MiddleTeleportAccept(MiddlePacketInit init) {
+	protected MiddleTeleportAccept(MiddlePacketInit init) {
 		super(init);
 	}
 

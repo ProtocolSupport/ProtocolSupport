@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleLoginStart extends ServerBoundMiddlePacket {
 
-	public MiddleLoginStart(MiddlePacketInit init) {
+	protected MiddleLoginStart(MiddlePacketInit init) {
 		super(init);
 	}
 

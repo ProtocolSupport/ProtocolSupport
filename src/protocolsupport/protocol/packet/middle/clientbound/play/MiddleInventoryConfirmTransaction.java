@@ -5,7 +5,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 
 public abstract class MiddleInventoryConfirmTransaction extends ClientBoundMiddlePacket {
 
-	public MiddleInventoryConfirmTransaction(MiddlePacketInit init) {
+	protected MiddleInventoryConfirmTransaction(MiddlePacketInit init) {
 		super(init);
 	}
 

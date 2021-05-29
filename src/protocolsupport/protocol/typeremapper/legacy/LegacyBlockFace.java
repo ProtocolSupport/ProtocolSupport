@@ -1,10 +1,15 @@
 package protocolsupport.protocol.typeremapper.legacy;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.block.BlockFace;
 
 public class LegacyBlockFace {
 
-	public static byte getLegacyRotatableId(BlockFace face) {
+	private LegacyBlockFace() {
+	}
+
+	public static byte getLegacyRotatableId(@Nonnull BlockFace face) {
 		switch (face) {
 			case SOUTH: return 0;
 			case SOUTH_SOUTH_WEST: return 1;
@@ -26,7 +31,7 @@ public class LegacyBlockFace {
 		}
 	}
 
-	public static byte getLegacyDirectionalId(BlockFace face) {
+	public static byte getLegacyDirectionalId(@Nonnull BlockFace face) {
 		switch (face) {
 			case NORTH: return 2;
 			case SOUTH: return 3;

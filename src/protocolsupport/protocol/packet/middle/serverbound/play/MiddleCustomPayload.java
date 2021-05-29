@@ -21,7 +21,7 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 
-	public MiddleCustomPayload(MiddlePacketInit init) {
+	protected MiddleCustomPayload(MiddlePacketInit init) {
 		super(init);
 	}
 

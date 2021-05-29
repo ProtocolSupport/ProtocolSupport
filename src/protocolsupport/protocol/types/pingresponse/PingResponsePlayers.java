@@ -61,7 +61,7 @@ public class PingResponsePlayers {
 		public PingResponsePlayers deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
 			JsonObject jsonObject = JsonUtils.getAsJsonObject(jsonElement, "players");
 			PingResponsePlayers players = new PingResponsePlayers(JsonUtils.getInt(jsonObject, "max"), JsonUtils.getInt(jsonObject, "online"));
-			if (JsonUtils.isJsonArray(jsonObject, "sample")) {
+			if (JsonUtils.hasJsonArray(jsonObject, "sample")) {
 				JsonArray jsonArray = JsonUtils.getJsonArray(jsonObject, "sample");
 				if (jsonArray.size() > 0) {
 					LoginProfile[] array = new LoginProfile[jsonArray.size()];

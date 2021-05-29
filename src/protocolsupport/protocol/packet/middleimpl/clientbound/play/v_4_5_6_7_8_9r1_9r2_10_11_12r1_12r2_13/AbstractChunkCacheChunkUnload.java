@@ -7,7 +7,7 @@ public abstract class AbstractChunkCacheChunkUnload extends MiddleChunkUnload {
 
 	protected final ChunkCache chunkCache = cache.getChunkCache();
 
-	public AbstractChunkCacheChunkUnload(MiddlePacketInit init) {
+	protected AbstractChunkCacheChunkUnload(MiddlePacketInit init) {
 		super(init);
 	}
 

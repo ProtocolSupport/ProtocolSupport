@@ -8,7 +8,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 
 public abstract class MiddleEncryptionResponse extends ServerBoundMiddlePacket {
 
-	public MiddleEncryptionResponse(MiddlePacketInit init) {
+	protected MiddleEncryptionResponse(MiddlePacketInit init) {
 		super(init);
 	}
 

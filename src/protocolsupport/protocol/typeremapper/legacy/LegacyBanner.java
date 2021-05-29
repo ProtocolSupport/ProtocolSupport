@@ -2,6 +2,9 @@ package protocolsupport.protocol.typeremapper.legacy;
 
 import java.util.EnumMap;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.bukkit.Material;
 
 import protocolsupport.protocol.types.nbt.NBTCompound;
@@ -14,7 +17,10 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class LegacyBanner {
 
-	public static void transformBanner(NBTCompound tag) {
+	private LegacyBanner() {
+	}
+
+	public static void transformBanner(@Nonnull NBTCompound tag) {
 		NBTList<NBTCompound> patterns = tag.getCompoundListTagOrNull(CommonNBT.BANNER_PATTERNS);
 		if (patterns != null) {
 			for (NBTCompound pattern : patterns.getTags()) {
@@ -23,10 +29,10 @@ public class LegacyBanner {
 		}
 	}
 
-	protected static final int[] colorToMaterial = new int[16];
-	protected static final EnumMap<Material, Integer> materialToColor = new EnumMap<>(Material.class);
+	private static final int[] colorToMaterial = new int[16];
+	private static final EnumMap<Material, Integer> materialToColor = new EnumMap<>(Material.class);
 
-	protected static void register(Material material, int color) {
+	private static void register(@Nonnull Material material, int color) {
 		colorToMaterial[color] = ItemMaterialLookup.getRuntimeId(material);
 		materialToColor.put(material, color);
 	}
@@ -54,7 +60,7 @@ public class LegacyBanner {
 		return colorToMaterial[color];
 	}
 
-	public static Integer getColorByMaterial(Material material) {
+	public static @Nullable Integer getColorByMaterial(@Nonnull Material material) {
 		return materialToColor.get(material);
 	}
 

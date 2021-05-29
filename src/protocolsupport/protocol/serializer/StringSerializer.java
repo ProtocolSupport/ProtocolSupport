@@ -12,7 +12,10 @@ import protocolsupport.protocol.utils.SimpleTypeSerializer;
 
 public class StringSerializer {
 
-	public static final SimpleTypeSerializer<String> SERIALIZER = new SimpleTypeSerializer<String>(
+	private StringSerializer() {
+	}
+
+	public static final SimpleTypeSerializer<String> SERIALIZER = new SimpleTypeSerializer<>(
 		new AbstractMap.SimpleEntry<>(StringSerializer::writeVarIntUTF8String, ProtocolVersionsHelper.UP_1_7),
 		new AbstractMap.SimpleEntry<>(StringSerializer::writeShortUTF16BEString, ProtocolVersionsHelper.DOWN_1_6_4)
 	);

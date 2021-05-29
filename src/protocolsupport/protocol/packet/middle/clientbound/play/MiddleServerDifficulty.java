@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.Difficulty;
 
 public abstract class MiddleServerDifficulty extends ClientBoundMiddlePacket {
 
-	public MiddleServerDifficulty(MiddlePacketInit init) {
+	protected MiddleServerDifficulty(MiddlePacketInit init) {
 		super(init);
 	}
 

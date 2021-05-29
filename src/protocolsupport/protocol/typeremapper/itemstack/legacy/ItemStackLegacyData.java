@@ -27,6 +27,9 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class ItemStackLegacyData {
 
+	private ItemStackLegacyData() {
+	}
+
 	public static final ItemStackLegacyDataRegistry REGISTRY = new ItemStackLegacyDataRegistry();
 
 	public static class ItemStackLegacyDataRegistry extends MappingRegistry<ItemStackLegacyDataTable> {

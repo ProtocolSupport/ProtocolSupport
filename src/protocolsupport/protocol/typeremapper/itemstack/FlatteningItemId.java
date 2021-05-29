@@ -14,6 +14,9 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class FlatteningItemId {
 
+	private FlatteningItemId() {
+	}
+
 	public static final IntMappingRegistry<ArrayBasedIntMappingTable> REGISTRY_TO_CLIENT = new IntMappingRegistry<ArrayBasedIntMappingTable>() {
 		@Override
 		protected ArrayBasedIntMappingTable createTable() {

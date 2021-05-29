@@ -22,6 +22,9 @@ import protocolsupport.protocol.types.nbt.NBTType;
 
 public class MojangsonParser {
 
+	private MojangsonParser() {
+	}
+
 	public static NBTCompound parse(String mojangson) throws IOException {
 		MojangsonReaderHelper reader = new MojangsonReaderHelper(mojangson);
 		if (reader.read() != MojangsonConstants.compound_start) {

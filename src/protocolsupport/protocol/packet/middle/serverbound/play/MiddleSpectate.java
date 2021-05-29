@@ -9,7 +9,7 @@ import protocolsupport.protocol.serializer.UUIDSerializer;
 
 public abstract class MiddleSpectate extends ServerBoundMiddlePacket {
 
-	public MiddleSpectate(MiddlePacketInit init) {
+	protected MiddleSpectate(MiddlePacketInit init) {
 		super(init);
 	}
 

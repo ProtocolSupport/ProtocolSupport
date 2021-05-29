@@ -9,7 +9,7 @@ import protocolsupport.protocol.types.recipe.RecipeType;
 
 public abstract class MiddleDeclareRecipes extends ClientBoundMiddlePacket {
 
-	public MiddleDeclareRecipes(MiddlePacketInit init) {
+	protected MiddleDeclareRecipes(MiddlePacketInit init) {
 		super(init);
 	}
 

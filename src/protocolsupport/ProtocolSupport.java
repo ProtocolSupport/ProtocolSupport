@@ -62,7 +62,7 @@ public class ProtocolSupport extends JavaPlugin {
 			getLogger().log(Level.SEVERE, "Platform init failed", t);
 			return;
 		}
-		getLogger().info(MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get().getIdentifier().getName()));
+		getLogger().info(() -> MessageFormat.format("Detected {0} server implementation type", ServerPlatform.get().getIdentifier().getName()));
 		if (!ServerPlatform.get().getMiscUtils().getVersionName().equals(supported_platform_version)) {
 			BIG_ERROR_THAT_ANYONE_CAN_SEE("Unsupported server minecraft version " + ServerPlatform.get().getMiscUtils().getVersionName());
 			return;
@@ -72,7 +72,7 @@ public class ProtocolSupport extends JavaPlugin {
 				try {
 					Class.forName(name);
 				} catch (ClassNotFoundException e) {
-					throw new RuntimeException("Class is in preload list, but wasn't found", e);
+					throw new IllegalArgumentException("Class is in preload list, but wasn't found", e);
 				}
 			});
 			ServerPlatform.get().getInjector().onLoad();

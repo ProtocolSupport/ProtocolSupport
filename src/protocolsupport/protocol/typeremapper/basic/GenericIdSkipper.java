@@ -19,6 +19,9 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class GenericIdSkipper {
 
+	private GenericIdSkipper() {
+	}
+
 	public static final GenericSkippingRegistry<String, GenericSkippingTable<String>> ENCHANT = new GenericSkippingRegistry<String, GenericSkippingTable<String>>() {
 		{
 			registerSkipEntry(Enchantment.CHANNELING, ProtocolVersionsHelper.DOWN_1_12_2);

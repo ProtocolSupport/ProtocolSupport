@@ -3,6 +3,8 @@ package protocolsupport.protocol.typeremapper.utils;
 import java.text.MessageFormat;
 import java.util.EnumMap;
 
+import javax.annotation.Nonnull;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.EnumMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
@@ -13,7 +15,7 @@ public abstract class MappingRegistry<T extends MappingTable> {
 
 	protected final EnumMap<ProtocolVersion, T> registry = new EnumMap<>(ProtocolVersion.class);
 
-	public MappingRegistry() {
+	protected MappingRegistry() {
 		clear();
 	}
 
@@ -23,7 +25,7 @@ public abstract class MappingRegistry<T extends MappingTable> {
 		}
 	}
 
-	public T getTable(ProtocolVersion version) {
+	public @Nonnull T getTable(@Nonnull ProtocolVersion version) {
 		T table = registry.get(version);
 		if (table == null) {
 			throw new IllegalArgumentException(MessageFormat.format("Missing mapping table for version {0}", version));
@@ -31,7 +33,7 @@ public abstract class MappingRegistry<T extends MappingTable> {
 		return table;
 	}
 
-	protected abstract T createTable();
+	protected abstract @Nonnull T createTable();
 
 	public abstract static class IntMappingRegistry<T extends IdMappingTable> extends MappingRegistry<T> {
 

@@ -6,6 +6,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -16,9 +19,12 @@ import protocolsupport.utils.JsonUtils;
 
 public class MinecraftSessionService {
 
+	private MinecraftSessionService() {
+	}
+
 	private static final String hasJoinedUrl = "https://sessionserver.mojang.com/session/minecraft/hasJoined";
 
-	public static void checkHasJoinedServerAndUpdateProfile(LoginProfile profile, String hash, String ip) throws AuthenticationUnavailableException, MalformedURLException {
+	public static void checkHasJoinedServerAndUpdateProfile(@Nonnull LoginProfile profile, @Nonnull String hash, @Nullable String ip) throws AuthenticationUnavailableException, MalformedURLException {
 		final URL url = new URL(hasJoinedUrl + "?username=" + profile.getOriginalName() + "&serverId=" + hash + (ip != null ? "&ip=" + ip : ""));
 		try {
 			JsonObject root = JsonUtils.readJsonObject(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8));
@@ -34,12 +40,18 @@ public class MinecraftSessionService {
 				));
 			}
 		} catch (IOException | IllegalStateException | JsonParseException e) {
-			throw new AuthenticationUnavailableException();
+			throw new AuthenticationUnavailableException(e);
 		}
 	}
 
 	public static class AuthenticationUnavailableException extends Exception {
+
 		private static final long serialVersionUID = 1L;
+
+		public AuthenticationUnavailableException(Throwable t) {
+			super(t);
+		}
+
 	}
 
 }

@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 
 public abstract class MiddleEntityVelocity extends MiddleEntity {
 
-	public MiddleEntityVelocity(MiddlePacketInit init) {
+	protected MiddleEntityVelocity(MiddlePacketInit init) {
 		super(init);
 	}
 

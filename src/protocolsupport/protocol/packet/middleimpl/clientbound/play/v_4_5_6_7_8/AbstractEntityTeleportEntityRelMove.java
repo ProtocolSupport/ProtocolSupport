@@ -8,7 +8,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 
 public abstract class AbstractEntityTeleportEntityRelMove extends MiddleEntityRelMove {
 
-	public AbstractEntityTeleportEntityRelMove(MiddlePacketInit init) {
+	protected AbstractEntityTeleportEntityRelMove(MiddlePacketInit init) {
 		super(init);
 	}
 

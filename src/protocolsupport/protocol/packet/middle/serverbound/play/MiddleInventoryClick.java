@@ -11,7 +11,7 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 
 	protected final WindowCache windowCache = cache.getWindowCache();
 
-	public MiddleInventoryClick(MiddlePacketInit init) {
+	protected MiddleInventoryClick(MiddlePacketInit init) {
 		super(init);
 	}
 

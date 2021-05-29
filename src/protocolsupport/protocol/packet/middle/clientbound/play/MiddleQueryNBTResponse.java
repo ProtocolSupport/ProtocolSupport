@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 
 public abstract class MiddleQueryNBTResponse extends ClientBoundMiddlePacket {
 
-	public MiddleQueryNBTResponse(MiddlePacketInit init) {
+	protected MiddleQueryNBTResponse(MiddlePacketInit init) {
 		super(init);
 	}
 

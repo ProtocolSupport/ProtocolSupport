@@ -10,7 +10,7 @@ import protocolsupport.utils.BitUtils;
 
 public abstract class MiddleSetPosition extends ClientBoundMiddlePacket {
 
-	public MiddleSetPosition(MiddlePacketInit init) {
+	protected MiddleSetPosition(MiddlePacketInit init) {
 		super(init);
 	}
 

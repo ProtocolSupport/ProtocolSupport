@@ -35,11 +35,9 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 				networkManager.setProtocol(NetworkState.LOGIN);
 				try {
 					final InetAddress address = networkManager.getAddress().getAddress();
-					if (ThrottleTracker.isEnabled() && !ServerPlatform.get().getMiscUtils().isProxyEnabled()) {
-						if (ThrottleTracker.throttle(address)) {
-							disconnect(new TextComponent("Connection throttled! Please wait before reconnecting."));
-							return;
-						}
+					if (ThrottleTracker.isEnabled() && !ServerPlatform.get().getMiscUtils().isProxyEnabled() && ThrottleTracker.throttle(address)) {
+						disconnect(new TextComponent("Connection throttled! Please wait before reconnecting."));
+						return;
 					}
 				} catch (Throwable t) {
 					Bukkit.getLogger().log(Level.WARNING, "Failed to check connection throttle", t);

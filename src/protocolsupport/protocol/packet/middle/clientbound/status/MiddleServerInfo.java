@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.pingresponse.PingResponse;
 
 public abstract class MiddleServerInfo extends ClientBoundMiddlePacket {
 
-	public MiddleServerInfo(MiddlePacketInit init) {
+	protected MiddleServerInfo(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -7,11 +7,11 @@ import protocolsupport.protocol.types.WindowType;
 
 public abstract class SingleWindowIdRemapper extends WindowRemapper {
 
-	public SingleWindowIdRemapper(WindowType clientWindowType, int clientSlots) {
+	protected SingleWindowIdRemapper(WindowType clientWindowType, int clientSlots) {
 		super(clientWindowType, clientSlots);
 	}
 
-	public SingleWindowIdRemapper(WindowType clientWindowType, int clientSlots, Supplier<Object> windowMetadataCreator) {
+	protected SingleWindowIdRemapper(WindowType clientWindowType, int clientSlots, Supplier<Object> windowMetadataCreator) {
 		super(clientWindowType, clientSlots, windowMetadataCreator);
 	}
 

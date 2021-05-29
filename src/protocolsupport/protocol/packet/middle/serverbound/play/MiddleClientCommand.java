@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 
 public abstract class MiddleClientCommand extends ServerBoundMiddlePacket {
 
-	public MiddleClientCommand(MiddlePacketInit init) {
+	protected MiddleClientCommand(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -26,7 +26,7 @@ public abstract class MiddleClientCommand extends ServerBoundMiddlePacket {
 		return clientcommand;
 	}
 
-	public static enum Command {
+	public enum Command {
 		REQUEST_RESPAWN, GET_STATS
 	}
 

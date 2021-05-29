@@ -1,6 +1,6 @@
 package protocolsupport.protocol.types;
 
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public enum EntityPose {
 	STANDING,
@@ -10,5 +10,5 @@ public enum EntityPose {
 	SPIN_ATTACK,
 	SNEAKING,
 	DYING;
-	public static final EnumConstantLookups.EnumConstantLookup<EntityPose> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(EntityPose.class);
+	public static final EnumConstantLookup<EntityPose> CONSTANT_LOOKUP = new EnumConstantLookup<>(EntityPose.class);
 }

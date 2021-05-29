@@ -9,6 +9,9 @@ import protocolsupport.protocol.types.NetworkItemStack;
 
 public class MerchantDataSerializer {
 
+	private MerchantDataSerializer() {
+	}
+
 	public static MerchantData readMerchantData(ByteBuf from) {
 		byte windowId = (byte) VarNumberSerializer.readVarInt(from);
 		TradeOffer[] offers = new TradeOffer[from.readUnsignedByte()];

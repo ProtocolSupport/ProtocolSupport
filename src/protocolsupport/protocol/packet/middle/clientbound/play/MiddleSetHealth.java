@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleSetHealth extends ClientBoundMiddlePacket {
 
-	public MiddleSetHealth(MiddlePacketInit init) {
+	protected MiddleSetHealth(MiddlePacketInit init) {
 		super(init);
 	}
 

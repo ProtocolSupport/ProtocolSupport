@@ -9,7 +9,7 @@ public abstract class MiddleInventoryData extends ClientBoundMiddlePacket {
 
 	protected final WindowCache windowCache = cache.getWindowCache();
 
-	public MiddleInventoryData(MiddlePacketInit init) {
+	protected MiddleInventoryData(MiddlePacketInit init) {
 		super(init);
 	}
 

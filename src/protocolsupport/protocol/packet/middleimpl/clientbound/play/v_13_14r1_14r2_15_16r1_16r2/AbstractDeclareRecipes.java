@@ -26,7 +26,7 @@ import protocolsupport.protocol.utils.i18n.I18NData;
 
 public abstract class AbstractDeclareRecipes extends MiddleDeclareRecipes {
 
-	public AbstractDeclareRecipes(MiddlePacketInit init) {
+	protected AbstractDeclareRecipes(MiddlePacketInit init) {
 		super(init);
 	}
 

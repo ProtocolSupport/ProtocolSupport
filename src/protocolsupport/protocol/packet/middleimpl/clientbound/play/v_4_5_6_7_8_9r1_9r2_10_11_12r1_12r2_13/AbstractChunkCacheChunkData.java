@@ -15,7 +15,7 @@ public abstract class AbstractChunkCacheChunkData extends MiddleChunkData {
 	protected final ChunkCache chunkCache = cache.getChunkCache();
 	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
-	public AbstractChunkCacheChunkData(MiddlePacketInit init) {
+	protected AbstractChunkCacheChunkData(MiddlePacketInit init) {
 		super(init);
 	}
 

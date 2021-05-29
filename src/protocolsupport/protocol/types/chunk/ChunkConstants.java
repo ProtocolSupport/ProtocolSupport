@@ -6,6 +6,9 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class ChunkConstants {
 
+	private ChunkConstants() {
+	}
+
 	public static final int GLOBAL_PALETTE_BITS_PER_BLOCK = 15;
 	public static final short[] GLOBAL_PALETTE = new short[MinecraftBlockData.BLOCKDATA_COUNT];
 	static {

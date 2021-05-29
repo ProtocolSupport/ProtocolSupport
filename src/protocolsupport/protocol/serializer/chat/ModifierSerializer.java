@@ -59,11 +59,11 @@ public class ModifierSerializer implements JsonDeserializer<Modifier>, SimpleJso
 	@Override
 	public JsonElement serialize(SimpleJsonTreeSerializer<String> serializer, Modifier modifier, String metadata) {
 		JsonObject jsonobject = new JsonObject();
-		JsonUtils.setIfNotNull(jsonobject, key_bold, modifier.isBold());
-		JsonUtils.setIfNotNull(jsonobject, key_italic, modifier.isItalic());
-		JsonUtils.setIfNotNull(jsonobject, key_underlined, modifier.isUnderlined());
-		JsonUtils.setIfNotNull(jsonobject, key_strikethrough, modifier.isStrikethrough());
-		JsonUtils.setIfNotNull(jsonobject, key_obfuscated, modifier.isRandom());
+		JsonUtils.setJsonValueIfNotNull(jsonobject, key_bold, modifier.isBold());
+		JsonUtils.setJsonValueIfNotNull(jsonobject, key_italic, modifier.isItalic());
+		JsonUtils.setJsonValueIfNotNull(jsonobject, key_underlined, modifier.isUnderlined());
+		JsonUtils.setJsonValueIfNotNull(jsonobject, key_strikethrough, modifier.isStrikethrough());
+		JsonUtils.setJsonValueIfNotNull(jsonobject, key_obfuscated, modifier.isRandom());
 		ChatColor color = modifier.getRGBColor();
 		if (color != null) {
 			jsonobject.addProperty(key_color, color.getIdentifier());

@@ -9,7 +9,7 @@ public abstract class MiddleSteerVehicle extends ServerBoundMiddlePacket {
 	public static final int FLAGS_BIT_JUMPING = 0;
 	public static final int FLAGS_BIT_UNMOUNT = 1;
 
-	public MiddleSteerVehicle(MiddlePacketInit init) {
+	protected MiddleSteerVehicle(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -10,7 +10,7 @@ public abstract class AbstractChunkCacheBlockBreakConfirm extends MiddleBlockBre
 
 	protected final ChunkCache chunkCache = cache.getChunkCache();
 
-	public AbstractChunkCacheBlockBreakConfirm(MiddlePacketInit init) {
+	protected AbstractChunkCacheBlockBreakConfirm(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -7,7 +7,7 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public abstract class MiddleEntityMetadata extends MiddleEntity {
 
-	public MiddleEntityMetadata(MiddlePacketInit init) {
+	protected MiddleEntityMetadata(MiddlePacketInit init) {
 		super(init);
 	}
 

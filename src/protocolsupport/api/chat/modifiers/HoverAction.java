@@ -151,7 +151,7 @@ public class HoverAction {
 		return Utils.toStringAllFields(this);
 	}
 
-	public static enum Type {
+	public enum Type {
 		SHOW_TEXT, SHOW_ITEM, SHOW_ENTITY;
 	}
 

@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleResourcePack extends ClientBoundMiddlePacket {
 
-	public MiddleResourcePack(MiddlePacketInit init) {
+	protected MiddleResourcePack(MiddlePacketInit init) {
 		super(init);
 	}
 

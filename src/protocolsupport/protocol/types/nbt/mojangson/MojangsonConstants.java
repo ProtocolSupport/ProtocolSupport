@@ -2,6 +2,9 @@ package protocolsupport.protocol.types.nbt.mojangson;
 
 public class MojangsonConstants {
 
+	private MojangsonConstants() {
+	}
+
 	public static final char compound_start = '{';
 	public static final char compound_kv = ':';
 	public static final char compound_end = '}';

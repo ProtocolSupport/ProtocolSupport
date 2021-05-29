@@ -4,9 +4,9 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
-import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 
 public class BlockChangeMulti extends MiddleBlockChangeMulti {

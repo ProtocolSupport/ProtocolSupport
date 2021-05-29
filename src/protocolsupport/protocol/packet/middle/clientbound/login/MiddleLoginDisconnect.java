@@ -8,7 +8,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleLoginDisconnect extends ClientBoundMiddlePacket {
 
-	public MiddleLoginDisconnect(MiddlePacketInit init) {
+	protected MiddleLoginDisconnect(MiddlePacketInit init) {
 		super(init);
 	}
 

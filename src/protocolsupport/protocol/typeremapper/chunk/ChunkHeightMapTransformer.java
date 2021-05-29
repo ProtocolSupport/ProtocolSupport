@@ -5,10 +5,13 @@ import protocolsupport.protocol.types.nbt.NBTLongArray;
 import protocolsupport.protocol.utils.NumberBitsStorageCompact;
 import protocolsupport.protocol.utils.NumberBitsStoragePadded;
 
-public class HeightMapTransformer {
+public class ChunkHeightMapTransformer {
 
-	protected static final int ENTRY_BITS_SIZE = 9;
-	protected static final int ENTRY_COUNT = 256;
+	private ChunkHeightMapTransformer() {
+	}
+
+	private static final int ENTRY_BITS_SIZE = 9;
+	private static final int ENTRY_COUNT = 256;
 
 	public static long[] transformStorageToCompact(long[] storage) {
 		NumberBitsStoragePadded storagePadded = new NumberBitsStoragePadded(ENTRY_BITS_SIZE, storage);
@@ -19,8 +22,8 @@ public class HeightMapTransformer {
 		return storageCompact.getStorage();
 	}
 
-	protected static final String NAME_MOTION_BLOCKING = "MOTION_BLOCKING";
-	protected static final String NAME_WORLD_SURFACE = "WORLD_SURFACE";
+	private static final String NAME_MOTION_BLOCKING = "MOTION_BLOCKING";
+	private static final String NAME_WORLD_SURFACE = "WORLD_SURFACE";
 
 	public static NBTCompound transform(NBTCompound heightmaps) {
 		heightmaps.setTag(NAME_MOTION_BLOCKING, new NBTLongArray(transformStorageToCompact(heightmaps.getTagOfTypeOrThrow(NAME_MOTION_BLOCKING, NBTLongArray.class).getValue())));

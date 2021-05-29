@@ -14,11 +14,11 @@ public abstract class WindowRemapper {
 	protected final int clientWindowSlots;
 	protected final Supplier<Object> windowMetadataCreator;
 
-	public WindowRemapper(WindowType clientWindowType, int clientSlots) {
+	protected WindowRemapper(WindowType clientWindowType, int clientSlots) {
 		this(clientWindowType, clientSlots, () -> null);
 	}
 
-	public WindowRemapper(WindowType clientWindowType, int clientSlots, Supplier<Object> windowMetadataCreator) {
+	protected WindowRemapper(WindowType clientWindowType, int clientSlots, Supplier<Object> windowMetadataCreator) {
 		this.clientWindowType = clientWindowType;
 		this.clientWindowSlots = clientSlots;
 		this.windowMetadataCreator = windowMetadataCreator;

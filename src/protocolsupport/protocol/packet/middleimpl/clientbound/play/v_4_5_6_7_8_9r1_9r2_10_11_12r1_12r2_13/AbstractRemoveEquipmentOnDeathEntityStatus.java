@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class AbstractRemoveEquipmentOnDeathEntityStatus extends AbstractKnownEntityStatus {
 
-	public AbstractRemoveEquipmentOnDeathEntityStatus(MiddlePacketInit init) {
+	protected AbstractRemoveEquipmentOnDeathEntityStatus(MiddlePacketInit init) {
 		super(init);
 	}
 

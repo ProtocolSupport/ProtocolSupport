@@ -12,6 +12,9 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class EncapsulatedProtocolUtils {
 
+	private EncapsulatedProtocolUtils() {
+	}
+
 	private static final int CURRENT_VERSION = 1;
 
 	public static EncapsulatedProtocolInfo readInfo(ByteBuf from) {

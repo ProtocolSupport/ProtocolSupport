@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleQueryEntityNBT extends ServerBoundMiddlePacket {
 
-	public MiddleQueryEntityNBT(MiddlePacketInit init) {
+	protected MiddleQueryEntityNBT(MiddlePacketInit init) {
 		super(init);
 	}
 

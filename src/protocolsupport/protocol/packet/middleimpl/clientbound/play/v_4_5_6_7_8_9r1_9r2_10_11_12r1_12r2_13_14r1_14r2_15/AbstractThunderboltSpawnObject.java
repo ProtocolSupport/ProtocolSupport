@@ -5,7 +5,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class AbstractThunderboltSpawnObject extends AbstractRemappedSpawnObject {
 
-	public AbstractThunderboltSpawnObject(MiddlePacketInit init) {
+	protected AbstractThunderboltSpawnObject(MiddlePacketInit init) {
 		super(init);
 	}
 

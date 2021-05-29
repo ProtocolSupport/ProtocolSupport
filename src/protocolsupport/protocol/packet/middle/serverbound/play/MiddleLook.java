@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
 public abstract class MiddleLook extends ServerBoundMiddlePacket {
 
-	public MiddleLook(MiddlePacketInit init) {
+	protected MiddleLook(MiddlePacketInit init) {
 		super(init);
 	}
 

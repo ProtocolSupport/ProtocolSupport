@@ -8,7 +8,7 @@ public abstract class MiddleUpdateViewDistance extends ClientBoundMiddlePacket {
 
 	protected int distance;
 
-	public MiddleUpdateViewDistance(MiddlePacketInit init) {
+	protected MiddleUpdateViewDistance(MiddlePacketInit init) {
 		super(init);
 	}
 

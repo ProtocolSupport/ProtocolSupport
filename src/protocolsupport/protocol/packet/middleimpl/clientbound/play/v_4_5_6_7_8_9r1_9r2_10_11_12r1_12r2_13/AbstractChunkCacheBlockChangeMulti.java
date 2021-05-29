@@ -10,7 +10,7 @@ public abstract class AbstractChunkCacheBlockChangeMulti extends MiddleBlockChan
 
 	protected final ChunkCache chunkCache = cache.getChunkCache();
 
-	public AbstractChunkCacheBlockChangeMulti(MiddlePacketInit init) {
+	protected AbstractChunkCacheBlockChangeMulti(MiddlePacketInit init) {
 		super(init);
 	}
 

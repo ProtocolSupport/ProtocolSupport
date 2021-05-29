@@ -6,6 +6,10 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Registry;
@@ -22,15 +26,18 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class MinecraftBlockData {
 
+	private MinecraftBlockData() {
+	}
+
 	public static final int BLOCK_COUNT;
 
 	public static final int BLOCKDATA_COUNT;
 
-	protected static final Map<Material, BlockInfo> blockInfoByMaterial = new EnumMap<>(Material.class);
-	protected static final BlockInfo[] blockInfoByNetworkId;
+	private static final Map<Material, BlockInfo> blockInfoByMaterial = new EnumMap<>(Material.class);
+	private static final BlockInfo[] blockInfoByNetworkId;
 
-	protected static final Map<BlockData, BlockDataInfo> blockdataInfoByBlockdata = new HashMap<>();
-	protected static final BlockDataInfo[] blockdataInfoByNetworkId;
+	private static final Map<BlockData, BlockDataInfo> blockdataInfoByBlockdata = new HashMap<>();
+	private static final BlockDataInfo[] blockdataInfoByNetworkId;
 
 	static {
 		JsonArray blockJsonArray = ResourceUtils.getAsJsonArray(MinecraftDataResourceUtils.getResourcePath("block.json"));
@@ -73,19 +80,19 @@ public class MinecraftBlockData {
 		}
 	}
 
-	public static Collection<BlockInfo> getBlockInfoCollection() {
+	public static @Nonnull Collection<BlockInfo> getBlockInfoCollection() {
 		return Collections.unmodifiableCollection(blockInfoByMaterial.values());
 	}
 
-	public static Collection<BlockDataInfo> getBlockDataInfoCollection() {
+	public static @Nonnull Collection<BlockDataInfo> getBlockDataInfoCollection() {
 		return Collections.unmodifiableCollection(blockdataInfoByBlockdata.values());
 	}
 
-	public static BlockInfo getBlockInfoByMaterial(Material material) {
+	public static @Nullable BlockInfo getBlockInfoByMaterial(@Nonnull Material material) {
 		return blockInfoByMaterial.get(material);
 	}
 
-	public static BlockInfo getBlockInfoByNetworkId(int networkId) {
+	public static @Nullable BlockInfo getBlockInfoByNetworkId(@Nonnegative int networkId) {
 		if ((networkId >= 0) && (networkId < blockInfoByNetworkId.length)) {
 			return blockInfoByNetworkId[networkId];
 		} else {
@@ -93,11 +100,11 @@ public class MinecraftBlockData {
 		}
 	}
 
-	public static BlockDataInfo getBlockDataInfoByBlockData(BlockData blockdata) {
+	public static @Nullable BlockDataInfo getBlockDataInfoByBlockData(@Nonnull BlockData blockdata) {
 		return blockdataInfoByBlockdata.get(blockdata);
 	}
 
-	public static BlockDataInfo getBlockDataInfoByNetworkId(int networkId) {
+	public static @Nullable BlockDataInfo getBlockDataInfoByNetworkId(@Nonnegative int networkId) {
 		if ((networkId >= 0) && (networkId < blockdataInfoByNetworkId.length)) {
 			return blockdataInfoByNetworkId[networkId];
 		} else {
@@ -111,7 +118,7 @@ public class MinecraftBlockData {
 		protected final int networkId;
 		protected BlockDataInfo[] data;
 
-		protected BlockInfo(String name, int networkId, BlockDataInfo[] data) {
+		protected BlockInfo(@Nonnull String name, @Nonnegative int networkId, @Nonnull BlockDataInfo[] data) {
 			this.material = Registry.MATERIAL.get(NamespacedKeyUtils.fromString(name));
 			this.networkId = networkId;
 			this.data = data;
@@ -120,19 +127,19 @@ public class MinecraftBlockData {
 			}
 		}
 
-		public String getName() {
+		public @Nonnull String getName() {
 			return material.getKey().toString();
 		}
 
-		public Material getMaterial() {
+		public @Nonnull Material getMaterial() {
 			return material;
 		}
 
-		public int getNetworkId() {
+		public @Nonnegative int getNetworkId() {
 			return networkId;
 		}
 
-		public BlockDataInfo[] getBlockDataArray() {
+		public @Nonnull BlockDataInfo[] getBlockDataArray() {
 			return data.clone();
 		}
 
@@ -149,7 +156,7 @@ public class MinecraftBlockData {
 		protected final float volume;
 		protected final float pitch;
 
-		protected BlockDataInfo(String name, int networkId, String breakSound, float volume, float pitch) {
+		protected BlockDataInfo(@Nonnull String name, @Nonnegative int networkId, @Nonnull String breakSound, float volume, float pitch) {
 			this.blockdata = Bukkit.createBlockData(name);
 			this.networkId = networkId;
 			this.breakSound = breakSound;
@@ -157,23 +164,23 @@ public class MinecraftBlockData {
 			this.pitch = pitch;
 		}
 
-		public BlockInfo getBlock() {
+		public @Nonnull BlockInfo getBlock() {
 			return block;
 		}
 
-		public String getName() {
+		public @Nonnull String getName() {
 			return blockdata.getAsString();
 		}
 
-		public BlockData getBlockData() {
+		public @Nonnull BlockData getBlockData() {
 			return blockdata.clone();
 		}
 
-		public int getNetworkId() {
+		public @Nonnegative int getNetworkId() {
 			return networkId;
 		}
 
-		public String getBreakSound() {
+		public @Nonnull String getBreakSound() {
 			return breakSound;
 		}
 

@@ -7,11 +7,11 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.NetworkItemStack;
-import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleEntityEquipment extends ClientBoundMiddlePacket {
 
-	public MiddleEntityEquipment(MiddlePacketInit init) {
+	protected MiddleEntityEquipment(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -53,7 +53,7 @@ public abstract class MiddleEntityEquipment extends ClientBoundMiddlePacket {
 
 	}
 
-	public static enum Slot {
+	public enum Slot {
 		MAIN_HAND, OFF_HAND,
 		BOOTS, LEGGINGS, CHESTPLATE, HELMET;
 

@@ -20,7 +20,7 @@ public abstract class AbstractPacketDecoder extends SimpleChannelInboundHandler<
 	protected final MiddlePacketRegistry<ServerBoundMiddlePacket> registry;
 	protected final PacketDataCodecImpl codec;
 
-	public AbstractPacketDecoder(ConnectionImpl connection) {
+	protected AbstractPacketDecoder(ConnectionImpl connection) {
 		this.connection = connection;
 		this.codec = connection.getCodec();
 		this.registry = new MiddlePacketRegistry<>(new ConnectionImplMiddlePacketInit(connection));

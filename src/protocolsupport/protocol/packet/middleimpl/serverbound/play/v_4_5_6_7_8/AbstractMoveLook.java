@@ -7,11 +7,11 @@ import protocolsupport.protocol.storage.netcache.MovementCache;
 
 public abstract class AbstractMoveLook extends ServerBoundMiddlePacket {
 
-	protected final MovementCache movementCache = cache.getMovementCache();
-
-	public AbstractMoveLook(MiddlePacketInit init) {
+	protected AbstractMoveLook(MiddlePacketInit init) {
 		super(init);
 	}
+
+	protected final MovementCache movementCache = cache.getMovementCache();
 
 	protected double x;
 	protected double y;
@@ -22,7 +22,7 @@ public abstract class AbstractMoveLook extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void write() {
-		int teleportId = cache.getMovementCache().tryTeleportConfirm(x, y, z);
+		int teleportId = movementCache.tryTeleportConfirm(x, y, z);
 		if (teleportId == -1) {
 			codec.writeServerbound(MiddleMoveLook.create(x, y, z, yaw, pitch, onGround));
 		} else {

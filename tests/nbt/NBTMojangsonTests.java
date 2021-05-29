@@ -21,9 +21,10 @@ import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.types.nbt.mojangson.MojangsonParser;
 import protocolsupport.protocol.types.nbt.mojangson.MojangsonSerializer;
 
-public class NBTMojangsonTests {
+class NBTMojangsonTests {
 
-	protected static final NBTCompound tag = new NBTCompound();
+	private static final NBTCompound tag = new NBTCompound();
+
 	static {
 		tag.setTag("testbyte", new NBTByte((byte) 5));
 		tag.setTag("testshort", new NBTShort((short) 78));
@@ -54,7 +55,7 @@ public class NBTMojangsonTests {
 	}
 
 	@Test
-	public void testSerialize() {
+	void testSerialize() {
 		Assertions.assertEquals(
 			"{" +
 			"\"testbyte\":5b" + "," +
@@ -79,7 +80,7 @@ public class NBTMojangsonTests {
 	}
 
 	@Test
-	public void testParse() throws IOException {
+	void testParse() throws IOException {
 		Assertions.assertEquals(tag, MojangsonParser.parse(
 			"{" +
 			"   testbyte   :   5b   " + "," +

@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleEntityLook extends MiddleEntity {
 
-	public MiddleEntityLook(MiddlePacketInit init) {
+	protected MiddleEntityLook(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -19,7 +19,7 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
-	public MiddleSpawnLiving(MiddlePacketInit init) {
+	protected MiddleSpawnLiving(MiddlePacketInit init) {
 		super(init);
 	}
 

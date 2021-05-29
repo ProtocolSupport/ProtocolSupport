@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 
 public abstract class MiddleDeclareCommands extends ClientBoundMiddlePacket {
 
-	public MiddleDeclareCommands(MiddlePacketInit init) {
+	protected MiddleDeclareCommands(MiddlePacketInit init) {
 		super(init);
 	}
 

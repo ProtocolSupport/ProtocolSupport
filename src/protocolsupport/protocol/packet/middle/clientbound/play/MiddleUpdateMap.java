@@ -8,7 +8,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleUpdateMap extends ClientBoundMiddlePacket {
 
-	public MiddleUpdateMap(MiddlePacketInit init) {
+	protected MiddleUpdateMap(MiddlePacketInit init) {
 		super(init);
 	}
 

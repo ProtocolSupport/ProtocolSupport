@@ -9,6 +9,10 @@ import protocolsupport.protocol.utils.i18n.I18NData;
 
 public class ItemStackRemappingHelper {
 
+	private ItemStackRemappingHelper() {
+	}
+
+
 	public static NetworkItemStack toLegacyItemData(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
 		if (itemstack.isNull()) {
 			return itemstack;

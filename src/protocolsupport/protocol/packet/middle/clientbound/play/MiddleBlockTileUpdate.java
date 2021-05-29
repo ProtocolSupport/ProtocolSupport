@@ -8,8 +8,7 @@ import protocolsupport.protocol.types.nbt.NBTCompound;
 
 public abstract class MiddleBlockTileUpdate extends MiddleBlock {
 
-
-	public MiddleBlockTileUpdate(MiddlePacketInit init) {
+	protected MiddleBlockTileUpdate(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -3,13 +3,19 @@ package protocolsupport.protocol.utils.minecraftdata;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
 public class MinecraftKeybindData {
 
-	protected static final HashMap<String, String> nameToKeyRepr = new HashMap<>();
+	private MinecraftKeybindData() {
+	}
+
+	private static final HashMap<String, String> nameToKeyRepr = new HashMap<>();
 
 	static {
 		ResourceUtils.getAsBufferedReader(MinecraftDataResourceUtils.getResourcePath("keybinds")).lines()
@@ -20,7 +26,7 @@ public class MinecraftKeybindData {
 		});
 	}
 
-	public static String getKey(String name) {
+	public static @Nullable String getKey(@Nonnull String name) {
 		return nameToKeyRepr.get(name);
 	}
 

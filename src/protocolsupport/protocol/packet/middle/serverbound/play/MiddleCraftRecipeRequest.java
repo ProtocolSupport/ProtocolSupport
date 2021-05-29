@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleCraftRecipeRequest extends ServerBoundMiddlePacket {
 
-	public MiddleCraftRecipeRequest(MiddlePacketInit init) {
+	protected MiddleCraftRecipeRequest(MiddlePacketInit init) {
 		super(init);
 	}
 

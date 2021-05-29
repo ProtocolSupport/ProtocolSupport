@@ -2,6 +2,9 @@ package protocolsupport.utils;
 
 public class BitUtils {
 
+	private BitUtils() {
+	}
+
 	public static boolean isIBitSet(int bitmask, int bitpos) {
 		return getIBit(bitmask, bitpos) != 0;
 	}

@@ -6,6 +6,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityAttributes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.UUIDSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
@@ -24,22 +25,21 @@ public class EntityAttributes extends MiddleEntityAttributes {
 		GenericSkippingTable<String> table = GenericIdSkipper.ATTRIBUTES.getTable(version);
 		ArrayList<Attribute> sendattrs = new ArrayList<>();
 		for (Attribute attribute : attributes.values()) {
-			if (!table.shouldSkip(attribute.key)) {
+			if (!table.shouldSkip(attribute.getKey())) {
 				sendattrs.add(attribute);
 			}
 		}
 		entityattributes.writeInt(entityId);
 		entityattributes.writeInt(sendattrs.size());
 		for (Attribute attribute : sendattrs) {
-			StringSerializer.writeString(entityattributes, version, LegacyEntityAttribute.getLegacyId(attribute.key));
-			entityattributes.writeDouble(attribute.value);
+			StringSerializer.writeString(entityattributes, version, LegacyEntityAttribute.getLegacyId(attribute.getKey()));
+			entityattributes.writeDouble(attribute.getValue());
 			if (version != ProtocolVersion.MINECRAFT_1_6_1) {
-				entityattributes.writeShort(attribute.modifiers.length);
-				for (Modifier modifier : attribute.modifiers) {
-					UUIDSerializer.writeUUID2L(entityattributes, modifier.uuid);
-					entityattributes.writeDouble(modifier.amount);
-					entityattributes.writeByte(modifier.operation);
-				}
+				ArraySerializer.writeShortTArray(entityattributes, attribute.getModifiers(), (modifierTo, modifier) -> {
+					UUIDSerializer.writeUUID2L(modifierTo, modifier.getUUID());
+					modifierTo.writeDouble(modifier.getAmount());
+					modifierTo.writeByte(modifier.getOperation());
+				});
 			}
 		}
 		codec.writeClientbound(entityattributes);

@@ -1,6 +1,11 @@
 package protocolsupport.protocol.types.particle;
 
+import java.text.MessageFormat;
 import java.util.function.Supplier;
+
+import javax.annotation.CheckForSigned;
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -81,14 +86,17 @@ import protocolsupport.protocol.types.particle.types.ParticleWitch;
 
 public class ParticleRegistry {
 
-	protected static final Int2ObjectMap<Supplier<Particle>> idToParticle = new Int2ObjectArrayMap<>(64);
-	protected static final Object2IntMap<Class<? extends Particle>> classToId = new Object2IntOpenHashMap<>();
+	private ParticleRegistry() {
+	}
+
+	private static final Int2ObjectMap<Supplier<Particle>> idToParticle = new Int2ObjectArrayMap<>(64);
+	private static final Object2IntMap<Class<? extends Particle>> classToId = new Object2IntOpenHashMap<>();
 	static {
 		classToId.defaultReturnValue(-1);
 	}
-	protected static int nextParticleId = 0;
+	private static int nextParticleId = 0;
 
-	protected static void register(Supplier<Particle> particle) {
+	private static void register(Supplier<Particle> particle) {
 		idToParticle.put(nextParticleId, particle);
 		classToId.put(particle.get().getClass(), nextParticleId);
 		nextParticleId++;
@@ -169,11 +177,15 @@ public class ParticleRegistry {
 		register(ParticleWhiteAsh::new);
 	}
 
-	public static Particle fromId(int id) {
-		return idToParticle.get(id).get();
+	public static @Nonnull Particle fromId(@Nonnegative int id) {
+		Supplier<Particle> particleSupplier = idToParticle.get(id);
+		if (particleSupplier == null) {
+			throw new IllegalArgumentException(MessageFormat.format("Unknown particle network id {0}", id));
+		}
+		return particleSupplier.get();
 	}
 
-	public static int getId(Particle particle) {
+	public static @CheckForSigned int getId(@Nonnull Particle particle) {
 		return classToId.getInt(particle.getClass());
 	}
 

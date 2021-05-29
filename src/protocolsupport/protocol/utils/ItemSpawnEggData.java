@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
@@ -17,18 +19,21 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class ItemSpawnEggData {
 
-	protected static final NetworkEntityType[] toSpawnedType = new NetworkEntityType[MinecraftItemData.ITEM_COUNT];
-	protected static final Object2IntMap<NetworkEntityType> fromSpawnedType = new Object2IntOpenHashMap<>();
+	private ItemSpawnEggData() {
+	}
 
-	protected static void register(Material spawnegg, NetworkEntityType type) {
+	private static final NetworkEntityType[] toSpawnedType = new NetworkEntityType[MinecraftItemData.ITEM_COUNT];
+	private static final Object2IntMap<NetworkEntityType> fromSpawnedType = new Object2IntOpenHashMap<>();
+
+	private static void register(Material spawnegg, NetworkEntityType type) {
 		int materialId = ItemMaterialLookup.getRuntimeId(spawnegg);
 		toSpawnedType[materialId] = type;
 		fromSpawnedType.put(type, materialId);
 	}
 
-	protected static final String spawnEggSuffix = "_SPAWN_EGG";
+	private static final String spawnEggSuffix = "_SPAWN_EGG";
 
-	public static Stream<Material> getSpawnEggs() {
+	public static @Nonnull Stream<Material> getSpawnEggs() {
 		return MinecraftItemData.getItems().filter(m -> m.toString().endsWith(spawnEggSuffix));
 	}
 
@@ -43,7 +48,7 @@ public class ItemSpawnEggData {
 	 * @param materialId spawn egg material id
 	 * @return entity type
 	 */
-	public static NetworkEntityType getSpawnedType(int materialId) {
+	public static @Nonnull NetworkEntityType getSpawnedType(int materialId) {
 		return toSpawnedType[materialId];
 	}
 
@@ -53,7 +58,7 @@ public class ItemSpawnEggData {
 	 * @param spawnedType entity type spawned by egg
 	 * @return spawn egg material id
 	 */
-	public static int getMaterialIdBySpawnedType(NetworkEntityType spawnedType) {
+	public static int getMaterialIdBySpawnedType(@Nonnull NetworkEntityType spawnedType) {
 		return fromSpawnedType.getOrDefault(spawnedType, -1);
 	}
 

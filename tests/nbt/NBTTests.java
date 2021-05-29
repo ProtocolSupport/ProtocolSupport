@@ -14,23 +14,23 @@ import protocolsupport.protocol.types.nbt.NBTShort;
 import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.protocol.types.nbt.NBTType;
 
-public class NBTTests {
+class NBTTests {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testList() {
+	void testList() {
 		NBTList<NBTInt> list = new NBTList<>(NBTType.INT);
 
 		list.addTag(new NBTInt(30));
 		list.addTag(new NBTInt(30));
 
-		Assertions.assertTrue(list.getTagsType() == NBTType.INT);
-		Assertions.assertTrue(list.size() == 2);
+		Assertions.assertEquals(NBTType.INT, list.getTagsType());
+		Assertions.assertEquals(2, list.size());
 		Assertions.assertThrows(IllegalArgumentException.class, () -> ((NBTList) list).addTag(new NBTShort((short) 0)));
 	}
 
 	@Test
-	public void testCompound() {
+	void testCompound() {
 		String testtagname = "test";
 		NBTCompound compound = new NBTCompound();
 
@@ -55,7 +55,7 @@ public class NBTTests {
 	}
 
 	@Test
-	public void testEq() {
+	void testEq() {
 		Assertions.assertEquals(new NBTByte((byte) 5), new NBTByte((byte) 5));
 		Assertions.assertEquals(new NBTShort((short) 5), new NBTShort((short) 5));
 		Assertions.assertEquals(new NBTInt(5), new NBTInt(5));
@@ -66,7 +66,7 @@ public class NBTTests {
 	}
 
 	@Test
-	public void testClone() {
+	void testClone() {
 		{
 			NBTCompound testTag = new NBTCompound();
 			testTag.setTag("test", new NBTString("test"));

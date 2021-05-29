@@ -5,7 +5,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 
 public abstract class MiddleHeldSlot extends ClientBoundMiddlePacket {
 
-	public MiddleHeldSlot(MiddlePacketInit init) {
+	protected MiddleHeldSlot(MiddlePacketInit init) {
 		super(init);
 	}
 

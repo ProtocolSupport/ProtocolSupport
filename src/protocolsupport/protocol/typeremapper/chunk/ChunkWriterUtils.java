@@ -6,6 +6,9 @@ import protocolsupport.utils.netty.RecyclableWrapCompressor;
 
 public class ChunkWriterUtils {
 
+	private ChunkWriterUtils() {
+	}
+
 	public static void writeBBLight(ByteBuf to, byte[] light) {
 		if (light != null) {
 			to.writeBytes(light);

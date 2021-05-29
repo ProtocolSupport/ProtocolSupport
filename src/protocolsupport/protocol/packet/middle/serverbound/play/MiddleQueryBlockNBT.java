@@ -9,7 +9,7 @@ import protocolsupport.protocol.types.Position;
 
 public abstract class MiddleQueryBlockNBT extends ServerBoundMiddlePacket {
 
-	public MiddleQueryBlockNBT(MiddlePacketInit init) {
+	protected MiddleQueryBlockNBT(MiddlePacketInit init) {
 		super(init);
 	}
 

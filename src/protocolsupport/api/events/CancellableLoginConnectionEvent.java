@@ -8,11 +8,11 @@ import protocolsupport.api.chat.components.TextComponent;
 
 public abstract class CancellableLoginConnectionEvent extends ConnectionEvent implements Cancellable {
 
-	public CancellableLoginConnectionEvent(Connection connection, boolean async) {
+	protected CancellableLoginConnectionEvent(Connection connection, boolean async) {
 		super(connection, async);
 	}
 
-	public CancellableLoginConnectionEvent(Connection connection) {
+	protected CancellableLoginConnectionEvent(Connection connection) {
 		this(connection, true);
 	}
 

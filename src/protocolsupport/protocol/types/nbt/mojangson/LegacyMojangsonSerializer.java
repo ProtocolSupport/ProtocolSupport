@@ -16,6 +16,9 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class LegacyMojangsonSerializer {
 
+	private LegacyMojangsonSerializer() {
+	}
+
 	public static String serialize(NBTCompound compound) {
 		StringBuilder builder = new StringBuilder();
 		writeCompound(builder, compound);
@@ -23,9 +26,9 @@ public class LegacyMojangsonSerializer {
 	}
 
 
-	protected static final Map<NBTType<? extends NBT>, TagWriter<? extends NBT>> typeWriters = new HashMap<>();
+	private static final Map<NBTType<? extends NBT>, TagWriter<? extends NBT>> typeWriters = new HashMap<>();
 
-	protected static <T extends NBT> void registerType(NBTType<T> type, TagWriter<T> typeWriter) {
+	private static <T extends NBT> void registerType(NBTType<T> type, TagWriter<T> typeWriter) {
 		typeWriters.put(type, typeWriter);
 	}
 
@@ -87,7 +90,7 @@ public class LegacyMojangsonSerializer {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected static void writeTag(StringBuilder builder, NBT tag) {
+	private static void writeTag(StringBuilder builder, NBT tag) {
 		TagWriter<NBT> f = (TagWriter<NBT>) typeWriters.get(tag.getType());
 		if (f == null) {
 			throw new IllegalArgumentException(MessageFormat.format("No writer registered for nbt type {0}", tag.getType()));
@@ -95,7 +98,7 @@ public class LegacyMojangsonSerializer {
 		f.writeTag(builder, tag);
 	}
 
-	protected static void writeCompound(StringBuilder builder, NBTCompound compound) {
+	private static void writeCompound(StringBuilder builder, NBTCompound compound) {
 		builder.append(MojangsonConstants.compound_start);
 		Iterator<Entry<String, NBT>> iterator = compound.getTags().entrySet().iterator();
 		if (iterator.hasNext()) {
@@ -114,7 +117,7 @@ public class LegacyMojangsonSerializer {
 		builder.append(MojangsonConstants.compound_end);
 	}
 
-	protected static void writeUnquotedString(StringBuilder builder, String string) {
+	private static void writeUnquotedString(StringBuilder builder, String string) {
 		for (int i = 0; i < string.length(); i++) {
 			char c = string.charAt(i);
 			if (MojangsonConstants.isAllowedUnquotedStringCodePoint(c)) {

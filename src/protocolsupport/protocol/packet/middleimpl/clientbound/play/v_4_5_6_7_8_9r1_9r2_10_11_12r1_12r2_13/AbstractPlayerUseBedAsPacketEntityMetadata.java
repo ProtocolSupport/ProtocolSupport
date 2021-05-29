@@ -9,7 +9,7 @@ import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEnti
 
 public abstract class AbstractPlayerUseBedAsPacketEntityMetadata extends AbstractRemappedEntityMetadata {
 
-	public AbstractPlayerUseBedAsPacketEntityMetadata(MiddlePacketInit init) {
+	protected AbstractPlayerUseBedAsPacketEntityMetadata(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -10,11 +10,11 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.types.NetworkItemStack;
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 
-	public MiddleAdvancements(MiddlePacketInit init) {
+	protected MiddleAdvancements(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -102,9 +102,9 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 			this.y = y;
 		}
 
-		protected static enum FrameType {
+		protected enum FrameType {
 			TASK, CHALLENGE, GOAL;
-			public static final EnumConstantLookups.EnumConstantLookup<FrameType> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(FrameType.class);
+			public static final EnumConstantLookup<FrameType> CONSTANT_LOOKUP = new EnumConstantLookup<>(FrameType.class);
 		}
 	}
 

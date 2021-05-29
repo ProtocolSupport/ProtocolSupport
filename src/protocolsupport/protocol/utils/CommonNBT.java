@@ -17,6 +17,10 @@ import protocolsupport.protocol.utils.minecraftdata.MinecraftPotionData;
 
 public class CommonNBT {
 
+	private CommonNBT() {
+	}
+
+
 	public static NBTCompound getOrCreateRootTag(NetworkItemStack itemstack) {
 		NBTCompound tag = itemstack.getNBT();
 		if (tag == null) {

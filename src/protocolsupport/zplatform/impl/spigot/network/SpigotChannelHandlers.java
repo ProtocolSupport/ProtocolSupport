@@ -2,6 +2,9 @@ package protocolsupport.zplatform.impl.spigot.network;
 
 public class SpigotChannelHandlers {
 
+	private SpigotChannelHandlers() {
+	}
+
 	public static final String READ_TIMEOUT = "timeout";
 	public static final String SPLITTER = "splitter";
 	public static final String PREPENDER = "prepender";

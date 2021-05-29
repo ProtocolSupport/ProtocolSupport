@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.Position;
 
 public abstract class MiddleWorldEvent extends ClientBoundMiddlePacket {
 
-	public MiddleWorldEvent(MiddlePacketInit init) {
+	protected MiddleWorldEvent(MiddlePacketInit init) {
 		super(init);
 	}
 

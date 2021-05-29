@@ -16,7 +16,7 @@ public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
-	public MiddleSpawnPainting(MiddlePacketInit init) {
+	protected MiddleSpawnPainting(MiddlePacketInit init) {
 		super(init);
 	}
 

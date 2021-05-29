@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleScoreboardScore extends ClientBoundMiddlePacket {
 
-	public MiddleScoreboardScore(MiddlePacketInit init) {
+	protected MiddleScoreboardScore(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -3,12 +3,18 @@ package protocolsupport.protocol.typeremapper.legacy;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import protocolsupport.api.chat.ChatColor;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.chat.modifiers.Modifier;
 
 public class LegacyChat {
+
+	private LegacyChat() {
+	}
 
 	public static final char STYLE_CHAR = '§';
 
@@ -27,7 +33,7 @@ public class LegacyChat {
 	public static final String STYLE_RESET = String.valueOf(new char[] {STYLE_CHAR, STYLE_RESET_CHAR});
 
 
-	public static boolean isEmpty(String string) {
+	public static boolean isEmpty(@Nonnull String string) {
 		if (string.isEmpty()) {
 			return true;
 		}
@@ -43,7 +49,7 @@ public class LegacyChat {
 		return true;
 	}
 
-	public static String toText(BaseComponent component, String locale) {
+	public static String toText(@Nullable BaseComponent component, @Nonnull String locale) {
 		if (component == null) {
 			return "";
 		}

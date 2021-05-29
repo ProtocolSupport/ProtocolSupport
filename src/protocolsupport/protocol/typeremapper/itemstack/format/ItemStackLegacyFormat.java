@@ -52,6 +52,9 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class ItemStackLegacyFormat {
 
+	private ItemStackLegacyFormat() {
+	}
+
 	public static final ItemStackLegacyFormatRegistry REGISTRY_TO = new ItemStackLegacyFormatRegistry() {{
 		add(Material.FILLED_MAP, new ItemStackLegacyFormatOperatorMapToLegacyId(), ProtocolVersionsHelper.DOWN_1_12_2);
 

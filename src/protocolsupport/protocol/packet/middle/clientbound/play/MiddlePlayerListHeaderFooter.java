@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddlePlayerListHeaderFooter extends ClientBoundMiddlePacket {
 
-	public MiddlePlayerListHeaderFooter(MiddlePacketInit init) {
+	protected MiddlePlayerListHeaderFooter(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -17,7 +17,8 @@ import org.bukkit.entity.Player;
 public class CommandHandler implements CommandExecutor, TabCompleter {
 
 	private final Map<String, SubCommand> subcommands = new LinkedHashMap<>();
-	{
+
+	public CommandHandler() {
 		subcommands.put("buildinfo", new BuildInfoSubCommand());
 		subcommands.put("debug", new DebugSubCommand());
 		subcommands.put("leakdetector", new LeakDetectorSubCommand());

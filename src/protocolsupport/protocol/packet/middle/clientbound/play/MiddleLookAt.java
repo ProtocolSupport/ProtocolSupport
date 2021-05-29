@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 
 public abstract class MiddleLookAt extends ClientBoundMiddlePacket {
 
-	public MiddleLookAt(MiddlePacketInit init) {
+	protected MiddleLookAt(MiddlePacketInit init) {
 		super(init);
 	}
 

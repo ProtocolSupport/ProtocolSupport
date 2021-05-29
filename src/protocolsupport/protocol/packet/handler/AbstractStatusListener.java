@@ -35,7 +35,8 @@ public abstract class AbstractStatusListener {
 	);
 
 	protected final NetworkManagerWrapper networkManager;
-	public AbstractStatusListener(NetworkManagerWrapper networkmanager) {
+
+	protected AbstractStatusListener(NetworkManagerWrapper networkmanager) {
 		this.networkManager = networkmanager;
 	}
 

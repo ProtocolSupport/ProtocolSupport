@@ -9,7 +9,7 @@ import protocolsupport.protocol.serializer.UUIDSerializer;
 
 public abstract class MiddleLoginSuccess extends ClientBoundMiddlePacket {
 
-	public MiddleLoginSuccess(MiddlePacketInit init) {
+	protected MiddleLoginSuccess(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -18,6 +18,9 @@ import protocolsupport.zplatform.ServerPlatform;
 //TODO: remap control API
 public class BiomeRemapper {
 
+	private BiomeRemapper() {
+	}
+
 	public static final BiomeRemappingRegistry REGISTRY = new BiomeRemappingRegistry();
 	public static final Object2IntMap<NamespacedKey> LEGACY = new Object2IntLinkedOpenHashMap<>();
 	public static final int LEGACY_NONE = -1;

@@ -2,6 +2,8 @@ package protocolsupport.protocol.utils;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.Bukkit;
 
 import protocolsupport.api.ProtocolVersion;
@@ -17,7 +19,10 @@ import protocolsupport.protocol.types.nbt.NBTString;
 
 public class ItemStackWriteEventHelper {
 
-	public static void callEvent(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
+	private ItemStackWriteEventHelper() {
+	}
+
+	public static void callEvent(@Nonnull ProtocolVersion version, @Nonnull String locale, @Nonnull NetworkItemStack itemstack) {
 		if (ItemStackWriteEvent.getHandlerList().getRegisteredListeners().length > 0) {
 			ItemStackWriteEvent event = new ItemStackWriteEvent(version, locale, new NetworkBukkitItemStack(itemstack));
 			Bukkit.getPluginManager().callEvent(event);

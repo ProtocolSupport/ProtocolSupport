@@ -9,7 +9,7 @@ import protocolsupport.protocol.types.Position;
 
 public abstract class MiddleJigsawGenerate extends ServerBoundMiddlePacket {
 
-	public MiddleJigsawGenerate(MiddlePacketInit init) {
+	protected MiddleJigsawGenerate(MiddlePacketInit init) {
 		super(init);
 	}
 

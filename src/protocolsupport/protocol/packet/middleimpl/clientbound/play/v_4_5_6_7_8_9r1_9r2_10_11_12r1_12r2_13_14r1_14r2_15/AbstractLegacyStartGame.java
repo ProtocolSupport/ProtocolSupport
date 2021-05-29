@@ -6,7 +6,7 @@ import protocolsupport.protocol.types.nbt.NBTCompound;
 
 public abstract class AbstractLegacyStartGame extends MiddleStartGame {
 
-	public AbstractLegacyStartGame(MiddlePacketInit init) {
+	protected AbstractLegacyStartGame(MiddlePacketInit init) {
 		super(init);
 	}
 

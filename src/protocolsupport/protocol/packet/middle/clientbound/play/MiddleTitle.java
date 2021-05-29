@@ -6,11 +6,11 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 
-	public MiddleTitle(MiddlePacketInit init) {
+	protected MiddleTitle(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -43,9 +43,9 @@ public abstract class MiddleTitle extends ClientBoundMiddlePacket {
 		}
 	}
 
-	protected static enum Action {
+	protected enum Action {
 		SET_TITLE, SET_SUBTITLE, SET_ACTION_BAR, SET_TIMES, HIDE, RESET;
-		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
+		public static final EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookup<>(Action.class);
 	}
 
 }

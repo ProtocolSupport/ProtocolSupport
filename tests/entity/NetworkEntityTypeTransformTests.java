@@ -14,10 +14,10 @@ import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import zinit.PlatformInit;
 
-public class NetworkEntityTypeTransformTests extends PlatformInit {
+class NetworkEntityTypeTransformTests extends PlatformInit {
 
 	@Test
-	public void testRegistriesFilled() {
+	void testRegistriesFilled() {
 		for (ProtocolVersion version : ProtocolVersionsHelper.ALL) {
 			NetworkEntityLegacyDataTable dataTable = NetworkEntityLegacyDataRegistry.INSTANCE.getTable(version);
 			NetworkEntityLegacyFormatTable formatTable = NetworkEntityLegacyFormatRegistry.INSTANCE.getTable(version);

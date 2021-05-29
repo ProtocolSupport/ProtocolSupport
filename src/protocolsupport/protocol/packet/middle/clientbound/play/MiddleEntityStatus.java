@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 //TODO: Enum for status id?
 public abstract class MiddleEntityStatus extends ClientBoundMiddlePacket {
 
-	public MiddleEntityStatus(MiddlePacketInit init) {
+	protected MiddleEntityStatus(MiddlePacketInit init) {
 		super(init);
 	}
 

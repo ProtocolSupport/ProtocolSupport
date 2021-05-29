@@ -3,6 +3,11 @@ package protocolsupport.protocol.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.CheckForSigned;
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.bukkit.Material;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -14,9 +19,12 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class ItemMaterialLookup {
 
-	protected static final Map<String, Material> byKey = new HashMap<>();
-	protected static final ArrayMap<Material> byRuntimeId = new ArrayMap<>(MinecraftItemData.ITEM_COUNT);
-	protected static final Object2IntMap<Material> toRuntimeId = new Object2IntOpenHashMap<>();
+	private ItemMaterialLookup() {
+	}
+
+	private static final Map<String, Material> byKey = new HashMap<>();
+	private static final ArrayMap<Material> byRuntimeId = new ArrayMap<>(MinecraftItemData.ITEM_COUNT);
+	private static final Object2IntMap<Material> toRuntimeId = new Object2IntOpenHashMap<>();
 
 	static {
 		toRuntimeId.defaultReturnValue(-1);
@@ -32,15 +40,15 @@ public class ItemMaterialLookup {
 		});
 	}
 
-	public static Material getByKey(String key) {
+	public static @Nullable Material getByKey(@Nonnull String key) {
 		return byKey.get(key);
 	}
 
-	public static Material getByRuntimeId(int runtimeId) {
+	public static @Nullable Material getByRuntimeId(@Nonnegative int runtimeId) {
 		return byRuntimeId.get(runtimeId);
 	}
 
-	public static int getRuntimeId(Material material) {
+	public static @CheckForSigned int getRuntimeId(@Nonnull Material material) {
 		return toRuntimeId.getInt(material);
 	}
 

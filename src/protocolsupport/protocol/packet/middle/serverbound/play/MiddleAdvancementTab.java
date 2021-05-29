@@ -5,11 +5,11 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleAdvancementTab extends ServerBoundMiddlePacket {
 
-	public MiddleAdvancementTab(MiddlePacketInit init) {
+	protected MiddleAdvancementTab(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -26,9 +26,9 @@ public abstract class MiddleAdvancementTab extends ServerBoundMiddlePacket {
 		codec.writeServerbound(advanvementtab);
 	}
 
-	protected static enum Action {
+	protected enum Action {
 		OPEN, CLOSE;
-		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
+		public static final EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookup<>(Action.class);
 	}
 
 }

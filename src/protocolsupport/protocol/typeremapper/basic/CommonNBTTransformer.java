@@ -7,6 +7,9 @@ import protocolsupport.protocol.types.nbt.NBTString;
 
 public class CommonNBTTransformer {
 
+	private CommonNBTTransformer() {
+	}
+
 	public static NBTList<NBTString> toLegacyChatList(NBTList<NBTString> list, String locale) {
 		if (list == null) {
 			return null;

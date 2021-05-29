@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleScoreboardDisplay extends ClientBoundMiddlePacket {
 
-	public MiddleScoreboardDisplay(MiddlePacketInit init) {
+	protected MiddleScoreboardDisplay(MiddlePacketInit init) {
 		super(init);
 	}
 

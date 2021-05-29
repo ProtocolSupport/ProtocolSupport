@@ -4,13 +4,13 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
-import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleGameStateChange extends ClientBoundMiddlePacket {
 
 	protected final ClientCache clientCache = cache.getClientCache();
 
-	public MiddleGameStateChange(MiddlePacketInit init) {
+	protected MiddleGameStateChange(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -30,7 +30,7 @@ public abstract class MiddleGameStateChange extends ClientBoundMiddlePacket {
 		}
 	}
 
-	protected static enum Action {
+	protected enum Action {
 		SHOW_MESSAGE_INVALID_BED,
 		RAIN_START,
 		RAIN_END,

@@ -8,7 +8,7 @@ import protocolsupport.protocol.types.SoundCategory;
 
 public abstract class MiddleWorldCustomSound extends ClientBoundMiddlePacket {
 
-	public MiddleWorldCustomSound(MiddlePacketInit init) {
+	protected MiddleWorldCustomSound(MiddlePacketInit init) {
 		super(init);
 	}
 

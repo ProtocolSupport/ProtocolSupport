@@ -72,6 +72,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 			}
 		} catch (InterruptedException e) {
 			disconnect(new TextComponent("Interrupt while waiting for login success send"));
+			Thread.currentThread().interrupt();
 			return;
 		}
 		networkManager.setProtocol(NetworkState.PLAY);
@@ -154,7 +155,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 	@Override
 	public void disconnect(BaseComponent message) {
 		try {
-			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + message.toLegacyText());
+			Bukkit.getLogger().info(() -> "Disconnecting " + getConnectionRepr() + ": " + message.toLegacyText());
 			ProtocolVersion version = connection.getVersion();
 			if ((version.getProtocolType() == ProtocolType.PC) && version.isBetween(ProtocolVersion.MINECRAFT_1_7_5, ProtocolVersion.MINECRAFT_1_7_10)) {
 				//first send join game that will make client actually switch to game state
@@ -181,13 +182,17 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 	protected abstract void joinGame(Object[] data);
 
 	protected abstract class JoinData {
+
 		public final Player player;
 		public final Object[] data;
-		public JoinData(Player player, Object... data) {
+
+		protected JoinData(Player player, Object... data) {
 			this.player = player;
 			this.data = data;
 		}
+
 		protected abstract void close();
+
 	}
 
 }

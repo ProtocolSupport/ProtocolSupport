@@ -7,15 +7,18 @@ import java.util.function.ToIntBiFunction;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public class MiscSerializer {
 
-	public static <T extends Enum<T>> T readVarIntEnum(ByteBuf from, EnumConstantLookups.EnumConstantLookup<T> lookup) {
+	private MiscSerializer() {
+	}
+
+	public static <T extends Enum<T>> T readVarIntEnum(ByteBuf from, EnumConstantLookup<T> lookup) {
 		return lookup.getByOrdinal(VarNumberSerializer.readVarInt(from));
 	}
 
-	public static <T extends Enum<T>> T readByteEnum(ByteBuf from, EnumConstantLookups.EnumConstantLookup<T> lookup) {
+	public static <T extends Enum<T>> T readByteEnum(ByteBuf from, EnumConstantLookup<T> lookup) {
 		return lookup.getByOrdinal(from.readByte());
 	}
 

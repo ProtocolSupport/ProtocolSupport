@@ -9,7 +9,7 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleSetProtocol extends ServerBoundMiddlePacket {
 
-	public MiddleSetProtocol(MiddlePacketInit init) {
+	protected MiddleSetProtocol(MiddlePacketInit init) {
 		super(init);
 	}
 

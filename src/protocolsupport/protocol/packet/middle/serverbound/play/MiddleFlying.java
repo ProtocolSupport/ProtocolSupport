@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
 public abstract class MiddleFlying extends ServerBoundMiddlePacket {
 
-	public MiddleFlying(MiddlePacketInit init) {
+	protected MiddleFlying(MiddlePacketInit init) {
 		super(init);
 	}
 

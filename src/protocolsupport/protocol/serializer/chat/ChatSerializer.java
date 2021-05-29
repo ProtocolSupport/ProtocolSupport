@@ -26,6 +26,9 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class ChatSerializer {
 
+	private ChatSerializer() {
+	}
+
 	private static final Gson deserializer = new GsonBuilder()
 	.registerTypeHierarchyAdapter(BaseComponent.class, ComponentSerializer.DEFAULT_INSTANCE)
 	.registerTypeHierarchyAdapter(Modifier.class, ModifierSerializer.INSTANCE)

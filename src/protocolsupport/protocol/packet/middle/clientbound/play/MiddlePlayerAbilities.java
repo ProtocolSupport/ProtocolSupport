@@ -5,7 +5,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 
 public abstract class MiddlePlayerAbilities extends ClientBoundMiddlePacket {
 
-	public MiddlePlayerAbilities(MiddlePacketInit init) {
+	protected MiddlePlayerAbilities(MiddlePacketInit init) {
 		super(init);
 	}
 

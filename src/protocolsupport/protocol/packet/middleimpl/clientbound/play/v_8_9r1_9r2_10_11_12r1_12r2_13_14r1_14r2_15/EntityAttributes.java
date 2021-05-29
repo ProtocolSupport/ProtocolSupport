@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityAttributes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.UUIDSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -24,21 +25,20 @@ public class EntityAttributes extends MiddleEntityAttributes {
 		GenericSkippingTable<String> table = GenericIdSkipper.ATTRIBUTES.getTable(version);
 		ArrayList<Attribute> sendattrs = new ArrayList<>();
 		for (Attribute attribute : attributes.values()) {
-			if (!table.shouldSkip(attribute.key)) {
+			if (!table.shouldSkip(attribute.getKey())) {
 				sendattrs.add(attribute);
 			}
 		}
 		VarNumberSerializer.writeVarInt(entityattributes, entityId);
 		entityattributes.writeInt(sendattrs.size());
 		for (Attribute attribute : sendattrs) {
-			StringSerializer.writeVarIntUTF8String(entityattributes, LegacyEntityAttribute.getLegacyId(attribute.key));
-			entityattributes.writeDouble(attribute.value);
-			VarNumberSerializer.writeVarInt(entityattributes, attribute.modifiers.length);
-			for (Modifier modifier : attribute.modifiers) {
-				UUIDSerializer.writeUUID2L(entityattributes, modifier.uuid);
-				entityattributes.writeDouble(modifier.amount);
-				entityattributes.writeByte(modifier.operation);
-			}
+			StringSerializer.writeVarIntUTF8String(entityattributes, LegacyEntityAttribute.getLegacyId(attribute.getKey()));
+			entityattributes.writeDouble(attribute.getValue());
+			ArraySerializer.writeVarIntTArray(entityattributes, attribute.getModifiers(), (modifierTo, modifier) -> {
+				UUIDSerializer.writeUUID2L(modifierTo, modifier.getUUID());
+				modifierTo.writeDouble(modifier.getAmount());
+				modifierTo.writeByte(modifier.getOperation());
+			});
 		}
 		codec.writeClientbound(entityattributes);
 	}

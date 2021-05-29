@@ -1,5 +1,7 @@
 package protocolsupport.protocol.typeremapper.entity;
 
+import javax.annotation.Nonnull;
+
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry.NetworkEntityLegacyFormatTable;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.object.NetworkEntityMetadataFormatTransformer;
@@ -11,21 +13,24 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class NetworkEntityTransformHelper {
 
+	private NetworkEntityTransformHelper() {
+	}
+
 	public static void transformMetadata(
-		NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> metadata,
-		NetworkEntityLegacyDataEntry legacyEntityEntry, NetworkEntityLegacyFormatTable entityFormatTable,
-		NetworkEntityMetadataList fMetadata
+		@Nonnull NetworkEntity entity, @Nonnull ArrayMap<NetworkEntityMetadataObject<?>> metadata,
+		@Nonnull NetworkEntityLegacyDataEntry entityLegacyDataTable, @Nonnull NetworkEntityLegacyFormatTable entityLegacyFormatTable,
+		@Nonnull NetworkEntityMetadataList legacyFormatMetadata
 	) {
-		legacyEntityEntry.transformMetadata(metadata);
-		transformMetadataFormat(entity, legacyEntityEntry.getType(), metadata, entityFormatTable, fMetadata);
+		entityLegacyDataTable.transformMetadata(metadata);
+		transformMetadataFormat(entity, entityLegacyDataTable.getType(), metadata, entityLegacyFormatTable, legacyFormatMetadata);
 	}
 
 	public static void transformMetadataFormat(
-		NetworkEntity entity, NetworkEntityType type, ArrayMap<NetworkEntityMetadataObject<?>> metadata,
-		NetworkEntityLegacyFormatTable entityFormatTable,
-		NetworkEntityMetadataList fMetadata
+		@Nonnull NetworkEntity entity, @Nonnull NetworkEntityType type, @Nonnull ArrayMap<NetworkEntityMetadataObject<?>> metadata,
+		@Nonnull NetworkEntityLegacyFormatTable entityLegacyFormatTable,
+		@Nonnull NetworkEntityMetadataList fMetadata
 	) {
-		for (NetworkEntityMetadataFormatTransformer fMetadataTransformer : entityFormatTable.get(type).getMetadataTransformers()) {
+		for (NetworkEntityMetadataFormatTransformer fMetadataTransformer : entityLegacyFormatTable.get(type).getMetadataTransformers()) {
 			fMetadataTransformer.transform(entity, metadata, fMetadata);
 		}
 		entity.getDataCache().unsetFirstMeta();

@@ -4,6 +4,8 @@ import java.text.MessageFormat;
 import java.util.EnumMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import protocolsupport.api.ProtocolVersion;
 
 public class ProtocolData<T> {
@@ -14,7 +16,7 @@ public class ProtocolData<T> {
 	}
 
 	@SafeVarargs
-	public ProtocolData(Map.Entry<T, ProtocolVersion[]>... entries) {
+	public ProtocolData(@Nonnull Map.Entry<T, ProtocolVersion[]>... entries) {
 		for (Map.Entry<T, ProtocolVersion[]> entry : entries) {
 			T data = entry.getKey();
 			for (ProtocolVersion version : entry.getValue()) {
@@ -23,7 +25,7 @@ public class ProtocolData<T> {
 		}
 	}
 
-	public T get(ProtocolVersion version) {
+	public @Nonnull T get(@Nonnull ProtocolVersion version) {
 		T entry = entries.get(version);
 		if (entry == null) {
 			throw new IllegalArgumentException(createMissingDataMessage(version));
@@ -31,7 +33,7 @@ public class ProtocolData<T> {
 		return entries.get(version);
 	}
 
-	protected String createMissingDataMessage(ProtocolVersion version) {
+	protected @Nonnull String createMissingDataMessage(@Nonnull ProtocolVersion version) {
 		return MessageFormat.format("Missing data for protocol version {0}", version);
 	}
 

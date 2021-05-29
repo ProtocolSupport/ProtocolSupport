@@ -8,6 +8,9 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class BlockBlockDataLookup {
 
+	private BlockBlockDataLookup() {
+	}
+
 	protected static final int[] blockToBlockdata = new int[MinecraftBlockData.BLOCK_COUNT];
 	protected static final int[] blockdataToBlock = new int[MinecraftBlockData.BLOCKDATA_COUNT];
 

@@ -1,8 +1,13 @@
 package protocolsupport.protocol.utils;
 
+import javax.annotation.Nonnull;
+
 public class MappingsData {
 
-	public static String getResourcePath(String name) {
+	private MappingsData() {
+	}
+
+	public static @Nonnull String getResourcePath(@Nonnull String name) {
 		return "mappings/" + name;
 	}
 

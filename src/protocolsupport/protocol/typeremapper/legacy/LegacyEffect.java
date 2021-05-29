@@ -9,6 +9,9 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class LegacyEffect {
 
+	private LegacyEffect() {
+	}
+
 	public static final IntMappingRegistry<HashMapBasedIntMappingTable> REGISTRY = new IntMappingRegistry<HashMapBasedIntMappingTable>() {
 		{
 			register(1003, 1002, ProtocolVersionsHelper.DOWN_1_8);

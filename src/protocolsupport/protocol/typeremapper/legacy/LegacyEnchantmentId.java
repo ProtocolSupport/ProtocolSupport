@@ -1,5 +1,11 @@
 package protocolsupport.protocol.typeremapper.legacy;
 
+import java.text.MessageFormat;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.bukkit.enchantments.Enchantment;
 
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
@@ -8,15 +14,20 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class LegacyEnchantmentId {
 
+	private LegacyEnchantmentId() {
+	}
+
+	private static final short legacyIdNone = -1;
 	private static final Object2ShortOpenHashMap<Enchantment> toLegacyId = new Object2ShortOpenHashMap<>();
 	private static final Enchantment[] byLegacyId = new Enchantment[128];
 
-	private static void register(Enchantment ench, short id) {
+	private static void register(@Nonnull Enchantment ench, @Nonnegative short id) {
 		toLegacyId.put(ench, id);
 		byLegacyId[id] = ench;
 	}
 
 	static {
+		toLegacyId.defaultReturnValue(legacyIdNone);
 		register(Enchantment.PROTECTION_ENVIRONMENTAL, (short) 0);
 		register(Enchantment.PROTECTION_FIRE, (short) 1);
 		register(Enchantment.PROTECTION_FALL, (short) 2);
@@ -49,11 +60,15 @@ public class LegacyEnchantmentId {
 		register(Enchantment.LURE, (short) 62);
 	}
 
-	public static short getId(Enchantment ench) {
-		return toLegacyId.getShort(ench);
+	public static @Nonnegative short getId(@Nonnull Enchantment ench) {
+		short legacyId = toLegacyId.getShort(ench);
+		if (legacyId == legacyIdNone) {
+			throw new IllegalArgumentException(MessageFormat.format("Missing enchantment {0} legacy id", ench));
+		}
+		return legacyId;
 	}
 
-	public static Enchantment getById(int id) {
+	public static @Nullable Enchantment getById(@Nonnegative int id) {
 		if ((id >= 0) && (id < byLegacyId.length)) {
 			return byLegacyId[id];
 		} else {

@@ -11,7 +11,7 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 
 public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 
-	public AbstractScoreboardTeam(MiddlePacketInit init) {
+	protected AbstractScoreboardTeam(MiddlePacketInit init) {
 		super(init);
 	}
 

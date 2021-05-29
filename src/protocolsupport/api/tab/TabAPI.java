@@ -9,6 +9,9 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class TabAPI {
 
+	private TabAPI() {
+	}
+
 	private static int maxTabSize = -1;
 
 	/**

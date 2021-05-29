@@ -12,11 +12,11 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.basic.BiomeRemapper;
+import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
-import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVaries;
-import protocolsupport.protocol.typeremapper.chunk.HeightMapTransformer;
+import protocolsupport.protocol.typeremapper.chunk.ChunkHeightMapTransformer;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
@@ -41,7 +41,7 @@ public class ChunkData extends MiddleChunkData {
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(full);
 		VarNumberSerializer.writeVarInt(chunkdata, blockMask);
-		ItemStackSerializer.writeDirectTag(chunkdata, HeightMapTransformer.transform(heightmaps));
+		ItemStackSerializer.writeDirectTag(chunkdata, ChunkHeightMapTransformer.transform(heightmaps));
 		MiscSerializer.writeVarIntLengthPrefixedType(chunkdata, this, (to, chunksections) -> {
 			ChunkWriterVaries.writeSectionsCompact(
 				to, chunksections.blockMask, 14,

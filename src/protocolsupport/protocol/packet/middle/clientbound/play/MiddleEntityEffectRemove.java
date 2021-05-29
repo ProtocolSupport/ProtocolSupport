@@ -6,7 +6,7 @@ import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 
 public abstract class MiddleEntityEffectRemove extends MiddleEntity {
 
-	public MiddleEntityEffectRemove(MiddlePacketInit init) {
+	protected MiddleEntityEffectRemove(MiddlePacketInit init) {
 		super(init);
 	}
 

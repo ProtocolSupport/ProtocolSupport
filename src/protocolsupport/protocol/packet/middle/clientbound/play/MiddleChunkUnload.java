@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.ChunkCoord;
 
 public abstract class MiddleChunkUnload extends ClientBoundMiddlePacket {
 
-	public MiddleChunkUnload(MiddlePacketInit init) {
+	protected MiddleChunkUnload(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
 public abstract class MiddlePlayerAbilities extends ServerBoundMiddlePacket {
 
-	public MiddlePlayerAbilities(MiddlePacketInit init) {
+	protected MiddlePlayerAbilities(MiddlePacketInit init) {
 		super(init);
 	}
 

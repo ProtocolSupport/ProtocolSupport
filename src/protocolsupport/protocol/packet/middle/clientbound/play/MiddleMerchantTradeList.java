@@ -7,12 +7,11 @@ import protocolsupport.protocol.types.MerchantData;
 
 public abstract class MiddleMerchantTradeList extends ClientBoundMiddlePacket {
 
-	protected MerchantData merchantData;
-
-
-	public MiddleMerchantTradeList(MiddlePacketInit init) {
+	protected MiddleMerchantTradeList(MiddlePacketInit init) {
 		super(init);
 	}
+
+	protected MerchantData merchantData;
 
 	@Override
 	protected void decode(ByteBuf serverdata) {

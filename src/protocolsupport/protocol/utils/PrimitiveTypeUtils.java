@@ -2,6 +2,9 @@ package protocolsupport.protocol.utils;
 
 public class PrimitiveTypeUtils {
 
+	private PrimitiveTypeUtils() {
+	}
+
 	public static byte toAngleB(float angleF) {
 		return (byte) ((angleF * 256F) / 360F);
 	}

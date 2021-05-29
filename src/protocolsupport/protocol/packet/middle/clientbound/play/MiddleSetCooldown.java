@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleSetCooldown extends ClientBoundMiddlePacket {
 
-	public MiddleSetCooldown(MiddlePacketInit init) {
+	protected MiddleSetCooldown(MiddlePacketInit init) {
 		super(init);
 	}
 

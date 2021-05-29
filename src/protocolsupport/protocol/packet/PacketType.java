@@ -180,7 +180,7 @@ public enum PacketType {
 		return id;
 	}
 
-	public static enum Direction {
+	public enum Direction {
 		CLIENTBOUND, SERVERBOUND, NONE
 	}
 

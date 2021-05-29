@@ -11,7 +11,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class AbstractPassengerStackEntityDestroy extends MiddleEntityDestroy {
 
-	public AbstractPassengerStackEntityDestroy(MiddlePacketInit init) {
+	protected AbstractPassengerStackEntityDestroy(MiddlePacketInit init) {
 		super(init);
 	}
 

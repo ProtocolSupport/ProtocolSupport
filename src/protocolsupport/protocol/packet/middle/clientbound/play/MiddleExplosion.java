@@ -6,7 +6,7 @@ import protocolsupport.protocol.types.Position;
 
 public abstract class MiddleExplosion extends ClientBoundMiddlePacket {
 
-	public MiddleExplosion(MiddlePacketInit init) {
+	protected MiddleExplosion(MiddlePacketInit init) {
 		super(init);
 	}
 

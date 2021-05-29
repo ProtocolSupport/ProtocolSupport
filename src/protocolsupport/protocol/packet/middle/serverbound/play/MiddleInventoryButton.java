@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
 public abstract class MiddleInventoryButton extends ServerBoundMiddlePacket {
 
-	public MiddleInventoryButton(MiddlePacketInit init) {
+	protected MiddleInventoryButton(MiddlePacketInit init) {
 		super(init);
 	}
 

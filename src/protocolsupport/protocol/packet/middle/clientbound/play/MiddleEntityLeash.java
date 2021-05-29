@@ -5,7 +5,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 
 public abstract class MiddleEntityLeash extends ClientBoundMiddlePacket {
 
-	public MiddleEntityLeash(MiddlePacketInit init) {
+	protected MiddleEntityLeash(MiddlePacketInit init) {
 		super(init);
 	}
 

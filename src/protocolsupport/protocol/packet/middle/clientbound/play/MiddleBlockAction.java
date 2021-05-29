@@ -5,7 +5,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleBlockAction extends MiddleBlock {
 
-	public MiddleBlockAction(MiddlePacketInit init) {
+	protected MiddleBlockAction(MiddlePacketInit init) {
 		super(init);
 	}
 

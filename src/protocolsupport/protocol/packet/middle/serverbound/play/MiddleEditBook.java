@@ -9,7 +9,7 @@ import protocolsupport.protocol.types.NetworkItemStack;
 
 public abstract class MiddleEditBook extends ServerBoundMiddlePacket {
 
-	public MiddleEditBook(MiddlePacketInit init) {
+	protected MiddleEditBook(MiddlePacketInit init) {
 		super(init);
 	}
 

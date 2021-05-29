@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.particle.ParticleRegistry;
 
 public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 
-	public MiddleWorldParticle(MiddlePacketInit init) {
+	protected MiddleWorldParticle(MiddlePacketInit init) {
 		super(init);
 	}
 

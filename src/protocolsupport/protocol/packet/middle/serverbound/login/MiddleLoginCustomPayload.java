@@ -8,7 +8,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleLoginCustomPayload extends ServerBoundMiddlePacket {
 
-	public MiddleLoginCustomPayload(MiddlePacketInit init) {
+	protected MiddleLoginCustomPayload(MiddlePacketInit init) {
 		super(init);
 	}
 

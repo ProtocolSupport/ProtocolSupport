@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleRecipeBookRecipe extends ServerBoundMiddlePacket {
 
-	public MiddleRecipeBookRecipe(MiddlePacketInit init) {
+	protected MiddleRecipeBookRecipe(MiddlePacketInit init) {
 		super(init);
 	}
 

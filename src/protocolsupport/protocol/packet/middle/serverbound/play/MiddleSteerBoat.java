@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
 public abstract class MiddleSteerBoat extends ServerBoundMiddlePacket {
 
-	public MiddleSteerBoat(MiddlePacketInit init) {
+	protected MiddleSteerBoat(MiddlePacketInit init) {
 		super(init);
 	}
 

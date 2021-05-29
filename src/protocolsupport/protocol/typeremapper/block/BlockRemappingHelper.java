@@ -7,6 +7,9 @@ import protocolsupport.protocol.utils.BlockBlockDataLookup;
 
 public class BlockRemappingHelper {
 
+	private BlockRemappingHelper() {
+	}
+
 	public static int remapPreFlatteningBlockId(IdMappingTable blockDataRemappingTable, int blockId) {
 		return PreFlatteningBlockIdData.getIdFromCombinedId(remapPreFlatteningBlockDataNormal(blockDataRemappingTable, BlockBlockDataLookup.getBlockDataId(blockId)));
 	}

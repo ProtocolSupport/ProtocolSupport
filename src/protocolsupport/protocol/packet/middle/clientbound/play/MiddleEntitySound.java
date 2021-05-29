@@ -8,7 +8,7 @@ import protocolsupport.protocol.types.SoundCategory;
 
 public abstract class MiddleEntitySound extends ClientBoundMiddlePacket {
 
-	public MiddleEntitySound(MiddlePacketInit init) {
+	protected MiddleEntitySound(MiddlePacketInit init) {
 		super(init);
 	}
 

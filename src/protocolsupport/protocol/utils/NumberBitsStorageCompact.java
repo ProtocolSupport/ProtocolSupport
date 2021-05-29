@@ -1,5 +1,8 @@
 package protocolsupport.protocol.utils;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
 import protocolsupport.utils.Utils;
 
 public class NumberBitsStorageCompact {
@@ -8,21 +11,21 @@ public class NumberBitsStorageCompact {
 	protected final int bitsPerNumber;
 	protected final long singleNumberMask;
 
-	public NumberBitsStorageCompact(int bitsPerNumber, int size) {
+	public NumberBitsStorageCompact(@Nonnegative int bitsPerNumber, @Nonnegative int size) {
 		this.bitsPerNumber = bitsPerNumber;
 		this.singleNumberMask = (1L << bitsPerNumber) - 1L;
 		this.storage = new long[Utils.ceilToBase(size * bitsPerNumber, Long.SIZE) / Long.SIZE];
 	}
 
-	public int getBitsPerNumber() {
+	public @Nonnegative int getBitsPerNumber() {
 		return bitsPerNumber;
 	}
 
-	public long[] getStorage() {
+	public @Nonnull long[] getStorage() {
 		return storage;
 	}
 
-	public int getNumber(int index) {
+	public int getNumber(@Nonnegative int index) {
 		int bitStartIndex = index * bitsPerNumber;
 		int arrStartIndex = bitStartIndex >> 6;
 		int arrEndIndex = ((bitStartIndex + bitsPerNumber) - 1) >> 6;
@@ -34,7 +37,7 @@ public class NumberBitsStorageCompact {
 		}
 	}
 
-	public void setNumber(int index, int number) {
+	public void setNumber(@Nonnegative int index, int number) {
 		int bitStartIndex = index * this.bitsPerNumber;
 		int arrStartIndex = bitStartIndex >> 6;
 		int arrEndIndex = ((bitStartIndex + bitsPerNumber) - 1) >> 6;

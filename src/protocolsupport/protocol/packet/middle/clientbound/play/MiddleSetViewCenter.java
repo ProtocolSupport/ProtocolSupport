@@ -9,7 +9,7 @@ public abstract class MiddleSetViewCenter extends ClientBoundMiddlePacket {
 
 	protected ChunkCoord chunk;
 
-	public MiddleSetViewCenter(MiddlePacketInit init) {
+	protected MiddleSetViewCenter(MiddlePacketInit init) {
 		super(init);
 	}
 

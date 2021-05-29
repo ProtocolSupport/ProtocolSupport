@@ -10,12 +10,12 @@ public abstract class ConnectionEvent extends Event {
 
 	protected final Connection connection;
 
-	public ConnectionEvent(Connection connection, boolean isAsync) {
+	protected ConnectionEvent(Connection connection, boolean isAsync) {
 		super(isAsync);
 		this.connection = connection;
 	}
 
-	public ConnectionEvent(Connection connection) {
+	protected ConnectionEvent(Connection connection) {
 		this(connection, true);
 	}
 

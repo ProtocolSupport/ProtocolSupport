@@ -13,6 +13,9 @@ import protocolsupport.protocol.utils.authlib.LoginProfile;
 
 public class GameProfileSerializer {
 
+	private GameProfileSerializer() {
+	}
+
 	public static final String NAME_KEY = "Name";
 	public static final String UUID_KEY = "Id";
 	public static final String PROPERTIES_KEY = "Properties";

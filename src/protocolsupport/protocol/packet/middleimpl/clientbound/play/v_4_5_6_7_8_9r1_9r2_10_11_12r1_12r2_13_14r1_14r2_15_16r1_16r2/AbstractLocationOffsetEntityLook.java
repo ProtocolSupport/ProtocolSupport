@@ -7,7 +7,7 @@ import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDa
 
 public abstract class AbstractLocationOffsetEntityLook extends MiddleEntityLook {
 
-	public AbstractLocationOffsetEntityLook(MiddlePacketInit init) {
+	protected AbstractLocationOffsetEntityLook(MiddlePacketInit init) {
 		super(init);
 	}
 

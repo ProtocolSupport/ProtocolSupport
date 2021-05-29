@@ -17,16 +17,21 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+import javax.annotation.Nonnull;
+
 import protocolsupport.utils.JavaSystemProperty;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
 public class ProtocolSupportFileLog {
 
-	protected static final Logger log = setupLog();
-	protected static final Executor executor = log != null ? Executors.newSingleThreadExecutor(r -> new Thread(r, "ProtocolSupport-FileLog")) : null;
+	private ProtocolSupportFileLog() {
+	}
 
-	protected static Logger setupLog() {
+	private static final Logger log = setupLog();
+	private static final Executor executor = log != null ? Executors.newSingleThreadExecutor(r -> new Thread(r, "ProtocolSupport-FileLog")) : null;
+
+	private static Logger setupLog() {
 		String logDirectoryPath = JavaSystemProperty.getValue("filelog", "", Function.identity());
 		if (logDirectoryPath.isEmpty()) {
 			ProtocolSupport.logInfo("File log is not enabled");
@@ -67,7 +72,7 @@ public class ProtocolSupportFileLog {
 		return log != null;
 	}
 
-	public static void logException(String string, Throwable e) {
+	public static void logException(@Nonnull String string, @Nonnull Throwable e) {
 		executor.execute(() -> log.log(Level.WARNING, string, e));
 	}
 

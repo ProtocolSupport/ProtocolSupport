@@ -4,11 +4,11 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleRecipeBookState extends ServerBoundMiddlePacket {
 
-	public MiddleRecipeBookState(MiddlePacketInit init) {
+	protected MiddleRecipeBookState(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -29,7 +29,7 @@ public abstract class MiddleRecipeBookState extends ServerBoundMiddlePacket {
 		return recipebookstate;
 	}
 
-	public static enum RecipeBookType {
+	public enum RecipeBookType {
 		CRAFTING, FURNACE, BLAST_FURNACE, SMOKER;
 		public static final EnumConstantLookup<RecipeBookType> CONSTANT_LOOKUP = new EnumConstantLookup<>(RecipeBookType.class);
 	}

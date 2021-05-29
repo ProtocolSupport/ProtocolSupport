@@ -9,7 +9,7 @@ import protocolsupport.utils.netty.ReplayingDecoderBuffer.EOFSignal;
 
 public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
 
-	public AbstractLegacyPacketDecoder(ConnectionImpl connection) {
+	protected AbstractLegacyPacketDecoder(ConnectionImpl connection) {
 		super(connection);
 	}
 

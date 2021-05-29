@@ -5,6 +5,9 @@ import java.text.MessageFormat;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
 import protocolsupport.api.events.PlayerProfileCompleteEvent;
@@ -42,7 +45,7 @@ public abstract class Profile {
 	 * This name is set from handshake and from online mode query response
 	 * @return original name of the player
 	 */
-	public String getOriginalName() {
+	public @Nullable String getOriginalName() {
 		return originalname;
 	}
 
@@ -51,7 +54,7 @@ public abstract class Profile {
 	 * This uuid is set from online mode profile query response or offline mode uuid generation or spoofed data <br>
 	 * @return original name of the player
 	 */
-	public UUID getOriginalUUID() {
+	public @Nullable UUID getOriginalUUID() {
 		return originaluuid;
 	}
 
@@ -60,21 +63,21 @@ public abstract class Profile {
 	 * This name can be changed by {@link PlayerProfileCompleteEvent#setForcedName}
 	 * @return current name
 	 */
-	public abstract String getName();
+	public abstract @Nullable String getName();
 
 	/**
 	 * Returns current uuid <br>
 	 * This uuid can be changed by {@link PlayerProfileCompleteEvent#setForcedUUID}
 	 * @return current uuid
 	 */
-	public abstract UUID getUUID();
+	public abstract @Nullable UUID getUUID();
 
 	/**
 	 * Returns current properties <br>
 	 * These properties can be changed by {@link PlayerProfileCompleteEvent} property management methods
 	 * @return current properties
 	 */
-	public abstract Set<String> getPropertiesNames();
+	public abstract @Nonnull Set<String> getPropertiesNames();
 
 	/**
 	 * Returns current properties <br>
@@ -82,7 +85,7 @@ public abstract class Profile {
 	 * @param name property name
 	 * @return current properties
 	 */
-	public abstract Set<ProfileProperty> getProperties(String name);
+	public abstract @Nonnull Set<ProfileProperty> getProperties(@Nonnull String name);
 
 
 	@Override

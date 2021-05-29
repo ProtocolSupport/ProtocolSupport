@@ -16,6 +16,9 @@ import protocolsupport.utils.BitUtils;
 
 public class ChunkWriterByte {
 
+	private ChunkWriterByte() {
+	}
+
 	public static byte[] serializeSectionsAndBiomes(
 		int mask,
 		CachedChunk chunk, IdMappingTable blockDataRemappingTable, boolean hasSkyLight,

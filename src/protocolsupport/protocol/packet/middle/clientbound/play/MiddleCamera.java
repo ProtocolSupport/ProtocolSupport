@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleCamera extends ClientBoundMiddlePacket {
 
-	public MiddleCamera(MiddlePacketInit init) {
+	protected MiddleCamera(MiddlePacketInit init) {
 		super(init);
 	}
 

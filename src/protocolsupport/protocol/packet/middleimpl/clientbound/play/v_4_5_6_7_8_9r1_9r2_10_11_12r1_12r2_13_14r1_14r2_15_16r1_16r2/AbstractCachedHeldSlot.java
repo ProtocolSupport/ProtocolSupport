@@ -5,7 +5,7 @@ import protocolsupport.protocol.storage.netcache.ClientCache;
 
 public abstract class AbstractCachedHeldSlot extends MiddleHeldSlot {
 
-	public AbstractCachedHeldSlot(MiddlePacketInit init) {
+	protected AbstractCachedHeldSlot(MiddlePacketInit init) {
 		super(init);
 	}
 

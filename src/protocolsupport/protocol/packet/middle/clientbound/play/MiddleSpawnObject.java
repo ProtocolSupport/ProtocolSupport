@@ -19,7 +19,7 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
-	public MiddleSpawnObject(MiddlePacketInit init) {
+	protected MiddleSpawnObject(MiddlePacketInit init) {
 		super(init);
 	}
 

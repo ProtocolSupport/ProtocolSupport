@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleSetCompression extends ClientBoundMiddlePacket {
 
-	public MiddleSetCompression(MiddlePacketInit init) {
+	protected MiddleSetCompression(MiddlePacketInit init) {
 		super(init);
 	}
 

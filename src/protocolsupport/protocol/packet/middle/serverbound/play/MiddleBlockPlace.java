@@ -11,7 +11,7 @@ import protocolsupport.protocol.types.UsedHand;
 
 public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 
-	public MiddleBlockPlace(MiddlePacketInit init) {
+	protected MiddleBlockPlace(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -1,5 +1,9 @@
 package protocolsupport.protocol.utils.minecraftdata;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonObject;
 
 import protocolsupport.utils.JsonUtils;
@@ -9,9 +13,12 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class MinecraftSoundData {
 
-	protected static final String[] idToName = new String[1024];
+	private MinecraftSoundData() {
+	}
 
-	protected static void register(int id, String name) {
+	private static final String[] idToName = new String[1024];
+
+	private static void register(@Nonnegative int id, @Nonnull String name) {
 		idToName[id] = name;
 	}
 
@@ -22,7 +29,7 @@ public class MinecraftSoundData {
 		}
 	}
 
-	public static String getNameById(int id) {
+	public static @Nullable String getNameById(@Nonnegative int id) {
 		if ((id >= 0) && (id < idToName.length)) {
 			return idToName[id];
 		} else {

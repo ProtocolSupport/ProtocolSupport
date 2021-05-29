@@ -8,7 +8,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 
 public abstract class MiddleEntityRelMoveLook extends MiddleEntity {
 
-	public MiddleEntityRelMoveLook(MiddlePacketInit init) {
+	protected MiddleEntityRelMoveLook(MiddlePacketInit init) {
 		super(init);
 	}
 

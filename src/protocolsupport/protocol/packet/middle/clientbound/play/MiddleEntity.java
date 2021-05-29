@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleEntity extends ClientBoundMiddlePacket {
 
-	public MiddleEntity(MiddlePacketInit init) {
+	protected MiddleEntity(MiddlePacketInit init) {
 		super(init);
 	}
 

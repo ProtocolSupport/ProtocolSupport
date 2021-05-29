@@ -17,7 +17,7 @@ public abstract class NetworkManagerWrapper {
 
 	protected final Channel channel;
 
-	public NetworkManagerWrapper(Channel channel) {
+	protected NetworkManagerWrapper(Channel channel) {
 		this.channel = channel;
 	}
 

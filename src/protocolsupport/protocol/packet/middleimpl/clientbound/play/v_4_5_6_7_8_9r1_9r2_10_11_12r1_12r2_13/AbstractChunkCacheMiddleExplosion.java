@@ -12,7 +12,7 @@ public abstract class AbstractChunkCacheMiddleExplosion extends MiddleExplosion 
 
 	protected final ChunkCache chunkCache = cache.getChunkCache();
 
-	public AbstractChunkCacheMiddleExplosion(MiddlePacketInit init) {
+	protected AbstractChunkCacheMiddleExplosion(MiddlePacketInit init) {
 		super(init);
 	}
 

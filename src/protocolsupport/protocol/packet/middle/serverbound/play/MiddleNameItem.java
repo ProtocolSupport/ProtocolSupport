@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleNameItem extends ServerBoundMiddlePacket {
 
-	public MiddleNameItem(MiddlePacketInit init) {
+	protected MiddleNameItem(MiddlePacketInit init) {
 		super(init);
 	}
 

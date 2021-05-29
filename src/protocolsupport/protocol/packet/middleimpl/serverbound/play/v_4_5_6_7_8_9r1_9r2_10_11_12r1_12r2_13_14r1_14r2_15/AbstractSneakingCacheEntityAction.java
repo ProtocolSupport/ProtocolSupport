@@ -5,7 +5,7 @@ import protocolsupport.protocol.storage.netcache.ClientCache;
 
 public abstract class AbstractSneakingCacheEntityAction extends MiddleEntityAction {
 
-	public AbstractSneakingCacheEntityAction(MiddlePacketInit init) {
+	protected AbstractSneakingCacheEntityAction(MiddlePacketInit init) {
 		super(init);
 	}
 

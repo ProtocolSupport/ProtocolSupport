@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleEntityRelMove extends MiddleEntity {
 
-	public MiddleEntityRelMove(MiddlePacketInit init) {
+	protected MiddleEntityRelMove(MiddlePacketInit init) {
 		super(init);
 	}
 

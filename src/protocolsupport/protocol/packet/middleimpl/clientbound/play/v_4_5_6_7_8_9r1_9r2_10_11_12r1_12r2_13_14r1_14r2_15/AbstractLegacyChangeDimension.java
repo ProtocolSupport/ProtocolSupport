@@ -6,7 +6,7 @@ import protocolsupport.protocol.types.nbt.NBTCompound;
 
 public abstract class AbstractLegacyChangeDimension extends MiddleChangeDimension {
 
-	public AbstractLegacyChangeDimension(MiddlePacketInit init) {
+	protected AbstractLegacyChangeDimension(MiddlePacketInit init) {
 		super(init);
 	}
 

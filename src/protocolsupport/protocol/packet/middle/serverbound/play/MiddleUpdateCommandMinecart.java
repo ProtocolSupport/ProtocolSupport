@@ -8,7 +8,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleUpdateCommandMinecart extends ServerBoundMiddlePacket {
 
-	public MiddleUpdateCommandMinecart(MiddlePacketInit init) {
+	protected MiddleUpdateCommandMinecart(MiddlePacketInit init) {
 		super(init);
 	}
 

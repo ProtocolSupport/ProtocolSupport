@@ -5,7 +5,7 @@ import protocolsupport.protocol.types.NetworkItemStack;
 
 public abstract class AbstractSingleEntityEquipment extends MiddleEntityEquipment {
 
-	public AbstractSingleEntityEquipment(MiddlePacketInit init) {
+	protected AbstractSingleEntityEquipment(MiddlePacketInit init) {
 		super(init);
 	}
 

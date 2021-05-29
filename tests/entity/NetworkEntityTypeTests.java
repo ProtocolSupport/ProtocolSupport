@@ -7,13 +7,13 @@ import org.junit.jupiter.api.Test;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import zinit.PlatformInit;
 
-public class NetworkEntityTypeTests extends PlatformInit {
+class NetworkEntityTypeTests extends PlatformInit {
 
 	@Test
-	protected void testFilled() {
+	void testFilled() {
 		for (EntityType bukkitType : EntityType.values()) {
 			if (bukkitType != EntityType.UNKNOWN) {
-				Assertions.assertNotEquals(NetworkEntityType.getByBukkitType(bukkitType), NetworkEntityType.NONE, "NetworkEntityType for Bukkit EntityType " + bukkitType + " ");
+				Assertions.assertNotEquals(NetworkEntityType.NONE, NetworkEntityType.getByBukkitType(bukkitType), "NetworkEntityType for Bukkit EntityType " + bukkitType + " ");
 			}
 		}
 	}

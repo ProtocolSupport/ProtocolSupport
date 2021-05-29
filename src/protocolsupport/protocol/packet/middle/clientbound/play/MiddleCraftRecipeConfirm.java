@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleCraftRecipeConfirm extends ClientBoundMiddlePacket {
 
-	public MiddleCraftRecipeConfirm(MiddlePacketInit init) {
+	protected MiddleCraftRecipeConfirm(MiddlePacketInit init) {
 		super(init);
 	}
 

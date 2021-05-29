@@ -1,6 +1,8 @@
 package protocolsupport.zplatform.impl.spigot;
 
 import java.io.DataOutput;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.security.KeyPair;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -68,6 +70,7 @@ import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.LoginProfile;
 import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.UnchekedReflectionException;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.impl.spigot.network.handler.SpigotHandshakeListener;
@@ -171,8 +174,8 @@ public class SpigotMiscUtils implements PlatformUtils {
 			try {
 				DefaultNBTSerializer.INSTANCE.serializeTag(new ByteBufOutputStream(buffer), rootTag);
 				nmsitemstack.setTag(NBTCompressedStreamTools.a(new ByteBufInputStream(buffer), NBTReadLimiter.a));
-			} catch (Exception e) {
-				throw new RuntimeException(e);
+			} catch (IOException e) {
+				throw new UncheckedIOException(e);
 			}
 		}
 		return CraftItemStack.asCraftMirror(nmsitemstack);
@@ -193,8 +196,8 @@ public class SpigotMiscUtils implements PlatformUtils {
 			try {
 				NBTCompressedStreamTools.a(nmsItemStack.getTag(), (DataOutput) new ByteBufOutputStream(buffer));
 				networkItemStack.setNBT((NBTCompound) DefaultNBTSerializer.INSTANCE.deserializeTag(new ByteBufInputStream(buffer)));
-			} catch (Exception e) {
-				throw new RuntimeException(e);
+			} catch (IOException e) {
+				throw new UncheckedIOException(e);
 			}
 		}
 		return networkItemStack;
@@ -240,7 +243,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 		try {
 			ReflectionUtils.getField(DedicatedServerProperties.class, "debug").set(SERVER.getDedicatedServerProperties(), true);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new RuntimeException("Exception occured while enabled debug");
+			throw new UnchekedReflectionException("Exception occured while enabled debug", e);
 		}
 	}
 
@@ -249,7 +252,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 		try {
 			ReflectionUtils.getField(DedicatedServerProperties.class, "debug").set(SERVER.getDedicatedServerProperties(), false);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new RuntimeException("Exception occured while disabling debug");
+			throw new UnchekedReflectionException("Exception occured while disabling debug", e);
 		}
 	}
 
@@ -293,14 +296,10 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public MultithreadEventLoopGroup getServerIOEventLoopGroup() {
-		try {
-			if (Epoll.isAvailable() && SERVER.l()) {
-				return ServerConnection.b.a();
-			} else {
-				return ServerConnection.a.a();
-			}
-		} catch (SecurityException | IllegalArgumentException e) {
-			throw new RuntimeException("Unable to get event loop", e);
+		if (Epoll.isAvailable() && SERVER.l()) {
+			return ServerConnection.b.a();
+		} else {
+			return ServerConnection.a.a();
 		}
 	}
 

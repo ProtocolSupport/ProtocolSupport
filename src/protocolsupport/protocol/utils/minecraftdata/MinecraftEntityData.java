@@ -1,5 +1,8 @@
 package protocolsupport.protocol.utils.minecraftdata;
 
+import javax.annotation.CheckForSigned;
+import javax.annotation.Nonnull;
+
 import org.bukkit.NamespacedKey;
 
 import com.google.gson.JsonObject;
@@ -12,9 +15,12 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class MinecraftEntityData {
 
-	protected static final Object2IntMap<String> nameToId = new Object2IntOpenHashMap<>();
+	private MinecraftEntityData() {
+	}
 
-	protected static void register(String name, int id) {
+	private static final Object2IntMap<String> nameToId = new Object2IntOpenHashMap<>();
+
+	private static void register(String name, int id) {
 		nameToId.put(name, id);
 		nameToId.put(NamespacedKey.minecraft(name).toString(), id);
 	}
@@ -26,7 +32,7 @@ public class MinecraftEntityData {
 		}
 	}
 
-	public static int getIdByName(String id) {
+	public static @CheckForSigned int getIdByName(@Nonnull String id) {
 		return nameToId.getOrDefault(id, -1);
 	}
 

@@ -14,7 +14,7 @@ public abstract class MiddleInventoryHorseOpen extends ClientBoundMiddlePacket {
 
 	protected final WindowsRemapper windowsRemapper = WindowsRemappersRegistry.get(version);
 
-	public MiddleInventoryHorseOpen(MiddlePacketInit init) {
+	protected MiddleInventoryHorseOpen(MiddlePacketInit init) {
 		super(init);
 	}
 

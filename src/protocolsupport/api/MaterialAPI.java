@@ -4,6 +4,11 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.CheckForSigned;
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
@@ -17,13 +22,16 @@ import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData.BlockInfo
 
 public class MaterialAPI {
 
+	private MaterialAPI() {
+	}
+
 	/**
 	 * Returns all possible block data states for this material
 	 * @param material block material
 	 * @return all possible block data states
 	 */
 	@SuppressWarnings("deprecation")
-	public static List<BlockData> getBlockDataList(Material material) {
+	public static @Nonnull List<BlockData> getBlockDataList(@Nonnull Material material) {
 		if (material.isLegacy()) {
 			throw new IllegalArgumentException(MessageFormat.format("Material {0} is legacy", material));
 		}
@@ -43,7 +51,7 @@ public class MaterialAPI {
 	 * @param blockdata blockdata
 	 * @return blockdata network id
 	 */
-	public static int getBlockDataNetworkId(BlockData blockdata) {
+	public static @CheckForSigned int getBlockDataNetworkId(@Nonnull BlockData blockdata) {
 		BlockDataInfo info = MinecraftBlockData.getBlockDataInfoByBlockData(blockdata);
 		return info != null ? info.getNetworkId() : -1;
 	}
@@ -54,7 +62,7 @@ public class MaterialAPI {
 	 * @param id blockdata network id
 	 * @return blockdata
 	 */
-	public static BlockData getBlockDataByNetworkId(int id) {
+	public static @Nullable BlockData getBlockDataByNetworkId(@Nonnegative int id) {
 		BlockDataInfo info = MinecraftBlockData.getBlockDataInfoByNetworkId(id);
 		return info != null ? info.getBlockData() : null;
 	}
@@ -65,7 +73,7 @@ public class MaterialAPI {
 	 * @return network id
 	 */
 	@SuppressWarnings("deprecation")
-	public static int getBlockNetworkId(Material material) {
+	public static @CheckForSigned int getBlockNetworkId(@Nonnull Material material) {
 		if (material.isLegacy()) {
 			throw new IllegalArgumentException(MessageFormat.format("Material {0} is legacy", material));
 		}
@@ -73,7 +81,7 @@ public class MaterialAPI {
 			throw new IllegalArgumentException(MessageFormat.format("Material {0} is not a block", material));
 		}
 		BlockInfo info = MinecraftBlockData.getBlockInfoByMaterial(material);
-		return info != null ? info.getNetworkId() : null;
+		return info != null ? info.getNetworkId() : -1;
 	}
 
 	/**
@@ -82,7 +90,7 @@ public class MaterialAPI {
 	 * @param id block network id
 	 * @return block material
 	 */
-	public static Material getBlockByNetworkId(int id) {
+	public static @Nullable Material getBlockByNetworkId(@Nonnegative int id) {
 		BlockInfo info = MinecraftBlockData.getBlockInfoByNetworkId(id);
 		return info != null ? info.getMaterial() : null;
 	}
@@ -116,7 +124,7 @@ public class MaterialAPI {
 	 * @return item network id
 	 */
 	@SuppressWarnings("deprecation")
-	public static int getItemNetworkId(Material material) {
+	public static @CheckForSigned int getItemNetworkId(@Nonnull Material material) {
 		if (material.isLegacy()) {
 			throw new IllegalArgumentException(MessageFormat.format("Material {0} is legacy", material));
 		}
@@ -132,7 +140,7 @@ public class MaterialAPI {
 	 * @param id item network id
 	 * @return item material
 	 */
-	public static Material getItemByNetworkId(int id) {
+	public static @Nullable Material getItemByNetworkId(@Nonnegative int id) {
 		return ItemMaterialLookup.getByRuntimeId(id);
 	}
 
@@ -141,7 +149,7 @@ public class MaterialAPI {
 	 * @param type entity type
 	 * @return id
 	 */
-	public static int getEntityLivingTypeNetworkId(EntityType type) {
+	public static @CheckForSigned int getEntityLivingTypeNetworkId(@Nonnull EntityType type) {
 		return NetworkEntityType.getByBukkitType(type).getNetworkTypeId();
 	}
 
@@ -150,7 +158,7 @@ public class MaterialAPI {
 	 * @param type entity type
 	 * @return id
 	 */
-	public static int getEntityObjectTypeNetworkId(EntityType type) {
+	public static @CheckForSigned int getEntityObjectTypeNetworkId(@Nonnull EntityType type) {
 		return NetworkEntityType.getByBukkitType(type).getNetworkTypeId();
 	}
 
@@ -160,7 +168,7 @@ public class MaterialAPI {
 	 * @param id entity network id
 	 * @return entity type
 	 */
-	public static EntityType getEntityLivingTypeByNetworkId(int id) {
+	public static @Nullable EntityType getEntityLivingTypeByNetworkId(@Nonnegative int id) {
 		return NetworkEntityType.getMobByNetworkTypeId(id).getBukkitType();
 	}
 
@@ -170,7 +178,7 @@ public class MaterialAPI {
 	 * @param id entity network id
 	 * @return entity type
 	 */
-	public static EntityType getEntityObjectTypeByNetworkId(int id) {
+	public static @Nullable EntityType getEntityObjectTypeByNetworkId(@Nonnegative int id) {
 		return NetworkEntityType.getObjectByNetworkTypeId(id).getBukkitType();
 	}
 

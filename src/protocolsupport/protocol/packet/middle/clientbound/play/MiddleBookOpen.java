@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.UsedHand;
 
 public abstract class MiddleBookOpen extends ClientBoundMiddlePacket {
 
-	public MiddleBookOpen(MiddlePacketInit init) {
+	protected MiddleBookOpen(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddlePickItem extends ServerBoundMiddlePacket {
 
-	public MiddlePickItem(MiddlePacketInit init) {
+	protected MiddlePickItem(MiddlePacketInit init) {
 		super(init);
 	}
 

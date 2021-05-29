@@ -6,6 +6,9 @@ import protocolsupport.protocol.types.Position;
 
 public class PositionSerializer {
 
+	private PositionSerializer() {
+	}
+
 	public static void skipPosition(ByteBuf from) {
 		from.skipBytes(Long.BYTES);
 	}

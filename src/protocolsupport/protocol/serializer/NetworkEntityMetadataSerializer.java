@@ -34,8 +34,11 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class NetworkEntityMetadataSerializer {
 
+	private NetworkEntityMetadataSerializer() {
+	}
+
 	@SuppressWarnings("unchecked")
-	protected static final Supplier<? extends ReadableNetworkEntityMetadataObject<?>>[] registry = new Supplier[256];
+	private static final Supplier<? extends ReadableNetworkEntityMetadataObject<?>>[] registry = new Supplier[256];
 	static {
 		register(NetworkEntityMetadataObjectByte::new);
 		register(NetworkEntityMetadataObjectVarInt::new);
@@ -58,7 +61,7 @@ public class NetworkEntityMetadataSerializer {
 		register(NetworkEntityMetadataObjectEntityPose::new);
 	}
 
-	protected static void register(Supplier<? extends ReadableNetworkEntityMetadataObject<?>> supplier) {
+	private static void register(Supplier<? extends ReadableNetworkEntityMetadataObject<?>> supplier) {
 		registry[NetworkEntityMetadataObjectRegistry.getTypeId(supplier.get().getClass(), ProtocolVersionsHelper.LATEST_PC)] = supplier;
 	}
 

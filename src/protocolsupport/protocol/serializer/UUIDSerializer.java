@@ -6,6 +6,9 @@ import io.netty.buffer.ByteBuf;
 
 public class UUIDSerializer {
 
+	private UUIDSerializer() {
+	}
+
 	public static UUID readUUID2L(ByteBuf from) {
 		return new UUID(from.readLong(), from.readLong());
 	}

@@ -10,7 +10,7 @@ public abstract class AbstractChunkCacheBlockChangeSingle extends MiddleBlockCha
 
 	protected final ChunkCache chunkCache = cache.getChunkCache();
 
-	public AbstractChunkCacheBlockChangeSingle(MiddlePacketInit init) {
+	protected AbstractChunkCacheBlockChangeSingle(MiddlePacketInit init) {
 		super(init);
 	}
 

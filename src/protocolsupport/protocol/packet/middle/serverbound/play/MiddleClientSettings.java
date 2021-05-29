@@ -7,11 +7,11 @@ import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 
-	public MiddleClientSettings(MiddlePacketInit init) {
+	protected MiddleClientSettings(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -40,9 +40,9 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 		return creator;
 	}
 
-	protected static enum ChatMode {
+	protected enum ChatMode {
 		NORMAL, ONLY_SYSTEM_MESSAGES, HIDDEN;
-		public static final EnumConstantLookups.EnumConstantLookup<ChatMode> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(ChatMode.class);
+		public static final EnumConstantLookup<ChatMode> CONSTANT_LOOKUP = new EnumConstantLookup<>(ChatMode.class);
 	}
 
 }

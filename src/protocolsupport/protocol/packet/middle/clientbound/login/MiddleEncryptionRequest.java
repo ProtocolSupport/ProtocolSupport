@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleEncryptionRequest extends ClientBoundMiddlePacket {
 
-	public MiddleEncryptionRequest(MiddlePacketInit init) {
+	protected MiddleEncryptionRequest(MiddlePacketInit init) {
 		super(init);
 	}
 

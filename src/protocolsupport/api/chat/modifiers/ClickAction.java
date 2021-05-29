@@ -45,7 +45,7 @@ public class ClickAction {
 		return Utils.toStringAllFields(this);
 	}
 
-	public static enum Type {
+	public enum Type {
 		OPEN_URL, OPEN_FILE, RUN_COMMAND, SUGGEST_COMMAND, CHANGE_PAGE, COPY_TO_CLIPBOARD;
 	}
 

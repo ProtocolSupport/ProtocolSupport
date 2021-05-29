@@ -25,7 +25,7 @@ public abstract class AbstractPacketEncoder extends ChannelOutboundHandlerAdapte
 	protected final MiddlePacketRegistry<ClientBoundMiddlePacket> registry;
 	protected final PacketDataCodecImpl codec;
 
-	public AbstractPacketEncoder(ConnectionImpl connection) {
+	protected AbstractPacketEncoder(ConnectionImpl connection) {
 		this.connection = connection;
 		this.codec = connection.getCodec();
 		this.registry = new MiddlePacketRegistry<>(new ConnectionImplMiddlePacketInit(connection));

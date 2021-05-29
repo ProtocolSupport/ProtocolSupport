@@ -8,7 +8,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleTabComplete extends ServerBoundMiddlePacket {
 
-	public MiddleTabComplete(MiddlePacketInit init) {
+	protected MiddleTabComplete(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class AbstractKnownEntityStatus extends MiddleEntityStatus {
 
-	public AbstractKnownEntityStatus(MiddlePacketInit init) {
+	protected AbstractKnownEntityStatus(MiddlePacketInit init) {
 		super(init);
 	}
 

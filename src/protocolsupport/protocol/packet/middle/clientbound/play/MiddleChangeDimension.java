@@ -15,7 +15,7 @@ import protocolsupport.protocol.types.nbt.NBTCompound;
 
 public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
 
-	public MiddleChangeDimension(MiddlePacketInit init) {
+	protected MiddleChangeDimension(MiddlePacketInit init) {
 		super(init);
 	}
 

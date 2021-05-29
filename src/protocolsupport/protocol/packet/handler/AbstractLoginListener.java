@@ -68,7 +68,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 	protected final Object timeoutTaskLock = new Object();
 	protected ScheduledFuture<?> timeoutTask;
 
-	public AbstractLoginListener(NetworkManagerWrapper networkmanager) {
+	protected AbstractLoginListener(NetworkManagerWrapper networkmanager) {
 		this.networkManager = networkmanager;
 		this.connection = ConnectionImpl.getFromChannel(networkmanager.getChannel());
 		ThreadLocalRandom.current().nextBytes(randomBytes);
@@ -95,7 +95,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 	@Override
 	public void disconnect(BaseComponent message) {
 		try {
-			Bukkit.getLogger().info("Disconnecting " + getConnectionRepr() + ": " + message.toLegacyText());
+			Bukkit.getLogger().info(() -> "Disconnecting " + getConnectionRepr() + ": " + message.toLegacyText());
 			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), future -> networkManager.close(message));
 		} catch (Throwable exception) {
 			Bukkit.getLogger().log(Level.SEVERE, "Error whilst disconnecting player", exception);
@@ -183,7 +183,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 			finishLogin();
 		} catch (Exception exception) {
 			disconnect(new TextComponent("Failed to verify username!"));
-			Bukkit.getLogger().log(Level.SEVERE, "Exception verifying " + connection.getProfile().getOriginalName(), exception);
+			Bukkit.getLogger().log(Level.SEVERE, exception, () -> "Exception verifying " + connection.getProfile().getOriginalName());
 		}
 	}
 
@@ -200,7 +200,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 			Bukkit.getLogger().severe("Couldn't verify username because servers are unavailable");
 		} catch (Exception exception) {
 			disconnect(new TextComponent("Failed to verify username!"));
-			Bukkit.getLogger().log(Level.SEVERE, "Exception verifying " + connection.getProfile().getOriginalName(), exception);
+			Bukkit.getLogger().log(Level.SEVERE, exception, () -> "Exception verifying " + connection.getProfile().getOriginalName());
 		}
 	}
 
@@ -269,6 +269,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 					}
 				} catch (InterruptedException e) {
 					disconnect(new TextComponent("Interrupt while waiting for login success send"));
+					Thread.currentThread().interrupt();
 					return;
 				}
 			}

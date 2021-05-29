@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
 public abstract class MiddleKeepAlive extends ServerBoundMiddlePacket {
 
-	public MiddleKeepAlive(MiddlePacketInit init) {
+	protected MiddleKeepAlive(MiddlePacketInit init) {
 		super(init);
 	}
 

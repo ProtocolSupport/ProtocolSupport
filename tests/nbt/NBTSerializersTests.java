@@ -22,9 +22,9 @@ import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.protocol.types.nbt.NBTType;
 import protocolsupport.protocol.types.nbt.serializer.DefaultNBTSerializer;
 
-public class NBTSerializersTests {
+class NBTSerializersTests {
 
-	protected static final byte[] serializedTagData = new byte[] {
+	private static final byte[] serializedTagData = new byte[] {
 		10, 0, 0, 1, 0, 8, 116, 101, 115, 116, 98, 121, 116, 101, 5, 2, 0, 9, 116, 101, 115, 116, 115, 104, 111, 114, 116, 0, 78, 3, 0,
 		7, 116, 101, 115, 116, 105, 110, 116, 0, 0, 2, 43, 4, 0, 8, 116, 101, 115, 116, 108, 111, 110, 103, 0, 0, 0, 0, 0, 0, 0, 125, 5,
 		0, 9, 116, 101, 115, 116, 102, 108, 111, 97, 116, 65, -44, 102, 102, 6, 0, 10, 116, 101, 115, 116, 100, 111, 117, 98, 108, 101,
@@ -35,7 +35,8 @@ public class NBTSerializersTests {
 		8, 116, 101, 115, 116, 108, 105, 115, 116, 3, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 10, 0
 	};
 
-	protected static final NBTCompound tag = new NBTCompound();
+	private static final NBTCompound tag = new NBTCompound();
+
 	static {
 		tag.setTag("testbyte", new NBTByte((byte) 5));
 		tag.setTag("testshort", new NBTShort((short) 78));
@@ -57,14 +58,14 @@ public class NBTSerializersTests {
 	}
 
 	@Test
-	public void testSerialize() throws Exception {
+	void testSerialize() throws Exception {
 		ByteBufOutputStream stream = new ByteBufOutputStream(Unpooled.buffer());
 		DefaultNBTSerializer.INSTANCE.serializeTag(stream, tag);
 		Assertions.assertArrayEquals(serializedTagData, MiscSerializer.readAllBytes(stream.buffer()));
 	}
 
 	@Test
-	public void testDeserialize() throws Exception {
+	void testDeserialize() throws Exception {
 		Assertions.assertEquals(tag, DefaultNBTSerializer.INSTANCE.deserializeTag(new ByteBufInputStream(Unpooled.wrappedBuffer(serializedTagData))));
 	}
 

@@ -8,7 +8,7 @@ public abstract class AbstractSetPosition extends MiddleSetPosition {
 
 	protected final MovementCache movementCache = cache.getMovementCache();
 
-	public AbstractSetPosition(MiddlePacketInit init) {
+	protected AbstractSetPosition(MiddlePacketInit init) {
 		super(init);
 	}
 

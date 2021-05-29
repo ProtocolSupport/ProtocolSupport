@@ -3,6 +3,8 @@ package protocolsupport.protocol.typeremapper.legacy;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.NamespacedKey;
 
 import protocolsupportbuildprocessor.Preload;
@@ -10,10 +12,13 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class LegacyEntityAttribute {
 
-	protected static final Map<String, String> toLegacyId = new HashMap<>();
-	protected static final Map<String, String> toModernId = new HashMap<>();
+	private LegacyEntityAttribute() {
+	}
 
-	protected static void register(String modernId, String legacyId) {
+	private static final Map<String, String> toLegacyId = new HashMap<>();
+	private static final Map<String, String> toModernId = new HashMap<>();
+
+	private static void register(@Nonnull String modernId, @Nonnull String legacyId) {
 		toLegacyId.put(modernId, legacyId);
 		toLegacyId.put(NamespacedKey.minecraft(modernId).toString(), legacyId);
 		toModernId.put(legacyId, modernId);
@@ -35,11 +40,11 @@ public class LegacyEntityAttribute {
 		register("zombie.spawn_reinforcements", "zombie.spawnReinforcements");
 	}
 
-	public static String getLegacyId(String modernId) {
+	public static @Nonnull String getLegacyId(@Nonnull String modernId) {
 		return toLegacyId.getOrDefault(modernId, modernId);
 	}
 
-	public static String getModernId(String legacyId) {
+	public static @Nonnull String getModernId(@Nonnull String legacyId) {
 		return toModernId.getOrDefault(legacyId, legacyId);
 	}
 

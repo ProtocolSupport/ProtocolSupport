@@ -6,13 +6,10 @@ import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.storage.netcache.PlayerListCache;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.Utils;
 
 public class SpawnNamed extends MiddleSpawnNamed {
-
-	protected final PlayerListCache playerlistCache = cache.getPlayerListCache();
 
 	public SpawnNamed(MiddlePacketInit init) {
 		super(init);

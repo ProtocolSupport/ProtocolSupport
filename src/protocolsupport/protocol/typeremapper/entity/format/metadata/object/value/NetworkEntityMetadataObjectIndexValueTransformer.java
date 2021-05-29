@@ -12,7 +12,7 @@ public abstract class NetworkEntityMetadataObjectIndexValueTransformer<T extends
 	protected final NetworkEntityMetadataObjectIndex<T> fromIndex;
 	protected final int toIndex;
 
-	public NetworkEntityMetadataObjectIndexValueTransformer(NetworkEntityMetadataObjectIndex<T> fromIndex, int toIndex) {
+	protected NetworkEntityMetadataObjectIndexValueTransformer(NetworkEntityMetadataObjectIndex<T> fromIndex, int toIndex) {
 		this.fromIndex = fromIndex;
 		this.toIndex = toIndex;
 	}

@@ -63,7 +63,7 @@ public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata
 			entitiesIds -> EntityDestroy.writeDestroyEntities(codec, entitiesIds)
 		);
 		codec.writeClientbound(SpawnObject.create(
-			entityId, entityDataFormatTable.get(lType).getType(),
+			entityId, entityLegacyFormatTable.get(lType).getType(),
 			ecache.getX(), ecache.getY(), ecache.getZ(),
 			ecache.getPitchB(), ecache.getYawB(),
 			objectdata,

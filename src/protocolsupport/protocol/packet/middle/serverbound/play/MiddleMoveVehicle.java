@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
 public abstract class MiddleMoveVehicle extends ServerBoundMiddlePacket {
 
-	public MiddleMoveVehicle(MiddlePacketInit init) {
+	protected MiddleMoveVehicle(MiddlePacketInit init) {
 		super(init);
 	}
 

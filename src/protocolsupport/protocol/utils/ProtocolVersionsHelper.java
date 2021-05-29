@@ -10,6 +10,9 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class ProtocolVersionsHelper {
 
+	private ProtocolVersionsHelper() {
+	}
+
 	public static final ProtocolVersion LATEST_PC = ProtocolVersion.getLatest(ProtocolType.PC);
 
 	public static final ProtocolVersion[] ALL = ProtocolVersion.getAllSupported();

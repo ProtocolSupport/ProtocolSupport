@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public abstract class MiddleEntityHeadRotation extends MiddleEntity {
 
-	public MiddleEntityHeadRotation(MiddlePacketInit init) {
+	protected MiddleEntityHeadRotation(MiddlePacketInit init) {
 		super(init);
 	}
 

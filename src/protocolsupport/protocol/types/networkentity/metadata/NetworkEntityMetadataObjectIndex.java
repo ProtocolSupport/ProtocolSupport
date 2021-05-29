@@ -3,6 +3,11 @@ package protocolsupport.protocol.types.networkentity.metadata;
 import java.text.MessageFormat;
 import java.util.HashMap;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import protocolsupport.ProtocolSupport;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBlockData;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBoolean;
@@ -34,13 +39,13 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 	protected final int index;
 	protected final Class<T> expectedDWObjectType;
 
-	protected NetworkEntityMetadataObjectIndex(Class<?> entityClass, int index, Class<T> expectedType) {
+	protected NetworkEntityMetadataObjectIndex(@Nonnull Class<?> entityClass, @Nonnegative int index, @Nonnull Class<T> expectedType) {
 		this.entityClass = entityClass;
 		this.index = index;
 		this.expectedDWObjectType = expectedType;
 	}
 
-	public T getObject(ArrayMap<NetworkEntityMetadataObject<?>> metadata) {
+	public @CheckForNull T getObject(@Nonnull ArrayMap<NetworkEntityMetadataObject<?>> metadata) {
 		NetworkEntityMetadataObject<?> object = metadata.get(index);
 		if (object == null) {
 			return null;
@@ -57,7 +62,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		return null;
 	}
 
-	public void setObject(ArrayMap<NetworkEntityMetadataObject<?>> metadata, T object) {
+	public void setObject(@Nonnull ArrayMap<NetworkEntityMetadataObject<?>> metadata, @Nullable T object) {
 		if (object == null) {
 			metadata.put(index, null);
 			return;
@@ -74,7 +79,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		}
 	}
 
-	public boolean copy(ArrayMap<NetworkEntityMetadataObject<?>> source, ArrayMap<NetworkEntityMetadataObject<?>> target) {
+	public boolean copy(@Nonnull ArrayMap<NetworkEntityMetadataObject<?>> source, @Nonnull ArrayMap<NetworkEntityMetadataObject<?>> target) {
 		NetworkEntityMetadataObject<?> object = source.get(index);
 		if (object == null) {
 			return false;
@@ -481,7 +486,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 			lastTakenId.put(caller, newIndex);
 			return new NetworkEntityMetadataObjectIndex<>(caller, newIndex, expectedType);
 		} catch (Exception e) {
-			throw new RuntimeException("Exception occured while computing datawatcherobjectindex", e);
+			throw new IllegalStateException("Exception occured while computing NetworkEntityMetadataObjectIndex", e);
 		}
 	}
 

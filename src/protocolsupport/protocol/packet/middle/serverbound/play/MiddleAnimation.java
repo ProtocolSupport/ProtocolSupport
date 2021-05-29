@@ -8,7 +8,7 @@ import protocolsupport.protocol.types.UsedHand;
 
 public abstract class MiddleAnimation extends ServerBoundMiddlePacket {
 
-	public MiddleAnimation(MiddlePacketInit init) {
+	protected MiddleAnimation(MiddlePacketInit init) {
 		super(init);
 	}
 

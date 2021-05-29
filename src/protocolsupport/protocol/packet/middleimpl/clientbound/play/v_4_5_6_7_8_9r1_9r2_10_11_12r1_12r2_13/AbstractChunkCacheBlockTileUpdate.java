@@ -14,7 +14,7 @@ public abstract class AbstractChunkCacheBlockTileUpdate extends MiddleBlockTileU
 
 	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
-	public AbstractChunkCacheBlockTileUpdate(MiddlePacketInit init) {
+	protected AbstractChunkCacheBlockTileUpdate(MiddlePacketInit init) {
 		super(init);
 	}
 

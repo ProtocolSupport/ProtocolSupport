@@ -26,7 +26,10 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class ItemStackSerializer {
 
-	public static final SimpleTypeDeserializer<NetworkItemStack> ITEMSTACK_DESERIALIZER = new SimpleTypeDeserializer<NetworkItemStack>(
+	private ItemStackSerializer() {
+	}
+
+	public static final SimpleTypeDeserializer<NetworkItemStack> ITEMSTACK_DESERIALIZER = new SimpleTypeDeserializer<>(
 		new AbstractMap.SimpleEntry<>(ItemStackSerializer::readItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2)),
 		new AbstractMap.SimpleEntry<>(from -> {
 			int typeId = from.readShort();
@@ -68,7 +71,7 @@ public class ItemStackSerializer {
 		}, ProtocolVersionsHelper.DOWN_1_7_10)
 	);
 
-	public static final SimpleTypeSerializer<NetworkItemStack> ITEMSTACK_SERIALIZER = new SimpleTypeSerializer<NetworkItemStack>(
+	public static final SimpleTypeSerializer<NetworkItemStack> ITEMSTACK_SERIALIZER = new SimpleTypeSerializer<>(
 		new AbstractMap.SimpleEntry<>(ItemStackSerializer::writeItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2)),
 		new AbstractMap.SimpleEntry<>((to, itemstack) -> {
 			if (itemstack.isNull()) {
@@ -171,12 +174,12 @@ public class ItemStackSerializer {
 
 
 
-	public static final SimpleTypeDeserializer<NBTCompound> TAG_DESERIALIZER = new SimpleTypeDeserializer<NBTCompound>(
+	public static final SimpleTypeDeserializer<NBTCompound> TAG_DESERIALIZER = new SimpleTypeDeserializer<>(
 		new AbstractMap.SimpleEntry<>(ItemStackSerializer::readDirectTag, ProtocolVersionsHelper.UP_1_8),
 		new AbstractMap.SimpleEntry<>(ItemStackSerializer::readShortTag, ProtocolVersionsHelper.DOWN_1_7_10)
 	);
 
-	public static final SimpleTypeSerializer<NBTCompound> TAG_SERIALIZER = new SimpleTypeSerializer<NBTCompound>(
+	public static final SimpleTypeSerializer<NBTCompound> TAG_SERIALIZER = new SimpleTypeSerializer<>(
 		new AbstractMap.SimpleEntry<>(ItemStackSerializer::writeDirectTag, ProtocolVersionsHelper.UP_1_8),
 		new AbstractMap.SimpleEntry<>(ItemStackSerializer::writeShortTag, ProtocolVersionsHelper.DOWN_1_7_10)
 	);

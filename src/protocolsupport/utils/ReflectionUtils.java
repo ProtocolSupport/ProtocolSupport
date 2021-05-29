@@ -6,30 +6,22 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
 import sun.misc.Unsafe;
 
 public class ReflectionUtils {
 
-	public static class UnchekedReflectionException extends RuntimeException {
-
-		private static final long serialVersionUID = 3789883196046843069L;
-
-		public UnchekedReflectionException(Throwable t) {
-			super(t);
-		}
-
-		public UnchekedReflectionException(String message) {
-			super(message);
-		}
-
+	private ReflectionUtils() {
 	}
 
-	public static <T extends AccessibleObject> T setAccessible(T object) {
+	public static @Nonnull <T extends AccessibleObject> T setAccessible(@Nonnull T object) {
 		object.setAccessible(true);
 		return object;
 	}
 
-	public static Field getField(Class<?> clazz, String name) {
+	public static @Nonnull Field getField(@Nonnull Class<?> clazz, @Nonnull String name) {
 		do {
 			for (Field field : clazz.getDeclaredFields()) {
 				if (field.getName().equals(name)) {
@@ -40,15 +32,7 @@ public class ReflectionUtils {
 		throw new UnchekedReflectionException("Can't find field " + name + " in class " + clazz + " or it's superclasses");
 	}
 
-	public static void setField(Field field, Object object, Object value) {
-		try {
-			field.set(object, value);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new UnchekedReflectionException(e);
-		}
-	}
-
-	public static Method getMethod(Class<?> clazz, String name, int paramlength) {
+	public static @Nonnull Method getMethod(@Nonnull Class<?> clazz, @Nonnull String name, @Nonnegative int paramlength) {
 		do {
 			for (Method method : clazz.getDeclaredMethods()) {
 				if (method.getName().equals(name) && (method.getParameterTypes().length == paramlength)) {
@@ -57,6 +41,24 @@ public class ReflectionUtils {
 			}
 		} while ((clazz = clazz.getSuperclass()) != null);
 		throw new UnchekedReflectionException("Can't find method " + name + " with params length " + paramlength + " in class " + clazz + " or it's superclasses");
+	}
+
+	public static void setFieldValue(@Nonnull Field field, @Nonnull Object object, @Nonnull Object value) {
+		try {
+			field.set(object, value);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new UnchekedReflectionException(e);
+		}
+	}
+
+	public static void setStaticFinalFieldValue(@Nonnull Class<?> clazz, @Nonnull String fieldname, @Nonnull Object value) {
+		try {
+			sffs.set(clazz, fieldname, value);
+		} catch (UnchekedReflectionException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw new UnchekedReflectionException(t);
+		}
 	}
 
 
@@ -150,16 +152,6 @@ public class ReflectionUtils {
 			exception.addSuppressed(t);
 		}
 		return new ErrorStaticFinalFieldSetter(exception);
-	}
-
-	public static void setStaticFinalField(Class<?> clazz, String fieldname, Object value) {
-		try {
-			sffs.set(clazz, fieldname, value);
-		} catch (UnchekedReflectionException t) {
-			throw t;
-		} catch (Throwable t) {
-			throw new UnchekedReflectionException(t);
-		}
 	}
 
 }

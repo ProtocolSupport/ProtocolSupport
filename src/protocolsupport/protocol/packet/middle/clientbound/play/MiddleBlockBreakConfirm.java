@@ -5,7 +5,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleBlockBreakConfirm extends MiddleBlock {
 
-	public MiddleBlockBreakConfirm(MiddlePacketInit init) {
+	protected MiddleBlockBreakConfirm(MiddlePacketInit init) {
 		super(init);
 	}
 

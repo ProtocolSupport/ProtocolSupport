@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleStatistics extends ClientBoundMiddlePacket {
 
-	public MiddleStatistics(MiddlePacketInit init) {
+	protected MiddleStatistics(MiddlePacketInit init) {
 		super(init);
 	}
 

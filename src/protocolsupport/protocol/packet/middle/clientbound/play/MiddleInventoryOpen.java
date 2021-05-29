@@ -23,7 +23,7 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 	protected final EnumSkippingTable<WindowType> windowSkipper = GenericIdSkipper.INVENTORY.getTable(version);
 	protected final WindowsRemapper windowsRemapper = WindowsRemappersRegistry.get(version);
 
-	public MiddleInventoryOpen(MiddlePacketInit init) {
+	protected MiddleInventoryOpen(MiddlePacketInit init) {
 		super(init);
 	}
 

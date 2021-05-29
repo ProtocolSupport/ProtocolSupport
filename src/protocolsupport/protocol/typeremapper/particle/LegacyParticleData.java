@@ -71,8 +71,12 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class LegacyParticleData {
 
+	private LegacyParticleData() {
+	}
+
 	//TODO: single -> multiple particles
 	public static final MappingRegistry<LegacyParticleDataTable> REGISTRY = new MappingRegistry<LegacyParticleDataTable>() {
+
 		{
 			Arrays.stream(ProtocolVersionsHelper.ALL)
 			.forEach(version -> {

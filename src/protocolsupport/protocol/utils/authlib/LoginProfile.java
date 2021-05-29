@@ -7,6 +7,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import protocolsupport.api.utils.Profile;
 import protocolsupport.api.utils.ProfileProperty;
 
@@ -19,29 +22,29 @@ public class LoginProfile extends Profile {
 	public LoginProfile() {
 	}
 
-	public LoginProfile(UUID uuid, String name, ProfileProperty... properties) {
+	public LoginProfile(@Nonnull UUID uuid, @Nonnull String name, @Nonnull ProfileProperty... properties) {
 		this.uuid = uuid;
 		this.name = name;
 		Arrays.stream(properties).forEach(this::addProperty);
 	}
 
 	@Override
-	public String getName() {
+	public @Nullable String getName() {
 		return name;
 	}
 
 	@Override
-	public UUID getUUID() {
+	public @Nullable UUID getUUID() {
 		return uuid;
 	}
 
 	@Override
-	public Set<String> getPropertiesNames() {
+	public @Nonnull Set<String> getPropertiesNames() {
 		return Collections.unmodifiableSet(properties.keySet());
 	}
 
 	@Override
-	public Set<ProfileProperty> getProperties(String name) {
+	public @Nonnull Set<ProfileProperty> getProperties(String name) {
 		return Collections.unmodifiableSet(properties.getOrDefault(name, Collections.emptySet()));
 	}
 
@@ -49,25 +52,25 @@ public class LoginProfile extends Profile {
 		this.onlineMode = onlineMode;
 	}
 
-	public void setOriginalName(String name) {
+	public void setOriginalName(@Nonnull String name) {
 		this.originalname = name;
 		this.name = name;
 	}
 
-	public void setName(String name) {
+	public void setName(@Nonnull String name) {
 		this.name = name;
 	}
 
-	public void setOriginalUUID(UUID uuid) {
+	public void setOriginalUUID(@Nonnull UUID uuid) {
 		this.originaluuid = uuid;
 		this.uuid = uuid;
 	}
 
-	public void setUUID(UUID uuid) {
+	public void setUUID(@Nonnull UUID uuid) {
 		this.uuid = uuid;
 	}
 
-	public Map<String, Set<ProfileProperty>> getProperties() {
+	public @Nonnull Map<String, Set<ProfileProperty>> getProperties() {
 		return properties;
 	}
 
@@ -75,7 +78,7 @@ public class LoginProfile extends Profile {
 		properties.clear();
 	}
 
-	public void addProperty(ProfileProperty profileProperty) {
+	public void addProperty(@Nonnull ProfileProperty profileProperty) {
 		properties.computeIfAbsent(profileProperty.getName(), k -> Collections.newSetFromMap(new ConcurrentHashMap<>())).add(profileProperty);
 	}
 

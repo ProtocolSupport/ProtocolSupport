@@ -21,6 +21,9 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class ChatAPI {
 
+	private ChatAPI() {
+	}
+
 	/**
 	 * Converts json string to chat component<br>
 	 * If json string is null, returns empty text component<br>
@@ -162,7 +165,7 @@ public class ChatAPI {
 		}
 	}
 
-	public static enum MessagePosition {
+	public enum MessagePosition {
 		CHAT, SYSMESSAGE, HOTBAR
 	}
 

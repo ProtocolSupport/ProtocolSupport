@@ -15,7 +15,7 @@ import protocolsupport.utils.Vector3S;
 
 public abstract class AbstractPotionItemAsObjectDataEntityMetadata extends AbstractPlayerUseBedAsPacketEntityMetadata {
 
-	public AbstractPotionItemAsObjectDataEntityMetadata(MiddlePacketInit init) {
+	protected AbstractPotionItemAsObjectDataEntityMetadata(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -29,7 +29,7 @@ public abstract class AbstractPotionItemAsObjectDataEntityMetadata extends Abstr
 				fMetadata.clear();
 				edata.unsetFirstMeta();
 				writePotionReplaceSpawn(item.getValue(), potiondata.getVelocity());
-				NetworkEntityTransformHelper.transformMetadataFormat(entity, lType, potiondata.getMetadata(), entityDataFormatTable, fMetadata);
+				NetworkEntityTransformHelper.transformMetadataFormat(entity, lType, potiondata.getMetadata(), entityLegacyFormatTable, fMetadata);
 				writeEntityMetadata(fMetadata);
 				//TODO: also reattach passengers
 				return;

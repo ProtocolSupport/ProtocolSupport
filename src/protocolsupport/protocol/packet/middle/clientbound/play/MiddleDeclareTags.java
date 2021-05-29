@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleDeclareTags extends ClientBoundMiddlePacket {
 
-	public MiddleDeclareTags(MiddlePacketInit init) {
+	protected MiddleDeclareTags(MiddlePacketInit init) {
 		super(init);
 	}
 

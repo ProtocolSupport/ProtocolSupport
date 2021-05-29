@@ -4,11 +4,11 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleWorldBorder extends ClientBoundMiddlePacket {
 
-	public MiddleWorldBorder(MiddlePacketInit init) {
+	protected MiddleWorldBorder(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -64,9 +64,9 @@ public abstract class MiddleWorldBorder extends ClientBoundMiddlePacket {
 		}
 	}
 
-	protected static enum Action {
+	protected enum Action {
 		SET_SIZE, LERP_SIZE, SET_CENTER, INIT, SET_WARN_TIME, SET_WARN_BLOCKS;
-		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
+		public static final EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookup<>(Action.class);
 	}
 
 }

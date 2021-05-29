@@ -9,6 +9,9 @@ import protocolsupport.utils.BitUtils;
 
 public class ChunkWriterShort {
 
+	private ChunkWriterShort() {
+	}
+
 	public static byte[] serializeSections(
 		int mask,
 		IdMappingTable blockDataRemappingTable,

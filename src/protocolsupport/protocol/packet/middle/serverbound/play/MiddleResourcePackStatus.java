@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleResourcePackStatus extends ServerBoundMiddlePacket {
 
-	public MiddleResourcePackStatus(MiddlePacketInit init) {
+	protected MiddleResourcePackStatus(MiddlePacketInit init) {
 		super(init);
 	}
 

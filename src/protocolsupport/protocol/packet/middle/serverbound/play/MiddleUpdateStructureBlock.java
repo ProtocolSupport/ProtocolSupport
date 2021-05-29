@@ -8,11 +8,11 @@ import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.Position;
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleUpdateStructureBlock extends ServerBoundMiddlePacket {
 
-	public MiddleUpdateStructureBlock(MiddlePacketInit init) {
+	protected MiddleUpdateStructureBlock(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -64,22 +64,22 @@ public abstract class MiddleUpdateStructureBlock extends ServerBoundMiddlePacket
 
 	public enum Action {
 		UPDATE, SAVE, LOAD, DETECT;
-		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
+		public static final EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookup<>(Action.class);
 	}
 
 	public enum Mode {
 		SAVE, LOAD, CORNER, DATA;
-		public static final EnumConstantLookups.EnumConstantLookup<Mode> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Mode.class);
+		public static final EnumConstantLookup<Mode> CONSTANT_LOOKUP = new EnumConstantLookup<>(Mode.class);
 	}
 
 	public enum Mirror {
 		NONE, LEFT_RIGHT, FRONT_BACK;
-		public static final EnumConstantLookups.EnumConstantLookup<Mirror> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Mirror.class);
+		public static final EnumConstantLookup<Mirror> CONSTANT_LOOKUP = new EnumConstantLookup<>(Mirror.class);
 	}
 
 	public enum Rotation {
 		NONE, CLOCKWISE_90, CLOCKWISE_180, COUNTERCLOCKWISE_90;
-		public static final EnumConstantLookups.EnumConstantLookup<Rotation> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Rotation.class);
+		public static final EnumConstantLookup<Rotation> CONSTANT_LOOKUP = new EnumConstantLookup<>(Rotation.class);
 	}
 
 }

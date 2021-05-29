@@ -5,7 +5,7 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 
 public abstract class MiddleTimeUpdate extends ClientBoundMiddlePacket {
 
-	public MiddleTimeUpdate(MiddlePacketInit init) {
+	protected MiddleTimeUpdate(MiddlePacketInit init) {
 		super(init);
 	}
 

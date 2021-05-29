@@ -64,9 +64,15 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class LegacyParticle {
 
+	private LegacyParticle() {
+	}
+
 	public static class IntId {
 
-		protected static final Object2IntMap<Class<? extends Particle>> classToId = new Object2IntOpenHashMap<>();
+		private IntId() {
+		}
+
+		private static final Object2IntMap<Class<? extends Particle>> classToId = new Object2IntOpenHashMap<>();
 
 		static {
 			classToId.defaultReturnValue(-1);
@@ -116,15 +122,15 @@ public class LegacyParticle {
 			classToId.put(ParticleSpit.class, 48);
 		}
 
-		protected static final CachedInstanceOfChain<BiFunction<ProtocolVersion, Particle, int[]>> toData = new CachedInstanceOfChain<>();
-		protected static final int[] data_none = new int[0];
+		private static final CachedInstanceOfChain<BiFunction<ProtocolVersion, Particle, int[]>> toData = new CachedInstanceOfChain<>();
+		private static final int[] data_none = new int[0];
 
-		protected static <L extends Particle> void register(Class<L> clazz, Function<L, int[]> function) {
+		private static <L extends Particle> void register(Class<L> clazz, Function<L, int[]> function) {
 			register(clazz, (protocol, particle) -> function.apply(particle));
 		}
 
 		@SuppressWarnings("unchecked")
-		protected static <L extends Particle> void register(Class<L> clazz, BiFunction<ProtocolVersion, L, int[]> function) {
+		private static <L extends Particle> void register(Class<L> clazz, BiFunction<ProtocolVersion, L, int[]> function) {
 			toData.setKnownPath(clazz, (BiFunction<ProtocolVersion, Particle, int[]>) function);
 		}
 
@@ -158,14 +164,17 @@ public class LegacyParticle {
 
 	public static class StringId {
 
-		protected static final Map<Class<Particle>, BiFunction<ProtocolVersion, Particle, String>> toIdData = new HashMap<>();
+		private StringId() {
+		}
 
-		protected static <L extends Particle> void register(Class<L> clazz, Function<L, String> function) {
+		private static final Map<Class<Particle>, BiFunction<ProtocolVersion, Particle, String>> toIdData = new HashMap<>();
+
+		private static <L extends Particle> void register(Class<L> clazz, Function<L, String> function) {
 			register(clazz, (protocol, particle) -> function.apply(particle));
 		}
 
 		@SuppressWarnings("unchecked")
-		protected static <L extends Particle> void register(Class<L> clazz, BiFunction<ProtocolVersion, L, String> function) {
+		private static <L extends Particle> void register(Class<L> clazz, BiFunction<ProtocolVersion, L, String> function) {
 			toIdData.put((Class<Particle>) clazz, (BiFunction<ProtocolVersion, Particle, String>) function);
 		}
 

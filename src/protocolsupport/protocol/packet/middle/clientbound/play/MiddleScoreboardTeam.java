@@ -15,12 +15,11 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.EnumConstantLookups;
-import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 
-	public MiddleScoreboardTeam(MiddlePacketInit init) {
+	protected MiddleScoreboardTeam(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -46,7 +45,7 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 			friendlyFire = serverdata.readUnsignedByte();
 			nameTagVisibility = StringSerializer.readVarIntUTF8String(serverdata);
 			collisionRule = StringSerializer.readVarIntUTF8String(serverdata);
-			format = MiscSerializer.readVarIntEnum(serverdata, EnumConstantLookups.CHAT_COLOR);
+			format = MiscSerializer.readVarIntEnum(serverdata, EnumConstantLookup.CHAT_COLOR);
 			prefix = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 			suffix = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
 		}
@@ -88,7 +87,7 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 		}
 	}
 
-	protected static enum Mode {
+	protected enum Mode {
 		CREATE, REMOVE, UPDATE, PLAYERS_ADD, PLAYERS_REMOVE;
 		public static final EnumConstantLookup<Mode> CONSTANT_LOOKUP = new EnumConstantLookup<>(Mode.class);
 	}

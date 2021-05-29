@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 
@@ -18,13 +21,16 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class ProtocolSupportAPI {
 
+	private ProtocolSupportAPI() {
+	}
+
 	private static final BigInteger apiversion = BigInteger.valueOf(14);
 	/**
 	 * Returns ProtocolSupport API version <br>
 	 * This number is incremented every time API changes (behavior change, method/field added/removed)
 	 * @return API version
 	 */
-	public static BigInteger getAPIVersion() {
+	public static @Nonnull BigInteger getAPIVersion() {
 		return apiversion;
 	}
 
@@ -34,7 +40,7 @@ public class ProtocolSupportAPI {
 	 * @param player player
 	 * @return player protocol version or UNKNOWN
 	 */
-	public static ProtocolVersion getProtocolVersion(Player player) {
+	public static @Nonnull ProtocolVersion getProtocolVersion(Player player) {
 		Connection connection = getConnection(player);
 		return connection != null ? connection.getVersion() : ProtocolVersion.UNKNOWN;
 	}
@@ -45,7 +51,7 @@ public class ProtocolSupportAPI {
 	 * @param address address
 	 * @return connection protocol version or UNKNOWN
 	 */
-	public static ProtocolVersion getProtocolVersion(SocketAddress address) {
+	public static @Nonnull ProtocolVersion getProtocolVersion(SocketAddress address) {
 		Connection connection = getConnection(address);
 		return connection != null ? connection.getVersion() : ProtocolVersion.UNKNOWN;
 	}
@@ -54,7 +60,7 @@ public class ProtocolSupportAPI {
 	 * Returns all currently active connections
 	 * @return all currently active connections
 	 */
-	public static List<Connection> getConnections() {
+	public static @Nonnull List<Connection> getConnections() {
 		return new ArrayList<>(ProtocolStorage.getConnections());
 	}
 
@@ -64,7 +70,7 @@ public class ProtocolSupportAPI {
 	 * @param player player
 	 * @return player {@link Connection} or null
 	 */
-	public static Connection getConnection(Player player) {
+	public static @Nullable Connection getConnection(@Nonnull Player player) {
 		Validate.notNull(player, "Player can't be null");
 		Connection connection = ServerPlatform.get().getMiscUtils().getConnection(player);
 		return connection != null ? connection : getConnection(player.spigot().getRawAddress());
@@ -76,7 +82,7 @@ public class ProtocolSupportAPI {
 	 * @param address address
 	 * @return {@link Connection} with specified address
 	 */
-	public static Connection getConnection(SocketAddress address) {
+	public static @Nullable Connection getConnection(@Nonnull SocketAddress address) {
 		return ProtocolStorage.getConnection(address);
 	}
 
@@ -91,7 +97,7 @@ public class ProtocolSupportAPI {
 	 * By default all supported versions are enabled
 	 * @param version protocol version which support needs to be enabled
 	 */
-	public static void enableProtocolVersion(ProtocolVersion version) {
+	public static void enableProtocolVersion(@Nonnull ProtocolVersion version) {
 		Validate.isTrue(version.isSupported(), "Can't enable support for version that is not supported at all");
 		enabledVersions.add(version);
 	}
@@ -101,7 +107,7 @@ public class ProtocolSupportAPI {
 	 * Disabling all versions before 1.9 will allow multiple passengers on entity
 	 * @param version protocol version which support needs to be disabled
 	 */
-	public static void disableProtocolVersion(ProtocolVersion version) {
+	public static void disableProtocolVersion(@Nonnull ProtocolVersion version) {
 		Validate.isTrue(version.isSupported(), "Can't disable support for version that is not supported at all");
 		enabledVersions.remove(version);
 	}
@@ -111,7 +117,7 @@ public class ProtocolSupportAPI {
 	 * @param version protocol version for which support enabled should be checked
 	 * @return true if protocol version support is enabled, false otherwise
 	 */
-	public static boolean isProtocolVersionEnabled(ProtocolVersion version) {
+	public static boolean isProtocolVersionEnabled(@Nonnull ProtocolVersion version) {
 		return enabledVersions.contains(version);
 	}
 
@@ -119,7 +125,7 @@ public class ProtocolSupportAPI {
 	 * Returns all currently enabled protocol versions
 	 * @return all currently enabled protocol versions
 	 */
-	public static Collection<ProtocolVersion> getEnabledProtocolVersions() {
+	public static @Nonnull Collection<ProtocolVersion> getEnabledProtocolVersions() {
 		return new ArrayList<>(enabledVersions);
 	}
 

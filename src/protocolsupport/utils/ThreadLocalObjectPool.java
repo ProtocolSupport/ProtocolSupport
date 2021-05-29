@@ -2,16 +2,19 @@ package protocolsupport.utils;
 
 import java.util.function.Function;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
 public class ThreadLocalObjectPool<T> {
 
 	private final ThreadLocal<LocalStack<T>> pool;
 
-	public ThreadLocalObjectPool(int maxCapacity, Function<Handle<T>, T> allocator) {
+	public ThreadLocalObjectPool(@Nonnegative int maxCapacity, @Nonnull Function<Handle<T>, T> allocator) {
 		this.pool = ThreadLocal.withInitial(() -> new LocalStack<>(maxCapacity, allocator));
 		this.pool.remove();
 	}
 
-	public T get() {
+	public @Nonnull T get() {
 		return pool.get().pop().object;
 	}
 

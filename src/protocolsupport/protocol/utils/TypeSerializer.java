@@ -21,6 +21,7 @@ public class TypeSerializer<T> {
 
 		protected final ProtocolVersion version;
 		protected final CachedInstanceOfChain<BiConsumer<ByteBuf, T>> serializers = new CachedInstanceOfChain<>();
+
 		protected Entry(ProtocolVersion version) {
 			this.version = version;
 		}

@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.typeremapper.particle.FlatteningParticleId;
+import protocolsupport.protocol.typeremapper.particle.FlatteningParticleIdRegistry;
 import protocolsupport.protocol.typeremapper.particle.LegacyParticleData;
 import protocolsupport.protocol.typeremapper.particle.LegacyParticleData.LegacyParticleDataTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
@@ -15,7 +15,7 @@ import protocolsupport.protocol.utils.TypeSerializer;
 public class WorldParticle extends MiddleWorldParticle {
 
 	protected final LegacyParticleDataTable remapper = LegacyParticleData.REGISTRY.getTable(version);
-	protected final ArrayBasedIntMappingTable flatteningIdTable = FlatteningParticleId.REGISTRY.getTable(version);
+	protected final ArrayBasedIntMappingTable flatteningIdTable = FlatteningParticleIdRegistry.INSTANCE.getTable(version);
 	protected final TypeSerializer.Entry<Particle> dataSerializer = ParticleDataSerializer.INSTANCE.get(version);
 
 	public WorldParticle(MiddlePacketInit init) {

@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
 public abstract class MiddlePing extends ServerBoundMiddlePacket {
 
-	public MiddlePing(MiddlePacketInit init) {
+	protected MiddlePing(MiddlePacketInit init) {
 		super(init);
 	}
 

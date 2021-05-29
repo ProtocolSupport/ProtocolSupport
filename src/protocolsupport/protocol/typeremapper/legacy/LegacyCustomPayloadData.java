@@ -31,6 +31,9 @@ import protocolsupport.utils.BitUtils;
 
 public class LegacyCustomPayloadData {
 
+	private LegacyCustomPayloadData() {
+	}
+
 	public static ByteBuf transformBrandDirectToString(ByteBuf data) {
 		ByteBuf buffer = Unpooled.buffer(data.readableBytes() + VarNumberSerializer.MAX_LENGTH);
 		StringSerializer.writeVarIntUTF8String(buffer, data.toString(StandardCharsets.UTF_8));

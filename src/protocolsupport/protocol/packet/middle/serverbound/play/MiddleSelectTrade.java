@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleSelectTrade extends ServerBoundMiddlePacket {
 
-	public MiddleSelectTrade(MiddlePacketInit init) {
+	protected MiddleSelectTrade(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -4,8 +4,8 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockAction;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
+import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 
 public class BlockAction extends MiddleBlockAction {

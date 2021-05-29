@@ -9,7 +9,7 @@ import protocolsupport.utils.BitUtils;
 
 public abstract class AbstractChunkCacheChunkLight extends MiddleChunkLight {
 
-	public AbstractChunkCacheChunkLight(MiddlePacketInit init) {
+	protected AbstractChunkCacheChunkLight(MiddlePacketInit init) {
 		super(init);
 	}
 

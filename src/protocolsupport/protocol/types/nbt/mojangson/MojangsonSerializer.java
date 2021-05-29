@@ -17,6 +17,9 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class MojangsonSerializer {
 
+	private MojangsonSerializer() {
+	}
+
 	public static String serialize(NBTCompound compound) {
 		StringBuilder builder = new StringBuilder();
 		writeCompound(builder, compound);
@@ -24,9 +27,9 @@ public class MojangsonSerializer {
 	}
 
 
-	protected static final Map<NBTType<? extends NBT>, TagWriter<? extends NBT>> typeWriters = new HashMap<>();
+	private static final Map<NBTType<? extends NBT>, TagWriter<? extends NBT>> typeWriters = new HashMap<>();
 
-	protected static <T extends NBT> void registerType(NBTType<T> type, TagWriter<T> typeWriter) {
+	private static <T extends NBT> void registerType(NBTType<T> type, TagWriter<T> typeWriter) {
 		typeWriters.put(type, typeWriter);
 	}
 
@@ -118,7 +121,7 @@ public class MojangsonSerializer {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected static void writeTag(StringBuilder builder, NBT tag) {
+	static void writeTag(StringBuilder builder, NBT tag) {
 		TagWriter<NBT> f = (TagWriter<NBT>) typeWriters.get(tag.getType());
 		if (f == null) {
 			throw new IllegalArgumentException(MessageFormat.format("No writer registered for nbt type {0}", tag.getType()));
@@ -126,17 +129,17 @@ public class MojangsonSerializer {
 		f.writeTag(builder, tag);
 	}
 
-	protected static void writeByte(StringBuilder builder, byte b) {
+	static void writeByte(StringBuilder builder, byte b) {
 		builder.append(b);
 		builder.append(MojangsonConstants.type_byte);
 	}
 
-	protected static void writeLong(StringBuilder builder, long l) {
+	static void writeLong(StringBuilder builder, long l) {
 		builder.append(l);
 		builder.append(MojangsonConstants.type_long);
 	}
 
-	protected static void writeCompound(StringBuilder builder, NBTCompound compound) {
+	static void writeCompound(StringBuilder builder, NBTCompound compound) {
 		builder.append(MojangsonConstants.compound_start);
 		Iterator<Entry<String, NBT>> iterator = compound.getTags().entrySet().iterator();
 		if (iterator.hasNext()) {
@@ -155,7 +158,7 @@ public class MojangsonSerializer {
 		builder.append(MojangsonConstants.compound_end);
 	}
 
-	protected static void writeQuotedString(StringBuilder builder, String string) {
+	static void writeQuotedString(StringBuilder builder, String string) {
 		builder.append(MojangsonConstants.string_quote);
 		for (int i = 0; i < string.length(); i++) {
 			char c = string.charAt(i);
@@ -173,7 +176,7 @@ public class MojangsonSerializer {
 	}
 
 	@FunctionalInterface
-	protected static interface TagWriter<T extends NBT> {
+	static interface TagWriter<T extends NBT> {
 		public void writeTag(StringBuilder builder, T tag);
 	}
 

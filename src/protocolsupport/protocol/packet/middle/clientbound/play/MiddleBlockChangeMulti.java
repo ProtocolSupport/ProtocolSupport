@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.ArraySerializer;
 
 public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 
-	public MiddleBlockChangeMulti(MiddlePacketInit init) {
+	protected MiddleBlockChangeMulti(MiddlePacketInit init) {
 		super(init);
 	}
 

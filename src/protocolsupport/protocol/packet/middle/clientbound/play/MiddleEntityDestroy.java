@@ -9,7 +9,7 @@ public abstract class MiddleEntityDestroy extends ClientBoundMiddlePacket {
 
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
-	public MiddleEntityDestroy(MiddlePacketInit init) {
+	protected MiddleEntityDestroy(MiddlePacketInit init) {
 		super(init);
 	}
 

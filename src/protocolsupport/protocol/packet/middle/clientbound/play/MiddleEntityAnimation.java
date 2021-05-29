@@ -9,7 +9,7 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public abstract class MiddleEntityAnimation extends ClientBoundMiddlePacket {
 
-	public MiddleEntityAnimation(MiddlePacketInit init) {
+	protected MiddleEntityAnimation(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -26,7 +26,7 @@ public abstract class MiddleEntityAnimation extends ClientBoundMiddlePacket {
 		}
 	}
 
-	protected static enum Animation {
+	protected enum Animation {
 		SWING_MAIN_HAND(0), WAKE_UP(2), SWING_OFF_HAND(3), CRIT(4), MAGIC_CRIT(5);
 		public static final ArrayMap<Animation> BY_ID = CollectionsUtils.makeEnumMappingArrayMap(Animation.class, Animation::getId);
 		protected int id;

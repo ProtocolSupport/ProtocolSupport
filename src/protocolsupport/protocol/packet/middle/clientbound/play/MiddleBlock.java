@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.Position;
 
 public abstract class MiddleBlock extends ClientBoundMiddlePacket {
 
-	public MiddleBlock(MiddlePacketInit init) {
+	protected MiddleBlock(MiddlePacketInit init) {
 		super(init);
 	}
 

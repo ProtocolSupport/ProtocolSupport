@@ -1,6 +1,6 @@
 package protocolsupport.protocol.types;
 
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public enum BlockDirection {
 
@@ -10,7 +10,7 @@ public enum BlockDirection {
 
 	protected int id2d;
 
-	public static final EnumConstantLookups.EnumConstantLookup<BlockDirection> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(BlockDirection.class);
+	public static final EnumConstantLookup<BlockDirection> CONSTANT_LOOKUP = new EnumConstantLookup<>(BlockDirection.class);
 
 	BlockDirection(int id2d) {
 		this.id2d = id2d;

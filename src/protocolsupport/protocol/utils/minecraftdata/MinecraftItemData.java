@@ -3,6 +3,9 @@ package protocolsupport.protocol.utils.minecraftdata;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
+import javax.annotation.CheckForSigned;
+import javax.annotation.Nonnull;
+
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
@@ -16,6 +19,9 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class MinecraftItemData {
 
+	private MinecraftItemData() {
+	}
+
 	public static final int ITEM_COUNT = (int) getItems().count();
 
 	@SuppressWarnings("deprecation")
@@ -26,9 +32,9 @@ public class MinecraftItemData {
 			.filter(Material::isItem);
 	}
 
-	protected static final Object2IntMap<String> nameToId = new Object2IntOpenHashMap<>();
+	private static final Object2IntMap<String> nameToId = new Object2IntOpenHashMap<>();
 
-	protected static void register(String name, int id) {
+	private static void register(String name, int id) {
 		nameToId.put(name, id);
 		nameToId.put(NamespacedKey.minecraft(name).toString(), id);
 	}
@@ -40,7 +46,7 @@ public class MinecraftItemData {
 		}
 	}
 
-	public static int getIdByName(String id) {
+	public static @CheckForSigned int getIdByName(@Nonnull String id) {
 		return nameToId.getOrDefault(id, -1);
 	}
 

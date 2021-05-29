@@ -3,6 +3,8 @@ package protocolsupport.protocol.typeremapper.utils;
 import java.text.MessageFormat;
 import java.util.EnumMap;
 
+import javax.annotation.Nonnull;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkippingTable;
@@ -23,7 +25,7 @@ public abstract class SkippingRegistry<T extends SkippingTable> {
 		}
 	}
 
-	public T getTable(ProtocolVersion version) {
+	public @Nonnull T getTable(@Nonnull ProtocolVersion version) {
 		T table = registry.get(version);
 		if (table == null) {
 			throw new IllegalArgumentException(MessageFormat.format("Missing skipping table for version {0}", version));

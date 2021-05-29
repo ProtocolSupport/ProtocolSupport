@@ -8,7 +8,7 @@ public abstract class MiddleKeepAlive extends ClientBoundMiddlePacket {
 
 	protected final KeepAliveCache keepaliveCache = cache.getKeepAliveCache();
 
-	public MiddleKeepAlive(MiddlePacketInit init) {
+	protected MiddleKeepAlive(MiddlePacketInit init) {
 		super(init);
 	}
 

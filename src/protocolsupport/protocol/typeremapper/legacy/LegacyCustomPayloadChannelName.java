@@ -7,6 +7,9 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class LegacyCustomPayloadChannelName {
 
+	private LegacyCustomPayloadChannelName() {
+	}
+
 	//TODO: move modern channels to separate type
 	public static final String MODERN_REGISTER = "minecraft:register";
 	public static final String MODERN_UNREGISTER = "minecraft:unregister";

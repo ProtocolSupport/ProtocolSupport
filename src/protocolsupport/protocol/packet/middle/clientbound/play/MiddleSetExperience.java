@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleSetExperience extends ClientBoundMiddlePacket {
 
-	public MiddleSetExperience(MiddlePacketInit init) {
+	protected MiddleSetExperience(MiddlePacketInit init) {
 		super(init);
 	}
 

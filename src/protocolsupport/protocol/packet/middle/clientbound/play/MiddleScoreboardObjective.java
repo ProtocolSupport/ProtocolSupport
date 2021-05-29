@@ -10,11 +10,11 @@ import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleScoreboardObjective extends ClientBoundMiddlePacket {
 
-	public MiddleScoreboardObjective(MiddlePacketInit init) {
+	protected MiddleScoreboardObjective(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -57,12 +57,12 @@ public abstract class MiddleScoreboardObjective extends ClientBoundMiddlePacket 
 	}
 
 
-	protected static enum Mode {
+	protected enum Mode {
 		CREATE, REMOVE, UPDATE;
 		public static final EnumConstantLookup<Mode> CONSTANT_LOOKUP = new EnumConstantLookup<>(Mode.class);
 	}
 
-	protected static enum Type {
+	protected enum Type {
 		INTEGER, HEARTS;
 		public static final EnumConstantLookup<Type> CONSTANT_LOOKUP = new EnumConstantLookup<>(Type.class);
 	}

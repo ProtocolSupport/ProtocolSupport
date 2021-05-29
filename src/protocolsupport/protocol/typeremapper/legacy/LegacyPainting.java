@@ -1,8 +1,16 @@
 package protocolsupport.protocol.typeremapper.legacy;
 
+import java.text.MessageFormat;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
 public class LegacyPainting {
 
-	public static String getName(int id) {
+	private LegacyPainting() {
+	}
+
+	public static @Nonnull String getName(@Nonnegative int id) {
 		switch (id) {
 			case 0:
 				return "Kebab";
@@ -57,6 +65,6 @@ public class LegacyPainting {
 			case 25:
 				return "DonkeyKong";
 		}
-		throw new UnsupportedOperationException("Trying to spawn painting with invalid id: " + id);
+		throw new IllegalArgumentException(MessageFormat.format("Missing painting {0} legacy id", id));
 	}
 }

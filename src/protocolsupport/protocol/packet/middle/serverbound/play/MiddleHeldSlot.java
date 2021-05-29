@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
 public abstract class MiddleHeldSlot extends ServerBoundMiddlePacket {
 
-	public MiddleHeldSlot(MiddlePacketInit init) {
+	protected MiddleHeldSlot(MiddlePacketInit init) {
 		super(init);
 	}
 

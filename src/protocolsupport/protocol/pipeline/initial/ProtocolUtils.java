@@ -8,6 +8,9 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class ProtocolUtils {
 
+	private ProtocolUtils() {
+	}
+
 	protected static ProtocolVersion get16PingVersion(int protocolId) {
 		switch (protocolId) {
 			case 78: {

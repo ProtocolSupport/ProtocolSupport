@@ -7,7 +7,7 @@ import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 
 public abstract class MiddleEntityEffectAdd extends MiddleEntity {
 
-	public MiddleEntityEffectAdd(MiddlePacketInit init) {
+	protected MiddleEntityEffectAdd(MiddlePacketInit init) {
 		super(init);
 	}
 

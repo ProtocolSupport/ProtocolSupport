@@ -7,23 +7,23 @@ import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDa
 
 public abstract class AbstractLocationOffsetEntityRelMoveLook extends MiddleEntityRelMoveLook {
 
-	public AbstractLocationOffsetEntityRelMoveLook(MiddlePacketInit init) {
+	protected AbstractLocationOffsetEntityRelMoveLook(MiddlePacketInit init) {
 		super(init);
 	}
 
-	protected final NetworkEntityLegacyDataTable legacyEntityEntryTable = NetworkEntityLegacyDataRegistry.INSTANCE.getTable(version);
-	protected final NetworkEntityLegacyLocationOffset entityOffset = NetworkEntityLegacyLocationOffset.get(version);
+	protected final NetworkEntityLegacyDataTable entityLegacyDataTable = NetworkEntityLegacyDataRegistry.INSTANCE.getTable(version);
+	protected final NetworkEntityLegacyLocationOffset entityLegacyOffset = NetworkEntityLegacyLocationOffset.get(version);
 
-	protected NetworkEntityLegacyLocationOffset.Offset entityOffsetEntry;
+	protected NetworkEntityLegacyLocationOffset.Offset entityLegacyOffsetEntry;
 
 	@Override
 	protected void handle() {
 		super.handle();
 
-		entityOffsetEntry = entityOffset.get(legacyEntityEntryTable.get(entity.getType()).getType());
-		if (entityOffsetEntry != null) {
-			yaw += entityOffsetEntry.getYaw();
-			pitch += entityOffsetEntry.getPitch();
+		entityLegacyOffsetEntry = entityLegacyOffset.get(entityLegacyDataTable.get(entity.getType()).getType());
+		if (entityLegacyOffsetEntry != null) {
+			yaw += entityLegacyOffsetEntry.getYaw();
+			pitch += entityLegacyOffsetEntry.getPitch();
 		}
 	}
 

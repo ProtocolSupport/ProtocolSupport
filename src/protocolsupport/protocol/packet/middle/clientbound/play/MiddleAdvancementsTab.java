@@ -6,7 +6,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleAdvancementsTab extends ClientBoundMiddlePacket {
 
-	public MiddleAdvancementsTab(MiddlePacketInit init) {
+	protected MiddleAdvancementsTab(MiddlePacketInit init) {
 		super(init);
 	}
 

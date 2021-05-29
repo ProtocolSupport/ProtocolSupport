@@ -1,6 +1,6 @@
 package protocolsupport.protocol.types;
 
-import protocolsupport.protocol.utils.EnumConstantLookups.EnumConstantLookup;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public enum WindowType {
 

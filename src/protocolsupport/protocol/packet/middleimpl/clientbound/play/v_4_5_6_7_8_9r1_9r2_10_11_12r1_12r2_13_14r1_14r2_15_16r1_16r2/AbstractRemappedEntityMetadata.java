@@ -11,12 +11,12 @@ import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class AbstractRemappedEntityMetadata extends AbstractKnownEntityMetadata {
 
-	public AbstractRemappedEntityMetadata(MiddlePacketInit init) {
+	protected AbstractRemappedEntityMetadata(MiddlePacketInit init) {
 		super(init);
 	}
 
-	protected final NetworkEntityLegacyDataTable legacyEntityEntryTable = NetworkEntityLegacyDataRegistry.INSTANCE.getTable(version);
-	protected final NetworkEntityLegacyFormatTable entityDataFormatTable = NetworkEntityLegacyFormatRegistry.INSTANCE.getTable(version);
+	protected final NetworkEntityLegacyDataTable entityLegacyDataTable = NetworkEntityLegacyDataRegistry.INSTANCE.getTable(version);
+	protected final NetworkEntityLegacyFormatTable entityLegacyFormatTable = NetworkEntityLegacyFormatRegistry.INSTANCE.getTable(version);
 
 	protected NetworkEntityType lType;
 	protected final NetworkEntityMetadataList fMetadata = new NetworkEntityMetadataList();
@@ -25,9 +25,9 @@ public abstract class AbstractRemappedEntityMetadata extends AbstractKnownEntity
 	protected void handle() {
 		super.handle();
 
-		NetworkEntityLegacyDataEntry legacyEntityEntry = legacyEntityEntryTable.get(entity.getType());
+		NetworkEntityLegacyDataEntry legacyEntityEntry = entityLegacyDataTable.get(entity.getType());
 		lType = legacyEntityEntry.getType();
-		NetworkEntityTransformHelper.transformMetadata(entity, metadata, legacyEntityEntry, entityDataFormatTable, fMetadata);
+		NetworkEntityTransformHelper.transformMetadata(entity, metadata, legacyEntityEntry, entityLegacyFormatTable, fMetadata);
 	}
 
 	@Override

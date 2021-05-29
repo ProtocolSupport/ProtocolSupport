@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleClientSettings;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public class ClientSettings extends MiddleClientSettings {
 
@@ -19,7 +19,7 @@ public class ClientSettings extends MiddleClientSettings {
 		chatMode = MiscSerializer.readVarIntEnum(clientdata, ChatMode.CONSTANT_LOOKUP);
 		chatColors = clientdata.readBoolean();
 		skinFlags = clientdata.readUnsignedByte();
-		mainHand = MiscSerializer.readVarIntEnum(clientdata, EnumConstantLookups.MAIN_HAND);
+		mainHand = MiscSerializer.readVarIntEnum(clientdata, EnumConstantLookup.MAIN_HAND);
 	}
 
 }

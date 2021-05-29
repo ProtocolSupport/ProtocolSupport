@@ -8,7 +8,7 @@ public abstract class AbstractChunkCacheStartGame extends AbstractLegacyStartGam
 
 	protected final ChunkCache chunkCache = cache.getChunkCache();
 
-	public AbstractChunkCacheStartGame(MiddlePacketInit init) {
+	protected AbstractChunkCacheStartGame(MiddlePacketInit init) {
 		super(init);
 	}
 

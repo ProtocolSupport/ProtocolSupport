@@ -12,9 +12,16 @@ import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class CollectionsUtils {
 
-	public static <K, V extends Enum<V>> Map<K, V> makeEnumMappingMap(Class<V> e, Function<V, K> mapping) {
+	private CollectionsUtils() {
+	}
+
+	public static @Nonnull <K, V extends Enum<V>> Map<K, V> makeEnumMappingMap(@Nonnull Class<V> e, @Nonnull Function<V, K> mapping) {
 		HashMap<K, V> map = new HashMap<>();
 		for (V v : e.getEnumConstants()) {
 			map.put(mapping.apply(v), v);
@@ -22,7 +29,7 @@ public class CollectionsUtils {
 		return map;
 	}
 
-	public static <K extends Enum<K>, V extends Enum<V>> Map<K, V> makeEnumMappingEnumMap(Class<V> e, Class<K> k, Function<V, K> mapping) {
+	public static @Nonnull <K extends Enum<K>, V extends Enum<V>> Map<K, V> makeEnumMappingEnumMap(@Nonnull Class<V> e, @Nonnull Class<K> k, @Nonnull Function<V, K> mapping) {
 		EnumMap<K, V> map = new EnumMap<>(k);
 		for (V v : e.getEnumConstants()) {
 			map.put(mapping.apply(v), v);
@@ -30,17 +37,17 @@ public class CollectionsUtils {
 		return map;
 	}
 
-	public static <K extends Enum<K>, V extends Enum<V>> Map<K, V> makeEnumMappingEnumMap(Stream<V> stream, Class<K> k, Function<V, K> mapping) {
+	public static @Nonnull <K extends Enum<K>, V extends Enum<V>> Map<K, V> makeEnumMappingEnumMap(@Nonnull Stream<V> stream, @Nonnull Class<K> k, @Nonnull Function<V, K> mapping) {
 		EnumMap<K, V> map = new EnumMap<>(k);
 		stream.forEach(v -> map.put(mapping.apply(v), v));
 		return map;
 	}
 
-	public static <V extends Enum<V>> ArrayMap<V> makeEnumMappingArrayMap(Class<V> e, ToIntFunction<V> mapping) {
+	public static @Nonnull <V extends Enum<V>> ArrayMap<V> makeEnumMappingArrayMap(@Nonnull Class<V> e, @Nonnull ToIntFunction<V> mapping) {
 		return new ArrayMap<>(Arrays.stream(e.getEnumConstants()).map(c -> new ArrayMap.Entry<>(mapping.applyAsInt(c), c)).collect(Collectors.toList()));
 	}
 
-	public static <V extends Enum<V>> ArrayMap<V> makeEnumMappingArrayMap(Stream<V> stream, ToIntFunction<V> mapping) {
+	public static @Nonnull <V extends Enum<V>> ArrayMap<V> makeEnumMappingArrayMap(@Nonnull Stream<V> stream, @Nonnull ToIntFunction<V> mapping) {
 		return new ArrayMap<>(stream.map(c -> new ArrayMap.Entry<>(mapping.applyAsInt(c), c)).collect(Collectors.toList()));
 	}
 
@@ -49,12 +56,12 @@ public class CollectionsUtils {
 		private final int offset;
 		private final Object[] array;
 
-		public ArrayMap(int size) {
+		public ArrayMap(@Nonnegative int size) {
 			this.array = new Object[size];
 			this.offset = 0;
 		}
 
-		public ArrayMap(Collection<Entry<T>> entries) {
+		public ArrayMap(@Nonnull Collection<Entry<T>> entries) {
 			int minKey = entries.stream().min(Comparator.comparingInt(e -> e.key)).get().key;
 			int maxKey = entries.stream().max(Comparator.comparingInt(e -> e.key)).get().key;
 			this.offset = -minKey;
@@ -63,7 +70,7 @@ public class CollectionsUtils {
 		}
 
 		@SafeVarargs
-		public ArrayMap(Entry<T>... entries) {
+		public ArrayMap(@Nonnull Entry<T>... entries) {
 			this(Arrays.asList(entries));
 		}
 
@@ -76,11 +83,11 @@ public class CollectionsUtils {
 		}
 
 		@SuppressWarnings("unchecked")
-		public T get(int key) {
+		public @Nullable T get(@Nonnegative int key) {
 			return (T) Utils.getFromArrayOrNull(array, key + offset);
 		}
 
-		public void put(int key, T value) {
+		public void put(@Nonnegative int key, @Nullable T value) {
 			int aindex = key + offset;
 			if ((aindex >= array.length) || (aindex < 0)) {
 				throw new IllegalArgumentException(MessageFormat.format("Cant fit key {0} in size {1} and offset {2}", key, array.length, offset));
@@ -95,7 +102,7 @@ public class CollectionsUtils {
 		public static class Entry<T> {
 			private final int key;
 			private final T value;
-			public Entry(int key, T value) {
+			public Entry(@Nonnegative int key, @Nonnull T value) {
 				this.key = key;
 				this.value = value;
 			}

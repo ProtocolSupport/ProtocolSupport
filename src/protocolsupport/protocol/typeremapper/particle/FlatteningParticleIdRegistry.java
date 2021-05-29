@@ -11,24 +11,24 @@ import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
-public class FlatteningParticleId {
+public class FlatteningParticleIdRegistry extends IntMappingRegistry<ArrayBasedIntMappingTable> {
 
-	public static final IntMappingRegistry<ArrayBasedIntMappingTable> REGISTRY = new IntMappingRegistry<ArrayBasedIntMappingTable>() {
-		@Override
-		protected ArrayBasedIntMappingTable createTable() {
-			return new ArrayBasedIntMappingTable(128);
-		}
-	};
+	public static final FlatteningParticleIdRegistry INSTANCE = new FlatteningParticleIdRegistry();
 
-	static {
+	protected FlatteningParticleIdRegistry() {
 		JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("flatteningparticles.json"));
 		for (String versionString : rootObject.keySet()) {
 			JsonObject entriesObject = rootObject.get(versionString).getAsJsonObject();
-			ArrayBasedIntMappingTable table = REGISTRY.getTable(ProtocolVersion.valueOf(versionString));
+			ArrayBasedIntMappingTable table = getTable(ProtocolVersion.valueOf(versionString));
 			for (String particleidString : entriesObject.keySet()) {
 				table.set(Integer.parseInt(particleidString), JsonUtils.getInt(entriesObject, particleidString));
 			}
 		}
+	}
+
+	@Override
+	protected ArrayBasedIntMappingTable createTable() {
+		return new ArrayBasedIntMappingTable(128);
 	}
 
 }

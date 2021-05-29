@@ -25,7 +25,7 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 
 	protected final WindowsRemapper windowsRemapper = WindowsRemappersRegistry.get(version);
 
-	public MiddleStartGame(MiddlePacketInit init) {
+	protected MiddleStartGame(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -6,6 +6,9 @@ import io.netty.handler.codec.EncoderException;
 
 public class VarNumberSerializer {
 
+	private VarNumberSerializer() {
+	}
+
 	public static final int MAX_LENGTH = 5;
 
 	public static int calculateVarIntSize(int value) {

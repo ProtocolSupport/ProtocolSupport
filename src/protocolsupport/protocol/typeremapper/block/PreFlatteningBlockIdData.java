@@ -16,7 +16,10 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class PreFlatteningBlockIdData {
 
-	protected static final int[] toLegacyId = new int[MinecraftBlockData.BLOCKDATA_COUNT];
+	private PreFlatteningBlockIdData() {
+	}
+
+	private static final int[] toLegacyId = new int[MinecraftBlockData.BLOCKDATA_COUNT];
 
 	static {
 		Arrays.fill(toLegacyId, Material.LEGACY_BEDROCK.getId() << 4);

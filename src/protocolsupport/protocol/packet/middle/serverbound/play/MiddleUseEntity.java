@@ -8,11 +8,11 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.UsedHand;
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 
-	public MiddleUseEntity(MiddlePacketInit init) {
+	protected MiddleUseEntity(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -53,7 +53,7 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 
 	protected enum Action {
 		INTERACT, ATTACK, INTERACT_AT;
-		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
+		public static final EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookup<>(Action.class);
 	}
 
 }

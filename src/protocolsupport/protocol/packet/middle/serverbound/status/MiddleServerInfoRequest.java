@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
 public abstract class MiddleServerInfoRequest extends ServerBoundMiddlePacket {
 
-	public MiddleServerInfoRequest(MiddlePacketInit init) {
+	protected MiddleServerInfoRequest(MiddlePacketInit init) {
 		super(init);
 	}
 

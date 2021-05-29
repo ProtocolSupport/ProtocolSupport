@@ -5,7 +5,7 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleBlockBreakAnimation extends MiddleBlock {
 
-	public MiddleBlockBreakAnimation(MiddlePacketInit init) {
+	protected MiddleBlockBreakAnimation(MiddlePacketInit init) {
 		super(init);
 	}
 

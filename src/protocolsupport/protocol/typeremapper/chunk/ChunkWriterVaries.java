@@ -14,6 +14,9 @@ import protocolsupport.utils.BitUtils;
 
 public class ChunkWriterVaries {
 
+	private ChunkWriterVaries() {
+	}
+
 	public static void writeSectionsPadded(
 		ByteBuf buffer, int mask, int globalPaletteBitsPerBlock,
 		IdMappingTable blockDataRemappingTable,

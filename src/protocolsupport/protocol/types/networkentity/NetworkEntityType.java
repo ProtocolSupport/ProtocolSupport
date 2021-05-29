@@ -4,6 +4,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.CheckForSigned;
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
 
@@ -136,23 +141,23 @@ public enum NetworkEntityType {
 	private final EntityType bukkitType;
 	private final NetworkEntityType superType;
 
-	public NetworkEntityType getSuperType() {
+	public @Nullable NetworkEntityType getSuperType() {
 		return superType;
 	}
 
-	public int getNetworkTypeId() {
+	public @CheckForSigned int getNetworkTypeId() {
 		return typeId;
 	}
 
-	public String getKey() {
+	public @Nonnull String getKey() {
 		return bukkitType != EntityType.UNKNOWN ? bukkitType.getKey().toString() : "";
 	}
 
-	public EntityType getBukkitType() {
+	public @Nonnull EntityType getBukkitType() {
 		return bukkitType;
 	}
 
-	public boolean isOfType(NetworkEntityType type) {
+	public boolean isOfType(@Nonnull NetworkEntityType type) {
 		return ((type == this) || ((getSuperType() != null) && getSuperType().isOfType(type)));
 	}
 
@@ -160,10 +165,10 @@ public enum NetworkEntityType {
 		NONE, SPECIAL, OBJECT, MOB
 	}
 
-	protected static final ArrayMap<NetworkEntityType> OBJECT_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.OBJECT), (w -> w.typeId));
-	protected static final ArrayMap<NetworkEntityType> MOB_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.MOB), (w -> w.typeId));
-	protected static final Map<EntityType, NetworkEntityType> BY_B_TYPE = CollectionsUtils.makeEnumMappingEnumMap(Arrays.stream(NetworkEntityType.values()), EntityType.class, NetworkEntityType::getBukkitType);
-	protected static final Map<String, NetworkEntityType> BY_R_STRING_ID = new HashMap<>();
+	private static final ArrayMap<NetworkEntityType> OBJECT_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.OBJECT), (w -> w.typeId));
+	private static final ArrayMap<NetworkEntityType> MOB_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.MOB), (w -> w.typeId));
+	private static final Map<EntityType, NetworkEntityType> BY_B_TYPE = CollectionsUtils.makeEnumMappingEnumMap(Arrays.stream(NetworkEntityType.values()), EntityType.class, NetworkEntityType::getBukkitType);
+	private static final Map<String, NetworkEntityType> BY_R_STRING_ID = new HashMap<>();
 	static {
 		Arrays.stream(NetworkEntityType.values())
 		.forEach(w -> {
@@ -175,32 +180,32 @@ public enum NetworkEntityType {
 		});
 	}
 
-	public static NetworkEntityType getObjectByNetworkTypeId(int objectTypeId) {
+	public static @Nonnull NetworkEntityType getObjectByNetworkTypeId(@Nonnegative int objectTypeId) {
 		NetworkEntityType type = OBJECT_BY_N_ID.get(objectTypeId);
 		return type != null ? type : NONE;
 	}
 
-	public static NetworkEntityType getMobByNetworkTypeId(int mobTypeId) {
+	public static @Nonnull NetworkEntityType getMobByNetworkTypeId(@Nonnegative int mobTypeId) {
 		NetworkEntityType type = MOB_BY_N_ID.get(mobTypeId);
 		return type != null ? type : NONE;
 	}
 
-	public static NetworkEntityType getByRegistrySTypeId(String name) {
+	public static @Nonnull NetworkEntityType getByRegistrySTypeId(@Nonnull String name) {
 		return BY_R_STRING_ID.getOrDefault(name, NONE);
 	}
 
-	public static NetworkEntityType getByBukkitType(EntityType btype) {
+	public static @Nonnull NetworkEntityType getByBukkitType(@Nonnull EntityType btype) {
 		return BY_B_TYPE.getOrDefault(btype, NONE);
 	}
 
-	NetworkEntityType(EType etype, EntityType bukkitType, NetworkEntityType superType) {
+	NetworkEntityType(@Nonnull EType etype, @Nonnull EntityType bukkitType, @Nullable NetworkEntityType superType) {
 		this.etype = etype;
 		this.bukkitType = bukkitType;
 		this.typeId = MinecraftEntityData.getIdByName(getKey());
 		this.superType = superType;
 	}
 
-	NetworkEntityType(EType etype, EntityType bukkitType) {
+	NetworkEntityType(@Nonnull EType etype, @Nonnull EntityType bukkitType) {
 		this(etype, bukkitType, null);
 	}
 

@@ -15,7 +15,7 @@ import protocolsupport.utils.BitUtils;
 
 public abstract class MiddleChunkData extends ClientBoundMiddlePacket {
 
-	public MiddleChunkData(MiddlePacketInit init) {
+	protected MiddleChunkData(MiddlePacketInit init) {
 		super(init);
 	}
 

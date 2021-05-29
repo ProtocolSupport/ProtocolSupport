@@ -22,6 +22,9 @@ import protocolsupport.utils.BitUtils;
 
 public class ChunkWriterVariesWithLight {
 
+	private ChunkWriterVariesWithLight() {
+	}
+
 	public static void writeSectionsCompactFlattening(
 		ByteBuf buffer, int mask, int globalPaletteBitsPerBlock,
 		IdMappingTable blockDataRemappingTable,

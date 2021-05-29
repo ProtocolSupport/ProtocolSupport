@@ -4,6 +4,9 @@ import java.text.MessageFormat;
 import java.util.EnumMap;
 import java.util.HashMap;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBlockData;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBoolean;
@@ -33,9 +36,12 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class NetworkEntityMetadataObjectRegistry {
 
+	private NetworkEntityMetadataObjectRegistry() {
+	}
+
 	private static final HashMap<Class<? extends NetworkEntityMetadataObject<?>>, EnumMap<ProtocolVersion, Integer>> registry = new HashMap<>();
 
-	private static void register(Class<? extends NetworkEntityMetadataObject<?>> clazz, int id, ProtocolVersion... versions) {
+	private static void register(@Nonnull Class<? extends NetworkEntityMetadataObject<?>> clazz, @Nonnegative int id, @Nonnull ProtocolVersion... versions) {
 		EnumMap<ProtocolVersion, Integer> mmap = registry.computeIfAbsent(clazz, k -> new EnumMap<>(ProtocolVersion.class));
 		for (ProtocolVersion version : versions) {
 			mmap.put(version, id);
@@ -78,7 +84,7 @@ public class NetworkEntityMetadataObjectRegistry {
 		register(NetworkEntityMetadataObjectVector3i.class, 6, ProtocolVersionsHelper.DOWN_1_8);
 	}
 
-	public static int getTypeId(@SuppressWarnings("rawtypes") Class<? extends NetworkEntityMetadataObject> clazz, ProtocolVersion version) {
+	public static int getTypeId(@SuppressWarnings("rawtypes") @Nonnull Class<? extends NetworkEntityMetadataObject> clazz, @Nonnull ProtocolVersion version) {
 		EnumMap<ProtocolVersion, Integer> mmap = registry.get(clazz);
 		if (mmap == null) {
 			throw new IllegalStateException(MessageFormat.format("No type id registry exists for object {0}", clazz));
@@ -90,7 +96,7 @@ public class NetworkEntityMetadataObjectRegistry {
 		return id;
 	}
 
-	public static int getTypeId(NetworkEntityMetadataObject<?> object, ProtocolVersion version) {
+	public static int getTypeId(@Nonnull NetworkEntityMetadataObject<?> object, @Nonnull ProtocolVersion version) {
 		return getTypeId(object.getClass(), version);
 	}
 

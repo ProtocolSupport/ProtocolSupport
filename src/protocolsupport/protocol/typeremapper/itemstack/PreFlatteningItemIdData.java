@@ -18,11 +18,14 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class PreFlatteningItemIdData {
 
-	protected static final int combinedLegacyStoneId = formLegacyCombinedId(Material.LEGACY_STONE.getId(), 0);
-	protected static final int[] toLegacyId = new int[MinecraftItemData.ITEM_COUNT];
-	protected static final Int2IntMap fromLegacyId = new Int2IntOpenHashMap();
+	private PreFlatteningItemIdData() {
+	}
 
-	protected static void register(int modernId, int legacyId) {
+	private static final int combinedLegacyStoneId = formLegacyCombinedId(Material.LEGACY_STONE.getId(), 0);
+	private static final int[] toLegacyId = new int[MinecraftItemData.ITEM_COUNT];
+	private static final Int2IntMap fromLegacyId = new Int2IntOpenHashMap();
+
+	private static void register(int modernId, int legacyId) {
 		toLegacyId[modernId] = legacyId;
 		fromLegacyId.put(legacyId, modernId);
 	}

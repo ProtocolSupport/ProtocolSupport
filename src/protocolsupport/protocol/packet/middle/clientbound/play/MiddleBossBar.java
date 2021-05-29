@@ -10,11 +10,11 @@ import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.UUIDSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 
-	public MiddleBossBar(MiddlePacketInit init) {
+	protected MiddleBossBar(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -64,7 +64,7 @@ public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 
 	protected enum Action {
 		ADD, REMOVE, UPDATE_PERCENT, UPDATE_TITLE, UPDATE_STYLE, UPDATE_FLAGS;
-		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
+		public static final EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookup<>(Action.class);
 	}
 
 }

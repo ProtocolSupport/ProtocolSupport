@@ -14,13 +14,13 @@ import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.protocol.types.GameMode;
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 
 	protected final PlayerListCache playerlistCache = cache.getPlayerListCache();
 
-	public MiddlePlayerListSetEntry(MiddlePacketInit init) {
+	protected MiddlePlayerListSetEntry(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -131,9 +131,9 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 
 	}
 
-	protected static enum Action {
+	protected enum Action {
 		ADD, GAMEMODE, PING, DISPLAY_NAME, REMOVE;
-		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
+		public static final EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookup<>(Action.class);
 	}
 
 }

@@ -11,6 +11,9 @@ import io.netty.buffer.ByteBuf;
 
 public class ArraySerializer {
 
+	private ArraySerializer() {
+	}
+
 	public static ByteBuf readShortByteArraySlice(ByteBuf from, int limit) {
 		int length = from.readShort();
 		MiscSerializer.checkLimit(length, limit);

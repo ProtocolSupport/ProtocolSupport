@@ -10,11 +10,11 @@ import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.serializer.UUIDSerializer;
-import protocolsupport.protocol.utils.EnumConstantLookups;
+import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleChat extends ClientBoundMiddlePacket {
 
-	public MiddleChat(MiddlePacketInit init) {
+	protected MiddleChat(MiddlePacketInit init) {
 		super(init);
 	}
 
@@ -25,7 +25,7 @@ public abstract class MiddleChat extends ClientBoundMiddlePacket {
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		message = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
-		position = MiscSerializer.readByteEnum(serverdata, EnumConstantLookups.MESSAGE_POSITION);
+		position = MiscSerializer.readByteEnum(serverdata, EnumConstantLookup.MESSAGE_POSITION);
 		sender = UUIDSerializer.readUUID2L(serverdata);
 	}
 

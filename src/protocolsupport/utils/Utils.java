@@ -11,9 +11,16 @@ import java.util.RandomAccess;
 import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class Utils {
 
-	public static String toStringAllFields(Object obj) {
+	private Utils() {
+	}
+
+	public static @Nonnull String toStringAllFields(@Nonnull Object obj) {
 		StringJoiner joiner = new StringJoiner(", ");
 		Class<?> clazz = obj.getClass();
 		do {
@@ -30,13 +37,13 @@ public class Utils {
 					}
 				}
 			} catch (IllegalAccessException e) {
-				throw new RuntimeException("Unable to get object fields values", e);
+				throw new UnchekedReflectionException("Unable to get object fields values", e);
 			}
 		} while ((clazz = clazz.getSuperclass()) != null);
 		return obj.getClass().getName() + "(" + joiner.toString() + ")";
 	}
 
-	public static <T> T getFromArrayOrNull(T[] array, int index) {
+	public static @Nullable <T> T getFromArrayOrNull(@Nonnull T[] array, @Nonnegative int index) {
 		if ((index >= 0) && (index < array.length)) {
 			return array[index];
 		} else {
@@ -44,18 +51,18 @@ public class Utils {
 		}
 	}
 
-	public static String clampString(String string, int limit) {
+	public static @Nonnull String clampString(@Nonnull String string, @Nonnegative int limit) {
 		return string.substring(0, string.length() > limit ? limit : string.length());
 	}
 
-	public static <T> ArrayList<T> createSingletonArrayList(T element) {
+	public static @Nonnull <T> ArrayList<T> createSingletonArrayList(@Nullable T element) {
 		ArrayList<T> list = new ArrayList<>(1);
 		list.add(element);
 		return list;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T, A extends List<T> & RandomAccess> List<A> splitList(A list, int limit) {
+	public static @Nonnull <T, A extends List<T> & RandomAccess> List<A> splitList(@Nonnull A list, @Nonnegative int limit) {
 		int size = list.size();
 		if (size <= limit) {
 			return Collections.singletonList(list);
@@ -74,7 +81,7 @@ public class Utils {
 		return result;
 	}
 
-	public static int ceilToBase(int number, int base) {
+	public static int ceilToBase(@Nonnegative int number, @Nonnegative int base) {
 		int ceil = (number / base) * base;
 		if (number != ceil) {
 			ceil += base;

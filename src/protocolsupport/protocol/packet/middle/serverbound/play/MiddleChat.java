@@ -7,7 +7,7 @@ import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleChat extends ServerBoundMiddlePacket {
 
-	public MiddleChat(MiddlePacketInit init) {
+	protected MiddleChat(MiddlePacketInit init) {
 		super(init);
 	}
 

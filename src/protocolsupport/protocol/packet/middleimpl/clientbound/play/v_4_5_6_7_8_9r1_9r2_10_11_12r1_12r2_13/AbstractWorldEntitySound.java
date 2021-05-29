@@ -8,7 +8,7 @@ import protocolsupport.protocol.utils.minecraftdata.MinecraftSoundData;
 
 public abstract class AbstractWorldEntitySound extends MiddleEntitySound {
 
-	public AbstractWorldEntitySound(MiddlePacketInit init) {
+	protected AbstractWorldEntitySound(MiddlePacketInit init) {
 		super(init);
 	}
 
