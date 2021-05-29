@@ -24,6 +24,10 @@ public class GenericIdSkipper {
 
 	public static final GenericSkippingRegistry<String, GenericSkippingTable<String>> ENCHANT = new GenericSkippingRegistry<String, GenericSkippingTable<String>>() {
 		{
+			registerSkipEntry(Enchantment.SOUL_SPEED, ProtocolVersionsHelper.DOWN_1_15_2);
+			registerSkipEntry(Enchantment.QUICK_CHARGE, ProtocolVersionsHelper.DOWN_1_13_2);
+			registerSkipEntry(Enchantment.PIERCING, ProtocolVersionsHelper.DOWN_1_13_2);
+			registerSkipEntry(Enchantment.MULTISHOT, ProtocolVersionsHelper.DOWN_1_13_2);
 			registerSkipEntry(Enchantment.CHANNELING, ProtocolVersionsHelper.DOWN_1_12_2);
 			registerSkipEntry(Enchantment.IMPALING, ProtocolVersionsHelper.DOWN_1_12_2);
 			registerSkipEntry(Enchantment.LOYALTY, ProtocolVersionsHelper.DOWN_1_12_2);
