@@ -24,26 +24,24 @@ public class NetworkEntityDataCache {
 		this.firstMeta = false;
 	}
 
-	protected static final double pos_s_to_real = 1 / 4096D;
-	protected static final long pos_real_to_s = 4096L;
 
-	protected long x;
-	protected long y;
-	protected long z;
+	protected double x;
+	protected double y;
+	protected double z;
 	protected float pitch;
 	protected float yaw;
 	protected byte headYaw;
 
 	public double getX() {
-		return x * pos_s_to_real;
+		return x;
 	}
 
 	public double getY() {
-		return y * pos_s_to_real;
+		return y;
 	}
 
 	public double getZ() {
-		return z * pos_s_to_real;
+		return z;
 	}
 
 	public float getPitch() {
@@ -74,10 +72,20 @@ public class NetworkEntityDataCache {
 		setYaw(PrimitiveTypeUtils.fromAngleB(yaw));
 	}
 
-	public void addLocation(short sX, short sY, short sZ) {
-		this.x += sX;
-		this.y += sY;
-		this.z += sZ;
+	protected static long toFixedPointPos(double pos) {
+		double fixedPos = pos * 4096D;
+		long fixedPosLong = (long) fixedPos;
+		return fixedPos < fixedPosLong ? fixedPosLong - 1L : fixedPosLong;
+	}
+
+	protected static double fromFixedPointPos(long fixedPos) {
+		return fixedPos / 4096D;
+	}
+
+	public void addLocation(short fpX, short fpY, short fpZ) {
+		this.x = fromFixedPointPos(toFixedPointPos(this.x) + fpX);
+		this.y = fromFixedPointPos(toFixedPointPos(this.y) + fpY);
+		this.z = fromFixedPointPos(toFixedPointPos(this.z) + fpZ);
 	}
 
 	public void setLook(byte pitch, byte yaw) {
@@ -86,15 +94,15 @@ public class NetworkEntityDataCache {
 	}
 
 	public void setX(double x) {
-		this.x = (long) (x * pos_real_to_s);
+		this.x = x;
 	}
 
 	public void setY(double y) {
-		this.y = (long) (y * pos_real_to_s);
+		this.y = y;
 	}
 
 	public void setZ(double z) {
-		this.z = (long) (z * pos_real_to_s);
+		this.z = z;
 	}
 
 	public void setPitch(float pitch) {
@@ -106,15 +114,15 @@ public class NetworkEntityDataCache {
 	}
 
 	public void addX(double x) {
-		this.x += (long) (x * pos_real_to_s);
+		this.x += x;
 	}
 
 	public void addY(double y) {
-		this.y += (long) (y * pos_real_to_s);
+		this.y += y;
 	}
 
 	public void addZ(double z) {
-		this.z += (long) (z * pos_real_to_s);
+		this.z += z;
 	}
 
 	public void addPitch(float pitch) {
