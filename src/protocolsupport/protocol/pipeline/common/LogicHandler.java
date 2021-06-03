@@ -59,7 +59,7 @@ public class LogicHandler extends MessageToMessageCodec<Object, Object> {
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) throws Exception {
 		boolean ignored = ignoreExceptions.contains(e.getClass());
 		if (!ignored && ProtocolSupportFileLog.isEnabled()) {
-			ProtocolSupportFileLog.logException("Network exception occured(connection: " + connection + ")", e);
+			ProtocolSupportFileLog.logWarningError("Network exception occured(connection: " + connection + ")", e);
 		}
 		if (ServerPlatform.get().getMiscUtils().isDebugging() && !ignored) {
 			super.exceptionCaught(ctx, new NetworkException(e, connection));

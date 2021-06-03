@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.netty.channel.ChannelFutureListener;
 import protocolsupport.ProtocolSupport;
+import protocolsupport.ProtocolSupportFileLog;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.protocol.ConnectionImpl;
@@ -24,7 +25,11 @@ public abstract class AbstractStatusListener {
 	protected static final int statusThreadKeepAlive = JavaSystemProperty.getValue("statusthreadskeepalive", 60, Integer::parseInt);
 
 	static {
-		ProtocolSupport.logInfo(MessageFormat.format("Status threads max count: {0}, keep alive time: {1}", statusThreads, statusThreadKeepAlive));
+		String message = MessageFormat.format("Status threads max count: {0}, keep alive time: {1}", statusThreads, statusThreadKeepAlive);
+		ProtocolSupport.logInfo(message);
+		if (ProtocolSupportFileLog.isEnabled()) {
+			ProtocolSupportFileLog.logInfoMessage(message);
+		}
 	}
 
 	protected static final Executor statusprocessor = new ThreadPoolExecutor(

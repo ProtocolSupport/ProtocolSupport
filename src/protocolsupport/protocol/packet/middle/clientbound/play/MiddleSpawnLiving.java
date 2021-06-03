@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.ProtocolSupport;
+import protocolsupport.ProtocolSupportFileLog;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.UUIDSerializer;
@@ -52,15 +53,22 @@ public abstract class MiddleSpawnLiving extends ClientBoundMiddlePacket {
 
 		if (type == NetworkEntityType.NONE) {
 			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
-				ProtocolSupport.logWarning(MessageFormat.format(
-					"Attempted to spawn unknown mob entity type id {0} at {1},{2},{3}",
-					typeId, x, y, z
-				));
+				ProtocolSupport.logWarning(createInvalidEntityMessage(typeId));
+			}
+			if (ProtocolSupportFileLog.isEnabled()) {
+				ProtocolSupportFileLog.logWarningMessage(createInvalidEntityMessage(typeId));
 			}
 			throw CancelMiddlePacketException.INSTANCE;
 		}
 
 		entity = NetworkEntity.createMob(uuid, entityId, type);
+	}
+
+	private String createInvalidEntityMessage(int typeId) {
+		return MessageFormat.format(
+			"Invalid mob entity type id {0} (x: {1}, y: {2}, z: {3})",
+			typeId, x, y, z
+		);
 	}
 
 	@Override

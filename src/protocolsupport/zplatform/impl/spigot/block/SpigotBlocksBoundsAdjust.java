@@ -31,7 +31,7 @@ public class SpigotBlocksBoundsAdjust {
 
 			ReflectionUtils.setStaticFinalFieldValue(BlockCarpet.class, "a", VoxelShapes.create(0, 0, 0, 1.0D, 0.00001, 1.0D));
 		} catch (Throwable t) {
-			ProtocolSupport.logError("Unable to inject custom block bounds", t);
+			ProtocolSupport.logErrorSevere("Unable to inject custom block bounds", t);
 		}
 
 		{

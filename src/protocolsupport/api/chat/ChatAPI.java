@@ -7,6 +7,7 @@ import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 
 import protocolsupport.ProtocolSupport;
+import protocolsupport.ProtocolSupportFileLog;
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.chat.components.BaseComponent;
@@ -52,7 +53,10 @@ public class ChatAPI {
 		} catch (Exception e) {
 			if (lenient) {
 				if (ServerPlatform.get().getMiscUtils().isDebugging()) {
-					ProtocolSupport.logError("Error parsing chat json " + json, e);
+					ProtocolSupport.logErrorSevere("Error parsing chat json " + json, e);
+				}
+				if (ProtocolSupportFileLog.isEnabled()) {
+					ProtocolSupportFileLog.logWarningError("Error parsing chat json " + json, e);
 				}
 				return new TextComponent(json);
 			} else {

@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import protocolsupport.ProtocolSupport;
+import protocolsupport.ProtocolSupportFileLog;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBlockData;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBoolean;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
@@ -54,10 +55,10 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 			return expectedDWObjectType.cast(object);
 		}
 		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
-			ProtocolSupport.logWarning(MessageFormat.format(
-				"Got wrong metadata type for entity type {0} index {1}, expected {2}, got {3}",
-				entityClass.getSimpleName(), index, expectedDWObjectType.getName(), object.getClass().getName()
-			));
+			ProtocolSupport.logWarning(createInvalidMetadataObjectMessage(object));
+		}
+		if (ProtocolSupportFileLog.isEnabled()) {
+			ProtocolSupportFileLog.logWarningMessage(createInvalidMetadataObjectMessage(object));
 		}
 		return null;
 	}
@@ -72,10 +73,10 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 			return;
 		}
 		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
-			ProtocolSupport.logWarning(MessageFormat.format(
-				"Attempted to set wrong metadata type for entity type {0} index {1}, expected {2}, got {3}",
-				entityClass.getSimpleName(), index, expectedDWObjectType.getName(), object.getClass().getName()
-			));
+			ProtocolSupport.logWarning(createInvalidMetadataObjectMessage(object));
+		}
+		if (ProtocolSupportFileLog.isEnabled()) {
+			ProtocolSupportFileLog.logWarningMessage(createInvalidMetadataObjectMessage(object));
 		}
 	}
 
@@ -89,12 +90,19 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 			return true;
 		}
 		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
-			ProtocolSupport.logWarning(MessageFormat.format(
-				"Got wrong metadata type for entity type {0} index {1}, expected {2}, got {3}",
-				entityClass.getSimpleName(), index, expectedDWObjectType.getName(), object.getClass().getName()
-			));
+			ProtocolSupport.logWarning(createInvalidMetadataObjectMessage(object));
+		}
+		if (ProtocolSupportFileLog.isEnabled()) {
+			ProtocolSupportFileLog.logWarningMessage(createInvalidMetadataObjectMessage(object));
 		}
 		return false;
+	}
+
+	private String createInvalidMetadataObjectMessage(NetworkEntityMetadataObject<?> object) {
+		return MessageFormat.format(
+			"Invalid metadata type {0} (entity type: {1}, index: {2}) - expected {3}",
+			object.getClass().getSimpleName(), entityClass.getSimpleName(), index, expectedDWObjectType.getSimpleName()
+		);
 	}
 
 	public static class Entity {

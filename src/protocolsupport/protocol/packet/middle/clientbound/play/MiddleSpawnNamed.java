@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.ProtocolSupport;
+import protocolsupport.ProtocolSupportFileLog;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.UUIDSerializer;
@@ -47,13 +48,20 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 		playerlistEntry = playerlistCache.getEntry(uuid);
 		if (playerlistEntry == null) {
 			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
-				ProtocolSupport.logWarning(MessageFormat.format(
-					"Attempted to spawn unknown (not added to playerlist) named entity uid {0} at {1},{2},{3}",
-					uuid, x, y, z
-				));
+				ProtocolSupport.logWarning(createInvalidEntityMessage(uuid));
+			}
+			if (ProtocolSupportFileLog.isEnabled()) {
+				ProtocolSupportFileLog.logWarningMessage(createInvalidEntityMessage(uuid));
 			}
 			throw CancelMiddlePacketException.INSTANCE;
 		}
+	}
+
+	private String createInvalidEntityMessage(UUID uuid) {
+		return MessageFormat.format(
+			"Attempted to spawn unknown (not added to playerlist) named entity (uid: {0}, x: {1}, y: {2}, z: {3})",
+			uuid, x, y, z
+		);
 	}
 
 	@Override

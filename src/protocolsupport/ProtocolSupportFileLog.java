@@ -40,30 +40,36 @@ public class ProtocolSupportFileLog {
 		try {
 			Files.createDirectories(Paths.get(logDirectoryPath));
 			Logger logger = Logger.getLogger("psfilelog");
+			logger.setUseParentHandlers(false);
 			FileHandler filehandler = new FileHandler(logDirectoryPath + "/psfilelog.%g.log", false);
 			filehandler.setEncoding(StandardCharsets.UTF_8.name());
 			filehandler.setFormatter(new Formatter() {
 				final DateTimeFormatter dtf = new DateTimeFormatterBuilder().append(DateTimeFormatter.ISO_LOCAL_DATE).appendLiteral(' ').append(DateTimeFormatter.ISO_LOCAL_TIME).toFormatter();
 				@Override
-				public String format(LogRecord record) {
-					String message = "["+ dtf.format(LocalDateTime.now()) + "] [" + record.getLevel().getLocalizedName() + "] " + record.getMessage();
-					Throwable thrown = record.getThrown();
-					if (thrown != null) {
-						StringWriter sw = new StringWriter();
-						PrintWriter pw = new PrintWriter(sw);
+				public String format(LogRecord logrecord) {
+					StringWriter sw = new StringWriter();
+					try (PrintWriter pw = new PrintWriter(sw)) {
+						pw.append("[");
+						pw.append(dtf.format(LocalDateTime.now()));
+						pw.append("] ");
+						pw.append("[");
+						pw.append(logrecord.getLevel().getLocalizedName());
+						pw.append("] ");
+						pw.append(logrecord.getMessage());
 						pw.println();
-						thrown.printStackTrace(pw);
-						pw.close();
-						message += sw.toString();
+						Throwable thrown = logrecord.getThrown();
+						if (thrown != null) {
+							thrown.printStackTrace(pw);
+						}
 					}
-					return message;
+					return sw.toString();
 				}
 			});
 			logger.addHandler(filehandler);
 			ProtocolSupport.logInfo("File log is enabled and is using directory " + logDirectoryPath);
 			return logger;
 		} catch (Throwable e) {
-			ProtocolSupport.logError("Unable to setup filelog", e);
+			ProtocolSupport.logErrorSevere("Unable to setup filelog", e);
 			return null;
 		}
 	}
@@ -72,8 +78,24 @@ public class ProtocolSupportFileLog {
 		return log != null;
 	}
 
-	public static void logException(@Nonnull String string, @Nonnull Throwable e) {
-		executor.execute(() -> log.log(Level.WARNING, string, e));
+	public static void logError(@Nonnull Level level, @Nonnull String string, @Nonnull Throwable e) {
+		executor.execute(() -> log.log(level, string, e));
+	}
+
+	public static void logWarningError(@Nonnull String string, @Nonnull Throwable e) {
+		logError(Level.WARNING, string, e);
+	}
+
+	public static void logMessage(@Nonnull Level level, @Nonnull String message) {
+		executor.execute(() -> log.log(level, message));
+	}
+
+	public static void logInfoMessage(@Nonnull String message) {
+		logMessage(Level.INFO, message);
+	}
+
+	public static void logWarningMessage(@Nonnull String message) {
+		logMessage(Level.WARNING, message);
 	}
 
 }

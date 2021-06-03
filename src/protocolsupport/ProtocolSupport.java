@@ -55,6 +55,10 @@ public class ProtocolSupport extends JavaPlugin {
 			getLogger().severe("Unable to load buildinfo, make sure you built this version using Gradle");
 			return;
 		}
+		if (ProtocolSupportFileLog.isEnabled()) {
+			ProtocolSupportFileLog.logInfoMessage("Server version: " + Bukkit.getVersion());
+			ProtocolSupportFileLog.logInfoMessage("ProtocolSupport version: " + buildinfo.toString());
+		}
 		try {
 			ServerPlatform.detect();
 		} catch (Throwable t) {
@@ -129,18 +133,6 @@ public class ProtocolSupport extends JavaPlugin {
 		ServerPlatform.get().getInjector().onDisable();
 	}
 
-	public static void logInfo(String message) {
-		ProtocolSupport.getInstance().getLogger().info(message);
-	}
-
-	public static void logWarning(String message) {
-		ProtocolSupport.getInstance().getLogger().warning(message);
-	}
-
-	public static void logError(String message, Throwable t) {
-		ProtocolSupport.getInstance().getLogger().log(Level.SEVERE, message, t);
-	}
-
 	public static class BuildInfo {
 		public final String buildtime;
 		public final String buildhost;
@@ -158,6 +150,28 @@ public class ProtocolSupport extends JavaPlugin {
 		public String toString() {
 			return Utils.toStringAllFields(this);
 		}
+	}
+
+
+	public static Logger getStaticLogger() {
+		ProtocolSupport instance = getInstance();
+		return instance != null ? instance.getLogger() : Logger.getLogger("ProtocolSupport");
+	}
+
+	public static void logInfo(String message) {
+		getStaticLogger().info(message);
+	}
+
+	public static void logWarning(String message) {
+		getStaticLogger().warning(message);
+	}
+
+	public static void logErrorSevere(String message, Throwable t) {
+		getStaticLogger().log(Level.SEVERE, message, t);
+	}
+
+	public static void logErrorWarning(String message, Throwable t) {
+		getStaticLogger().log(Level.WARNING, message, t);
 	}
 
 }

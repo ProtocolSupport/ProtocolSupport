@@ -1,10 +1,12 @@
 package protocolsupport.utils.netty;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.zip.Deflater;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.ProtocolSupport;
+import protocolsupport.ProtocolSupportFileLog;
 import protocolsupport.utils.JavaSystemProperty;
 
 public class Compressor {
@@ -12,7 +14,11 @@ public class Compressor {
 	protected static final int compressionLevel = JavaSystemProperty.getValue("compressionlevel", 3, Integer::parseInt);
 
 	static {
-		ProtocolSupport.logInfo("Compression level: " + compressionLevel);
+		String message = MessageFormat.format("Compression level: {0}", compressionLevel);
+		ProtocolSupport.logInfo(message);
+		if (ProtocolSupportFileLog.isEnabled()) {
+			ProtocolSupportFileLog.logInfoMessage(message);
+		}
 	}
 
 	protected final Deflater deflater;

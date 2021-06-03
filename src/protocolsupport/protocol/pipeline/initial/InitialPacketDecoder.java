@@ -12,6 +12,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderException;
 import io.netty.util.concurrent.Future;
 import protocolsupport.ProtocolSupport;
+import protocolsupport.ProtocolSupportFileLog;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
@@ -40,8 +41,20 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	protected static final int pingLegacyDelay = JavaSystemProperty.getValue("pinglegacydelay", 200, Integer::parseInt);
 
 	static {
-		ProtocolSupport.logInfo("Assume 1.5.2 ping delay: " + ping152delay);
-		ProtocolSupport.logInfo("Assume legacy ping delay: " + pingLegacyDelay);
+		{
+			String message = MessageFormat.format("Assume 1.5.2 ping delay: {0}", ping152delay);
+			ProtocolSupport.logInfo(message);
+			if (ProtocolSupportFileLog.isEnabled()) {
+				ProtocolSupportFileLog.logInfoMessage(message);
+			}
+		}
+		{
+			String message = MessageFormat.format("Assume legacy ping delay: {0}", pingLegacyDelay);
+			ProtocolSupport.logInfo(message);
+			if (ProtocolSupportFileLog.isEnabled()) {
+				ProtocolSupportFileLog.logInfoMessage(message);
+			}
+		}
 	}
 
 	protected static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<>(ProtocolVersion.class);

@@ -26,6 +26,7 @@ import org.bukkit.event.player.PlayerPreLoginEvent;
 
 import io.netty.channel.ChannelPipeline;
 import protocolsupport.ProtocolSupport;
+import protocolsupport.ProtocolSupportFileLog;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
@@ -50,7 +51,11 @@ public abstract class AbstractLoginListener implements IPacketListener {
 	protected static final int loginThreadKeepAlive = JavaSystemProperty.getValue("loginthreadskeepalive", 60, Integer::parseInt);
 
 	static {
-		ProtocolSupport.logInfo(MessageFormat.format("Login threads keep alive time: {0}", loginThreadKeepAlive));
+		String message = MessageFormat.format("Login threads keep alive time: {0}", loginThreadKeepAlive);
+		ProtocolSupport.logInfo(message);
+		if (ProtocolSupportFileLog.isEnabled()) {
+			ProtocolSupportFileLog.logInfoMessage(message);
+		}
 	}
 
 	protected static final Executor loginprocessor = new ThreadPoolExecutor(

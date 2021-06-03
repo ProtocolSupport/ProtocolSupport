@@ -4,7 +4,6 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
 
@@ -154,8 +153,8 @@ public class ConnectionImpl extends Connection {
 					return;
 				}
 				task.run();
-			} catch (Exception e) {
-				ProtocolSupport.getInstance().getLogger().log(Level.WARNING, "Unhandled exception occured in task submitted to event loop", e);
+			} catch (Throwable e) {
+				ProtocolSupport.logErrorWarning("Unhandled exception occured in task submitted to event loop", e);
 			}
 		});
 	}
@@ -227,6 +226,7 @@ public class ConnectionImpl extends Connection {
 		}
 
 		protected final Handle<LPacketEvent> handle;
+
 		protected LPacketEvent(Handle<LPacketEvent> handle) {
 			this.handle = handle;
 		}
@@ -251,8 +251,7 @@ public class ConnectionImpl extends Connection {
 				try {
 					listener.onPacketSending(packetevent);
 				} catch (Throwable t) {
-					System.err.println("Error occured while handling packet sending");
-					t.printStackTrace();
+					ProtocolSupport.logErrorWarning("Unhandled exception occured while handling packet sending", t);
 				}
 			}
 			if (!packetevent.isCancelled()) {
@@ -267,8 +266,7 @@ public class ConnectionImpl extends Connection {
 				try {
 					listener.onPacketReceiving(packetevent);
 				} catch (Throwable t) {
-					System.err.println("Error occured while handling packet receiving");
-					t.printStackTrace();
+					ProtocolSupport.logErrorWarning("Unhandled exception occured while handling packet receiving", t);
 				}
 			}
 			if (!packetevent.isCancelled()) {
@@ -319,8 +317,7 @@ public class ConnectionImpl extends Connection {
 				try {
 					listener.onRawPacketSending(rawpacketevent);
 				} catch (Throwable t) {
-					System.err.println("Error occured while handling raw packet sending");
-					t.printStackTrace();
+					ProtocolSupport.logErrorWarning("Unhandled exception occured while handling raw packet sending", t);
 				}
 			}
 			if (rawpacketevent.isCancelled()) {
@@ -338,8 +335,7 @@ public class ConnectionImpl extends Connection {
 				try {
 					listener.onRawPacketReceiving(rawpacketevent);
 				} catch (Throwable t) {
-					System.err.println("Error occured while handling raw packet receiving");
-					t.printStackTrace();
+					ProtocolSupport.logErrorWarning("Unhandled exception occured while handling rawpacket receiving", t);
 				}
 			}
 			if (rawpacketevent.isCancelled()) {
