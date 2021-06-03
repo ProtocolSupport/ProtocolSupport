@@ -27,7 +27,7 @@ public class SpawnObject extends AbstractRemappedSpawnObject {
 		serializer.writeDouble(z);
 		serializer.writeByte(pitch);
 		serializer.writeByte(yaw);
-		serializer.writeInt(rObjectdata);
+		serializer.writeInt(fObjectdata);
 		serializer.writeShort(velX);
 		serializer.writeShort(velY);
 		serializer.writeShort(velZ);

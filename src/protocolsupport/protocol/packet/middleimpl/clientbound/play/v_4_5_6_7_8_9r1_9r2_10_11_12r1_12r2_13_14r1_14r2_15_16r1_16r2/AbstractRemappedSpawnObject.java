@@ -2,13 +2,15 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnObject;
-import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry;
-import protocolsupport.protocol.typeremapper.basic.ObjectDataRemappersRegistry.ObjectDataRemappingTable;
 import protocolsupport.protocol.typeremapper.entity.NetworkEntityLegacyLocationOffset;
 import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry;
 import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry.NetworkEntityLegacyFormatTable;
+import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyObjectdataFormatRegistry;
+import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyObjectdataFormatRegistry.NetworkEntityLegacyObjectdataFormatTable;
 import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry.NetworkEntityLegacyDataTable;
+import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyObjectdataDataRegistry;
+import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyObjectdataDataRegistry.NetworkEntityLegacyObjectdataDataTable;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class AbstractRemappedSpawnObject extends MiddleSpawnObject {
@@ -18,13 +20,16 @@ public abstract class AbstractRemappedSpawnObject extends MiddleSpawnObject {
 	}
 
 	protected final NetworkEntityLegacyDataTable entityLegacyDataTable = NetworkEntityLegacyDataRegistry.INSTANCE.getTable(version);
+	protected final NetworkEntityLegacyObjectdataDataTable entityLegacyObjectdataDataTable = NetworkEntityLegacyObjectdataDataRegistry.INSTANCE.getTable(version);
 	protected final NetworkEntityLegacyFormatTable entityLegacyFormatTable = NetworkEntityLegacyFormatRegistry.INSTANCE.getTable(version);
-	protected final ObjectDataRemappingTable entityObjectDataRemapTable = ObjectDataRemappersRegistry.REGISTRY.getTable(version);
+	protected final NetworkEntityLegacyObjectdataFormatTable entityLegacyObjectdataFormatTable = NetworkEntityLegacyObjectdataFormatRegistry.INSTANCE.getTable(version);
 	protected final NetworkEntityLegacyLocationOffset entityLegacyOffset = NetworkEntityLegacyLocationOffset.get(version);
 
 	protected NetworkEntityType lType;
+	protected int lObjectdata;
+
 	protected NetworkEntityType fType;
-	protected int rObjectdata;
+	protected int fObjectdata;
 
 	@Override
 	protected void handle() {
@@ -37,8 +42,9 @@ public abstract class AbstractRemappedSpawnObject extends MiddleSpawnObject {
 		super.handle();
 
 		lType = lLType;
+		lObjectdata = entityLegacyObjectdataDataTable.get(lLType).applyAsInt(objectdata);
 		fType = entityLegacyFormatTable.get(lLType).getType();
-		rObjectdata = entityObjectDataRemapTable.getRemap(lLType).applyAsInt(objectdata);
+		fObjectdata = entityLegacyObjectdataFormatTable.get(fType).applyAsInt(lObjectdata);
 		NetworkEntityLegacyLocationOffset.Offset offset = entityLegacyOffset.get(lLType);
 		if (offset != null) {
 			x += offset.getX();

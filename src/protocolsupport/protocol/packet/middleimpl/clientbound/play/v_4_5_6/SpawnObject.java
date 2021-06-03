@@ -15,7 +15,7 @@ public class SpawnObject extends AbstractPotionItemAsObjectDataSpawnObject {
 
 	@Override
 	protected void writeSpawnObject() {
-		codec.writeClientbound(create(entity.getId(), fType, x, y, z, pitch, yaw, rObjectdata, velX, velY, velZ));
+		codec.writeClientbound(create(entity.getId(), fType, x, y, z, pitch, yaw, fObjectdata, velX, velY, velZ));
 	}
 
 	public static ClientBoundPacketData create(
