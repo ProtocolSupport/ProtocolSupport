@@ -15,14 +15,14 @@ import io.netty.buffer.ByteBufAllocator;
 import io.netty.util.ByteProcessor;
 import io.netty.util.internal.StringUtil;
 
-public class WrappingBuffer extends ByteBuf {
+public class WrappingByteBuf extends ByteBuf {
 
 	protected ByteBuf buf;
 
-	public WrappingBuffer() {
+	public WrappingByteBuf() {
 	}
 
-	public WrappingBuffer(ByteBuf buf) {
+	public WrappingByteBuf(ByteBuf buf) {
 		this.buf = buf;
 	}
 

@@ -13,7 +13,7 @@ import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketDataSerializer;
 import net.minecraft.server.v1_16_R3.PacketListener;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.netty.WrappingBuffer;
+import protocolsupport.utils.netty.WrappingByteBuf;
 
 public class SpigotPacketEncoder extends MessageToByteEncoder<Packet<PacketListener>> {
 
@@ -21,7 +21,7 @@ public class SpigotPacketEncoder extends MessageToByteEncoder<Packet<PacketListe
 		super(false);
 	}
 
-	private final WrappingBuffer wrapper = new WrappingBuffer();
+	private final WrappingByteBuf wrapper = new WrappingByteBuf();
 	private final PacketDataSerializer nativeSerializer = new PacketDataSerializer(wrapper);
 
 	@Override

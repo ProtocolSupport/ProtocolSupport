@@ -13,11 +13,11 @@ import net.minecraft.server.v1_16_R3.NetworkManager;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketDataSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.utils.netty.WrappingBuffer;
+import protocolsupport.utils.netty.WrappingByteBuf;
 
 public class SpigotPacketDecoder extends ByteToMessageDecoder {
 
-	private final WrappingBuffer wrapper = new WrappingBuffer();
+	private final WrappingByteBuf wrapper = new WrappingByteBuf();
 	private final PacketDataSerializer nativeSerializer = new PacketDataSerializer(wrapper);
 
 	@Override

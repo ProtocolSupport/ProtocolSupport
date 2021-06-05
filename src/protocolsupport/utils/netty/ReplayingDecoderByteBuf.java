@@ -22,7 +22,7 @@ public final class ReplayingDecoderByteBuf extends ByteBuf {
 
 	public static final EOFSignal EOF = new EOFSignal();
 
-	private ByteBuf buf;
+	private final ByteBuf buf;
 	private SwappedByteBuf swapped;
 
 	public ReplayingDecoderByteBuf(ByteBuf buffer) {
