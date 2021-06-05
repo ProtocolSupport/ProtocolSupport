@@ -211,7 +211,10 @@ public class NetworkEntityLegacyFormatRegistry extends MappingRegistry<NetworkEn
 
 		registerSimple(NetworkEntityType.GUARDIAN, GuardianNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_8);
 
-		registerSimple(NetworkEntityType.ELDER_GUARDIAN, GuardianNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_11);
+		new Mapping(NetworkEntityType.ELDER_GUARDIAN)
+		.add(NetworkEntityType.ELDER_GUARDIAN, GuardianNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+		.add(NetworkEntityType.GUARDIAN, new GuardianNetworkEntityMetadataFormatTransformerFactory(true), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_10))
+		.register();
 
 		registerSimple(NetworkEntityType.VINDICATOR, IllagerNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_11);
 

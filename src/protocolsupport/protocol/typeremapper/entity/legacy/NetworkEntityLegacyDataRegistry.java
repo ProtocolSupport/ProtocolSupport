@@ -185,10 +185,8 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		.add(NetworkEntityType.SQUID, ProtocolVersionsHelper.DOWN_1_7_10)
 		.register();
 
-		//TODO: elder guardian did exist, but was a meta flag, so it shouldn't map to guardian, and the legacy format should take care of that instead
 		new Mapping(NetworkEntityType.ELDER_GUARDIAN)
-		.add(NetworkEntityType.ELDER_GUARDIAN, ProtocolVersionsHelper.UP_1_11)
-		.add(NetworkEntityType.GUARDIAN, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_10, ProtocolVersion.MINECRAFT_1_8))
+		.add(NetworkEntityType.ELDER_GUARDIAN, ProtocolVersionsHelper.UP_1_8)
 		.add(NetworkEntityType.SQUID, ProtocolVersionsHelper.DOWN_1_7_10)
 		.register();
 
