@@ -6,6 +6,7 @@ import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.Netwo
 import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry.NetworkEntityLegacyFormatTable;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.object.NetworkEntityMetadataFormatTransformer;
 import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry.NetworkEntityLegacyDataEntry;
+import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry.NetworkEntityLegacyDataTable;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
@@ -14,6 +15,10 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 public class NetworkEntityTransformHelper {
 
 	private NetworkEntityTransformHelper() {
+	}
+
+	public static NetworkEntityType transformTypeFormat(NetworkEntityType type, NetworkEntityLegacyDataTable dataTable, NetworkEntityLegacyFormatTable formatTable) {
+		return formatTable.get(dataTable.get(type).getType()).getType();
 	}
 
 	public static void transformMetadata(

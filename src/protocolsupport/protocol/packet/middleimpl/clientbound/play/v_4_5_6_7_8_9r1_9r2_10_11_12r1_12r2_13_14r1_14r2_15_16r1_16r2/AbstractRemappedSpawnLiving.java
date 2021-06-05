@@ -2,9 +2,10 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnLiving;
-import protocolsupport.protocol.typeremapper.entity.NetworkEntityLegacyLocationOffset;
 import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry;
 import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry.NetworkEntityLegacyFormatTable;
+import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyLocationOffsetRegistry;
+import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyLocationOffsetRegistry.NetworkEntityLegacyLocationOffsetTable;
 import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry.NetworkEntityLegacyDataTable;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
@@ -17,7 +18,7 @@ public abstract class AbstractRemappedSpawnLiving extends MiddleSpawnLiving {
 
 	protected final NetworkEntityLegacyDataTable entityLegacyDataTable = NetworkEntityLegacyDataRegistry.INSTANCE.getTable(version);
 	protected final NetworkEntityLegacyFormatTable entityLegacyFormatTable = NetworkEntityLegacyFormatRegistry.INSTANCE.getTable(version);
-	protected final NetworkEntityLegacyLocationOffset entityLegacyOffset = NetworkEntityLegacyLocationOffset.get(version);
+	protected final NetworkEntityLegacyLocationOffsetTable entityLegacyLocationOffsetTable = NetworkEntityLegacyLocationOffsetRegistry.INSTANCE.getTable(version);
 
 	protected NetworkEntityType lType;
 	protected NetworkEntityType fType;
@@ -34,7 +35,7 @@ public abstract class AbstractRemappedSpawnLiving extends MiddleSpawnLiving {
 
 		lType = lLType;
 		fType = entityLegacyFormatTable.get(lType).getType();
-		NetworkEntityLegacyLocationOffset.Offset offset = entityLegacyOffset.get(lLType);
+		NetworkEntityLegacyLocationOffsetRegistry.LocationOffset offset = entityLegacyLocationOffsetTable.get(fType);
 		if (offset != null) {
 			x += offset.getX();
 			y += offset.getY();

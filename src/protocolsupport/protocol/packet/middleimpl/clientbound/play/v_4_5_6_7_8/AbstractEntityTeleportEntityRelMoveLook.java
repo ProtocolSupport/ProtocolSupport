@@ -16,10 +16,10 @@ public abstract class AbstractEntityTeleportEntityRelMoveLook extends AbstractLo
 		double x = ecache.getX();
 		double y = ecache.getY();
 		double z = ecache.getZ();
-		if (entityLegacyOffsetEntry != null) {
-			x += entityLegacyOffsetEntry.getX();
-			y += entityLegacyOffsetEntry.getY();
-			z += entityLegacyOffsetEntry.getZ();
+		if (entityLegacyLocationOffset != null) {
+			x += entityLegacyLocationOffset.getX();
+			y += entityLegacyLocationOffset.getY();
+			z += entityLegacyLocationOffset.getZ();
 		}
 		writeTeleport(x, y, z, yaw, pitch, onGround);
 	}
