@@ -1,27 +1,30 @@
 package protocolsupport.protocol.types;
 
-//TODO: enums for type and profession
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
+//TODO: enum for type
 public class VillagerData {
 
 	protected final int type;
-	protected final int profession;
+	protected final VillagerProfession profession;
 	protected final int level;
 
-	public VillagerData(int type, int profession, int level) {
+	public VillagerData(@Nonnegative int type, @Nonnull VillagerProfession profession, @Nonnegative int level) {
 		this.type = type;
 		this.profession = profession;
 		this.level = level;
 	}
 
-	public int getType() {
+	public @Nonnegative int getType() {
 		return type;
 	}
 
-	public int getProfession() {
+	public @Nonnull VillagerProfession getProfession() {
 		return profession;
 	}
 
-	public int getLevel() {
+	public @Nonnegative int getLevel() {
 		return level;
 	}
 

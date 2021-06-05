@@ -34,4 +34,12 @@ public class EnumConstantLookup<T extends Enum<T>> {
 		}
 	}
 
+	public @Nonnull T getByOrdinalOrDefault(@Nonnegative int ordinal, @Nonnull T defaultValue) {
+		if ((ordinal >= 0) && (ordinal < enumConstans.length)) {
+			return enumConstans[ordinal];
+		} else {
+			return defaultValue;
+		}
+	}
+
 }

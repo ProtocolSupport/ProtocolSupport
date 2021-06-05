@@ -130,11 +130,7 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 
 		registerNoop(NetworkEntityType.ZOMBIE);
 
-		//TODO: zombie villager did exist, but it was a meta flag on zombie type before, so this should be noop
-		new Mapping(NetworkEntityType.ZOMBIE_VILLAGER)
-		.add(NetworkEntityType.ZOMBIE_VILLAGER, ProtocolVersionsHelper.UP_1_11)
-		.add(NetworkEntityType.ZOMBIE, ProtocolVersionsHelper.DOWN_1_10)
-		.register();
+		registerNoop(NetworkEntityType.ZOMBIE_VILLAGER);
 
 		new Mapping(NetworkEntityType.HUSK)
 		.add(NetworkEntityType.HUSK, ProtocolVersionsHelper.UP_1_11)

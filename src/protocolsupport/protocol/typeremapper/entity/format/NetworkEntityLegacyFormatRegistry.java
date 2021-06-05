@@ -65,6 +65,7 @@ import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.tameable.CatNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.tameable.ParrotNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.tameable.WolfNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.zombie.LegacyZombieVillagerNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.zombie.ZombieNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.zombie.ZombieVillagerNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.object.AreaEffectNetworkEntityMetadataFormatTransformerFactory;
@@ -167,7 +168,10 @@ public class NetworkEntityLegacyFormatRegistry extends MappingRegistry<NetworkEn
 
 		registerSimple(NetworkEntityType.ZOMBIE, ZombieNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
 
-		registerSimple(NetworkEntityType.ZOMBIE_VILLAGER, ZombieVillagerNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_11);
+		new Mapping(NetworkEntityType.ZOMBIE_VILLAGER)
+		.add(NetworkEntityType.ZOMBIE_VILLAGER, ZombieVillagerNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_11)
+		.add(NetworkEntityType.ZOMBIE, LegacyZombieVillagerNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.DOWN_1_10)
+		.register();
 
 		registerSimple(NetworkEntityType.HUSK, ZombieNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_11);
 
