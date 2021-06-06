@@ -269,11 +269,7 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		.add(NetworkEntityType.SPIDER, SpiderInitDefaultMetadataTransformer.INSTANCE, ProtocolVersionsHelper.DOWN_1_9_4)
 		.register();
 
-		//TODO: technically did exist, just it was ocelot with special metadata, so it should be noop
-		new Mapping(NetworkEntityType.CAT)
-		.add(NetworkEntityType.CAT, ProtocolVersionsHelper.UP_1_14)
-		.add(NetworkEntityType.OCELOT, ProtocolVersionsHelper.DOWN_1_13_2)
-		.register();
+		registerNoop(NetworkEntityType.CAT);
 
 		new Mapping(NetworkEntityType.FOX)
 		.add(NetworkEntityType.FOX, ProtocolVersionsHelper.UP_1_14)

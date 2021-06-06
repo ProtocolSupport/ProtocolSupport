@@ -63,6 +63,7 @@ import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.skeleton.LegacyStrayNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.skeleton.LegacyWitherSkeletonNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.tameable.CatNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.tameable.LegacyCatNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.tameable.ParrotNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.tameable.WolfNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.zombie.LegacyZombieVillagerNetworkEntityMetadataFormatTransformerFactory;
@@ -250,7 +251,10 @@ public class NetworkEntityLegacyFormatRegistry extends MappingRegistry<NetworkEn
 
 		registerSimple(NetworkEntityType.PANDA, PandaNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_14);
 
-		registerSimple(NetworkEntityType.CAT, CatNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_14);
+		new Mapping(NetworkEntityType.CAT)
+		.add(NetworkEntityType.CAT, CatNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_14)
+		.add(NetworkEntityType.OCELOT, LegacyCatNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.DOWN_1_13_2)
+		.register();
 
 		registerSimple(NetworkEntityType.FOX, FoxNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_14);
 
