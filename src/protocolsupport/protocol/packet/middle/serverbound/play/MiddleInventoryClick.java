@@ -38,7 +38,7 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 	public static final int MODE_DOUBLE_CLICK = 6;
 
 	public static ServerBoundPacketData create(int windowId, int mode, int button, int slot, SlotItem[] modifiedSlot, NetworkItemStack clickedItem) {
-		ServerBoundPacketData inventoryclickPacket = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_WINDOW_CLICK);
+		ServerBoundPacketData inventoryclickPacket = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_WINDOW_CLICK);
 		inventoryclickPacket.writeByte(windowId);
 		inventoryclickPacket.writeShort(slot);
 		inventoryclickPacket.writeByte(button);

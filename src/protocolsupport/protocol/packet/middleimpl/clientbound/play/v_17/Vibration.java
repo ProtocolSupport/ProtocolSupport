@@ -13,7 +13,7 @@ public class Vibration extends MiddleVibration {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData vibrationPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_VIBRATION);
+		ClientBoundPacketData vibrationPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_VIBRATION);
 		VibrationPath.writeNetworkData(vibrationPacket, path);
 		codec.writeClientbound(vibrationPacket);
 	}

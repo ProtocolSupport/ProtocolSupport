@@ -21,7 +21,7 @@ public abstract class MiddleCreativeSetSlot extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int slot, NetworkItemStack itemstack) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_CREATIVE_SET_SLOT);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_CREATIVE_SET_SLOT);
 		creator.writeShort(slot);
 		ItemStackSerializer.writeItemStack(creator, itemstack);
 		return creator;

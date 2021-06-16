@@ -19,7 +19,7 @@ public abstract class MiddleChat extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(String message) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_CHAT);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_CHAT);
 		StringSerializer.writeVarIntUTF8String(creator, message);
 		return creator;
 	}

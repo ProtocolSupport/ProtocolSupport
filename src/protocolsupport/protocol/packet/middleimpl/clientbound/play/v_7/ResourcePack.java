@@ -15,7 +15,7 @@ public class ResourcePack extends MiddleResourcePack {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData resourcepack = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
+		ClientBoundPacketData resourcepack = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeVarIntUTF8String(resourcepack, "MC|RPack");
 		MiscSerializer.writeShortLengthPrefixedType(resourcepack, url, ByteBufUtil::writeUtf8);
 		codec.writeClientbound(resourcepack);

@@ -20,7 +20,7 @@ public class EntityAttributes extends MiddleEntityAttributes {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData entityattributes = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_ATTRIBUTES);
+		ClientBoundPacketData entityattributes = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_ATTRIBUTES);
 		GenericSkippingTable<String> table = GenericIdSkipper.ATTRIBUTES.getTable(version);
 		ArrayList<Attribute> sendattrs = new ArrayList<>();
 		for (Attribute attribute : attributes.values()) {

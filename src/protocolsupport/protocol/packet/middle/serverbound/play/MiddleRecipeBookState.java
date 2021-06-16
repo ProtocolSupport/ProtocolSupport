@@ -22,7 +22,7 @@ public abstract class MiddleRecipeBookState extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(RecipeBookType bookType, boolean bookOpen, boolean bookFiltering) {
-		ServerBoundPacketData recipebookstate = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_RECIPE_BOOK_STATE);
+		ServerBoundPacketData recipebookstate = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_RECIPE_BOOK_STATE);
 		MiscSerializer.writeVarIntEnum(recipebookstate, bookType);
 		recipebookstate.writeBoolean(bookOpen);
 		recipebookstate.writeBoolean(bookFiltering);

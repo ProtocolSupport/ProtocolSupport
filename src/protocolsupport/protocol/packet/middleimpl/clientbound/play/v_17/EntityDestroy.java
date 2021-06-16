@@ -13,7 +13,7 @@ public class EntityDestroy extends MiddleEntityDestroy {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData entitydestroyPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY);
+		ClientBoundPacketData entitydestroyPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_DESTROY);
 		VarNumberSerializer.writeVarInt(entitydestroyPacket, entityId);
 		codec.writeClientbound(entitydestroyPacket);
 	}

@@ -55,7 +55,7 @@ public class SpawnObject extends AbstractPotionItemAsObjectDataSpawnObject {
 			}
 		}
 
-		ClientBoundPacketData spawnobject = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
+		ClientBoundPacketData spawnobject = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SPAWN_OBJECT);
 		VarNumberSerializer.writeVarInt(spawnobject, entityId);
 		spawnobject.writeByte(LegacyEntityId.getObjectIntId(type));
 		spawnobject.writeInt(fpX);

@@ -15,7 +15,7 @@ public abstract class MiddleLoginStart extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void write() {
-		ServerBoundPacketData loginstart = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_LOGIN_START);
+		ServerBoundPacketData loginstart = ServerBoundPacketData.create(ServerBoundPacketType.LOGIN_START);
 		StringSerializer.writeVarIntUTF8String(loginstart, name);
 		codec.writeServerbound(loginstart);
 	}

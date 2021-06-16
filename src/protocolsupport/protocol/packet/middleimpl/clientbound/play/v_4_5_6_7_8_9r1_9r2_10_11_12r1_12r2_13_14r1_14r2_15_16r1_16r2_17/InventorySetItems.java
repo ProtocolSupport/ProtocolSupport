@@ -41,7 +41,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 	}
 
 	protected static ClientBoundPacketData create(ProtocolVersion version, String locale, byte windowId, NetworkItemStack[] items) {
-		ClientBoundPacketData windowitems = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_WINDOW_SET_ITEMS);
+		ClientBoundPacketData windowitems = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WINDOW_SET_ITEMS);
 		windowitems.writeByte(windowId);
 		ArraySerializer.writeShortTArray(windowitems, items, (lTo, item) -> ItemStackSerializer.writeItemStack(lTo, version, locale, item));
 		return windowitems;

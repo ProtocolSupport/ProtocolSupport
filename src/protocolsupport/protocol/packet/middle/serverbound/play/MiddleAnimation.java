@@ -20,7 +20,7 @@ public abstract class MiddleAnimation extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(UsedHand hand) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_ANIMATION);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_ANIMATION);
 		MiscSerializer.writeVarIntEnum(creator, hand);
 		return creator;
 	}

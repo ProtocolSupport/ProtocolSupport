@@ -20,7 +20,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData blockchangemulti = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI);
+		ClientBoundPacketData blockchangemulti = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_BLOCK_CHANGE_MULTI);
 		blockchangemulti.writeLong(chunkCoordWithSection);
 		blockchangemulti.writeBoolean(large);
 		ArraySerializer.writeVarIntVarLongArray(blockchangemulti, records);

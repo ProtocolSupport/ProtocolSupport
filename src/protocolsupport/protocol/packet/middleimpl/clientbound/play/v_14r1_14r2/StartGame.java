@@ -15,7 +15,7 @@ public class StartGame extends AbstractLegacyStartGame {
 
 	@Override
 	protected void writeStartGame(int dimensionId) {
-		ClientBoundPacketData startgame = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_START_GAME);
+		ClientBoundPacketData startgame = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_START_GAME);
 		startgame.writeInt(player.getId());
 		startgame.writeByte(gamemodeCurrent.getId() | (hardcore ? 0x8 : 0));
 		startgame.writeInt(dimensionId);

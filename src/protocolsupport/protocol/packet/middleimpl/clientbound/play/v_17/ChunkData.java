@@ -35,7 +35,7 @@ public class ChunkData extends MiddleChunkData {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdataPacket, coord);
 		ArraySerializer.writeVarIntLongArray(chunkdataPacket, blockMask.toLongArray());
 		ItemStackSerializer.writeDirectTag(chunkdataPacket, heightmaps);

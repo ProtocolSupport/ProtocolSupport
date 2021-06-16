@@ -32,7 +32,7 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 		int x, int y, int z,
 		String sound, float volume, float pitch
 	) {
-		ClientBoundPacketData worldcustomsound = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND);
+		ClientBoundPacketData worldcustomsound = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WORLD_CUSTOM_SOUND);
 		sound = SoundRemapper.getSoundName(version, sound);
 		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)) {
 			sound = Utils.clampString(sound, 32);

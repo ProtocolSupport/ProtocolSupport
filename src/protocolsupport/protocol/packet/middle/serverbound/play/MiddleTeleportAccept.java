@@ -19,7 +19,7 @@ public abstract class MiddleTeleportAccept extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int teleportId) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_TELEPORT_ACCEPT);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_TELEPORT_ACCEPT);
 		VarNumberSerializer.writeVarInt(creator, teleportId);
 		return creator;
 	}

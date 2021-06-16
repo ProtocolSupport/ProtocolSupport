@@ -13,7 +13,7 @@ public class WorldBorderInit extends MiddleWorldBorderInit {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData worldborderPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_WORLDBORDER_INIT);
+		ClientBoundPacketData worldborderPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WORLDBORDER_INIT);
 		worldborderPacket.writeDouble(x);
 		worldborderPacket.writeDouble(z);
 		worldborderPacket.writeDouble(oldSize);

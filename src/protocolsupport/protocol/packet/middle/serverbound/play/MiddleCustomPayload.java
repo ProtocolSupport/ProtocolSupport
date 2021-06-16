@@ -95,20 +95,20 @@ public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(String tag) {
-		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_CUSTOM_PAYLOAD);
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeVarIntUTF8String(serializer, tag);
 		return serializer;
 	}
 
 	public static ServerBoundPacketData create(String tag, byte[] data) {
-		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_CUSTOM_PAYLOAD);
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeVarIntUTF8String(serializer, tag);
 		serializer.writeBytes(data);
 		return serializer;
 	}
 
 	public static ServerBoundPacketData create(String tag, ByteBuf data) {
-		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_CUSTOM_PAYLOAD);
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeVarIntUTF8String(serializer, tag);
 		serializer.writeBytes(data);
 		return serializer;

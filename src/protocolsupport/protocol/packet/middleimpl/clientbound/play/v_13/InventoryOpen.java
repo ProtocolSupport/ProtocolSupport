@@ -21,7 +21,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 
 	@Override
 	public void writeToClient0() {
-		ClientBoundPacketData windowopen = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
+		ClientBoundPacketData windowopen = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WINDOW_OPEN);
 		writeData(
 			windowopen,
 			windowId,

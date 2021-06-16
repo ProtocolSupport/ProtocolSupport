@@ -13,7 +13,7 @@ public class ResourcePack extends MiddleResourcePack {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData resourcepack = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_RESOURCE_PACK);
+		ClientBoundPacketData resourcepack = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_RESOURCE_PACK);
 		StringSerializer.writeVarIntUTF8String(resourcepack, url);
 		StringSerializer.writeVarIntUTF8String(resourcepack, hash);
 		codec.writeClientbound(resourcepack);

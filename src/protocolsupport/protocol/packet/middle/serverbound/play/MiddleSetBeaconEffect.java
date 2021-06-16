@@ -20,7 +20,7 @@ public abstract class MiddleSetBeaconEffect extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int primary, int secondary) {
-		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_SET_BEACON_EFFECT);
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_SET_BEACON_EFFECT);
 		VarNumberSerializer.writeVarInt(serializer, primary);
 		VarNumberSerializer.writeVarInt(serializer, secondary);
 		return serializer;

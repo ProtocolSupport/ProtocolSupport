@@ -16,7 +16,7 @@ public class SpawnLiving extends AbstractRemappedSpawnLiving {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData spawnliving = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SPAWN_LIVING);
+		ClientBoundPacketData spawnliving = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SPAWN_LIVING);
 		spawnliving.writeInt(entity.getId());
 		spawnliving.writeByte(LegacyEntityId.getIntId(fType));
 		spawnliving.writeInt((int) (x * 32));

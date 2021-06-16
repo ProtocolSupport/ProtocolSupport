@@ -30,7 +30,7 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 
 	public static ServerBoundPacketData create(Position position, int face, UsedHand hand, float cX, float cY, float cZ, boolean insideblock) {
 		if (face != -1) {
-			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_USE_ITEM);
+			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_USE_ITEM);
 			MiscSerializer.writeVarIntEnum(creator, hand);
 			PositionSerializer.writePosition(creator, position);
 			VarNumberSerializer.writeVarInt(creator, face);
@@ -40,7 +40,7 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 			creator.writeBoolean(insideblock);
 			return creator;
 		} else {
-			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_BLOCK_PLACE);
+			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_BLOCK_PLACE);
 			MiscSerializer.writeVarIntEnum(creator, hand);
 			return creator;
 		}

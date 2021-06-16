@@ -15,7 +15,7 @@ public class BlockOpenSignEditor extends MiddleBlockOpenSignEditor {
 	@Override
 	protected void write() {
 		if (version.isAfter(ProtocolVersion.MINECRAFT_1_6_1)) {
-			ClientBoundPacketData blockopensigneditor = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SIGN_EDITOR);
+			ClientBoundPacketData blockopensigneditor = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SIGN_EDITOR);
 			blockopensigneditor.writeByte(0);
 			PositionSerializer.writeLegacyPositionI(blockopensigneditor, position);
 		}

@@ -23,7 +23,7 @@ public abstract class MiddleEditBook extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(NetworkItemStack book, boolean signing, int slot) {
-		ServerBoundPacketData editbook = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_EDIT_BOOK);
+		ServerBoundPacketData editbook = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_EDIT_BOOK);
 		ItemStackSerializer.writeItemStack(editbook, book);
 		editbook.writeBoolean(signing);
 		VarNumberSerializer.writeVarInt(editbook, slot);

@@ -12,7 +12,7 @@ public class SyncPing extends MiddleSyncPing {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData syncpingPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SYNC_PING);
+		ClientBoundPacketData syncpingPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SYNC_PING);
 		syncpingPacket.writeInt(id);
 		codec.writeClientbound(syncpingPacket);
 	}

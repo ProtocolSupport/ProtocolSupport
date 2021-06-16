@@ -25,7 +25,7 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdataPacket, coord);
 		chunkdataPacket.writeBoolean(false); //full
 		chunkdataPacket.writeShort(blockMask);

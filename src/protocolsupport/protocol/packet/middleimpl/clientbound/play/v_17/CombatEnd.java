@@ -13,7 +13,7 @@ public class CombatEnd extends MiddleCombatEnd {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData combatendPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_COMBAT_END);
+		ClientBoundPacketData combatendPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_COMBAT_END);
 		VarNumberSerializer.writeVarInt(combatendPacket, duration);
 		combatendPacket.writeInt(opponentId);
 		codec.writeClientbound(combatendPacket);

@@ -12,7 +12,7 @@ public class QueryNBTResponse extends MiddleQueryNBTResponse {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData querynbtresponse = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_QUERY_NBT_RESPONSE);
+		ClientBoundPacketData querynbtresponse = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_QUERY_NBT_RESPONSE);
 		querynbtresponse.writeBytes(data);
 		codec.writeClientbound(querynbtresponse);
 	}

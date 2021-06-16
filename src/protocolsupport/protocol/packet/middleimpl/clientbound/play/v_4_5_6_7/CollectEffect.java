@@ -13,7 +13,7 @@ public class CollectEffect extends AbstractSoundCollectEffect {
 
 	@Override
 	protected void writeCollectEffect() {
-		ClientBoundPacketData collecteffect = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_COLLECT_EFFECT);
+		ClientBoundPacketData collecteffect = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_COLLECT_EFFECT);
 		collecteffect.writeInt(entityId);
 		collecteffect.writeInt(collectorId);
 		codec.writeClientbound(collecteffect);

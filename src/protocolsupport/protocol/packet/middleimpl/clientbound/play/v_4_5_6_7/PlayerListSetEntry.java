@@ -68,7 +68,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 	}
 
 	protected static ClientBoundPacketData create(ProtocolVersion version, String name, boolean addOrUpdate, short ping) {
-		ClientBoundPacketData playerinfo = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_PLAYER_INFO);
+		ClientBoundPacketData playerinfo = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_PLAYER_INFO);
 		StringSerializer.writeString(playerinfo, version, LegacyChat.clampLegacyText(name, 16));
 		playerinfo.writeBoolean(addOrUpdate);
 		playerinfo.writeShort(ping);

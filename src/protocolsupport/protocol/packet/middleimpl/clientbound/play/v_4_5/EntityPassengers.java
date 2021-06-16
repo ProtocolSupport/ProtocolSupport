@@ -16,7 +16,7 @@ public class EntityPassengers extends AbstractPassengerStackEntityPassengers {
 	}
 
 	public static ClientBoundPacketData create(int passengerId, int vehicleId) {
-		ClientBoundPacketData entitypassengers = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_LEASH);
+		ClientBoundPacketData entitypassengers = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_LEASH);
 		entitypassengers.writeInt(passengerId);
 		entitypassengers.writeInt(vehicleId);
 		return entitypassengers;

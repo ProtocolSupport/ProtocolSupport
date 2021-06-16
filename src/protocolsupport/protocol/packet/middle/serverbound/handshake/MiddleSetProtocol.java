@@ -19,7 +19,7 @@ public abstract class MiddleSetProtocol extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void write() {
-		ServerBoundPacketData setprotocol = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_HANDSHAKE_START);
+		ServerBoundPacketData setprotocol = ServerBoundPacketData.create(ServerBoundPacketType.HANDSHAKE_START);
 		VarNumberSerializer.writeVarInt(setprotocol, ProtocolVersionsHelper.LATEST_PC.getId());
 		StringSerializer.writeVarIntUTF8String(setprotocol, hostname);
 		setprotocol.writeShort(port);

@@ -21,7 +21,7 @@ public class BlockChangeMulti extends AbstractChunkCacheBlockChangeMulti {
 	protected void write() {
 		int chunkAbsY = getChunkSectionY(chunkCoordWithSection) << 4;
 
-		ClientBoundPacketData blockchangemulti = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI);
+		ClientBoundPacketData blockchangemulti = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_BLOCK_CHANGE_MULTI);
 		PositionSerializer.writeIntChunkCoord(blockchangemulti, new ChunkCoord(getChunkX(chunkCoordWithSection), getChunkZ(chunkCoordWithSection)));
 		blockchangemulti.writeShort(records.length);
 		blockchangemulti.writeInt(records.length * 4);

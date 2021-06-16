@@ -12,7 +12,7 @@ public class HeldSlot extends AbstractCachedHeldSlot {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData heldslot = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_HELD_SLOT);
+		ClientBoundPacketData heldslot = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_HELD_SLOT);
 		heldslot.writeShort(slot);
 		codec.writeClientbound(heldslot);
 	}

@@ -27,7 +27,7 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 		String locale = clientCache.getLocale();
 		boolean hasSkyLight = clientCache.hasDimensionSkyLight();
 
-		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(false); //full
 		chunkdata.writeShort(blockMask);

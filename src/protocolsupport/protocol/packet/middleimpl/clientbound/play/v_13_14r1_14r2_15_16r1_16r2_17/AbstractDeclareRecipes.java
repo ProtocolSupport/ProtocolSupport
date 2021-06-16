@@ -119,7 +119,7 @@ public abstract class AbstractDeclareRecipes extends MiddleDeclareRecipes {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData declarerecipes = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_DECLARE_RECIPES);
+		ClientBoundPacketData declarerecipes = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_DECLARE_RECIPES);
 		MiscSerializer.writeVarIntCountPrefixedType(declarerecipes, recipes, (recipesTo, recipes) -> {
 			int writtenRecipeCount = 0;
 			for (Recipe recipe : recipes) {

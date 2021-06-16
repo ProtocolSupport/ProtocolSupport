@@ -19,7 +19,7 @@ public abstract class MiddlePickItem extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int slot) {
-		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_PICK_ITEM);
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_PICK_ITEM);
 		VarNumberSerializer.writeVarInt(serializer, slot);
 		return serializer;
 	}

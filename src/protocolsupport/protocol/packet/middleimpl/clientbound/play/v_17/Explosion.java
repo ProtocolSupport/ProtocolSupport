@@ -13,7 +13,7 @@ public class Explosion extends MiddleExplosion {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData explosionPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_EXPLOSION);
+		ClientBoundPacketData explosionPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_EXPLOSION);
 		explosionPacket.writeFloat(x);
 		explosionPacket.writeFloat(y);
 		explosionPacket.writeFloat(z);

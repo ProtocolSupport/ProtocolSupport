@@ -15,9 +15,9 @@ public class PacketEncoder extends AbstractPacketEncoder {
 	}
 
 	{
-		registry.register(NetworkState.LOGIN, ClientBoundPacketType.CLIENTBOUND_LOGIN_DISCONNECT, LoginDisconnect::new);
-		registry.register(NetworkState.STATUS, ClientBoundPacketType.CLIENTBOUND_STATUS_SERVER_INFO, ServerInfo::new);
-		registry.register(NetworkState.STATUS, ClientBoundPacketType.CLIENTBOUND_STATUS_PONG, NoopPong::new);
+		registry.register(NetworkState.LOGIN, ClientBoundPacketType.LOGIN_DISCONNECT, LoginDisconnect::new);
+		registry.register(NetworkState.STATUS, ClientBoundPacketType.STATUS_SERVER_INFO, ServerInfo::new);
+		registry.register(NetworkState.STATUS, ClientBoundPacketType.STATUS_PONG, NoopPong::new);
 	}
 
 }

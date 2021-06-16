@@ -18,7 +18,7 @@ public class DeclareTags extends AbstractDeclareTags {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData declaretagsPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_DECLARE_TAGS);
+		ClientBoundPacketData declaretagsPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_DECLARE_TAGS);
 		VarNumberSerializer.writeVarInt(declaretagsPacket, tagsMap.size());
 		for (Map.Entry<NamespacedKey, Tag[]> tagsEntry : tagsMap.entrySet()) {
 			NamespacedKey key = tagsEntry.getKey();

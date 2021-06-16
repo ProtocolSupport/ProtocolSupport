@@ -27,14 +27,14 @@ public class CustomPayload extends MiddleCustomPayload {
 	}
 
 	public static ClientBoundPacketData create(String tag, Consumer<ByteBuf> dataWriter) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeVarIntUTF8String(serializer, tag);
 		dataWriter.accept(serializer);
 		return serializer;
 	}
 
 	public static ClientBoundPacketData create(String tag, ByteBuf data) {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeVarIntUTF8String(serializer, tag);
 		serializer.writeBytes(data);
 		return serializer;

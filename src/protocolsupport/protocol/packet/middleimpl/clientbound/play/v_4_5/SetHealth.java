@@ -16,7 +16,7 @@ public class SetHealth extends MiddleSetHealth {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData sethealth = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SET_HEALTH);
+		ClientBoundPacketData sethealth = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SET_HEALTH);
 		sethealth.writeShort((int) Math.ceil((health * 20.0F) / cache.getClientCache().getMaxHealth()));
 		sethealth.writeShort(food);
 		sethealth.writeFloat(saturation);

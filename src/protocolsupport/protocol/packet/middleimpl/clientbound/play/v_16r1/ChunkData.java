@@ -33,7 +33,7 @@ public class ChunkData extends AbstractLimitedHeightChunkData {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
 		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(true); //full
 		chunkdata.writeBoolean(true); //use existing light

@@ -18,7 +18,7 @@ public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor
 	}
 
 	protected static boolean shouldLock(ClientBoundPacketData packet) {
-		return packet.getPacketType() == ClientBoundPacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE;
+		return packet.getPacketType() == ClientBoundPacketType.PLAY_CHUNK_SINGLE;
 	}
 
 	protected boolean locked = false;
@@ -33,23 +33,23 @@ public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor
 	public void process(ClientBoundPacketData packet) {
 		if (locked) {
 			switch (packet.getPacketType()) {
-				case CLIENTBOUND_PLAY_RESPAWN: {
+				case PLAY_RESPAWN: {
 					clearQueue();
 					write(packet);
 					break;
 				}
-				case CLIENTBOUND_PLAY_ENTITY_PASSENGERS: {
+				case PLAY_ENTITY_PASSENGERS: {
 					queue.add(packet.clone());
 					write(packet);
 					break;
 				}
-				case CLIENTBOUND_PLAY_CHUNK_SINGLE:
-				case CLIENTBOUND_PLAY_CHUNK_UNLOAD:
-				case CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE:
-				case CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI:
-				case CLIENTBOUND_PLAY_BLOCK_ACTION:
-				case CLIENTBOUND_PLAY_BLOCK_BREAK_ANIMATION:
-				case CLIENTBOUND_PLAY_BLOCK_TILE:
+				case PLAY_CHUNK_SINGLE:
+				case PLAY_CHUNK_UNLOAD:
+				case PLAY_BLOCK_CHANGE_SINGLE:
+				case PLAY_BLOCK_CHANGE_MULTI:
+				case PLAY_BLOCK_ACTION:
+				case PLAY_BLOCK_BREAK_ANIMATION:
+				case PLAY_BLOCK_TILE:
 				case CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN:
 				case CLIENTBOUND_LEGACY_PLAY_USE_BED: {
 					queue.add(packet);

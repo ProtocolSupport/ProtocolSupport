@@ -13,7 +13,7 @@ public class TitleAnimation extends MiddleTitleAnimation {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData titlesubtextPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_TITLE_ANIMATION);
+		ClientBoundPacketData titlesubtextPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_TITLE_ANIMATION);
 		VarNumberSerializer.writeVarInt(titlesubtextPacket, 2); //legacy title action (2 - set animation)
 		titlesubtextPacket.writeInt(fadeIn);
 		titlesubtextPacket.writeInt(stay);

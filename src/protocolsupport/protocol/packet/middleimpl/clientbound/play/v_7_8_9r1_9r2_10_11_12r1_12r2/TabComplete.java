@@ -15,7 +15,7 @@ public class TabComplete extends MiddleTabComplete {
 	@Override
 	protected void write() {
 		String prefix = start <= 1 ? "/" : "";
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_TAB_COMPLETE);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_TAB_COMPLETE);
 		ArraySerializer.writeVarIntTArray(serializer, matches, (to, match) -> StringSerializer.writeVarIntUTF8String(to, prefix + match.getMatch()));
 		codec.writeClientbound(serializer);
 	}

@@ -13,7 +13,7 @@ public class GameStateChange extends MiddleGameStateChange {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData gamestatechange = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_GAME_STATE_CHANGE);
+		ClientBoundPacketData gamestatechange = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_GAME_STATE_CHANGE);
 		MiscSerializer.writeByteEnum(gamestatechange, action);
 		gamestatechange.writeFloat(value);
 		codec.writeClientbound(gamestatechange);

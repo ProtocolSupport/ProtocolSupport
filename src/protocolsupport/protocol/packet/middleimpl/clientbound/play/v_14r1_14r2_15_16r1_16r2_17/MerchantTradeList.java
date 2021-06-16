@@ -13,7 +13,7 @@ public class MerchantTradeList extends MiddleMerchantTradeList {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData merchanttradelist = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_MERCHANT_TRADE_LIST);
+		ClientBoundPacketData merchanttradelist = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_MERCHANT_TRADE_LIST);
 		MerchantDataSerializer.writeMerchantData(merchanttradelist, version, cache.getClientCache().getLocale(), merchantData);
 		codec.writeClientbound(merchanttradelist);
 	}

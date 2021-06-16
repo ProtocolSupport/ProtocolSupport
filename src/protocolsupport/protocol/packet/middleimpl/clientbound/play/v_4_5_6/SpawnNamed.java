@@ -17,7 +17,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData spawnnamed = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
+		ClientBoundPacketData spawnnamed = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SPAWN_NAMED);
 		spawnnamed.writeInt(entity.getId());
 		StringSerializer.writeShortUTF16BEString(spawnnamed, Utils.clampString(playerlistEntry.getUserName(), 16));
 		spawnnamed.writeInt((int) (x * 32));

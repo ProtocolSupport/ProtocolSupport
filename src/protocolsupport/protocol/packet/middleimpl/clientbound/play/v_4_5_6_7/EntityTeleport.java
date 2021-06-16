@@ -16,7 +16,7 @@ public class EntityTeleport extends AbstractLocationOffsetEntityTeleport {
 	}
 
 	public static ClientBoundPacketData create(int entityId, double x, double y, double z, byte yaw, byte pitch) {
-		ClientBoundPacketData entityteleport = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_TELEPORT);
+		ClientBoundPacketData entityteleport = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_TELEPORT);
 		entityteleport.writeInt(entityId);
 		entityteleport.writeInt((int) (x * 32));
 		entityteleport.writeInt((int) (y * 32));

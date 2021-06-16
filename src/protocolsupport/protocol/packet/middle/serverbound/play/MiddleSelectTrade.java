@@ -19,7 +19,7 @@ public abstract class MiddleSelectTrade extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int slot) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_SELECT_TRADE);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_SELECT_TRADE);
 		VarNumberSerializer.writeVarInt(creator, slot);
 		return creator;
 	}

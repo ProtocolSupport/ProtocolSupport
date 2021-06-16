@@ -21,7 +21,7 @@ public abstract class MiddleClientCommand extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(Command command) {
-		ServerBoundPacketData clientcommand = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_CLIENT_COMMAND);
+		ServerBoundPacketData clientcommand = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_CLIENT_COMMAND);
 		MiscSerializer.writeVarIntEnum(clientcommand, command);
 		return clientcommand;
 	}

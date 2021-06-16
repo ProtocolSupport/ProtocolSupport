@@ -18,7 +18,7 @@ public class CombatDeath extends MiddleCombatDeath {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData combatdeathPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_COMBAT_DEATH);
+		ClientBoundPacketData combatdeathPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_COMBAT_DEATH);
 		VarNumberSerializer.writeVarInt(combatdeathPacket, playerId);
 		combatdeathPacket.writeInt(killerId);
 		StringSerializer.writeVarIntUTF8String(combatdeathPacket, ChatSerializer.serialize(version, clientCache.getLocale(), message));

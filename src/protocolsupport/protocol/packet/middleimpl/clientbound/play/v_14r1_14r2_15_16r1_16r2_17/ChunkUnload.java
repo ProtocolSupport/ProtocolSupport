@@ -13,7 +13,7 @@ public class ChunkUnload extends MiddleChunkUnload {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData chunkunload = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_CHUNK_UNLOAD);
+		ClientBoundPacketData chunkunload = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_UNLOAD);
 		PositionSerializer.writeIntChunkCoord(chunkunload, chunk);
 		codec.writeClientbound(chunkunload);
 	}

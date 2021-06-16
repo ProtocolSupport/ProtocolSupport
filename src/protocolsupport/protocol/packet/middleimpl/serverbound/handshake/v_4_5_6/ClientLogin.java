@@ -28,14 +28,14 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void write() {
-		ServerBoundPacketData setprotocol = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_HANDSHAKE_START);
+		ServerBoundPacketData setprotocol = ServerBoundPacketData.create(ServerBoundPacketType.HANDSHAKE_START);
 		VarNumberSerializer.writeVarInt(setprotocol, ProtocolVersionsHelper.LATEST_PC.getId());
 		StringSerializer.writeVarIntUTF8String(setprotocol, hostname);
 		setprotocol.writeShort(port);
 		VarNumberSerializer.writeVarInt(setprotocol, 2);
 		codec.writeServerbound(setprotocol);
 
-		ServerBoundPacketData loginstart = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_LOGIN_START);
+		ServerBoundPacketData loginstart = ServerBoundPacketData.create(ServerBoundPacketType.LOGIN_START);
 		StringSerializer.writeVarIntUTF8String(loginstart, username);
 		codec.writeServerbound(loginstart);
 	}

@@ -33,7 +33,7 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 		int x, int y, int z,
 		String sound, SoundCategory category, float volume, float pitch
 	) {
-		ClientBoundPacketData worldcustomsound = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND);
+		ClientBoundPacketData worldcustomsound = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WORLD_CUSTOM_SOUND);
 		StringSerializer.writeVarIntUTF8String(worldcustomsound, SoundRemapper.getSoundName(version, sound));
 		MiscSerializer.writeVarIntEnum(worldcustomsound, category);
 		worldcustomsound.writeInt(x);

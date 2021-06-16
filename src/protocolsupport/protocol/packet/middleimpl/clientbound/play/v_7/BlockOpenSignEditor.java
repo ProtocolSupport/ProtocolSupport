@@ -13,7 +13,7 @@ public class BlockOpenSignEditor extends MiddleBlockOpenSignEditor {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData blockopensigneditor = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SIGN_EDITOR);
+		ClientBoundPacketData blockopensigneditor = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SIGN_EDITOR);
 		PositionSerializer.writeLegacyPositionI(blockopensigneditor, position);
 		codec.writeClientbound(blockopensigneditor);
 	}

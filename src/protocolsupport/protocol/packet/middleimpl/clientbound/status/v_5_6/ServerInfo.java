@@ -15,7 +15,7 @@ public class ServerInfo extends MiddleServerInfo {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData serverinfo = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_STATUS_SERVER_INFO);
+		ClientBoundPacketData serverinfo = ClientBoundPacketData.create(ClientBoundPacketType.STATUS_SERVER_INFO);
 		String response = new StringJoiner("\u0000")
 		.add("§1")
 		.add(String.valueOf(ping.getProtocolData().getVersion()))

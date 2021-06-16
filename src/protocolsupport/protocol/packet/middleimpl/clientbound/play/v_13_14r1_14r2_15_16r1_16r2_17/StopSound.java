@@ -14,7 +14,7 @@ public class StopSound extends MiddleStopSound {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData stopsound = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_STOP_SOUND);
+		ClientBoundPacketData stopsound = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_STOP_SOUND);
 		stopsound.writeByte((source != -1 ? FLAG_SOURCE : 0) | (name != null ? FLAG_NAME : 0));
 		if (source != -1) {
 			VarNumberSerializer.writeVarInt(stopsound, source);

@@ -20,7 +20,7 @@ public class EntityMetadata extends AbstractPlayerUseBedAsPacketEntityMetadata {
 
 	@Override
 	protected void writeEntityMetadata(NetworkEntityMetadataList remappedMetadata) {
-		ClientBoundPacketData entitymetadata = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
+		ClientBoundPacketData entitymetadata = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_METADATA);
 		VarNumberSerializer.writeVarInt(entitymetadata, entityId);
 		NetworkEntityMetadataSerializer.writeData(entitymetadata, version, clientCache.getLocale(), remappedMetadata);
 		codec.writeClientbound(entitymetadata);

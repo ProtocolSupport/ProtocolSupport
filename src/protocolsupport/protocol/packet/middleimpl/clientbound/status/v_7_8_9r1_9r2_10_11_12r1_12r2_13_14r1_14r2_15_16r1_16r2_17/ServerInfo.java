@@ -14,7 +14,7 @@ public class ServerInfo extends MiddleServerInfo {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData serverinfo = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_STATUS_SERVER_INFO);
+		ClientBoundPacketData serverinfo = ClientBoundPacketData.create(ClientBoundPacketType.STATUS_SERVER_INFO);
 		StringSerializer.writeVarIntUTF8String(serverinfo, PingResponse.toJson(version, ping));
 		codec.writeClientbound(serverinfo);
 	}

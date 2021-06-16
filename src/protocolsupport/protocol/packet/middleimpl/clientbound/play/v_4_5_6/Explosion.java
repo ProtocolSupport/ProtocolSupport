@@ -21,7 +21,7 @@ public class Explosion extends AbstractChunkCacheMiddleExplosion {
 			"entity.generic.explode", 4.0F, SoundRemapper.createEntityGenericExplodePitch()
 		));
 
-		ClientBoundPacketData explosion = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_EXPLOSION);
+		ClientBoundPacketData explosion = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_EXPLOSION);
 		explosion.writeDouble(x);
 		explosion.writeDouble(y);
 		explosion.writeDouble(z);

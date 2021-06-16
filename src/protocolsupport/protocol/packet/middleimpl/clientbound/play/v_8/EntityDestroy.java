@@ -34,7 +34,7 @@ public class EntityDestroy extends AbstractPassengerStackEntityDestroy {
 
 
 	public static void writeDestroyEntity(PacketDataCodec codec, int entityId) {
-		ClientBoundPacketData entitydestroyPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY);
+		ClientBoundPacketData entitydestroyPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_DESTROY);
 		VarNumberSerializer.writeVarInt(entitydestroyPacket, 1); //entity array length
 		VarNumberSerializer.writeVarInt(entitydestroyPacket, entityId);
 		codec.writeClientbound(entitydestroyPacket);

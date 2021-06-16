@@ -12,7 +12,7 @@ public class SetPosition extends AbstractLegacyTeleportConfirmSetPosition {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData setposition = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_POSITION);
+		ClientBoundPacketData setposition = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_POSITION);
 		setposition.writeDouble(x);
 		setposition.writeDouble(y + 1.6200000047683716D);
 		setposition.writeDouble(z);

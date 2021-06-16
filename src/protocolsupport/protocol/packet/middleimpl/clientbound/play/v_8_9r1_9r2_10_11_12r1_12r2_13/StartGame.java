@@ -17,7 +17,7 @@ public class StartGame extends AbstractChunkCacheStartGame {
 
 	@Override
 	protected void writeStartGame(int dimensionId) {
-		ClientBoundPacketData startgame = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_START_GAME);
+		ClientBoundPacketData startgame = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_START_GAME);
 		startgame.writeInt(player.getId());
 		startgame.writeByte(gamemodeCurrent.getId() | (hardcore ? 0x8 : 0));
 		if (version.isBefore(ProtocolVersion.MINECRAFT_1_9_1)) {

@@ -13,7 +13,7 @@ public class EntityTeleport extends AbstractLocationOffsetEntityTeleport {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData entityteleport = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_TELEPORT);
+		ClientBoundPacketData entityteleport = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_TELEPORT);
 		VarNumberSerializer.writeVarInt(entityteleport, entityId);
 		entityteleport.writeDouble(x);
 		entityteleport.writeDouble(y);

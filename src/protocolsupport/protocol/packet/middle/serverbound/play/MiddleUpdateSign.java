@@ -22,7 +22,7 @@ public abstract class MiddleUpdateSign extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(Position position, String[] lines) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_UPDATE_SIGN);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_UPDATE_SIGN);
 		PositionSerializer.writePosition(creator, position);
 		for (int i = 0; i < lines.length; i++) {
 			StringSerializer.writeVarIntUTF8String(creator, lines[i]);

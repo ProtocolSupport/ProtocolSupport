@@ -13,7 +13,7 @@ public class WorldBorderLerpSize extends MiddleWorldBorderLerpSize {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData worldborderPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_WORLDBORDER_LERP_SIZE);
+		ClientBoundPacketData worldborderPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WORLDBORDER_LERP_SIZE);
 		worldborderPacket.writeDouble(oldSize);
 		worldborderPacket.writeDouble(newSize);
 		VarNumberSerializer.writeVarLong(worldborderPacket, speed);

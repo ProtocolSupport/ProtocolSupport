@@ -19,7 +19,7 @@ public abstract class MiddleRecipeBookRecipe extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(String recipeId) {
-		ServerBoundPacketData recipebookrecipe = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_RECIPE_BOOK_RECIPE);
+		ServerBoundPacketData recipebookrecipe = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_RECIPE_BOOK_RECIPE);
 		StringSerializer.writeVarIntUTF8String(recipebookrecipe, recipeId);
 		return recipebookrecipe;
 	}

@@ -42,7 +42,7 @@ public abstract class MiddleUpdateStructureBlock extends ServerBoundMiddlePacket
 		byte offsetX, byte offsetY, byte offsetZ, byte sizeX, byte sizeY, byte sizeZ,
 		Mirror mirror, Rotation rotation, String metadata, float integrity, long seed, byte flags
 	) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_UPDATE_STRUCTURE_BLOCK);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_UPDATE_STRUCTURE_BLOCK);
 		PositionSerializer.writePosition(creator, position);
 		MiscSerializer.writeVarIntEnum(creator, action);
 		MiscSerializer.writeVarIntEnum(creator, mode);

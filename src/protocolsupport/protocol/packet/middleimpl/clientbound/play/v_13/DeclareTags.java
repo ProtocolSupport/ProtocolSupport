@@ -12,7 +12,7 @@ public class DeclareTags extends AbstractDeclareTags {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData declaretagsPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_DECLARE_TAGS);
+		ClientBoundPacketData declaretagsPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_DECLARE_TAGS);
 		writeBlocksTags(declaretagsPacket, tagsMap.get(key_block));
 		writeItemsTags(declaretagsPacket, tagsMap.get(key_item));
 		writeTags(declaretagsPacket, tagsMap.get(key_fluid));

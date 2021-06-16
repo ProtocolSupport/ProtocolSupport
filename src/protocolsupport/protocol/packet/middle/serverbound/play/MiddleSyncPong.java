@@ -18,7 +18,7 @@ public abstract class MiddleSyncPong extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int id) {
-		ServerBoundPacketData syncpongPacket = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_SYNC_PONG);
+		ServerBoundPacketData syncpongPacket = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_SYNC_PONG);
 		syncpongPacket.writeInt(id);
 		return syncpongPacket;
 	}

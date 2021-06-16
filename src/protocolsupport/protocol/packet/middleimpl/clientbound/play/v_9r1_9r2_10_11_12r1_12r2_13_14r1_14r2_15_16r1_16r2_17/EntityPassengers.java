@@ -14,7 +14,7 @@ public class EntityPassengers extends AbstractKnownEntityPassengers {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData entitypassengers = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_PASSENGERS);
+		ClientBoundPacketData entitypassengers = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_PASSENGERS);
 		VarNumberSerializer.writeVarInt(entitypassengers, vehicleId);
 		ArraySerializer.writeVarIntVarIntArray(entitypassengers, passengersIds);
 		codec.writeClientbound(entitypassengers);

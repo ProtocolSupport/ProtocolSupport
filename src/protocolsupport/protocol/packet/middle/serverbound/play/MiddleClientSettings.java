@@ -31,7 +31,7 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(String locale, int viewDist, ChatMode chatMode, boolean chatColors, int skinFlags, MainHand mainHand, boolean disableTextFilter) {
-		ServerBoundPacketData clientsettingsPacket = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_SETTINGS);
+		ServerBoundPacketData clientsettingsPacket = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_SETTINGS);
 		StringSerializer.writeVarIntUTF8String(clientsettingsPacket, locale);
 		clientsettingsPacket.writeByte(viewDist);
 		MiscSerializer.writeVarIntEnum(clientsettingsPacket, chatMode);

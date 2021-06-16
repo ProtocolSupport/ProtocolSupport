@@ -13,7 +13,7 @@ public class AnimatePacketReorderer extends ServerBoundPacketDataProcessor {
 		ServerBoundPacketType packetType = packet.getPacketType();
 
 		if (animatePacket != null) {
-			if (packetType == ServerBoundPacketType.SERVERBOUND_PLAY_USE_ENTITY) {
+			if (packetType == ServerBoundPacketType.PLAY_USE_ENTITY) {
 				read(packet);
 				read(animatePacket);
 				animatePacket = null;
@@ -24,7 +24,7 @@ public class AnimatePacketReorderer extends ServerBoundPacketDataProcessor {
 			}
 		}
 
-		if (packetType == ServerBoundPacketType.SERVERBOUND_PLAY_ANIMATION) {
+		if (packetType == ServerBoundPacketType.PLAY_ANIMATION) {
 			animatePacket = packet;
 		} else {
 			read(packet);

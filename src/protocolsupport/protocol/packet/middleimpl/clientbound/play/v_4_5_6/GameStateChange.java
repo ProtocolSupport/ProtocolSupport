@@ -34,7 +34,7 @@ public class GameStateChange extends MiddleGameStateChange {
 				break;
 			}
 			default: {
-				ClientBoundPacketData gamestatechange = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_GAME_STATE_CHANGE);
+				ClientBoundPacketData gamestatechange = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_GAME_STATE_CHANGE);
 				MiscSerializer.writeByteEnum(gamestatechange, action);
 				gamestatechange.writeByte((int) value);
 				codec.writeClientbound(gamestatechange);
@@ -44,7 +44,7 @@ public class GameStateChange extends MiddleGameStateChange {
 	}
 
 	protected static ClientBoundPacketData createRain(boolean raining) {
-		ClientBoundPacketData gamestatechange = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_GAME_STATE_CHANGE);
+		ClientBoundPacketData gamestatechange = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_GAME_STATE_CHANGE);
 		MiscSerializer.writeByteEnum(gamestatechange, raining ? Action.RAIN_START : Action.RAIN_END);
 		gamestatechange.writeByte(0);
 		return gamestatechange;

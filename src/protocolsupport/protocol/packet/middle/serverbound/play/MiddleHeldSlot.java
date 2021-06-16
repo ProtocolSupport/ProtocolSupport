@@ -18,7 +18,7 @@ public abstract class MiddleHeldSlot extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int slot) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_HELD_SLOT);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_HELD_SLOT);
 		creator.writeShort(slot);
 		return creator;
 	}

@@ -13,7 +13,7 @@ public class SpawnPosition extends MiddleSpawnPosition {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData spawnpositionPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SPAWN_POSITION);
+		ClientBoundPacketData spawnpositionPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SPAWN_POSITION);
 		PositionSerializer.writePosition(spawnpositionPacket, position);
 		spawnpositionPacket.writeFloat(angle);
 		codec.writeClientbound(spawnpositionPacket);

@@ -26,7 +26,7 @@ public class Explosion extends MiddleExplosion {
 			));
 		}
 
-		ClientBoundPacketData explosion = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_EXPLOSION);
+		ClientBoundPacketData explosion = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_EXPLOSION);
 		explosion.writeFloat(x);
 		explosion.writeFloat(y);
 		explosion.writeFloat(z);

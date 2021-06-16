@@ -13,7 +13,7 @@ public class SetExperience extends MiddleSetExperience {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData setexperience = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SET_EXPERIENCE);
+		ClientBoundPacketData setexperience = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SET_EXPERIENCE);
 		setexperience.writeFloat(exp);
 		VarNumberSerializer.writeVarInt(setexperience, level);
 		VarNumberSerializer.writeVarInt(setexperience, totalExp);

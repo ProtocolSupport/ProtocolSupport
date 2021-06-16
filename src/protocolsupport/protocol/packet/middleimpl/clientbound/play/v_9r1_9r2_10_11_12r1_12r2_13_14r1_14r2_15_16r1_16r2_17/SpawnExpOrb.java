@@ -13,7 +13,7 @@ public class SpawnExpOrb extends MiddleSpawnExpOrb {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData spawnexporb = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SPAWN_EXP_ORB);
+		ClientBoundPacketData spawnexporb = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SPAWN_EXP_ORB);
 		VarNumberSerializer.writeVarInt(spawnexporb, entity.getId());
 		spawnexporb.writeDouble(x);
 		spawnexporb.writeDouble(y);

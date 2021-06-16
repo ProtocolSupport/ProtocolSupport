@@ -13,7 +13,7 @@ public class WorldBorderWarnDelay extends MiddleWorldBorderWarnDelay {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData worldborderPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_WORLDBORDER_WARN_DELAY);
+		ClientBoundPacketData worldborderPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WORLDBORDER_WARN_DELAY);
 		VarNumberSerializer.writeVarInt(worldborderPacket, warnDelay);
 		codec.writeClientbound(worldborderPacket);
 	}

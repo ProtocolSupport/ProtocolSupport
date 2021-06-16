@@ -22,7 +22,7 @@ public abstract class MiddleMoveVehicle extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(double x, double y, double z, float yaw, float pitch) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_MOVE_VEHICLE);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_MOVE_VEHICLE);
 		creator.writeDouble(x);
 		creator.writeDouble(y);
 		creator.writeDouble(z);

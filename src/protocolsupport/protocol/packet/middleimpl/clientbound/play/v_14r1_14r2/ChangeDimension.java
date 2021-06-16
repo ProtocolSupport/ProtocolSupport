@@ -14,7 +14,7 @@ public class ChangeDimension extends AbstractLegacyChangeDimension {
 
 	@Override
 	protected void writeChangeDimension(int dimensionId) {
-		ClientBoundPacketData changedimension = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_RESPAWN);
+		ClientBoundPacketData changedimension = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_RESPAWN);
 		changedimension.writeInt(dimensionId);
 		changedimension.writeByte(gamemodeCurrent.getId());
 		StringSerializer.writeVarIntUTF8String(changedimension, LegacyDimension.getWorldType(worldFlat));

@@ -14,7 +14,7 @@ public class LoginSuccess extends MiddleLoginSuccess {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_LOGIN_SUCCESS);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacketType.LOGIN_SUCCESS);
 		UUIDSerializer.writeUUID4I(serializer, uuid);
 		StringSerializer.writeVarIntUTF8String(serializer, name);
 		codec.writeClientbound(serializer);

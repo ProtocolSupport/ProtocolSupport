@@ -18,7 +18,7 @@ public class SpawnObject extends AbstractThunderboltSpawnObject {
 
 	@Override
 	protected void writeSpawnObject() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SPAWN_OBJECT);
 		VarNumberSerializer.writeVarInt(serializer, entity.getId());
 		UUIDSerializer.writeUUID2L(serializer, entity.getUUID());
 		serializer.writeByte(flatteningEntityIdTable.get(fType.getNetworkTypeId()));

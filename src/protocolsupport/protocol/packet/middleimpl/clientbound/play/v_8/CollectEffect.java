@@ -14,7 +14,7 @@ public class CollectEffect extends AbstractSoundCollectEffect {
 
 	@Override
 	protected void writeCollectEffect() {
-		ClientBoundPacketData collecteffect = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_COLLECT_EFFECT);
+		ClientBoundPacketData collecteffect = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_COLLECT_EFFECT);
 		VarNumberSerializer.writeVarInt(collecteffect, entityId);
 		VarNumberSerializer.writeVarInt(collecteffect, collectorId);
 		codec.writeClientbound(collecteffect);

@@ -23,7 +23,7 @@ public abstract class MiddleSteerVehicle extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(float sideForce, float forwardForce, int flags) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_STEER_VEHICLE);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_STEER_VEHICLE);
 		creator.writeFloat(sideForce);
 		creator.writeFloat(forwardForce);
 		creator.writeByte(flags);

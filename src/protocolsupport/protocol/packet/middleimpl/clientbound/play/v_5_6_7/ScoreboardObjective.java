@@ -15,7 +15,7 @@ public class ScoreboardObjective extends MiddleScoreboardObjective {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData scoreboardobjective = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SCOREBOARD_OBJECTIVE);
+		ClientBoundPacketData scoreboardobjective = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SCOREBOARD_OBJECTIVE);
 		StringSerializer.writeString(scoreboardobjective, version, name);
 		StringSerializer.writeString(
 			scoreboardobjective, version,

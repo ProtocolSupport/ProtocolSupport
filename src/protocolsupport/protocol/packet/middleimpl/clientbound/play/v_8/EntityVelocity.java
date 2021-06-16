@@ -17,7 +17,7 @@ public class EntityVelocity extends AbstractPotionItemAsObjectDataEntityVelocity
 	}
 
 	public static ClientBoundPacketData create(int entityId, short velX, short velY, short velZ) {
-		ClientBoundPacketData entityvelocity = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_VELOCITY);
+		ClientBoundPacketData entityvelocity = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_VELOCITY);
 		VarNumberSerializer.writeVarInt(entityvelocity, entityId);
 		entityvelocity.writeShort(velX);
 		entityvelocity.writeShort(velY);

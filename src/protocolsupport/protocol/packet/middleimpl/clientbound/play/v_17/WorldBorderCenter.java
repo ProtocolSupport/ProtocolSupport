@@ -12,7 +12,7 @@ public class WorldBorderCenter extends MiddleWorldBorderCenter {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData worldborderPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_WORLDBORDER_CENTER);
+		ClientBoundPacketData worldborderPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WORLDBORDER_CENTER);
 		worldborderPacket.writeDouble(x);
 		worldborderPacket.writeDouble(z);
 		codec.writeClientbound(worldborderPacket);

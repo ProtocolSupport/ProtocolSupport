@@ -13,7 +13,7 @@ public class SetPosition extends MiddleSetPosition {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData setposition = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_POSITION);
+		ClientBoundPacketData setposition = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_POSITION);
 		setposition.writeDouble(x);
 		setposition.writeDouble(y);
 		setposition.writeDouble(z);

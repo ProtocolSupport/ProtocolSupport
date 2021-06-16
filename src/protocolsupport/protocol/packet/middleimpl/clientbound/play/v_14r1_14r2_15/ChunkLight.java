@@ -17,7 +17,7 @@ public class ChunkLight extends AbstractLimitedHeightChunkLight {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData chunklightPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_CHUNK_LIGHT);
+		ClientBoundPacketData chunklightPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_LIGHT);
 		PositionSerializer.writeVarIntChunkCoord(chunklightPacket, coord);
 		VarNumberSerializer.writeVarInt(chunklightPacket, limitedSetSkyLightMask);
 		VarNumberSerializer.writeVarInt(chunklightPacket, limitedSetBlockLightMask);

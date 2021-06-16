@@ -17,7 +17,7 @@ public class EntityDestroy extends MiddleEntityDestroy {
 	}
 
 	public static ClientBoundPacketData create(int entityId) {
-		ClientBoundPacketData entitydestroyPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY);
+		ClientBoundPacketData entitydestroyPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_DESTROY);
 		VarNumberSerializer.writeVarInt(entitydestroyPacket, 1); //entity array length
 		VarNumberSerializer.writeVarInt(entitydestroyPacket, entityId);
 		return entitydestroyPacket;

@@ -30,14 +30,14 @@ public class Ping extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void write() {
-		ServerBoundPacketData setprotocol = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_HANDSHAKE_START);
+		ServerBoundPacketData setprotocol = ServerBoundPacketData.create(ServerBoundPacketType.HANDSHAKE_START);
 		VarNumberSerializer.writeVarInt(setprotocol, ProtocolVersionsHelper.LATEST_PC.getId());
 		StringSerializer.writeVarIntUTF8String(setprotocol, hostname);
 		setprotocol.writeShort(port);
 		VarNumberSerializer.writeVarInt(setprotocol, 1);
 		codec.writeServerbound(setprotocol);
 
-		codec.writeServerbound(ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_STATUS_REQUEST));
+		codec.writeServerbound(ServerBoundPacketData.create(ServerBoundPacketType.STATUS_REQUEST));
 	}
 
 }

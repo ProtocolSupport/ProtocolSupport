@@ -19,7 +19,7 @@ public class EntityEquipment extends MiddleEntityEquipment {
 	protected void write() {
 		String locale = clientCache.getLocale();
 
-		ClientBoundPacketData entityequipment = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_EQUIPMENT);
+		ClientBoundPacketData entityequipment = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_EQUIPMENT);
 		VarNumberSerializer.writeVarInt(entityequipment, entityId);
 		int lastEntryIndex = entries.size() - 1;
 		for (int entryIndex = 0; entryIndex <= lastEntryIndex; entryIndex++) {

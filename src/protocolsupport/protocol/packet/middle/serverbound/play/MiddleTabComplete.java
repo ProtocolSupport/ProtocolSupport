@@ -17,7 +17,7 @@ public abstract class MiddleTabComplete extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void write() {
-		ServerBoundPacketData tabcomplete = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_TAB_COMPLETE);
+		ServerBoundPacketData tabcomplete = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_TAB_COMPLETE);
 		VarNumberSerializer.writeVarInt(tabcomplete, id);
 		StringSerializer.writeVarIntUTF8String(tabcomplete, string);
 		codec.writeServerbound(tabcomplete);

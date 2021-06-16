@@ -48,7 +48,7 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 	}
 
 	protected static ClientBoundPacketData create(ProtocolVersion version, String locale, byte windowId, int slot, NetworkItemStack itemstack) {
-		ClientBoundPacketData windowslot = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_WINDOW_SET_SLOT);
+		ClientBoundPacketData windowslot = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WINDOW_SET_SLOT);
 		windowslot.writeByte(windowId);
 		windowslot.writeShort(slot);
 		ItemStackSerializer.writeItemStack(windowslot, version, locale, itemstack);

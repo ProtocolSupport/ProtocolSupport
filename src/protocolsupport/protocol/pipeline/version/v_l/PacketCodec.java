@@ -8,8 +8,8 @@ public class PacketCodec extends BytePacketCodec {
 	protected static final PacketCodec instance = new PacketCodec();
 
 	{
-		registry.register(ClientBoundPacketType.CLIENTBOUND_LOGIN_DISCONNECT, 0xFF);
-		registry.register(ClientBoundPacketType.CLIENTBOUND_STATUS_SERVER_INFO, 0xFF);
+		registry.register(ClientBoundPacketType.LOGIN_DISCONNECT, 0xFF);
+		registry.register(ClientBoundPacketType.STATUS_SERVER_INFO, 0xFF);
 	}
 
 }

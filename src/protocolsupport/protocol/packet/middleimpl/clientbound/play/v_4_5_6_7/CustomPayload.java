@@ -30,14 +30,14 @@ public class CustomPayload extends MiddleCustomPayload {
 	}
 
 	public static <T> ClientBoundPacketData create(ProtocolVersion version, String tag, T type, BiConsumer<ByteBuf, T> typeWriter) {
-		ClientBoundPacketData custompayload = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
+		ClientBoundPacketData custompayload = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeString(custompayload, version, tag);
 		MiscSerializer.writeShortLengthPrefixedType(custompayload, type, typeWriter);
 		return custompayload;
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, String tag, ByteBuf data) {
-		ClientBoundPacketData custompayload = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
+		ClientBoundPacketData custompayload = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeString(custompayload, version, tag);
 		ArraySerializer.writeShortByteArray(custompayload, data);
 		return custompayload;

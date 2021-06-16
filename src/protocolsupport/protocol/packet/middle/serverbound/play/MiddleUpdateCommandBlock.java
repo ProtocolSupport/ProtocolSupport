@@ -35,7 +35,7 @@ public abstract class MiddleUpdateCommandBlock extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(Position position, String command, Mode mode, int flags) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_UPDATE_COMMAND_BLOCK);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_UPDATE_COMMAND_BLOCK);
 		PositionSerializer.writePosition(creator, position);
 		StringSerializer.writeVarIntUTF8String(creator, command);
 		MiscSerializer.writeVarIntEnum(creator, mode);

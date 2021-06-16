@@ -23,7 +23,7 @@ public class Chat extends MiddleChat {
 	}
 
 	public static ClientBoundPacketData create(MessagePosition position, String messageJson) {
-		ClientBoundPacketData chat = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_CHAT);
+		ClientBoundPacketData chat = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHAT);
 		StringSerializer.writeVarIntUTF8String(chat, messageJson);
 		MiscSerializer.writeByteEnum(chat, position);
 		return chat;

@@ -19,7 +19,7 @@ public abstract class MiddleNameItem extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(String name) {
-		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_NAME_ITEM);
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_NAME_ITEM);
 		StringSerializer.writeVarIntUTF8String(serializer, name);
 		return serializer;
 	}

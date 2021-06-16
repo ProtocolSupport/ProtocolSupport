@@ -19,7 +19,7 @@ public abstract class MiddleSteerBoat extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(boolean rightPaddleTurning, boolean leftPaddleTurning) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_STEER_BOAT);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_STEER_BOAT);
 		creator.writeBoolean(rightPaddleTurning);
 		creator.writeBoolean(leftPaddleTurning);
 		return creator;

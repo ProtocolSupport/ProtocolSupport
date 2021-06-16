@@ -12,7 +12,7 @@ public class TitleClear extends MiddleTitleClear {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData titleclearPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_TITLE_CLEAR);
+		ClientBoundPacketData titleclearPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_TITLE_CLEAR);
 		codec.writeClientbound(titleclearPacket);
 	}
 

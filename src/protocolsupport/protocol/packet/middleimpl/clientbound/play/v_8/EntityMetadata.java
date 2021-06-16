@@ -31,7 +31,7 @@ public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata
 
 	@Override
 	protected void writeEntityMetadata(NetworkEntityMetadataList remappedMetadata) {
-		ClientBoundPacketData entitymetadataPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
+		ClientBoundPacketData entitymetadataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_METADATA);
 		VarNumberSerializer.writeVarInt(entitymetadataPacket, entityId);
 		NetworkEntityMetadataSerializer.writeLegacyData(entitymetadataPacket, version, clientCache.getLocale(), remappedMetadata);
 		codec.writeClientbound(entitymetadataPacket);

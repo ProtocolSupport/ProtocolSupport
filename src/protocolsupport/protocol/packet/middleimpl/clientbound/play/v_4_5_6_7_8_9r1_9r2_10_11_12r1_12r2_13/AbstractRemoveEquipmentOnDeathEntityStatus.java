@@ -21,7 +21,7 @@ public abstract class AbstractRemoveEquipmentOnDeathEntityStatus extends Abstrac
 			writeEquipmentRemove();
 		}
 
-		ClientBoundPacketData entitystatus = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_STATUS);
+		ClientBoundPacketData entitystatus = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_STATUS);
 		entitystatus.writeInt(entityId);
 		entitystatus.writeByte(status);
 		codec.writeClientbound(entitystatus);

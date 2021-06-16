@@ -20,7 +20,7 @@ public class WorldParticle extends MiddleWorldParticle {
 	protected void write() {
 		particle = legacyParticleTable.get(particle.getClass()).apply(particle);
 		if (particle != null) {
-			ClientBoundPacketData spawnparticle = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
+			ClientBoundPacketData spawnparticle = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WORLD_PARTICLES);
 			spawnparticle.writeInt(PreFlatteningNetworkParticleIntIdRegistryDataSerializer.getId(particle));
 			spawnparticle.writeBoolean(longdist);
 			spawnparticle.writeFloat((float) x);

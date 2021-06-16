@@ -28,7 +28,7 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int entityId, Action action, Vector interactedAt, UsedHand hand, boolean sneaking) {
-		ServerBoundPacketData useentity = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_USE_ENTITY);
+		ServerBoundPacketData useentity = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_USE_ENTITY);
 		VarNumberSerializer.writeVarInt(useentity, entityId);
 		MiscSerializer.writeVarIntEnum(useentity, action);
 		switch (action) {

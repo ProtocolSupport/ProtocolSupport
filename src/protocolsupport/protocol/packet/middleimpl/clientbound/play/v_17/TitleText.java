@@ -17,7 +17,7 @@ public class TitleText extends MiddleTitleText {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData titletextPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_TITLE_TEXT);
+		ClientBoundPacketData titletextPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_TITLE_TEXT);
 		StringSerializer.writeVarIntUTF8String(titletextPacket, ChatSerializer.serialize(version, clientCache.getLocale(), text));
 		codec.writeClientbound(titletextPacket);
 	}

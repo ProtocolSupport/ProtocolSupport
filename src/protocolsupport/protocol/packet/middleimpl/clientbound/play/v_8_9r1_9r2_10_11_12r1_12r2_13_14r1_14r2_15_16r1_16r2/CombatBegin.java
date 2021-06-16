@@ -13,7 +13,7 @@ public class CombatBegin extends MiddleCombatBegin {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData combatstartPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_COMBAT_BEGIN);
+		ClientBoundPacketData combatstartPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_COMBAT_BEGIN);
 		VarNumberSerializer.writeVarInt(combatstartPacket, 0); //action (0 - start)
 		codec.writeClientbound(combatstartPacket);
 	}

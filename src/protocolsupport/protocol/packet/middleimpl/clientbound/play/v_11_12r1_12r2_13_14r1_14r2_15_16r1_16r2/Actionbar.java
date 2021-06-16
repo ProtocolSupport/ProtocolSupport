@@ -18,7 +18,7 @@ public class Actionbar extends MiddleActionbar {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData actionbarPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ACTIONBAR);
+		ClientBoundPacketData actionbarPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ACTIONBAR);
 		VarNumberSerializer.writeVarInt(actionbarPacket, 2); //legacy title action (2 - set actionbar text)
 		StringSerializer.writeVarIntUTF8String(actionbarPacket, ChatSerializer.serialize(version, clientCache.getLocale(), text));
 		codec.writeClientbound(actionbarPacket);

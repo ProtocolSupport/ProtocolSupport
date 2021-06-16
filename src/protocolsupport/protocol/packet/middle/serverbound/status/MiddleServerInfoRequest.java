@@ -12,7 +12,7 @@ public abstract class MiddleServerInfoRequest extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void write() {
-		codec.writeServerbound(ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_STATUS_REQUEST));
+		codec.writeServerbound(ServerBoundPacketData.create(ServerBoundPacketType.STATUS_REQUEST));
 	}
 
 }

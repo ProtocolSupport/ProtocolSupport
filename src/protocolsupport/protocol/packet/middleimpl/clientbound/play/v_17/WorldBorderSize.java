@@ -12,7 +12,7 @@ public class WorldBorderSize extends MiddleWorldBorderSize {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData worldborderPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_WORLDBORDER_SIZE);
+		ClientBoundPacketData worldborderPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WORLDBORDER_SIZE);
 		worldborderPacket.writeDouble(size);
 		codec.writeClientbound(worldborderPacket);
 	}

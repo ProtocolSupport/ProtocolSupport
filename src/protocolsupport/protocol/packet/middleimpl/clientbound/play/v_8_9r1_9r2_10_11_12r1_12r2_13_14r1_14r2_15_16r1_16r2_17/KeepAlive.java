@@ -14,7 +14,7 @@ public class KeepAlive extends MiddleKeepAlive {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData keepalive = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_KEEP_ALIVE);
+		ClientBoundPacketData keepalive = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_KEEP_ALIVE);
 		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_12_1)) {
 			VarNumberSerializer.writeVarInt(keepalive, keepAliveId);
 		} else {

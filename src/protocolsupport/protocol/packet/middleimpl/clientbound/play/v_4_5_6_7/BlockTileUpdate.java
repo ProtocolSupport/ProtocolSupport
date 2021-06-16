@@ -34,7 +34,7 @@ public class BlockTileUpdate extends AbstractChunkCacheBlockTileUpdate {
 			}
 			return blocksignupdate;
 		} else {
-			ClientBoundPacketData blocktileupdate = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_BLOCK_TILE);
+			ClientBoundPacketData blocktileupdate = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_BLOCK_TILE);
 			PositionSerializer.writeLegacyPositionS(blocktileupdate, tile.getPosition());
 			blocktileupdate.writeByte(type.getNetworkId());
 			ItemStackSerializer.writeShortTag(blocktileupdate, tile.getNBT());

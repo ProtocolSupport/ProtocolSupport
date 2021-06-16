@@ -23,7 +23,7 @@ public abstract class MiddleMoveLook extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(double x, double y, double z, float yaw, float pitch, boolean onGround) {
-		ServerBoundPacketData movelook = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_POSITION_LOOK);
+		ServerBoundPacketData movelook = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_POSITION_LOOK);
 		movelook.writeDouble(x);
 		movelook.writeDouble(y);
 		movelook.writeDouble(z);

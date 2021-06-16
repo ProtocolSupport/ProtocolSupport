@@ -19,7 +19,7 @@ public abstract class MiddleInventoryButton extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int windowId, int enchantment) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_ENCHANT_SELECT);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_ENCHANT_SELECT);
 		creator.writeByte(windowId);
 		creator.writeByte(enchantment);
 		return creator;

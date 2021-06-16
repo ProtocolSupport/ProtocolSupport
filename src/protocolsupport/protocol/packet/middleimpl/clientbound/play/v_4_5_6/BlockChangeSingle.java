@@ -24,7 +24,7 @@ public class BlockChangeSingle extends AbstractChunkCacheBlockChangeSingle {
 	}
 
 	public static ClientBoundPacketData create(Position position, int id) {
-		ClientBoundPacketData blockchangesingle = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE);
+		ClientBoundPacketData blockchangesingle = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_BLOCK_CHANGE_SINGLE);
 		PositionSerializer.writeLegacyPositionB(blockchangesingle, position);
 		blockchangesingle.writeShort(PreFlatteningBlockIdData.getIdFromCombinedId(id));
 		blockchangesingle.writeByte(PreFlatteningBlockIdData.getDataFromCombinedId(id));

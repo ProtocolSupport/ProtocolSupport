@@ -73,7 +73,7 @@ public class InventoryData extends MiddleInventoryData {
 	}
 
 	protected static ClientBoundPacketData create(byte windowId, int type, int value) {
-		ClientBoundPacketData windowdata = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_WINDOW_DATA);
+		ClientBoundPacketData windowdata = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WINDOW_DATA);
 		windowdata.writeByte(windowId);
 		windowdata.writeShort(type);
 		windowdata.writeShort(value);

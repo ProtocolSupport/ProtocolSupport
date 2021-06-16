@@ -30,7 +30,7 @@ public class EntityEquipment extends AbstractSingleEntityEquipment {
 		ProtocolVersion version, String locale,
 		int entityId, Slot slot, NetworkItemStack itemstack
 	) {
-		ClientBoundPacketData entityequipment = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_EQUIPMENT);
+		ClientBoundPacketData entityequipment = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_EQUIPMENT);
 		VarNumberSerializer.writeVarInt(entityequipment, entityId);
 		MiscSerializer.writeVarIntEnum(entityequipment, slot);
 		ItemStackSerializer.writeItemStack(entityequipment, version, locale, itemstack);

@@ -25,7 +25,7 @@ public class EntityEquipment extends AbstractNoOffhandEntityEquipment {
 		ProtocolVersion version, String locale,
 		int entityId, Slot slot, NetworkItemStack itemstack
 	) {
-		ClientBoundPacketData entityequipment = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_EQUIPMENT);
+		ClientBoundPacketData entityequipment = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_EQUIPMENT);
 		entityequipment.writeInt(entityId);
 		entityequipment.writeShort(getSlotId(slot));
 		ItemStackSerializer.writeItemStack(entityequipment, version, locale, itemstack);

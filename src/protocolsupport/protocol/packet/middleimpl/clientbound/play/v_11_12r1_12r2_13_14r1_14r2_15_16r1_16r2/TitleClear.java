@@ -13,7 +13,7 @@ public class TitleClear extends MiddleTitleClear {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData titleclearPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_TITLE_CLEAR);
+		ClientBoundPacketData titleclearPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_TITLE_CLEAR);
 		VarNumberSerializer.writeVarInt(titleclearPacket, reset ? 5 : 4); //legacy title action (4 - hide title, 5 - reset title)
 		codec.writeClientbound(titleclearPacket);
 	}

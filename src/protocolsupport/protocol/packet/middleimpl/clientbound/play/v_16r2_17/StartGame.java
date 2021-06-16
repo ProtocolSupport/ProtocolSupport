@@ -18,7 +18,7 @@ public class StartGame extends MiddleStartGame {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData startgame = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_START_GAME);
+		ClientBoundPacketData startgame = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_START_GAME);
 		startgame.writeInt(player.getId());
 		startgame.writeBoolean(hardcore);
 		startgame.writeByte(gamemodeCurrent.getId());

@@ -22,7 +22,7 @@ public abstract class MiddleUpdateCommandMinecart extends ServerBoundMiddlePacke
 	}
 
 	public static ServerBoundPacketData create(int entityId, String command, boolean trackOutput) {
-		ServerBoundPacketData updatecommandminecart = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_UPDATE_COMMAND_MINECART);
+		ServerBoundPacketData updatecommandminecart = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_UPDATE_COMMAND_MINECART);
 		VarNumberSerializer.writeVarInt(updatecommandminecart, entityId);
 		StringSerializer.writeVarIntUTF8String(updatecommandminecart, command);
 		updatecommandminecart.writeBoolean(trackOutput);

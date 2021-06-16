@@ -13,7 +13,7 @@ public class WorldBorderWarnDistance extends MiddleWorldBorderWarnDistance {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData worldborderPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_WORLDBORDER_WARN_DISTANCE);
+		ClientBoundPacketData worldborderPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WORLDBORDER_WARN_DISTANCE);
 		VarNumberSerializer.writeVarInt(worldborderPacket, 5); //action (4 - warn distance)
 		VarNumberSerializer.writeVarInt(worldborderPacket, warnDistance);
 		codec.writeClientbound(worldborderPacket);

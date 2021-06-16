@@ -23,7 +23,7 @@ public abstract class MiddleEntityAction extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int entityId, Action action, int jumpBoost) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_ENTITY_ACTION);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_ENTITY_ACTION);
 		VarNumberSerializer.writeVarInt(creator, entityId);
 		MiscSerializer.writeVarIntEnum(creator, action);
 		VarNumberSerializer.writeVarInt(creator, jumpBoost);
