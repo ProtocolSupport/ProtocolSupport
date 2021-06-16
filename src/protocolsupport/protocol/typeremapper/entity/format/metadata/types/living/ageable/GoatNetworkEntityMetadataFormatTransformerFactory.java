@@ -1,13 +1,16 @@
 package protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ageable;
 
+import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.base.AgeableNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class GoatNetworkEntityMetadataFormatTransformerFactory extends AgeableNetworkEntityMetadataFormatTransformerFactory {
 
 	public static final GoatNetworkEntityMetadataFormatTransformerFactory INSTANCE = new GoatNetworkEntityMetadataFormatTransformerFactory();
 
 	protected GoatNetworkEntityMetadataFormatTransformerFactory() {
-		//TODO: implement goat metadata
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Goat.SCREAMING, 17), ProtocolVersionsHelper.UP_1_17);
 	}
 
 }

@@ -264,6 +264,16 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> ANGER = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
 	}
 
+	public static class Axolotl extends Ageable {
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> VARIANT = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> PLAYING_DEAD = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> FROM_BUCKET = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
+	}
+
+	public static class Goat extends Ageable {
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> SCREAMING = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
+	}
+
 	public static class Enderman extends Insentient {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBlockData> CARRIED_BLOCK = takeNextIndex(NetworkEntityMetadataObjectBlockData.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> SCREAMING = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
