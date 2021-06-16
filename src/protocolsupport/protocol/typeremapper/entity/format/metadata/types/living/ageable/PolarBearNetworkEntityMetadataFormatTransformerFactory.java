@@ -10,7 +10,8 @@ public class PolarBearNetworkEntityMetadataFormatTransformerFactory extends Agea
 	public static final PolarBearNetworkEntityMetadataFormatTransformerFactory INSTANCE = new PolarBearNetworkEntityMetadataFormatTransformerFactory();
 
 	protected PolarBearNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.PolarBear.STANDING_UP, 16), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.PolarBear.STANDING_UP, 17), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.PolarBear.STANDING_UP, 16), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.PolarBear.STANDING_UP, 15), ProtocolVersionsHelper.ALL_1_14);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.PolarBear.STANDING_UP, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 	}

@@ -143,15 +143,15 @@ public class CommonNBT {
 
 	public static String deserializeBlockDataFromNBT(NBTCompound compound) {
 		String name = compound.getStringTagValueOrThrow("Name");
-		NBTCompound properties = compound.getCompoundTagOrNull("Properties");
-		if (properties == null) {
+		NBTCompound propertiesTag = compound.getCompoundTagOrNull("Properties");
+		if (propertiesTag == null) {
 			return name;
 		} else {
 			StringJoiner joiner = new StringJoiner(",", name + "[", "]");
-			for (Entry<String, NBT> entry : properties.getTags().entrySet()) {
-				NBT value = entry.getValue();
-				if (value instanceof NBTString) {
-					joiner.add(entry.getKey() + "=" + ((NBTString) value).getValue());
+			for (Entry<String, NBT> entry : propertiesTag.getTags().entrySet()) {
+				NBT valueTag = entry.getValue();
+				if (valueTag instanceof NBTString stringTag) {
+					joiner.add(entry.getKey() + "=" + stringTag.getValue());
 				}
 			}
 			return joiner.toString();

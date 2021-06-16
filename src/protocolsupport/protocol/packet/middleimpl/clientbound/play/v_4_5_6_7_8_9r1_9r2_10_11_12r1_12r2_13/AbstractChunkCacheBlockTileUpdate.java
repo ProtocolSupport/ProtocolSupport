@@ -2,15 +2,15 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockTileUpdate;
-import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
-import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
+import protocolsupport.protocol.storage.netcache.chunk.LimitedHeightCachedChunk;
+import protocolsupport.protocol.storage.netcache.chunk.LimitedHeightChunkCache;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.types.ChunkCoord;
 import protocolsupport.protocol.types.Position;
 
 public abstract class AbstractChunkCacheBlockTileUpdate extends MiddleBlockTileUpdate {
 
-	protected final ChunkCache chunkCache = cache.getChunkCache();
+	protected final LimitedHeightChunkCache chunkCache = cache.getChunkCache();
 
 	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
@@ -23,7 +23,7 @@ public abstract class AbstractChunkCacheBlockTileUpdate extends MiddleBlockTileU
 		Position position = tile.getPosition();
 		int x = position.getX();
 		int z = position.getZ();
-		CachedChunk cachedChunk = chunkCache.get(ChunkCoord.fromGlobal(x, z));
+		LimitedHeightCachedChunk cachedChunk = chunkCache.get(ChunkCoord.fromGlobal(x, z));
 		if (cachedChunk == null) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
@@ -31,7 +31,7 @@ public abstract class AbstractChunkCacheBlockTileUpdate extends MiddleBlockTileU
 		int sectionNumber = y >> 4;
 		tile =
 			tileRemapper.tileThatNeedsBlockData(tile.getType()) ?
-			tileRemapper.remap(tile, cachedChunk.getBlock(sectionNumber, CachedChunk.getBlockIndex(x & 0xF, y & 0xF, z & 0xF))) :
+			tileRemapper.remap(tile, cachedChunk.getBlock(sectionNumber, LimitedHeightCachedChunk.getBlockIndex(x & 0xF, y & 0xF, z & 0xF))) :
 			tileRemapper.remap(tile);
 		cachedChunk.getTiles(sectionNumber).put(position, tile);
 	}

@@ -1,17 +1,16 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import java.util.BitSet;
+
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.ChunkCoord;
 import protocolsupport.protocol.types.TileEntity;
-import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.protocol.types.chunk.ChunkSectonBlockData;
 import protocolsupport.protocol.types.nbt.NBTCompound;
-import protocolsupport.utils.BitUtils;
 
 public abstract class MiddleChunkData extends ClientBoundMiddlePacket {
 
@@ -20,29 +19,26 @@ public abstract class MiddleChunkData extends ClientBoundMiddlePacket {
 	}
 
 	protected ChunkCoord coord;
-	protected boolean full;
-	protected int blockMask;
+	protected BitSet blockMask;
 	protected NBTCompound heightmaps;
 	protected int[] biomes;
-	protected final ChunkSectonBlockData[] sections = new ChunkSectonBlockData[ChunkConstants.SECTION_COUNT_BLOCKS];
+	protected ChunkSectonBlockData[] sections;
 	protected TileEntity[] tiles;
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		coord = PositionSerializer.readIntChunkCoord(serverdata);
-		full = serverdata.readBoolean();
 
-		blockMask = VarNumberSerializer.readVarInt(serverdata);
+		blockMask = BitSet.valueOf(ArraySerializer.readVarIntLongArray(serverdata));
 		heightmaps = ItemStackSerializer.readDirectTag(serverdata);
-		if (full) {
-			biomes = ArraySerializer.readVarIntVarIntArray(serverdata);
-		}
+		biomes = ArraySerializer.readVarIntVarIntArray(serverdata);
 
 		{
 			ByteBuf chunkdata = ArraySerializer.readVarIntByteArraySlice(serverdata);
-			for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-				if (BitUtils.isIBitSet(blockMask, sectionNumber)) {
-					sections[sectionNumber] = ChunkSectonBlockData.readFromStream(chunkdata);
+			sections = new ChunkSectonBlockData[blockMask.length()];
+			for (int sectionIndex = 0; sectionIndex < sections.length; sectionIndex++) {
+				if (blockMask.get(sectionIndex)) {
+					sections[sectionIndex] = ChunkSectonBlockData.readFromStream(chunkdata);
 				}
 			}
 		}

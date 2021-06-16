@@ -7,7 +7,7 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class RecyclableWrapCompressor extends Compressor {
 
-	protected static final Recycler<RecyclableWrapCompressor> recycler = new Recycler<RecyclableWrapCompressor>() {
+	protected static final Recycler<RecyclableWrapCompressor> recycler = new Recycler<>() {
 		@Override
 		protected RecyclableWrapCompressor newObject(Handle<RecyclableWrapCompressor> handle) {
 			return new RecyclableWrapCompressor(handle);

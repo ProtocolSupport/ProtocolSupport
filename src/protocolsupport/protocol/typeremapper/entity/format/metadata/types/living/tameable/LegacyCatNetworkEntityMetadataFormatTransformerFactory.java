@@ -13,19 +13,19 @@ public class LegacyCatNetworkEntityMetadataFormatTransformerFactory extends Tame
 	public static final LegacyCatNetworkEntityMetadataFormatTransformerFactory INSTANCE = new LegacyCatNetworkEntityMetadataFormatTransformerFactory();
 
 	protected LegacyCatNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueTransformer<NetworkEntityMetadataObjectVarInt>(NetworkEntityMetadataObjectIndex.Cat.VARIANT, 15) {
+		add(new NetworkEntityMetadataObjectIndexValueTransformer<>(NetworkEntityMetadataObjectIndex.Cat.VARIANT, 15) {
 			@Override
 			public NetworkEntityMetadataObject<?> transformValue(NetworkEntityMetadataObjectVarInt object) {
 				return new NetworkEntityMetadataObjectVarInt(getLegacyCatVariant(object.getValue()));
 			}
 		}, ProtocolVersionsHelper.RANGE__1_10__1_13_2);
-		add(new NetworkEntityMetadataObjectIndexValueTransformer<NetworkEntityMetadataObjectVarInt>(NetworkEntityMetadataObjectIndex.Cat.VARIANT, 14) {
+		add(new NetworkEntityMetadataObjectIndexValueTransformer<>(NetworkEntityMetadataObjectIndex.Cat.VARIANT, 14) {
 			@Override
 			public NetworkEntityMetadataObject<?> transformValue(NetworkEntityMetadataObjectVarInt object) {
 				return new NetworkEntityMetadataObjectVarInt(getLegacyCatVariant(object.getValue()));
 			}
 		}, ProtocolVersionsHelper.ALL_1_9);
-		add(new NetworkEntityMetadataObjectIndexValueTransformer<NetworkEntityMetadataObjectVarInt>(NetworkEntityMetadataObjectIndex.Cat.VARIANT, 18) {
+		add(new NetworkEntityMetadataObjectIndexValueTransformer<>(NetworkEntityMetadataObjectIndex.Cat.VARIANT, 18) {
 			@Override
 			public NetworkEntityMetadataObject<?> transformValue(NetworkEntityMetadataObjectVarInt object) {
 				return new NetworkEntityMetadataObjectByte((byte) getLegacyCatVariant(object.getValue()));

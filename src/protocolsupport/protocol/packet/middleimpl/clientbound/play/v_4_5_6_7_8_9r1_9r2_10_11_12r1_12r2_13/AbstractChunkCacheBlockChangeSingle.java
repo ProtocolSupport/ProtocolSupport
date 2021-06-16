@@ -2,13 +2,13 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeSingle;
-import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
-import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
+import protocolsupport.protocol.storage.netcache.chunk.LimitedHeightCachedChunk;
+import protocolsupport.protocol.storage.netcache.chunk.LimitedHeightChunkCache;
 import protocolsupport.protocol.types.ChunkCoord;
 
 public abstract class AbstractChunkCacheBlockChangeSingle extends MiddleBlockChangeSingle {
 
-	protected final ChunkCache chunkCache = cache.getChunkCache();
+	protected final LimitedHeightChunkCache chunkCache = cache.getChunkCache();
 
 	protected AbstractChunkCacheBlockChangeSingle(MiddlePacketInit init) {
 		super(init);
@@ -25,13 +25,13 @@ public abstract class AbstractChunkCacheBlockChangeSingle extends MiddleBlockCha
 		int x = position.getX();
 		int z = position.getZ();
 
-		CachedChunk cachedChunk = chunkCache.get(ChunkCoord.fromGlobal(x, z));
+		LimitedHeightCachedChunk cachedChunk = chunkCache.get(ChunkCoord.fromGlobal(x, z));
 
 		if (cachedChunk == null) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
 
-		cachedChunk.setBlock(y >> 4, CachedChunk.getBlockIndex(x & 0xF, y & 0xF, z & 0xF), (short) id);
+		cachedChunk.setBlock(y >> 4, LimitedHeightCachedChunk.getBlockIndex(x & 0xF, y & 0xF, z & 0xF), (short) id);
 	}
 
 }

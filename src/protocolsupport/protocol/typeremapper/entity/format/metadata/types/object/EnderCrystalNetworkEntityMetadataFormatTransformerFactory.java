@@ -10,11 +10,13 @@ public class EnderCrystalNetworkEntityMetadataFormatTransformerFactory extends B
 	public static final EnderCrystalNetworkEntityMetadataFormatTransformerFactory INSTANCE = new EnderCrystalNetworkEntityMetadataFormatTransformerFactory();
 
 	protected EnderCrystalNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.EnderCrystal.TARGET, 7), ProtocolVersionsHelper.UP_1_14);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.EnderCrystal.TARGET, 8), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.EnderCrystal.TARGET, 7), ProtocolVersionsHelper.RANGE__1_14__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.EnderCrystal.TARGET, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.EnderCrystal.TARGET, 5), ProtocolVersionsHelper.ALL_1_9);
 
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.EnderCrystal.SHOW_BOTTOM, 8), ProtocolVersionsHelper.UP_1_14);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.EnderCrystal.SHOW_BOTTOM, 9), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.EnderCrystal.SHOW_BOTTOM, 8), ProtocolVersionsHelper.RANGE__1_14__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.EnderCrystal.SHOW_BOTTOM, 7), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.EnderCrystal.SHOW_BOTTOM, 6), ProtocolVersionsHelper.ALL_1_9);
 	}

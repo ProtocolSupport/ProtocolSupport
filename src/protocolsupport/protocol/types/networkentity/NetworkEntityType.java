@@ -97,6 +97,9 @@ public enum NetworkEntityType {
 	HOGLIN(EType.MOB, EntityType.HOGLIN),
 	ZOGLIN(EType.MOB, EntityType.ZOGLIN),
 	STRIDER(EType.MOB, EntityType.STRIDER),
+	AXOLOTL(EType.MOB, EntityType.AXOLOTL),
+	GLOW_SQUID(EType.MOB, EntityType.GLOW_SQUID),
+	GOAT(EType.MOB, EntityType.GOAT),
 	ARMOR_STAND_MOB(EType.MOB, EntityType.ARMOR_STAND),
 	// Objects
 	BOAT(EType.OBJECT, EntityType.BOAT),
@@ -126,7 +129,6 @@ public enum NetworkEntityType {
 	LAMA_SPIT(EType.OBJECT, EntityType.LLAMA_SPIT),
 	DRAGON_FIREBALL(EType.OBJECT, EntityType.DRAGON_FIREBALL),
 	EVOCATOR_FANGS(EType.OBJECT, EntityType.EVOKER_FANGS),
-	ARMOR_STAND_OBJECT(EType.OBJECT, EntityType.ARMOR_STAND),
 	MINECART(EType.OBJECT, EntityType.MINECART),
 	MINECART_CHEST(EType.OBJECT, EntityType.MINECART_CHEST, MINECART),
 	MINECART_FURNACE(EType.OBJECT, EntityType.MINECART_FURNACE, MINECART),
@@ -134,12 +136,18 @@ public enum NetworkEntityType {
 	MINECART_MOB_SPAWNER(EType.OBJECT, EntityType.MINECART_MOB_SPAWNER, MINECART),
 	MINECART_HOPPER(EType.OBJECT, EntityType.MINECART_HOPPER, MINECART),
 	MINECART_COMMAND(EType.OBJECT, EntityType.MINECART_COMMAND, MINECART),
+	GLOW_ITEM_FRAME(EType.OBJECT, EntityType.GLOW_ITEM_FRAME),
+	ARMOR_STAND_OBJECT(EType.OBJECT, EntityType.ARMOR_STAND),
 	THUNDERBOLT(EType.OBJECT, EntityType.LIGHTNING);
 
 	private final EType etype;
 	private final int typeId;
 	private final EntityType bukkitType;
 	private final NetworkEntityType superType;
+
+	public @Nonnull EType getEType() {
+		return etype;
+	}
 
 	public @Nullable NetworkEntityType getSuperType() {
 		return superType;

@@ -10,67 +10,66 @@ import org.spigotmc.SpigotConfig;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraft.server.v1_16_R3.EntityPlayer;
-import net.minecraft.server.v1_16_R3.ExpirableListEntry;
-import net.minecraft.server.v1_16_R3.GameProfileBanEntry;
-import net.minecraft.server.v1_16_R3.IChatBaseComponent;
-import net.minecraft.server.v1_16_R3.IpBanEntry;
-import net.minecraft.server.v1_16_R3.MinecraftServer;
-import net.minecraft.server.v1_16_R3.NetworkManager;
-import net.minecraft.server.v1_16_R3.PacketListenerPlayIn;
-import net.minecraft.server.v1_16_R3.PacketLoginInCustomPayload;
-import net.minecraft.server.v1_16_R3.PacketLoginInEncryptionBegin;
-import net.minecraft.server.v1_16_R3.PacketLoginInListener;
-import net.minecraft.server.v1_16_R3.PacketLoginInStart;
-import net.minecraft.server.v1_16_R3.PacketPlayInAbilities;
-import net.minecraft.server.v1_16_R3.PacketPlayInAdvancements;
-import net.minecraft.server.v1_16_R3.PacketPlayInArmAnimation;
-import net.minecraft.server.v1_16_R3.PacketPlayInAutoRecipe;
-import net.minecraft.server.v1_16_R3.PacketPlayInBEdit;
-import net.minecraft.server.v1_16_R3.PacketPlayInBeacon;
-import net.minecraft.server.v1_16_R3.PacketPlayInBlockDig;
-import net.minecraft.server.v1_16_R3.PacketPlayInBlockPlace;
-import net.minecraft.server.v1_16_R3.PacketPlayInBoatMove;
-import net.minecraft.server.v1_16_R3.PacketPlayInChat;
-import net.minecraft.server.v1_16_R3.PacketPlayInClientCommand;
-import net.minecraft.server.v1_16_R3.PacketPlayInCloseWindow;
-import net.minecraft.server.v1_16_R3.PacketPlayInCustomPayload;
-import net.minecraft.server.v1_16_R3.PacketPlayInDifficultyChange;
-import net.minecraft.server.v1_16_R3.PacketPlayInDifficultyLock;
-import net.minecraft.server.v1_16_R3.PacketPlayInEnchantItem;
-import net.minecraft.server.v1_16_R3.PacketPlayInEntityAction;
-import net.minecraft.server.v1_16_R3.PacketPlayInEntityNBTQuery;
-import net.minecraft.server.v1_16_R3.PacketPlayInFlying;
-import net.minecraft.server.v1_16_R3.PacketPlayInHeldItemSlot;
-import net.minecraft.server.v1_16_R3.PacketPlayInItemName;
-import net.minecraft.server.v1_16_R3.PacketPlayInJigsawGenerate;
-import net.minecraft.server.v1_16_R3.PacketPlayInKeepAlive;
-import net.minecraft.server.v1_16_R3.PacketPlayInPickItem;
-import net.minecraft.server.v1_16_R3.PacketPlayInRecipeDisplayed;
-import net.minecraft.server.v1_16_R3.PacketPlayInRecipeSettings;
-import net.minecraft.server.v1_16_R3.PacketPlayInResourcePackStatus;
-import net.minecraft.server.v1_16_R3.PacketPlayInSetCommandBlock;
-import net.minecraft.server.v1_16_R3.PacketPlayInSetCommandMinecart;
-import net.minecraft.server.v1_16_R3.PacketPlayInSetCreativeSlot;
-import net.minecraft.server.v1_16_R3.PacketPlayInSetJigsaw;
-import net.minecraft.server.v1_16_R3.PacketPlayInSettings;
-import net.minecraft.server.v1_16_R3.PacketPlayInSpectate;
-import net.minecraft.server.v1_16_R3.PacketPlayInSteerVehicle;
-import net.minecraft.server.v1_16_R3.PacketPlayInStruct;
-import net.minecraft.server.v1_16_R3.PacketPlayInTabComplete;
-import net.minecraft.server.v1_16_R3.PacketPlayInTeleportAccept;
-import net.minecraft.server.v1_16_R3.PacketPlayInTileNBTQuery;
-import net.minecraft.server.v1_16_R3.PacketPlayInTrSel;
-import net.minecraft.server.v1_16_R3.PacketPlayInTransaction;
-import net.minecraft.server.v1_16_R3.PacketPlayInUpdateSign;
-import net.minecraft.server.v1_16_R3.PacketPlayInUseEntity;
-import net.minecraft.server.v1_16_R3.PacketPlayInUseItem;
-import net.minecraft.server.v1_16_R3.PacketPlayInVehicleMove;
-import net.minecraft.server.v1_16_R3.PacketPlayInWindowClick;
-import net.minecraft.server.v1_16_R3.PlayerInteractManager;
-import net.minecraft.server.v1_16_R3.PlayerList;
-import net.minecraft.server.v1_16_R3.World;
-import net.minecraft.server.v1_16_R3.WorldServer;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.network.protocol.game.PacketListenerPlayIn;
+import net.minecraft.network.protocol.game.PacketPlayInAbilities;
+import net.minecraft.network.protocol.game.PacketPlayInAdvancements;
+import net.minecraft.network.protocol.game.PacketPlayInArmAnimation;
+import net.minecraft.network.protocol.game.PacketPlayInAutoRecipe;
+import net.minecraft.network.protocol.game.PacketPlayInBEdit;
+import net.minecraft.network.protocol.game.PacketPlayInBeacon;
+import net.minecraft.network.protocol.game.PacketPlayInBlockDig;
+import net.minecraft.network.protocol.game.PacketPlayInBlockPlace;
+import net.minecraft.network.protocol.game.PacketPlayInBoatMove;
+import net.minecraft.network.protocol.game.PacketPlayInChat;
+import net.minecraft.network.protocol.game.PacketPlayInClientCommand;
+import net.minecraft.network.protocol.game.PacketPlayInCloseWindow;
+import net.minecraft.network.protocol.game.PacketPlayInCustomPayload;
+import net.minecraft.network.protocol.game.PacketPlayInDifficultyChange;
+import net.minecraft.network.protocol.game.PacketPlayInDifficultyLock;
+import net.minecraft.network.protocol.game.PacketPlayInEnchantItem;
+import net.minecraft.network.protocol.game.PacketPlayInEntityAction;
+import net.minecraft.network.protocol.game.PacketPlayInEntityNBTQuery;
+import net.minecraft.network.protocol.game.PacketPlayInFlying;
+import net.minecraft.network.protocol.game.PacketPlayInHeldItemSlot;
+import net.minecraft.network.protocol.game.PacketPlayInItemName;
+import net.minecraft.network.protocol.game.PacketPlayInJigsawGenerate;
+import net.minecraft.network.protocol.game.PacketPlayInKeepAlive;
+import net.minecraft.network.protocol.game.PacketPlayInPickItem;
+import net.minecraft.network.protocol.game.PacketPlayInRecipeDisplayed;
+import net.minecraft.network.protocol.game.PacketPlayInRecipeSettings;
+import net.minecraft.network.protocol.game.PacketPlayInResourcePackStatus;
+import net.minecraft.network.protocol.game.PacketPlayInSetCommandBlock;
+import net.minecraft.network.protocol.game.PacketPlayInSetCommandMinecart;
+import net.minecraft.network.protocol.game.PacketPlayInSetCreativeSlot;
+import net.minecraft.network.protocol.game.PacketPlayInSetJigsaw;
+import net.minecraft.network.protocol.game.PacketPlayInSettings;
+import net.minecraft.network.protocol.game.PacketPlayInSpectate;
+import net.minecraft.network.protocol.game.PacketPlayInSteerVehicle;
+import net.minecraft.network.protocol.game.PacketPlayInStruct;
+import net.minecraft.network.protocol.game.PacketPlayInTabComplete;
+import net.minecraft.network.protocol.game.PacketPlayInTeleportAccept;
+import net.minecraft.network.protocol.game.PacketPlayInTileNBTQuery;
+import net.minecraft.network.protocol.game.PacketPlayInTrSel;
+import net.minecraft.network.protocol.game.PacketPlayInUpdateSign;
+import net.minecraft.network.protocol.game.PacketPlayInUseEntity;
+import net.minecraft.network.protocol.game.PacketPlayInUseItem;
+import net.minecraft.network.protocol.game.PacketPlayInVehicleMove;
+import net.minecraft.network.protocol.game.PacketPlayInWindowClick;
+import net.minecraft.network.protocol.game.ServerboundPongPacket;
+import net.minecraft.network.protocol.login.PacketLoginInCustomPayload;
+import net.minecraft.network.protocol.login.PacketLoginInEncryptionBegin;
+import net.minecraft.network.protocol.login.PacketLoginInListener;
+import net.minecraft.network.protocol.login.PacketLoginInStart;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.server.level.WorldServer;
+import net.minecraft.server.players.ExpirableListEntry;
+import net.minecraft.server.players.GameProfileBanEntry;
+import net.minecraft.server.players.IpBanEntry;
+import net.minecraft.server.players.PlayerList;
+import net.minecraft.world.level.World;
 import protocolsupport.protocol.packet.handler.AbstractLoginListenerPlay;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
@@ -86,12 +85,11 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 
 	@Override
 	protected JoinData createJoinData() {
-		WorldServer worldserver = server.getWorldServer(World.OVERWORLD);
+		WorldServer worldserver = server.getWorldServer(World.f);
 		EntityPlayer entity = new EntityPlayer(
 			server,
 			worldserver,
-			SpigotMiscUtils.toMojangGameProfile(connection.getLoginProfile()),
-			new PlayerInteractManager(worldserver)
+			SpigotMiscUtils.toMojangGameProfile(connection.getLoginProfile())
 		);
 		return new JoinData(entity.getBukkitEntity(), entity) {
 			@Override
@@ -128,7 +126,7 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 				}
 				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, reason);
 			}
-		} else if ((playerlist.players.size() >= playerlist.getMaxPlayers()) && !playerlist.f(mojangGameProfile)) {
+		} else if ((playerlist.j.size() >= playerlist.getMaxPlayers()) && !playerlist.isOp(mojangGameProfile)) {
 			event.disallow(PlayerLoginEvent.Result.KICK_FULL, SpigotConfig.serverFullMessage);
 		}
 	}
@@ -180,10 +178,6 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 
 	@Override
 	public void a(PacketPlayInSettings p0) {
-	}
-
-	@Override
-	public void a(PacketPlayInTransaction p0) {
 	}
 
 	@Override
@@ -344,6 +338,10 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 
 	@Override
 	public void a(PacketPlayInRecipeSettings var1) {
+	}
+
+	@Override
+	public void a(ServerboundPongPacket p0) {
 	}
 
 	@Override

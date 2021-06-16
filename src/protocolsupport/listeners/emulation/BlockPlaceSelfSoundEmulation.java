@@ -1,6 +1,7 @@
 package protocolsupport.listeners.emulation;
 
 import org.bukkit.SoundCategory;
+import org.bukkit.SoundGroup;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -8,12 +9,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import protocolsupport.api.Connection;
-import protocolsupport.api.MaterialAPI;
 import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData;
-import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData.BlockDataInfo;
 
 public class BlockPlaceSelfSoundEmulation implements Listener {
 
@@ -25,14 +23,14 @@ public class BlockPlaceSelfSoundEmulation implements Listener {
 			return;
 		}
 		ProtocolVersion version = connection.getVersion();
-		if ((version.getProtocolType() == ProtocolType.PC) &&version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_8)) {
-			BlockDataInfo blockdataentry = MinecraftBlockData.getBlockDataInfoByNetworkId(MaterialAPI.getBlockDataNetworkId(event.getBlock().getBlockData()));
+		if ((version.getProtocolType() == ProtocolType.PC) && version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_8)) {
+			SoundGroup soundgroup = event.getBlock().getBlockData().getSoundGroup();
 			player.playSound(
 				event.getBlock().getLocation(),
-				blockdataentry.getBreakSound(),
+				soundgroup.getStepSound(),
 				SoundCategory.BLOCKS,
-				(blockdataentry.getVolume() + 1.0F) / 2.0F,
-				blockdataentry.getPitch() * 0.8F
+				(soundgroup.getVolume() + 1.0F) / 2.0F,
+				soundgroup.getPitch() * 0.8F
 			);
 		}
 	}

@@ -33,7 +33,6 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(PacketType.CLIENTBOUND_PLAY_SPAWN_EXP_ORB, 0x11);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_VELOCITY, 0x12);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY, 0x13);
-		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_NOOP, 0x14);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE, 0x15);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_LOOK, 0x16);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE_LOOK, 0x17);
@@ -62,7 +61,7 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(PacketType.CLIENTBOUND_PLAY_WINDOW_SET_SLOT, 0x2F);
 		registry.register(PacketType.CLIENTBOUND_PLAY_WINDOW_SET_ITEMS, 0x30);
 		registry.register(PacketType.CLIENTBOUND_PLAY_WINDOW_DATA, 0x31);
-		registry.register(PacketType.CLIENTBOUND_PLAY_WINDOW_TRANSACTION, 0x32);
+		registry.register(PacketType.CLIENTBOUND_LEGACY_PLAY_WINDOW_TRANSACTION, 0x32);
 		registry.register(PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN, 0x33);
 		registry.register(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP, 0x34);
 		registry.register(PacketType.CLIENTBOUND_PLAY_BLOCK_TILE, 0x35);

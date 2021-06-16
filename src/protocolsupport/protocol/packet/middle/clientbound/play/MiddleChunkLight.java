@@ -1,13 +1,13 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
+import java.util.BitSet;
+
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.ChunkCoord;
-import protocolsupport.protocol.types.chunk.ChunkConstants;
-import protocolsupport.utils.BitUtils;
 
 public abstract class MiddleChunkLight extends ClientBoundMiddlePacket {
 
@@ -17,28 +17,32 @@ public abstract class MiddleChunkLight extends ClientBoundMiddlePacket {
 
 	protected ChunkCoord coord;
 	protected boolean trustEdges;
-	protected int setSkyLightMask;
-	protected int setBlockLightMask;
-	protected int emptySkyLightMask;
-	protected int emptyBlockLightMask;
-	protected final byte[][] skyLight = new byte[ChunkConstants.SECTION_COUNT_LIGHT][];
-	protected final byte[][] blockLight = new byte[ChunkConstants.SECTION_COUNT_LIGHT][];
+	protected BitSet setSkyLightMask;
+	protected BitSet setBlockLightMask;
+	protected BitSet emptySkyLightMask;
+	protected BitSet emptyBlockLightMask;
+	protected byte[][] skyLight;
+	protected byte[][] blockLight;
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		coord = PositionSerializer.readVarIntChunkCoord(serverdata);
 		trustEdges = serverdata.readBoolean();
 
-		setSkyLightMask = VarNumberSerializer.readVarInt(serverdata);
-		setBlockLightMask = VarNumberSerializer.readVarInt(serverdata);
-		emptySkyLightMask = VarNumberSerializer.readVarInt(serverdata);
-		emptyBlockLightMask = VarNumberSerializer.readVarInt(serverdata);
+		setSkyLightMask = BitSet.valueOf(ArraySerializer.readVarIntLongArray(serverdata));
+		setBlockLightMask = BitSet.valueOf(ArraySerializer.readVarIntLongArray(serverdata));
+		emptySkyLightMask = BitSet.valueOf(ArraySerializer.readVarIntLongArray(serverdata));
+		emptyBlockLightMask = BitSet.valueOf(ArraySerializer.readVarIntLongArray(serverdata));
 
-		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_LIGHT; sectionNumber++) {
-			skyLight[sectionNumber] = BitUtils.isIBitSet(setSkyLightMask, sectionNumber) ? ArraySerializer.readVarIntByteArray(serverdata) : null;
+		skyLight = new byte[setSkyLightMask.length()][];
+		VarNumberSerializer.readVarInt(serverdata); //skylight data count
+		for (int sectionIndex = 0; sectionIndex < skyLight.length; sectionIndex++) {
+			skyLight[sectionIndex] = setSkyLightMask.get(sectionIndex) ? ArraySerializer.readVarIntByteArray(serverdata) : null;
 		}
-		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_LIGHT; sectionNumber++) {
-			blockLight[sectionNumber] = BitUtils.isIBitSet(setBlockLightMask, sectionNumber) ? ArraySerializer.readVarIntByteArray(serverdata) : null;
+		VarNumberSerializer.readVarInt(serverdata); //blocklight data count
+		blockLight = new byte[setBlockLightMask.length()][];
+		for (int sectionIndex = 0; sectionIndex < blockLight.length; sectionIndex++) {
+			blockLight[sectionIndex] = setBlockLightMask.get(sectionIndex) ? ArraySerializer.readVarIntByteArray(serverdata) : null;
 		}
 	}
 

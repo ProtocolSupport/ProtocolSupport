@@ -9,7 +9,8 @@ public class CargoHorseNetworkEntityMetadataFormatTransformerFactory extends Bas
 	public static final CargoHorseNetworkEntityMetadataFormatTransformerFactory INSTANCE = new CargoHorseNetworkEntityMetadataFormatTransformerFactory();
 
 	protected CargoHorseNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.CargoHorse.HAS_CHEST, 18), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.CargoHorse.HAS_CHEST, 19), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.CargoHorse.HAS_CHEST, 18), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.CargoHorse.HAS_CHEST, 17), ProtocolVersionsHelper.ALL_1_14);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.CargoHorse.HAS_CHEST, 15), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 	}

@@ -21,14 +21,14 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.Blo
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.BlockPlace;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.KeepAlive;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.Move;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.CreativeSetSlot;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.Flying;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.HeldSlot;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.InventoryButton;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.InventoryClick;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.InventoryClose;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.InventoryTransaction;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.Look;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.InventoryConfirmTransaction;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17.CreativeSetSlot;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17.Flying;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17.HeldSlot;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17.InventoryButton;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17.InventoryClose;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17.Look;
 import protocolsupport.protocol.pipeline.version.util.decoder.AbstractLegacyPacketDecoder;
 
 public class PacketDecoder extends AbstractLegacyPacketDecoder {
@@ -55,7 +55,7 @@ public class PacketDecoder extends AbstractLegacyPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x13, EntityAction::new);
 		registry.register(NetworkState.PLAY, 0x65, InventoryClose::new);
 		registry.register(NetworkState.PLAY, 0x66, InventoryClick::new);
-		registry.register(NetworkState.PLAY, 0x6A, InventoryTransaction::new);
+		registry.register(NetworkState.PLAY, 0x6A, InventoryConfirmTransaction::new);
 		registry.register(NetworkState.PLAY, 0x6B, CreativeSetSlot::new);
 		registry.register(NetworkState.PLAY, 0x6C, InventoryButton::new);
 		registry.register(NetworkState.PLAY, 0x82, UpdateSign::new);

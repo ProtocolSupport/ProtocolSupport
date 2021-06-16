@@ -10,7 +10,8 @@ public class SnowmanNetworkEntityMetadataFormatTransformer extends InsentientNet
 	public static final SnowmanNetworkEntityMetadataFormatTransformer INSTANCE = new SnowmanNetworkEntityMetadataFormatTransformer();
 
 	protected SnowmanNetworkEntityMetadataFormatTransformer() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Snowman.NO_HAT, 15), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Snowman.NO_HAT, 16), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Snowman.NO_HAT, 15), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Snowman.NO_HAT, 14), ProtocolVersionsHelper.ALL_1_14);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Snowman.NO_HAT, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Snowman.NO_HAT, 11), ProtocolVersionsHelper.ALL_1_9);

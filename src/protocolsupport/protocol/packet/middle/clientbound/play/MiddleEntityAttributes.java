@@ -23,8 +23,8 @@ public abstract class MiddleEntityAttributes extends MiddleEntity {
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		super.decode(serverdata);
-		int attributesCount = serverdata.readInt();
-		for (int i = 0; i < attributesCount; i++) {
+		int attributesCount = VarNumberSerializer.readVarInt(serverdata);
+		for (int attributeIndex = 0; attributeIndex < attributesCount; attributeIndex++) {
 			String key = StringSerializer.readVarIntUTF8String(serverdata);
 			double value = serverdata.readDouble();
 			if (value == 0.0D) {
@@ -84,6 +84,7 @@ public abstract class MiddleEntityAttributes extends MiddleEntity {
 		public String toString() {
 			return Utils.toStringAllFields(this);
 		}
+
 	}
 
 	protected static class AttributeModifier {
@@ -114,6 +115,7 @@ public abstract class MiddleEntityAttributes extends MiddleEntity {
 		public String toString() {
 			return Utils.toStringAllFields(this);
 		}
+
 	}
 
 }

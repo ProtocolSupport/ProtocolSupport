@@ -9,7 +9,8 @@ public class SpellcasterNetworkEntityMetadataFormatTransformer extends IllagerNe
 	public static final SpellcasterNetworkEntityMetadataFormatTransformer INSTANCE = new SpellcasterNetworkEntityMetadataFormatTransformer();
 
 	protected SpellcasterNetworkEntityMetadataFormatTransformer() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.SpellcasterIllager.SPELL, 16), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.SpellcasterIllager.SPELL, 17), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.SpellcasterIllager.SPELL, 16), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.SpellcasterIllager.SPELL, 15), ProtocolVersionsHelper.ALL_1_14);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.SpellcasterIllager.SPELL, 13), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 	}

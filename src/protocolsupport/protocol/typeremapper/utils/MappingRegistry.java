@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.EnumMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
-import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MappingRegistry<T extends MappingTable> {
@@ -35,7 +35,7 @@ public abstract class MappingRegistry<T extends MappingTable> {
 
 	protected abstract @Nonnull T createTable();
 
-	public abstract static class IntMappingRegistry<T extends IdMappingTable> extends MappingRegistry<T> {
+	public abstract static class IntMappingRegistry<T extends IntMappingTable> extends MappingRegistry<T> {
 
 		public void register(int from, int to, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {

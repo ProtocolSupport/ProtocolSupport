@@ -2,7 +2,7 @@ package protocolsupport.zplatform;
 
 import org.spigotmc.SpigotConfig;
 
-import net.minecraft.server.v1_16_R3.NetworkManager;
+import net.minecraft.network.NetworkManager;
 import protocolsupport.api.ServerPlatformIdentifier;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 import protocolsupport.zplatform.impl.spigot.SpigotPacketFactory;

@@ -10,7 +10,8 @@ public class ItemEntityNetworkEntityMetadataFormatTransformerFactory extends Bas
 	public static final ItemEntityNetworkEntityMetadataFormatTransformerFactory INSTANCE = new ItemEntityNetworkEntityMetadataFormatTransformerFactory();
 
 	protected ItemEntityNetworkEntityMetadataFormatTransformerFactory() {
-		add(version -> new NetworkEntityMetadataObjectIndexValueItemStackToLegacyFormatTransformer(NetworkEntityMetadataObjectIndex.Item.ITEM, 7, version), ProtocolVersionsHelper.UP_1_14);
+		add(version -> new NetworkEntityMetadataObjectIndexValueItemStackToLegacyFormatTransformer(NetworkEntityMetadataObjectIndex.Item.ITEM, 8, version), ProtocolVersionsHelper.UP_1_17);
+		add(version -> new NetworkEntityMetadataObjectIndexValueItemStackToLegacyFormatTransformer(NetworkEntityMetadataObjectIndex.Item.ITEM, 7, version), ProtocolVersionsHelper.RANGE__1_14__1_16_4);
 		add(version -> new NetworkEntityMetadataObjectIndexValueItemStackToLegacyFormatTransformer(NetworkEntityMetadataObjectIndex.Item.ITEM, 6, version), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		add(version -> new NetworkEntityMetadataObjectIndexValueItemStackToLegacyFormatTransformer(NetworkEntityMetadataObjectIndex.Item.ITEM, 5, version), ProtocolVersionsHelper.ALL_1_9);
 		add(version -> new NetworkEntityMetadataObjectIndexValueItemStackToLegacyFormatTransformer(NetworkEntityMetadataObjectIndex.Item.ITEM, 10, version), ProtocolVersionsHelper.DOWN_1_8);

@@ -3,14 +3,14 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_
 import org.bukkit.util.NumberConversions;
 
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleExplosion;
-import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
-import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
+import protocolsupport.protocol.storage.netcache.chunk.LimitedHeightCachedChunk;
+import protocolsupport.protocol.storage.netcache.chunk.LimitedHeightChunkCache;
 import protocolsupport.protocol.types.ChunkCoord;
 import protocolsupport.protocol.types.Position;
 
 public abstract class AbstractChunkCacheMiddleExplosion extends MiddleExplosion {
 
-	protected final ChunkCache chunkCache = cache.getChunkCache();
+	protected final LimitedHeightChunkCache chunkCache = cache.getChunkCache();
 
 	protected AbstractChunkCacheMiddleExplosion(MiddlePacketInit init) {
 		super(init);
@@ -28,9 +28,9 @@ public abstract class AbstractChunkCacheMiddleExplosion extends MiddleExplosion 
 			int xB = xOrigin + block.getX();
 			int yB = yOrigin + block.getY();
 			int zB = zOrigin + block.getZ();
-			CachedChunk chunk = chunkCache.get(new ChunkCoord(xB >> 4, zB >> 4));
+			LimitedHeightCachedChunk chunk = chunkCache.get(new ChunkCoord(xB >> 4, zB >> 4));
 			if (chunk != null) {
-				chunk.setBlock(yB >> 4, CachedChunk.getBlockIndex(xB & 0xF, yB & 0xF, zB & 0xF), (short) 0);
+				chunk.setBlock(yB >> 4, LimitedHeightCachedChunk.getBlockIndex(xB & 0xF, yB & 0xF, zB & 0xF), (short) 0);
 			}
 		}
 	}

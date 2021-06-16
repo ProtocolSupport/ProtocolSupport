@@ -7,7 +7,8 @@ import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 public class RaidParticipantNetworkEntityMetadataFormatTransformerFactory extends InsentientNetworkEntityMetadataFormatTransformerFactory {
 
 	protected RaidParticipantNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.RaidParticipant.CELEBRATING, 15), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.RaidParticipant.CELEBRATING, 16), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.RaidParticipant.CELEBRATING, 15), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.RaidParticipant.CELEBRATING, 14), ProtocolVersionsHelper.ALL_1_14);
 	}
 

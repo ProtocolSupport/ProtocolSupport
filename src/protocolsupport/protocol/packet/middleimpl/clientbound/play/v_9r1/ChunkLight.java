@@ -9,7 +9,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_1
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
@@ -19,29 +18,27 @@ import protocolsupport.utils.BitUtils;
 
 public class ChunkLight extends AbstractChunkCacheChunkLight {
 
-	protected final ArrayBasedIntMappingTable blockDataRemappingTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
+	protected final ArrayBasedIntMappingTable blockLegacyDataTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 
 	public ChunkLight(MiddlePacketInit init) {
 		super(init);
 	}
 
-	protected final ClientCache clientCache = cache.getClientCache();
-
 	@Override
 	protected void write() {
-		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
-		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
-		chunkdata.writeBoolean(false); //full
-		VarNumberSerializer.writeVarInt(chunkdata, blockMask);
-		MiscSerializer.writeVarIntLengthPrefixedType(chunkdata, this, (to, chunksections) -> {
+		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+		PositionSerializer.writeIntChunkCoord(chunkdataPacket, coord);
+		chunkdataPacket.writeBoolean(false); //full
+		VarNumberSerializer.writeVarInt(chunkdataPacket, blockMask);
+		MiscSerializer.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
 			ChunkWriterVariesWithLight.writeSectionsCompactPreFlattening(
-				to, chunksections.blockMask, 13,
-				chunksections.blockDataRemappingTable,
-				chunksections.cachedChunk,
-				chunksections.clientCache.hasDimensionSkyLight()
+				to,
+				13,
+				chunksections.blockLegacyDataTable,
+				chunksections.cachedChunk, chunksections.blockMask, chunksections.clientCache.hasDimensionSkyLight()
 			);
 		});
-		codec.writeClientbound(chunkdata);
+		codec.writeClientbound(chunkdataPacket);
 
 		Map<Position, TileEntity>[] tiles = cachedChunk.getTiles();
 		for (int sectionNumber = 0; sectionNumber < tiles.length; sectionNumber++) {

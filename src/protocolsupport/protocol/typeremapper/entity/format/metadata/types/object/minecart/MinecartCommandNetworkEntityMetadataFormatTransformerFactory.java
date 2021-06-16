@@ -10,12 +10,14 @@ public class MinecartCommandNetworkEntityMetadataFormatTransformerFactory extend
 	public static final MinecartCommandNetworkEntityMetadataFormatTransformerFactory INSTANCE = new MinecartCommandNetworkEntityMetadataFormatTransformerFactory();
 
 	protected MinecartCommandNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartCommand.COMMAND, 13), ProtocolVersionsHelper.UP_1_14);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartCommand.COMMAND, 14), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartCommand.COMMAND, 13), ProtocolVersionsHelper.RANGE__1_14__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartCommand.COMMAND, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartCommand.COMMAND, 11), ProtocolVersionsHelper.ALL_1_9);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartCommand.COMMAND, 23), ProtocolVersionsHelper.RANGE__1_7_5__1_8);
 
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartCommand.LAST_OUTPUT, 14), ProtocolVersionsHelper.UP_1_14);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartCommand.LAST_OUTPUT, 15), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartCommand.LAST_OUTPUT, 14), ProtocolVersionsHelper.RANGE__1_14__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartCommand.LAST_OUTPUT, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartCommand.LAST_OUTPUT, 12), ProtocolVersionsHelper.ALL_1_9);
 		add(new NetworkEntityMetadataObjectIndexValueChatToStringTransformer(NetworkEntityMetadataObjectIndex.MinecartCommand.LAST_OUTPUT, 24, 64), ProtocolVersionsHelper.RANGE__1_7_5__1_8);

@@ -16,17 +16,18 @@ public class AgeableNetworkEntityMetadataFormatTransformerFactory extends Insent
 	public static final AgeableNetworkEntityMetadataFormatTransformerFactory INSTANCE = new AgeableNetworkEntityMetadataFormatTransformerFactory();
 
 	protected AgeableNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Ageable.IS_BABY, 15), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Ageable.IS_BABY, 16), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Ageable.IS_BABY, 15), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Ageable.IS_BABY, 14), ProtocolVersionsHelper.ALL_1_14);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Ageable.IS_BABY, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Ageable.IS_BABY, 11), ProtocolVersionsHelper.ALL_1_9);
-		add(new NetworkEntityMetadataObjectIndexValueTransformer<NetworkEntityMetadataObjectBoolean>(NetworkEntityMetadataObjectIndex.Ageable.IS_BABY, 12) {
+		add(new NetworkEntityMetadataObjectIndexValueTransformer<>(NetworkEntityMetadataObjectIndex.Ageable.IS_BABY, 12) {
 			@Override
 			public NetworkEntityMetadataObject<?> transformValue(NetworkEntityMetadataObjectBoolean object) {
 				return new NetworkEntityMetadataObjectByte((byte) (object.getValue() ? -1 : 0));
 			}
 		}, ProtocolVersion.MINECRAFT_1_8);
-		add(new NetworkEntityMetadataObjectIndexValueTransformer<NetworkEntityMetadataObjectBoolean>(NetworkEntityMetadataObjectIndex.Ageable.IS_BABY, 12) {
+		add(new NetworkEntityMetadataObjectIndexValueTransformer<>(NetworkEntityMetadataObjectIndex.Ageable.IS_BABY, 12) {
 			@Override
 			public NetworkEntityMetadataObject<?> transformValue(NetworkEntityMetadataObjectBoolean object) {
 				return new NetworkEntityMetadataObjectInt((object.getValue() ? -1 : 0));

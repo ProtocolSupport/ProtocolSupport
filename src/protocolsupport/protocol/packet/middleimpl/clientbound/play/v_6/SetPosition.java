@@ -2,9 +2,9 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6;
 
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractSetPosition;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractLegacyTeleportConfirmSetPosition;
 
-public class SetPosition extends AbstractSetPosition {
+public class SetPosition extends AbstractLegacyTeleportConfirmSetPosition {
 
 	public SetPosition(MiddlePacketInit init) {
 		super(init);

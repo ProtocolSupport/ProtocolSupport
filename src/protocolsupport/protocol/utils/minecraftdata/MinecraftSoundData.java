@@ -16,7 +16,7 @@ public class MinecraftSoundData {
 	private MinecraftSoundData() {
 	}
 
-	private static final String[] idToName = new String[1024];
+	private static final String[] idToName = new String[2048];
 
 	private static void register(@Nonnegative int id, @Nonnull String name) {
 		idToName[id] = name;

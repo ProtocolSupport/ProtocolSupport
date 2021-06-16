@@ -4,10 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
-import java.util.RandomAccess;
 import java.util.StringJoiner;
 import java.util.concurrent.TimeUnit;
 
@@ -37,7 +34,7 @@ public class Utils {
 					}
 				}
 			} catch (IllegalAccessException e) {
-				throw new UnchekedReflectionException("Unable to get object fields values", e);
+				throw new UncheckedReflectionException("Unable to get object fields values", e);
 			}
 		} while ((clazz = clazz.getSuperclass()) != null);
 		return obj.getClass().getName() + "(" + joiner.toString() + ")";
@@ -59,26 +56,6 @@ public class Utils {
 		ArrayList<T> list = new ArrayList<>(1);
 		list.add(element);
 		return list;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static @Nonnull <T, A extends List<T> & RandomAccess> List<A> splitList(@Nonnull A list, @Nonnegative int limit) {
-		int size = list.size();
-		if (size <= limit) {
-			return Collections.singletonList(list);
-		}
-		int count = size / limit;
-		List<A> result = new ArrayList<>(count);
-		int fromIndex = 0;
-		for (int i = 0; i < count; i++) {
-			int toIndex = fromIndex + limit;
-			result.add((A) list.subList(fromIndex, toIndex));
-			fromIndex = toIndex;
-		}
-		if (fromIndex < (size - 1)) {
-			result.add((A) list.subList(fromIndex, size));
-		}
-		return result;
 	}
 
 	public static int ceilToBase(@Nonnegative int number, @Nonnegative int base) {

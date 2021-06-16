@@ -6,11 +6,12 @@ import java.util.List;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
+import net.minecraft.network.PacketDecompressor;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.netty.Decompressor;
 import protocolsupport.utils.netty.ReusableReadHeapBuffer;
 
-public class SpigotPacketDecompressor extends net.minecraft.server.v1_16_R3.PacketDecompressor {
+public class SpigotPacketDecompressor extends PacketDecompressor {
 
 	protected static final int maxPacketLength = 2 << 20;
 

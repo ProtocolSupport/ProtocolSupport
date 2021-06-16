@@ -211,7 +211,7 @@ public class ConnectionImpl extends Connection {
 
 	protected static class LPacketEvent extends PacketEvent implements AutoCloseable {
 
-		protected static final Recycler<LPacketEvent> recycler = new Recycler<LPacketEvent>() {
+		protected static final Recycler<LPacketEvent> recycler = new Recycler<>() {
 			@Override
 			protected LPacketEvent newObject(Handle<LPacketEvent> handle) {
 				return new LPacketEvent(handle);
@@ -277,7 +277,7 @@ public class ConnectionImpl extends Connection {
 
 	protected static class LRawPacketEvent extends RawPacketEvent implements AutoCloseable {
 
-		protected static final Recycler<LRawPacketEvent> recycler = new Recycler<LRawPacketEvent>() {
+		protected static final Recycler<LRawPacketEvent> recycler = new Recycler<>() {
 			@Override
 			protected LRawPacketEvent newObject(Handle<LRawPacketEvent> handle) {
 				return new LRawPacketEvent(handle);

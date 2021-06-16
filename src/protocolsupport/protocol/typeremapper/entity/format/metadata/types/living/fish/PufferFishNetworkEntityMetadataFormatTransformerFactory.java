@@ -9,7 +9,8 @@ public class PufferFishNetworkEntityMetadataFormatTransformerFactory extends Fis
 	public static final PufferFishNetworkEntityMetadataFormatTransformerFactory INSTANCE = new PufferFishNetworkEntityMetadataFormatTransformerFactory();
 
 	protected PufferFishNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.PufferFish.PUFF_STATE, 16), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.PufferFish.PUFF_STATE, 17), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.PufferFish.PUFF_STATE, 16), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.PufferFish.PUFF_STATE, 15), ProtocolVersionsHelper.ALL_1_14);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.PufferFish.PUFF_STATE, 13), ProtocolVersionsHelper.ALL_1_13);
 	}

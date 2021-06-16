@@ -25,8 +25,8 @@ public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 	protected boolean isDisplayLineTeam() {
 		if (
 			suffix.isSimple() &&
-			(suffix instanceof TextComponent) &&
-			((TextComponent) suffix).getText().isEmpty()
+			(suffix instanceof TextComponent suffixTextComponent) &&
+			suffixTextComponent.getText().isEmpty()
 		) {
 			TrackedScoreboardTeam team = teamsTracker.getTeam(name);
 			for (String player : team.getPlayers()) {

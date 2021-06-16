@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.utils;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
 
@@ -7,17 +8,22 @@ import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 
 public class MappingTable {
 
-	public abstract static class IdMappingTable extends MappingTable {
+	public abstract static class IntMappingTable extends MappingTable {
 
 		public abstract void set(int from, int to);
 
-		public abstract int get(int id);
+		public abstract int get(int from);
 
 	}
 
-	public static class ArrayBasedIntMappingTable extends IdMappingTable {
+	public static class ArrayBasedIntMappingTable extends IntMappingTable {
 
 		protected final int[] table;
+
+		public ArrayBasedIntMappingTable(int size, int defaultValue) {
+			table = new int[size];
+			Arrays.fill(table, defaultValue);
+		}
 
 		public ArrayBasedIntMappingTable(int size) {
 			table = new int[size];
@@ -32,17 +38,17 @@ public class MappingTable {
 		}
 
 		@Override
-		public int get(int id) {
-			if ((id >= 0) && (id < table.length)) {
-				return table[id];
+		public int get(int from) {
+			if ((from >= 0) && (from < table.length)) {
+				return table[from];
 			} else {
-				return id;
+				return from;
 			}
 		}
 
 	}
 
-	public static class HashMapBasedIntMappingTable extends IdMappingTable {
+	public static class HashMapBasedIntMappingTable extends IntMappingTable {
 
 		protected final Int2IntOpenHashMap table = new Int2IntOpenHashMap();
 		{
@@ -90,6 +96,26 @@ public class MappingTable {
 
 		public T get(T from) {
 			return table.getOrDefault(from, from);
+		}
+
+	}
+
+	public static class ThrowingArrayBasedIntTable extends ArrayBasedIntMappingTable {
+
+		public ThrowingArrayBasedIntTable(int size) {
+			super(size, -1);
+		}
+
+		@Override
+		public int get(int from) {
+			int value = -1;
+			if ((from >= 0) && (from < table.length)) {
+				value = table[from];
+			}
+			if (value != -1) {
+				return value;
+			}
+			throw new IllegalArgumentException("No mapping exists for int " + from);
 		}
 
 	}

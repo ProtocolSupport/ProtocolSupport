@@ -6,12 +6,12 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryCl
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper.NoSuchSlotException;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper.WindowSlot;
-import protocolsupport.protocol.types.NetworkItemStack;
 
 public class InventoryClick extends MiddleInventoryClick {
 
 	public InventoryClick(MiddlePacketInit init) {
 		super(init);
+		modifiedSlots = new SlotItem[0];
 	}
 
 	@Override
@@ -19,9 +19,9 @@ public class InventoryClick extends MiddleInventoryClick {
 		windowId = clientdata.readByte();
 		slot = clientdata.readShort();
 		button = clientdata.readUnsignedByte();
-		actionNumber = clientdata.readShort();
+		clientdata.readShort(); //action number
 		mode = clientdata.readUnsignedByte();
-		itemstack = ItemStackSerializer.readItemStack(clientdata, version);
+		clickedItem = ItemStackSerializer.readItemStack(clientdata, version);
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class InventoryClick extends MiddleInventoryClick {
 		}
 
 		if ((button == 0) && (mode == MODE_SHIFT_CLICK)) {
-			itemstack = NetworkItemStack.NULL;
+			modifiedSlots = new SlotItem[0];
 		}
 	}
 

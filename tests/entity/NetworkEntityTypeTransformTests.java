@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.typeremapper.entity.FlatteningNetworkEntityId;
 import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry;
 import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry.NetworkEntityLegacyFormatEntry;
 import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry.NetworkEntityLegacyFormatTable;
@@ -17,19 +18,51 @@ import zinit.PlatformInit;
 class NetworkEntityTypeTransformTests extends PlatformInit {
 
 	@Test
-	void testRegistriesFilled() {
+	void testMappingRegistries() {
 		for (ProtocolVersion version : ProtocolVersionsHelper.ALL) {
 			NetworkEntityLegacyDataTable dataTable = NetworkEntityLegacyDataRegistry.INSTANCE.getTable(version);
 			NetworkEntityLegacyFormatTable formatTable = NetworkEntityLegacyFormatRegistry.INSTANCE.getTable(version);
 			for (NetworkEntityType type : NetworkEntityType.values()) {
-				if (type != NetworkEntityType.NONE) {
-					NetworkEntityLegacyDataEntry dataEntry = dataTable.get(type);
-					Assertions.assertNotNull(dataEntry, "NetworkEntityLegacyDataEntry for ProtocolVersion " + version + " and NetworkEntityType " + type);
-					type = dataEntry.getType();
-					if (type != NetworkEntityType.NONE) {
-						NetworkEntityLegacyFormatEntry formatEntry = formatTable.get(type);
-						Assertions.assertNotNull(formatEntry, "NetworkEntityLegacyFormatEntry for ProtocolVersion " + version + " and NetworkEntityType " + type);
-						Assertions.assertNotEquals(NetworkEntityType.NONE, formatEntry.getType(), "NetworkEntityLegacyFormatEntry#getType for ProtocolVersion " + version + " and NetworkEntityType " + type + "");
+				NetworkEntityType mappedType = type;
+				if (mappedType == NetworkEntityType.NONE) {
+					continue;
+				}
+
+				NetworkEntityLegacyDataEntry dataEntry = dataTable.get(mappedType);
+				Assertions.assertNotNull(dataEntry, "NetworkEntityLegacyDataEntry for ProtocolVersion " + version + " and NetworkEntityType " + type);
+
+				mappedType = dataEntry.getType();
+				if (mappedType == NetworkEntityType.NONE) {
+					continue;
+				}
+
+				NetworkEntityLegacyFormatEntry formatEntry = formatTable.get(mappedType);
+				Assertions.assertNotNull(formatEntry, "NetworkEntityLegacyFormatEntry for ProtocolVersion " + version + " and NetworkEntityType " + type);
+				mappedType = formatEntry.getType();
+				Assertions.assertNotEquals(NetworkEntityType.NONE, mappedType, "NetworkEntityLegacyFormatEntry#getType for ProtocolVersion " + version + " and NetworkEntityType " + type + "");
+
+				NetworkEntityType fMappedType = mappedType;
+				switch (mappedType.getEType()) {
+					case MOB: {
+						if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13)) {
+							Assertions.assertDoesNotThrow(
+								() -> FlatteningNetworkEntityId.REGISTRY.getTable(version).get(fMappedType.getNetworkTypeId()),
+								"NetworkParticleFlatteningId for ProtocolVersion " + version + " and NetworkEntityType " + type
+							);
+						}
+						break;
+					}
+					case OBJECT: {
+						if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_14)) {
+							Assertions.assertDoesNotThrow(
+								() -> FlatteningNetworkEntityId.REGISTRY.getTable(version).get(fMappedType.getNetworkTypeId()),
+								"NetworkParticleFlatteningId for ProtocolVersion " + version + " and NetworkEntityType " + type
+							);
+						}
+						break;
+					}
+					default: {
+						break;
 					}
 				}
 			}

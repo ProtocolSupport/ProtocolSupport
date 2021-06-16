@@ -19,7 +19,6 @@ import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 import protocolsupport.protocol.utils.CommonNBT;
-import protocolsupport.utils.Utils;
 import protocolsupport.utils.Vector3S;
 
 public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata {
@@ -32,18 +31,18 @@ public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata
 
 	@Override
 	protected void writeEntityMetadata(NetworkEntityMetadataList remappedMetadata) {
-		ClientBoundPacketData entitymetadata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
-		VarNumberSerializer.writeVarInt(entitymetadata, entityId);
-		NetworkEntityMetadataSerializer.writeLegacyData(entitymetadata, version, clientCache.getLocale(), remappedMetadata);
-		codec.writeClientbound(entitymetadata);
+		ClientBoundPacketData entitymetadataPacket = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_METADATA);
+		VarNumberSerializer.writeVarInt(entitymetadataPacket, entityId);
+		NetworkEntityMetadataSerializer.writeLegacyData(entitymetadataPacket, version, clientCache.getLocale(), remappedMetadata);
+		codec.writeClientbound(entitymetadataPacket);
 	}
 
 	@Override
 	protected void writePlayerUseBed(Position position) {
-		ClientBoundPacketData usebed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED);
-		VarNumberSerializer.writeVarInt(usebed, entityId);
-		PositionSerializer.writeLegacyPositionL(usebed, position);
-		codec.writeClientbound(usebed);
+		ClientBoundPacketData usebedPacket = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED);
+		VarNumberSerializer.writeVarInt(usebedPacket, entityId);
+		PositionSerializer.writeLegacyPositionL(usebedPacket, position);
+		codec.writeClientbound(usebedPacket);
 	}
 
 	@Override
@@ -57,10 +56,10 @@ public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata
 			}
 		}
 		AbstractPassengerStackEntityDestroy.writeDestroy(
-			Utils.createSingletonArrayList(entity),
+			entity,
 			entity -> AbstractPassengerStackEntityPassengers.writeVehiclePassengers(codec, EntityPassengers::create, entity, Collections.emptyList()),
 			entity -> AbstractPassengerStackEntityPassengers.writeLeaveVehicleConnectStack(codec, EntityPassengers::create, entity),
-			entitiesIds -> EntityDestroy.writeDestroyEntities(codec, entitiesIds)
+			entity -> EntityDestroy.writeDestroyEntity(codec, entity)
 		);
 		codec.writeClientbound(SpawnObject.create(
 			entityId, entityLegacyFormatTable.get(lType).getType(),

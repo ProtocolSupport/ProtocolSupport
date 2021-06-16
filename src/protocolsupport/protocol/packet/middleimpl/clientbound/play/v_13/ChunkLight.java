@@ -6,12 +6,11 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
-import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
 
 public class ChunkLight extends AbstractChunkCacheChunkLight {
 
@@ -19,9 +18,7 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 		super(init);
 	}
 
-	protected final ClientCache clientCache = cache.getClientCache();
-
-	protected final ArrayBasedIntMappingTable blockDataRemappingTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
+	protected final IntMappingTable blockLegacyDataTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockDataRegistry.INSTANCE.getTable(version);
 
 	@Override
@@ -32,13 +29,13 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 		VarNumberSerializer.writeVarInt(chunkdata, blockMask);
 		MiscSerializer.writeVarIntLengthPrefixedType(chunkdata, this, (to, chunksections) -> {
 			ChunkWriterVariesWithLight.writeSectionsCompactFlattening(
-				to, chunksections.blockMask, 14,
-				chunksections.blockDataRemappingTable, chunksections.flatteningBlockDataTable,
-				chunksections.cachedChunk, chunksections.clientCache.hasDimensionSkyLight()
+				to, 14,
+				chunksections.blockLegacyDataTable, chunksections.flatteningBlockDataTable,
+				chunksections.cachedChunk, chunksections.blockMask, chunksections.clientCache.hasDimensionSkyLight()
 			);
 		});
 		MiscSerializer.writeVarIntCountPrefixedType(chunkdata, this, (to, chunksections) -> {
-			return ChunkWriterVariesWithLight.writeTiles(to, chunksections.blockMask, chunksections.cachedChunk);
+			return ChunkWriterVariesWithLight.writeTiles(to, chunksections.cachedChunk, chunksections.blockMask);
 		});
 		codec.writeClientbound(chunkdata);
 	}

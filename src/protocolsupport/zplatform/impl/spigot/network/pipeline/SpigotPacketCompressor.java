@@ -2,11 +2,13 @@ package protocolsupport.zplatform.impl.spigot.network.pipeline;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.EncoderException;
+import net.minecraft.network.PacketCompressor;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.netty.RecyclableWrapCompressor;
 import protocolsupport.utils.netty.ReusableReadHeapBuffer;
 
-public class SpigotPacketCompressor extends net.minecraft.server.v1_16_R3.PacketCompressor {
+public class SpigotPacketCompressor extends PacketCompressor {
 
 	protected final RecyclableWrapCompressor compressor = RecyclableWrapCompressor.create();
 	protected final int threshold;
@@ -25,7 +27,7 @@ public class SpigotPacketCompressor extends net.minecraft.server.v1_16_R3.Packet
 	protected final ReusableReadHeapBuffer readBuffer = new ReusableReadHeapBuffer();
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, ByteBuf from, ByteBuf to) throws Exception {
+	protected void encode(ChannelHandlerContext ctx, ByteBuf from, ByteBuf to) {
 		int readable = from.readableBytes();
 		if (readable == 0) {
 			return;
@@ -35,7 +37,11 @@ public class SpigotPacketCompressor extends net.minecraft.server.v1_16_R3.Packet
 			to.writeBytes(from);
 		} else {
 			VarNumberSerializer.writeVarInt(to, readable);
-			readBuffer.readFrom(from, (larray, loffset, llength) -> compressor.compressTo(to, larray, loffset, llength));
+			try {
+				readBuffer.readFrom(from, (larray, loffset, llength) -> compressor.compressTo(to, larray, loffset, llength));
+			} catch (Exception e) {
+				throw new EncoderException(e);
+			}
 		}
 	}
 

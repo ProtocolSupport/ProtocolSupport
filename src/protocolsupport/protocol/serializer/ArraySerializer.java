@@ -44,6 +44,14 @@ public class ArraySerializer {
 		return from.readSlice(VarNumberSerializer.readVarInt(from));
 	}
 
+	public static long[] readVarIntLongArray(ByteBuf from) {
+		long[] array = new long[VarNumberSerializer.readVarInt(from)];
+		for (int i = 0; i < array.length; i++) {
+			array[i] = from.readLong();
+		}
+		return array;
+	}
+
 	@SuppressWarnings("unchecked")
 	public static <T> T[] readVarIntTArray(ByteBuf from, Class<T> tclass, Function<ByteBuf, T> elementReader) {
 		T[] array = (T[]) Array.newInstance(tclass, VarNumberSerializer.readVarInt(from));

@@ -10,6 +10,8 @@ public class MinecartFurnaceNetworkEntityMetadataFormatTransformerFactory extend
 	public static final MinecartFurnaceNetworkEntityMetadataFormatTransformerFactory INSTANCE = new MinecartFurnaceNetworkEntityMetadataFormatTransformerFactory();
 
 	protected MinecartFurnaceNetworkEntityMetadataFormatTransformerFactory() {
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartFurnace.POWERED, 14), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartFurnace.POWERED, 13), ProtocolVersionsHelper.RANGE__1_14__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartFurnace.POWERED, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartFurnace.POWERED, 11), ProtocolVersionsHelper.ALL_1_9);
 		add(new NetworkEntityMetadataObjectIndexValueBooleanToByteTransformer(NetworkEntityMetadataObjectIndex.MinecartFurnace.POWERED, 16), ProtocolVersionsHelper.DOWN_1_8);

@@ -9,7 +9,7 @@ import io.netty.util.Recycler.Handle;
 
 public class Decompressor {
 
-	protected static final Recycler<Decompressor> recycler = new Recycler<Decompressor>() {
+	protected static final Recycler<Decompressor> recycler = new Recycler<>() {
 		@Override
 		protected Decompressor newObject(Handle<Decompressor> handle) {
 			return new Decompressor(handle);

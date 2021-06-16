@@ -10,7 +10,8 @@ public class HoglinNetworkEntityMetadataFormatTransformerFactory extends Ageable
 	public static final HoglinNetworkEntityMetadataFormatTransformerFactory INSTANCE = new HoglinNetworkEntityMetadataFormatTransformerFactory();
 
 	protected HoglinNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Hoglin.ZOMBIFICATION_IMMUNITY, 16), ProtocolVersionsHelper.UP_1_16);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Hoglin.ZOMBIFICATION_IMMUNITY, 17), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Hoglin.ZOMBIFICATION_IMMUNITY, 16), ProtocolVersionsHelper.ALL_1_16);
 	}
 
 }

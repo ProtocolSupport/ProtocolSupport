@@ -32,7 +32,7 @@ public class ItemStackLegacyDataOperatorEnchantFilter implements UnaryOperator<N
 		}
 		NBTList<NBTCompound> newList = NBTList.createCompoundList();
 		for (NBTCompound enchData : oldList.getTags()) {
-			if (!enchSkipTable.shouldSkip(enchData.getStringTagValueOrDefault("id", ""))) {
+			if (!enchSkipTable.isSet(enchData.getStringTagValueOrDefault("id", ""))) {
 				newList.addTag(enchData);
 			}
 		}

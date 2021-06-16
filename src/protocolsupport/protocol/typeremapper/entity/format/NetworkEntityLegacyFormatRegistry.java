@@ -37,8 +37,10 @@ import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.WitchNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.WitherNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ZoglinNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ageable.AxolotlNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ageable.BeeNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ageable.FoxNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ageable.GoatNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ageable.HoglinNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ageable.MushroomCowNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ageable.PandaNetworkEntityMetadataFormatTransformerFactory;
@@ -113,6 +115,8 @@ public class NetworkEntityLegacyFormatRegistry extends MappingRegistry<NetworkEn
 
 		registerSimple(NetworkEntityType.SQUID, InsentientNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
 
+		registerSimple(NetworkEntityType.GLOW_SQUID, InsentientNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_17);
+
 		registerSimple(NetworkEntityType.COMMON_HORSE, BattleHorseNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_6);
 
 		new Mapping(NetworkEntityType.ZOMBIE_HORSE)
@@ -148,6 +152,8 @@ public class NetworkEntityLegacyFormatRegistry extends MappingRegistry<NetworkEn
 		registerSimple(NetworkEntityType.RABBIT, RabbitNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_8);
 
 		registerSimple(NetworkEntityType.SHEEP, SheepNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
+
+		registerSimple(NetworkEntityType.GOAT, GoatNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_17);
 
 		registerSimple(NetworkEntityType.POLAR_BEAR, PolarBearNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_10);
 
@@ -245,6 +251,8 @@ public class NetworkEntityLegacyFormatRegistry extends MappingRegistry<NetworkEn
 
 		registerSimple(NetworkEntityType.TROPICAL_FISH, TropicalFishNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_13);
 
+		registerSimple(NetworkEntityType.AXOLOTL, AxolotlNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_17);
+
 		registerSimple(NetworkEntityType.TRADER_LAMA, LamaEntityNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_14);
 
 		registerSimple(NetworkEntityType.WANDERING_TRADER, AbstractMerchantNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_14);
@@ -317,6 +325,8 @@ public class NetworkEntityLegacyFormatRegistry extends MappingRegistry<NetworkEn
 		registerSimple(NetworkEntityType.FIREWORK, FireworkNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
 
 		registerSimple(NetworkEntityType.ITEM_FRAME, ItemFrameNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
+
+		registerSimple(NetworkEntityType.GLOW_ITEM_FRAME, ItemFrameNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
 
 		registerSimple(NetworkEntityType.ENDER_CRYSTAL, EnderCrystalNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
 

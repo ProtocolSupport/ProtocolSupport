@@ -8,9 +8,9 @@ import java.util.ListIterator;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import net.minecraft.server.v1_16_R3.ChatComponentText;
-import net.minecraft.server.v1_16_R3.NetworkManager;
-import net.minecraft.server.v1_16_R3.ServerConnection;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.chat.ChatComponentText;
+import net.minecraft.server.network.ServerConnection;
 import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 
@@ -24,11 +24,11 @@ public class SpigotNettyInjector {
 		ServerConnection serverConnection = SpigotMiscUtils.SERVER.getServerConnection();
 		Collection<NetworkManager> nmList = null;
 		try {
-			nmList = (Collection<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("pending")).get(serverConnection);
+			nmList = (Collection<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("g")).get(serverConnection);
 		} catch (NoSuchFieldException e) {
 			nmList = (Collection<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("connectedChannels")).get(serverConnection);
 		}
-		Field connectionsListField = ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("listeningChannels"));
+		Field connectionsListField = ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("f"));
 		ChannelInjectList connectionsList = new ChannelInjectList(nmList, (List<ChannelFuture>) connectionsListField.get(serverConnection));
 		connectionsListField.set(serverConnection, connectionsList);
 		connectionsList.injectExisting();
@@ -93,7 +93,7 @@ public class SpigotNettyInjector {
 			channel.pipeline().addFirst(new SpigotNettyServerChannelHandler());
 			synchronized (networkManagers) {
 				for (NetworkManager nm : networkManagers) {
-					if ((nm.channel != null) && nm.channel.localAddress().equals(channel.localAddress())) {
+					if ((nm.k != null) && nm.k.localAddress().equals(channel.localAddress())) {
 						nm.close(new ChatComponentText("ProtocolSupport channel reset"));
 					}
 				}

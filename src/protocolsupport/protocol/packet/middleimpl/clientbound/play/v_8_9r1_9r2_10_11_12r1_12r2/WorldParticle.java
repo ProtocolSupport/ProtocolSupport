@@ -4,13 +4,13 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.typeremapper.legacy.LegacyParticle;
-import protocolsupport.protocol.typeremapper.particle.LegacyParticleData;
-import protocolsupport.protocol.typeremapper.particle.LegacyParticleData.LegacyParticleDataTable;
+import protocolsupport.protocol.typeremapper.particle.NetworkParticleLegacyData;
+import protocolsupport.protocol.typeremapper.particle.NetworkParticleLegacyData.NetworkParticleLegacyDataTable;
+import protocolsupport.protocol.typeremapper.particle.PreFlatteningNetworkParticleIntIdRegistryDataSerializer;
 
 public class WorldParticle extends MiddleWorldParticle {
 
-	protected final LegacyParticleDataTable legacyParticleTable = LegacyParticleData.REGISTRY.getTable(version);
+	protected final NetworkParticleLegacyDataTable legacyParticleTable = NetworkParticleLegacyData.REGISTRY.getTable(version);
 
 	public WorldParticle(MiddlePacketInit init) {
 		super(init);
@@ -21,7 +21,7 @@ public class WorldParticle extends MiddleWorldParticle {
 		particle = legacyParticleTable.get(particle.getClass()).apply(particle);
 		if (particle != null) {
 			ClientBoundPacketData spawnparticle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
-			spawnparticle.writeInt(LegacyParticle.IntId.getId(particle));
+			spawnparticle.writeInt(PreFlatteningNetworkParticleIntIdRegistryDataSerializer.getId(particle));
 			spawnparticle.writeBoolean(longdist);
 			spawnparticle.writeFloat((float) x);
 			spawnparticle.writeFloat((float) y);
@@ -31,7 +31,7 @@ public class WorldParticle extends MiddleWorldParticle {
 			spawnparticle.writeFloat(particle.getOffsetZ());
 			spawnparticle.writeFloat(particle.getData());
 			spawnparticle.writeInt(particle.getCount());
-			for (int data : LegacyParticle.IntId.getData(version, particle)) {
+			for (int data : PreFlatteningNetworkParticleIntIdRegistryDataSerializer.getData(version, particle)) {
 				VarNumberSerializer.writeVarInt(spawnparticle, data);
 			}
 			codec.writeClientbound(spawnparticle);

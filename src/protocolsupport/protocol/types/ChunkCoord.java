@@ -1,5 +1,7 @@
 package protocolsupport.protocol.types;
 
+import java.util.Objects;
+
 import protocolsupport.utils.Utils;
 
 public class ChunkCoord {
@@ -26,7 +28,13 @@ public class ChunkCoord {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof ChunkCoord)) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
 		}
 		ChunkCoord other = (ChunkCoord) obj;
@@ -35,7 +43,7 @@ public class ChunkCoord {
 
 	@Override
 	public int hashCode() {
-		return (x * 31) + z;
+		return Objects.hash(x, z);
 	}
 
 	@Override

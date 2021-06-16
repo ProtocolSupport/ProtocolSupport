@@ -27,18 +27,22 @@ public abstract class MiddleUpdateMap extends ClientBoundMiddlePacket {
 	protected void decode(ByteBuf serverdata) {
 		id = VarNumberSerializer.readVarInt(serverdata);
 		scale = serverdata.readUnsignedByte();
-		showIcons = serverdata.readBoolean();
 		locked = serverdata.readBoolean();
-		icons = ArraySerializer.readVarIntTArray(
-			serverdata, Icon.class,
-			from -> new Icon(
-				VarNumberSerializer.readVarInt(from),
-				from.readUnsignedByte(),
-				from.readUnsignedByte(),
-				from.readByte(),
-				from.readBoolean() ? StringSerializer.readVarIntUTF8String(serverdata) : null
-			)
-		);
+		showIcons = serverdata.readBoolean();
+		if (showIcons) {
+			icons = ArraySerializer.readVarIntTArray(
+				serverdata, Icon.class,
+				from -> new Icon(
+					VarNumberSerializer.readVarInt(from),
+					from.readUnsignedByte(),
+					from.readUnsignedByte(),
+					from.readByte(),
+					from.readBoolean() ? StringSerializer.readVarIntUTF8String(serverdata) : null
+				)
+			);
+		} else {
+			icons = new Icon[0];
+		}
 		columns = serverdata.readUnsignedByte();
 		if (columns > 0) {
 			rows = serverdata.readUnsignedByte();

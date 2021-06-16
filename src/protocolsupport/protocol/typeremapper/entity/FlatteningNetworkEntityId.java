@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.utils.MappingRegistry.IntMappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.ThrowingArrayBasedIntTable;
 import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
@@ -16,10 +17,10 @@ public class FlatteningNetworkEntityId {
 	private FlatteningNetworkEntityId() {
 	}
 
-	public static final IntMappingRegistry<ArrayBasedIntMappingTable> REGISTRY = new IntMappingRegistry<ArrayBasedIntMappingTable>() {
+	public static final IntMappingRegistry<ThrowingArrayBasedIntTable> REGISTRY = new IntMappingRegistry<>() {
 		@Override
-		protected ArrayBasedIntMappingTable createTable() {
-			return new ArrayBasedIntMappingTable(256);
+		protected ThrowingArrayBasedIntTable createTable() {
+			return new ThrowingArrayBasedIntTable(256);
 		}
 	};
 

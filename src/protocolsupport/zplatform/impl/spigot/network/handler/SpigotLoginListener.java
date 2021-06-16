@@ -7,13 +7,13 @@ import javax.crypto.SecretKey;
 
 import org.bukkit.Bukkit;
 
-import net.minecraft.server.v1_16_R3.CryptographyException;
-import net.minecraft.server.v1_16_R3.IChatBaseComponent;
-import net.minecraft.server.v1_16_R3.NetworkManager;
-import net.minecraft.server.v1_16_R3.PacketLoginInCustomPayload;
-import net.minecraft.server.v1_16_R3.PacketLoginInEncryptionBegin;
-import net.minecraft.server.v1_16_R3.PacketLoginInListener;
-import net.minecraft.server.v1_16_R3.PacketLoginInStart;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.network.protocol.login.PacketLoginInCustomPayload;
+import net.minecraft.network.protocol.login.PacketLoginInEncryptionBegin;
+import net.minecraft.network.protocol.login.PacketLoginInListener;
+import net.minecraft.network.protocol.login.PacketLoginInStart;
+import net.minecraft.util.CryptographyException;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;

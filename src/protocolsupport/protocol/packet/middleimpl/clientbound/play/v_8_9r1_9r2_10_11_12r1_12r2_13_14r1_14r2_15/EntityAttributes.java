@@ -25,7 +25,7 @@ public class EntityAttributes extends MiddleEntityAttributes {
 		GenericSkippingTable<String> table = GenericIdSkipper.ATTRIBUTES.getTable(version);
 		ArrayList<Attribute> sendattrs = new ArrayList<>();
 		for (Attribute attribute : attributes.values()) {
-			if (!table.shouldSkip(attribute.getKey())) {
+			if (!table.isSet(attribute.getKey())) {
 				sendattrs.add(attribute);
 			}
 		}

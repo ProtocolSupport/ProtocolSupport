@@ -27,36 +27,31 @@ public class HoverAction {
 	@Deprecated
 	public HoverAction(Type type, String value) {
 		this.type = type;
-		switch (type) {
-			case SHOW_TEXT: {
-				this.contents = ChatAPI.fromJSON(value);
-				return;
-			}
-			case SHOW_ENTITY: {
+		this.contents = switch (type) {
+			case SHOW_TEXT -> ChatAPI.fromJSON(value);
+			case SHOW_ENTITY -> {
 				try {
 					NBTCompound compound = MojangsonParser.parse(value);
 					NBTString etype = compound.getStringTagOrNull("type");
 					NBTString euuid = compound.getStringTagOrNull("id");
-					this.contents = new EntityInfo(
+					yield new EntityInfo(
 						etype != null ? Registry.ENTITY_TYPE.get(NamespacedKeyUtils.fromString(etype.getValue())) : null,
 						euuid != null ? UUID.fromString(euuid.getValue()) : null,
 						compound.getStringTagValueOrNull("name")
 					);
-					return;
 				} catch (IOException e) {
 					throw new IllegalArgumentException("HoverAction value " + value + " can't be parsed as EntityInfo");
 				}
 			}
-			case SHOW_ITEM: {
+			case SHOW_ITEM -> {
 				try {
-					this.contents = new NetworkBukkitItemStack(CommonNBT.deserializeItemStackFromNBT(MojangsonParser.parse(value)));
+					yield new NetworkBukkitItemStack(CommonNBT.deserializeItemStackFromNBT(MojangsonParser.parse(value)));
 				} catch (IOException e) {
 					throw new IllegalArgumentException("HoverAction value " + value + " can't be parsed as ItemStack");
 				}
-				return;
 			}
-		}
-		throw new IllegalArgumentException("Unknown HoverAction Type " + type);
+			default -> throw new IllegalArgumentException("Unknown HoverAction Type " + type);
+		};
 	}
 
 	public HoverAction(BaseComponent component) {
@@ -88,10 +83,9 @@ public class HoverAction {
 
 	@Deprecated
 	public String getValue() {
-		if (contents instanceof BaseComponent) {
-			return ChatAPI.toJSON((BaseComponent) contents);
-		} else if (contents instanceof EntityInfo) {
-			EntityInfo entityinfo = (EntityInfo) contents;
+		if (contents instanceof BaseComponent text) {
+			return ChatAPI.toJSON(text);
+		} else if (contents instanceof EntityInfo entityinfo) {
 			NBTCompound compound = new NBTCompound();
 			String ename = entityinfo.getName();
 			compound.setTag("type", new NBTString(entityinfo.getType().getKey().toString()));
@@ -100,8 +94,8 @@ public class HoverAction {
 				compound.setTag("name", new NBTString(ename));
 			}
 			return MojangsonSerializer.serialize(compound);
-		} else if (contents instanceof ItemStack) {
-			return MojangsonSerializer.serialize(CommonNBT.serializeItemStackToNBT(NetworkBukkitItemStack.create(getItemStack())));
+		} else if (contents instanceof ItemStack itemstack) {
+			return MojangsonSerializer.serialize(CommonNBT.serializeItemStackToNBT(NetworkBukkitItemStack.create(itemstack)));
 		} else {
 			return contents.toString();
 		}

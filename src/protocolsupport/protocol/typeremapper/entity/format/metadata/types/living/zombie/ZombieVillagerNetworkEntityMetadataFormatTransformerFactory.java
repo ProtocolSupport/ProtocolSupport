@@ -10,11 +10,13 @@ public class ZombieVillagerNetworkEntityMetadataFormatTransformerFactory extends
 	public static final ZombieVillagerNetworkEntityMetadataFormatTransformerFactory INSTANCE = new ZombieVillagerNetworkEntityMetadataFormatTransformerFactory();
 
 	protected ZombieVillagerNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.ZombieVillager.CONVERTING, 18), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.ZombieVillager.CONVERTING, 19), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.ZombieVillager.CONVERTING, 18), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.ZombieVillager.CONVERTING, 17), ProtocolVersionsHelper.ALL_1_14);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.ZombieVillager.CONVERTING, 15), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.ZombieVillager.VDATA, 19), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.ZombieVillager.VDATA, 20), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.ZombieVillager.VDATA, 19), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.ZombieVillager.VDATA, 18), ProtocolVersionsHelper.ALL_1_14);
 		add(new NetworkEntityMetadataObjectIndexValueVillagerDataToProfessionVarIntTransformer(NetworkEntityMetadataObjectIndex.ZombieVillager.VDATA, 16), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 	}

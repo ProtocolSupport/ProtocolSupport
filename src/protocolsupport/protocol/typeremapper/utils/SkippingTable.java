@@ -44,7 +44,7 @@ public class SkippingTable {
 			set.add(id);
 		}
 
-		public boolean shouldSkip(T id) {
+		public boolean isSet(T id) {
 			return set.contains(id);
 		}
 

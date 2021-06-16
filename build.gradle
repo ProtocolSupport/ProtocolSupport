@@ -12,7 +12,7 @@ buildscript {
 
 plugins {
 	id 'java'
-	id 'com.github.johnrengelman.shadow' version '5.0.0'
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
 	id 'maven-publish'
 }
 
@@ -26,7 +26,7 @@ defaultTasks 'build'
 
 
 group 'protocolsupport'
-version '1.16.5-3'
+version '1.17-1-dev'
 
 
 import java.nio.file.Path
@@ -56,7 +56,7 @@ task setupFolders(type: DefaultTask) {doLast{
 }}
 
 
-sourceCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_16
 
 sourceSets {
 	main {
@@ -100,12 +100,12 @@ dependencies {
 		projectDirectoryPath.resolve('libraries_runtime'),
 		[
 			new BuildDependencySupplier(
-				'spigot-1.16.5-1.jar',
-				new URL('https://hub.spigotmc.org/jenkins/job/BuildTools/126/artifact/target/BuildTools.jar'),
+				'spigot-1.17-1.jar',
+				new URL('https://hub.spigotmc.org/jenkins/job/BuildTools/128/artifact/target/BuildTools.jar'),
 				spigotBuildDirectoryPath,
 				'BuildTools.jar',
-				['java', '-jar', 'BuildTools.jar', '--rev', '1.16.5'],
-				['spigot-1.16.5.jar']
+				['java', '-jar', 'BuildTools.jar', '--rev', '1.17'],
+				['spigot-1.17.jar']
 			).setBuildEnv([
 				'MAVEN_OPTS': '-Dmaven.repo.local=' + spigotBuildDirectoryPath.resolve('m2').toString() + ' -Xmx1024M'
 			])

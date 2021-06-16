@@ -31,7 +31,6 @@ public class PacketCodec extends BytePacketCodec {
 		registry.register(PacketType.CLIENTBOUND_PLAY_SPAWN_EXP_ORB, 0x1A);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_VELOCITY, 0x1C);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY, 0x1D);
-		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_NOOP, 0x1E);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE, 0x1F);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_LOOK, 0x20);
 		registry.register(PacketType.CLIENTBOUND_PLAY_ENTITY_REL_MOVE_LOOK, 0x21);
@@ -59,7 +58,7 @@ public class PacketCodec extends BytePacketCodec {
 		registry.register(PacketType.CLIENTBOUND_PLAY_WINDOW_SET_SLOT, 0x67);
 		registry.register(PacketType.CLIENTBOUND_PLAY_WINDOW_SET_ITEMS, 0x68);
 		registry.register(PacketType.CLIENTBOUND_PLAY_WINDOW_DATA, 0x69);
-		registry.register(PacketType.CLIENTBOUND_PLAY_WINDOW_TRANSACTION, 0x6A);
+		registry.register(PacketType.CLIENTBOUND_LEGACY_PLAY_WINDOW_TRANSACTION, 0x6A);
 		registry.register(PacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN, 0x82);
 		registry.register(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP, 0x83);
 		registry.register(PacketType.CLIENTBOUND_PLAY_BLOCK_TILE, 0x84);

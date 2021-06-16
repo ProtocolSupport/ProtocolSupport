@@ -1,9 +1,9 @@
 package protocolsupport.zplatform.impl.spigot.network.handler;
 
-import net.minecraft.server.v1_16_R3.IChatBaseComponent;
-import net.minecraft.server.v1_16_R3.NetworkManager;
-import net.minecraft.server.v1_16_R3.PacketHandshakingInListener;
-import net.minecraft.server.v1_16_R3.PacketHandshakingInSetProtocol;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.network.protocol.handshake.PacketHandshakingInListener;
+import net.minecraft.network.protocol.handshake.PacketHandshakingInSetProtocol;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;
@@ -23,7 +23,7 @@ public class SpigotHandshakeListener extends AbstractHandshakeListener implement
 
 	@Override
 	public void a(PacketHandshakingInSetProtocol packet) {
-		handleSetProtocol(SpigotMiscUtils.protocolToNetState(packet.b()), packet.hostname, packet.port);
+		handleSetProtocol(SpigotMiscUtils.protocolToNetState(packet.b()), packet.c, packet.d);
 	}
 
 	@Override

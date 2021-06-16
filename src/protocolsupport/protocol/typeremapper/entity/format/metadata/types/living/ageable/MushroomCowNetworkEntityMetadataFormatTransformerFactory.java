@@ -10,7 +10,8 @@ public class MushroomCowNetworkEntityMetadataFormatTransformerFactory extends Ag
 	public static final MushroomCowNetworkEntityMetadataFormatTransformerFactory INSTANCE = new MushroomCowNetworkEntityMetadataFormatTransformerFactory();
 
 	protected MushroomCowNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MushroomCow.VARIANT, 16), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MushroomCow.VARIANT, 17), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MushroomCow.VARIANT, 16), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MushroomCow.VARIANT, 15), ProtocolVersionsHelper.ALL_1_14);
 	}
 

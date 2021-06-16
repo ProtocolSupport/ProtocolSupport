@@ -10,7 +10,8 @@ public class PhantomNetworkEntityMetadataFormatTransformerFactory extends Insent
 	public static final PhantomNetworkEntityMetadataFormatTransformerFactory INSTANCE = new PhantomNetworkEntityMetadataFormatTransformerFactory();
 
 	protected PhantomNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Phantom.SIZE, 15), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Phantom.SIZE, 16), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Phantom.SIZE, 15), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Phantom.SIZE, 14), ProtocolVersionsHelper.ALL_1_14);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Phantom.SIZE, 12), ProtocolVersionsHelper.ALL_1_13);
 	}

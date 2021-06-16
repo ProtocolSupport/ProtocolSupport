@@ -5,7 +5,7 @@ import java.util.Map;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2_15_16r1_16r2.AbstractDeclareRecipes;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2_15_16r1_16r2_17.AbstractDeclareRecipes;
 import protocolsupport.protocol.types.recipe.Recipe;
 import protocolsupport.protocol.types.recipe.RecipeType;
 
@@ -30,7 +30,7 @@ public class DeclareRecipes extends AbstractDeclareRecipes {
 		registerWriter(RecipeType.CRAFTING_SPECIAL_FIREWORK_ROCKET, RecipeWriter.SIMPLE);
 		registerWriter(RecipeType.CRAFTING_SPECIAL_FIREWORK_STAR, RecipeWriter.SIMPLE);
 		registerWriter(RecipeType.CRAFTING_SPECIAL_FIREWORK_STAR_FADE, RecipeWriter.SIMPLE);
-		registerWriter(RecipeType.CRAFTING_SPECIAL_REPAIRITEM, new RecipeWriter<Recipe>() {
+		registerWriter(RecipeType.CRAFTING_SPECIAL_REPAIRITEM, new RecipeWriter<>() {
 			@Override
 			public boolean writeRecipe(ByteBuf to, ProtocolVersion version, Recipe recipe) {
 				if (version.isBefore(ProtocolVersion.MINECRAFT_1_14_3)) {

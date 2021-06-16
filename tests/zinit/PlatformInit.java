@@ -19,10 +19,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.craftbukkit.Main;
-import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
 import org.junit.jupiter.api.Assertions;
 
-import net.minecraft.server.v1_16_R3.MinecraftServer;
+import net.minecraft.server.MinecraftServer;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class PlatformInit {

@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class NBTCompound extends NBT {
@@ -184,13 +185,23 @@ public class NBTCompound extends NBT {
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		return (other instanceof NBTCompound) && ((NBTCompound) other).tags.equals(tags);
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		NBTCompound other = (NBTCompound) obj;
+		return Objects.equals(tags, other.tags);
 	}
 
 	@Override
 	public int hashCode() {
-		return tags.hashCode();
+		return Objects.hash(tags);
 	}
 
 	@Override

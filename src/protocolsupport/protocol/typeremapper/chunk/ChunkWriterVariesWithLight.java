@@ -9,11 +9,11 @@ import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.chunk.BlockStorage;
 import protocolsupport.protocol.storage.netcache.chunk.BlockStorageBytePaletted;
-import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunkSectionBlockStorage;
+import protocolsupport.protocol.storage.netcache.chunk.LimitedHeightCachedChunk;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
-import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
@@ -26,19 +26,18 @@ public class ChunkWriterVariesWithLight {
 	}
 
 	public static void writeSectionsCompactFlattening(
-		ByteBuf buffer, int mask, int globalPaletteBitsPerBlock,
-		IdMappingTable blockDataRemappingTable,
-		FlatteningBlockDataTable flatteningBlockDataTable,
-		CachedChunk chunk, boolean hasSkyLight
+		ByteBuf buffer,
+		int globalPaletteBitsPerBlock,
+		IntMappingTable blockDataRemappingTable, FlatteningBlockDataTable flatteningBlockDataTable,
+		LimitedHeightCachedChunk chunk, int mask, boolean hasSkyLight
 	) {
-		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-			if (BitUtils.isIBitSet(mask, sectionNumber)) {
-				CachedChunkSectionBlockStorage section = chunk.getBlocksSection(sectionNumber);
+		for (int sectionIndex = 0; sectionIndex < ChunkConstants.LEGACY_LIMITED_HEIGHT_CHUNK_BLOCK_SECTIONS; sectionIndex++) {
+			if (BitUtils.isIBitSet(mask, sectionIndex)) {
+				CachedChunkSectionBlockStorage section = chunk.getBlocksSection(sectionIndex);
 
 				if (section != null) {
 					BlockStorage blockstorage = section.getBlockStorage();
-					if (blockstorage instanceof BlockStorageBytePaletted) {
-						BlockStorageBytePaletted blockstoragePaletted = (BlockStorageBytePaletted) blockstorage;
+					if (blockstorage instanceof BlockStorageBytePaletted blockstoragePaletted) {
 						buffer.writeByte(8);
 						BlockStorageBytePaletted.Palette paletteObject = blockstoragePaletted.getPalette();
 						short[] palette = paletteObject.getPalette();
@@ -70,12 +69,12 @@ public class ChunkWriterVariesWithLight {
 						ArraySerializer.writeVarIntLongArray(buffer, writer.getStorage());
 					}
 				} else {
-					ChunkWriterUtils.writeBBEmptySection(buffer);
+					ChunkWriteUtils.writeBBEmptySection(buffer);
 				}
 
-				ChunkWriterUtils.writeBBLight(buffer, chunk.getBlockLight(sectionNumber));
+				ChunkWriteUtils.writeBBLight(buffer, chunk.getBlockLight(sectionIndex));
 				if (hasSkyLight) {
-					ChunkWriterUtils.writeBBLight(buffer, chunk.getSkyLight(sectionNumber));
+					ChunkWriteUtils.writeBBLight(buffer, chunk.getSkyLight(sectionIndex));
 				}
 			}
 		}
@@ -83,18 +82,18 @@ public class ChunkWriterVariesWithLight {
 
 
 	public static void writeSectionsCompactPreFlattening(
-		ByteBuf buffer, int mask, int globalPaletteBitsPerBlock,
-		IdMappingTable blockDataRemappingTable,
-		CachedChunk chunk, boolean hasSkyLight
+		ByteBuf buffer,
+		int globalPaletteBitsPerBlock,
+		IntMappingTable blockDataRemappingTable,
+		LimitedHeightCachedChunk chunk, int mask, boolean hasSkyLight
 	) {
-		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-			if (BitUtils.isIBitSet(mask, sectionNumber)) {
-				CachedChunkSectionBlockStorage section = chunk.getBlocksSection(sectionNumber);
+		for (int sectionIndex = 0; sectionIndex < ChunkConstants.LEGACY_LIMITED_HEIGHT_CHUNK_BLOCK_SECTIONS; sectionIndex++) {
+			if (BitUtils.isIBitSet(mask, sectionIndex)) {
+				CachedChunkSectionBlockStorage section = chunk.getBlocksSection(sectionIndex);
 
 				if (section != null) {
 					BlockStorage blockstorage = section.getBlockStorage();
-					if (blockstorage instanceof BlockStorageBytePaletted) {
-						BlockStorageBytePaletted blockstoragePaletted = (BlockStorageBytePaletted) blockstorage;
+					if (blockstorage instanceof BlockStorageBytePaletted blockstoragePaletted) {
 						buffer.writeByte(Byte.SIZE);
 						BlockStorageBytePaletted.Palette paletteObject = blockstoragePaletted.getPalette();
 						short[] palette = paletteObject.getPalette();
@@ -126,18 +125,18 @@ public class ChunkWriterVariesWithLight {
 						ArraySerializer.writeVarIntLongArray(buffer, writer.getStorage());
 					}
 				} else {
-					ChunkWriterUtils.writeBBEmptySection(buffer);
+					ChunkWriteUtils.writeBBEmptySection(buffer);
 				}
 
-				ChunkWriterUtils.writeBBLight(buffer, chunk.getBlockLight(sectionNumber));
+				ChunkWriteUtils.writeBBLight(buffer, chunk.getBlockLight(sectionIndex));
 				if (hasSkyLight) {
-					ChunkWriterUtils.writeBBLight(buffer, chunk.getSkyLight(sectionNumber));
+					ChunkWriteUtils.writeBBLight(buffer, chunk.getSkyLight(sectionIndex));
 				}
 			}
 		}
 	}
 
-	public static int writeTiles(ByteBuf buffer, int mask, CachedChunk chunk) {
+	public static int writeTiles(ByteBuf buffer, LimitedHeightCachedChunk chunk, int mask) {
 		int count = 0;
 		Map<Position, TileEntity>[] tiles = chunk.getTiles();
 		for (int sectionNumber = 0; sectionNumber < tiles.length; sectionNumber++) {

@@ -6,7 +6,6 @@ import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheChunkLight;
 import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterByte;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
@@ -21,9 +20,7 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 		super(init);
 	}
 
-	protected final ClientCache clientCache = cache.getClientCache();
-
-	protected final ArrayBasedIntMappingTable blockDataRemappingTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
+	protected final ArrayBasedIntMappingTable blockLegacyDataTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 
 	@Override
 	protected void write() {
@@ -36,9 +33,9 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 		chunkdata.writeShort(blockMask);
 		chunkdata.writeShort(0);
 		byte[] compressed = RecyclableWrapCompressor.compressStatic(ChunkWriterByte.serializeSectionsAndBiomes(
-			blockMask,
-			cachedChunk, blockDataRemappingTable, hasSkyLight,
-			null, null, null
+			null, blockLegacyDataTable,
+			null, null,
+			cachedChunk, blockMask, hasSkyLight
 		));
 		chunkdata.writeInt(compressed.length);
 		chunkdata.writeBytes(compressed);

@@ -10,6 +10,8 @@ public class ClientSettings extends MiddleClientSettings {
 
 	public ClientSettings(MiddlePacketInit init) {
 		super(init);
+		mainHand = MainHand.RIGHT;
+		disableTextFilter = true;
 	}
 
 	@Override
@@ -22,7 +24,6 @@ public class ClientSettings extends MiddleClientSettings {
 		clientdata.readByte();
 		clientdata.readBoolean();
 		skinFlags = 255;
-		mainHand = MainHand.RIGHT;
 	}
 
 }

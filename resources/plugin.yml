@@ -1,7 +1,7 @@
 name: ProtocolSupport
 main: protocolsupport.ProtocolSupport
 version: ${version}
-api-version: 1.16
+api-version: 1.17
 load: STARTUP
 
 commands:

@@ -1,30 +1,52 @@
 package protocolsupport.zplatform.impl.spigot;
 
-import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
 
 import com.mojang.authlib.GameProfile;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_16_R3.*;
-import net.minecraft.server.v1_16_R3.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_16_R3.PacketPlayInFlying.PacketPlayInLook;
-import net.minecraft.server.v1_16_R3.PacketPlayInFlying.PacketPlayInPosition;
-import net.minecraft.server.v1_16_R3.PacketPlayInFlying.PacketPlayInPositionLook;
-import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutEntityLook;
-import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
-import net.minecraft.server.v1_16_R3.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
-import net.minecraft.server.v1_16_R3.PacketPlayOutTitle.EnumTitleAction;
-import net.minecraft.server.v1_16_R3.ServerPing.ServerData;
-import net.minecraft.server.v1_16_R3.ServerPing.ServerPingPlayerSample;
+import net.minecraft.network.EnumProtocol;
+import net.minecraft.network.PacketDataSerializer;
+import net.minecraft.network.chat.ChatMessageType;
+import net.minecraft.network.chat.IChatBaseComponent.ChatSerializer;
+import net.minecraft.network.protocol.EnumProtocolDirection;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.protocol.game.PacketPlayInFlying.PacketPlayInLook;
+import net.minecraft.network.protocol.game.PacketPlayInFlying.PacketPlayInPosition;
+import net.minecraft.network.protocol.game.PacketPlayInFlying.PacketPlayInPositionLook;
+import net.minecraft.network.protocol.game.PacketPlayOutEntity.PacketPlayOutEntityLook;
+import net.minecraft.network.protocol.game.PacketPlayOutEntity.PacketPlayOutRelEntityMove;
+import net.minecraft.network.protocol.game.PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook;
+import net.minecraft.network.protocol.handshake.PacketHandshakingInSetProtocol;
+import net.minecraft.network.protocol.login.PacketLoginInCustomPayload;
+import net.minecraft.network.protocol.login.PacketLoginInEncryptionBegin;
+import net.minecraft.network.protocol.login.PacketLoginInStart;
+import net.minecraft.network.protocol.login.PacketLoginOutCustomPayload;
+import net.minecraft.network.protocol.login.PacketLoginOutDisconnect;
+import net.minecraft.network.protocol.login.PacketLoginOutEncryptionBegin;
+import net.minecraft.network.protocol.login.PacketLoginOutSetCompression;
+import net.minecraft.network.protocol.login.PacketLoginOutSuccess;
+import net.minecraft.network.protocol.status.PacketStatusInPing;
+import net.minecraft.network.protocol.status.PacketStatusInStart;
+import net.minecraft.network.protocol.status.PacketStatusOutPong;
+import net.minecraft.network.protocol.status.PacketStatusOutServerInfo;
+import net.minecraft.network.protocol.status.ServerPing;
+import net.minecraft.network.protocol.status.ServerPing.ServerData;
+import net.minecraft.network.protocol.status.ServerPing.ServerPingPlayerSample;
+import net.minecraft.resources.MinecraftKey;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.api.utils.Profile;
+import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.UncheckedReflectionException;
 import protocolsupport.zplatform.PlatformPacketFactory;
 
 public class SpigotPacketFactory implements PlatformPacketFactory {
@@ -38,40 +60,35 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	@Override
 	public Object createTabHeaderFooterPacket(BaseComponent header, BaseComponent footer) {
-		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
-		serializer.a(ChatAPI.toJSON(header != null ? header : emptyMessage));
-		serializer.a(ChatAPI.toJSON(footer != null ? footer : emptyMessage));
-		PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
-		try {
-			packet.a(serializer);
-		} catch (IOException e) {
-		}
-		return packet;
+		return new PacketPlayOutPlayerListHeaderFooter(
+			ChatSerializer.a(ChatAPI.toJSON(header != null ? header : emptyMessage)),
+			ChatSerializer.a(ChatAPI.toJSON(footer != null ? footer : emptyMessage))
+		);
 	}
 
 	@Override
 	public Object createTitleResetPacket() {
-		return new PacketPlayOutTitle(EnumTitleAction.CLEAR, null);
+		return new ClientboundClearTitlesPacket(true);
 	}
 
 	@Override
 	public Object createTitleClearPacket() {
-		return new PacketPlayOutTitle(EnumTitleAction.RESET, null);
+		return new ClientboundClearTitlesPacket(false);
 	}
 
 	@Override
 	public Object createTitleMainPacket(String title) {
-		return new PacketPlayOutTitle(EnumTitleAction.TITLE, ChatSerializer.a(title));
+		return new ClientboundSetTitleTextPacket(ChatSerializer.a(title));
 	}
 
 	@Override
 	public Object createTitleSubPacket(String title) {
-		return new PacketPlayOutTitle(EnumTitleAction.SUBTITLE, ChatSerializer.a(title));
+		return new ClientboundSetSubtitleTextPacket(ChatSerializer.a(title));
 	}
 
 	@Override
 	public Object createTitleParamsPacket(int fadeIn, int stay, int fadeOut) {
-		return new PacketPlayOutTitle(fadeIn, stay, fadeOut);
+		return new ClientboundSetTitlesAnimationPacket(fadeIn, stay, fadeOut);
 	}
 
 	@Override
@@ -272,11 +289,6 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getOutPlayEntityPacketId() {
-		return getOutId(PacketPlayOutEntity.class);
-	}
-
-	@Override
 	public int getOutPlayEntityRelMovePacketId() {
 		return getOutId(PacketPlayOutRelEntityMove.class);
 	}
@@ -422,11 +434,6 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getOutPlayWindowTransactionPacketId() {
-		return getOutId(PacketPlayOutTransaction.class);
-	}
-
-	@Override
 	public int getOutPlayMapPacketId() {
 		return getOutId(PacketPlayOutMap.class);
 	}
@@ -502,16 +509,6 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getOutPlayWorldBorderPacketId() {
-		return getOutId(PacketPlayOutWorldBorder.class);
-	}
-
-	@Override
-	public int getOutPlayTitlePacketId() {
-		return getOutId(PacketPlayOutTitle.class);
-	}
-
-	@Override
 	public int getOutPlayPlayerListHeaderFooterPacketId() {
 		return getOutId(PacketPlayOutPlayerListHeaderFooter.class);
 	}
@@ -534,11 +531,6 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getOutPlayServerDifficultyPacketId() {
 		return getOutId(PacketPlayOutServerDifficulty.class);
-	}
-
-	@Override
-	public int getOutPlayCombatEventPacketId() {
-		return getOutId(PacketPlayOutCombatEvent.class);
 	}
 
 	@Override
@@ -632,8 +624,88 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getOutPlayAcknowledgePlayerDiggingId() {
+	public int getOutPlayAcknowledgePlayerDiggingPacketId() {
 		return getOutId(PacketPlayOutBlockBreak.class);
+	}
+
+	@Override
+	public int getOutPlayTitleTextPacketId() {
+		return getOutId(ClientboundSetTitleTextPacket.class);
+	}
+
+	@Override
+	public int getOutPlayTitleSubTextPacketId() {
+		return getOutId(ClientboundSetSubtitleTextPacket.class);
+	}
+
+	@Override
+	public int getOutPlayTitleAnimationPacketId() {
+		return getOutId(ClientboundSetTitlesAnimationPacket.class);
+	}
+
+	@Override
+	public int getOutPlayTitleClearPacketId() {
+		return getOutId(ClientboundClearTitlesPacket.class);
+	}
+
+	@Override
+	public int getOutPlayActionbarPacketId() {
+		return getOutId(ClientboundSetActionBarTextPacket.class);
+	}
+
+	@Override
+	public int getOutPlayWorldborderInitPacketId() {
+		return getOutId(ClientboundInitializeBorderPacket.class);
+	}
+
+	@Override
+	public int getOutPlayWorldborderCenterPacketId() {
+		return getOutId(ClientboundSetBorderCenterPacket.class);
+	}
+
+	@Override
+	public int getOutPlayWorldborderLerpSizePacketId() {
+		return getOutId(ClientboundSetBorderLerpSizePacket.class);
+	}
+
+	@Override
+	public int getOutPlayWorldborderSizePacketId() {
+		return getOutId(ClientboundSetBorderSizePacket.class);
+	}
+
+	@Override
+	public int getOutPlayWorldborderWarnDelayPacketId() {
+		return getOutId(ClientboundSetBorderWarningDelayPacket.class);
+	}
+
+	@Override
+	public int getOutPlayWorldborderWarnDistancePacketId() {
+		return getOutId(ClientboundSetBorderWarningDistancePacket.class);
+	}
+
+	@Override
+	public int getOutPlayCombatBeginPacketId() {
+		return getOutId(ClientboundPlayerCombatEnterPacket.class);
+	}
+
+	@Override
+	public int getOutPlayCombatEndPacketId() {
+		return getOutId(ClientboundPlayerCombatEndPacket.class);
+	}
+
+	@Override
+	public int getOutPlayCombatDeathPacketId() {
+		return getOutId(ClientboundPlayerCombatKillPacket.class);
+	}
+
+	@Override
+	public int getOutPlayVibration() {
+		return getOutId(ClientboundAddVibrationSignalPacket.class);
+	}
+
+	@Override
+	public int getOutPlaySyncPing() {
+		return getOutId(ClientboundPingPacket.class);
 	}
 
 
@@ -680,11 +752,6 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getInPlayUseEntityPacketId() {
 		return getInId(PacketPlayInUseEntity.class);
-	}
-
-	@Override
-	public int getInPlayPlayerPacketId() {
-		return getInId(PacketPlayInFlying.class);
 	}
 
 	@Override
@@ -750,11 +817,6 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getInPlayWindowClickPacketId() {
 		return getInId(PacketPlayInWindowClick.class);
-	}
-
-	@Override
-	public int getInPlayWindowTransactionPacketId() {
-		return getInId(PacketPlayInTransaction.class);
 	}
 
 	@Override
@@ -897,22 +959,57 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		return getInId(PacketPlayInJigsawGenerate.class);
 	}
 
+	@Override
+	public int getInPlaySyncPong() {
+		return getInId(ServerboundPongPacket.class);
+	}
 
+	protected static final Map<Class<? extends Packet<?>>, EnumProtocol> protocolmap = getProtocolMap();
+	protected static final Field directionMapField = getDirectionMapField();
+	protected static final Field packetIdMapField = getPacketIdMapField();
+
+	@SuppressWarnings("unchecked")
+	protected static final Map<Class<? extends Packet<?>>, EnumProtocol> getProtocolMap() {
+		try {
+			return (Map<Class<? extends Packet<?>>, EnumProtocol>) ReflectionUtils.getField(EnumProtocol.class, "h").get(null);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new UncheckedReflectionException(e);
+		}
+	}
+
+	protected static Field getDirectionMapField() {
+		try {
+			return ReflectionUtils.getField(EnumProtocol.class, "j");
+		} catch (IllegalArgumentException e) {
+			throw new UncheckedReflectionException(e);
+		}
+	}
+
+	protected static Field getPacketIdMapField() {
+		try {
+			return ReflectionUtils.getField(SpigotPacketFactory.class.getClassLoader().loadClass(EnumProtocol.class.getName() + "$a"), "a");
+		} catch (IllegalArgumentException | ClassNotFoundException e) {
+			throw new UncheckedReflectionException(e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	protected static int getPacketId(Class<?> packetClass, EnumProtocolDirection direction) {
 		try {
-			Packet<?> packet = (Packet<?>) packetClass.newInstance();
-			return EnumProtocol.a(packet).a(direction, packet);
+			EnumProtocol protocol = protocolmap.get(packetClass);
+			Object registry = ((Map<EnumProtocolDirection, Object>) directionMapField.get(protocol)).get(direction);
+			return ((Map<Class<? extends Packet<?>>, Integer>) packetIdMapField.get(registry)).get(packetClass);
 		} catch (Exception e) {
 			throw new RuntimeException("Unable to get packet id", e);
 		}
 	}
 
 	protected static final int getOutId(Class<?> packetClass) {
-		return getPacketId(packetClass, EnumProtocolDirection.CLIENTBOUND);
+		return getPacketId(packetClass, EnumProtocolDirection.b);
 	}
 
 	protected static final int getInId(Class<?> packetClass) {
-		return getPacketId(packetClass, EnumProtocolDirection.SERVERBOUND);
+		return getPacketId(packetClass, EnumProtocolDirection.a);
 	}
 
 }

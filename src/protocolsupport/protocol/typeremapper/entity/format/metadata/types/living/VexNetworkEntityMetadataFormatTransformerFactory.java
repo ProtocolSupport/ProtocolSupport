@@ -10,7 +10,8 @@ public class VexNetworkEntityMetadataFormatTransformerFactory extends Insentient
 	public static final VexNetworkEntityMetadataFormatTransformerFactory INSTANCE = new VexNetworkEntityMetadataFormatTransformerFactory();
 
 	protected VexNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Vex.ATTACK_MODE, 15), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Vex.ATTACK_MODE, 16), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Vex.ATTACK_MODE, 15), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Vex.ATTACK_MODE, 14), ProtocolVersionsHelper.ALL_1_14);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Vex.ATTACK_MODE, 12), ProtocolVersionsHelper.RANGE__1_11__1_13_2);
 	}

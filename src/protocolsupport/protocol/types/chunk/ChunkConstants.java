@@ -17,11 +17,11 @@ public class ChunkConstants {
 		}
 	}
 
-	public static final int SECTION_COUNT_BLOCKS = 16;
-	public static final int SECTION_COUNT_LIGHT = 18;
-
 	public static final int BLOCKS_IN_SECTION = 16 * 16 * 16;
 
 	public static final int LIGHT_DATA_LENGTH = BLOCKS_IN_SECTION / 2;
+
+	public static final int LEGACY_LIMITED_HEIGHT_CHUNK_BLOCK_SECTIONS = 16;
+	public static final int LEGACY_LIMITED_HEIGHT_CHUNK_LIGHT_SECTIONS = 18;
 
 }

@@ -10,11 +10,13 @@ public class FishingFloatNetworkEntityMetadataFormatTransformerFactory extends B
 	public static final FishingFloatNetworkEntityMetadataFormatTransformerFactory INSTANCE = new FishingFloatNetworkEntityMetadataFormatTransformerFactory();
 
 	protected FishingFloatNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.FishingFloat.HOOKED_ENTITY, 7), ProtocolVersionsHelper.UP_1_14);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.FishingFloat.HOOKED_ENTITY, 8), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.FishingFloat.HOOKED_ENTITY, 7), ProtocolVersionsHelper.RANGE__1_14__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.FishingFloat.HOOKED_ENTITY, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.FishingFloat.HOOKED_ENTITY, 5), ProtocolVersionsHelper.ALL_1_9);
 
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.FishingFloat.CATCHABLE, 8), ProtocolVersionsHelper.UP_1_16);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.FishingFloat.CATCHABLE, 9), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.FishingFloat.CATCHABLE, 8), ProtocolVersionsHelper.ALL_1_16);
 	}
 
 }

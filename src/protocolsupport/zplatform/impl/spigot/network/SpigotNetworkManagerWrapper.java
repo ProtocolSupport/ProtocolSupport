@@ -14,10 +14,10 @@ import com.mojang.authlib.properties.Property;
 import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.minecraft.server.v1_16_R3.NetworkManager;
-import net.minecraft.server.v1_16_R3.Packet;
-import net.minecraft.server.v1_16_R3.PacketListener;
-import net.minecraft.server.v1_16_R3.PlayerConnection;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.PacketListener;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.server.network.PlayerConnection;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.api.utils.ProfileProperty;
@@ -50,7 +50,7 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public void setAddress(InetSocketAddress address) {
-		internal.socketAddress = address;
+		internal.l = address;
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 	public Player getBukkitPlayer() {
 		PacketListener listener = getPacketListener();
 		if (listener instanceof PlayerConnection) {
-			return ((PlayerConnection) listener).player.getBukkitEntity();
+			return ((PlayerConnection) listener).getPlayer();
 		}
 		return null;
 	}

@@ -113,6 +113,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> SILENT = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> NO_GRAVITY = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectEntityPose> POSE = takeNextIndex(NetworkEntityMetadataObjectEntityPose.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> FROZEN_TIME = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
 	}
 
 	public static class EntityLiving extends Entity {

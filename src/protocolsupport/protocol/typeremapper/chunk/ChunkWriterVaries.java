@@ -1,11 +1,13 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
+import java.util.BitSet;
+
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
-import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.protocol.types.chunk.ChunkSectonBlockData;
 import protocolsupport.protocol.utils.NumberBitsStorageCompact;
@@ -18,14 +20,14 @@ public class ChunkWriterVaries {
 	}
 
 	public static void writeSectionsPadded(
-		ByteBuf buffer, int mask, int globalPaletteBitsPerBlock,
-		IdMappingTable blockDataRemappingTable,
-		FlatteningBlockDataTable flatteningBlockDataTable,
-		ChunkSectonBlockData[] sections
+		ByteBuf buffer,
+		int globalPaletteBitsPerBlock,
+		IntMappingTable blockLegacyDataTable, FlatteningBlockDataTable flatteningBlockDataTable,
+		ChunkSectonBlockData[] sections, BitSet sectionMask
 	) {
-		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-			if (BitUtils.isIBitSet(mask, sectionNumber)) {
-				ChunkSectonBlockData section = sections[sectionNumber];
+		for (int sectionIndex = 0; sectionIndex < sections.length; sectionIndex++) {
+			if (sectionMask.get(sectionIndex)) {
+				ChunkSectonBlockData section = sections[sectionIndex];
 
 				int bitsPerBlock = section.getBitsPerNumber();
 				if (bitsPerBlock != ChunkConstants.GLOBAL_PALETTE_BITS_PER_BLOCK) {
@@ -34,7 +36,7 @@ public class ChunkWriterVaries {
 					short[] palette = section.getPalette();
 					VarNumberSerializer.writeVarInt(buffer, palette.length);
 					for (short blockdata : palette) {
-						VarNumberSerializer.writeVarInt(buffer, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, blockdata));
+						VarNumberSerializer.writeVarInt(buffer, BlockRemappingHelper.remapFlatteningBlockDataId(blockLegacyDataTable, flatteningBlockDataTable, blockdata));
 					}
 					ArraySerializer.writeVarIntLongArray(buffer, section.getStorage());
 				} else {
@@ -42,7 +44,40 @@ public class ChunkWriterVaries {
 					buffer.writeByte(globalPaletteBitsPerBlock);
 					NumberBitsStoragePadded blockstorage = new NumberBitsStoragePadded(globalPaletteBitsPerBlock, ChunkConstants.BLOCKS_IN_SECTION);
 					for (int blockIndex = 0; blockIndex < ChunkConstants.BLOCKS_IN_SECTION; blockIndex++) {
-						blockstorage.setNumber(blockIndex, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, section.getBlockData(blockIndex)));
+						blockstorage.setNumber(blockIndex, BlockRemappingHelper.remapFlatteningBlockDataId(blockLegacyDataTable, flatteningBlockDataTable, section.getBlockData(blockIndex)));
+					}
+					ArraySerializer.writeVarIntLongArray(buffer, blockstorage.getStorage());
+				}
+			}
+		}
+	}
+
+	public static void writeSectionsPadded(
+		ByteBuf buffer,
+		int globalPaletteBitsPerBlock,
+		IntMappingTable blockLegacyDataTable, FlatteningBlockDataTable flatteningBlockDataTable,
+		ChunkSectonBlockData[] sections, int sectionMask, int sectionOffset
+	) {
+		for (int sectionIndex = 0; sectionIndex < ChunkConstants.LEGACY_LIMITED_HEIGHT_CHUNK_BLOCK_SECTIONS; sectionIndex++) {
+			if (BitUtils.isIBitSet(sectionMask, sectionIndex)) {
+				ChunkSectonBlockData section = sections[sectionIndex + sectionOffset];
+
+				int bitsPerBlock = section.getBitsPerNumber();
+				if (bitsPerBlock != ChunkConstants.GLOBAL_PALETTE_BITS_PER_BLOCK) {
+					buffer.writeShort(section.getNonAirBlockCount());
+					buffer.writeByte(bitsPerBlock);
+					short[] palette = section.getPalette();
+					VarNumberSerializer.writeVarInt(buffer, palette.length);
+					for (short blockdata : palette) {
+						VarNumberSerializer.writeVarInt(buffer, BlockRemappingHelper.remapFlatteningBlockDataId(blockLegacyDataTable, flatteningBlockDataTable, blockdata));
+					}
+					ArraySerializer.writeVarIntLongArray(buffer, section.getStorage());
+				} else {
+					buffer.writeShort(section.getNonAirBlockCount());
+					buffer.writeByte(globalPaletteBitsPerBlock);
+					NumberBitsStoragePadded blockstorage = new NumberBitsStoragePadded(globalPaletteBitsPerBlock, ChunkConstants.BLOCKS_IN_SECTION);
+					for (int blockIndex = 0; blockIndex < ChunkConstants.BLOCKS_IN_SECTION; blockIndex++) {
+						blockstorage.setNumber(blockIndex, BlockRemappingHelper.remapFlatteningBlockDataId(blockLegacyDataTable, flatteningBlockDataTable, section.getBlockData(blockIndex)));
 					}
 					ArraySerializer.writeVarIntLongArray(buffer, blockstorage.getStorage());
 				}
@@ -51,14 +86,14 @@ public class ChunkWriterVaries {
 	}
 
 	public static void writeSectionsCompact(
-		ByteBuf buffer, int mask, int globalPaletteBitsPerBlock,
-		IdMappingTable blockDataRemappingTable,
-		FlatteningBlockDataTable flatteningBlockDataTable,
-		ChunkSectonBlockData[] sections
+		ByteBuf buffer,
+		int globalPaletteBitsPerBlock,
+		IntMappingTable blockDataRemappingTable, FlatteningBlockDataTable flatteningBlockDataTable,
+		ChunkSectonBlockData[] sections, int sectionMask, int sectionOffset
 	) {
-		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-			if (BitUtils.isIBitSet(mask, sectionNumber)) {
-				ChunkSectonBlockData section = sections[sectionNumber];
+		for (int sectionIndex = 0; sectionIndex  < ChunkConstants.LEGACY_LIMITED_HEIGHT_CHUNK_BLOCK_SECTIONS; sectionIndex++) {
+			if (BitUtils.isIBitSet(sectionMask, sectionIndex)) {
+				ChunkSectonBlockData section = sections[sectionIndex + sectionOffset];
 
 				int bitsPerBlock = section.getBitsPerNumber();
 				if (bitsPerBlock != ChunkConstants.GLOBAL_PALETTE_BITS_PER_BLOCK) {

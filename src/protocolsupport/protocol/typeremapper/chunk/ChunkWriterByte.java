@@ -3,14 +3,14 @@ package protocolsupport.protocol.typeremapper.chunk;
 import org.bukkit.NamespacedKey;
 
 import protocolsupport.protocol.storage.netcache.IBiomeRegistry;
-import protocolsupport.protocol.storage.netcache.chunk.CachedChunk;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunkSectionBlockStorage;
+import protocolsupport.protocol.storage.netcache.chunk.LimitedHeightCachedChunk;
 import protocolsupport.protocol.typeremapper.basic.BiomeRemapper;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
-import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.utils.BitUtils;
 
@@ -20,9 +20,9 @@ public class ChunkWriterByte {
 	}
 
 	public static byte[] serializeSectionsAndBiomes(
-		int mask,
-		CachedChunk chunk, IdMappingTable blockDataRemappingTable, boolean hasSkyLight,
-		int[] biomeData, IBiomeRegistry biomeRegistry, GenericMappingTable<NamespacedKey> biomeRemappingTable
+		GenericMappingTable<NamespacedKey> biomeRemappingTable, IntMappingTable blockDataRemappingTable,
+		IBiomeRegistry biomeRegistry, int[] biomeData,
+		LimitedHeightCachedChunk chunk, int mask, boolean hasSkyLight
 	) {
 		int columnsCount = Integer.bitCount(mask);
 		byte[] data = new byte[((hasSkyLight ? 10240 : 8192) * columnsCount) + (biomeData != null ? 256 : 0)];
@@ -32,9 +32,9 @@ public class ChunkWriterByte {
 		int blockLightIndex = 6144 * columnsCount;
 		int skyLightIndex = 8192 * columnsCount;
 
-		for (int sectionNumber = 0; sectionNumber < ChunkConstants.SECTION_COUNT_BLOCKS; sectionNumber++) {
-			if (BitUtils.isIBitSet(mask, sectionNumber)) {
-				CachedChunkSectionBlockStorage section = chunk.getBlocksSection(sectionNumber);
+		for (int sectionIndex = 0; sectionIndex < ChunkConstants.LEGACY_LIMITED_HEIGHT_CHUNK_BLOCK_SECTIONS; sectionIndex++) {
+			if (BitUtils.isIBitSet(mask, sectionIndex)) {
+				CachedChunkSectionBlockStorage section = chunk.getBlocksSection(sectionIndex);
 
 				if (section != null) {
 					int blockLegacyDataAcc = 0;
@@ -53,10 +53,10 @@ public class ChunkWriterByte {
 				blockIdIndex += 4096;
 				blockDataIndex += 2048;
 
-				ChunkWriterUtils.copyLight(data, blockLightIndex, chunk.getBlockLight(sectionNumber));
+				ChunkWriteUtils.copyLight(data, blockLightIndex, chunk.getBlockLight(sectionIndex));
 				blockLightIndex += 2048;
 				if (hasSkyLight) {
-					ChunkWriterUtils.copyLight(data, skyLightIndex, chunk.getSkyLight(sectionNumber));
+					ChunkWriteUtils.copyLight(data, skyLightIndex, chunk.getSkyLight(sectionIndex));
 					skyLightIndex += 2048;
 				}
 			}

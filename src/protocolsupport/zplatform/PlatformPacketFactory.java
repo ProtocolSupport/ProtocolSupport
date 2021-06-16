@@ -98,8 +98,6 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayEntityDestroyPacketId();
 
-	public int getOutPlayEntityPacketId();
-
 	public int getOutPlayEntityRelMovePacketId();
 
 	public int getOutPlayEntityLookPacketId();
@@ -158,8 +156,6 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayWindowDataPacketId();
 
-	public int getOutPlayWindowTransactionPacketId();
-
 	public int getOutPlayMapPacketId();
 
 	public int getOutPlayUpdateTilePacketId();
@@ -190,10 +186,6 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayCameraPacketId();
 
-	public int getOutPlayWorldBorderPacketId();
-
-	public int getOutPlayTitlePacketId();
-
 	public int getOutPlayPlayerListHeaderFooterPacketId();
 
 	public int getOutPlaySetPassengersPacketId();
@@ -203,8 +195,6 @@ public interface PlatformPacketFactory {
 	public int getOutPlayWorldCustomSoundPacketId();
 
 	public int getOutPlayServerDifficultyPacketId();
-
-	public int getOutPlayCombatEventPacketId();
 
 	public int getOutPlayBossBarPacketId();
 
@@ -242,8 +232,39 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayBookOpenPacketId();
 
-	public int getOutPlayAcknowledgePlayerDiggingId();
+	public int getOutPlayAcknowledgePlayerDiggingPacketId();
 
+	public int getOutPlayTitleTextPacketId();
+
+	public int getOutPlayTitleSubTextPacketId();
+
+	public int getOutPlayTitleAnimationPacketId();
+
+	public int getOutPlayTitleClearPacketId();
+
+	public int getOutPlayActionbarPacketId();
+
+	public int getOutPlayWorldborderInitPacketId();
+
+	public int getOutPlayWorldborderCenterPacketId();
+
+	public int getOutPlayWorldborderLerpSizePacketId();
+
+	public int getOutPlayWorldborderSizePacketId();
+
+	public int getOutPlayWorldborderWarnDelayPacketId();
+
+	public int getOutPlayWorldborderWarnDistancePacketId();
+
+	public int getOutPlayCombatBeginPacketId();
+
+	public int getOutPlayCombatEndPacketId();
+
+	public int getOutPlayCombatDeathPacketId();
+
+	public int getOutPlayVibration();
+
+	public int getOutPlaySyncPing();
 
 	public int getInHandshakeStartPacketId();
 
@@ -262,8 +283,6 @@ public interface PlatformPacketFactory {
 	public int getInPlayChatPacketId();
 
 	public int getInPlayUseEntityPacketId();
-
-	public int getInPlayPlayerPacketId();
 
 	public int getInPlayPositionPacketId();
 
@@ -290,8 +309,6 @@ public interface PlatformPacketFactory {
 	public int getInPlayWindowClosePacketId();
 
 	public int getInPlayWindowClickPacketId();
-
-	public int getInPlayWindowTransactionPacketId();
 
 	public int getInPlayCreativeSetSlotPacketId();
 
@@ -349,6 +366,6 @@ public interface PlatformPacketFactory {
 
 	public int getInPlayJigsawGenerateStructurePacketId();
 
-
+	public int getInPlaySyncPong();
 
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.security.KeyPair;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
@@ -15,11 +16,14 @@ import javax.crypto.SecretKey;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_16_R3.util.CraftIconCache;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
+import org.bukkit.craftbukkit.v1_17_R1.CraftParticle;
+import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_17_R1.util.CraftIconCache;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
@@ -39,19 +43,20 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.MultithreadEventLoopGroup;
 import io.netty.channel.epoll.Epoll;
-import net.minecraft.server.v1_16_R3.AxisAlignedBB;
-import net.minecraft.server.v1_16_R3.DedicatedServer;
-import net.minecraft.server.v1_16_R3.DedicatedServerProperties;
-import net.minecraft.server.v1_16_R3.EntityPlayer;
-import net.minecraft.server.v1_16_R3.EnumProtocol;
-import net.minecraft.server.v1_16_R3.IChatBaseComponent;
-import net.minecraft.server.v1_16_R3.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_16_R3.Item;
-import net.minecraft.server.v1_16_R3.NBTCompressedStreamTools;
-import net.minecraft.server.v1_16_R3.NBTReadLimiter;
-import net.minecraft.server.v1_16_R3.PlayerConnection;
-import net.minecraft.server.v1_16_R3.ServerConnection;
-import net.minecraft.server.v1_16_R3.WorldServer;
+import net.minecraft.nbt.NBTCompressedStreamTools;
+import net.minecraft.nbt.NBTReadLimiter;
+import net.minecraft.network.EnumProtocol;
+import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.network.chat.IChatBaseComponent.ChatSerializer;
+import net.minecraft.resources.MinecraftKey;
+import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.server.dedicated.DedicatedServerProperties;
+import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.server.level.WorldServer;
+import net.minecraft.server.network.PlayerConnection;
+import net.minecraft.server.network.ServerConnection;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.phys.AxisAlignedBB;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.NetworkState;
@@ -70,7 +75,7 @@ import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.LoginProfile;
 import protocolsupport.utils.ReflectionUtils;
-import protocolsupport.utils.UnchekedReflectionException;
+import protocolsupport.utils.UncheckedReflectionException;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.impl.spigot.network.handler.SpigotHandshakeListener;
@@ -86,17 +91,17 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	public static NetworkState protocolToNetState(EnumProtocol state) {
 		switch (state) {
-			case HANDSHAKING: {
+			case a: {
 				return NetworkState.HANDSHAKING;
 			}
-			case PLAY: {
+			case b: {
 				return NetworkState.PLAY;
 			}
-			case LOGIN: {
-				return NetworkState.LOGIN;
-			}
-			case STATUS: {
+			case c: {
 				return NetworkState.STATUS;
+			}
+			case d: {
+				return NetworkState.LOGIN;
 			}
 			default: {
 				throw new IllegalArgumentException("Unknown state " + state);
@@ -107,16 +112,16 @@ public class SpigotMiscUtils implements PlatformUtils {
 	public static EnumProtocol netStateToProtocol(NetworkState state) {
 		switch (state) {
 			case HANDSHAKING: {
-				return EnumProtocol.HANDSHAKING;
+				return EnumProtocol.a;
 			}
 			case PLAY: {
-				return EnumProtocol.PLAY;
-			}
-			case LOGIN: {
-				return EnumProtocol.LOGIN;
+				return EnumProtocol.b;
 			}
 			case STATUS: {
-				return EnumProtocol.STATUS;
+				return EnumProtocol.c;
+			}
+			case LOGIN: {
+				return EnumProtocol.d;
 			}
 			default: {
 				throw new IllegalArgumentException("Unknown state " + state);
@@ -143,9 +148,9 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public ConnectionImpl getConnection(Player player) {
 		if (player instanceof CraftPlayer) {
-			PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
+			PlayerConnection connection = ((CraftPlayer) player).getHandle().b;
 			if (connection != null) {
-				Channel channel = connection.networkManager.channel;
+				Channel channel = connection.a.k;
 				if (channel != null) {
 					return ConnectionImpl.getFromChannel(channel);
 				}
@@ -166,7 +171,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public ItemStack createBukkitItemStackFromNetwork(NetworkItemStack stack) {
-		net.minecraft.server.v1_16_R3.ItemStack nmsitemstack = new net.minecraft.server.v1_16_R3.ItemStack(Item.getById(stack.getTypeId()), stack.getAmount());
+		net.minecraft.world.item.ItemStack nmsitemstack = new net.minecraft.world.item.ItemStack(Item.getById(stack.getTypeId()), stack.getAmount());
 		NBTCompound rootTag = stack.getNBT();
 		if (rootTag != null) {
 			//TODO: a faster way to do that
@@ -191,7 +196,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 		networkItemStack.setAmount(itemstack.getAmount());
 		if (itemstack.hasItemMeta()) {
 			//TODO: a faster way to do that
-			net.minecraft.server.v1_16_R3.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(itemstack);
+			net.minecraft.world.item.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(itemstack);
 			ByteBuf buffer = Unpooled.buffer();
 			try {
 				NBTCompressedStreamTools.a(nmsItemStack.getTag(), (DataOutput) new ByteBufOutputStream(buffer));
@@ -201,6 +206,27 @@ public class SpigotMiscUtils implements PlatformUtils {
 			}
 		}
 		return networkItemStack;
+	}
+
+	protected static final Map<Particle, MinecraftKey> particleKeyMap = getParticleKeyMap();
+
+	@SuppressWarnings("unchecked")
+	protected static final Map<Particle, MinecraftKey> getParticleKeyMap() {
+		try {
+			return (Map<Particle, MinecraftKey>) ReflectionUtils.getField(CraftParticle.class, "particles").get(null);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new UncheckedReflectionException(e);
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public NamespacedKey getParticleKey(Particle particle) {
+		MinecraftKey key = particleKeyMap.get(particle);
+		if (key == null) {
+			return null;
+		}
+		return new NamespacedKey(key.getNamespace(), key.getKey());
 	}
 
 	@Override
@@ -230,7 +256,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public boolean isProxyPreventionEnabled() {
-		return SERVER.W();
+		return SERVER.getDedicatedServerProperties().b;
 	}
 
 	@Override
@@ -243,7 +269,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 		try {
 			ReflectionUtils.getField(DedicatedServerProperties.class, "debug").set(SERVER.getDedicatedServerProperties(), true);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new UnchekedReflectionException("Exception occured while enabled debug", e);
+			throw new UncheckedReflectionException("Exception occured while enabled debug", e);
 		}
 	}
 
@@ -252,13 +278,13 @@ public class SpigotMiscUtils implements PlatformUtils {
 		try {
 			ReflectionUtils.getField(DedicatedServerProperties.class, "debug").set(SERVER.getDedicatedServerProperties(), false);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new UnchekedReflectionException("Exception occured while disabling debug", e);
+			throw new UncheckedReflectionException("Exception occured while disabling debug", e);
 		}
 	}
 
 	@Override
 	public int getCompressionThreshold() {
-		return SERVER.ax();
+		return SERVER.aw();
 	}
 
 	@Override
@@ -296,7 +322,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public MultithreadEventLoopGroup getServerIOEventLoopGroup() {
-		if (Epoll.isAvailable() && SERVER.l()) {
+		if (Epoll.isAvailable() && SERVER.m()) {
 			return ServerConnection.b.a();
 		} else {
 			return ServerConnection.a.a();

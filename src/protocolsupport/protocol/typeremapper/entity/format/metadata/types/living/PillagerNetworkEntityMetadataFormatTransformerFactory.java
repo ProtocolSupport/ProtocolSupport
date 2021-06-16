@@ -10,7 +10,8 @@ public class PillagerNetworkEntityMetadataFormatTransformerFactory extends RaidP
 	public static final PillagerNetworkEntityMetadataFormatTransformerFactory INSTANCE = new PillagerNetworkEntityMetadataFormatTransformerFactory();
 
 	protected PillagerNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Pillager.USING_CROSSBOW, 16), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Pillager.USING_CROSSBOW, 17), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Pillager.USING_CROSSBOW, 16), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Pillager.USING_CROSSBOW, 15), ProtocolVersionsHelper.ALL_1_14);
 	}
 

@@ -21,7 +21,7 @@ import protocolsupport.protocol.typeremapper.entity.legacy.metadata.ParrotInitDe
 import protocolsupport.protocol.typeremapper.entity.legacy.metadata.SpiderInitDefaultMetadataTransformer;
 import protocolsupport.protocol.typeremapper.entity.legacy.metadata.VillagerInitDefaultMetadataTransformer;
 import protocolsupport.protocol.typeremapper.entity.legacy.metadata.WitchInitDefaultMetadataTransformer;
-import protocolsupport.protocol.typeremapper.particle.LegacyParticleData;
+import protocolsupport.protocol.typeremapper.particle.NetworkParticleLegacyData;
 import protocolsupport.protocol.typeremapper.utils.MappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingTable;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
@@ -53,6 +53,16 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		registerNoop(NetworkEntityType.CHICKEN);
 
 		registerNoop(NetworkEntityType.SQUID);
+
+		new Mapping(NetworkEntityType.GLOW_SQUID)
+		.add(NetworkEntityType.GLOW_SQUID, ProtocolVersionsHelper.UP_1_17)
+		.add(NetworkEntityType.SQUID, ProtocolVersionsHelper.DOWN_1_16_4)
+		.register();
+
+		new Mapping(NetworkEntityType.AXOLOTL)
+		.add(NetworkEntityType.AXOLOTL, ProtocolVersionsHelper.UP_1_17)
+		.add(NetworkEntityType.SQUID, ProtocolVersionsHelper.DOWN_1_16_4)
+		.register();
 
 		new Mapping(NetworkEntityType.COMMON_HORSE)
 		.add(NetworkEntityType.COMMON_HORSE, ProtocolVersionsHelper.UP_1_6)
@@ -99,6 +109,11 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		.register();
 
 		registerNoop(NetworkEntityType.SHEEP);
+
+		new Mapping(NetworkEntityType.GOAT)
+		.add(NetworkEntityType.GOAT, ProtocolVersionsHelper.UP_1_17)
+		.add(NetworkEntityType.SHEEP, ProtocolVersionsHelper.DOWN_1_16_4)
+		.register();
 
 		new Mapping(NetworkEntityType.POLAR_BEAR)
 		.add(NetworkEntityType.POLAR_BEAR, ProtocolVersionsHelper.UP_1_10)
@@ -378,10 +393,15 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 
 		register(NetworkEntityType.ITEM_FRAME, version -> new NetworkEntityLegacyDataEntry(NetworkEntityType.ITEM_FRAME, new GenericEntityItemMetadataTransformer(version, NetworkEntityMetadataObjectIndex.ItemFrame.ITEM)));
 
+		new Mapping(NetworkEntityType.GLOW_ITEM_FRAME)
+		.add(NetworkEntityType.GLOW_ITEM_FRAME, (Function<ProtocolVersion, Consumer<ArrayMap<NetworkEntityMetadataObject<?>>>>) version -> new GenericEntityItemMetadataTransformer(version, NetworkEntityMetadataObjectIndex.ItemFrame.ITEM), ProtocolVersionsHelper.UP_1_17)
+		.add(NetworkEntityType.ITEM_FRAME, (Function<ProtocolVersion, Consumer<ArrayMap<NetworkEntityMetadataObject<?>>>>) version -> new GenericEntityItemMetadataTransformer(version, NetworkEntityMetadataObjectIndex.ItemFrame.ITEM), ProtocolVersionsHelper.DOWN_1_16_4)
+		.register();
+
 		registerNoop(NetworkEntityType.ENDER_CRYSTAL);
 
 		new Mapping(NetworkEntityType.AREA_EFFECT_CLOUD)
-		.add(NetworkEntityType.AREA_EFFECT_CLOUD, (Function<ProtocolVersion, Consumer<ArrayMap<NetworkEntityMetadataObject<?>>>>) version -> new GenericEntityParticleMetadataTransformer(LegacyParticleData.REGISTRY.getTable(version), NetworkEntityMetadataObjectIndex.AreaEffectCloud.PARTICLE), ProtocolVersionsHelper.UP_1_9)
+		.add(NetworkEntityType.AREA_EFFECT_CLOUD, (Function<ProtocolVersion, Consumer<ArrayMap<NetworkEntityMetadataObject<?>>>>) version -> new GenericEntityParticleMetadataTransformer(NetworkParticleLegacyData.REGISTRY.getTable(version), NetworkEntityMetadataObjectIndex.AreaEffectCloud.PARTICLE), ProtocolVersionsHelper.UP_1_9)
 		.add(NetworkEntityLegacyDataEntry.NONE, ProtocolVersionsHelper.DOWN_1_8)
 		.register();
 

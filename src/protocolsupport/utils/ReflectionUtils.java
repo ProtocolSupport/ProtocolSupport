@@ -29,7 +29,7 @@ public class ReflectionUtils {
 				}
 			}
 		} while ((clazz = clazz.getSuperclass()) != null);
-		throw new UnchekedReflectionException("Can't find field " + name + " in class " + clazz + " or it's superclasses");
+		throw new UncheckedReflectionException("Can't find field " + name + " in class " + clazz + " or it's superclasses");
 	}
 
 	public static @Nonnull Method getMethod(@Nonnull Class<?> clazz, @Nonnull String name, @Nonnegative int paramlength) {
@@ -40,24 +40,24 @@ public class ReflectionUtils {
 				}
 			}
 		} while ((clazz = clazz.getSuperclass()) != null);
-		throw new UnchekedReflectionException("Can't find method " + name + " with params length " + paramlength + " in class " + clazz + " or it's superclasses");
+		throw new UncheckedReflectionException("Can't find method " + name + " with params length " + paramlength + " in class " + clazz + " or it's superclasses");
 	}
 
 	public static void setFieldValue(@Nonnull Field field, @Nonnull Object object, @Nonnull Object value) {
 		try {
 			field.set(object, value);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new UnchekedReflectionException(e);
+			throw new UncheckedReflectionException(e);
 		}
 	}
 
 	public static void setStaticFinalFieldValue(@Nonnull Class<?> clazz, @Nonnull String fieldname, @Nonnull Object value) {
 		try {
 			sffs.set(clazz, fieldname, value);
-		} catch (UnchekedReflectionException t) {
+		} catch (UncheckedReflectionException t) {
 			throw t;
 		} catch (Throwable t) {
-			throw new UnchekedReflectionException(t);
+			throw new UncheckedReflectionException(t);
 		}
 	}
 
@@ -76,7 +76,7 @@ public class ReflectionUtils {
 			try {
 				unsafe = ((Unsafe) setAccessible(Unsafe.class.getDeclaredField("theUnsafe")).get(null));
 			} catch (Throwable e) {
-				throw new UnchekedReflectionException(e);
+				throw new UncheckedReflectionException(e);
 			}
 		}
 
@@ -89,7 +89,7 @@ public class ReflectionUtils {
 				}
 				unsafe.putObjectVolatile(unsafe.staticFieldBase(field), unsafe.staticFieldOffset(field), value);
 			} catch (Throwable e) {
-				throw new UnchekedReflectionException(e);
+				throw new UncheckedReflectionException(e);
 			}
 		}
 
@@ -103,7 +103,7 @@ public class ReflectionUtils {
 			try {
 				implLookup = ((MethodHandles.Lookup) setAccessible(MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP")).get(null));
 			} catch (Throwable e) {
-				throw new UnchekedReflectionException(e);
+				throw new UncheckedReflectionException(e);
 			}
 		}
 
@@ -116,7 +116,7 @@ public class ReflectionUtils {
 				.invokeExact(field, field.getModifiers() & ~Modifier.FINAL);
 				field.set(null, value);
 			} catch (Throwable e) {
-				throw new UnchekedReflectionException(e);
+				throw new UncheckedReflectionException(e);
 			}
 		}
 
@@ -124,9 +124,9 @@ public class ReflectionUtils {
 
 	protected static class ErrorStaticFinalFieldSetter implements StaticFinalFieldSetter {
 
-		private final UnchekedReflectionException exception;
+		private final UncheckedReflectionException exception;
 
-		protected ErrorStaticFinalFieldSetter(UnchekedReflectionException exception) {
+		protected ErrorStaticFinalFieldSetter(UncheckedReflectionException exception) {
 			this.exception = exception;
 		}
 
@@ -140,7 +140,7 @@ public class ReflectionUtils {
 	private static final StaticFinalFieldSetter sffs = initSFFS();
 
 	private static StaticFinalFieldSetter initSFFS() {
-		UnchekedReflectionException exception = new UnchekedReflectionException("Static final field setter initialization failed");
+		UncheckedReflectionException exception = new UncheckedReflectionException("Static final field setter initialization failed");
 		try {
 			return new UnsafeStaticFinalFieldSetter();
 		} catch (Throwable t) {

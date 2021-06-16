@@ -10,7 +10,8 @@ public class ZoglinNetworkEntityMetadataFormatTransformerFactory extends Insenti
 	public static final ZoglinNetworkEntityMetadataFormatTransformerFactory INSTANCE = new ZoglinNetworkEntityMetadataFormatTransformerFactory();
 
 	protected ZoglinNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Zoglin.IS_BABY, 15), ProtocolVersionsHelper.UP_1_16);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Zoglin.IS_BABY, 16), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Zoglin.IS_BABY, 15), ProtocolVersionsHelper.ALL_1_16);
 	}
 
 }

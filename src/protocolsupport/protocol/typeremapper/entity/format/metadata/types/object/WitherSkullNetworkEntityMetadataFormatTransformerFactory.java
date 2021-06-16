@@ -11,7 +11,8 @@ public class WitherSkullNetworkEntityMetadataFormatTransformerFactory extends Ba
 	public static final WitherSkullNetworkEntityMetadataFormatTransformerFactory INSTANCE = new WitherSkullNetworkEntityMetadataFormatTransformerFactory();
 
 	protected WitherSkullNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.WitherSkull.CHARGED, 7), ProtocolVersionsHelper.UP_1_14);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.WitherSkull.CHARGED, 8), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.WitherSkull.CHARGED, 7), ProtocolVersionsHelper.RANGE__1_14__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.WitherSkull.CHARGED, 6), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.WitherSkull.CHARGED, 5), ProtocolVersionsHelper.ALL_1_9);
 		add(new NetworkEntityMetadataObjectIndexValueBooleanToByteTransformer(NetworkEntityMetadataObjectIndex.WitherSkull.CHARGED, 10), ProtocolVersionsHelper.DOWN_1_8);

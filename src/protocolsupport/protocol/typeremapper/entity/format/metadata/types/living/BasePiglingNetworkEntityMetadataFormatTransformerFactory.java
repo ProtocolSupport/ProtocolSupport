@@ -10,7 +10,8 @@ public class BasePiglingNetworkEntityMetadataFormatTransformerFactory extends In
 	public static final BasePiglingNetworkEntityMetadataFormatTransformerFactory INSTANCE = new BasePiglingNetworkEntityMetadataFormatTransformerFactory();
 
 	protected BasePiglingNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.BasePiglin.ZOMBIFICATION_IMMUNITY, 15), ProtocolVersionsHelper.UP_1_16_2);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.BasePiglin.ZOMBIFICATION_IMMUNITY, 16), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.BasePiglin.ZOMBIFICATION_IMMUNITY, 15), ProtocolVersionsHelper.RANGE__1_16_2__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.BasePiglin.ZOMBIFICATION_IMMUNITY, 16), ProtocolVersionsHelper.RANGE__1_16__1_16_1);
 	}
 

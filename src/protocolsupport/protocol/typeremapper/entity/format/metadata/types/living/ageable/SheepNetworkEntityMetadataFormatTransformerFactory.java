@@ -10,7 +10,8 @@ public class SheepNetworkEntityMetadataFormatTransformerFactory extends AgeableN
 	public static final SheepNetworkEntityMetadataFormatTransformerFactory INSTANCE = new SheepNetworkEntityMetadataFormatTransformerFactory();
 
 	protected SheepNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Sheep.SHEEP_FLAGS, 16), ProtocolVersionsHelper.UP_1_15);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Sheep.SHEEP_FLAGS, 17), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Sheep.SHEEP_FLAGS, 16), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Sheep.SHEEP_FLAGS, 15), ProtocolVersionsHelper.ALL_1_14);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Sheep.SHEEP_FLAGS, 13), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Sheep.SHEEP_FLAGS, 12), ProtocolVersionsHelper.ALL_1_9);

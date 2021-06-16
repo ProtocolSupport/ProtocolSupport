@@ -10,6 +10,7 @@ public class ClientSettings extends MiddleClientSettings {
 
 	public ClientSettings(MiddlePacketInit init) {
 		super(init);
+		disableTextFilter = true;
 	}
 
 	@Override

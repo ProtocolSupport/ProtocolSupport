@@ -8,6 +8,8 @@ import java.util.concurrent.FutureTask;
 import javax.crypto.SecretKey;
 
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
@@ -30,6 +32,8 @@ public interface PlatformUtils {
 	public ItemStack createBukkitItemStackFromNetwork(NetworkItemStack stack);
 
 	public NetworkItemStack createNetworkItemStackFromBukkit(ItemStack itemstack);
+
+	public NamespacedKey getParticleKey(Particle particle);
 
 	public List<Player> getNearbyPlayers(Location location, double rX, double rY, double rZ);
 

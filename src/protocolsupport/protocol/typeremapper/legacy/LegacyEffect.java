@@ -12,7 +12,7 @@ public class LegacyEffect {
 	private LegacyEffect() {
 	}
 
-	public static final IntMappingRegistry<HashMapBasedIntMappingTable> REGISTRY = new IntMappingRegistry<HashMapBasedIntMappingTable>() {
+	public static final IntMappingRegistry<HashMapBasedIntMappingTable> REGISTRY = new IntMappingRegistry<>() {
 		{
 			register(1003, 1002, ProtocolVersionsHelper.DOWN_1_8);
 			register(1004, 1002, ProtocolVersionsHelper.DOWN_1_8);

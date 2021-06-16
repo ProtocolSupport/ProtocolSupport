@@ -2,8 +2,8 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.types.particle.Particle;
-import protocolsupport.protocol.types.particle.ParticleRegistry;
+import protocolsupport.protocol.types.particle.NetworkParticle;
+import protocolsupport.protocol.types.particle.NetworkParticleRegistry;
 
 public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 
@@ -11,7 +11,7 @@ public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 		super(init);
 	}
 
-	protected Particle particle;
+	protected NetworkParticle particle;
 	protected boolean longdist;
 	protected double x;
 	protected double y;
@@ -19,7 +19,7 @@ public abstract class MiddleWorldParticle extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		particle = ParticleRegistry.fromId(serverdata.readInt());
+		particle = NetworkParticleRegistry.fromId(serverdata.readInt());
 		longdist = serverdata.readBoolean();
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();

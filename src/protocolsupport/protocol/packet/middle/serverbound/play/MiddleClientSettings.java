@@ -21,23 +21,25 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 	protected boolean chatColors;
 	protected int skinFlags;
 	protected MainHand mainHand;
+	protected boolean disableTextFilter;
 
 	@Override
 	protected void write() {
 		cache.getClientCache().setLocale(locale);
 
-		codec.writeServerbound(create(locale, viewDist, chatMode, chatColors, skinFlags, mainHand));
+		codec.writeServerbound(create(locale, viewDist, chatMode, chatColors, skinFlags, mainHand, disableTextFilter));
 	}
 
-	public static ServerBoundPacketData create(String locale, int viewDist, ChatMode chatMode, boolean chatColors, int skinFlags, MainHand mainHand) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_SETTINGS);
-		StringSerializer.writeVarIntUTF8String(creator, locale);
-		creator.writeByte(viewDist);
-		MiscSerializer.writeVarIntEnum(creator, chatMode);
-		creator.writeBoolean(chatColors);
-		creator.writeByte(skinFlags);
-		MiscSerializer.writeVarIntEnum(creator, mainHand);
-		return creator;
+	public static ServerBoundPacketData create(String locale, int viewDist, ChatMode chatMode, boolean chatColors, int skinFlags, MainHand mainHand, boolean disableTextFilter) {
+		ServerBoundPacketData clientsettingsPacket = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_SETTINGS);
+		StringSerializer.writeVarIntUTF8String(clientsettingsPacket, locale);
+		clientsettingsPacket.writeByte(viewDist);
+		MiscSerializer.writeVarIntEnum(clientsettingsPacket, chatMode);
+		clientsettingsPacket.writeBoolean(chatColors);
+		clientsettingsPacket.writeByte(skinFlags);
+		MiscSerializer.writeVarIntEnum(clientsettingsPacket, mainHand);
+		clientsettingsPacket.writeBoolean(disableTextFilter);
+		return clientsettingsPacket;
 	}
 
 	protected enum ChatMode {

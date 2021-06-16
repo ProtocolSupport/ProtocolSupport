@@ -17,8 +17,8 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap.Entry;
 public class TileEntitySkullRemapper extends TileEntityWithBlockDataNBTRemapper {
 
 	protected static byte getLegacyData(BlockData skull) {
-		if (skull instanceof Rotatable) {
-			return LegacyBlockFace.getLegacyRotatableId(((Rotatable) skull).getRotation());
+		if (skull instanceof Rotatable rotatable) {
+			return LegacyBlockFace.getLegacyRotatableId(rotatable.getRotation());
 		}
 		return 0;
 	}

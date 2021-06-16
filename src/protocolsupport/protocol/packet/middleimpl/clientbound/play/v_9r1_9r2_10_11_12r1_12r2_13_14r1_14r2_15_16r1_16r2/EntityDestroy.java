@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10
 import protocolsupport.protocol.packet.PacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class EntityDestroy extends MiddleEntityDestroy {
 
@@ -13,13 +13,14 @@ public class EntityDestroy extends MiddleEntityDestroy {
 
 	@Override
 	protected void write() {
-		codec.writeClientbound(create(entityIds));
+		codec.writeClientbound(create(entityId));
 	}
 
-	public static ClientBoundPacketData create(int... entityIds) {
-		ClientBoundPacketData entitydestory = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY);
-		ArraySerializer.writeVarIntVarIntArray(entitydestory, entityIds);
-		return entitydestory;
+	public static ClientBoundPacketData create(int entityId) {
+		ClientBoundPacketData entitydestroyPacket = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_DESTROY);
+		VarNumberSerializer.writeVarInt(entitydestroyPacket, 1); //entity array length
+		VarNumberSerializer.writeVarInt(entitydestroyPacket, entityId);
+		return entitydestroyPacket;
 	}
 
 }

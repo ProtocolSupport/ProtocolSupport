@@ -50,13 +50,9 @@ public class MinecraftBlockData {
 			blockdataCount += blockdataArray.length;
 			for (int blockdataIndex = 0; blockdataIndex < blockdataJsonArray.size(); blockdataIndex++) {
 				JsonObject blockdataJsonObject = JsonUtils.getAsJsonObject(blockdataJsonArray.get(blockdataIndex), "block data array element");
-				JsonObject soundsJsonObject = JsonUtils.getJsonObject(blockdataJsonObject, "sounds");
 				blockdataArray[blockdataIndex] = new BlockDataInfo(
 					JsonUtils.getString(blockdataJsonObject, "name"),
-					JsonUtils.getInt(blockdataJsonObject, "network_id"),
-					MinecraftSoundData.getNameById(JsonUtils.getInt(soundsJsonObject, "break")),
-					JsonUtils.getFloat(soundsJsonObject, "volume"),
-					JsonUtils.getFloat(soundsJsonObject, "pitch")
+					JsonUtils.getInt(blockdataJsonObject, "network_id")
 				);
 			}
 			blocks[blockIndex] = new BlockInfo(
@@ -152,16 +148,9 @@ public class MinecraftBlockData {
 		protected final BlockData blockdata;
 		protected final int networkId;
 
-		protected final String breakSound;
-		protected final float volume;
-		protected final float pitch;
-
-		protected BlockDataInfo(@Nonnull String name, @Nonnegative int networkId, @Nonnull String breakSound, float volume, float pitch) {
+		protected BlockDataInfo(@Nonnull String name, @Nonnegative int networkId) {
 			this.blockdata = Bukkit.createBlockData(name);
 			this.networkId = networkId;
-			this.breakSound = breakSound;
-			this.volume = volume;
-			this.pitch = pitch;
 		}
 
 		public @Nonnull BlockInfo getBlock() {
@@ -178,18 +167,6 @@ public class MinecraftBlockData {
 
 		public @Nonnegative int getNetworkId() {
 			return networkId;
-		}
-
-		public @Nonnull String getBreakSound() {
-			return breakSound;
-		}
-
-		public float getVolume() {
-			return volume;
-		}
-
-		public float getPitch() {
-			return pitch;
 		}
 
 	}

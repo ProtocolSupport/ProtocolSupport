@@ -3,7 +3,7 @@ package protocolsupport.protocol.storage.netcache;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import protocolsupport.protocol.storage.netcache.chunk.ChunkCache;
+import protocolsupport.protocol.storage.netcache.chunk.LimitedHeightChunkCache;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
 import protocolsupport.utils.Utils;
 
@@ -45,8 +45,8 @@ public class NetworkDataCache {
 		return attrscache;
 	}
 
-	protected final ChunkCache chunkcache = new ChunkCache();
-	public ChunkCache getChunkCache() {
+	protected final LimitedHeightChunkCache chunkcache = new LimitedHeightChunkCache();
+	public LimitedHeightChunkCache getChunkCache() {
 		return chunkcache;
 	}
 

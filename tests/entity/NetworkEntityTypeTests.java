@@ -12,7 +12,7 @@ class NetworkEntityTypeTests extends PlatformInit {
 	@Test
 	void testFilled() {
 		for (EntityType bukkitType : EntityType.values()) {
-			if (bukkitType != EntityType.UNKNOWN) {
+			if ((bukkitType != EntityType.UNKNOWN) && (bukkitType != EntityType.MARKER)) {
 				Assertions.assertNotEquals(NetworkEntityType.NONE, NetworkEntityType.getByBukkitType(bukkitType), "NetworkEntityType for Bukkit EntityType " + bukkitType + " ");
 			}
 		}

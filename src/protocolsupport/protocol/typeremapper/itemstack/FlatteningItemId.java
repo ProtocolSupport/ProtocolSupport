@@ -17,14 +17,14 @@ public class FlatteningItemId {
 	private FlatteningItemId() {
 	}
 
-	public static final IntMappingRegistry<ArrayBasedIntMappingTable> REGISTRY_TO_CLIENT = new IntMappingRegistry<ArrayBasedIntMappingTable>() {
+	public static final IntMappingRegistry<ArrayBasedIntMappingTable> REGISTRY_TO_CLIENT = new IntMappingRegistry<>() {
 		@Override
 		protected ArrayBasedIntMappingTable createTable() {
 			return new ArrayBasedIntMappingTable(MinecraftItemData.ITEM_COUNT);
 		}
 	};
 
-	public static final IntMappingRegistry<ArrayBasedIntMappingTable> REGISTRY_FROM_CLIENT = new IntMappingRegistry<ArrayBasedIntMappingTable>() {
+	public static final IntMappingRegistry<ArrayBasedIntMappingTable> REGISTRY_FROM_CLIENT = new IntMappingRegistry<>() {
 		@Override
 		protected ArrayBasedIntMappingTable createTable() {
 			return new ArrayBasedIntMappingTable(MinecraftItemData.ITEM_COUNT);

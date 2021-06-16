@@ -36,6 +36,7 @@ public class ClientCache implements IBiomeRegistry {
 
 	protected String world;
 	protected NBTCompound dimension;
+	protected int minY;
 	protected boolean dimensionSkyLight;
 	protected boolean raining;
 
@@ -51,9 +52,14 @@ public class ClientCache implements IBiomeRegistry {
 		if (!world.equals(this.world)) {
 			this.world = world;
 			this.dimension = dimension;
+			this.minY = dimension.getNumberTagOrThrow("min_y").getAsInt();
 			this.dimensionSkyLight = dimension.getNumberTagOrThrow("has_skylight").getAsInt() == 1;
 			this.raining = false;
 		}
+	}
+
+	public int getMinY() {
+		return minY;
 	}
 
 	public void setDimensionSkyLight(boolean hasSkyLight) {

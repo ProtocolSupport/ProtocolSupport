@@ -1,5 +1,7 @@
 package protocolsupport.protocol.types;
 
+import java.util.Objects;
+
 import protocolsupport.utils.Utils;
 
 public class Position {
@@ -57,20 +59,22 @@ public class Position {
 
 	@Override
 	public int hashCode() {
-		int code = 7;
-		code = (47 * code) + x;
-		code = (47 * code) + y;
-		code = (47 * code) + z;
-		return code;
+		return Objects.hash(x, y, z);
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (o instanceof Position) {
-			Position pos = (Position) o;
-			return (x == pos.getX()) && (y == pos.getY()) && (z == pos.getZ());
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
 		}
-		return false;
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Position other = (Position) obj;
+		return (x == other.x) && (y == other.y) && (z == other.z);
 	}
 
 }

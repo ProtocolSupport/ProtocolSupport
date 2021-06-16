@@ -7,6 +7,7 @@ import protocolsupportbuildprocessor.Preload;
 public enum PacketType {
 
 	NONE(Direction.NONE, -1),
+
 	SERVERBOUND_HANDSHAKE_START(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInHandshakeStartPacketId()),
 	SERVERBOUND_STATUS_REQUEST(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInStatusRequestPacketId()),
 	SERVERBOUND_STATUS_PING(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInStatusPingPacketId()),
@@ -16,7 +17,6 @@ public enum PacketType {
 	SERVERBOUND_PLAY_KEEP_ALIVE(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayKeepAlivePacketId()),
 	SERVERBOUND_PLAY_CHAT(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayChatPacketId()),
 	SERVERBOUND_PLAY_USE_ENTITY(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayUseEntityPacketId()),
-	SERVERBOUND_PLAY_PLAYER(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayPlayerPacketId()),
 	SERVERBOUND_PLAY_POSITION(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayPositionPacketId()),
 	SERVERBOUND_PLAY_LOOK(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayLookPacketId()),
 	SERVERBOUND_PLAY_POSITION_LOOK(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayPositionLookPacketId()),
@@ -30,7 +30,6 @@ public enum PacketType {
 	SERVERBOUND_PLAY_STEER_VEHICLE(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlaySteerVehiclePacketId()),
 	SERVERBOUND_PLAY_WINDOW_CLOSE(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayWindowClosePacketId()),
 	SERVERBOUND_PLAY_WINDOW_CLICK(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayWindowClickPacketId()),
-	SERVERBOUND_PLAY_WINDOW_TRANSACTION(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayWindowTransactionPacketId()),
 	SERVERBOUND_PLAY_CREATIVE_SET_SLOT(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayCreativeSetSlotPacketId()),
 	SERVERBOUND_PLAY_ENCHANT_SELECT(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayEnchantSelectPacketId()),
 	SERVERBOUND_PLAY_UPDATE_SIGN(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayUpdateSignPacketId()),
@@ -59,6 +58,7 @@ public enum PacketType {
 	SERVERBOUND_PLAY_UPDATE_STRUCTURE_BLOCK(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayUpdateStructureBlockPacketId()),
 	SERVERBOUND_PLAY_JIGSAW_UPDATE(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayJigsawUpdatePacketId()),
 	SERVERBOUND_PLAY_JIGSAW_GENERATE(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlayJigsawGenerateStructurePacketId()),
+	SERVERBOUND_PLAY_SYNC_PONG(Direction.SERVERBOUND, ServerPlatform.get().getPacketFactory().getInPlaySyncPong()),
 
 	CLIENTBOUND_LOGIN_DISCONNECT(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutLoginDisconnectPacketId()),
 	CLIENTBOUND_LOGIN_ENCRYPTION_BEGIN(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutLoginEncryptionBeginPacketId()),
@@ -86,7 +86,6 @@ public enum PacketType {
 	CLIENTBOUND_PLAY_SPAWN_EXP_ORB(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlaySpawnExpOrbPacketId()),
 	CLIENTBOUND_PLAY_ENTITY_DESTROY(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayEntityDestroyPacketId()),
 	CLIENTBOUND_PLAY_ENTITY_VELOCITY(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayEntityVelocityPacketId()),
-	CLIENTBOUND_PLAY_ENTITY_NOOP(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayEntityPacketId()),
 	CLIENTBOUND_PLAY_ENTITY_REL_MOVE(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayEntityRelMovePacketId()),
 	CLIENTBOUND_PLAY_ENTITY_LOOK(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayEntityLookPacketId()),
 	CLIENTBOUND_PLAY_ENTITY_REL_MOVE_LOOK(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayEntityRelMoveLookPacketId()),
@@ -120,7 +119,6 @@ public enum PacketType {
 	CLIENTBOUND_PLAY_WINDOW_SET_SLOT(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayWindowSetSlotPacketId()),
 	CLIENTBOUND_PLAY_WINDOW_SET_ITEMS(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayWindowSetItemsPacketId()),
 	CLIENTBOUND_PLAY_WINDOW_DATA(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayWindowDataPacketId()),
-	CLIENTBOUND_PLAY_WINDOW_TRANSACTION(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayWindowTransactionPacketId()),
 	CLIENTBOUND_PLAY_UPDATE_MAP(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayMapPacketId()),
 	CLIENTBOUND_PLAY_SIGN_EDITOR(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlaySignEditorPacketId()),
 	CLIENTBOUND_PLAY_STATISTICS(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayStatisticsPacketId()),
@@ -135,13 +133,10 @@ public enum PacketType {
 	CLIENTBOUND_PLAY_KICK_DISCONNECT(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayKickDisconnectPacketId()),
 	CLIENTBOUND_PLAY_RESOURCE_PACK(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayResourcePackPacketId()),
 	CLIENTBOUND_PLAY_CAMERA(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayCameraPacketId()),
-	CLIENTBOUND_PLAY_WORLD_BORDER(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayWorldBorderPacketId()),
-	CLIENTBOUND_PLAY_TITLE(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayTitlePacketId()),
 	CLIENTBOUND_PLAY_PLAYER_LIST_HEADER_FOOTER(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayPlayerListHeaderFooterPacketId()),
 	CLIENTBOUND_PLAY_CHUNK_UNLOAD(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayChunkUnloadPacketId()),
 	CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayWorldCustomSoundPacketId()),
 	CLIENTBOUND_PLAY_SERVER_DIFFICULTY(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayServerDifficultyPacketId()),
-	CLIENTBOUND_PLAY_COMBAT_EVENT(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayCombatEventPacketId()),
 	CLIENTBOUND_PLAY_BOSS_BAR(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayBossBarPacketId()),
 	CLIENTBOUND_PLAY_VEHICLE_MOVE(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayVehicleMovePacketId()),
 	CLIENTBOUND_PLAY_UNLOCK_RECIPES(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayUnlockRecipesPacketId()),
@@ -158,11 +153,28 @@ public enum PacketType {
 	CLIENTBOUND_PLAY_UPDATE_VIEW_DISTANCE(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayUpdateViewDistancePacketId()),
 	CLIENTBOUND_PLAY_MERCHANT_TRADE_LIST(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayMerchantTradeListPacketId()),
 	CLIENTBOUND_PLAY_BOOK_OPEN(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayBookOpenPacketId()),
-	CLIENTBOUND_PLAY_BLOCK_BREAK_CONFIRM(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayAcknowledgePlayerDiggingId()),
+	CLIENTBOUND_PLAY_BLOCK_BREAK_CONFIRM(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayAcknowledgePlayerDiggingPacketId()),
+	CLIENTBOUND_PLAY_TITLE_TEXT(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayTitleTextPacketId()),
+	CLIENTBOUND_PLAY_TITLE_SUBTEXT(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayTitleSubTextPacketId()),
+	CLIENTBOUND_PLAY_TITLE_ANIMATION(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayTitleAnimationPacketId()),
+	CLIENTBOUND_PLAY_TITLE_CLEAR(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayTitleClearPacketId()),
+	CLIENTBOUND_PLAY_ACTIONBAR(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayActionbarPacketId()),
+	CLIENTBOUND_PLAY_WORLDBORDER_INIT(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayWorldborderInitPacketId()),
+	CLIENTBOUND_PLAY_WORLDBORDER_CENTER(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayWorldborderCenterPacketId()),
+	CLIENTBOUND_PLAY_WORLDBORDER_LERP_SIZE(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayWorldborderLerpSizePacketId()),
+	CLIENTBOUND_PLAY_WORLDBORDER_SIZE(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayWorldborderSizePacketId()),
+	CLIENTBOUND_PLAY_WORLDBORDER_WARN_DELAY(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayWorldborderWarnDelayPacketId()),
+	CLIENTBOUND_PLAY_WORLDBORDER_WARN_DISTANCE(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayWorldborderWarnDistancePacketId()),
+	CLIENTBOUND_PLAY_COMBAT_BEGIN(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayCombatBeginPacketId()),
+	CLIENTBOUND_PLAY_COMBAT_END(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayCombatEndPacketId()),
+	CLIENTBOUND_PLAY_COMBAT_DEATH(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayCombatDeathPacketId()),
+	CLIENTBOUND_PLAY_VIBRATION(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlayVibration()),
+	CLIENTBOUND_PLAY_SYNC_PING(Direction.CLIENTBOUND, ServerPlatform.get().getPacketFactory().getOutPlaySyncPing()),
 
 	CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN(Direction.CLIENTBOUND, -1),
 	CLIENTBOUND_LEGACY_PLAY_USE_BED(Direction.CLIENTBOUND, -1),
-	CLIENTBOUND_LEGACY_PLAY_SPAWN_GLOBAL(Direction.CLIENTBOUND, -1);
+	CLIENTBOUND_LEGACY_PLAY_SPAWN_GLOBAL(Direction.CLIENTBOUND, -1),
+	CLIENTBOUND_LEGACY_PLAY_WINDOW_TRANSACTION(Direction.CLIENTBOUND, -1);
 
 	private final Direction direction;
 	private final int id;

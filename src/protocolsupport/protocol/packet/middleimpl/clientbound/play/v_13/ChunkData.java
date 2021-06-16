@@ -8,7 +8,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.basic.BiomeRemapper;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
@@ -16,7 +15,7 @@ import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.F
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
-import protocolsupport.protocol.typeremapper.utils.MappingTable.IdMappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
 
 public class ChunkData extends AbstractChunkCacheChunkData {
 
@@ -24,35 +23,34 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 		super(init);
 	}
 
-	protected final ClientCache clientCache = cache.getClientCache();
-
-	protected final GenericMappingTable<NamespacedKey> biomeRemappingTable = BiomeRemapper.REGISTRY.getTable(version);
-	protected final IdMappingTable blockDataRemappingTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
+	protected final GenericMappingTable<NamespacedKey> biomeLegacyDataTable = BiomeRemapper.REGISTRY.getTable(version);
+	protected final IntMappingTable blockLegacyDataTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockDataRegistry.INSTANCE.getTable(version);
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
-		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
-		chunkdata.writeBoolean(full);
-		VarNumberSerializer.writeVarInt(chunkdata, blockMask);
-		MiscSerializer.writeVarIntLengthPrefixedType(chunkdata, this, (to, chunksections) -> {
+		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE);
+		PositionSerializer.writeIntChunkCoord(chunkdataPacket, coord);
+		chunkdataPacket.writeBoolean(full);
+		VarNumberSerializer.writeVarInt(chunkdataPacket, limitedBlockMask);
+		MiscSerializer.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
 			ChunkWriterVariesWithLight.writeSectionsCompactFlattening(
-				to, chunksections.blockMask, 14,
-				chunksections.blockDataRemappingTable, chunksections.flatteningBlockDataTable,
-				chunksections.cachedChunk, chunksections.clientCache.hasDimensionSkyLight()
+				to, 14,
+				chunksections.blockLegacyDataTable, chunksections.flatteningBlockDataTable,
+				chunksections.cachedChunk,
+				chunksections.limitedBlockMask, chunksections.clientCache.hasDimensionSkyLight()
 			);
 			if (chunksections.full) {
 				int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(chunksections.biomes);
 				for (int biomeId : legacyBiomeData) {
-					to.writeInt(BiomeRemapper.mapLegacyBiome(chunksections.clientCache, chunksections.biomeRemappingTable, biomeId));
+					to.writeInt(BiomeRemapper.mapLegacyBiome(chunksections.clientCache, chunksections.biomeLegacyDataTable, biomeId));
 				}
 			}
 		});
-		MiscSerializer.writeVarIntCountPrefixedType(chunkdata, this, (to, chunksections) -> {
-			return ChunkWriterVariesWithLight.writeTiles(to, chunksections.blockMask, chunksections.cachedChunk);
+		MiscSerializer.writeVarIntCountPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
+			return ChunkWriterVariesWithLight.writeTiles(to, chunksections.cachedChunk, chunksections.limitedHeightOffset);
 		});
-		codec.writeClientbound(chunkdata);
+		codec.writeClientbound(chunkdataPacket);
 	}
 
 }

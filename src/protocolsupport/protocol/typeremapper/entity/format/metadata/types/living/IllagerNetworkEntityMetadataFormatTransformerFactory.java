@@ -14,7 +14,7 @@ public class IllagerNetworkEntityMetadataFormatTransformerFactory extends RaidPa
 
 	protected IllagerNetworkEntityMetadataFormatTransformerFactory() {
 		add(
-			new NetworkEntityMetadataObjectIndexValueTransformer<NetworkEntityMetadataObjectByte>(NetworkEntityMetadataObjectIndex.Insentient.INS_FLAGS, 12) {
+			new NetworkEntityMetadataObjectIndexValueTransformer<>(NetworkEntityMetadataObjectIndex.Insentient.INS_FLAGS, 12) {
 				@Override
 				public NetworkEntityMetadataObject<?> transformValue(NetworkEntityMetadataObjectByte object) {
 					return new NetworkEntityMetadataObjectByte((byte) (BitUtils.isIBitSet(object.getValue(), NetworkEntityMetadataObjectIndex.Insentient.INS_FLAGS_BIT_ATTACKING) ? 1 : 0));

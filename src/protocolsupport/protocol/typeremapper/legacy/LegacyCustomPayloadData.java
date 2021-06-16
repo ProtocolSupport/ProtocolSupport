@@ -158,21 +158,13 @@ public class LegacyCustomPayloadData {
 		Position position = PositionSerializer.readLegacyPositionI(data);
 		String command = StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE);
 		int trackOutput = data.readByte();
-		MiddleUpdateCommandBlock.Mode mode = null;
-		switch (StringSerializer.readVarIntUTF8String(data, 16)) {
-			case "SEQUENCE": {
-				mode = MiddleUpdateCommandBlock.Mode.SEQUENCE;
-				break;
-			}
-			case "AUTO": {
-				mode = MiddleUpdateCommandBlock.Mode.AUTO;
-				break;
-			}
-			case "REDSTONE": {
-				mode = MiddleUpdateCommandBlock.Mode.REDSTONE;
-				break;
-			}
-		}
+		String modeString = StringSerializer.readVarIntUTF8String(data, 16);
+		MiddleUpdateCommandBlock.Mode mode = switch (modeString) {
+			case "SEQUENCE" -> MiddleUpdateCommandBlock.Mode.SEQUENCE;
+			case "AUTO" -> MiddleUpdateCommandBlock.Mode.AUTO;
+			case "REDSTONE" -> MiddleUpdateCommandBlock.Mode.REDSTONE;
+			default -> throw new IllegalArgumentException("Unexpected command block mode " + modeString);
+		};
 		int conditional = data.readByte();
 		int auto = data.readByte();
 		codec.writeServerbound(MiddleUpdateCommandBlock.create(
