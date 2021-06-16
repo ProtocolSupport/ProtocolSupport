@@ -234,12 +234,12 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 
 		new Mapping(NetworkEntityType.DOLPHIN)
 		.add(NetworkEntityType.DOLPHIN, ProtocolVersionsHelper.UP_1_13)
-		.add(NetworkEntityType.SQUID, ProtocolVersionsHelper.DOWN_1_12_2)
+		.add(NetworkEntityType.SPIDER, SpiderInitDefaultMetadataTransformer.INSTANCE, ProtocolVersionsHelper.DOWN_1_12_2)
 		.register();
 
 		new Mapping(NetworkEntityType.TURTLE)
 		.add(NetworkEntityType.TURTLE, ProtocolVersionsHelper.UP_1_13)
-		.add(NetworkEntityType.SQUID, ProtocolVersionsHelper.DOWN_1_12_2)
+		.add(NetworkEntityType.SPIDER, SpiderInitDefaultMetadataTransformer.INSTANCE, ProtocolVersionsHelper.DOWN_1_12_2)
 		.register();
 
 		new Mapping(NetworkEntityType.COD)
