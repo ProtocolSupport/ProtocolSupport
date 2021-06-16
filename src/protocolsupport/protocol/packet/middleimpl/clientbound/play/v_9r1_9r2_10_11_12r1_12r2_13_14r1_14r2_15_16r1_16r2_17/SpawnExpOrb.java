@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnExpOrb;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -13,7 +13,7 @@ public class SpawnExpOrb extends MiddleSpawnExpOrb {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData spawnexporb = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_EXP_ORB);
+		ClientBoundPacketData spawnexporb = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SPAWN_EXP_ORB);
 		VarNumberSerializer.writeVarInt(spawnexporb, entity.getId());
 		spawnexporb.writeDouble(x);
 		spawnexporb.writeDouble(y);

@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentMap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.ProtocolSupport;
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
@@ -95,20 +95,20 @@ public abstract class MiddleCustomPayload extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(String tag) {
-		ServerBoundPacketData serializer = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_CUSTOM_PAYLOAD);
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeVarIntUTF8String(serializer, tag);
 		return serializer;
 	}
 
 	public static ServerBoundPacketData create(String tag, byte[] data) {
-		ServerBoundPacketData serializer = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_CUSTOM_PAYLOAD);
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeVarIntUTF8String(serializer, tag);
 		serializer.writeBytes(data);
 		return serializer;
 	}
 
 	public static ServerBoundPacketData create(String tag, ByteBuf data) {
-		ServerBoundPacketData serializer = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_CUSTOM_PAYLOAD);
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeVarIntUTF8String(serializer, tag);
 		serializer.writeBytes(data);
 		return serializer;

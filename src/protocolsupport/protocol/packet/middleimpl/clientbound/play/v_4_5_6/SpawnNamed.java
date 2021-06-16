@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
@@ -17,7 +17,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData spawnnamed = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
+		ClientBoundPacketData spawnnamed = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SPAWN_NAMED);
 		spawnnamed.writeInt(entity.getId());
 		StringSerializer.writeShortUTF16BEString(spawnnamed, Utils.clampString(playerlistEntry.getUserName(), 16));
 		spawnnamed.writeInt((int) (x * 32));

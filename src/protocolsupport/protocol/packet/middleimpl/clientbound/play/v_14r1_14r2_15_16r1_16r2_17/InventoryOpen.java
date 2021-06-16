@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_15_16r1_16r2_17;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -22,7 +22,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 
 	@Override
 	protected void writeToClient0() {
-		ClientBoundPacketData windowopen = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
+		ClientBoundPacketData windowopen = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_WINDOW_OPEN);
 		VarNumberSerializer.writeVarInt(windowopen, windowId);
 		VarNumberSerializer.writeVarInt(windowopen, ((Number) windowTypeIdMappingTable.get(windowRemapper.toClientWindowType(type))).intValue());
 		StringSerializer.writeVarIntUTF8String(windowopen, ChatSerializer.serialize(version, clientCache.getLocale(), title));

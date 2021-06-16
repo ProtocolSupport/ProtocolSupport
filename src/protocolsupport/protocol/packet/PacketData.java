@@ -12,7 +12,7 @@ import protocolsupport.utils.JavaSystemProperty;
 import protocolsupport.utils.ThreadLocalObjectPool;
 import protocolsupport.zplatform.ServerPlatform;
 
-public abstract class PacketData<T extends PacketData<T>> extends UnpooledHeapByteBuf {
+public abstract class PacketData<PT, PD extends PacketData<PT, PD>> extends UnpooledHeapByteBuf {
 
 	protected static final int MAX_POOL_CAPACITY_TOTAL = JavaSystemProperty.getValue("packetdatapool.capacity", 200, Integer::parseInt);
 	protected static final int MAX_POOL_CAPACITY;
@@ -35,23 +35,23 @@ public abstract class PacketData<T extends PacketData<T>> extends UnpooledHeapBy
 
 	public static final ByteBufAllocator ALLOCATOR = new UnpooledByteBufAllocator(false);
 
-	protected final ThreadLocalObjectPool.Handle<T> handle;
+	protected final ThreadLocalObjectPool.Handle<PD> handle;
 
-	protected PacketData(ThreadLocalObjectPool.Handle<T> handle) {
+	protected PacketData(ThreadLocalObjectPool.Handle<PD> handle) {
 		super(ALLOCATOR, 1024, Integer.MAX_VALUE);
 		this.handle = handle;
 	}
 
 	@SuppressWarnings("unchecked")
-	protected T init(PacketType packetType) {
+	protected PD init(PT packetType) {
 		this.packetType = packetType;
 		this.writeZero(HEAD_SPACE_MAX);
 		this.readerIndex(writerIndex());
-		return (T) this;
+		return (PD) this;
 	}
 
 	@SuppressWarnings("unchecked")
-	public void writeHeadSpace(int length, int value, ObjIntConsumer<T> writer) {
+	public void writeHeadSpace(int length, int value, ObjIntConsumer<PD> writer) {
 
 		int newIndex = readerIndex() - length;
 		readerIndex(newIndex);
@@ -59,14 +59,14 @@ public abstract class PacketData<T extends PacketData<T>> extends UnpooledHeapBy
 		int writerIndex = writerIndex();
 
 		writerIndex(newIndex);
-		writer.accept((T) this, value);
+		writer.accept((PD) this, value);
 
 		writerIndex(writerIndex);
 	}
 
-	protected PacketType packetType;
+	protected PT packetType;
 
-	public PacketType getPacketType() {
+	public PT getPacketType() {
 		return packetType;
 	}
 
@@ -78,6 +78,6 @@ public abstract class PacketData<T extends PacketData<T>> extends UnpooledHeapBy
 	}
 
 	@Override
-	public abstract T clone();
+	public abstract PD clone();
 
 }

@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -22,7 +22,7 @@ public abstract class MiddleJigsawUpdate extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void write() {
-		ServerBoundPacketData jigsawupdate = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_JIGSAW_UPDATE);
+		ServerBoundPacketData jigsawupdate = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_JIGSAW_UPDATE);
 		PositionSerializer.writePosition(jigsawupdate, position);
 		StringSerializer.writeVarIntUTF8String(jigsawupdate, name);
 		StringSerializer.writeVarIntUTF8String(jigsawupdate, target);

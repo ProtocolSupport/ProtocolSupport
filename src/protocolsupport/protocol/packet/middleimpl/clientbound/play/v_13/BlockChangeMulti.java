@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheBlockChangeMulti;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -25,7 +25,7 @@ public class BlockChangeMulti extends AbstractChunkCacheBlockChangeMulti {
 	protected void write() {
 		int chunkAbsY = getChunkSectionY(chunkCoordWithSection) << 4;
 
-		ClientBoundPacketData blockchangemulti = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI);
+		ClientBoundPacketData blockchangemulti = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_MULTI);
 		PositionSerializer.writeIntChunkCoord(blockchangemulti, new ChunkCoord(getChunkX(chunkCoordWithSection), getChunkZ(chunkCoordWithSection)));
 		VarNumberSerializer.writeVarInt(blockchangemulti, records.length);
 		for (long record : records) {

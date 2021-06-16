@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPassengerStackEntityPassengers;
 
@@ -16,7 +16,7 @@ public class EntityPassengers extends AbstractPassengerStackEntityPassengers {
 	}
 
 	public static ClientBoundPacketData create(int passengerId, int vehicleId) {
-		ClientBoundPacketData entitypassengers = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_LEASH);
+		ClientBoundPacketData entitypassengers = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_LEASH);
 		entitypassengers.writeInt(passengerId);
 		entitypassengers.writeInt(vehicleId);
 		return entitypassengers;

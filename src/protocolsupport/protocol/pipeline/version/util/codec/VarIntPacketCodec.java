@@ -13,7 +13,7 @@ public abstract class VarIntPacketCodec extends IPacketIdCodec {
 	}
 
 	@Override
-	protected void writePacketId(PacketData<?> to, int packetId) {
+	protected void writePacketId(PacketData<?, ?> to, int packetId) {
 		to.writeHeadSpace(VarNumberSerializer.calculateVarIntSize(packetId), packetId, (lTo, lPacketId) -> VarNumberSerializer.writeVarInt(lTo, lPacketId));
 	}
 

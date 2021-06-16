@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2_17;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleStartGame;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -18,7 +18,7 @@ public class StartGame extends MiddleStartGame {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData startgame = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_START_GAME);
+		ClientBoundPacketData startgame = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_START_GAME);
 		startgame.writeInt(player.getId());
 		startgame.writeBoolean(hardcore);
 		startgame.writeByte(gamemodeCurrent.getId());

@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2_15_16r1_16r2_17;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardObjective;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -18,7 +18,7 @@ public class ScoreboardObjective extends MiddleScoreboardObjective {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData scoreboardobjective = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_OBJECTIVE);
+		ClientBoundPacketData scoreboardobjective = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SCOREBOARD_OBJECTIVE);
 		StringSerializer.writeVarIntUTF8String(scoreboardobjective, name);
 		scoreboardobjective.writeByte(mode.ordinal());
 		if (mode != Mode.REMOVE) {

@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -17,7 +17,7 @@ public abstract class MiddleTabComplete extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void write() {
-		ServerBoundPacketData tabcomplete = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_TAB_COMPLETE);
+		ServerBoundPacketData tabcomplete = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_TAB_COMPLETE);
 		VarNumberSerializer.writeVarInt(tabcomplete, id);
 		StringSerializer.writeVarIntUTF8String(tabcomplete, string);
 		codec.writeServerbound(tabcomplete);

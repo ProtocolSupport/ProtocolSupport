@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.bukkit.NamespacedKey;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2_15_16r1_16r2_17.AbstractDeclareTags;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -18,7 +18,7 @@ public class DeclareTags extends AbstractDeclareTags {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData declaretagsPacket = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_DECLARE_TAGS);
+		ClientBoundPacketData declaretagsPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_DECLARE_TAGS);
 		VarNumberSerializer.writeVarInt(declaretagsPacket, tagsMap.size());
 		for (Map.Entry<NamespacedKey, Tag[]> tagsEntry : tagsMap.entrySet()) {
 			NamespacedKey key = tagsEntry.getKey();

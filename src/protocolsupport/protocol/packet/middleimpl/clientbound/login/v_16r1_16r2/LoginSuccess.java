@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.login.v_16r1_16r2;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.login.MiddleLoginSuccess;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -14,7 +14,7 @@ public class LoginSuccess extends MiddleLoginSuccess {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData serializer = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LOGIN_SUCCESS);
+		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_LOGIN_SUCCESS);
 		UUIDSerializer.writeUUID4I(serializer, uuid);
 		StringSerializer.writeVarIntUTF8String(serializer, name);
 		codec.writeClientbound(serializer);

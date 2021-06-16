@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2_15_16r1;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleUnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -14,7 +14,7 @@ public class UnlockRecipes extends MiddleUnlockRecipes {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData unlockrecipes = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UNLOCK_RECIPES);
+		ClientBoundPacketData unlockrecipes = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_UNLOCK_RECIPES);
 		MiscSerializer.writeVarIntEnum(unlockrecipes, action);
 		unlockrecipes.writeBoolean(craftRecipeBookOpen);
 		unlockrecipes.writeBoolean(craftRecipeBookFiltering);

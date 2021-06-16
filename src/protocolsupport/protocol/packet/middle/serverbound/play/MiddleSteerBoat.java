@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
@@ -19,7 +19,7 @@ public abstract class MiddleSteerBoat extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(boolean rightPaddleTurning, boolean leftPaddleTurning) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_STEER_BOAT);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_STEER_BOAT);
 		creator.writeBoolean(rightPaddleTurning);
 		creator.writeBoolean(leftPaddleTurning);
 		return creator;

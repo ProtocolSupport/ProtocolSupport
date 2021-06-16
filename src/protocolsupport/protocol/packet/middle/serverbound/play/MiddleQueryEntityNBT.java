@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -16,7 +16,7 @@ public abstract class MiddleQueryEntityNBT extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void write() {
-		ServerBoundPacketData queryentitynbt = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_QUERY_ENTITY_NBT);
+		ServerBoundPacketData queryentitynbt = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_QUERY_ENTITY_NBT);
 		VarNumberSerializer.writeVarInt(queryentitynbt, id);
 		VarNumberSerializer.writeVarInt(queryentitynbt, entityId);
 		codec.writeServerbound(queryentitynbt);

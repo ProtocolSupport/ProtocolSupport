@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -20,7 +20,7 @@ public class WorldParticle extends MiddleWorldParticle {
 	protected void write() {
 		particle = legacyParticleTable.get(particle.getClass()).apply(particle);
 		if (particle != null) {
-			ClientBoundPacketData spawnparticle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
+			ClientBoundPacketData spawnparticle = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_WORLD_PARTICLES);
 			spawnparticle.writeInt(PreFlatteningNetworkParticleIntIdRegistryDataSerializer.getId(particle));
 			spawnparticle.writeBoolean(longdist);
 			spawnparticle.writeFloat((float) x);

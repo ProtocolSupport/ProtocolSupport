@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
@@ -23,7 +23,7 @@ public abstract class MiddleSteerVehicle extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(float sideForce, float forwardForce, int flags) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_STEER_VEHICLE);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_STEER_VEHICLE);
 		creator.writeFloat(sideForce);
 		creator.writeFloat(forwardForce);
 		creator.writeByte(flags);

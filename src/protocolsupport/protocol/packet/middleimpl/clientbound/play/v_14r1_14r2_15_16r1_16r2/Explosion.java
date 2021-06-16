@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_15_16r1_16r2;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleExplosion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17.WorldCustomSound;
@@ -26,7 +26,7 @@ public class Explosion extends MiddleExplosion {
 			));
 		}
 
-		ClientBoundPacketData explosion = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_EXPLOSION);
+		ClientBoundPacketData explosion = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_EXPLOSION);
 		explosion.writeFloat(x);
 		explosion.writeFloat(y);
 		explosion.writeFloat(z);

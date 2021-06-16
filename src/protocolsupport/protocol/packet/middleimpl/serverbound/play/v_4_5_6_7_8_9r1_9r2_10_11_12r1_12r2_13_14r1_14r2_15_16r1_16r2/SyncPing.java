@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSyncPing;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.storage.netcache.KeepAliveCache;
@@ -20,7 +20,7 @@ public class SyncPing extends MiddleSyncPing {
 	 */
 	@Override
 	protected void write() {
-		ClientBoundPacketData inventorytransactionPacket = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_WINDOW_TRANSACTION);
+		ClientBoundPacketData inventorytransactionPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_LEGACY_PLAY_WINDOW_TRANSACTION);
 		inventorytransactionPacket.writeByte(0); //window id (0 - player window id)
 		inventorytransactionPacket.writeShort(keepaliveCache.storeServerSyncPingId(id));
 		inventorytransactionPacket.writeBoolean(false); //accepted (false - not)

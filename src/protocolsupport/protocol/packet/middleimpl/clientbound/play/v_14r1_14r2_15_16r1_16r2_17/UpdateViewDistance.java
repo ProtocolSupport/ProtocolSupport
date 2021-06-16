@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_15_16r1_16r2_17;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleUpdateViewDistance;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -13,7 +13,7 @@ public class UpdateViewDistance extends MiddleUpdateViewDistance {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData updateviewdistance = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_VIEW_DISTANCE);
+		ClientBoundPacketData updateviewdistance = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_UPDATE_VIEW_DISTANCE);
 		VarNumberSerializer.writeVarInt(updateviewdistance, distance);
 		codec.writeClientbound(updateviewdistance);
 	}

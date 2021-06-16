@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_l;
 import org.bukkit.Bukkit;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -22,14 +22,14 @@ public class Ping extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void write() {
-		ServerBoundPacketData setprotocol = ServerBoundPacketData.create(PacketType.SERVERBOUND_HANDSHAKE_START);
+		ServerBoundPacketData setprotocol = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_HANDSHAKE_START);
 		VarNumberSerializer.writeVarInt(setprotocol, ProtocolVersionsHelper.LATEST_PC.getId());
 		StringSerializer.writeVarIntUTF8String(setprotocol, "");
 		setprotocol.writeShort(Bukkit.getPort());
 		VarNumberSerializer.writeVarInt(setprotocol, 1);
 		codec.writeServerbound(setprotocol);
 
-		codec.writeServerbound(ServerBoundPacketData.create(PacketType.SERVERBOUND_STATUS_REQUEST));
+		codec.writeServerbound(ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_STATUS_REQUEST));
 	}
 
 }

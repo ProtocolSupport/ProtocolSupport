@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
@@ -23,7 +23,7 @@ public abstract class MiddleEditBook extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(NetworkItemStack book, boolean signing, int slot) {
-		ServerBoundPacketData editbook = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_EDIT_BOOK);
+		ServerBoundPacketData editbook = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_EDIT_BOOK);
 		ItemStackSerializer.writeItemStack(editbook, book);
 		editbook.writeBoolean(signing);
 		VarNumberSerializer.writeVarInt(editbook, slot);

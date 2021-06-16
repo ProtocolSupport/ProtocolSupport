@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
@@ -18,7 +18,7 @@ public abstract class MiddleSyncPong extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int id) {
-		ServerBoundPacketData syncpongPacket = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_SYNC_PONG);
+		ServerBoundPacketData syncpongPacket = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_SYNC_PONG);
 		syncpongPacket.writeInt(id);
 		return syncpongPacket;
 	}

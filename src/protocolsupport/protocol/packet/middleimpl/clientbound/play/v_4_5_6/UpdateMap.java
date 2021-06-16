@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
 
 import org.bukkit.Material;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleUpdateMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyMap;
@@ -21,7 +21,7 @@ public class UpdateMap extends MiddleUpdateMap {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData scaledata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
+		ClientBoundPacketData scaledata = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 		scaledata.writeShort(mapId);
 		scaledata.writeShort(id);
 		scaledata.writeShort(2);
@@ -30,7 +30,7 @@ public class UpdateMap extends MiddleUpdateMap {
 		codec.writeClientbound(scaledata);
 
 		if (icons.length > 0) {
-			ClientBoundPacketData iconsdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
+			ClientBoundPacketData iconsdata = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 			iconsdata.writeShort(mapId);
 			iconsdata.writeShort(id);
 			iconsdata.writeShort((icons.length * 3) + 1);
@@ -48,7 +48,7 @@ public class UpdateMap extends MiddleUpdateMap {
 			maptransformer.loadFromNewMapData(columns, rows, xstart, zstart, colors);
 			ArrayBasedIntMappingTable colorRemapper = MapColorMappingRegistry.INSTANCE.getTable(version);
 			for (ColumnEntry entry : maptransformer.toPre18MapData()) {
-				ClientBoundPacketData mapdata = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
+				ClientBoundPacketData mapdata = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 				mapdata.writeShort(mapId);
 				mapdata.writeShort(id);
 				mapdata.writeShort(3 + entry.getColors().length);

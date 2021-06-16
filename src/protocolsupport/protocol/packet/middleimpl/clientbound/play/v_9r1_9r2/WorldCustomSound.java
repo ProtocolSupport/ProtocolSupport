@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -33,7 +33,7 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 		int x, int y, int z,
 		String sound, SoundCategory category, float volume, float pitch
 	) {
-		ClientBoundPacketData worldcustomsound = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND);
+		ClientBoundPacketData worldcustomsound = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_WORLD_CUSTOM_SOUND);
 		StringSerializer.writeVarIntUTF8String(worldcustomsound, SoundRemapper.getSoundName(version, sound));
 		MiscSerializer.writeVarIntEnum(worldcustomsound, category);
 		worldcustomsound.writeInt(x);

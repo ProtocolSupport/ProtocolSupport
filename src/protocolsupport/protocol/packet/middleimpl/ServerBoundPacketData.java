@@ -1,16 +1,16 @@
 package protocolsupport.protocol.packet.middleimpl;
 
 import protocolsupport.protocol.packet.PacketData;
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.utils.ThreadLocalObjectPool;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
-public class ServerBoundPacketData extends PacketData<ServerBoundPacketData> {
+public class ServerBoundPacketData extends PacketData<ServerBoundPacketType, ServerBoundPacketData> {
 
 	protected static final ThreadLocalObjectPool<ServerBoundPacketData> pool = new ThreadLocalObjectPool<>(MAX_POOL_CAPACITY, ServerBoundPacketData::new);
 
-	public static ServerBoundPacketData create(PacketType packetType) {
+	public static ServerBoundPacketData create(ServerBoundPacketType packetType) {
 		return pool.get().init(packetType);
 	}
 

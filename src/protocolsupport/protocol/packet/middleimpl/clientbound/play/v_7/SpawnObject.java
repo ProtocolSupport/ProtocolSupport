@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPotionItemAsObjectDataSpawnObject;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -55,7 +55,7 @@ public class SpawnObject extends AbstractPotionItemAsObjectDataSpawnObject {
 			}
 		}
 
-		ClientBoundPacketData spawnobject = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
+		ClientBoundPacketData spawnobject = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SPAWN_OBJECT);
 		VarNumberSerializer.writeVarInt(spawnobject, entityId);
 		spawnobject.writeByte(LegacyEntityId.getObjectIntId(type));
 		spawnobject.writeInt(fpX);
@@ -74,7 +74,7 @@ public class SpawnObject extends AbstractPotionItemAsObjectDataSpawnObject {
 
 	@Override
 	protected void writeSpawnThunderbolt() {
-		ClientBoundPacketData spawnglobal = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LEGACY_PLAY_SPAWN_GLOBAL);
+		ClientBoundPacketData spawnglobal = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_LEGACY_PLAY_SPAWN_GLOBAL);
 		VarNumberSerializer.writeVarInt(spawnglobal, entity.getId());
 		spawnglobal.writeByte(1);
 		spawnglobal.writeInt(PrimitiveTypeUtils.toFixedPoint32(x));

@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -22,7 +22,7 @@ public abstract class MiddleUpdateSign extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(Position position, String[] lines) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_UPDATE_SIGN);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_UPDATE_SIGN);
 		PositionSerializer.writePosition(creator, position);
 		for (int i = 0; i < lines.length; i++) {
 			StringSerializer.writeVarIntUTF8String(creator, lines[i]);

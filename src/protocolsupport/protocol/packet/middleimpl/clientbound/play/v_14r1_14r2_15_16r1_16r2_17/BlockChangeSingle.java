@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_15_16r1_16r2_17;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeSingle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -27,7 +27,7 @@ public class BlockChangeSingle extends MiddleBlockChangeSingle {
 	}
 
 	public static ClientBoundPacketData create(Position position, int id) {
-		ClientBoundPacketData blockchangesingle = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE);
+		ClientBoundPacketData blockchangesingle = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_BLOCK_CHANGE_SINGLE);
 		PositionSerializer.writePosition(blockchangesingle, position);
 		VarNumberSerializer.writeVarInt(blockchangesingle, id);
 		return blockchangesingle;

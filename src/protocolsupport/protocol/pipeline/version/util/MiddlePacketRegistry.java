@@ -4,7 +4,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 import protocolsupport.api.utils.NetworkState;
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.MiddlePacket;
 import protocolsupport.protocol.packet.middle.MiddlePacket.MiddlePacketInit;
 
@@ -19,7 +19,7 @@ public class MiddlePacketRegistry<T extends MiddlePacket> {
 
 	protected final Lazy<T>[] registry = new Lazy[NetworkState.values().length << 8];
 
-	public void register(NetworkState state, PacketType packetType, Function<MiddlePacketInit, T> middlepacket) {
+	public void register(NetworkState state, ClientBoundPacketType packetType, Function<MiddlePacketInit, T> middlepacket) {
 		register(state, packetType.getId(), middlepacket);
 	}
 

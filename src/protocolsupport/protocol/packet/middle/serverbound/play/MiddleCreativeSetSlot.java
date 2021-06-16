@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
@@ -21,7 +21,7 @@ public abstract class MiddleCreativeSetSlot extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int slot, NetworkItemStack itemstack) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_CREATIVE_SET_SLOT);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_CREATIVE_SET_SLOT);
 		creator.writeShort(slot);
 		ItemStackSerializer.writeItemStack(creator, itemstack);
 		return creator;

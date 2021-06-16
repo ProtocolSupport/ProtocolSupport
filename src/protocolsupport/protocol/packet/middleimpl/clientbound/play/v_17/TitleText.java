@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTitleText;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -17,7 +17,7 @@ public class TitleText extends MiddleTitleText {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData titletextPacket = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_TITLE_TEXT);
+		ClientBoundPacketData titletextPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_TITLE_TEXT);
 		StringSerializer.writeVarIntUTF8String(titletextPacket, ChatSerializer.serialize(version, clientCache.getLocale(), text));
 		codec.writeClientbound(titletextPacket);
 	}

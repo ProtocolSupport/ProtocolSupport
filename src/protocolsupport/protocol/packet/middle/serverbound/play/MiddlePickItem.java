@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
@@ -19,7 +19,7 @@ public abstract class MiddlePickItem extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int slot) {
-		ServerBoundPacketData serializer = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_PICK_ITEM);
+		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_PICK_ITEM);
 		VarNumberSerializer.writeVarInt(serializer, slot);
 		return serializer;
 	}

@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockAction;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.PositionSerializer;
@@ -19,7 +19,7 @@ public class BlockAction extends MiddleBlockAction {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData blockaction = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_BLOCK_ACTION);
+		ClientBoundPacketData blockaction = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_BLOCK_ACTION);
 		PositionSerializer.writeLegacyPositionL(blockaction, position);
 		blockaction.writeByte(actionId);
 		blockaction.writeByte(actionParam);

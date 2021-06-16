@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r1_16r2;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17.AbstractLimitedHeightChunkLight;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -17,7 +17,7 @@ public class ChunkLight extends AbstractLimitedHeightChunkLight {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData chunklightPacket = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHUNK_LIGHT);
+		ClientBoundPacketData chunklightPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_CHUNK_LIGHT);
 		PositionSerializer.writeVarIntChunkCoord(chunklightPacket, coord);
 		chunklightPacket.writeBoolean(trustEdges);
 		VarNumberSerializer.writeVarInt(chunklightPacket, limitedSetSkyLightMask);

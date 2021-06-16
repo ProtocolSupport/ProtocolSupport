@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
@@ -26,7 +26,7 @@ public abstract class MiddleInventoryClose extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int windowId) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_WINDOW_CLOSE);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_WINDOW_CLOSE);
 		creator.writeByte(windowId);
 		return creator;
 	}

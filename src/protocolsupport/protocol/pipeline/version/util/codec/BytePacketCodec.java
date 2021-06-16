@@ -12,7 +12,7 @@ public abstract class BytePacketCodec extends IPacketIdCodec {
 	}
 
 	@Override
-	protected void writePacketId(PacketData<?> to, int packetId) {
+	protected void writePacketId(PacketData<?, ?> to, int packetId) {
 		to.writeHeadSpace(Byte.BYTES, packetId, (lTo, lPacketId) -> lTo.writeByte(lPacketId));
 	}
 

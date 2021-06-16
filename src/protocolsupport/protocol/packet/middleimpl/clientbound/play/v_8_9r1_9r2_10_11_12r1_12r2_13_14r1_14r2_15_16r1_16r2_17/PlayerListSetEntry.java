@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -20,7 +20,7 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData playerlistsetentry = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_PLAYER_INFO);
+		ClientBoundPacketData playerlistsetentry = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_PLAYER_INFO);
 		VarNumberSerializer.writeVarInt(playerlistsetentry, action.ordinal());
 		VarNumberSerializer.writeVarInt(playerlistsetentry, infos.size());
 		for (Entry<UUID, PlayerListOldNewEntry> entry : infos.entrySet()) {

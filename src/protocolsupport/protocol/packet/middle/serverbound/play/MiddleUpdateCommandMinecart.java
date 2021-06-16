@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -22,7 +22,7 @@ public abstract class MiddleUpdateCommandMinecart extends ServerBoundMiddlePacke
 	}
 
 	public static ServerBoundPacketData create(int entityId, String command, boolean trackOutput) {
-		ServerBoundPacketData updatecommandminecart = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_UPDATE_COMMAND_MINECART);
+		ServerBoundPacketData updatecommandminecart = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_UPDATE_COMMAND_MINECART);
 		VarNumberSerializer.writeVarInt(updatecommandminecart, entityId);
 		StringSerializer.writeVarIntUTF8String(updatecommandminecart, command);
 		updatecommandminecart.writeBoolean(trackOutput);

@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 
 import java.util.UUID;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.UUIDSerializer;
@@ -17,7 +17,7 @@ public abstract class MiddleSpectate extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void write() {
-		ServerBoundPacketData spetate = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_SPECTATE);
+		ServerBoundPacketData spetate = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_SPECTATE);
 		UUIDSerializer.writeUUID2L(spetate, entityUUID);
 		codec.writeServerbound(spetate);
 	}

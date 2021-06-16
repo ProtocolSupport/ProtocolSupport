@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.login.v_13_14r1_14r2_15_16r1_16r2_17;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.login.MiddleLoginCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -14,7 +14,7 @@ public class LoginCustomPayload extends MiddleLoginCustomPayload {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData logincustompayload = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LOGIN_CUSTOM_PAYLOAD);
+		ClientBoundPacketData logincustompayload = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_LOGIN_CUSTOM_PAYLOAD);
 		VarNumberSerializer.writeVarInt(logincustompayload, id);
 		StringSerializer.writeVarIntUTF8String(logincustompayload, tag);
 		logincustompayload.writeBytes(data);

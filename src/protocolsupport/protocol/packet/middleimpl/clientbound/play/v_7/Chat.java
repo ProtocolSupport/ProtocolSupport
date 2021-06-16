@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 
 import protocolsupport.api.chat.ChatAPI.MessagePosition;
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChat;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -22,7 +22,7 @@ public class Chat extends MiddleChat {
 			return;
 		}
 
-		ClientBoundPacketData chat = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CHAT);
+		ClientBoundPacketData chat = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_CHAT);
 		StringSerializer.writeVarIntUTF8String(chat, ChatSerializer.serialize(version, clientCache.getLocale(), message));
 		codec.writeClientbound(chat);
 	}

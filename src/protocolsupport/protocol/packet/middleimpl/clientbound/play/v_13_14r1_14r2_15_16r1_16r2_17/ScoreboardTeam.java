@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2_15_16r1_16r2_17;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleScoreboardTeam;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -21,7 +21,7 @@ public class ScoreboardTeam extends MiddleScoreboardTeam {
 	protected void write() {
 		String locale = clientCache.getLocale();
 
-		ClientBoundPacketData scoreboardteam = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SCOREBOARD_TEAM);
+		ClientBoundPacketData scoreboardteam = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SCOREBOARD_TEAM);
 		StringSerializer.writeVarIntUTF8String(scoreboardteam, name);
 		MiscSerializer.writeByteEnum(scoreboardteam, mode);
 		if ((mode == Mode.CREATE) || (mode == Mode.UPDATE)) {

@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17.AbstractRemappedSpawnLiving;
 import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
@@ -21,7 +21,7 @@ public class SpawnLiving extends AbstractRemappedSpawnLiving {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData spawnliving = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SPAWN_LIVING);
+		ClientBoundPacketData spawnliving = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SPAWN_LIVING);
 		VarNumberSerializer.writeVarInt(spawnliving, entity.getId());
 		UUIDSerializer.writeUUID2L(spawnliving, entity.getUUID());
 		VarNumberSerializer.writeVarInt(spawnliving, flatteningEntityIdTable.get(fType.getNetworkTypeId()));

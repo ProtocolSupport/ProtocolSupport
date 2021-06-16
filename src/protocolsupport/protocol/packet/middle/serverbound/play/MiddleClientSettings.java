@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 
 import org.bukkit.inventory.MainHand;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -31,7 +31,7 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(String locale, int viewDist, ChatMode chatMode, boolean chatColors, int skinFlags, MainHand mainHand, boolean disableTextFilter) {
-		ServerBoundPacketData clientsettingsPacket = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_SETTINGS);
+		ServerBoundPacketData clientsettingsPacket = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_SETTINGS);
 		StringSerializer.writeVarIntUTF8String(clientsettingsPacket, locale);
 		clientsettingsPacket.writeByte(viewDist);
 		MiscSerializer.writeVarIntEnum(clientsettingsPacket, chatMode);

@@ -1,19 +1,19 @@
 package protocolsupport.protocol.typeremapper.packet;
 
 import protocolsupport.protocol.PacketDataCodecImpl.ServerBoundPacketDataProcessor;
-import protocolsupport.protocol.packet.PacketData;
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
+import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
 public class AnimatePacketReorderer extends ServerBoundPacketDataProcessor {
 
-	protected PacketData<?> animatePacket;
+	protected ServerBoundPacketData animatePacket;
 
 	@Override
-	public void process(PacketData<?> packet) {
-		PacketType packetType = packet.getPacketType();
+	public void process(ServerBoundPacketData packet) {
+		ServerBoundPacketType packetType = packet.getPacketType();
 
 		if (animatePacket != null) {
-			if (packetType == PacketType.SERVERBOUND_PLAY_USE_ENTITY) {
+			if (packetType == ServerBoundPacketType.SERVERBOUND_PLAY_USE_ENTITY) {
 				read(packet);
 				read(animatePacket);
 				animatePacket = null;
@@ -24,7 +24,7 @@ public class AnimatePacketReorderer extends ServerBoundPacketDataProcessor {
 			}
 		}
 
-		if (packetType == PacketType.SERVERBOUND_PLAY_ANIMATION) {
+		if (packetType == ServerBoundPacketType.SERVERBOUND_PLAY_ANIMATION) {
 			animatePacket = packet;
 		} else {
 			read(packet);

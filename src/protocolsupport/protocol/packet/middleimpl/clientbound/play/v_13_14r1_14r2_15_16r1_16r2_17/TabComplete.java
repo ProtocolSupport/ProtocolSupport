@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2_15_16r1_16r2_17;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTabComplete;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -15,7 +15,7 @@ public class TabComplete extends MiddleTabComplete {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData tabcomplete = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_TAB_COMPLETE);
+		ClientBoundPacketData tabcomplete = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_TAB_COMPLETE);
 		VarNumberSerializer.writeVarInt(tabcomplete, id);
 		VarNumberSerializer.writeVarInt(tabcomplete, start);
 		VarNumberSerializer.writeVarInt(tabcomplete, length);

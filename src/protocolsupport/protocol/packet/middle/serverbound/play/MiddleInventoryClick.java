@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -38,7 +38,7 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 	public static final int MODE_DOUBLE_CLICK = 6;
 
 	public static ServerBoundPacketData create(int windowId, int mode, int button, int slot, SlotItem[] modifiedSlot, NetworkItemStack clickedItem) {
-		ServerBoundPacketData inventoryclickPacket = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_WINDOW_CLICK);
+		ServerBoundPacketData inventoryclickPacket = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_WINDOW_CLICK);
 		inventoryclickPacket.writeByte(windowId);
 		inventoryclickPacket.writeShort(slot);
 		inventoryclickPacket.writeByte(button);

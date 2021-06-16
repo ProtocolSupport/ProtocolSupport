@@ -4,7 +4,7 @@ import java.text.MessageFormat;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleDeclareRecipes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -119,7 +119,7 @@ public abstract class AbstractDeclareRecipes extends MiddleDeclareRecipes {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData declarerecipes = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_DECLARE_RECIPES);
+		ClientBoundPacketData declarerecipes = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_DECLARE_RECIPES);
 		MiscSerializer.writeVarIntCountPrefixedType(declarerecipes, recipes, (recipesTo, recipes) -> {
 			int writtenRecipeCount = 0;
 			for (Recipe recipe : recipes) {

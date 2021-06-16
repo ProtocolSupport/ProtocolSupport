@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.MiscSerializer;
@@ -23,7 +23,7 @@ public abstract class MiddleEntityAction extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(int entityId, Action action, int jumpBoost) {
-		ServerBoundPacketData creator = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_ENTITY_ACTION);
+		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_ENTITY_ACTION);
 		VarNumberSerializer.writeVarInt(creator, entityId);
 		MiscSerializer.writeVarIntEnum(creator, action);
 		VarNumberSerializer.writeVarInt(creator, jumpBoost);

@@ -4,7 +4,7 @@ import java.util.function.BiConsumer;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -30,14 +30,14 @@ public class CustomPayload extends MiddleCustomPayload {
 	}
 
 	public static <T> ClientBoundPacketData create(ProtocolVersion version, String tag, T type, BiConsumer<ByteBuf, T> typeWriter) {
-		ClientBoundPacketData custompayload = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
+		ClientBoundPacketData custompayload = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeString(custompayload, version, tag);
 		MiscSerializer.writeShortLengthPrefixedType(custompayload, type, typeWriter);
 		return custompayload;
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, String tag, ByteBuf data) {
-		ClientBoundPacketData custompayload = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
+		ClientBoundPacketData custompayload = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_CUSTOM_PAYLOAD);
 		StringSerializer.writeString(custompayload, version, tag);
 		ArraySerializer.writeShortByteArray(custompayload, data);
 		return custompayload;

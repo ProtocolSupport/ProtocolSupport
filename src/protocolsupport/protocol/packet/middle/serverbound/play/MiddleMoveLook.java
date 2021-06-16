@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
@@ -23,7 +23,7 @@ public abstract class MiddleMoveLook extends ServerBoundMiddlePacket {
 	}
 
 	public static ServerBoundPacketData create(double x, double y, double z, float yaw, float pitch, boolean onGround) {
-		ServerBoundPacketData movelook = ServerBoundPacketData.create(PacketType.SERVERBOUND_PLAY_POSITION_LOOK);
+		ServerBoundPacketData movelook = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_PLAY_POSITION_LOOK);
 		movelook.writeDouble(x);
 		movelook.writeDouble(y);
 		movelook.writeDouble(z);

@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
 
 import java.util.EnumMap;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityAnimation;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 
@@ -23,7 +23,7 @@ public class EntityAnimation extends MiddleEntityAnimation {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData entityanimation = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_ENTITY_ANIMATION);
+		ClientBoundPacketData entityanimation = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_ENTITY_ANIMATION);
 		entityanimation.writeInt(entityId);
 		entityanimation.writeByte(animationIds.get(animation));
 		codec.writeClientbound(entityanimation);

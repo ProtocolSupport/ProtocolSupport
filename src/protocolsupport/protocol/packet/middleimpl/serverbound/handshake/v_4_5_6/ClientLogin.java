@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_4_5_6;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -28,14 +28,14 @@ public class ClientLogin extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void write() {
-		ServerBoundPacketData setprotocol = ServerBoundPacketData.create(PacketType.SERVERBOUND_HANDSHAKE_START);
+		ServerBoundPacketData setprotocol = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_HANDSHAKE_START);
 		VarNumberSerializer.writeVarInt(setprotocol, ProtocolVersionsHelper.LATEST_PC.getId());
 		StringSerializer.writeVarIntUTF8String(setprotocol, hostname);
 		setprotocol.writeShort(port);
 		VarNumberSerializer.writeVarInt(setprotocol, 2);
 		codec.writeServerbound(setprotocol);
 
-		ServerBoundPacketData loginstart = ServerBoundPacketData.create(PacketType.SERVERBOUND_LOGIN_START);
+		ServerBoundPacketData loginstart = ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_LOGIN_START);
 		StringSerializer.writeVarIntUTF8String(loginstart, username);
 		codec.writeServerbound(loginstart);
 	}

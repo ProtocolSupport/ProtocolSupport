@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.login.MiddleLoginDisconnect;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -14,7 +14,7 @@ public class LoginDisconnect extends MiddleLoginDisconnect {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData logindisconnect = ClientBoundPacketData.create(PacketType.CLIENTBOUND_LOGIN_DISCONNECT);
+		ClientBoundPacketData logindisconnect = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_LOGIN_DISCONNECT);
 		StringSerializer.writeVarIntUTF8String(logindisconnect, ChatSerializer.serialize(version, cache.getClientCache().getLocale(), message));
 		codec.writeClientbound(logindisconnect);
 	}

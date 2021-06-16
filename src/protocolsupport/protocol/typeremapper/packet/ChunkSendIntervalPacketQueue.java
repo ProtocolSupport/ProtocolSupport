@@ -4,8 +4,9 @@ import java.util.ArrayDeque;
 import java.util.concurrent.TimeUnit;
 
 import protocolsupport.protocol.PacketDataCodecImpl.ClientBoundPacketDataProcessor;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.PacketData;
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.utils.JavaSystemProperty;
 
 public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor {
@@ -16,12 +17,12 @@ public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor
 		return chunkSendInterval > 0;
 	}
 
-	protected static boolean shouldLock(PacketData<?> packet) {
-		return packet.getPacketType() == PacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE;
+	protected static boolean shouldLock(ClientBoundPacketData packet) {
+		return packet.getPacketType() == ClientBoundPacketType.CLIENTBOUND_PLAY_CHUNK_SINGLE;
 	}
 
 	protected boolean locked = false;
-	protected final ArrayDeque<PacketData<?>> queue = new ArrayDeque<>(1024);
+	protected final ArrayDeque<ClientBoundPacketData> queue = new ArrayDeque<>(1024);
 
 	protected void clearQueue() {
 		queue.forEach(PacketData::release);
@@ -29,7 +30,7 @@ public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor
 	}
 
 	@Override
-	public void process(PacketData<?> packet) {
+	public void process(ClientBoundPacketData packet) {
 		if (locked) {
 			switch (packet.getPacketType()) {
 				case CLIENTBOUND_PLAY_RESPAWN: {
@@ -73,7 +74,7 @@ public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor
 			() -> {
 				locked = false;
 				if (!queue.isEmpty()) {
-					PacketData<?> qPacket = null;
+					ClientBoundPacketData qPacket = null;
 					while ((qPacket = queue.pollFirst()) != null) {
 						write(qPacket);
 						if (shouldLock(qPacket)) {

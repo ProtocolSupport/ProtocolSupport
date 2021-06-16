@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCombatDeath;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -18,7 +18,7 @@ public class CombatDeath extends MiddleCombatDeath {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData combatdeathPacket = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_COMBAT_DEATH);
+		ClientBoundPacketData combatdeathPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_COMBAT_DEATH);
 		VarNumberSerializer.writeVarInt(combatdeathPacket, playerId);
 		combatdeathPacket.writeInt(killerId);
 		StringSerializer.writeVarIntUTF8String(combatdeathPacket, ChatSerializer.serialize(version, clientCache.getLocale(), message));

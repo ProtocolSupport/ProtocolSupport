@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middle.serverbound.status;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
@@ -12,7 +12,7 @@ public abstract class MiddleServerInfoRequest extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void write() {
-		codec.writeServerbound(ServerBoundPacketData.create(PacketType.SERVERBOUND_STATUS_REQUEST));
+		codec.writeServerbound(ServerBoundPacketData.create(ServerBoundPacketType.SERVERBOUND_STATUS_REQUEST));
 	}
 
 }

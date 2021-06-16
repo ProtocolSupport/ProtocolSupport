@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleUpdateMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.ArraySerializer;
@@ -17,7 +17,7 @@ public class UpdateMap extends MiddleUpdateMap {
 
 	@Override
 	public void write() {
-		ClientBoundPacketData updatemapPacket = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
+		ClientBoundPacketData updatemapPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_UPDATE_MAP);
 		VarNumberSerializer.writeVarInt(updatemapPacket, id);
 		updatemapPacket.writeByte(scale);
 		updatemapPacket.writeBoolean(locked);

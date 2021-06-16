@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSetHealth;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleClientCommand;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
@@ -16,7 +16,7 @@ public class SetHealth extends MiddleSetHealth {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData sethealth = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_SET_HEALTH);
+		ClientBoundPacketData sethealth = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_SET_HEALTH);
 		sethealth.writeShort((int) Math.ceil((health * 20.0F) / cache.getClientCache().getMaxHealth()));
 		sethealth.writeShort(food);
 		sethealth.writeFloat(saturation);

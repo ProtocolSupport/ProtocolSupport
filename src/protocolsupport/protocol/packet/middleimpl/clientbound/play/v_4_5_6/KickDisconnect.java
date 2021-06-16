@@ -1,6 +1,6 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
 
-import protocolsupport.protocol.packet.PacketType;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleKickDisconnect;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.serializer.StringSerializer;
@@ -14,7 +14,7 @@ public class KickDisconnect extends MiddleKickDisconnect {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData kickdisconnect = ClientBoundPacketData.create(PacketType.CLIENTBOUND_PLAY_KICK_DISCONNECT);
+		ClientBoundPacketData kickdisconnect = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_PLAY_KICK_DISCONNECT);
 		StringSerializer.writeShortUTF16BEString(kickdisconnect, LegacyChat.clampLegacyText(message.toLegacyText(cache.getClientCache().getLocale()), 256));
 		codec.writeClientbound(kickdisconnect);
 	}
