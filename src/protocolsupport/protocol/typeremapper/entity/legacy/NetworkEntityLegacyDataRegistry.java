@@ -18,6 +18,7 @@ import protocolsupport.protocol.typeremapper.entity.legacy.metadata.GenericEntit
 import protocolsupport.protocol.typeremapper.entity.legacy.metadata.GenericEntityVarIntBlockDataMetadataTransformer;
 import protocolsupport.protocol.typeremapper.entity.legacy.metadata.NoopMetadataTransformer;
 import protocolsupport.protocol.typeremapper.entity.legacy.metadata.ParrotInitDefaultMetadataTransformer;
+import protocolsupport.protocol.typeremapper.entity.legacy.metadata.SheepInitDefaultMetadataTransformer;
 import protocolsupport.protocol.typeremapper.entity.legacy.metadata.SpiderInitDefaultMetadataTransformer;
 import protocolsupport.protocol.typeremapper.entity.legacy.metadata.VillagerInitDefaultMetadataTransformer;
 import protocolsupport.protocol.typeremapper.entity.legacy.metadata.WitchInitDefaultMetadataTransformer;
@@ -113,7 +114,7 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 
 		new Mapping(NetworkEntityType.GOAT)
 		.add(NetworkEntityType.GOAT, ProtocolVersionsHelper.UP_1_17)
-		.add(NetworkEntityType.SHEEP, ProtocolVersionsHelper.DOWN_1_16_4)
+		.add(NetworkEntityType.SHEEP, SheepInitDefaultMetadataTransformer.INSTANCE, ProtocolVersionsHelper.DOWN_1_16_4)
 		.register();
 
 		new Mapping(NetworkEntityType.POLAR_BEAR)
