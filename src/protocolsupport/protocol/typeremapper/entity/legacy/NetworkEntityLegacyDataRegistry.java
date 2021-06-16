@@ -61,7 +61,8 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 
 		new Mapping(NetworkEntityType.AXOLOTL)
 		.add(NetworkEntityType.AXOLOTL, ProtocolVersionsHelper.UP_1_17)
-		.add(NetworkEntityType.SQUID, ProtocolVersionsHelper.DOWN_1_16_4)
+		.add(NetworkEntityType.DOLPHIN, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_13, ProtocolVersion.MINECRAFT_1_16_4))
+		.add(NetworkEntityType.SPIDER, SpiderInitDefaultMetadataTransformer.INSTANCE, ProtocolVersionsHelper.DOWN_1_12_2)
 		.register();
 
 		new Mapping(NetworkEntityType.COMMON_HORSE)
