@@ -62,9 +62,9 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r1_16r2_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r1_16r2_17.EntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r1_16r2_17.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2.ChunkData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2.StartGame;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2_17.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2_17.ChangeDimension;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2_17.StartGame;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2_17.UnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17.InventoryClose;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17.InventoryData;

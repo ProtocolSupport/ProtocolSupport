@@ -52,7 +52,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r1_16r2_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r1_16r2_17.SpawnObject;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2_17.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2_17.ChangeDimension;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2_17.StartGame;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2_17.UnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17.Actionbar;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17.ChunkData;
@@ -67,6 +66,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17.Explosio
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17.ResourcePack;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17.SetPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17.SpawnPosition;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17.StartGame;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17.SyncPing;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17.TitleAnimation;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17.TitleClear;

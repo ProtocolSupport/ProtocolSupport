@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2_17;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2;
 
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleStartGame;
