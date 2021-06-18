@@ -7,6 +7,10 @@ import org.bukkit.Material;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.PositionCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleEditBook;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleNameItem;
@@ -16,10 +20,6 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSetBeaconEf
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateCommandBlock;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateCommandMinecart;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateStructureBlock;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.CommonNBTTransformer;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.Position;
@@ -35,13 +35,13 @@ public class LegacyCustomPayloadData {
 	}
 
 	public static ByteBuf transformBrandDirectToString(ByteBuf data) {
-		ByteBuf buffer = Unpooled.buffer(data.readableBytes() + VarNumberSerializer.MAX_LENGTH);
-		StringSerializer.writeVarIntUTF8String(buffer, data.toString(StandardCharsets.UTF_8));
+		ByteBuf buffer = Unpooled.buffer(data.readableBytes() + VarNumberCodec.MAX_LENGTH);
+		StringCodec.writeVarIntUTF8String(buffer, data.toString(StandardCharsets.UTF_8));
 		return buffer;
 	}
 
 	public static void transformAndWriteBookEdit(PacketDataCodec codec, ProtocolVersion version, int heldSlot, ByteBuf data) {
-		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version);
+		NetworkItemStack book = ItemStackCodec.readItemStack(data, version);
 		if (!book.isNull()) {
 			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
 			codec.writeServerbound(MiddleEditBook.create(book, false, heldSlot));
@@ -49,7 +49,7 @@ public class LegacyCustomPayloadData {
 	}
 
 	public static void transformAndWriteBookSign(PacketDataCodec codec, ProtocolVersion version, int heldSlot, ByteBuf data) {
-		NetworkItemStack book = ItemStackSerializer.readItemStack(data, version);
+		NetworkItemStack book = ItemStackCodec.readItemStack(data, version);
 		if (!book.isNull()) {
 			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
 			if (version == ProtocolVersion.MINECRAFT_1_8) {
@@ -63,24 +63,24 @@ public class LegacyCustomPayloadData {
 	}
 
 	public static void transformAndWriteStructureBlock(PacketDataCodec codec, ByteBuf data) {
-		Position position = PositionSerializer.readLegacyPositionI(data);
+		Position position = PositionCodec.readPositionIII(data);
 		MiddleUpdateStructureBlock.Action action = MiddleUpdateStructureBlock.Action.CONSTANT_LOOKUP.getByOrdinal(data.readByte() - 1);
-		MiddleUpdateStructureBlock.Mode mode = MiddleUpdateStructureBlock.Mode.valueOf(StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE));
-		String name = StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE);
+		MiddleUpdateStructureBlock.Mode mode = MiddleUpdateStructureBlock.Mode.valueOf(StringCodec.readVarIntUTF8String(data, Short.MAX_VALUE));
+		String name = StringCodec.readVarIntUTF8String(data, Short.MAX_VALUE);
 		byte offsetX = (byte) data.readInt();
 		byte offsetY = (byte) data.readInt();
 		byte offsetZ = (byte) data.readInt();
 		byte sizeX = (byte) data.readInt();
 		byte sizeY = (byte) data.readInt();
 		byte sizeZ = (byte) data.readInt();
-		MiddleUpdateStructureBlock.Mirror mirror = MiddleUpdateStructureBlock.Mirror.valueOf(StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE));
-		MiddleUpdateStructureBlock.Rotation rotation = MiddleUpdateStructureBlock.Rotation.valueOf(StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE));
-		String metadata = StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE);
+		MiddleUpdateStructureBlock.Mirror mirror = MiddleUpdateStructureBlock.Mirror.valueOf(StringCodec.readVarIntUTF8String(data, Short.MAX_VALUE));
+		MiddleUpdateStructureBlock.Rotation rotation = MiddleUpdateStructureBlock.Rotation.valueOf(StringCodec.readVarIntUTF8String(data, Short.MAX_VALUE));
+		String metadata = StringCodec.readVarIntUTF8String(data, Short.MAX_VALUE);
 		int ignoreEntities = data.readBoolean() ? 0x01 : 0;
 		int showAir = data.readBoolean() ? 0x02 : 0;
 		int showBoundingBox = data.readBoolean() ? 0x04 : 0;
 		float integrity = data.readFloat();
-		long seed = VarNumberSerializer.readVarLong(data);
+		long seed = VarNumberCodec.readVarLong(data);
 		byte flags = (byte) (ignoreEntities | showAir | showBoundingBox);
 		codec.writeServerbound(MiddleUpdateStructureBlock.create(
 			position, action, mode, name,
@@ -96,7 +96,7 @@ public class LegacyCustomPayloadData {
 	}
 
 	public static void transformAndWriteNameItemSString(PacketDataCodec codec, ByteBuf data) {
-		codec.writeServerbound(MiddleNameItem.create(StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE)));
+		codec.writeServerbound(MiddleNameItem.create(StringCodec.readVarIntUTF8String(data, Short.MAX_VALUE)));
 	}
 
 	public static void transformAndWriteNameItemDString(PacketDataCodec codec, ByteBuf data) {
@@ -105,7 +105,7 @@ public class LegacyCustomPayloadData {
 	}
 
 	public static void transformAndWritePickItem(PacketDataCodec codec, ByteBuf data) {
-		int slot = VarNumberSerializer.readVarInt(data);
+		int slot = VarNumberCodec.readVarInt(data);
 		codec.writeServerbound(MiddlePickItem.create(slot));
 	}
 
@@ -115,8 +115,8 @@ public class LegacyCustomPayloadData {
 	}
 
 	public static void transformAndWriteBasicCommandBlockEdit(PacketDataCodec codec, ByteBuf data) {
-		Position position = PositionSerializer.readLegacyPositionI(data);
-		String command = StringSerializer.readShortUTF16BEString(data, Short.MAX_VALUE);
+		Position position = PositionCodec.readPositionIII(data);
+		String command = StringCodec.readShortUTF16BEString(data, Short.MAX_VALUE);
 		codec.writeServerbound(MiddleUpdateCommandBlock.create(
 			position, command, MiddleUpdateCommandBlock.Mode.REDSTONE, 0
 		));
@@ -126,8 +126,8 @@ public class LegacyCustomPayloadData {
 		int type = data.readByte();
 		switch (type) {
 			case 0: {
-				Position position = PositionSerializer.readLegacyPositionI(data);
-				String command = StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE);
+				Position position = PositionCodec.readPositionIII(data);
+				String command = StringCodec.readVarIntUTF8String(data, Short.MAX_VALUE);
 				int trackOutput = useTrackOutput ? data.readByte() : 0;
 				codec.writeServerbound(MiddleUpdateCommandBlock.create(
 					position, command, MiddleUpdateCommandBlock.Mode.REDSTONE,
@@ -137,7 +137,7 @@ public class LegacyCustomPayloadData {
 			}
 			case 1: {
 				int entityId = data.readInt();
-				String command = StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE);
+				String command = StringCodec.readVarIntUTF8String(data, Short.MAX_VALUE);
 				boolean trackOutput = useTrackOutput ? data.readBoolean() : false;
 				codec.writeServerbound(MiddleUpdateCommandMinecart.create(
 					entityId, command, trackOutput
@@ -155,10 +155,10 @@ public class LegacyCustomPayloadData {
 	};
 
 	public static void transformAndWriteAutoCommandBlockEdit(PacketDataCodec codec, ByteBuf data) {
-		Position position = PositionSerializer.readLegacyPositionI(data);
-		String command = StringSerializer.readVarIntUTF8String(data, Short.MAX_VALUE);
+		Position position = PositionCodec.readPositionIII(data);
+		String command = StringCodec.readVarIntUTF8String(data, Short.MAX_VALUE);
 		int trackOutput = data.readByte();
-		String modeString = StringSerializer.readVarIntUTF8String(data, 16);
+		String modeString = StringCodec.readVarIntUTF8String(data, 16);
 		MiddleUpdateCommandBlock.Mode mode = switch (modeString) {
 			case "SEQUENCE" -> MiddleUpdateCommandBlock.Mode.SEQUENCE;
 			case "AUTO" -> MiddleUpdateCommandBlock.Mode.AUTO;

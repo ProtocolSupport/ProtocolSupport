@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.codec.MiscDataCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleRecipeBookState extends ServerBoundMiddlePacket {
@@ -23,7 +23,7 @@ public abstract class MiddleRecipeBookState extends ServerBoundMiddlePacket {
 
 	public static ServerBoundPacketData create(RecipeBookType bookType, boolean bookOpen, boolean bookFiltering) {
 		ServerBoundPacketData recipebookstate = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_RECIPE_BOOK_STATE);
-		MiscSerializer.writeVarIntEnum(recipebookstate, bookType);
+		MiscDataCodec.writeVarIntEnum(recipebookstate, bookType);
 		recipebookstate.writeBoolean(bookOpen);
 		recipebookstate.writeBoolean(bookFiltering);
 		return recipebookstate;

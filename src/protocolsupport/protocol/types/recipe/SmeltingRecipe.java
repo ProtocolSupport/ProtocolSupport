@@ -1,9 +1,9 @@
 package protocolsupport.protocol.types.recipe;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.types.NetworkItemStack;
 
 public class SmeltingRecipe extends Recipe {
@@ -16,11 +16,11 @@ public class SmeltingRecipe extends Recipe {
 	public SmeltingRecipe(String id, RecipeType type, ByteBuf data) {
 		super(id, type);
 
-		group = StringSerializer.readVarIntUTF8String(data);
+		group = StringCodec.readVarIntUTF8String(data);
 		ingredient = new RecipeIngredient(data);
-		result = ItemStackSerializer.readItemStack(data);
+		result = ItemStackCodec.readItemStack(data);
 		exp = data.readFloat();
-		time = VarNumberSerializer.readVarInt(data);
+		time = VarNumberCodec.readVarInt(data);
 	}
 
 	public String getGroup() {

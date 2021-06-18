@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleStatistics extends ClientBoundMiddlePacket {
 
@@ -15,9 +15,9 @@ public abstract class MiddleStatistics extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		statistics = ArraySerializer.readVarIntTArray(
+		statistics = ArrayCodec.readVarIntTArray(
 			serverdata, Statistic.class,
-			from -> new Statistic(VarNumberSerializer.readVarInt(from), VarNumberSerializer.readVarInt(from), VarNumberSerializer.readVarInt(from))
+			from -> new Statistic(VarNumberCodec.readVarInt(from), VarNumberCodec.readVarInt(from), VarNumberCodec.readVarInt(from))
 		);
 	}
 

@@ -5,11 +5,11 @@ import java.util.UUID;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.UUIDCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.UUIDSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
@@ -28,14 +28,14 @@ public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		uuid = UUIDSerializer.readUUID2L(serverdata);
-		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
+		uuid = UUIDCodec.readUUID2L(serverdata);
+		action = MiscDataCodec.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		switch (action) {
 			case ADD: {
-				title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
+				title = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(serverdata), true);
 				percent = serverdata.readFloat();
-				color = VarNumberSerializer.readVarInt(serverdata);
-				divider = VarNumberSerializer.readVarInt(serverdata);
+				color = VarNumberCodec.readVarInt(serverdata);
+				divider = VarNumberCodec.readVarInt(serverdata);
 				flags = serverdata.readUnsignedByte();
 				break;
 			}
@@ -47,12 +47,12 @@ public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 				break;
 			}
 			case UPDATE_TITLE: {
-				title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
+				title = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(serverdata), true);
 				break;
 			}
 			case UPDATE_STYLE: {
-				color = VarNumberSerializer.readVarInt(serverdata);
-				divider = VarNumberSerializer.readVarInt(serverdata);
+				color = VarNumberCodec.readVarInt(serverdata);
+				divider = VarNumberCodec.readVarInt(serverdata);
 				break;
 			}
 			case UPDATE_FLAGS: {

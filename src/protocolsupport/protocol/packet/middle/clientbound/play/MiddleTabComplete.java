@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleTabComplete extends ClientBoundMiddlePacket {
 
@@ -19,12 +19,12 @@ public abstract class MiddleTabComplete extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		id = VarNumberSerializer.readVarInt(serverdata);
-		start = VarNumberSerializer.readVarInt(serverdata);
-		length = VarNumberSerializer.readVarInt(serverdata);
-		matches = ArraySerializer.readVarIntTArray(serverdata, CommandMatch.class, data -> {
-			String match = StringSerializer.readVarIntUTF8String(serverdata);
-			String tooltip = serverdata.readBoolean() ? StringSerializer.readVarIntUTF8String(serverdata) : null;
+		id = VarNumberCodec.readVarInt(serverdata);
+		start = VarNumberCodec.readVarInt(serverdata);
+		length = VarNumberCodec.readVarInt(serverdata);
+		matches = ArrayCodec.readVarIntTArray(serverdata, CommandMatch.class, data -> {
+			String match = StringCodec.readVarIntUTF8String(serverdata);
+			String tooltip = serverdata.readBoolean() ? StringCodec.readVarIntUTF8String(serverdata) : null;
 			return new CommandMatch(match, tooltip);
 		});
 	}

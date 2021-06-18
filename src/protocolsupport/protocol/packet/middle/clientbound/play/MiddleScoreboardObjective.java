@@ -6,10 +6,10 @@ import java.util.Set;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleScoreboardObjective extends ClientBoundMiddlePacket {
@@ -27,11 +27,11 @@ public abstract class MiddleScoreboardObjective extends ClientBoundMiddlePacket 
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		name = StringSerializer.readVarIntUTF8String(serverdata);
-		mode = MiscSerializer.readByteEnum(serverdata, Mode.CONSTANT_LOOKUP);
+		name = StringCodec.readVarIntUTF8String(serverdata);
+		mode = MiscDataCodec.readByteEnum(serverdata, Mode.CONSTANT_LOOKUP);
 		if (mode != Mode.REMOVE) {
-			value = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
-			type = MiscSerializer.readVarIntEnum(serverdata, Type.CONSTANT_LOOKUP);
+			value = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(serverdata), true);
+			type = MiscDataCodec.readVarIntEnum(serverdata, Type.CONSTANT_LOOKUP);
 		}
 
 		switch (mode) {

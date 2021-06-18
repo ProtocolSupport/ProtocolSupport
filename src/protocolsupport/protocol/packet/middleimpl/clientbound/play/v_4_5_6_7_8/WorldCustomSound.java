@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.basic.SoundRemapper;
 import protocolsupport.utils.Utils;
 
@@ -37,7 +37,7 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)) {
 			sound = Utils.clampString(sound, 32);
 		}
-		StringSerializer.writeString(worldcustomsound, version, sound);
+		StringCodec.writeString(worldcustomsound, version, sound);
 		worldcustomsound.writeInt(x);
 		worldcustomsound.writeInt(y);
 		worldcustomsound.writeInt(z);

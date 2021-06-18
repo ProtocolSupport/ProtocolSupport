@@ -13,7 +13,7 @@ import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.utils.NetworkState;
-import protocolsupport.protocol.serializer.chat.ChatSerializer;
+import protocolsupport.protocol.codec.chat.ChatCodec;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.zplatform.ServerPlatform;
@@ -48,7 +48,7 @@ public class ChatAPI {
 	 */
 	public static BaseComponent fromJSON(String json, boolean lenient) {
 		try {
-			BaseComponent result = ChatSerializer.deserialize(json);
+			BaseComponent result = ChatCodec.deserialize(json);
 			return result != null ? result : new TextComponent("");
 		} catch (Exception e) {
 			if (lenient) {
@@ -71,7 +71,7 @@ public class ChatAPI {
 	 * @return json string
 	 */
 	public static String toJSON(BaseComponent component) {
-		return component != null ? ChatSerializer.serialize(ProtocolVersionsHelper.LATEST_PC, I18NData.DEFAULT_LOCALE, component) : null;
+		return component != null ? ChatCodec.serialize(ProtocolVersionsHelper.LATEST_PC, I18NData.DEFAULT_LOCALE, component) : null;
 	}
 
 	/**

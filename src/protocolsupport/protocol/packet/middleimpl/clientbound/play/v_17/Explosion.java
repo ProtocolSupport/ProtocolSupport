@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17;
 
+import protocolsupport.protocol.codec.ArrayCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleExplosion;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.ArraySerializer;
 
 public class Explosion extends MiddleExplosion {
 
@@ -18,7 +18,7 @@ public class Explosion extends MiddleExplosion {
 		explosionPacket.writeFloat(y);
 		explosionPacket.writeFloat(z);
 		explosionPacket.writeFloat(radius);
-		ArraySerializer.writeVarIntTArray(explosionPacket, blocks, (blockTo, block) -> {
+		ArrayCodec.writeVarIntTArray(explosionPacket, blocks, (blockTo, block) -> {
 			blockTo.writeByte(block.getX());
 			blockTo.writeByte(block.getY());
 			blockTo.writeByte(block.getZ());

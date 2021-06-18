@@ -2,11 +2,11 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 
 import org.bukkit.util.Vector;
 
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.UsedHand;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
@@ -29,18 +29,18 @@ public abstract class MiddleUseEntity extends ServerBoundMiddlePacket {
 
 	public static ServerBoundPacketData create(int entityId, Action action, Vector interactedAt, UsedHand hand, boolean sneaking) {
 		ServerBoundPacketData useentity = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_USE_ENTITY);
-		VarNumberSerializer.writeVarInt(useentity, entityId);
-		MiscSerializer.writeVarIntEnum(useentity, action);
+		VarNumberCodec.writeVarInt(useentity, entityId);
+		MiscDataCodec.writeVarIntEnum(useentity, action);
 		switch (action) {
 			case INTERACT: {
-				MiscSerializer.writeVarIntEnum(useentity, hand);
+				MiscDataCodec.writeVarIntEnum(useentity, hand);
 				break;
 			}
 			case INTERACT_AT: {
 				useentity.writeFloat((float) interactedAt.getX());
 				useentity.writeFloat((float) interactedAt.getY());
 				useentity.writeFloat((float) interactedAt.getZ());
-				MiscSerializer.writeVarIntEnum(useentity, hand);
+				MiscDataCodec.writeVarIntEnum(useentity, hand);
 				break;
 			}
 			case ATTACK: {

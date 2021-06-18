@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.EncoderException;
 import net.minecraft.network.PacketCompressor;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.utils.netty.RecyclableWrapCompressor;
 import protocolsupport.utils.netty.ReusableReadHeapBuffer;
 
@@ -33,10 +33,10 @@ public class SpigotPacketCompressor extends PacketCompressor {
 			return;
 		}
 		if (readable < this.threshold) {
-			VarNumberSerializer.writeVarInt(to, 0);
+			VarNumberCodec.writeVarInt(to, 0);
 			to.writeBytes(from);
 		} else {
-			VarNumberSerializer.writeVarInt(to, readable);
+			VarNumberCodec.writeVarInt(to, readable);
 			try {
 				readBuffer.readFrom(from, (larray, loffset, llength) -> compressor.compressTo(to, larray, loffset, llength));
 			} catch (Exception e) {
@@ -47,7 +47,7 @@ public class SpigotPacketCompressor extends PacketCompressor {
 
 	@Override
 	protected ByteBuf allocateBuffer(ChannelHandlerContext ctx, ByteBuf buf, boolean preferDirect) throws Exception {
-		return ctx.alloc().heapBuffer(buf.readableBytes() + VarNumberSerializer.MAX_LENGTH);
+		return ctx.alloc().heapBuffer(buf.readableBytes() + VarNumberCodec.MAX_LENGTH);
 	}
 
 }

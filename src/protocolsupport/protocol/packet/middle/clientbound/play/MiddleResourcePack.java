@@ -3,8 +3,8 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleResourcePack extends ClientBoundMiddlePacket {
 
@@ -19,10 +19,10 @@ public abstract class MiddleResourcePack extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		url = StringSerializer.readVarIntUTF8String(serverdata);
-		hash = StringSerializer.readVarIntUTF8String(serverdata);
+		url = StringCodec.readVarIntUTF8String(serverdata);
+		hash = StringCodec.readVarIntUTF8String(serverdata);
 		forced = serverdata.readBoolean();
-		forcedText = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
+		forcedText = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(serverdata), true);
 	}
 
 }

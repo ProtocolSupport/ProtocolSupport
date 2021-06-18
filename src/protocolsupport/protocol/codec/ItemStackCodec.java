@@ -1,4 +1,4 @@
-package protocolsupport.protocol.serializer;
+package protocolsupport.protocol.codec;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -24,13 +24,13 @@ import protocolsupport.protocol.utils.SimpleTypeSerializer;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
-public class ItemStackSerializer {
+public class ItemStackCodec {
 
-	private ItemStackSerializer() {
+	private ItemStackCodec() {
 	}
 
 	public static final SimpleTypeDeserializer<NetworkItemStack> ITEMSTACK_DESERIALIZER = new SimpleTypeDeserializer<>(
-		new AbstractMap.SimpleEntry<>(ItemStackSerializer::readItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2)),
+		new AbstractMap.SimpleEntry<>(ItemStackCodec::readItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2)),
 		new AbstractMap.SimpleEntry<>(from -> {
 			int typeId = from.readShort();
 			if (typeId < 0) {
@@ -72,7 +72,7 @@ public class ItemStackSerializer {
 	);
 
 	public static final SimpleTypeSerializer<NetworkItemStack> ITEMSTACK_SERIALIZER = new SimpleTypeSerializer<>(
-		new AbstractMap.SimpleEntry<>(ItemStackSerializer::writeItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2)),
+		new AbstractMap.SimpleEntry<>(ItemStackCodec::writeItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2)),
 		new AbstractMap.SimpleEntry<>((to, itemstack) -> {
 			if (itemstack.isNull()) {
 				to.writeShort(-1);
@@ -114,7 +114,7 @@ public class ItemStackSerializer {
 			return NetworkItemStack.NULL;
 		}
 		NetworkItemStack itemstack = new NetworkItemStack();
-		itemstack.setTypeId(VarNumberSerializer.readVarInt(from));
+		itemstack.setTypeId(VarNumberCodec.readVarInt(from));
 		itemstack.setAmount(from.readByte());
 		itemstack.setNBT(readDirectTag(from));
 		return itemstack;
@@ -145,7 +145,7 @@ public class ItemStackSerializer {
 			to.writeBoolean(false);
 		} else {
 			to.writeBoolean(true);
-			VarNumberSerializer.writeVarInt(to, itemstack.getTypeId());
+			VarNumberCodec.writeVarInt(to, itemstack.getTypeId());
 			to.writeByte(itemstack.getAmount());
 			writeTag(to, ProtocolVersionsHelper.LATEST_PC, itemstack.getNBT());
 		}
@@ -175,13 +175,13 @@ public class ItemStackSerializer {
 
 
 	public static final SimpleTypeDeserializer<NBTCompound> TAG_DESERIALIZER = new SimpleTypeDeserializer<>(
-		new AbstractMap.SimpleEntry<>(ItemStackSerializer::readDirectTag, ProtocolVersionsHelper.UP_1_8),
-		new AbstractMap.SimpleEntry<>(ItemStackSerializer::readShortTag, ProtocolVersionsHelper.DOWN_1_7_10)
+		new AbstractMap.SimpleEntry<>(ItemStackCodec::readDirectTag, ProtocolVersionsHelper.UP_1_8),
+		new AbstractMap.SimpleEntry<>(ItemStackCodec::readShortTag, ProtocolVersionsHelper.DOWN_1_7_10)
 	);
 
 	public static final SimpleTypeSerializer<NBTCompound> TAG_SERIALIZER = new SimpleTypeSerializer<>(
-		new AbstractMap.SimpleEntry<>(ItemStackSerializer::writeDirectTag, ProtocolVersionsHelper.UP_1_8),
-		new AbstractMap.SimpleEntry<>(ItemStackSerializer::writeShortTag, ProtocolVersionsHelper.DOWN_1_7_10)
+		new AbstractMap.SimpleEntry<>(ItemStackCodec::writeDirectTag, ProtocolVersionsHelper.UP_1_8),
+		new AbstractMap.SimpleEntry<>(ItemStackCodec::writeShortTag, ProtocolVersionsHelper.DOWN_1_7_10)
 	);
 
 	public static NBTCompound readTag(ByteBuf from, ProtocolVersion version) {
@@ -246,7 +246,7 @@ public class ItemStackSerializer {
 		if (tag == null) {
 			to.writeShort(-1);
 		} else {
-			MiscSerializer.writeShortLengthPrefixedType(to, tag, (lTo, lTag) -> {
+			MiscDataCodec.writeShortLengthPrefixedType(to, tag, (lTo, lTag) -> {
 				try (DataOutputStream outputstream = new DataOutputStream(new GZIPOutputStream(new ByteBufOutputStream(lTo)))) {
 					DefaultNBTSerializer.INSTANCE.serializeTag(outputstream, lTag);
 				} catch (Exception e) {

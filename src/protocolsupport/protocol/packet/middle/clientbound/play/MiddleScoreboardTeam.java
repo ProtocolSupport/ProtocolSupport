@@ -10,11 +10,11 @@ import org.bukkit.ChatColor;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
@@ -38,19 +38,19 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		name = StringSerializer.readVarIntUTF8String(serverdata);
-		mode = MiscSerializer.readByteEnum(serverdata, Mode.CONSTANT_LOOKUP);
+		name = StringCodec.readVarIntUTF8String(serverdata);
+		mode = MiscDataCodec.readByteEnum(serverdata, Mode.CONSTANT_LOOKUP);
 		if ((mode == Mode.CREATE) || (mode == Mode.UPDATE)) {
-			displayName = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
+			displayName = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(serverdata), true);
 			friendlyFire = serverdata.readUnsignedByte();
-			nameTagVisibility = StringSerializer.readVarIntUTF8String(serverdata);
-			collisionRule = StringSerializer.readVarIntUTF8String(serverdata);
-			format = MiscSerializer.readVarIntEnum(serverdata, EnumConstantLookup.CHAT_COLOR);
-			prefix = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
-			suffix = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
+			nameTagVisibility = StringCodec.readVarIntUTF8String(serverdata);
+			collisionRule = StringCodec.readVarIntUTF8String(serverdata);
+			format = MiscDataCodec.readVarIntEnum(serverdata, EnumConstantLookup.CHAT_COLOR);
+			prefix = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(serverdata), true);
+			suffix = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(serverdata), true);
 		}
 		if ((mode == Mode.CREATE) || (mode == Mode.PLAYERS_ADD) || (mode == Mode.PLAYERS_REMOVE)) {
-			players = ArraySerializer.readVarIntVarIntUTF8StringArray(serverdata);
+			players = ArrayCodec.readVarIntVarIntUTF8StringArray(serverdata);
 		}
 
 		switch (mode) {

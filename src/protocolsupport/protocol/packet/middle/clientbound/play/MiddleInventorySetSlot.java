@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.ItemStackCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
 import protocolsupport.protocol.types.NetworkItemStack;
 
@@ -26,7 +26,7 @@ public abstract class MiddleInventorySetSlot extends ClientBoundMiddlePacket {
 	protected void decode(ByteBuf serverdata) {
 		windowId = serverdata.readByte();
 		slot = serverdata.readShort();
-		itemstack = ItemStackSerializer.readItemStack(serverdata);
+		itemstack = ItemStackCodec.readItemStack(serverdata);
 	}
 
 }

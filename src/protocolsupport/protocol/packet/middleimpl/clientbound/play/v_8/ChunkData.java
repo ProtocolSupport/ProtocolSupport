@@ -4,13 +4,13 @@ import java.util.Map;
 
 import org.bukkit.NamespacedKey;
 
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.PositionCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheChunkData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.basic.BiomeRemapper;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriteUtils;
@@ -33,14 +33,14 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 	@Override
 	protected void write() {
 		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
-		PositionSerializer.writeIntChunkCoord(chunkdataPacket, coord);
+		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
 		chunkdataPacket.writeBoolean(full);
 		if ((limitedBlockMask == 0) && full) {
 			chunkdataPacket.writeShort(1);
-			ArraySerializer.writeVarIntByteArray(chunkdataPacket, ChunkWriteUtils.getEmptySectionShort(clientCache.hasDimensionSkyLight()));
+			ArrayCodec.writeVarIntByteArray(chunkdataPacket, ChunkWriteUtils.getEmptySectionShort(clientCache.hasDimensionSkyLight()));
 		} else {
 			chunkdataPacket.writeShort(limitedBlockMask);
-			MiscSerializer.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
+			MiscDataCodec.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
 				to.writeBytes(ChunkWriterShort.serializeSections(
 					chunksections.blockLegacyDataTable,
 					chunksections.cachedChunk, chunksections.limitedBlockMask, chunksections.clientCache.hasDimensionSkyLight()

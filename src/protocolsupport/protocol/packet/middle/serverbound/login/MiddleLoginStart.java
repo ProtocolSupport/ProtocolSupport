@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.serverbound.login;
 
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleLoginStart extends ServerBoundMiddlePacket {
 
@@ -16,7 +16,7 @@ public abstract class MiddleLoginStart extends ServerBoundMiddlePacket {
 	@Override
 	protected void write() {
 		ServerBoundPacketData loginstart = ServerBoundPacketData.create(ServerBoundPacketType.LOGIN_START);
-		StringSerializer.writeVarIntUTF8String(loginstart, name);
+		StringCodec.writeVarIntUTF8String(loginstart, name);
 		codec.writeServerbound(loginstart);
 	}
 

@@ -3,9 +3,9 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.util.ArrayList;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
@@ -20,11 +20,11 @@ public abstract class MiddleEntityEquipment extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		entityId = VarNumberSerializer.readVarInt(serverdata);
+		entityId = VarNumberCodec.readVarInt(serverdata);
 		byte slotId;
 		do {
 			slotId = serverdata.readByte();
-			entries.add(new Entry(Slot.CONSTANT_LOOKUP.getByOrdinal(slotId & Byte.MAX_VALUE), ItemStackSerializer.readItemStack(serverdata)));
+			entries.add(new Entry(Slot.CONSTANT_LOOKUP.getByOrdinal(slotId & Byte.MAX_VALUE), ItemStackCodec.readItemStack(serverdata)));
 		} while (slotId < 0);
 	}
 

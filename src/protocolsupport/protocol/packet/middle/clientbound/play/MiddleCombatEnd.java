@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleCombatEnd extends ClientBoundMiddlePacket {
 
@@ -15,7 +15,7 @@ public abstract class MiddleCombatEnd extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		this.duration = VarNumberSerializer.readVarInt(serverdata);
+		this.duration = VarNumberCodec.readVarInt(serverdata);
 		this.opponentId = serverdata.readInt();
 	}
 

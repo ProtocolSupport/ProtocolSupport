@@ -1,12 +1,12 @@
-package protocolsupport.protocol.serializer;
+package protocolsupport.protocol.codec;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 
-public class VarNumberSerializer {
+public class VarNumberCodec {
 
-	private VarNumberSerializer() {
+	private VarNumberCodec() {
 	}
 
 	public static final int MAX_LENGTH = 5;

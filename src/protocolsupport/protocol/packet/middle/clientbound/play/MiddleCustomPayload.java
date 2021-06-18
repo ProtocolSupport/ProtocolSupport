@@ -6,9 +6,9 @@ import java.util.concurrent.ConcurrentMap;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.typeremapper.basic.CustomPayloadTransformerRegistry;
 import protocolsupport.protocol.typeremapper.basic.CustomPayloadTransformerRegistry.CustomPayloadTransformer;
 import protocolsupport.protocol.typeremapper.basic.CustomPayloadTransformerRegistry.CustomPayloadTransformerTable;
@@ -29,7 +29,7 @@ public abstract class MiddleCustomPayload extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		tag = StringSerializer.readVarIntUTF8String(serverdata);
+		tag = StringCodec.readVarIntUTF8String(serverdata);
 		data = serverdata.readSlice(serverdata.readableBytes());
 	}
 
@@ -65,7 +65,7 @@ public abstract class MiddleCustomPayload extends ClientBoundMiddlePacket {
 				if (transformer != null) {
 					custom = true;
 					tag = transformer.getClientTag();
-					data = Unpooled.wrappedBuffer(transformer.transformDataClientbound(custompayloadMetadata, MiscSerializer.readAllBytes(data)));
+					data = Unpooled.wrappedBuffer(transformer.transformDataClientbound(custompayloadMetadata, MiscDataCodec.readAllBytes(data)));
 				}
 			}
 		}

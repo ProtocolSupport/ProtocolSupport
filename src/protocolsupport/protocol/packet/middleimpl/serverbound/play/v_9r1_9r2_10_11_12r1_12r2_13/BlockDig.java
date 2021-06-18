@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_9r1_9r2_10_11_12r1_12r2_13;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.PositionCodec;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleBlockDig;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.PositionSerializer;
 
 public class BlockDig extends MiddleBlockDig {
 
@@ -13,8 +13,8 @@ public class BlockDig extends MiddleBlockDig {
 
 	@Override
 	protected void read(ByteBuf clientdata) {
-		status = MiscSerializer.readVarIntEnum(clientdata, Action.CONSTANT_LOOKUP);
-		PositionSerializer.readLegacyPositionLTo(clientdata, position);
+		status = MiscDataCodec.readVarIntEnum(clientdata, Action.CONSTANT_LOOKUP);
+		PositionCodec.readPositionLXYZ(clientdata, position);
 		face = clientdata.readUnsignedByte();
 	}
 

@@ -2,10 +2,10 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.status.v_5_6;
 
 import java.util.StringJoiner;
 
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.status.MiddleServerInfo;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.StringSerializer;
 
 public class ServerInfo extends MiddleServerInfo {
 
@@ -24,7 +24,7 @@ public class ServerInfo extends MiddleServerInfo {
 		.add(String.valueOf(ping.getPlayers().getOnline()))
 		.add(String.valueOf(ping.getPlayers().getMax()))
 		.toString();
-		StringSerializer.writeShortUTF16BEString(serverinfo, response);
+		StringCodec.writeShortUTF16BEString(serverinfo, response);
 		codec.writeClientbound(serverinfo);
 	}
 

@@ -6,10 +6,10 @@ import java.util.Map;
 import org.bukkit.NamespacedKey;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.NamespacedKeyUtils;
 
 public abstract class MiddleDeclareTags extends ClientBoundMiddlePacket {
@@ -29,11 +29,11 @@ public abstract class MiddleDeclareTags extends ClientBoundMiddlePacket {
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		tagsMap = new LinkedHashMap<>();
-		int count = VarNumberSerializer.readVarInt(serverdata);
+		int count = VarNumberCodec.readVarInt(serverdata);
 		for (int index = 0; index < count; index++) {
-			NamespacedKey key = NamespacedKeyUtils.fromString(StringSerializer.readVarIntUTF8String(serverdata));
-			Tag[] tags = ArraySerializer.readVarIntTArray(serverdata, Tag.class, tagFrom -> {
-				return new Tag(StringSerializer.readVarIntUTF8String(tagFrom), ArraySerializer.readVarIntVarIntArray(tagFrom));
+			NamespacedKey key = NamespacedKeyUtils.fromString(StringCodec.readVarIntUTF8String(serverdata));
+			Tag[] tags = ArrayCodec.readVarIntTArray(serverdata, Tag.class, tagFrom -> {
+				return new Tag(StringCodec.readVarIntUTF8String(tagFrom), ArrayCodec.readVarIntVarIntArray(tagFrom));
 			});
 			tagsMap.put(key, tags);
 		}

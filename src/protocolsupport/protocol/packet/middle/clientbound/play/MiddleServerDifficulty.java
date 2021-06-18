@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.MiscDataCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.types.Difficulty;
 
 public abstract class MiddleServerDifficulty extends ClientBoundMiddlePacket {
@@ -16,7 +16,7 @@ public abstract class MiddleServerDifficulty extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		difficulty = MiscSerializer.readByteEnum(serverdata, Difficulty.CONSTANT_LOOKUP);
+		difficulty = MiscDataCodec.readByteEnum(serverdata, Difficulty.CONSTANT_LOOKUP);
 		locked = serverdata.readBoolean();
 	}
 

@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17;
 
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.chat.ChatCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleResourcePack;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.chat.ChatSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 
 public class ResourcePack extends MiddleResourcePack {
@@ -18,10 +18,10 @@ public class ResourcePack extends MiddleResourcePack {
 	@Override
 	protected void write() {
 		ClientBoundPacketData resourcepackPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_RESOURCE_PACK);
-		StringSerializer.writeVarIntUTF8String(resourcepackPacket, url);
-		StringSerializer.writeVarIntUTF8String(resourcepackPacket, hash);
+		StringCodec.writeVarIntUTF8String(resourcepackPacket, url);
+		StringCodec.writeVarIntUTF8String(resourcepackPacket, hash);
 		resourcepackPacket.writeBoolean(forced);
-		ChatSerializer.serialize(version, clientCache.getLocale(), forcedText);
+		ChatCodec.serialize(version, clientCache.getLocale(), forcedText);
 		codec.writeClientbound(resourcepackPacket);
 	}
 

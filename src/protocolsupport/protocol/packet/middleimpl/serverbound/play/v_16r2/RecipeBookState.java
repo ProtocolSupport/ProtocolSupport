@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_16r2;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.MiscDataCodec;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleRecipeBookState;
-import protocolsupport.protocol.serializer.MiscSerializer;
 
 public class RecipeBookState extends MiddleRecipeBookState {
 
@@ -12,7 +12,7 @@ public class RecipeBookState extends MiddleRecipeBookState {
 
 	@Override
 	protected void read(ByteBuf clientdata) {
-		bookType = MiscSerializer.readVarIntEnum(clientdata, RecipeBookType.CONSTANT_LOOKUP);
+		bookType = MiscDataCodec.readVarIntEnum(clientdata, RecipeBookType.CONSTANT_LOOKUP);
 		bookOpen = clientdata.readBoolean();
 		bookFiltering = clientdata.readBoolean();
 	}

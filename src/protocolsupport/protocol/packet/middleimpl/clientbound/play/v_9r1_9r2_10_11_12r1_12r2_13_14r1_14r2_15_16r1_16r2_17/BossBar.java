@@ -1,13 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17;
 
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.UUIDCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
+import protocolsupport.protocol.codec.chat.ChatCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBossBar;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.UUIDSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.serializer.chat.ChatSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 
 public class BossBar extends MiddleBossBar {
@@ -21,14 +21,14 @@ public class BossBar extends MiddleBossBar {
 	@Override
 	protected void write() {
 		ClientBoundPacketData bossbar = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_BOSS_BAR);
-		UUIDSerializer.writeUUID2L(bossbar, uuid);
-		MiscSerializer.writeVarIntEnum(bossbar, action);
+		UUIDCodec.writeUUID2L(bossbar, uuid);
+		MiscDataCodec.writeVarIntEnum(bossbar, action);
 		switch (action) {
 			case ADD: {
-				StringSerializer.writeVarIntUTF8String(bossbar, ChatSerializer.serialize(version, clientCache.getLocale(), title));
+				StringCodec.writeVarIntUTF8String(bossbar, ChatCodec.serialize(version, clientCache.getLocale(), title));
 				bossbar.writeFloat(percent);
-				VarNumberSerializer.writeVarInt(bossbar, color);
-				VarNumberSerializer.writeVarInt(bossbar, divider);
+				VarNumberCodec.writeVarInt(bossbar, color);
+				VarNumberCodec.writeVarInt(bossbar, divider);
 				bossbar.writeByte(flags);
 				break;
 			}
@@ -40,12 +40,12 @@ public class BossBar extends MiddleBossBar {
 				break;
 			}
 			case UPDATE_TITLE: {
-				StringSerializer.writeVarIntUTF8String(bossbar, ChatSerializer.serialize(version, clientCache.getLocale(), title));
+				StringCodec.writeVarIntUTF8String(bossbar, ChatCodec.serialize(version, clientCache.getLocale(), title));
 				break;
 			}
 			case UPDATE_STYLE: {
-				VarNumberSerializer.writeVarInt(bossbar, color);
-				VarNumberSerializer.writeVarInt(bossbar, divider);
+				VarNumberCodec.writeVarInt(bossbar, color);
+				VarNumberCodec.writeVarInt(bossbar, divider);
 				break;
 			}
 			case UPDATE_FLAGS: {

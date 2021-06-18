@@ -1,4 +1,4 @@
-package protocolsupport.protocol.serializer;
+package protocolsupport.protocol.codec;
 
 import java.text.MessageFormat;
 import java.util.function.BiConsumer;
@@ -9,13 +9,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
-public class MiscSerializer {
+public class MiscDataCodec {
 
-	private MiscSerializer() {
+	private MiscDataCodec() {
 	}
 
 	public static <T extends Enum<T>> T readVarIntEnum(ByteBuf from, EnumConstantLookup<T> lookup) {
-		return lookup.getByOrdinal(VarNumberSerializer.readVarInt(from));
+		return lookup.getByOrdinal(VarNumberCodec.readVarInt(from));
 	}
 
 	public static <T extends Enum<T>> T readByteEnum(ByteBuf from, EnumConstantLookup<T> lookup) {
@@ -23,7 +23,7 @@ public class MiscSerializer {
 	}
 
 	public static void writeVarIntEnum(ByteBuf to, Enum<?> e) {
-		VarNumberSerializer.writeVarInt(to, e.ordinal());
+		VarNumberCodec.writeVarInt(to, e.ordinal());
 	}
 
 	public static void writeByteEnum(ByteBuf to, Enum<?> e) {
@@ -31,7 +31,7 @@ public class MiscSerializer {
 	}
 
 	public static byte[] readAllBytes(ByteBuf buf) {
-		return MiscSerializer.readBytes(buf, buf.readableBytes());
+		return MiscDataCodec.readBytes(buf, buf.readableBytes());
 	}
 
 	public static ByteBuf readAllBytesSlice(ByteBuf from) {
@@ -57,7 +57,7 @@ public class MiscSerializer {
 
 
 	public static <T> void writeVarIntCountPrefixedType(ByteBuf to, T type, ToIntBiFunction<ByteBuf, T> typeWriter) {
-		writeCountPrefixedType(to, VarNumberSerializer::writeFixedSizeVarInt, type, typeWriter);
+		writeCountPrefixedType(to, VarNumberCodec::writeFixedSizeVarInt, type, typeWriter);
 	}
 
 	public static <T> void writeCountPrefixedType(ByteBuf to, ObjIntConsumer<ByteBuf> sizeWriter, T type, ToIntBiFunction<ByteBuf, T> dataWriter) {
@@ -71,7 +71,7 @@ public class MiscSerializer {
 	}
 
 	public static <T> void writeVarIntLengthPrefixedType(ByteBuf to, T type, BiConsumer<ByteBuf, T> typeWriter) {
-		writeLengthPrefixedType(to, VarNumberSerializer::writeFixedSizeVarInt, type, typeWriter);
+		writeLengthPrefixedType(to, VarNumberCodec::writeFixedSizeVarInt, type, typeWriter);
 	}
 
 	public static <T> void writeShortLengthPrefixedType(ByteBuf to, T type, BiConsumer<ByteBuf, T> typeWriter) {

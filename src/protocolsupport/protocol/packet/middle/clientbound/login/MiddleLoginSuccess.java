@@ -3,9 +3,9 @@ package protocolsupport.protocol.packet.middle.clientbound.login;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.UUIDCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.UUIDSerializer;
 
 public abstract class MiddleLoginSuccess extends ClientBoundMiddlePacket {
 
@@ -18,8 +18,8 @@ public abstract class MiddleLoginSuccess extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		uuid = UUIDSerializer.readUUID4I(serverdata);
-		name = StringSerializer.readVarIntUTF8String(serverdata);
+		uuid = UUIDCodec.readUUID4I(serverdata);
+		name = StringCodec.readVarIntUTF8String(serverdata);
 	}
 
 	@Override

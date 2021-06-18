@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.PositionCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
@@ -25,8 +25,8 @@ public abstract class MiddleBlockDig extends ServerBoundMiddlePacket {
 
 	public static ServerBoundPacketData create(Action status, Position position, int face) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_BLOCK_DIG);
-		MiscSerializer.writeVarIntEnum(creator, status);
-		PositionSerializer.writePosition(creator, position);
+		MiscDataCodec.writeVarIntEnum(creator, status);
+		PositionCodec.writePosition(creator, position);
 		creator.writeByte(face);
 		return creator;
 	}

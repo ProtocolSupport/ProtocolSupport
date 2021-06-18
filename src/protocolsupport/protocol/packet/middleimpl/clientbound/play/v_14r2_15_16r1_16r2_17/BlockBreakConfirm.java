@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r2_15_16r1_16r2_17;
 
+import protocolsupport.protocol.codec.PositionCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockBreakConfirm;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
@@ -23,9 +23,9 @@ public class BlockBreakConfirm extends MiddleBlockBreakConfirm {
 	@Override
 	protected void write() {
 		ClientBoundPacketData blockbreakconfirm = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_BLOCK_BREAK_CONFIRM);
-		PositionSerializer.writePosition(blockbreakconfirm, position);
-		VarNumberSerializer.writeVarInt(blockbreakconfirm, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, blockId));
-		VarNumberSerializer.writeVarInt(blockbreakconfirm, status);
+		PositionCodec.writePosition(blockbreakconfirm, position);
+		VarNumberCodec.writeVarInt(blockbreakconfirm, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, blockId));
+		VarNumberCodec.writeVarInt(blockbreakconfirm, status);
 		blockbreakconfirm.writeBoolean(successful);
 		codec.writeClientbound(blockbreakconfirm);
 	}

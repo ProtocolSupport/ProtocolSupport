@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_12r2;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class CraftRecipeRequest extends ServerBoundMiddlePacket {
 
@@ -13,7 +13,7 @@ public class CraftRecipeRequest extends ServerBoundMiddlePacket {
 	@Override
 	protected void read(ByteBuf clientdata) {
 		clientdata.readUnsignedByte();
-		VarNumberSerializer.readVarInt(clientdata);
+		VarNumberCodec.readVarInt(clientdata);
 		clientdata.readBoolean();
 	}
 

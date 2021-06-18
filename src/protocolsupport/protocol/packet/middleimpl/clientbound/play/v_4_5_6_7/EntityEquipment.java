@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.codec.ItemStackCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractNoOffhandEntityEquipment;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.types.NetworkItemStack;
 
@@ -28,7 +28,7 @@ public class EntityEquipment extends AbstractNoOffhandEntityEquipment {
 		ClientBoundPacketData entityequipment = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_EQUIPMENT);
 		entityequipment.writeInt(entityId);
 		entityequipment.writeShort(getSlotId(slot));
-		ItemStackSerializer.writeItemStack(entityequipment, version, locale, itemstack);
+		ItemStackCodec.writeItemStack(entityequipment, version, locale, itemstack);
 		return entityequipment;
 	}
 

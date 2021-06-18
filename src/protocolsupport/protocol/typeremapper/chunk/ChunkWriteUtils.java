@@ -3,7 +3,7 @@ package protocolsupport.protocol.typeremapper.chunk;
 import java.util.BitSet;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.serializer.ArraySerializer;
+import protocolsupport.protocol.codec.ArrayCodec;
 import protocolsupport.utils.netty.RecyclableWrapCompressor;
 
 public class ChunkWriteUtils {
@@ -27,8 +27,8 @@ public class ChunkWriteUtils {
 
 	public static void writeBBEmptySection(ByteBuf to) {
 		to.writeByte(4);
-		ArraySerializer.writeVarIntVarIntArray(to, new int[] {0});
-		ArraySerializer.writeVarIntLongArray(to, new long[256]);
+		ArrayCodec.writeVarIntVarIntArray(to, new int[] {0});
+		ArrayCodec.writeVarIntLongArray(to, new long[256]);
 	}
 
 	public static void copyLight(byte[] to, int indexTo, byte[] light) {

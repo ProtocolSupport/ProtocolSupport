@@ -2,8 +2,8 @@ package protocolsupport.protocol.typeremapper.particle;
 
 import java.util.Arrays;
 
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemappingHelper;
@@ -41,9 +41,9 @@ public class FlatteningNetworkParticleDataSerializer extends TypeSerializer<Netw
 		Arrays.stream(ProtocolVersionsHelper.UP_1_13)
 		.forEach(version -> {
 			FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockDataRegistry.INSTANCE.getTable(version);
-			register(NetworkParticleBlock.class, (to, particle) -> VarNumberSerializer.writeVarInt(to, flatteningBlockDataTable.getId(particle.getBlockData())), version);
-			register(NetworkParticleFallingDust.class, (to, particle) -> VarNumberSerializer.writeFixedSizeVarInt(to, flatteningBlockDataTable.getId(particle.getBlockData())), version);
-			register(NetworkParticleItem.class, (to, particle) -> ItemStackSerializer.writeItemStack(to, version, ItemStackRemappingHelper.toLegacyItemFormat(version, I18NData.DEFAULT_LOCALE, particle.getItemStack())), version);
+			register(NetworkParticleBlock.class, (to, particle) -> VarNumberCodec.writeVarInt(to, flatteningBlockDataTable.getId(particle.getBlockData())), version);
+			register(NetworkParticleFallingDust.class, (to, particle) -> VarNumberCodec.writeFixedSizeVarInt(to, flatteningBlockDataTable.getId(particle.getBlockData())), version);
+			register(NetworkParticleItem.class, (to, particle) -> ItemStackCodec.writeItemStack(to, version, ItemStackRemappingHelper.toLegacyItemFormat(version, I18NData.DEFAULT_LOCALE, particle.getItemStack())), version);
 		});
 	}
 

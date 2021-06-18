@@ -15,7 +15,7 @@ import com.google.gson.JsonSerializer;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
-import protocolsupport.protocol.serializer.chat.ChatSerializer.GsonBaseComponentSerializer;
+import protocolsupport.protocol.codec.chat.ChatCodec.GsonBaseComponentSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.JsonUtils;
 import protocolsupportbuildprocessor.Preload;

@@ -2,8 +2,8 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.AbstractSneakingCacheEntityAction;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class EntityAction extends AbstractSneakingCacheEntityAction {
@@ -22,9 +22,9 @@ public class EntityAction extends AbstractSneakingCacheEntityAction {
 
 	@Override
 	protected void read(ByteBuf clientdata) {
-		entityId = VarNumberSerializer.readVarInt(clientdata);
-		int actionId = VarNumberSerializer.readVarInt(clientdata);
-		jumpBoost = VarNumberSerializer.readVarInt(clientdata);
+		entityId = VarNumberCodec.readVarInt(clientdata);
+		int actionId = VarNumberCodec.readVarInt(clientdata);
+		jumpBoost = VarNumberCodec.readVarInt(clientdata);
 		if (version == ProtocolVersion.MINECRAFT_1_8) {
 			action = actionById8.get(actionId);
 		} else {

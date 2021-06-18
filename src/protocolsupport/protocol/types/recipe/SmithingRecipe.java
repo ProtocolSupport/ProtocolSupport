@@ -1,7 +1,7 @@
 package protocolsupport.protocol.types.recipe;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.codec.ItemStackCodec;
 import protocolsupport.protocol.types.NetworkItemStack;
 
 public class SmithingRecipe extends Recipe {
@@ -15,7 +15,7 @@ public class SmithingRecipe extends Recipe {
 
 		base = new RecipeIngredient(data);
 		addition = new RecipeIngredient(data);
-		result = ItemStackSerializer.readItemStack(data);
+		result = ItemStackCodec.readItemStack(data);
 	}
 
 	public RecipeIngredient getBase() {

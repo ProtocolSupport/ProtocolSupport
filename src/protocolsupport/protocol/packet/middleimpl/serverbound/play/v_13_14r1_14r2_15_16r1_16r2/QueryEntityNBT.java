@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13_14r1_14r2_15_16r1_16r2;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleQueryEntityNBT;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class QueryEntityNBT extends MiddleQueryEntityNBT {
 
@@ -12,8 +12,8 @@ public class QueryEntityNBT extends MiddleQueryEntityNBT {
 
 	@Override
 	protected void read(ByteBuf clientdata) {
-		id = VarNumberSerializer.readVarInt(clientdata);
-		entityId = VarNumberSerializer.readVarInt(clientdata);
+		id = VarNumberCodec.readVarInt(clientdata);
+		entityId = VarNumberCodec.readVarInt(clientdata);
 	}
 
 }

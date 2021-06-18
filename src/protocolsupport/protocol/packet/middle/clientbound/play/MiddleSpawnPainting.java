@@ -3,10 +3,10 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.PositionCodec;
+import protocolsupport.protocol.codec.UUIDCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.UUIDSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
@@ -27,11 +27,11 @@ public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		int entityId = VarNumberSerializer.readVarInt(serverdata);
-		UUID uuid = UUIDSerializer.readUUID2L(serverdata);
+		int entityId = VarNumberCodec.readVarInt(serverdata);
+		UUID uuid = UUIDCodec.readUUID2L(serverdata);
 		entity = new NetworkEntity(uuid, entityId, NetworkEntityType.PAINTING);
-		type = VarNumberSerializer.readVarInt(serverdata);
-		PositionSerializer.readPositionTo(serverdata, position);
+		type = VarNumberCodec.readVarInt(serverdata);
+		PositionCodec.readPosition(serverdata, position);
 		direction = serverdata.readUnsignedByte();
 	}
 

@@ -11,11 +11,11 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.PacketDataCodecImpl;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.pipeline.version.util.ConnectionImplMiddlePacketInit;
 import protocolsupport.protocol.pipeline.version.util.MiddlePacketRegistry;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.netty.CombinedResultChannelPromise;
 import protocolsupport.zplatform.ServerPlatform;
 
@@ -47,7 +47,7 @@ public abstract class AbstractPacketEncoder extends ChannelOutboundHandlerAdapte
 
 		ClientBoundMiddlePacket packetTransformer = null;
 		try {
-			packetTransformer = registry.getTransformer(connection.getNetworkState(), VarNumberSerializer.readVarInt(input));
+			packetTransformer = registry.getTransformer(connection.getNetworkState(), VarNumberCodec.readVarInt(input));
 			CombinedResultChannelPromise combinedPromise = new CombinedResultChannelPromise(ctx.channel(), promise);
 			codec.setWritePromise(combinedPromise);
 			try {
@@ -65,7 +65,7 @@ public abstract class AbstractPacketEncoder extends ChannelOutboundHandlerAdapte
 				throw new EncoderException(MessageFormat.format(
 					"Unable to transform or read clientbound middle packet(type {0}, data {1})",
 					packetTransformer != null ? packetTransformer.getClass().getName() : "unknown",
-					Arrays.toString(MiscSerializer.readAllBytes(input))
+					Arrays.toString(MiscDataCodec.readAllBytes(input))
 				), exception);
 			} else {
 				throw exception;

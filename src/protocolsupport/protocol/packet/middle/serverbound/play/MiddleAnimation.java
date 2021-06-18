@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.codec.MiscDataCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.types.UsedHand;
 
 public abstract class MiddleAnimation extends ServerBoundMiddlePacket {
@@ -21,7 +21,7 @@ public abstract class MiddleAnimation extends ServerBoundMiddlePacket {
 
 	public static ServerBoundPacketData create(UsedHand hand) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_ANIMATION);
-		MiscSerializer.writeVarIntEnum(creator, hand);
+		MiscDataCodec.writeVarIntEnum(creator, hand);
 		return creator;
 	}
 

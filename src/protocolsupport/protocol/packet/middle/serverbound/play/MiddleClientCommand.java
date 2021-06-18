@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.codec.MiscDataCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 
 public abstract class MiddleClientCommand extends ServerBoundMiddlePacket {
 
@@ -22,7 +22,7 @@ public abstract class MiddleClientCommand extends ServerBoundMiddlePacket {
 
 	public static ServerBoundPacketData create(Command command) {
 		ServerBoundPacketData clientcommand = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_CLIENT_COMMAND);
-		MiscSerializer.writeVarIntEnum(clientcommand, command);
+		MiscDataCodec.writeVarIntEnum(clientcommand, command);
 		return clientcommand;
 	}
 

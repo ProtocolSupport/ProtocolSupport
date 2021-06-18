@@ -1,11 +1,11 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13;
 
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleUpdateMap;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.mapcolor.MapColorMappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 
@@ -18,17 +18,17 @@ public class UpdateMap extends MiddleUpdateMap {
 	@Override
 	protected void write() {
 		ClientBoundPacketData updatemap = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_UPDATE_MAP);
-		VarNumberSerializer.writeVarInt(updatemap, id);
+		VarNumberCodec.writeVarInt(updatemap, id);
 		updatemap.writeByte(scale);
 		updatemap.writeBoolean(showIcons);
-		ArraySerializer.writeVarIntTArray(updatemap, icons, (to, icon) -> {
-			VarNumberSerializer.writeVarInt(to, icon.type);
+		ArrayCodec.writeVarIntTArray(updatemap, icons, (to, icon) -> {
+			VarNumberCodec.writeVarInt(to, icon.type);
 			to.writeByte(icon.x);
 			to.writeByte(icon.z);
 			to.writeByte(icon.direction);
 			to.writeBoolean(icon.displayName != null);
 			if (icon.displayName != null) {
-				StringSerializer.writeVarIntUTF8String(to, icon.displayName);
+				StringCodec.writeVarIntUTF8String(to, icon.displayName);
 			}
 		});
 		updatemap.writeByte(columns);
@@ -40,7 +40,7 @@ public class UpdateMap extends MiddleUpdateMap {
 			updatemap.writeByte(rows);
 			updatemap.writeByte(xstart);
 			updatemap.writeByte(zstart);
-			ArraySerializer.writeVarIntByteArray(updatemap, colors);
+			ArrayCodec.writeVarIntByteArray(updatemap, colors);
 		}
 		codec.writeClientbound(updatemap);
 	}

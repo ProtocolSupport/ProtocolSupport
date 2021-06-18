@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleSetBeaconEffect extends ServerBoundMiddlePacket {
 
@@ -21,8 +21,8 @@ public abstract class MiddleSetBeaconEffect extends ServerBoundMiddlePacket {
 
 	public static ServerBoundPacketData create(int primary, int secondary) {
 		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_SET_BEACON_EFFECT);
-		VarNumberSerializer.writeVarInt(serializer, primary);
-		VarNumberSerializer.writeVarInt(serializer, secondary);
+		VarNumberCodec.writeVarInt(serializer, primary);
+		VarNumberCodec.writeVarInt(serializer, secondary);
 		return serializer;
 	}
 

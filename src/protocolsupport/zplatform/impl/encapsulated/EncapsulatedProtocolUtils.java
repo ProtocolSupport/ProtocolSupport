@@ -7,8 +7,8 @@ import java.text.MessageFormat;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 
 public class EncapsulatedProtocolUtils {
 
@@ -18,35 +18,35 @@ public class EncapsulatedProtocolUtils {
 	private static final int CURRENT_VERSION = 1;
 
 	public static EncapsulatedProtocolInfo readInfo(ByteBuf from) {
-		int encapVersion = VarNumberSerializer.readVarInt(from);
+		int encapVersion = VarNumberCodec.readVarInt(from);
 		if (encapVersion > CURRENT_VERSION) {
 			throw new DecoderException(MessageFormat.format("Unsupported encapsulation protocol version {0}", encapVersion));
 		}
 		InetSocketAddress remoteaddress = null;
 		if (from.readBoolean()) {
 			try {
-				InetAddress address = InetAddress.getByAddress(ArraySerializer.readVarIntByteArray(from));
-				remoteaddress = new InetSocketAddress(address, VarNumberSerializer.readVarInt(from));
+				InetAddress address = InetAddress.getByAddress(ArrayCodec.readVarIntByteArray(from));
+				remoteaddress = new InetSocketAddress(address, VarNumberCodec.readVarInt(from));
 			} catch (UnknownHostException e) {
 				throw new DecoderException("Invalid ip address");
 			}
 		}
 		boolean hasCompression = from.readBoolean();
 		if (encapVersion == 0) {
-			VarNumberSerializer.readVarInt(from);
-			VarNumberSerializer.readVarInt(from);
+			VarNumberCodec.readVarInt(from);
+			VarNumberCodec.readVarInt(from);
 		}
 		return new EncapsulatedProtocolInfo(remoteaddress, hasCompression);
 	}
 
 	public static void writeInfo(ByteBuf to, EncapsulatedProtocolInfo info) {
-		VarNumberSerializer.writeVarInt(to, CURRENT_VERSION);
+		VarNumberCodec.writeVarInt(to, CURRENT_VERSION);
 		if (info.getAddress() != null) {
 			to.writeBoolean(true);
 			byte[] addr = info.getAddress().getAddress().getAddress();
-			VarNumberSerializer.writeVarInt(to, addr.length);
+			VarNumberCodec.writeVarInt(to, addr.length);
 			to.writeBytes(addr);
-			VarNumberSerializer.writeVarInt(to, info.getAddress().getPort());
+			VarNumberCodec.writeVarInt(to, info.getAddress().getPort());
 		} else {
 			to.writeBoolean(false);
 		}

@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleAdvancementsTab extends ClientBoundMiddlePacket {
 
@@ -15,7 +15,7 @@ public abstract class MiddleAdvancementsTab extends ClientBoundMiddlePacket {
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		if (serverdata.readBoolean()) {
-			identifier = StringSerializer.readVarIntUTF8String(serverdata);
+			identifier = StringCodec.readVarIntUTF8String(serverdata);
 		} else {
 			identifier = null;
 		}

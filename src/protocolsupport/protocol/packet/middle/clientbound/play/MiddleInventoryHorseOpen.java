@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
 import protocolsupport.protocol.typeremapper.window.WindowsRemapper;
 import protocolsupport.protocol.typeremapper.window.WindowsRemappersRegistry;
@@ -25,7 +25,7 @@ public abstract class MiddleInventoryHorseOpen extends ClientBoundMiddlePacket {
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		windowId = serverdata.readByte();
-		slots = VarNumberSerializer.readVarInt(serverdata);
+		slots = VarNumberCodec.readVarInt(serverdata);
 		entityId = serverdata.readInt();
 	}
 

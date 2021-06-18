@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleScoreboardScore extends ClientBoundMiddlePacket {
 
@@ -18,11 +18,11 @@ public abstract class MiddleScoreboardScore extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		name = StringSerializer.readVarIntUTF8String(serverdata);
+		name = StringCodec.readVarIntUTF8String(serverdata);
 		mode = serverdata.readUnsignedByte();
-		objectiveName = StringSerializer.readVarIntUTF8String(serverdata);
+		objectiveName = StringCodec.readVarIntUTF8String(serverdata);
 		if (mode != 1) {
-			value = VarNumberSerializer.readVarInt(serverdata);
+			value = VarNumberCodec.readVarInt(serverdata);
 		}
 	}
 

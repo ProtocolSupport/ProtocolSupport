@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleEntityAction extends ServerBoundMiddlePacket {
@@ -24,9 +24,9 @@ public abstract class MiddleEntityAction extends ServerBoundMiddlePacket {
 
 	public static ServerBoundPacketData create(int entityId, Action action, int jumpBoost) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_ENTITY_ACTION);
-		VarNumberSerializer.writeVarInt(creator, entityId);
-		MiscSerializer.writeVarIntEnum(creator, action);
-		VarNumberSerializer.writeVarInt(creator, jumpBoost);
+		VarNumberCodec.writeVarInt(creator, entityId);
+		MiscDataCodec.writeVarIntEnum(creator, action);
+		VarNumberCodec.writeVarInt(creator, jumpBoost);
 		return creator;
 	}
 

@@ -3,10 +3,10 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6;
 import com.google.gson.JsonObject;
 
 import protocolsupport.api.chat.ChatAPI.MessagePosition;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChat;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.utils.JsonUtils;
 
@@ -25,7 +25,7 @@ public class Chat extends MiddleChat {
 		}
 
 		ClientBoundPacketData chat = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHAT);
-		StringSerializer.writeShortUTF16BEString(chat, encode(message.toLegacyText(clientCache.getLocale())));
+		StringCodec.writeShortUTF16BEString(chat, encode(message.toLegacyText(clientCache.getLocale())));
 		codec.writeClientbound(chat);
 	}
 

@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleUpdateMap extends ClientBoundMiddlePacket {
 
@@ -25,19 +25,19 @@ public abstract class MiddleUpdateMap extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		id = VarNumberSerializer.readVarInt(serverdata);
+		id = VarNumberCodec.readVarInt(serverdata);
 		scale = serverdata.readUnsignedByte();
 		locked = serverdata.readBoolean();
 		showIcons = serverdata.readBoolean();
 		if (showIcons) {
-			icons = ArraySerializer.readVarIntTArray(
+			icons = ArrayCodec.readVarIntTArray(
 				serverdata, Icon.class,
 				from -> new Icon(
-					VarNumberSerializer.readVarInt(from),
+					VarNumberCodec.readVarInt(from),
 					from.readUnsignedByte(),
 					from.readUnsignedByte(),
 					from.readByte(),
-					from.readBoolean() ? StringSerializer.readVarIntUTF8String(serverdata) : null
+					from.readBoolean() ? StringCodec.readVarIntUTF8String(serverdata) : null
 				)
 			);
 		} else {
@@ -48,7 +48,7 @@ public abstract class MiddleUpdateMap extends ClientBoundMiddlePacket {
 			rows = serverdata.readUnsignedByte();
 			xstart = serverdata.readUnsignedByte();
 			zstart = serverdata.readUnsignedByte();
-			colors = ArraySerializer.readVarIntByteArray(serverdata);
+			colors = ArrayCodec.readVarIntByteArray(serverdata);
 		}
 	}
 

@@ -2,14 +2,14 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2;
 
 import org.bukkit.NamespacedKey;
 
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.PositionCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17.AbstractLimitedHeightChunkData;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.BiomeRemapper;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
@@ -35,11 +35,11 @@ public class ChunkData extends AbstractLimitedHeightChunkData {
 	@Override
 	protected void write() {
 		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
-		PositionSerializer.writeIntChunkCoord(chunkdataPacket, coord);
+		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
 		chunkdataPacket.writeBoolean(true); //full
-		VarNumberSerializer.writeVarInt(chunkdataPacket, limitedBlockMask);
-		ItemStackSerializer.writeDirectTag(chunkdataPacket, ChunkHeightMapTransformer.transform(heightmaps));
-		MiscSerializer.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
+		VarNumberCodec.writeVarInt(chunkdataPacket, limitedBlockMask);
+		ItemStackCodec.writeDirectTag(chunkdataPacket, ChunkHeightMapTransformer.transform(heightmaps));
+		MiscDataCodec.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
 			ChunkWriterVaries.writeSectionsCompact(
 				to, 14,
 				chunksections.blockLegacyDataTable, chunksections.flatteningBlockDataTable,
@@ -50,10 +50,10 @@ public class ChunkData extends AbstractLimitedHeightChunkData {
 				to.writeInt(BiomeRemapper.mapLegacyBiome(chunksections.clientCache, chunksections.biomeLegacyDataTable, biomeId));
 			}
 		});
-		ArraySerializer.writeVarIntTArray(
+		ArrayCodec.writeVarIntTArray(
 			chunkdataPacket,
 			tiles,
-			(to, tile) -> ItemStackSerializer.writeDirectTag(to, tileRemapper.remap(tile).getNBT())
+			(to, tile) -> ItemStackCodec.writeDirectTag(to, tileRemapper.remap(tile).getNBT())
 		);
 		codec.writeClientbound(chunkdataPacket);
 	}

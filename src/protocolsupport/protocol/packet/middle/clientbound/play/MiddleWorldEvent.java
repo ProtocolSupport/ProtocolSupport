@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.PositionCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.types.Position;
 
 public abstract class MiddleWorldEvent extends ClientBoundMiddlePacket {
@@ -19,7 +19,7 @@ public abstract class MiddleWorldEvent extends ClientBoundMiddlePacket {
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		effectId = serverdata.readInt();
-		PositionSerializer.readPositionTo(serverdata, position);
+		PositionCodec.readPosition(serverdata, position);
 		data = serverdata.readInt();
 		disableRelative = serverdata.readBoolean();
 	}

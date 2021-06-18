@@ -2,8 +2,8 @@ package protocolsupport.protocol.types.networkentity.metadata.objects;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.types.EntityPose;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
@@ -17,7 +17,7 @@ public class NetworkEntityMetadataObjectEntityPose extends NetworkEntityMetadata
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
 		//TODO: rework it somehow, this shouldn't be there
 		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_17)) {
-			MiscSerializer.writeVarIntEnum(to, value);
+			MiscDataCodec.writeVarIntEnum(to, value);
 		} else {
 			if (value == EntityPose.LONG_JUMPING) {
 				value = EntityPose.FALL_FLYING;
@@ -26,7 +26,7 @@ public class NetworkEntityMetadataObjectEntityPose extends NetworkEntityMetadata
 			if (ordinalId > EntityPose.SNEAKING.ordinal()) {
 				ordinalId--;
 			}
-			VarNumberSerializer.writeVarInt(to, ordinalId);
+			VarNumberCodec.writeVarInt(to, ordinalId);
 		}
 	}
 

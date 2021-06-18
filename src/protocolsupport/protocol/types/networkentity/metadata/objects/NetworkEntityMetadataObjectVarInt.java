@@ -2,7 +2,7 @@ package protocolsupport.protocol.types.networkentity.metadata.objects;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
 public class NetworkEntityMetadataObjectVarInt extends NetworkEntityMetadataObject<Integer> {
@@ -13,7 +13,7 @@ public class NetworkEntityMetadataObjectVarInt extends NetworkEntityMetadataObje
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
-		VarNumberSerializer.writeVarInt(to, value);
+		VarNumberCodec.writeVarInt(to, value);
 	}
 
 }

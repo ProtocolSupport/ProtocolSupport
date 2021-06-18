@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleWorldBorderInit extends ClientBoundMiddlePacket {
 
@@ -25,10 +25,10 @@ public abstract class MiddleWorldBorderInit extends ClientBoundMiddlePacket {
 		z = serverdata.readDouble();
 		oldSize = serverdata.readDouble();
 		newSize = serverdata.readDouble();
-		speed = VarNumberSerializer.readVarLong(serverdata);
-		teleportBound = VarNumberSerializer.readVarInt(serverdata);
-		warnDistance = VarNumberSerializer.readVarInt(serverdata);
-		warnDelay = VarNumberSerializer.readVarInt(serverdata);
+		speed = VarNumberCodec.readVarLong(serverdata);
+		teleportBound = VarNumberCodec.readVarInt(serverdata);
+		warnDistance = VarNumberCodec.readVarInt(serverdata);
+		warnDelay = VarNumberCodec.readVarInt(serverdata);
 	}
 
 }

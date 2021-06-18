@@ -2,6 +2,9 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5;
 
 import java.util.Collections;
 
+import protocolsupport.protocol.codec.NetworkEntityMetadataSerializer;
+import protocolsupport.protocol.codec.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
+import protocolsupport.protocol.codec.PositionCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6.SpawnObject;
@@ -9,9 +12,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7.Ent
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPassengerStackEntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPassengerStackEntityPassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPotionItemAsObjectDataEntityMetadata;
-import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
-import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
-import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotionId;
 import protocolsupport.protocol.types.NetworkItemStack;
@@ -42,7 +42,7 @@ public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata
 		ClientBoundPacketData usebedPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED);
 		usebedPacket.writeInt(entityId);
 		usebedPacket.writeByte(0);
-		PositionSerializer.writeLegacyPositionB(usebedPacket, position);
+		PositionCodec.writePositionIBI(usebedPacket, position);
 		codec.writeClientbound(usebedPacket);
 	}
 

@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.PositionCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.types.Position;
 
 public abstract class MiddleSpawnPosition extends ClientBoundMiddlePacket {
@@ -16,7 +16,7 @@ public abstract class MiddleSpawnPosition extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		PositionSerializer.readPositionTo(serverdata, position);
+		PositionCodec.readPosition(serverdata, position);
 		angle = serverdata.readFloat();
 	}
 

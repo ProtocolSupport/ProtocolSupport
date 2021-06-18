@@ -2,8 +2,8 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleKeepAlive;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.KeepAliveCache;
 
 public class KeepAlive extends MiddleKeepAlive {
@@ -17,7 +17,7 @@ public class KeepAlive extends MiddleKeepAlive {
 	@Override
 	protected void read(ByteBuf clientdata) {
 		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_12_1)) {
-			keepAliveId = VarNumberSerializer.readVarInt(clientdata);
+			keepAliveId = VarNumberCodec.readVarInt(clientdata);
 		} else {
 			keepAliveId = clientdata.readLong();
 		}

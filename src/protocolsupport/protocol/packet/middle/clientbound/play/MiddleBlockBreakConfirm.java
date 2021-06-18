@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.codec.VarNumberCodec;
 
 public abstract class MiddleBlockBreakConfirm extends MiddleBlock {
 
@@ -16,8 +16,8 @@ public abstract class MiddleBlockBreakConfirm extends MiddleBlock {
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		super.decode(serverdata);
-		blockId = VarNumberSerializer.readVarInt(serverdata);
-		status = VarNumberSerializer.readVarInt(serverdata);
+		blockId = VarNumberCodec.readVarInt(serverdata);
+		status = VarNumberCodec.readVarInt(serverdata);
 		successful = serverdata.readBoolean();
 	}
 

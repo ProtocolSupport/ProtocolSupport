@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
 
+import protocolsupport.protocol.codec.MiscDataCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleGameStateChange;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
 
 public class GameStateChange extends MiddleGameStateChange {
 
@@ -35,7 +35,7 @@ public class GameStateChange extends MiddleGameStateChange {
 			}
 			default: {
 				ClientBoundPacketData gamestatechange = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_GAME_STATE_CHANGE);
-				MiscSerializer.writeByteEnum(gamestatechange, action);
+				MiscDataCodec.writeByteEnum(gamestatechange, action);
 				gamestatechange.writeByte((int) value);
 				codec.writeClientbound(gamestatechange);
 				break;
@@ -45,7 +45,7 @@ public class GameStateChange extends MiddleGameStateChange {
 
 	protected static ClientBoundPacketData createRain(boolean raining) {
 		ClientBoundPacketData gamestatechange = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_GAME_STATE_CHANGE);
-		MiscSerializer.writeByteEnum(gamestatechange, raining ? Action.RAIN_START : Action.RAIN_END);
+		MiscDataCodec.writeByteEnum(gamestatechange, raining ? Action.RAIN_START : Action.RAIN_END);
 		gamestatechange.writeByte(0);
 		return gamestatechange;
 	}

@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_7;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.PositionCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUpdateSign;
-import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 
 public class UpdateSign extends MiddleUpdateSign {
 
@@ -13,9 +13,9 @@ public class UpdateSign extends MiddleUpdateSign {
 
 	@Override
 	protected void read(ByteBuf clientdata) {
-		PositionSerializer.readLegacyPositionSTo(clientdata, position);
+		PositionCodec.readPositionISI(clientdata, position);
 		for (int i = 0; i < lines.length; i++) {
-			lines[i] = StringSerializer.readVarIntUTF8String(clientdata, 15);
+			lines[i] = StringCodec.readVarIntUTF8String(clientdata, 15);
 		}
 	}
 

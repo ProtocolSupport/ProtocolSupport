@@ -2,7 +2,7 @@ package protocolsupport.protocol.types.networkentity.metadata.objects;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.PositionSerializer;
+import protocolsupport.protocol.codec.PositionCodec;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
@@ -19,9 +19,9 @@ public class NetworkEntityMetadataObjectPosition extends NetworkEntityMetadataOb
 
 	protected static void writePositionL(ByteBuf to, ProtocolVersion version, Position position) {
 		if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_14)) {
-			PositionSerializer.writePosition(to, position);
+			PositionCodec.writePosition(to, position);
 		} else {
-			PositionSerializer.writeLegacyPositionL(to, position);
+			PositionCodec.writePositionLXYZ(to, position);
 		}
 	}
 

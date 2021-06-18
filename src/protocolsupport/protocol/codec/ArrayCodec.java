@@ -1,4 +1,4 @@
-package protocolsupport.protocol.serializer;
+package protocolsupport.protocol.codec;
 
 import java.lang.reflect.Array;
 import java.util.List;
@@ -9,14 +9,14 @@ import java.util.function.ObjIntConsumer;
 
 import io.netty.buffer.ByteBuf;
 
-public class ArraySerializer {
+public class ArrayCodec {
 
-	private ArraySerializer() {
+	private ArrayCodec() {
 	}
 
 	public static ByteBuf readShortByteArraySlice(ByteBuf from, int limit) {
 		int length = from.readShort();
-		MiscSerializer.checkLimit(length, limit);
+		MiscDataCodec.checkLimit(length, limit);
 		return from.readSlice(length);
 	}
 
@@ -31,21 +31,21 @@ public class ArraySerializer {
 
 
 	public static byte[] readVarIntByteArray(ByteBuf from) {
-		return MiscSerializer.readBytes(from, VarNumberSerializer.readVarInt(from));
+		return MiscDataCodec.readBytes(from, VarNumberCodec.readVarInt(from));
 	}
 
 	public static ByteBuf readVarIntByteArraySlice(ByteBuf from, int limit) {
-		int length = VarNumberSerializer.readVarInt(from);
-		MiscSerializer.checkLimit(length, limit);
+		int length = VarNumberCodec.readVarInt(from);
+		MiscDataCodec.checkLimit(length, limit);
 		return from.readSlice(length);
 	}
 
 	public static ByteBuf readVarIntByteArraySlice(ByteBuf from) {
-		return from.readSlice(VarNumberSerializer.readVarInt(from));
+		return from.readSlice(VarNumberCodec.readVarInt(from));
 	}
 
 	public static long[] readVarIntLongArray(ByteBuf from) {
-		long[] array = new long[VarNumberSerializer.readVarInt(from)];
+		long[] array = new long[VarNumberCodec.readVarInt(from)];
 		for (int i = 0; i < array.length; i++) {
 			array[i] = from.readLong();
 		}
@@ -54,7 +54,7 @@ public class ArraySerializer {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T[] readVarIntTArray(ByteBuf from, Class<T> tclass, Function<ByteBuf, T> elementReader) {
-		T[] array = (T[]) Array.newInstance(tclass, VarNumberSerializer.readVarInt(from));
+		T[] array = (T[]) Array.newInstance(tclass, VarNumberCodec.readVarInt(from));
 		for (int i = 0; i < array.length; i++) {
 			array[i] = elementReader.apply(from);
 		}
@@ -62,22 +62,22 @@ public class ArraySerializer {
 	}
 
 	public static String[] readVarIntVarIntUTF8StringArray(ByteBuf from) {
-		return readVarIntTArray(from, String.class, StringSerializer::readVarIntUTF8String);
+		return readVarIntTArray(from, String.class, StringCodec::readVarIntUTF8String);
 	}
 
 
 	public static int[] readVarIntVarIntArray(ByteBuf from) {
-		int[] array = new int[VarNumberSerializer.readVarInt(from)];
+		int[] array = new int[VarNumberCodec.readVarInt(from)];
 		for (int i = 0; i < array.length; i++) {
-			array[i] = VarNumberSerializer.readVarInt(from);
+			array[i] = VarNumberCodec.readVarInt(from);
 		}
 		return array;
 	}
 
 	public static long[] readVarIntVarLongArray(ByteBuf from) {
-		long[] array = new long[VarNumberSerializer.readVarInt(from)];
+		long[] array = new long[VarNumberCodec.readVarInt(from)];
 		for (int i = 0; i < array.length; i++) {
-			array[i] = VarNumberSerializer.readVarLong(from);
+			array[i] = VarNumberCodec.readVarLong(from);
 		}
 		return array;
 	}
@@ -97,17 +97,17 @@ public class ArraySerializer {
 
 
 	public static void writeVarIntByteArray(ByteBuf to, ByteBuf data) {
-		VarNumberSerializer.writeVarInt(to, data.readableBytes());
+		VarNumberCodec.writeVarInt(to, data.readableBytes());
 		to.writeBytes(data);
 	}
 
 	public static void writeVarIntByteArray(ByteBuf to, byte[] data) {
-		VarNumberSerializer.writeVarInt(to, data.length);
+		VarNumberCodec.writeVarInt(to, data.length);
 		to.writeBytes(data);
 	}
 
 	public static <T> void writeVarIntTArray(ByteBuf to, T[] array, BiConsumer<ByteBuf, T> elementWriter) {
-		VarNumberSerializer.writeVarInt(to, array.length);
+		VarNumberCodec.writeVarInt(to, array.length);
 		for (T element : array) {
 			elementWriter.accept(to, element);
 		}
@@ -115,35 +115,35 @@ public class ArraySerializer {
 
 	public static <T, A extends List<T> & RandomAccess> void writeVarIntTArray(ByteBuf to, A array, BiConsumer<ByteBuf, T> elementWriter) {
 		int size = array.size();
-		VarNumberSerializer.writeVarInt(to, size);
+		VarNumberCodec.writeVarInt(to, size);
 		for (int i = 0; i < size; i++) {
 			elementWriter.accept(to, array.get(i));
 		}
 	}
 
 	public static void writeVarIntVarIntUTF8StringArray(ByteBuf to, String[] array) {
-		VarNumberSerializer.writeVarInt(to, array.length);
+		VarNumberCodec.writeVarInt(to, array.length);
 		for (String str : array) {
-			StringSerializer.writeVarIntUTF8String(to, str);
+			StringCodec.writeVarIntUTF8String(to, str);
 		}
 	}
 
 	public static void writeVarIntVarIntArray(ByteBuf to, int[] array) {
-		VarNumberSerializer.writeVarInt(to, array.length);
+		VarNumberCodec.writeVarInt(to, array.length);
 		for (int element : array) {
-			VarNumberSerializer.writeVarInt(to, element);
+			VarNumberCodec.writeVarInt(to, element);
 		}
 	}
 
 	public static void writeVarIntVarLongArray(ByteBuf to, long[] array) {
-		VarNumberSerializer.writeVarInt(to, array.length);
+		VarNumberCodec.writeVarInt(to, array.length);
 		for (long element : array) {
-			VarNumberSerializer.writeVarLong(to, element);
+			VarNumberCodec.writeVarLong(to, element);
 		}
 	}
 
 	public static void writeVarIntLongArray(ByteBuf to, long[] array) {
-		VarNumberSerializer.writeVarInt(to, array.length);
+		VarNumberCodec.writeVarInt(to, array.length);
 		for (long element : array) {
 			to.writeLong(element);
 		}

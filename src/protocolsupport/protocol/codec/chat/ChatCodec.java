@@ -1,4 +1,4 @@
-package protocolsupport.protocol.serializer.chat;
+package protocolsupport.protocol.codec.chat;
 
 import java.lang.reflect.Type;
 import java.util.EnumMap;
@@ -24,9 +24,9 @@ import protocolsupport.utils.JsonUtils;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
-public class ChatSerializer {
+public class ChatCodec {
 
-	private ChatSerializer() {
+	private ChatCodec() {
 	}
 
 	private static final Gson deserializer = new GsonBuilder()
@@ -120,12 +120,12 @@ public class ChatSerializer {
 
 		@Override
 		public BaseComponent deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-			return ChatSerializer.deserializeTree(json);
+			return ChatCodec.deserializeTree(json);
 		}
 
 		@Override
 		public JsonElement serialize(BaseComponent src, Type typeOfSrc, JsonSerializationContext context) {
-			return ChatSerializer.serializeTree(version, I18NData.DEFAULT_LOCALE, src);
+			return ChatCodec.serializeTree(version, I18NData.DEFAULT_LOCALE, src);
 		}
 
 	}

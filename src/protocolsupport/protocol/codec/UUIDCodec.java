@@ -1,12 +1,12 @@
-package protocolsupport.protocol.serializer;
+package protocolsupport.protocol.codec;
 
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
 
-public class UUIDSerializer {
+public class UUIDCodec {
 
-	private UUIDSerializer() {
+	private UUIDCodec() {
 	}
 
 	public static UUID readUUID2L(ByteBuf from) {

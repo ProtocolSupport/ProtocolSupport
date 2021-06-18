@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.codec.PositionCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.Position;
 
 public abstract class MiddleQueryBlockNBT extends ServerBoundMiddlePacket {
@@ -19,8 +19,8 @@ public abstract class MiddleQueryBlockNBT extends ServerBoundMiddlePacket {
 	@Override
 	protected void write() {
 		ServerBoundPacketData queryblocknbt = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_QUERY_BLOCK_NBT);
-		VarNumberSerializer.writeVarInt(queryblocknbt, id);
-		PositionSerializer.writePosition(queryblocknbt, position);
+		VarNumberCodec.writeVarInt(queryblocknbt, id);
+		PositionCodec.writePosition(queryblocknbt, position);
 		codec.writeServerbound(queryblocknbt);
 	}
 

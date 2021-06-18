@@ -15,7 +15,7 @@ import net.minecraft.network.PacketListener;
 import net.minecraft.network.SkipEncodeException;
 import net.minecraft.network.protocol.EnumProtocolDirection;
 import net.minecraft.network.protocol.Packet;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.utils.netty.WrappingByteBuf;
 
 public class SpigotPacketEncoder extends MessageToByteEncoder<Packet<PacketListener>> {
@@ -36,7 +36,7 @@ public class SpigotPacketEncoder extends MessageToByteEncoder<Packet<PacketListe
 		}
 		wrapper.setBuf(data);
         try {
-			VarNumberSerializer.writeVarInt(wrapper, packetId);
+			VarNumberCodec.writeVarInt(wrapper, packetId);
 			packet.a(nativeSerializer);
             if (wrapper.readableBytes() > 2097152) {
                 throw new IllegalArgumentException("Packet length varint length is more than 21 bits");

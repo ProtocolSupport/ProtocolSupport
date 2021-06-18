@@ -1,11 +1,11 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
 import protocolsupport.protocol.types.NetworkItemStack;
 
@@ -42,12 +42,12 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 		inventoryclickPacket.writeByte(windowId);
 		inventoryclickPacket.writeShort(slot);
 		inventoryclickPacket.writeByte(button);
-		VarNumberSerializer.writeVarInt(inventoryclickPacket, mode);
-		ArraySerializer.writeVarIntTArray(inventoryclickPacket, modifiedSlot, (slotitemTo, slotitem) -> {
+		VarNumberCodec.writeVarInt(inventoryclickPacket, mode);
+		ArrayCodec.writeVarIntTArray(inventoryclickPacket, modifiedSlot, (slotitemTo, slotitem) -> {
 			slotitemTo.writeShort(slotitem.getSlot());
-			ItemStackSerializer.writeItemStack(slotitemTo, slotitem.getItemStack());
+			ItemStackCodec.writeItemStack(slotitemTo, slotitem.getItemStack());
 		});
-		ItemStackSerializer.writeItemStack(inventoryclickPacket, clickedItem);
+		ItemStackCodec.writeItemStack(inventoryclickPacket, clickedItem);
 		return inventoryclickPacket;
 	}
 

@@ -2,9 +2,9 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_8_9r1_9r2_
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.ProtocolSupport;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleCustomPayload;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadData;
@@ -20,8 +20,8 @@ public class CustomPayload extends MiddleCustomPayload {
 
 	@Override
 	protected void read(ByteBuf clientdata) {
-		tag = StringSerializer.readVarIntUTF8String(clientdata, 20);
-		data = MiscSerializer.readAllBytesSlice(clientdata, Short.MAX_VALUE);
+		tag = StringCodec.readVarIntUTF8String(clientdata, 20);
+		data = MiscDataCodec.readAllBytesSlice(clientdata, Short.MAX_VALUE);
 	}
 
 	@Override

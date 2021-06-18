@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.codec.PositionCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldEvent;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;
 import protocolsupport.protocol.typeremapper.itemstack.FlatteningItemId;
@@ -41,7 +41,7 @@ public class WorldEvent extends MiddleWorldEvent {
 
 		ClientBoundPacketData worldevent = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WORLD_EVENT);
 		worldevent.writeInt(effectId);
-		PositionSerializer.writeLegacyPositionL(worldevent, position);
+		PositionCodec.writePositionLXYZ(worldevent, position);
 		worldevent.writeInt(data);
 		worldevent.writeBoolean(disableRelative);
 		codec.writeClientbound(worldevent);

@@ -4,9 +4,9 @@ import java.util.LinkedHashMap;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.UUIDSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.UUIDCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.utils.Utils;
 
@@ -23,16 +23,16 @@ public abstract class MiddleEntityAttributes extends MiddleEntity {
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		super.decode(serverdata);
-		int attributesCount = VarNumberSerializer.readVarInt(serverdata);
+		int attributesCount = VarNumberCodec.readVarInt(serverdata);
 		for (int attributeIndex = 0; attributeIndex < attributesCount; attributeIndex++) {
-			String key = StringSerializer.readVarIntUTF8String(serverdata);
+			String key = StringCodec.readVarIntUTF8String(serverdata);
 			double value = serverdata.readDouble();
 			if (value == 0.0D) {
 				value = 0.00000001;
 			}
-			AttributeModifier[] modifiers = new AttributeModifier[VarNumberSerializer.readVarInt(serverdata)];
+			AttributeModifier[] modifiers = new AttributeModifier[VarNumberCodec.readVarInt(serverdata)];
 			for (int modifierIndex = 0; modifierIndex < modifiers.length; modifierIndex++) {
-				UUID uuid = UUIDSerializer.readUUID2L(serverdata);
+				UUID uuid = UUIDCodec.readUUID2L(serverdata);
 				double amount = serverdata.readDouble();
 				int operation = serverdata.readByte();
 				modifiers[modifierIndex] = new AttributeModifier(uuid, amount, operation);

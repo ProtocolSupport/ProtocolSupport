@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_5_6_7;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 import protocolsupport.protocol.typeremapper.window.WindowTypeIdMappingRegistry;
@@ -37,7 +37,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	public static void writeData(ClientBoundPacketData to, ProtocolVersion version, int windowId, int type, String title, int slots) {
 		to.writeByte(windowId);
 		to.writeByte(type);
-		StringSerializer.writeString(to, version, LegacyChat.clampLegacyText(title, 32));
+		StringCodec.writeString(to, version, LegacyChat.clampLegacyText(title, 32));
 		to.writeByte(slots);
 		to.writeBoolean(true); //use provided title
 	}

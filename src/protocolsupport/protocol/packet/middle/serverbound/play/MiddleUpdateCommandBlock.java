@@ -1,11 +1,11 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.PositionCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
@@ -36,9 +36,9 @@ public abstract class MiddleUpdateCommandBlock extends ServerBoundMiddlePacket {
 
 	public static ServerBoundPacketData create(Position position, String command, Mode mode, int flags) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_UPDATE_COMMAND_BLOCK);
-		PositionSerializer.writePosition(creator, position);
-		StringSerializer.writeVarIntUTF8String(creator, command);
-		MiscSerializer.writeVarIntEnum(creator, mode);
+		PositionCodec.writePosition(creator, position);
+		StringCodec.writeVarIntUTF8String(creator, command);
+		MiscDataCodec.writeVarIntEnum(creator, mode);
 		creator.writeByte(flags);
 		return creator;
 	}

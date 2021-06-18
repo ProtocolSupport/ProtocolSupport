@@ -8,10 +8,10 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.PacketDataCodecImpl;
+import protocolsupport.protocol.codec.MiscDataCodec;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.pipeline.version.util.ConnectionImplMiddlePacketInit;
 import protocolsupport.protocol.pipeline.version.util.MiddlePacketRegistry;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class AbstractPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
@@ -35,7 +35,7 @@ public abstract class AbstractPacketDecoder extends SimpleChannelInboundHandler<
 		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 			throw new DecoderException(MessageFormat.format(
 				"Unable to transform or read serverbound middle packet(data {0})",
-				Arrays.toString(MiscSerializer.readAllBytes(input))
+				Arrays.toString(MiscDataCodec.readAllBytes(input))
 			), exception);
 		} else {
 			throw exception;

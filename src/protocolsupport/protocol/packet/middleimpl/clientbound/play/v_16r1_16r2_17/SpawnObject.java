@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r1_16r2_17;
 
+import protocolsupport.protocol.codec.UUIDCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17.AbstractRemappedSpawnObject;
-import protocolsupport.protocol.serializer.UUIDSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.entity.FlatteningNetworkEntityId;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 
@@ -19,8 +19,8 @@ public class SpawnObject extends AbstractRemappedSpawnObject {
 	@Override
 	protected void write() {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SPAWN_OBJECT);
-		VarNumberSerializer.writeVarInt(serializer, entity.getId());
-		UUIDSerializer.writeUUID2L(serializer, entity.getUUID());
+		VarNumberCodec.writeVarInt(serializer, entity.getId());
+		UUIDCodec.writeUUID2L(serializer, entity.getUUID());
 		serializer.writeByte(flatteningEntityIdTable.get(fType.getNetworkTypeId()));
 		serializer.writeDouble(x);
 		serializer.writeDouble(y);

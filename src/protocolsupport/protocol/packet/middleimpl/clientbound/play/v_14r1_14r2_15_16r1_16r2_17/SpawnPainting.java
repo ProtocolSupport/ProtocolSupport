@@ -1,11 +1,11 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_15_16r1_16r2_17;
 
+import protocolsupport.protocol.codec.PositionCodec;
+import protocolsupport.protocol.codec.UUIDCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnPainting;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.UUIDSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class SpawnPainting extends MiddleSpawnPainting {
 
@@ -16,10 +16,10 @@ public class SpawnPainting extends MiddleSpawnPainting {
 	@Override
 	protected void write() {
 		ClientBoundPacketData spawnpainting = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SPAWN_PAINTING);
-		VarNumberSerializer.writeVarInt(spawnpainting, entity.getId());
-		UUIDSerializer.writeUUID2L(spawnpainting, entity.getUUID());
-		VarNumberSerializer.writeVarInt(spawnpainting, type);
-		PositionSerializer.writePosition(spawnpainting, position);
+		VarNumberCodec.writeVarInt(spawnpainting, entity.getId());
+		UUIDCodec.writeUUID2L(spawnpainting, entity.getUUID());
+		VarNumberCodec.writeVarInt(spawnpainting, type);
+		PositionCodec.writePosition(spawnpainting, position);
 		spawnpainting.writeByte(direction);
 		codec.writeClientbound(spawnpainting);
 	}

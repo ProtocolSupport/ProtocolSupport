@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middle.serverbound.handshake;
 
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public abstract class MiddleSetProtocol extends ServerBoundMiddlePacket {
@@ -20,10 +20,10 @@ public abstract class MiddleSetProtocol extends ServerBoundMiddlePacket {
 	@Override
 	protected void write() {
 		ServerBoundPacketData setprotocol = ServerBoundPacketData.create(ServerBoundPacketType.HANDSHAKE_START);
-		VarNumberSerializer.writeVarInt(setprotocol, ProtocolVersionsHelper.LATEST_PC.getId());
-		StringSerializer.writeVarIntUTF8String(setprotocol, hostname);
+		VarNumberCodec.writeVarInt(setprotocol, ProtocolVersionsHelper.LATEST_PC.getId());
+		StringCodec.writeVarIntUTF8String(setprotocol, hostname);
 		setprotocol.writeShort(port);
-		VarNumberSerializer.writeVarInt(setprotocol, nextState);
+		VarNumberCodec.writeVarInt(setprotocol, nextState);
 		codec.writeServerbound(setprotocol);
 	}
 

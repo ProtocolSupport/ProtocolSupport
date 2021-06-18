@@ -7,7 +7,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
 import net.minecraft.network.PacketDecompressor;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.utils.netty.Decompressor;
 import protocolsupport.utils.netty.ReusableReadHeapBuffer;
 
@@ -34,7 +34,7 @@ public class SpigotPacketDecompressor extends PacketDecompressor {
 		if (!from.isReadable()) {
 			return;
 		}
-		int uncompressedlength = VarNumberSerializer.readVarInt(from);
+		int uncompressedlength = VarNumberCodec.readVarInt(from);
 		if (uncompressedlength == 0) {
 			list.add(from.retain());
 		} else {

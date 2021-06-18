@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractSoundCollectEffect;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.WorldCustomSound;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class CollectEffect extends AbstractSoundCollectEffect {
 
@@ -15,8 +15,8 @@ public class CollectEffect extends AbstractSoundCollectEffect {
 	@Override
 	protected void writeCollectEffect() {
 		ClientBoundPacketData collecteffect = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_COLLECT_EFFECT);
-		VarNumberSerializer.writeVarInt(collecteffect, entityId);
-		VarNumberSerializer.writeVarInt(collecteffect, collectorId);
+		VarNumberCodec.writeVarInt(collecteffect, entityId);
+		VarNumberCodec.writeVarInt(collecteffect, collectorId);
 		codec.writeClientbound(collecteffect);
 	}
 

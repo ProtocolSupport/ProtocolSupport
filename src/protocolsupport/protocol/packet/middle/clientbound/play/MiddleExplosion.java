@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.ArrayCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.types.Position;
 
 public abstract class MiddleExplosion extends ClientBoundMiddlePacket {
@@ -26,7 +26,7 @@ public abstract class MiddleExplosion extends ClientBoundMiddlePacket {
 		y = serverdata.readFloat();
 		z = serverdata.readFloat();
 		radius = serverdata.readFloat();
-		blocks = ArraySerializer.readVarIntTArray(serverdata, Position.class, posFrom -> new Position(posFrom.readByte(), posFrom.readByte(), posFrom.readByte()));
+		blocks = ArrayCodec.readVarIntTArray(serverdata, Position.class, posFrom -> new Position(posFrom.readByte(), posFrom.readByte(), posFrom.readByte()));
 		pMotX = serverdata.readFloat();
 		pMotY = serverdata.readFloat();
 		pMotZ = serverdata.readFloat();

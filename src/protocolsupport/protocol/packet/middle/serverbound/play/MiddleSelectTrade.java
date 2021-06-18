@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleSelectTrade extends ServerBoundMiddlePacket {
 
@@ -20,7 +20,7 @@ public abstract class MiddleSelectTrade extends ServerBoundMiddlePacket {
 
 	public static ServerBoundPacketData create(int slot) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_SELECT_TRADE);
-		VarNumberSerializer.writeVarInt(creator, slot);
+		VarNumberCodec.writeVarInt(creator, slot);
 		return creator;
 	}
 

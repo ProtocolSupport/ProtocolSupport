@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.UUIDSerializer;
+import protocolsupport.protocol.codec.UUIDCodec;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
 public class NetworkEntityMetadataObjectOptionalUUID extends NetworkEntityMetadataObject<UUID> {
@@ -20,7 +20,7 @@ public class NetworkEntityMetadataObjectOptionalUUID extends NetworkEntityMetada
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
 		to.writeBoolean(value != null);
 		if (value != null) {
-			UUIDSerializer.writeUUID2L(to, value);
+			UUIDCodec.writeUUID2L(to, value);
 		}
 	}
 

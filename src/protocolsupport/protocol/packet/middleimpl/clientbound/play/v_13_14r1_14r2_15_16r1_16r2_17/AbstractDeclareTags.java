@@ -1,11 +1,11 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13_14r1_14r2_15_16r1_16r2_17;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleDeclareTags;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataEntry;
@@ -27,15 +27,15 @@ public abstract class AbstractDeclareTags extends MiddleDeclareTags {
 	protected void writeBlocksTags(ByteBuf to, Tag[] tags) {
 		IntMappingTable blockDataRemappingTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 		FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockDataRegistry.INSTANCE.getTable(version);
-		ArraySerializer.writeVarIntTArray(to, tags, (tagsTo, tag) -> {
-			StringSerializer.writeVarIntUTF8String(tagsTo, tag.getTagId());
-			MiscSerializer.writeVarIntCountPrefixedType(tagsTo, tag.getTaggedIds(), (taggedIdsTo, blocksIds) -> {
+		ArrayCodec.writeVarIntTArray(to, tags, (tagsTo, tag) -> {
+			StringCodec.writeVarIntUTF8String(tagsTo, tag.getTagId());
+			MiscDataCodec.writeVarIntCountPrefixedType(tagsTo, tag.getTaggedIds(), (taggedIdsTo, blocksIds) -> {
 				int count = blocksIds.length;
 				for (int blockId : blocksIds) {
 					int blockData = BlockBlockDataLookup.getBlockDataId(blockId);
 					if (blockDataRemappingTable.get(blockData) == blockData) {
 						FlatteningBlockDataEntry fEntry = flatteningBlockDataTable.get(blockData);
-						VarNumberSerializer.writeVarInt(taggedIdsTo, fEntry != null ? fEntry.getBlockId() : blockId);
+						VarNumberCodec.writeVarInt(taggedIdsTo, fEntry != null ? fEntry.getBlockId() : blockId);
 					} else {
 						count--;
 					}
@@ -48,13 +48,13 @@ public abstract class AbstractDeclareTags extends MiddleDeclareTags {
 	protected void writeItemsTags(ByteBuf to, Tag[] tags) {
 		ItemStackLegacyDataTable legacyitemdataTable = ItemStackLegacyData.REGISTRY.getTable(version);
 		IntMappingTable flatteningItemTypeTable = FlatteningItemId.REGISTRY_TO_CLIENT.getTable(version);
-		ArraySerializer.writeVarIntTArray(to, tags, (tagsTo, tag) -> {
-			StringSerializer.writeVarIntUTF8String(tagsTo, tag.getTagId());
-			MiscSerializer.writeVarIntCountPrefixedType(tagsTo, tag.getTaggedIds(), (taggedIdsTo, itemsIds) -> {
+		ArrayCodec.writeVarIntTArray(to, tags, (tagsTo, tag) -> {
+			StringCodec.writeVarIntUTF8String(tagsTo, tag.getTagId());
+			MiscDataCodec.writeVarIntCountPrefixedType(tagsTo, tag.getTaggedIds(), (taggedIdsTo, itemsIds) -> {
 				int count = itemsIds.length;
 				for (int itemId : itemsIds) {
 					if (itemId == legacyitemdataTable.apply(new NetworkItemStack(itemId)).getTypeId()) {
-						VarNumberSerializer.writeVarInt(taggedIdsTo, flatteningItemTypeTable.get(itemId));
+						VarNumberCodec.writeVarInt(taggedIdsTo, flatteningItemTypeTable.get(itemId));
 					} else {
 						count--;
 					}
@@ -65,9 +65,9 @@ public abstract class AbstractDeclareTags extends MiddleDeclareTags {
 	}
 
 	protected static void writeTags(ByteBuf to, Tag[] tags) {
-		ArraySerializer.writeVarIntTArray(to, tags, (lTo, tag) -> {
-			StringSerializer.writeVarIntUTF8String(lTo, tag.getTagId());
-			ArraySerializer.writeVarIntVarIntArray(lTo, tag.getTaggedIds());
+		ArrayCodec.writeVarIntTArray(to, tags, (lTo, tag) -> {
+			StringCodec.writeVarIntUTF8String(lTo, tag.getTagId());
+			ArrayCodec.writeVarIntVarIntArray(lTo, tag.getTaggedIds());
 		});
 	}
 

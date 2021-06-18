@@ -3,8 +3,8 @@ package protocolsupport.protocol.packet.middle.clientbound.login;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleLoginDisconnect extends ClientBoundMiddlePacket {
 
@@ -16,7 +16,7 @@ public abstract class MiddleLoginDisconnect extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		message = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
+		message = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(serverdata), true);
 	}
 
 }

@@ -1,12 +1,12 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.PositionCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
@@ -43,21 +43,21 @@ public abstract class MiddleUpdateStructureBlock extends ServerBoundMiddlePacket
 		Mirror mirror, Rotation rotation, String metadata, float integrity, long seed, byte flags
 	) {
 		ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_UPDATE_STRUCTURE_BLOCK);
-		PositionSerializer.writePosition(creator, position);
-		MiscSerializer.writeVarIntEnum(creator, action);
-		MiscSerializer.writeVarIntEnum(creator, mode);
-		StringSerializer.writeVarIntUTF8String(creator, name);
+		PositionCodec.writePosition(creator, position);
+		MiscDataCodec.writeVarIntEnum(creator, action);
+		MiscDataCodec.writeVarIntEnum(creator, mode);
+		StringCodec.writeVarIntUTF8String(creator, name);
 		creator.writeByte(offsetX);
 		creator.writeByte(offsetY);
 		creator.writeByte(offsetZ);
 		creator.writeByte(sizeX);
 		creator.writeByte(sizeY);
 		creator.writeByte(sizeZ);
-		MiscSerializer.writeVarIntEnum(creator, mirror);
-		MiscSerializer.writeVarIntEnum(creator, rotation);
-		StringSerializer.writeVarIntUTF8String(creator, metadata);
+		MiscDataCodec.writeVarIntEnum(creator, mirror);
+		MiscDataCodec.writeVarIntEnum(creator, rotation);
+		StringCodec.writeVarIntUTF8String(creator, metadata);
 		creator.writeFloat(integrity);
-		VarNumberSerializer.writeVarLong(creator, seed);
+		VarNumberCodec.writeVarLong(creator, seed);
 		creator.writeByte(flags);
 		return creator;
 	}

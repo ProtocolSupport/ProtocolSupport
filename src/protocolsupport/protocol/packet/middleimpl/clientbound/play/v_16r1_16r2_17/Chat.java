@@ -3,13 +3,13 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r1_16r2_
 import java.util.UUID;
 
 import protocolsupport.api.chat.ChatAPI.MessagePosition;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.UUIDCodec;
+import protocolsupport.protocol.codec.chat.ChatCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChat;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.UUIDSerializer;
-import protocolsupport.protocol.serializer.chat.ChatSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 
 public class Chat extends MiddleChat {
@@ -22,14 +22,14 @@ public class Chat extends MiddleChat {
 
 	@Override
 	protected void write() {
-		codec.writeClientbound(create(position, ChatSerializer.serialize(version, clientCache.getLocale(), message), sender));
+		codec.writeClientbound(create(position, ChatCodec.serialize(version, clientCache.getLocale(), message), sender));
 	}
 
 	public static ClientBoundPacketData create(MessagePosition position, String messageJson, UUID sender) {
 		ClientBoundPacketData chat = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHAT);
-		StringSerializer.writeVarIntUTF8String(chat, messageJson);
-		MiscSerializer.writeByteEnum(chat, position);
-		UUIDSerializer.writeUUID2L(chat, sender);
+		StringCodec.writeVarIntUTF8String(chat, messageJson);
+		MiscDataCodec.writeByteEnum(chat, position);
+		UUIDCodec.writeUUID2L(chat, sender);
 		return chat;
 	}
 

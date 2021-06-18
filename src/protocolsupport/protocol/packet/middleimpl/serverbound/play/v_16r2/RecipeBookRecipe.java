@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_16r2;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleRecipeBookRecipe;
-import protocolsupport.protocol.serializer.StringSerializer;
 
 public class RecipeBookRecipe extends MiddleRecipeBookRecipe {
 
@@ -12,7 +12,7 @@ public class RecipeBookRecipe extends MiddleRecipeBookRecipe {
 
 	@Override
 	protected void read(ByteBuf clientdata) {
-		recipeId = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
+		recipeId = StringCodec.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
 	}
 
 }

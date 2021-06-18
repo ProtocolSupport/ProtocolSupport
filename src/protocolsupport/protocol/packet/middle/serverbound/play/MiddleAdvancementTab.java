@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleAdvancementTab extends ServerBoundMiddlePacket {
@@ -19,9 +19,9 @@ public abstract class MiddleAdvancementTab extends ServerBoundMiddlePacket {
 	@Override
 	protected void write() {
 		ServerBoundPacketData advanvementtab = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_ADVANCEMENT_TAB);
-		MiscSerializer.writeVarIntEnum(advanvementtab, action);
+		MiscDataCodec.writeVarIntEnum(advanvementtab, action);
 		if (action == Action.OPEN) {
-			StringSerializer.writeVarIntUTF8String(advanvementtab, identifier);
+			StringCodec.writeVarIntUTF8String(advanvementtab, identifier);
 		}
 		codec.writeServerbound(advanvementtab);
 	}

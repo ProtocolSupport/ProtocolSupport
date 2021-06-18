@@ -10,7 +10,7 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.events.ItemStackWriteEvent;
-import protocolsupport.protocol.serializer.chat.ChatSerializer;
+import protocolsupport.protocol.codec.chat.ChatCodec;
 import protocolsupport.protocol.types.NetworkBukkitItemStack;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
@@ -33,7 +33,7 @@ public class ItemStackWriteEventHelper {
 				NBTCompound displayNBT = CommonNBT.getOrCreateDisplayTag(rootTag);
 
 				if (forcedDisplayName != null) {
-					displayNBT.setTag(CommonNBT.DISPLAY_NAME, new NBTString(ChatSerializer.serialize(version, locale, forcedDisplayName)));
+					displayNBT.setTag(CommonNBT.DISPLAY_NAME, new NBTString(ChatCodec.serialize(version, locale, forcedDisplayName)));
 				}
 
 				if (!additionalLore.isEmpty()) {

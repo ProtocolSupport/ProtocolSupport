@@ -2,14 +2,14 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_12r1_12r2_
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.chat.ChatCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleAdvancements;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.chat.ChatSerializer;
 
 public class Advancements extends MiddleAdvancements {
 
@@ -21,13 +21,13 @@ public class Advancements extends MiddleAdvancements {
 	protected void write() {
 		ClientBoundPacketData advancements = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ADVANCEMENTS);
 		advancements.writeBoolean(reset);
-		ArraySerializer.writeVarIntTArray(advancements, advancementsMapping, (to, element) -> {
-			StringSerializer.writeVarIntUTF8String(to, element.getObj1());
+		ArrayCodec.writeVarIntTArray(advancements, advancementsMapping, (to, element) -> {
+			StringCodec.writeVarIntUTF8String(to, element.getObj1());
 			writeAdvanvement(to, version, cache.getClientCache().getLocale(), element.getObj2());
 		});
-		ArraySerializer.writeVarIntVarIntUTF8StringArray(advancements, removeAdvancements);
-		ArraySerializer.writeVarIntTArray(advancements, advancementsProgress, (to, element) -> {
-			StringSerializer.writeVarIntUTF8String(to, element.getObj1());
+		ArrayCodec.writeVarIntVarIntUTF8StringArray(advancements, removeAdvancements);
+		ArrayCodec.writeVarIntTArray(advancements, advancementsProgress, (to, element) -> {
+			StringCodec.writeVarIntUTF8String(to, element.getObj1());
 			wrtieAdvancementProgress(to, element.getObj2());
 		});
 		codec.writeClientbound(advancements);
@@ -36,7 +36,7 @@ public class Advancements extends MiddleAdvancements {
 	protected static void writeAdvanvement(ByteBuf to, ProtocolVersion version, String locale, Advancement advancement) {
 		if (advancement.parentId != null) {
 			to.writeBoolean(true);
-			StringSerializer.writeVarIntUTF8String(to, advancement.parentId);
+			StringCodec.writeVarIntUTF8String(to, advancement.parentId);
 		} else {
 			to.writeBoolean(false);
 		}
@@ -46,18 +46,18 @@ public class Advancements extends MiddleAdvancements {
 		} else {
 			to.writeBoolean(false);
 		}
-		ArraySerializer.writeVarIntVarIntUTF8StringArray(to, advancement.criteria);
-		ArraySerializer.writeVarIntTArray(to, advancement.requirements, ArraySerializer::writeVarIntVarIntUTF8StringArray);
+		ArrayCodec.writeVarIntVarIntUTF8StringArray(to, advancement.criteria);
+		ArrayCodec.writeVarIntTArray(to, advancement.requirements, ArrayCodec::writeVarIntVarIntUTF8StringArray);
 	}
 
 	protected static void writeAdvancementDisplay(ByteBuf to, ProtocolVersion version, String locale, AdvancementDisplay display) {
-		StringSerializer.writeVarIntUTF8String(to, ChatSerializer.serialize(version, locale, display.title));
-		StringSerializer.writeVarIntUTF8String(to, ChatSerializer.serialize(version, locale, display.description));
-		ItemStackSerializer.writeItemStack(to, version, locale, display.icon);
-		MiscSerializer.writeVarIntEnum(to, display.frametype);
+		StringCodec.writeVarIntUTF8String(to, ChatCodec.serialize(version, locale, display.title));
+		StringCodec.writeVarIntUTF8String(to, ChatCodec.serialize(version, locale, display.description));
+		ItemStackCodec.writeItemStack(to, version, locale, display.icon);
+		MiscDataCodec.writeVarIntEnum(to, display.frametype);
 		to.writeInt(display.flags);
 		if ((display.flags & AdvancementDisplay.flagHasBackgroundOffset) != 0) {
-			StringSerializer.writeVarIntUTF8String(to, display.background);
+			StringCodec.writeVarIntUTF8String(to, display.background);
 		}
 		to.writeFloat(display.x);
 		to.writeFloat(display.y);
@@ -65,8 +65,8 @@ public class Advancements extends MiddleAdvancements {
 
 
 	protected void wrtieAdvancementProgress(ByteBuf to, AdvancementProgress obj2) {
-		ArraySerializer.writeVarIntTArray(to, obj2.criterionsProgress, (lTo, element) -> {
-			StringSerializer.writeVarIntUTF8String(lTo, element.getObj1());
+		ArrayCodec.writeVarIntTArray(to, obj2.criterionsProgress, (lTo, element) -> {
+			StringCodec.writeVarIntUTF8String(lTo, element.getObj1());
 			if (element.getObj2() != null) {
 				lTo.writeBoolean(true);
 				lTo.writeLong(element.getObj2());

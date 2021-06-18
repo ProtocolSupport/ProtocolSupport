@@ -1,4 +1,4 @@
-package protocolsupport.protocol.serializer.chat;
+package protocolsupport.protocol.codec.chat;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

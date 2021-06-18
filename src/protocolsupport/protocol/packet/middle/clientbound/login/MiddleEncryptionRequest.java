@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.clientbound.login;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleEncryptionRequest extends ClientBoundMiddlePacket {
 
@@ -17,9 +17,9 @@ public abstract class MiddleEncryptionRequest extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		serverId = StringSerializer.readVarIntUTF8String(serverdata);
-		publicKey = ArraySerializer.readVarIntByteArraySlice(serverdata);
-		verifyToken = ArraySerializer.readVarIntByteArraySlice(serverdata);
+		serverId = StringCodec.readVarIntUTF8String(serverdata);
+		publicKey = ArrayCodec.readVarIntByteArraySlice(serverdata);
+		verifyToken = ArrayCodec.readVarIntByteArraySlice(serverdata);
 	}
 
 	@Override

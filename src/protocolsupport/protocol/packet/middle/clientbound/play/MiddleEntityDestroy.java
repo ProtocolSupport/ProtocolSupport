@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 
 public abstract class MiddleEntityDestroy extends ClientBoundMiddlePacket {
@@ -17,7 +17,7 @@ public abstract class MiddleEntityDestroy extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		entityId = VarNumberSerializer.readVarInt(serverdata);
+		entityId = VarNumberCodec.readVarInt(serverdata);
 	}
 
 	@Override

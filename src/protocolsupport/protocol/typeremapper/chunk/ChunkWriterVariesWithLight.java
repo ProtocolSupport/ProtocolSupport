@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.Map;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.storage.netcache.chunk.BlockStorage;
 import protocolsupport.protocol.storage.netcache.chunk.BlockStorageBytePaletted;
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunkSectionBlockStorage;
@@ -42,12 +42,12 @@ public class ChunkWriterVariesWithLight {
 						BlockStorageBytePaletted.Palette paletteObject = blockstoragePaletted.getPalette();
 						short[] palette = paletteObject.getPalette();
 						int paletteSize = Math.min(palette.length, paletteObject.getPaletteSize());
-						VarNumberSerializer.writeVarInt(buffer, paletteSize);
+						VarNumberCodec.writeVarInt(buffer, paletteSize);
 						for (int i = 0; i < paletteSize; i++) {
-							VarNumberSerializer.writeVarInt(buffer, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, palette[i]));
+							VarNumberCodec.writeVarInt(buffer, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, palette[i]));
 						}
 						int blockdataLength = ChunkConstants.BLOCKS_IN_SECTION >> 3;
-						VarNumberSerializer.writeVarInt(buffer, blockdataLength);
+						VarNumberCodec.writeVarInt(buffer, blockdataLength);
 						for (int paletteLongIndex = 0; paletteLongIndex < blockdataLength; paletteLongIndex++) {
 							int blockIndex = paletteLongIndex << 3;
 							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex | 7));
@@ -61,12 +61,12 @@ public class ChunkWriterVariesWithLight {
 						}
 					} else {
 						buffer.writeByte(globalPaletteBitsPerBlock);
-						VarNumberSerializer.writeVarInt(buffer, 0);
+						VarNumberCodec.writeVarInt(buffer, 0);
 						NumberBitsStorageCompact writer = new NumberBitsStorageCompact(globalPaletteBitsPerBlock, ChunkConstants.BLOCKS_IN_SECTION);
 						for (int blockIndex = 0; blockIndex < ChunkConstants.BLOCKS_IN_SECTION; blockIndex++) {
 							writer.setNumber(blockIndex, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, section.getBlockData(blockIndex)));
 						}
-						ArraySerializer.writeVarIntLongArray(buffer, writer.getStorage());
+						ArrayCodec.writeVarIntLongArray(buffer, writer.getStorage());
 					}
 				} else {
 					ChunkWriteUtils.writeBBEmptySection(buffer);
@@ -98,12 +98,12 @@ public class ChunkWriterVariesWithLight {
 						BlockStorageBytePaletted.Palette paletteObject = blockstoragePaletted.getPalette();
 						short[] palette = paletteObject.getPalette();
 						int paletteSize = Math.min(palette.length, paletteObject.getPaletteSize());
-						VarNumberSerializer.writeVarInt(buffer, paletteSize);
+						VarNumberCodec.writeVarInt(buffer, paletteSize);
 						for (int i = 0; i < paletteSize; i++) {
-							VarNumberSerializer.writeVarInt(buffer, BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, palette[i]));
+							VarNumberCodec.writeVarInt(buffer, BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, palette[i]));
 						}
 						int blockdataLength = ChunkConstants.BLOCKS_IN_SECTION >> 3;
-						VarNumberSerializer.writeVarInt(buffer, blockdataLength);
+						VarNumberCodec.writeVarInt(buffer, blockdataLength);
 						for (int paletteLongIndex = 0; paletteLongIndex < blockdataLength; paletteLongIndex++) {
 							int blockIndex = paletteLongIndex << 3;
 							buffer.writeByte(blockstoragePaletted.getRuntimeId(blockIndex | 7));
@@ -117,12 +117,12 @@ public class ChunkWriterVariesWithLight {
 						}
 					} else {
 						buffer.writeByte(globalPaletteBitsPerBlock);
-						VarNumberSerializer.writeVarInt(buffer, 0);
+						VarNumberCodec.writeVarInt(buffer, 0);
 						NumberBitsStorageCompact writer = new NumberBitsStorageCompact(globalPaletteBitsPerBlock, ChunkConstants.BLOCKS_IN_SECTION);
 						for (int blockIndex = 0; blockIndex < ChunkConstants.BLOCKS_IN_SECTION; blockIndex++) {
 							writer.setNumber(blockIndex, BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, section.getBlockData(blockIndex)));
 						}
-						ArraySerializer.writeVarIntLongArray(buffer, writer.getStorage());
+						ArrayCodec.writeVarIntLongArray(buffer, writer.getStorage());
 					}
 				} else {
 					ChunkWriteUtils.writeBBEmptySection(buffer);
@@ -143,7 +143,7 @@ public class ChunkWriterVariesWithLight {
 			if (BitUtils.isIBitSet(mask, sectionNumber)) {
 				Collection<TileEntity> sectionTiles = tiles[sectionNumber].values();
 				for (TileEntity tile : sectionTiles) {
-					ItemStackSerializer.writeDirectTag(buffer, tile.getNBT());
+					ItemStackCodec.writeDirectTag(buffer, tile.getNBT());
 				}
 				count += sectionTiles.size();
 			}

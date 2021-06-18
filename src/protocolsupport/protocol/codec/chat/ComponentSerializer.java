@@ -1,4 +1,4 @@
-package protocolsupport.protocol.serializer.chat;
+package protocolsupport.protocol.codec.chat;
 
 import java.lang.reflect.Type;
 import java.util.Map.Entry;

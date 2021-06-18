@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2_17;
 
+import protocolsupport.protocol.codec.ArrayCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
@@ -23,7 +23,7 @@ public class BlockChangeMulti extends MiddleBlockChangeMulti {
 		ClientBoundPacketData blockchangemulti = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_BLOCK_CHANGE_MULTI);
 		blockchangemulti.writeLong(chunkCoordWithSection);
 		blockchangemulti.writeBoolean(large);
-		ArraySerializer.writeVarIntVarLongArray(blockchangemulti, records);
+		ArrayCodec.writeVarIntVarLongArray(blockchangemulti, records);
 		codec.writeClientbound(blockchangemulti);
 	}
 

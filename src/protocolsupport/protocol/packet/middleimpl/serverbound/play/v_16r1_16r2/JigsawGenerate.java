@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_16r1_16r2;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.PositionCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleJigsawGenerate;
-import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class JigsawGenerate extends MiddleJigsawGenerate {
 
@@ -13,8 +13,8 @@ public class JigsawGenerate extends MiddleJigsawGenerate {
 
 	@Override
 	protected void read(ByteBuf clientdata) {
-		PositionSerializer.readPositionTo(clientdata, position);
-		levels = VarNumberSerializer.readVarInt(clientdata);
+		PositionCodec.readPosition(clientdata, position);
+		levels = VarNumberCodec.readVarInt(clientdata);
 		keep = clientdata.readBoolean();
 	}
 

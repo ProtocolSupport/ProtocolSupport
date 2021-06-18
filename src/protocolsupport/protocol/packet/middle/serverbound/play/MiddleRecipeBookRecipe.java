@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleRecipeBookRecipe extends ServerBoundMiddlePacket {
 
@@ -20,7 +20,7 @@ public abstract class MiddleRecipeBookRecipe extends ServerBoundMiddlePacket {
 
 	public static ServerBoundPacketData create(String recipeId) {
 		ServerBoundPacketData recipebookrecipe = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_RECIPE_BOOK_RECIPE);
-		StringSerializer.writeVarIntUTF8String(recipebookrecipe, recipeId);
+		StringCodec.writeVarIntUTF8String(recipebookrecipe, recipeId);
 		return recipebookrecipe;
 	}
 

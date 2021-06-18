@@ -1,4 +1,4 @@
-package protocolsupport.protocol.serializer;
+package protocolsupport.protocol.codec;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolType;
@@ -7,20 +7,20 @@ import protocolsupport.protocol.types.MerchantData;
 import protocolsupport.protocol.types.MerchantData.TradeOffer;
 import protocolsupport.protocol.types.NetworkItemStack;
 
-public class MerchantDataSerializer {
+public class MerchantDataCodec {
 
-	private MerchantDataSerializer() {
+	private MerchantDataCodec() {
 	}
 
 	public static MerchantData readMerchantData(ByteBuf from) {
-		byte windowId = (byte) VarNumberSerializer.readVarInt(from);
+		byte windowId = (byte) VarNumberCodec.readVarInt(from);
 		TradeOffer[] offers = new TradeOffer[from.readUnsignedByte()];
 		for (int i = 0; i < offers.length; i++) {
-			NetworkItemStack itemstack1 = ItemStackSerializer.readItemStack(from);
-			NetworkItemStack result = ItemStackSerializer.readItemStack(from);
+			NetworkItemStack itemstack1 = ItemStackCodec.readItemStack(from);
+			NetworkItemStack result = ItemStackCodec.readItemStack(from);
 			NetworkItemStack itemstack2 = NetworkItemStack.NULL;
 			if (from.readBoolean()) {
-				itemstack2 = ItemStackSerializer.readItemStack(from);
+				itemstack2 = ItemStackCodec.readItemStack(from);
 			}
 			boolean disabled = from.readBoolean();
 			int uses = from.readInt();
@@ -35,8 +35,8 @@ public class MerchantDataSerializer {
 				xp, specialPrice, priceMultiplier, demand
 			);
 		}
-		int villagerLevel = VarNumberSerializer.readVarInt(from);
-		int villagerXp = VarNumberSerializer.readVarInt(from);
+		int villagerLevel = VarNumberCodec.readVarInt(from);
+		int villagerXp = VarNumberCodec.readVarInt(from);
 		boolean villagerRegular = from.readBoolean();
 		boolean restockingVillager = from.readBoolean();
 		return new MerchantData(windowId, offers, villagerLevel, villagerXp, villagerRegular, restockingVillager);
@@ -46,17 +46,17 @@ public class MerchantDataSerializer {
 		boolean advandedTrading = isUsingAdvancedTrading(version);
 		boolean usesCount = isUsingUsesCount(version);
 		if (advandedTrading) {
-			VarNumberSerializer.writeVarInt(to, merchdata.getWindowId());
+			VarNumberCodec.writeVarInt(to, merchdata.getWindowId());
 		} else {
 			to.writeInt(merchdata.getWindowId());
 		}
 		to.writeByte(merchdata.getOffers().length);
 		for (TradeOffer offer : merchdata.getOffers()) {
-			ItemStackSerializer.writeItemStack(to, version, locale, offer.getItemStack1());
-			ItemStackSerializer.writeItemStack(to, version, locale, offer.getResult());
+			ItemStackCodec.writeItemStack(to, version, locale, offer.getItemStack1());
+			ItemStackCodec.writeItemStack(to, version, locale, offer.getResult());
 			to.writeBoolean(offer.hasItemStack2());
 			if (offer.hasItemStack2()) {
-				ItemStackSerializer.writeItemStack(to, version, locale, offer.getItemStack2());
+				ItemStackCodec.writeItemStack(to, version, locale, offer.getItemStack2());
 			}
 			to.writeBoolean(offer.isDisabled());
 			if (usesCount) {
@@ -73,8 +73,8 @@ public class MerchantDataSerializer {
 			}
 		}
 		if (advandedTrading) {
-			VarNumberSerializer.writeVarInt(to, merchdata.getVillagerLevel());
-			VarNumberSerializer.writeVarInt(to, merchdata.getVillagerXP());
+			VarNumberCodec.writeVarInt(to, merchdata.getVillagerLevel());
+			VarNumberCodec.writeVarInt(to, merchdata.getVillagerXP());
 			to.writeBoolean(merchdata.isVillagerRegular());
 			if (isUsingRestockingVillagerField(version)) {
 				to.writeBoolean(merchdata.isRestockingVillager());

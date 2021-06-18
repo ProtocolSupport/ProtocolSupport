@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.codec.PositionCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.types.Position;
 
 public abstract class MiddleJigsawUpdate extends ServerBoundMiddlePacket {
@@ -23,12 +23,12 @@ public abstract class MiddleJigsawUpdate extends ServerBoundMiddlePacket {
 	@Override
 	protected void write() {
 		ServerBoundPacketData jigsawupdate = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_JIGSAW_UPDATE);
-		PositionSerializer.writePosition(jigsawupdate, position);
-		StringSerializer.writeVarIntUTF8String(jigsawupdate, name);
-		StringSerializer.writeVarIntUTF8String(jigsawupdate, target);
-		StringSerializer.writeVarIntUTF8String(jigsawupdate, pool);
-		StringSerializer.writeVarIntUTF8String(jigsawupdate, finalState);
-		StringSerializer.writeVarIntUTF8String(jigsawupdate, jointType);
+		PositionCodec.writePosition(jigsawupdate, position);
+		StringCodec.writeVarIntUTF8String(jigsawupdate, name);
+		StringCodec.writeVarIntUTF8String(jigsawupdate, target);
+		StringCodec.writeVarIntUTF8String(jigsawupdate, pool);
+		StringCodec.writeVarIntUTF8String(jigsawupdate, finalState);
+		StringCodec.writeVarIntUTF8String(jigsawupdate, jointType);
 		codec.writeServerbound(jigsawupdate);
 	}
 

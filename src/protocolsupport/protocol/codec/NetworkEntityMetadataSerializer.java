@@ -1,4 +1,4 @@
-package protocolsupport.protocol.serializer;
+package protocolsupport.protocol.codec;
 
 import java.text.MessageFormat;
 import java.util.Arrays;

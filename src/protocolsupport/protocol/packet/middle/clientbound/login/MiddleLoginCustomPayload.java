@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middle.clientbound.login;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleLoginCustomPayload extends ClientBoundMiddlePacket {
 
@@ -18,9 +18,9 @@ public abstract class MiddleLoginCustomPayload extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		id = VarNumberSerializer.readVarInt(serverdata);
-		tag = StringSerializer.readVarIntUTF8String(serverdata);
-		data = MiscSerializer.readAllBytesSlice(serverdata);
+		id = VarNumberCodec.readVarInt(serverdata);
+		tag = StringCodec.readVarIntUTF8String(serverdata);
+		data = MiscDataCodec.readAllBytesSlice(serverdata);
 	}
 
 	@Override

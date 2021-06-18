@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.MiscDataCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleUnlockRecipes extends ClientBoundMiddlePacket {
@@ -26,7 +26,7 @@ public abstract class MiddleUnlockRecipes extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
+		action = MiscDataCodec.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		craftRecipeBookOpen = serverdata.readBoolean();
 		craftRecipeBookFiltering = serverdata.readBoolean();
 		smeltingRecipeBookOpen = serverdata.readBoolean();
@@ -35,9 +35,9 @@ public abstract class MiddleUnlockRecipes extends ClientBoundMiddlePacket {
 		blastFurnaceRecipeBookFiltering = serverdata.readBoolean();
 		smokerRecipeBookOpen = serverdata.readBoolean();
 		smokerRecipeBookFiltering = serverdata.readBoolean();
-		recipes1 = ArraySerializer.readVarIntVarIntUTF8StringArray(serverdata);
+		recipes1 = ArrayCodec.readVarIntVarIntUTF8StringArray(serverdata);
 		if (action == Action.INIT) {
-			recipes2 = ArraySerializer.readVarIntVarIntUTF8StringArray(serverdata);
+			recipes2 = ArrayCodec.readVarIntVarIntUTF8StringArray(serverdata);
 		}
 	}
 

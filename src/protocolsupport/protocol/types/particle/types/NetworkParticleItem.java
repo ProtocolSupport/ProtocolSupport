@@ -1,7 +1,7 @@
 package protocolsupport.protocol.types.particle.types;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.codec.ItemStackCodec;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.particle.NetworkParticle;
 
@@ -24,7 +24,7 @@ public class NetworkParticleItem extends NetworkParticle {
 
 	@Override
 	public void readData(ByteBuf buf) {
-		itemstack = ItemStackSerializer.readItemStack(buf);
+		itemstack = ItemStackCodec.readItemStack(buf);
 	}
 
 }

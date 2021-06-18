@@ -1,11 +1,11 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_7;
 
 import io.netty.buffer.ByteBufUtil;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleResourcePack;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 
 public class ResourcePack extends MiddleResourcePack {
 
@@ -16,8 +16,8 @@ public class ResourcePack extends MiddleResourcePack {
 	@Override
 	protected void write() {
 		ClientBoundPacketData resourcepack = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CUSTOM_PAYLOAD);
-		StringSerializer.writeVarIntUTF8String(resourcepack, "MC|RPack");
-		MiscSerializer.writeShortLengthPrefixedType(resourcepack, url, ByteBufUtil::writeUtf8);
+		StringCodec.writeVarIntUTF8String(resourcepack, "MC|RPack");
+		MiscDataCodec.writeShortLengthPrefixedType(resourcepack, url, ByteBufUtil::writeUtf8);
 		codec.writeClientbound(resourcepack);
 	}
 

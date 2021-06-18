@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middle.serverbound.login;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.ArrayCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.ArraySerializer;
 
 public abstract class MiddleEncryptionResponse extends ServerBoundMiddlePacket {
 
@@ -18,8 +18,8 @@ public abstract class MiddleEncryptionResponse extends ServerBoundMiddlePacket {
 	@Override
 	protected void write() {
 		ServerBoundPacketData encryptionresponse = ServerBoundPacketData.create(ServerBoundPacketType.LOGIN_ENCRYPTION_BEGIN);
-		ArraySerializer.writeVarIntByteArray(encryptionresponse, sharedSecret);
-		ArraySerializer.writeVarIntByteArray(encryptionresponse, verifyToken);
+		ArrayCodec.writeVarIntByteArray(encryptionresponse, sharedSecret);
+		ArrayCodec.writeVarIntByteArray(encryptionresponse, verifyToken);
 		codec.writeServerbound(encryptionresponse);
 	}
 

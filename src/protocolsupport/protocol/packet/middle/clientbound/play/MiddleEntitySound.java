@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.SoundCategory;
 
 public abstract class MiddleEntitySound extends ClientBoundMiddlePacket {
@@ -20,9 +20,9 @@ public abstract class MiddleEntitySound extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		id = VarNumberSerializer.readVarInt(serverdata);
-		category = MiscSerializer.readVarIntEnum(serverdata, SoundCategory.CONSTANT_LOOKUP);
-		entityId = VarNumberSerializer.readVarInt(serverdata);
+		id = VarNumberCodec.readVarInt(serverdata);
+		category = MiscDataCodec.readVarIntEnum(serverdata, SoundCategory.CONSTANT_LOOKUP);
+		entityId = VarNumberCodec.readVarInt(serverdata);
 		volume = serverdata.readFloat();
 		pitch = serverdata.readFloat();
 	}

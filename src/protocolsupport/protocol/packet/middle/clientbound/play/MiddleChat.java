@@ -6,10 +6,10 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.ChatAPI.MessagePosition;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.UUIDCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.UUIDSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleChat extends ClientBoundMiddlePacket {
@@ -24,9 +24,9 @@ public abstract class MiddleChat extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		message = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
-		position = MiscSerializer.readByteEnum(serverdata, EnumConstantLookup.MESSAGE_POSITION);
-		sender = UUIDSerializer.readUUID2L(serverdata);
+		message = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(serverdata), true);
+		position = MiscDataCodec.readByteEnum(serverdata, EnumConstantLookup.MESSAGE_POSITION);
+		sender = UUIDCodec.readUUID2L(serverdata);
 	}
 
 }

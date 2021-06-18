@@ -6,10 +6,10 @@ import java.util.UUID;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.ProtocolSupportFileLog;
+import protocolsupport.protocol.codec.UUIDCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.UUIDSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
@@ -37,8 +37,8 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		int entityId = VarNumberSerializer.readVarInt(serverdata);
-		UUID uuid = UUIDSerializer.readUUID2L(serverdata);
+		int entityId = VarNumberCodec.readVarInt(serverdata);
+		UUID uuid = UUIDCodec.readUUID2L(serverdata);
 		int typeId = serverdata.readUnsignedByte();
 		NetworkEntityType type = NetworkEntityType.getObjectByNetworkTypeId(typeId);
 		x = serverdata.readDouble();

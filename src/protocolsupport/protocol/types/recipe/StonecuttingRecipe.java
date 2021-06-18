@@ -1,8 +1,8 @@
 package protocolsupport.protocol.types.recipe;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
+import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.types.NetworkItemStack;
 
 public class StonecuttingRecipe extends Recipe {
@@ -13,9 +13,9 @@ public class StonecuttingRecipe extends Recipe {
 
 	public StonecuttingRecipe(String id, ByteBuf data) {
 		super(id, RecipeType.STONECUTTING);
-		group = StringSerializer.readVarIntUTF8String(data);
+		group = StringCodec.readVarIntUTF8String(data);
 		ingredient = new RecipeIngredient(data);
-		result = ItemStackSerializer.readItemStack(data);
+		result = ItemStackCodec.readItemStack(data);
 	}
 
 	public String getGroup() {

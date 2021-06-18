@@ -1,12 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14r1_14r2_15_16r1;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleRecipeBookRecipe;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleRecipeBookState;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleRecipeBookState.RecipeBookType;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public class RecipeBookData extends ServerBoundMiddlePacket {
@@ -28,10 +28,10 @@ public class RecipeBookData extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void read(ByteBuf clientdata) {
-		type = MiscSerializer.readVarIntEnum(clientdata, Type.CONSTANT_LOOKUP);
+		type = MiscDataCodec.readVarIntEnum(clientdata, Type.CONSTANT_LOOKUP);
 		switch (type) {
 			case DISPLAYED_RECIPE: {
-				recipeId = StringSerializer.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
+				recipeId = StringCodec.readVarIntUTF8String(clientdata, Short.MAX_VALUE);
 				break;
 			}
 			case RECIPE_BOOK_STATUS: {

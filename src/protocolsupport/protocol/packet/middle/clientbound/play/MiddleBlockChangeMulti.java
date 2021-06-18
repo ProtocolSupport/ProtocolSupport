@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.ArrayCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ArraySerializer;
 
 public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 
@@ -18,7 +18,7 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 	protected void decode(ByteBuf serverdata) {
 		chunkCoordWithSection = serverdata.readLong();
 		large = serverdata.readBoolean();
-		records = ArraySerializer.readVarIntVarLongArray(serverdata);
+		records = ArrayCodec.readVarIntVarLongArray(serverdata);
 	}
 
 	protected static int getChunkX(long coord) {

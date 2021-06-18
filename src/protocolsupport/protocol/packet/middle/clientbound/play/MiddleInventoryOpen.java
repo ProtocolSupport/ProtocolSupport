@@ -3,11 +3,11 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClose;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.EnumSkippingTable;
@@ -35,9 +35,9 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		windowId = (byte) VarNumberSerializer.readVarInt(serverdata);
-		type = MiscSerializer.readVarIntEnum(serverdata, WindowType.CONSTANT_LOOKUP);
-		title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(serverdata), true);
+		windowId = (byte) VarNumberCodec.readVarInt(serverdata);
+		type = MiscDataCodec.readVarIntEnum(serverdata, WindowType.CONSTANT_LOOKUP);
+		title = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(serverdata), true);
 	}
 
 	@Override

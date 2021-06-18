@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_15_16r1_16r2_17;
 
+import protocolsupport.protocol.codec.PositionCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockOpenSignEditor;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.PositionSerializer;
 
 public class BlockOpenSignEditor extends MiddleBlockOpenSignEditor {
 
@@ -14,7 +14,7 @@ public class BlockOpenSignEditor extends MiddleBlockOpenSignEditor {
 	@Override
 	protected void write() {
 		ClientBoundPacketData blockopensigneditor = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SIGN_EDITOR);
-		PositionSerializer.writePosition(blockopensigneditor, position);
+		PositionCodec.writePosition(blockopensigneditor, position);
 		codec.writeClientbound(blockopensigneditor);
 	}
 

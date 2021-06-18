@@ -3,10 +3,10 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 import java.util.BitSet;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.PositionCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.types.ChunkCoord;
 import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.protocol.types.chunk.ChunkSectonBlockData;
@@ -27,14 +27,14 @@ public abstract class MiddleChunkData extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		coord = PositionSerializer.readIntChunkCoord(serverdata);
+		coord = PositionCodec.readIntChunkCoord(serverdata);
 
-		blockMask = BitSet.valueOf(ArraySerializer.readVarIntLongArray(serverdata));
-		heightmaps = ItemStackSerializer.readDirectTag(serverdata);
-		biomes = ArraySerializer.readVarIntVarIntArray(serverdata);
+		blockMask = BitSet.valueOf(ArrayCodec.readVarIntLongArray(serverdata));
+		heightmaps = ItemStackCodec.readDirectTag(serverdata);
+		biomes = ArrayCodec.readVarIntVarIntArray(serverdata);
 
 		{
-			ByteBuf chunkdata = ArraySerializer.readVarIntByteArraySlice(serverdata);
+			ByteBuf chunkdata = ArrayCodec.readVarIntByteArraySlice(serverdata);
 			sections = new ChunkSectonBlockData[blockMask.length()];
 			for (int sectionIndex = 0; sectionIndex < sections.length; sectionIndex++) {
 				if (blockMask.get(sectionIndex)) {
@@ -43,7 +43,7 @@ public abstract class MiddleChunkData extends ClientBoundMiddlePacket {
 			}
 		}
 
-		tiles = ArraySerializer.readVarIntTArray(serverdata, TileEntity.class, from -> new TileEntity(ItemStackSerializer.readDirectTag(serverdata)));
+		tiles = ArrayCodec.readVarIntTArray(serverdata, TileEntity.class, from -> new TileEntity(ItemStackCodec.readDirectTag(serverdata)));
 	}
 
 }

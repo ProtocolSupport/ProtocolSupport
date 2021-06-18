@@ -1,13 +1,13 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15;
 
 import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityEquipment;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.AbstractSingleEntityEquipment;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.types.NetworkItemStack;
 
@@ -31,9 +31,9 @@ public class EntityEquipment extends AbstractSingleEntityEquipment {
 		int entityId, Slot slot, NetworkItemStack itemstack
 	) {
 		ClientBoundPacketData entityequipment = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_EQUIPMENT);
-		VarNumberSerializer.writeVarInt(entityequipment, entityId);
-		MiscSerializer.writeVarIntEnum(entityequipment, slot);
-		ItemStackSerializer.writeItemStack(entityequipment, version, locale, itemstack);
+		VarNumberCodec.writeVarInt(entityequipment, entityId);
+		MiscDataCodec.writeVarIntEnum(entityequipment, slot);
+		ItemStackCodec.writeItemStack(entityequipment, version, locale, itemstack);
 		return entityequipment;
 	}
 

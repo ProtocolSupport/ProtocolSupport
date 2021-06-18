@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.MiscDataCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
@@ -19,7 +19,7 @@ public abstract class MiddleGameStateChange extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		action = MiscSerializer.readByteEnum(serverdata, Action.CONSTANT_LOOKUP);
+		action = MiscDataCodec.readByteEnum(serverdata, Action.CONSTANT_LOOKUP);
 		value = serverdata.readFloat();
 	}
 

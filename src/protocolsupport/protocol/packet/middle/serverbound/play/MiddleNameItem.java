@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.StringSerializer;
 
 public abstract class MiddleNameItem extends ServerBoundMiddlePacket {
 
@@ -20,7 +20,7 @@ public abstract class MiddleNameItem extends ServerBoundMiddlePacket {
 
 	public static ServerBoundPacketData create(String name) {
 		ServerBoundPacketData serializer = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_NAME_ITEM);
-		StringSerializer.writeVarIntUTF8String(serializer, name);
+		StringCodec.writeVarIntUTF8String(serializer, name);
 		return serializer;
 	}
 

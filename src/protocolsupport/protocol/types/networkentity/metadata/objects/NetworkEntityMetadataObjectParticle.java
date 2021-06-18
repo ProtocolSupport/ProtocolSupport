@@ -2,7 +2,7 @@ package protocolsupport.protocol.types.networkentity.metadata.objects;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.typeremapper.particle.FlatteningNetworkParticleDataSerializer;
 import protocolsupport.protocol.typeremapper.particle.FlatteningNetworkParticleIdRegistry;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
@@ -17,7 +17,7 @@ public class NetworkEntityMetadataObjectParticle extends NetworkEntityMetadataOb
 
 	@Override
 	public void writeToStream(ByteBuf to, ProtocolVersion version, String locale) {
-		VarNumberSerializer.writeVarInt(to, FlatteningNetworkParticleIdRegistry.INSTANCE.getTable(version).get(NetworkParticleRegistry.getId(value)));
+		VarNumberCodec.writeVarInt(to, FlatteningNetworkParticleIdRegistry.INSTANCE.getTable(version).get(NetworkParticleRegistry.getId(value)));
 		FlatteningNetworkParticleDataSerializer.INSTANCE.get(version).write(to, value);
 	}
 

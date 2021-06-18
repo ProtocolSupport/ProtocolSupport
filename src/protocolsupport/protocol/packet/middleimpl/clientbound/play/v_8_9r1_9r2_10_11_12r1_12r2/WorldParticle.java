@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2;
 
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldParticle;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.particle.NetworkParticleLegacyData;
 import protocolsupport.protocol.typeremapper.particle.NetworkParticleLegacyData.NetworkParticleLegacyDataTable;
 import protocolsupport.protocol.typeremapper.particle.PreFlatteningNetworkParticleIntIdRegistryDataSerializer;
@@ -32,7 +32,7 @@ public class WorldParticle extends MiddleWorldParticle {
 			spawnparticle.writeFloat(particle.getData());
 			spawnparticle.writeInt(particle.getCount());
 			for (int data : PreFlatteningNetworkParticleIntIdRegistryDataSerializer.getData(version, particle)) {
-				VarNumberSerializer.writeVarInt(spawnparticle, data);
+				VarNumberCodec.writeVarInt(spawnparticle, data);
 			}
 			codec.writeClientbound(spawnparticle);
 		}

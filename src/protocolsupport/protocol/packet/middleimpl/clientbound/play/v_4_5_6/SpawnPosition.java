@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6;
 
+import protocolsupport.protocol.codec.PositionCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnPosition;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.PositionSerializer;
 
 public class SpawnPosition extends MiddleSpawnPosition {
 
@@ -15,7 +15,7 @@ public class SpawnPosition extends MiddleSpawnPosition {
 	protected void write() {
 		ClientBoundPacketData spawnposition = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SPAWN_POSITION);
 		position.modifyY(1);
-		PositionSerializer.writeLegacyPositionI(spawnposition, position);
+		PositionCodec.writePositionIII(spawnposition, position);
 		codec.writeClientbound(spawnposition);
 	}
 

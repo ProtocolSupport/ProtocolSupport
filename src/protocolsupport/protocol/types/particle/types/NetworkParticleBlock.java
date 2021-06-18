@@ -1,7 +1,7 @@
 package protocolsupport.protocol.types.particle.types;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.types.particle.NetworkParticle;
 
 public class NetworkParticleBlock extends NetworkParticle {
@@ -22,7 +22,7 @@ public class NetworkParticleBlock extends NetworkParticle {
 
 	@Override
 	public void readData(ByteBuf buf) {
-		blockdata = VarNumberSerializer.readVarInt(buf);
+		blockdata = VarNumberCodec.readVarInt(buf);
 	}
 
 }

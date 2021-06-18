@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
@@ -18,7 +18,7 @@ public abstract class MiddleEntityAnimation extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		entityId = VarNumberSerializer.readVarInt(serverdata);
+		entityId = VarNumberCodec.readVarInt(serverdata);
 		animation = Animation.BY_ID.get(serverdata.readUnsignedByte());
 
 		if (animation == null) {

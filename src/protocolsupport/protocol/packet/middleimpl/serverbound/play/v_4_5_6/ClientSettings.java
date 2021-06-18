@@ -3,8 +3,8 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6;
 import org.bukkit.inventory.MainHand;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleClientSettings;
-import protocolsupport.protocol.serializer.StringSerializer;
 
 public class ClientSettings extends MiddleClientSettings {
 
@@ -16,7 +16,7 @@ public class ClientSettings extends MiddleClientSettings {
 
 	@Override
 	protected void read(ByteBuf clientdata) {
-		locale = StringSerializer.readShortUTF16BEString(clientdata, 16);
+		locale = StringCodec.readShortUTF16BEString(clientdata, 16);
 		viewDist = clientdata.readByte();
 		int chatState = clientdata.readByte();
 		chatMode = ChatMode.CONSTANT_LOOKUP.getByOrdinal(chatState & 7);

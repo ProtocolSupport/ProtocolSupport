@@ -1,15 +1,15 @@
-package protocolsupport.protocol.serializer;
+package protocolsupport.protocol.codec;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.types.ChunkCoord;
 import protocolsupport.protocol.types.Position;
 
-public class PositionSerializer {
+public class PositionCodec {
 
-	private PositionSerializer() {
+	private PositionCodec() {
 	}
 
-	public static void skipPosition(ByteBuf from) {
+	public static void skipPositionL(ByteBuf from) {
 		from.skipBytes(Long.BYTES);
 	}
 
@@ -20,39 +20,39 @@ public class PositionSerializer {
 		);
 	}
 
-	public static void readPositionTo(ByteBuf from, Position to) {
+	public static void readPosition(ByteBuf from, Position to) {
 		long l = from.readLong();
 		to.setX((int) (l >> 38));
 		to.setY((int) (l & 0xFFF));
 		to.setZ((int) ((l << 26) >> 38));
 	}
 
-	public static void readLegacyPositionLTo(ByteBuf from, Position to) {
+	public static void readPositionLXYZ(ByteBuf from, Position to) {
 		long l = from.readLong();
 		to.setX((int) (l >> 38));
 		to.setY((int) ((l >> 26) & 0xFFFL));
 		to.setZ((int) ((l << 38) >> 38));
 	}
 
-	public static void readLegacyPositionBTo(ByteBuf from, Position to) {
+	public static void readPositionIBI(ByteBuf from, Position to) {
 		to.setX(from.readInt());
 		to.setY(from.readUnsignedByte());
 		to.setZ(from.readInt());
 	}
 
-	public static void readLegacyPositionSTo(ByteBuf from, Position to) {
+	public static void readPositionISI(ByteBuf from, Position to) {
 		to.setX(from.readInt());
 		to.setY(from.readShort());
 		to.setZ(from.readInt());
 	}
 
-	public static void readLegacyPositionITo(ByteBuf from, Position to) {
+	public static void readPositionIII(ByteBuf from, Position to) {
 		to.setX(from.readInt());
 		to.setY(from.readInt());
 		to.setZ(from.readInt());
 	}
 
-	public static Position readLegacyPositionI(ByteBuf from) {
+	public static Position readPositionIII(ByteBuf from) {
 		return new Position(from.readInt(), from.readInt(), from.readInt());
 	}
 
@@ -60,23 +60,23 @@ public class PositionSerializer {
 		to.writeLong(((position.getX() & 0x3FFFFFFL) << 38) | ((position.getZ() & 0x3FFFFFFL) << 12) | (position.getY() & 0xFFFL));
 	}
 
-	public static void writeLegacyPositionL(ByteBuf to, Position position) {
+	public static void writePositionLXYZ(ByteBuf to, Position position) {
 		to.writeLong(((position.getX() & 0x3FFFFFFL) << 38) | ((position.getY() & 0xFFFL) << 26) | (position.getZ() & 0x3FFFFFFL));
 	}
 
-	public static void writeLegacyPositionB(ByteBuf to, Position position) {
+	public static void writePositionIBI(ByteBuf to, Position position) {
 		to.writeInt(position.getX());
 		to.writeByte(position.getY());
 		to.writeInt(position.getZ());
 	}
 
-	public static void writeLegacyPositionS(ByteBuf to, Position position) {
+	public static void writePositionISI(ByteBuf to, Position position) {
 		to.writeInt(position.getX());
 		to.writeShort(position.getY());
 		to.writeInt(position.getZ());
 	}
 
-	public static void writeLegacyPositionI(ByteBuf to, Position position) {
+	public static void writePositionIII(ByteBuf to, Position position) {
 		to.writeInt(position.getX());
 		to.writeInt(position.getY());
 		to.writeInt(position.getZ());
@@ -89,7 +89,7 @@ public class PositionSerializer {
 	}
 
 	public static ChunkCoord readVarIntChunkCoord(ByteBuf from) {
-		return new ChunkCoord(VarNumberSerializer.readVarInt(from), VarNumberSerializer.readVarInt(from));
+		return new ChunkCoord(VarNumberCodec.readVarInt(from), VarNumberCodec.readVarInt(from));
 	}
 
 	public static void writeIntChunkCoord(ByteBuf to, ChunkCoord chunk) {
@@ -98,8 +98,8 @@ public class PositionSerializer {
 	}
 
 	public static void writeVarIntChunkCoord(ByteBuf to, ChunkCoord chunk) {
-		VarNumberSerializer.writeVarInt(to, chunk.getX());
-		VarNumberSerializer.writeVarInt(to, chunk.getZ());
+		VarNumberCodec.writeVarInt(to, chunk.getX());
+		VarNumberCodec.writeVarInt(to, chunk.getZ());
 	}
 
 }

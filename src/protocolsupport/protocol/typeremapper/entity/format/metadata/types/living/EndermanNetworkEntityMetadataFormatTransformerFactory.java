@@ -1,7 +1,7 @@
 package protocolsupport.protocol.typeremapper.entity.format.metadata.types.living;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
+import protocolsupport.protocol.codec.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.block.PreFlatteningBlockIdData;

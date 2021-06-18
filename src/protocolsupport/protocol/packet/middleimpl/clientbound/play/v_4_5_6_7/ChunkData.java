@@ -4,10 +4,10 @@ import java.util.Map;
 
 import org.bukkit.NamespacedKey;
 
+import protocolsupport.protocol.codec.PositionCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheChunkData;
-import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.typeremapper.basic.BiomeRemapper;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriteUtils;
@@ -33,7 +33,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 		boolean hasSkyLight = clientCache.hasDimensionSkyLight();
 
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
-		PositionSerializer.writeIntChunkCoord(chunkdata, coord);
+		PositionCodec.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(full);
 		if ((limitedBlockMask == 0) && full) {
 			chunkdata.writeShort(1);

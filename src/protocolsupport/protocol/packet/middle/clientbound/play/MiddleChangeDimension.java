@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
@@ -38,8 +38,8 @@ public abstract class MiddleChangeDimension extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		dimension = ItemStackSerializer.readDirectTag(serverdata);
-		world = StringSerializer.readVarIntUTF8String(serverdata);
+		dimension = ItemStackCodec.readDirectTag(serverdata);
+		world = StringCodec.readVarIntUTF8String(serverdata);
 		hashedSeed = serverdata.readLong();
 		gamemodeCurrent = GameMode.getById(serverdata.readByte());
 		gamemodePrevious = GameMode.getById(serverdata.readByte());

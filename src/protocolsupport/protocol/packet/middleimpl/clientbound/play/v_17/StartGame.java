@@ -1,12 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17;
 
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleStartGame;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class StartGame extends MiddleStartGame {
 
@@ -21,13 +21,13 @@ public class StartGame extends MiddleStartGame {
 		startgame.writeBoolean(hardcore);
 		startgame.writeByte(gamemodeCurrent.getId());
 		startgame.writeByte(gamemodePrevious.getId());
-		ArraySerializer.writeVarIntVarIntUTF8StringArray(startgame, worlds);
-		ItemStackSerializer.writeDirectTag(startgame, dimensions);
-		ItemStackSerializer.writeDirectTag(startgame, dimension);
-		StringSerializer.writeVarIntUTF8String(startgame, world);
+		ArrayCodec.writeVarIntVarIntUTF8StringArray(startgame, worlds);
+		ItemStackCodec.writeDirectTag(startgame, dimensions);
+		ItemStackCodec.writeDirectTag(startgame, dimension);
+		StringCodec.writeVarIntUTF8String(startgame, world);
 		startgame.writeLong(hashedSeed);
-		VarNumberSerializer.writeVarInt(startgame, maxplayers);
-		VarNumberSerializer.writeVarInt(startgame, renderDistance);
+		VarNumberCodec.writeVarInt(startgame, maxplayers);
+		VarNumberCodec.writeVarInt(startgame, renderDistance);
 		startgame.writeBoolean(reducedDebugInfo);
 		startgame.writeBoolean(respawnScreenEnabled);
 		startgame.writeBoolean(worldDebug);

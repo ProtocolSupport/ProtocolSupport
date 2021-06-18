@@ -4,11 +4,11 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.Any;
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
@@ -27,14 +27,14 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		reset = serverdata.readBoolean();
-		advancementsMapping = ArraySerializer.readVarIntTArray(
+		advancementsMapping = ArrayCodec.readVarIntTArray(
 			serverdata, Any.class,
-			buf -> new Any<>(StringSerializer.readVarIntUTF8String(buf), Advancement.read(buf))
+			buf -> new Any<>(StringCodec.readVarIntUTF8String(buf), Advancement.read(buf))
 		);
-		removeAdvancements = ArraySerializer.readVarIntVarIntUTF8StringArray(serverdata);
-		advancementsProgress = ArraySerializer.readVarIntTArray(
+		removeAdvancements = ArrayCodec.readVarIntVarIntUTF8StringArray(serverdata);
+		advancementsProgress = ArrayCodec.readVarIntTArray(
 			serverdata, Any.class,
-			buf -> new Any<>(StringSerializer.readVarIntUTF8String(buf), AdvancementProgress.read(buf))
+			buf -> new Any<>(StringCodec.readVarIntUTF8String(buf), AdvancementProgress.read(buf))
 		);
 	}
 
@@ -48,10 +48,10 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 	protected static class Advancement {
 
 		protected static Advancement read(ByteBuf from) {
-			String parentId = from.readBoolean() ? StringSerializer.readVarIntUTF8String(from) : null;
+			String parentId = from.readBoolean() ? StringCodec.readVarIntUTF8String(from) : null;
 			AdvancementDisplay display = from.readBoolean() ? AdvancementDisplay.read(from) : null;
-			String[] criterias = ArraySerializer.readVarIntVarIntUTF8StringArray(from);
-			String[][] requirments = ArraySerializer.readVarIntTArray(from, String[].class, ArraySerializer::readVarIntVarIntUTF8StringArray);
+			String[] criterias = ArrayCodec.readVarIntVarIntUTF8StringArray(from);
+			String[][] requirments = ArrayCodec.readVarIntTArray(from, String[].class, ArrayCodec::readVarIntVarIntUTF8StringArray);
 			return new Advancement(parentId, display, criterias, requirments);
 		}
 
@@ -72,12 +72,12 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 		public static final int flagHasBackgroundOffset = 0x1;
 
 		protected static AdvancementDisplay read(ByteBuf from) {
-			BaseComponent title = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(from), true);
-			BaseComponent description = ChatAPI.fromJSON(StringSerializer.readVarIntUTF8String(from), true);
-			NetworkItemStack icon = ItemStackSerializer.readItemStack(from);
-			FrameType type = MiscSerializer.readVarIntEnum(from, FrameType.CONSTANT_LOOKUP);
+			BaseComponent title = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(from), true);
+			BaseComponent description = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(from), true);
+			NetworkItemStack icon = ItemStackCodec.readItemStack(from);
+			FrameType type = MiscDataCodec.readVarIntEnum(from, FrameType.CONSTANT_LOOKUP);
 			int flags = from.readInt();
-			String background = (flags & flagHasBackgroundOffset) != 0 ? StringSerializer.readVarIntUTF8String(from) : null;
+			String background = (flags & flagHasBackgroundOffset) != 0 ? StringCodec.readVarIntUTF8String(from) : null;
 			float x = from.readFloat();
 			float y = from.readFloat();
 			return new AdvancementDisplay(title, description, icon, type, flags, background, x, y);
@@ -112,9 +112,9 @@ public abstract class MiddleAdvancements extends ClientBoundMiddlePacket {
 
 		@SuppressWarnings("unchecked")
 		protected static AdvancementProgress read(ByteBuf from) {
-			return new AdvancementProgress(ArraySerializer.readVarIntTArray(
+			return new AdvancementProgress(ArrayCodec.readVarIntTArray(
 				from, Any.class,
-				buf -> new Any<>(StringSerializer.readVarIntUTF8String(from), buf.readBoolean() ? buf.readLong() : null)
+				buf -> new Any<>(StringCodec.readVarIntUTF8String(from), buf.readBoolean() ? buf.readLong() : null)
 			));
 		}
 

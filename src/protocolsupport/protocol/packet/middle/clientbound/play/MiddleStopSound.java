@@ -1,9 +1,9 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleStopSound extends ClientBoundMiddlePacket {
 
@@ -20,8 +20,8 @@ public abstract class MiddleStopSound extends ClientBoundMiddlePacket {
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		int flags = serverdata.readByte();
-		source = (flags & FLAG_SOURCE) == FLAG_SOURCE ? VarNumberSerializer.readVarInt(serverdata) : -1;
-		name = (flags & FLAG_NAME) == FLAG_NAME ? StringSerializer.readVarIntUTF8String(serverdata) : null;
+		source = (flags & FLAG_SOURCE) == FLAG_SOURCE ? VarNumberCodec.readVarInt(serverdata) : -1;
+		name = (flags & FLAG_NAME) == FLAG_NAME ? StringCodec.readVarIntUTF8String(serverdata) : null;
 	}
 
 }

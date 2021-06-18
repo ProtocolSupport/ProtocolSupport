@@ -2,11 +2,11 @@ package protocolsupport.protocol.packet.middle.serverbound.play;
 
 import org.bukkit.inventory.MainHand;
 
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
@@ -32,12 +32,12 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 
 	public static ServerBoundPacketData create(String locale, int viewDist, ChatMode chatMode, boolean chatColors, int skinFlags, MainHand mainHand, boolean disableTextFilter) {
 		ServerBoundPacketData clientsettingsPacket = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_SETTINGS);
-		StringSerializer.writeVarIntUTF8String(clientsettingsPacket, locale);
+		StringCodec.writeVarIntUTF8String(clientsettingsPacket, locale);
 		clientsettingsPacket.writeByte(viewDist);
-		MiscSerializer.writeVarIntEnum(clientsettingsPacket, chatMode);
+		MiscDataCodec.writeVarIntEnum(clientsettingsPacket, chatMode);
 		clientsettingsPacket.writeBoolean(chatColors);
 		clientsettingsPacket.writeByte(skinFlags);
-		MiscSerializer.writeVarIntEnum(clientsettingsPacket, mainHand);
+		MiscDataCodec.writeVarIntEnum(clientsettingsPacket, mainHand);
 		clientsettingsPacket.writeBoolean(disableTextFilter);
 		return clientsettingsPacket;
 	}

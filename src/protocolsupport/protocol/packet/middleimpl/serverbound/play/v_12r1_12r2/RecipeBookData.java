@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_12r1_12r2;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public class RecipeBookData extends ServerBoundMiddlePacket {
 
@@ -12,7 +12,7 @@ public class RecipeBookData extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void read(ByteBuf clientdata) {
-		int type = VarNumberSerializer.readVarInt(clientdata);
+		int type = VarNumberCodec.readVarInt(clientdata);
 		switch (type) {
 			case 0: {
 				clientdata.readInt();

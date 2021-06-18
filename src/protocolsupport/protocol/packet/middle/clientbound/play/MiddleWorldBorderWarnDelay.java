@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 
 public abstract class MiddleWorldBorderWarnDelay extends ClientBoundMiddlePacket {
 
@@ -14,7 +14,7 @@ public abstract class MiddleWorldBorderWarnDelay extends ClientBoundMiddlePacket
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		warnDelay = VarNumberSerializer.readVarInt(serverdata);
+		warnDelay = VarNumberCodec.readVarInt(serverdata);
 	}
 
 }

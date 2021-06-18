@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 
 public abstract class MiddleEntityEffectAdd extends MiddleEntity {
@@ -21,7 +21,7 @@ public abstract class MiddleEntityEffectAdd extends MiddleEntity {
 		super.decode(serverdata);
 		effectId = serverdata.readByte();
 		amplifier = serverdata.readByte();
-		duration = VarNumberSerializer.readVarInt(serverdata);
+		duration = VarNumberCodec.readVarInt(serverdata);
 		flags = serverdata.readByte();
 	}
 

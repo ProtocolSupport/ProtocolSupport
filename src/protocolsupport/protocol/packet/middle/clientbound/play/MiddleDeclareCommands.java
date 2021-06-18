@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.MiscDataCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.MiscSerializer;
 
 public abstract class MiddleDeclareCommands extends ClientBoundMiddlePacket {
 
@@ -15,7 +15,7 @@ public abstract class MiddleDeclareCommands extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		data = MiscSerializer.readAllBytesSlice(serverdata);
+		data = MiscDataCodec.readAllBytesSlice(serverdata);
 	}
 
 }

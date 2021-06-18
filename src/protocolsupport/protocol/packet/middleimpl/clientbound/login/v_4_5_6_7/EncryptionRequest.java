@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.login.v_4_5_6_7;
 
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.login.MiddleEncryptionRequest;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 
 public class EncryptionRequest extends MiddleEncryptionRequest {
 
@@ -15,9 +15,9 @@ public class EncryptionRequest extends MiddleEncryptionRequest {
 	@Override
 	protected void write() {
 		ClientBoundPacketData encryptionrequest = ClientBoundPacketData.create(ClientBoundPacketType.LOGIN_ENCRYPTION_BEGIN);
-		StringSerializer.writeString(encryptionrequest, version, serverId);
-		ArraySerializer.writeShortByteArray(encryptionrequest, publicKey);
-		ArraySerializer.writeShortByteArray(encryptionrequest, verifyToken);
+		StringCodec.writeString(encryptionrequest, version, serverId);
+		ArrayCodec.writeShortByteArray(encryptionrequest, publicKey);
+		ArrayCodec.writeShortByteArray(encryptionrequest, verifyToken);
 		codec.writeClientbound(encryptionrequest);
 	}
 

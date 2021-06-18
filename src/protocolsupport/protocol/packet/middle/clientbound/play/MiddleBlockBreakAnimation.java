@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.codec.VarNumberCodec;
 
 public abstract class MiddleBlockBreakAnimation extends MiddleBlock {
 
@@ -14,7 +14,7 @@ public abstract class MiddleBlockBreakAnimation extends MiddleBlock {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		entityId = VarNumberSerializer.readVarInt(serverdata);
+		entityId = VarNumberCodec.readVarInt(serverdata);
 		super.decode(serverdata);
 		stage = serverdata.readByte();
 	}

@@ -6,11 +6,11 @@ import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.utils.ProfileProperty;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.UUIDCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.UUIDSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.PlayerListCache;
 import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
 import protocolsupport.protocol.types.GameMode;
@@ -29,33 +29,33 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		action = MiscSerializer.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
-		int entryCount = VarNumberSerializer.readVarInt(serverdata);
+		action = MiscDataCodec.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
+		int entryCount = VarNumberCodec.readVarInt(serverdata);
 		while (entryCount-- > 0) {
-			UUID uuid = UUIDSerializer.readUUID2L(serverdata);
+			UUID uuid = UUIDCodec.readUUID2L(serverdata);
 			switch (action) {
 				case ADD: {
 					PlayerListEntry oldEntry = playerlistCache.getEntry(uuid);
 					if (oldEntry != null) {
 						oldEntry = oldEntry.clone();
 					}
-					String username = StringSerializer.readVarIntUTF8String(serverdata);
+					String username = StringCodec.readVarIntUTF8String(serverdata);
 					ArrayList<ProfileProperty> properties = new ArrayList<>();
-					int propertiesCount = VarNumberSerializer.readVarInt(serverdata);
+					int propertiesCount = VarNumberCodec.readVarInt(serverdata);
 					while (propertiesCount-- > 0) {
-						String name = StringSerializer.readVarIntUTF8String(serverdata);
-						String value = StringSerializer.readVarIntUTF8String(serverdata);
+						String name = StringCodec.readVarIntUTF8String(serverdata);
+						String value = StringCodec.readVarIntUTF8String(serverdata);
 						String signature = null;
 						if (serverdata.readBoolean()) {
-							signature = StringSerializer.readVarIntUTF8String(serverdata);
+							signature = StringCodec.readVarIntUTF8String(serverdata);
 						}
 						properties.add(new ProfileProperty(name, value, signature));
 					}
-					GameMode gamemode = GameMode.getById(VarNumberSerializer.readVarInt(serverdata));
-					int ping = VarNumberSerializer.readVarInt(serverdata);
+					GameMode gamemode = GameMode.getById(VarNumberCodec.readVarInt(serverdata));
+					int ping = VarNumberCodec.readVarInt(serverdata);
 					String displayNameJson = null;
 					if (serverdata.readBoolean()) {
-						displayNameJson = StringSerializer.readVarIntUTF8String(serverdata);
+						displayNameJson = StringCodec.readVarIntUTF8String(serverdata);
 					}
 					PlayerListEntry currentEntry = new PlayerListEntry(username, ping, gamemode, displayNameJson, properties);
 					playerlistCache.addEntry(uuid, currentEntry);
@@ -63,7 +63,7 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 					break;
 				}
 				case GAMEMODE: {
-					GameMode gamemode = GameMode.getById(VarNumberSerializer.readVarInt(serverdata));
+					GameMode gamemode = GameMode.getById(VarNumberCodec.readVarInt(serverdata));
 					PlayerListEntry currentEntry = playerlistCache.getEntry(uuid);
 					if (currentEntry != null) {
 						PlayerListEntry oldEntry = currentEntry.clone();
@@ -73,7 +73,7 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 					break;
 				}
 				case PING: {
-					int ping = VarNumberSerializer.readVarInt(serverdata);
+					int ping = VarNumberCodec.readVarInt(serverdata);
 					PlayerListEntry currentEntry = playerlistCache.getEntry(uuid);
 					if (currentEntry != null) {
 						PlayerListEntry oldEntry = currentEntry.clone();
@@ -85,7 +85,7 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 				case DISPLAY_NAME: {
 					String displayNameJson = null;
 					if (serverdata.readBoolean()) {
-						displayNameJson = StringSerializer.readVarIntUTF8String(serverdata);
+						displayNameJson = StringCodec.readVarIntUTF8String(serverdata);
 					}
 					PlayerListEntry currentEntry = playerlistCache.getEntry(uuid);
 					if (currentEntry != null) {

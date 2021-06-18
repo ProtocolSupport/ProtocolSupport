@@ -2,11 +2,11 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.tab.TabAPI;
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.ArraySerializer;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
@@ -51,17 +51,17 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 		hardcore = serverdata.readBoolean();
 		gamemodeCurrent = GameMode.getById(serverdata.readByte());
 		gamemodePrevious = GameMode.getById(serverdata.readByte());
-		worlds = ArraySerializer.readVarIntVarIntUTF8StringArray(serverdata);
-		dimensions = ItemStackSerializer.readDirectTag(serverdata);
-		dimension = ItemStackSerializer.readDirectTag(serverdata);
-		world = StringSerializer.readVarIntUTF8String(serverdata);
+		worlds = ArrayCodec.readVarIntVarIntUTF8StringArray(serverdata);
+		dimensions = ItemStackCodec.readDirectTag(serverdata);
+		dimension = ItemStackCodec.readDirectTag(serverdata);
+		world = StringCodec.readVarIntUTF8String(serverdata);
 		hashedSeed = serverdata.readLong();
-		maxplayers = VarNumberSerializer.readVarInt(serverdata);
+		maxplayers = VarNumberCodec.readVarInt(serverdata);
 		int forcedMaxPlayers = TabAPI.getMaxTabSize();
 		if (forcedMaxPlayers >= 0) {
 			maxplayers = forcedMaxPlayers;
 		}
-		renderDistance = VarNumberSerializer.readVarInt(serverdata);
+		renderDistance = VarNumberCodec.readVarInt(serverdata);
 		reducedDebugInfo = serverdata.readBoolean();
 		respawnScreenEnabled = serverdata.readBoolean();
 		worldDebug = serverdata.readBoolean();

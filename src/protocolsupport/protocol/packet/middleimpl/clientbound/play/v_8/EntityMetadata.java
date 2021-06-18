@@ -2,16 +2,16 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_8;
 
 import java.util.Collections;
 
+import protocolsupport.protocol.codec.NetworkEntityMetadataSerializer;
+import protocolsupport.protocol.codec.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
+import protocolsupport.protocol.codec.PositionCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPassengerStackEntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPassengerStackEntityPassengers;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPotionItemAsObjectDataEntityMetadata;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_6_7_8.EntityPassengers;
-import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer;
-import protocolsupport.protocol.serializer.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
-import protocolsupport.protocol.serializer.PositionSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotionId;
 import protocolsupport.protocol.types.NetworkItemStack;
@@ -32,7 +32,7 @@ public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata
 	@Override
 	protected void writeEntityMetadata(NetworkEntityMetadataList remappedMetadata) {
 		ClientBoundPacketData entitymetadataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_METADATA);
-		VarNumberSerializer.writeVarInt(entitymetadataPacket, entityId);
+		VarNumberCodec.writeVarInt(entitymetadataPacket, entityId);
 		NetworkEntityMetadataSerializer.writeLegacyData(entitymetadataPacket, version, clientCache.getLocale(), remappedMetadata);
 		codec.writeClientbound(entitymetadataPacket);
 	}
@@ -40,8 +40,8 @@ public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata
 	@Override
 	protected void writePlayerUseBed(Position position) {
 		ClientBoundPacketData usebedPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED);
-		VarNumberSerializer.writeVarInt(usebedPacket, entityId);
-		PositionSerializer.writeLegacyPositionL(usebedPacket, position);
+		VarNumberCodec.writeVarInt(usebedPacket, entityId);
+		PositionCodec.writePositionLXYZ(usebedPacket, position);
 		codec.writeClientbound(usebedPacket);
 	}
 

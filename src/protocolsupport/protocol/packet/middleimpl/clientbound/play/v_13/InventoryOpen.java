@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13;
 
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.chat.ChatCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.chat.ChatSerializer;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.window.WindowTypeIdMappingRegistry;
 import protocolsupport.protocol.typeremapper.window.WindowTypeIdMappingRegistry.WindowTypeIdMappingTable;
@@ -26,7 +26,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 			windowopen,
 			windowId,
 			(String) windowTypeIdMappingTable.get(windowRemapper.toClientWindowType(type)),
-			ChatSerializer.serialize(version, clientCache.getLocale(), title),
+			ChatCodec.serialize(version, clientCache.getLocale(), title),
 			windowRemapper.toClientWindowSlots(0)
 		);
 		codec.writeClientbound(windowopen);
@@ -34,8 +34,8 @@ public class InventoryOpen extends MiddleInventoryOpen {
 
 	public static void writeData(ClientBoundPacketData to, int windowId, String type, String titleJson, int slots) {
 		to.writeByte(windowId);
-		StringSerializer.writeVarIntUTF8String(to, type);
-		StringSerializer.writeVarIntUTF8String(to, titleJson);
+		StringCodec.writeVarIntUTF8String(to, type);
+		StringCodec.writeVarIntUTF8String(to, titleJson);
 		to.writeByte(slots);
 	}
 

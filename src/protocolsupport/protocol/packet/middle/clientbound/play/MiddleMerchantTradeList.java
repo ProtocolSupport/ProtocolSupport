@@ -1,8 +1,8 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.MerchantDataCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.serializer.MerchantDataSerializer;
 import protocolsupport.protocol.types.MerchantData;
 
 public abstract class MiddleMerchantTradeList extends ClientBoundMiddlePacket {
@@ -15,7 +15,7 @@ public abstract class MiddleMerchantTradeList extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		merchantData = MerchantDataSerializer.readMerchantData(serverdata);
+		merchantData = MerchantDataCodec.readMerchantData(serverdata);
 	}
 
 }

@@ -17,13 +17,13 @@ import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPipeLineBuilder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameDecoder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameEncoder;
-import protocolsupport.protocol.serializer.MiscSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.utils.JavaSystemProperty;
 import protocolsupport.utils.netty.Decompressor;
 import protocolsupport.utils.netty.ReplayingDecoderByteBuf;
@@ -186,7 +186,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 						scheduleTask(ctx, new SetProtocolTask(this, channel, ProtocolVersion.MINECRAFT_1_5_2), ping152delay, TimeUnit.MILLISECONDS);
 					} else if (
 						(buffer.readUnsignedByte() == 0xFA) &&
-						"MC|PingHost".equals(StringSerializer.readShortUTF16BEString(buffer, Short.MAX_VALUE))
+						"MC|PingHost".equals(StringCodec.readShortUTF16BEString(buffer, Short.MAX_VALUE))
 					) {
 						//definitely 1.6
 						buffer.readUnsignedShort();
@@ -215,16 +215,16 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	protected static ProtocolVersion attemptDecodeNewHandshake(ByteBuf bytebuf) {
 		bytebuf.readerIndex(0);
-		return ProtocolUtils.readNewHandshake(bytebuf.readSlice(VarNumberSerializer.readVarInt(bytebuf)));
+		return ProtocolUtils.readNewHandshake(bytebuf.readSlice(VarNumberCodec.readVarInt(bytebuf)));
 	}
 
 	protected void decodeEncapsulated(ChannelHandlerContext ctx) throws Exception {
 		Channel channel = ctx.channel();
-		ByteBuf firstpacketdata = buffer.readSlice(VarNumberSerializer.readVarInt(buffer));
+		ByteBuf firstpacketdata = buffer.readSlice(VarNumberCodec.readVarInt(buffer));
 		if (encapsulatedinfo.hasCompression()) {
-			int uncompressedlength = VarNumberSerializer.readVarInt(firstpacketdata);
+			int uncompressedlength = VarNumberCodec.readVarInt(firstpacketdata);
 			if (uncompressedlength != 0) {
-				firstpacketdata = Unpooled.wrappedBuffer(Decompressor.decompressStatic(MiscSerializer.readAllBytes(firstpacketdata), uncompressedlength));
+				firstpacketdata = Unpooled.wrappedBuffer(Decompressor.decompressStatic(MiscDataCodec.readAllBytes(firstpacketdata), uncompressedlength));
 			}
 		}
 		int firstbyte = firstpacketdata.readUnsignedByte();
@@ -240,7 +240,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 						setProtocol(channel, ProtocolVersion.MINECRAFT_1_5_2);
 					} else if (
 						(firstpacketdata.readUnsignedByte() == 0xFA) &&
-						"MC|PingHost".equals(StringSerializer.readShortUTF16BEString(firstpacketdata, Short.MAX_VALUE))
+						"MC|PingHost".equals(StringCodec.readShortUTF16BEString(firstpacketdata, Short.MAX_VALUE))
 					) {
 						//1.6.*
 						firstpacketdata.readUnsignedShort();

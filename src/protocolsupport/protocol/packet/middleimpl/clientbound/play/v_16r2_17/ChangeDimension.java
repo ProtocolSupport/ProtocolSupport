@@ -1,10 +1,10 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2_17;
 
+import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
-import protocolsupport.protocol.serializer.StringSerializer;
 
 public class ChangeDimension extends MiddleChangeDimension {
 
@@ -15,8 +15,8 @@ public class ChangeDimension extends MiddleChangeDimension {
 	@Override
 	protected void write() {
 		ClientBoundPacketData changedimension = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_RESPAWN);
-		ItemStackSerializer.writeDirectTag(changedimension, dimension);
-		StringSerializer.writeVarIntUTF8String(changedimension, world);
+		ItemStackCodec.writeDirectTag(changedimension, dimension);
+		StringCodec.writeVarIntUTF8String(changedimension, world);
 		changedimension.writeLong(hashedSeed);
 		changedimension.writeByte(gamemodeCurrent.getId());
 		changedimension.writeByte(gamemodePrevious.getId());

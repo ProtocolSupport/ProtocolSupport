@@ -3,7 +3,7 @@ package protocolsupport.protocol.pipeline.initial;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.VarNumberSerializer;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
 public class ProtocolUtils {
@@ -35,9 +35,9 @@ public class ProtocolUtils {
 	}
 
 	protected static ProtocolVersion readNewHandshake(ByteBuf data) {
-		int packetId = VarNumberSerializer.readVarInt(data);
+		int packetId = VarNumberCodec.readVarInt(data);
 		if (packetId == 0x00) {
-			return ProtocolVersionsHelper.getNewProtocolVersion(VarNumberSerializer.readVarInt(data));
+			return ProtocolVersionsHelper.getNewProtocolVersion(VarNumberCodec.readVarInt(data));
 		} else {
 			throw new DecoderException(packetId + " is not a valid packet id");
 		}
