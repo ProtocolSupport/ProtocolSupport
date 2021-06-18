@@ -5,12 +5,12 @@ import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.AbstractThunderboltSpawnObject;
-import protocolsupport.protocol.typeremapper.entity.FlatteningNetworkEntityId;
+import protocolsupport.protocol.typeremapper.entity.FlatteningNetworkEntityIdRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 
 public class SpawnObject extends AbstractThunderboltSpawnObject {
 
-	protected final ArrayBasedIntMappingTable flatteningEntityIdTable = FlatteningNetworkEntityId.REGISTRY.getTable(version);
+	protected final ArrayBasedIntMappingTable flatteningEntityIdTable = FlatteningNetworkEntityIdRegistry.INSTANCE.getTable(version);
 
 	public SpawnObject(MiddlePacketInit init) {
 		super(init);

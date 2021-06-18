@@ -16,7 +16,7 @@ public class DeclareTags extends AbstractDeclareTags {
 		writeBlocksTags(declaretagsPacket, tagsMap.get(key_block));
 		writeItemsTags(declaretagsPacket, tagsMap.get(key_item));
 		writeTags(declaretagsPacket, tagsMap.get(key_fluid));
-		writeTags(declaretagsPacket, tagsMap.get(key_entity_type));
+		writeEntityTags(declaretagsPacket, tagsMap.get(key_entity_type));
 		codec.writeClientbound(declaretagsPacket);
 	}
 

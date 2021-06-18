@@ -12,27 +12,24 @@ import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
-public class FlatteningNetworkEntityId {
+public class FlatteningNetworkEntityIdRegistry extends IntMappingRegistry<ThrowingArrayBasedIntTable> {
 
-	private FlatteningNetworkEntityId() {
-	}
+	public static final IntMappingRegistry<ThrowingArrayBasedIntTable> INSTANCE = new FlatteningNetworkEntityIdRegistry();
 
-	public static final IntMappingRegistry<ThrowingArrayBasedIntTable> REGISTRY = new IntMappingRegistry<>() {
-		@Override
-		protected ThrowingArrayBasedIntTable createTable() {
-			return new ThrowingArrayBasedIntTable(256);
-		}
-	};
-
-	static {
+	public FlatteningNetworkEntityIdRegistry() {
 		JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("flatteningentity.json"));
 		for (String versionString : rootObject.keySet()) {
 			JsonObject entriesObject = rootObject.get(versionString).getAsJsonObject();
-			ArrayBasedIntMappingTable table = REGISTRY.getTable(ProtocolVersion.valueOf(versionString));
+			ArrayBasedIntMappingTable table = getTable(ProtocolVersion.valueOf(versionString));
 			for (String entityidString : entriesObject.keySet()) {
 				table.set(Integer.parseInt(entityidString), JsonUtils.getInt(entriesObject, entityidString));
 			}
 		}
+	}
+
+	@Override
+	protected ThrowingArrayBasedIntTable createTable() {
+		return new ThrowingArrayBasedIntTable(256);
 	}
 
 }

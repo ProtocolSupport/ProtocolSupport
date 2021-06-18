@@ -10,14 +10,18 @@ import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataEntry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
+import protocolsupport.protocol.typeremapper.entity.FlatteningNetworkEntityIdRegistry;
+import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry;
+import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry.NetworkEntityLegacyDataTable;
 import protocolsupport.protocol.typeremapper.itemstack.FlatteningItemId;
 import protocolsupport.protocol.typeremapper.itemstack.legacy.ItemStackLegacyData;
 import protocolsupport.protocol.typeremapper.itemstack.legacy.ItemStackLegacyData.ItemStackLegacyDataTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
+import protocolsupport.protocol.typeremapper.utils.MappingTable.ThrowingArrayBasedIntTable;
 import protocolsupport.protocol.types.NetworkItemStack;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.BlockBlockDataLookup;
 
-//TODO: implement special handling for entity tags
 public abstract class AbstractDeclareTags extends MiddleDeclareTags {
 
 	protected AbstractDeclareTags(MiddlePacketInit init) {
@@ -25,7 +29,7 @@ public abstract class AbstractDeclareTags extends MiddleDeclareTags {
 	}
 
 	protected void writeBlocksTags(ByteBuf to, Tag[] tags) {
-		IntMappingTable blockDataRemappingTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
+		IntMappingTable blockdataLegacyDataTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 		FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockDataRegistry.INSTANCE.getTable(version);
 		ArrayCodec.writeVarIntTArray(to, tags, (tagsTo, tag) -> {
 			StringCodec.writeVarIntUTF8String(tagsTo, tag.getTagId());
@@ -33,7 +37,7 @@ public abstract class AbstractDeclareTags extends MiddleDeclareTags {
 				int count = blocksIds.length;
 				for (int blockId : blocksIds) {
 					int blockData = BlockBlockDataLookup.getBlockDataId(blockId);
-					if (blockDataRemappingTable.get(blockData) == blockData) {
+					if (blockdataLegacyDataTable.get(blockData) == blockData) {
 						FlatteningBlockDataEntry fEntry = flatteningBlockDataTable.get(blockData);
 						VarNumberCodec.writeVarInt(taggedIdsTo, fEntry != null ? fEntry.getBlockId() : blockId);
 					} else {
@@ -55,6 +59,26 @@ public abstract class AbstractDeclareTags extends MiddleDeclareTags {
 				for (int itemId : itemsIds) {
 					if (itemId == legacyitemdataTable.apply(new NetworkItemStack(itemId)).getTypeId()) {
 						VarNumberCodec.writeVarInt(taggedIdsTo, flatteningItemTypeTable.get(itemId));
+					} else {
+						count--;
+					}
+				}
+				return count;
+			});
+		});
+	}
+
+	protected void writeEntityTags(ByteBuf to, Tag[] tags) {
+		NetworkEntityLegacyDataTable entityLegacyDataTable = NetworkEntityLegacyDataRegistry.INSTANCE.getTable(version);
+		ThrowingArrayBasedIntTable flatteningEntityIdTable = FlatteningNetworkEntityIdRegistry.INSTANCE.getTable(version);
+		ArrayCodec.writeVarIntTArray(to, tags, (tagsTo, tag) -> {
+			StringCodec.writeVarIntUTF8String(tagsTo, tag.getTagId());
+			MiscDataCodec.writeVarIntCountPrefixedType(tagsTo, tag.getTaggedIds(), (taggedIdsTo, entitiesIds) -> {
+				int count = entitiesIds.length;
+				for (int entityId : entitiesIds) {
+					NetworkEntityType type = NetworkEntityType.getByNetworkTypeId(entityId);
+					if ((type != NetworkEntityType.NONE) && (entityLegacyDataTable.get(type).getType().getNetworkTypeId() == entityId)) {
+						VarNumberCodec.writeVarInt(taggedIdsTo, flatteningEntityIdTable.get(entityId));
 					} else {
 						count--;
 					}

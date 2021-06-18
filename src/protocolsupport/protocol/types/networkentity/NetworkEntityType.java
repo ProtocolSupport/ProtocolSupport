@@ -173,8 +173,7 @@ public enum NetworkEntityType {
 		NONE, SPECIAL, OBJECT, MOB
 	}
 
-	private static final ArrayMap<NetworkEntityType> OBJECT_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.OBJECT), (w -> w.typeId));
-	private static final ArrayMap<NetworkEntityType> MOB_BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()).filter(w -> w.etype == EType.MOB), (w -> w.typeId));
+	private static final ArrayMap<NetworkEntityType> BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()), (w -> w.typeId));
 	private static final Map<EntityType, NetworkEntityType> BY_B_TYPE = CollectionsUtils.makeEnumMappingEnumMap(Arrays.stream(NetworkEntityType.values()), EntityType.class, NetworkEntityType::getBukkitType);
 	private static final Map<String, NetworkEntityType> BY_R_STRING_ID = new HashMap<>();
 	static {
@@ -188,14 +187,19 @@ public enum NetworkEntityType {
 		});
 	}
 
-	public static @Nonnull NetworkEntityType getObjectByNetworkTypeId(@Nonnegative int objectTypeId) {
-		NetworkEntityType type = OBJECT_BY_N_ID.get(objectTypeId);
+	public static @Nonnull NetworkEntityType getByNetworkTypeId(@Nonnegative int typeId) {
+		NetworkEntityType type = BY_N_ID.get(typeId);
 		return type != null ? type : NONE;
 	}
 
+	public static @Nonnull NetworkEntityType getObjectByNetworkTypeId(@Nonnegative int objectTypeId) {
+		NetworkEntityType type = BY_N_ID.get(objectTypeId);
+		return (type != null) && (type.getEType() == EType.OBJECT) ? type : NONE;
+	}
+
 	public static @Nonnull NetworkEntityType getMobByNetworkTypeId(@Nonnegative int mobTypeId) {
-		NetworkEntityType type = MOB_BY_N_ID.get(mobTypeId);
-		return type != null ? type : NONE;
+		NetworkEntityType type = BY_N_ID.get(mobTypeId);
+		return (type != null) && (type.getEType() == EType.MOB) ? type : NONE;
 	}
 
 	public static @Nonnull NetworkEntityType getByRegistrySTypeId(@Nonnull String name) {

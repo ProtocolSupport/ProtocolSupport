@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.typeremapper.entity.FlatteningNetworkEntityId;
+import protocolsupport.protocol.typeremapper.entity.FlatteningNetworkEntityIdRegistry;
 import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry;
 import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry.NetworkEntityLegacyFormatEntry;
 import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry.NetworkEntityLegacyFormatTable;
@@ -46,7 +46,7 @@ class NetworkEntityTypeTransformTests extends PlatformInit {
 					case MOB: {
 						if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13)) {
 							Assertions.assertDoesNotThrow(
-								() -> FlatteningNetworkEntityId.REGISTRY.getTable(version).get(fMappedType.getNetworkTypeId()),
+								() -> FlatteningNetworkEntityIdRegistry.INSTANCE.getTable(version).get(fMappedType.getNetworkTypeId()),
 								"NetworkParticleFlatteningId for ProtocolVersion " + version + " and NetworkEntityType " + type
 							);
 						}
@@ -55,7 +55,7 @@ class NetworkEntityTypeTransformTests extends PlatformInit {
 					case OBJECT: {
 						if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_14)) {
 							Assertions.assertDoesNotThrow(
-								() -> FlatteningNetworkEntityId.REGISTRY.getTable(version).get(fMappedType.getNetworkTypeId()),
+								() -> FlatteningNetworkEntityIdRegistry.INSTANCE.getTable(version).get(fMappedType.getNetworkTypeId()),
 								"NetworkParticleFlatteningId for ProtocolVersion " + version + " and NetworkEntityType " + type
 							);
 						}

@@ -27,6 +27,8 @@ public class DeclareTags extends AbstractDeclareTags {
 				writeBlocksTags(declaretagsPacket, tagsEntry.getValue());
 			} else if (key.equals(key_item)) {
 				writeItemsTags(declaretagsPacket, tagsEntry.getValue());
+			} else if (key.equals(key_entity_type)) {
+				writeEntityTags(declaretagsPacket, tagsEntry.getValue());
 			} else {
 				writeTags(declaretagsPacket, tagsEntry.getValue());
 			}
