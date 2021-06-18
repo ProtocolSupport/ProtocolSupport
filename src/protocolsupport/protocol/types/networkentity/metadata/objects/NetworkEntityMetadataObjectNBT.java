@@ -4,13 +4,12 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.types.nbt.NBTCompound;
-import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class NetworkEntityMetadataObjectNBTTagCompound extends ReadableNetworkEntityMetadataObject<NBTCompound> {
+public class NetworkEntityMetadataObjectNBT extends NetworkEntityMetadataObject<NBTCompound> {
 
-	@Override
-	public void readFromStream(ByteBuf from) {
-		value = ItemStackSerializer.readDirectTag(from);
+	public NetworkEntityMetadataObjectNBT(NBTCompound nbt) {
+		this.value = nbt;
 	}
 
 	@Override

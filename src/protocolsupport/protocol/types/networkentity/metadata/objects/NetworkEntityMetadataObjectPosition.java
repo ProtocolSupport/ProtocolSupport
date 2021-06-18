@@ -4,13 +4,12 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.types.Position;
-import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class NetworkEntityMetadataObjectPosition extends ReadableNetworkEntityMetadataObject<Position> {
+public class NetworkEntityMetadataObjectPosition extends NetworkEntityMetadataObject<Position> {
 
-	@Override
-	public void readFromStream(ByteBuf from) {
-		value = PositionSerializer.readPosition(from);
+	public NetworkEntityMetadataObjectPosition(Position position) {
+		this.value = position;
 	}
 
 	@Override

@@ -3,16 +3,15 @@ package protocolsupport.protocol.types.networkentity.metadata.objects;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
-import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class NetworkEntityMetadataObjectOptionalVarInt extends ReadableNetworkEntityMetadataObject<Integer> {
+public class NetworkEntityMetadataObjectOptionalVarInt extends NetworkEntityMetadataObject<Integer> {
 
-	@Override
-	public void readFromStream(ByteBuf from) {
-		int i = VarNumberSerializer.readVarInt(from);
-		if (i != 0) {
-			value = i - 1;
-		}
+	public NetworkEntityMetadataObjectOptionalVarInt() {
+	}
+
+	public NetworkEntityMetadataObjectOptionalVarInt(int i) {
+		this.value = i;
 	}
 
 	@Override

@@ -4,20 +4,12 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.types.NetworkItemStack;
-import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class NetworkEntityMetadataObjectItemStack extends ReadableNetworkEntityMetadataObject<NetworkItemStack> {
-
-	public NetworkEntityMetadataObjectItemStack() {
-	}
+public class NetworkEntityMetadataObjectItemStack extends NetworkEntityMetadataObject<NetworkItemStack> {
 
 	public NetworkEntityMetadataObjectItemStack(NetworkItemStack itemstack) {
-		value = itemstack;
-	}
-
-	@Override
-	public void readFromStream(ByteBuf from) {
-		value = ItemStackSerializer.readItemStack(from);
+		this.value = itemstack;
 	}
 
 	@Override

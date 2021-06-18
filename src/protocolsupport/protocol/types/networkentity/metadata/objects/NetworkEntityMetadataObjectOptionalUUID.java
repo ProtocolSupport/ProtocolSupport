@@ -5,15 +5,15 @@ import java.util.UUID;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.UUIDSerializer;
-import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class NetworkEntityMetadataObjectOptionalUUID extends ReadableNetworkEntityMetadataObject<UUID> {
+public class NetworkEntityMetadataObjectOptionalUUID extends NetworkEntityMetadataObject<UUID> {
 
-	@Override
-	public void readFromStream(ByteBuf from) {
-		if (from.readBoolean()) {
-			value = UUIDSerializer.readUUID2L(from);
-		}
+	public NetworkEntityMetadataObjectOptionalUUID() {
+	}
+
+	public NetworkEntityMetadataObjectOptionalUUID(UUID uuid) {
+		this.value = uuid;
 	}
 
 	@Override

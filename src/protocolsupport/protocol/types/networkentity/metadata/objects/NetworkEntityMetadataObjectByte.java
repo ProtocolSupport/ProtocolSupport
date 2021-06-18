@@ -2,20 +2,12 @@ package protocolsupport.protocol.types.networkentity.metadata.objects;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class NetworkEntityMetadataObjectByte extends ReadableNetworkEntityMetadataObject<Byte> {
-
-	public NetworkEntityMetadataObjectByte() {
-	}
+public class NetworkEntityMetadataObjectByte extends NetworkEntityMetadataObject<Byte> {
 
 	public NetworkEntityMetadataObjectByte(byte b) {
 		this.value = b;
-	}
-
-	@Override
-	public void readFromStream(ByteBuf from) {
-		value = from.readByte();
 	}
 
 	@Override

@@ -4,13 +4,12 @@ import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class NetworkEntityMetadataObjectVector3f extends ReadableNetworkEntityMetadataObject<Vector> {
+public class NetworkEntityMetadataObjectVector3f extends NetworkEntityMetadataObject<Vector> {
 
-	@Override
-	public void readFromStream(ByteBuf from) {
-		value = new Vector(from.readFloat(), from.readFloat(), from.readFloat());
+	public NetworkEntityMetadataObjectVector3f(Vector v) {
+		this.value = v;
 	}
 
 	@Override

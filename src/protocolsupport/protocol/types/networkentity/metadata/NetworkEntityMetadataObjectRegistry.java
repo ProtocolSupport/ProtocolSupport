@@ -17,7 +17,7 @@ import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEnti
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectFloat;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectInt;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectItemStack;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectNBTTagCompound;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectNBT;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalChat;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalPosition;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalUUID;
@@ -73,8 +73,8 @@ public class NetworkEntityMetadataObjectRegistry {
 		register(NetworkEntityMetadataObjectOptionalUUID.class, 11, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
 		register(NetworkEntityMetadataObjectBlockData.class, 13, ProtocolVersionsHelper.UP_1_13);
 		register(NetworkEntityMetadataObjectBlockData.class, 12, ProtocolVersionsHelper.RANGE__1_9__1_12_2);
-		register(NetworkEntityMetadataObjectNBTTagCompound.class, 14, ProtocolVersionsHelper.UP_1_13);
-		register(NetworkEntityMetadataObjectNBTTagCompound.class, 13, ProtocolVersionsHelper.RANGE__1_11__1_12_2);
+		register(NetworkEntityMetadataObjectNBT.class, 14, ProtocolVersionsHelper.UP_1_13);
+		register(NetworkEntityMetadataObjectNBT.class, 13, ProtocolVersionsHelper.RANGE__1_11__1_12_2);
 		register(NetworkEntityMetadataObjectParticle.class, 15, ProtocolVersionsHelper.UP_1_13);
 		register(NetworkEntityMetadataObjectVillagerData.class, 16, ProtocolVersionsHelper.UP_1_14);
 		register(NetworkEntityMetadataObjectOptionalVarInt.class, 17, ProtocolVersionsHelper.UP_1_14);

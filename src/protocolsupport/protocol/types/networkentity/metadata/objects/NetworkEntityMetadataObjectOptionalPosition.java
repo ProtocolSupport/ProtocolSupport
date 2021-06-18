@@ -2,17 +2,16 @@ package protocolsupport.protocol.types.networkentity.metadata.objects;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.types.Position;
-import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class NetworkEntityMetadataObjectOptionalPosition extends ReadableNetworkEntityMetadataObject<Position> {
+public class NetworkEntityMetadataObjectOptionalPosition extends NetworkEntityMetadataObject<Position> {
 
-	@Override
-	public void readFromStream(ByteBuf from) {
-		if (from.readBoolean()) {
-			value = PositionSerializer.readPosition(from);
-		}
+	public NetworkEntityMetadataObjectOptionalPosition() {
+	}
+
+	public NetworkEntityMetadataObjectOptionalPosition(Position position) {
+		this.value = position;
 	}
 
 	@Override

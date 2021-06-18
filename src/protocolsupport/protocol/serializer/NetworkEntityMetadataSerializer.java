@@ -2,14 +2,13 @@ package protocolsupport.protocol.serializer;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.function.Supplier;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectDeserializer;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectRegistry;
-import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEntityMetadataObject;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBlockData;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBoolean;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
@@ -18,7 +17,7 @@ import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEnti
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectEntityPose;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectFloat;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectItemStack;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectNBTTagCompound;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectNBT;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalChat;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalPosition;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalUUID;
@@ -38,31 +37,32 @@ public class NetworkEntityMetadataSerializer {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static final Supplier<? extends ReadableNetworkEntityMetadataObject<?>>[] registry = new Supplier[256];
+	private static final NetworkEntityMetadataObjectDeserializer<NetworkEntityMetadataObject<?>>[] registry = new NetworkEntityMetadataObjectDeserializer[256];
 	static {
-		register(NetworkEntityMetadataObjectByte::new);
-		register(NetworkEntityMetadataObjectVarInt::new);
-		register(NetworkEntityMetadataObjectFloat::new);
-		register(NetworkEntityMetadataObjectString::new);
-		register(NetworkEntityMetadataObjectChat::new);
-		register(NetworkEntityMetadataObjectOptionalChat::new);
-		register(NetworkEntityMetadataObjectItemStack::new);
-		register(NetworkEntityMetadataObjectBoolean::new);
-		register(NetworkEntityMetadataObjectVector3f::new);
-		register(NetworkEntityMetadataObjectPosition::new);
-		register(NetworkEntityMetadataObjectOptionalPosition::new);
-		register(NetworkEntityMetadataObjectDirection::new);
-		register(NetworkEntityMetadataObjectOptionalUUID::new);
-		register(NetworkEntityMetadataObjectBlockData::new);
-		register(NetworkEntityMetadataObjectNBTTagCompound::new);
-		register(NetworkEntityMetadataObjectParticle::new);
-		register(NetworkEntityMetadataObjectVillagerData::new);
-		register(NetworkEntityMetadataObjectOptionalVarInt::new);
-		register(NetworkEntityMetadataObjectEntityPose::new);
+		register(NetworkEntityMetadataObjectByte.class, NetworkEntityMetadataObjectDeserializer.BYTE);
+		register(NetworkEntityMetadataObjectVarInt.class, NetworkEntityMetadataObjectDeserializer.VARINT);
+		register(NetworkEntityMetadataObjectFloat.class, NetworkEntityMetadataObjectDeserializer.FLOAT);
+		register(NetworkEntityMetadataObjectString.class, NetworkEntityMetadataObjectDeserializer.STRING);
+		register(NetworkEntityMetadataObjectChat.class, NetworkEntityMetadataObjectDeserializer.CHAT);
+		register(NetworkEntityMetadataObjectOptionalChat.class, NetworkEntityMetadataObjectDeserializer.OPT_CHAT);
+		register(NetworkEntityMetadataObjectItemStack.class, NetworkEntityMetadataObjectDeserializer.ITEMSTACK);
+		register(NetworkEntityMetadataObjectBoolean.class, NetworkEntityMetadataObjectDeserializer.BOOLEAN);
+		register(NetworkEntityMetadataObjectVector3f.class, NetworkEntityMetadataObjectDeserializer.VECTOR3F);
+		register(NetworkEntityMetadataObjectPosition.class, NetworkEntityMetadataObjectDeserializer.POSITION);
+		register(NetworkEntityMetadataObjectOptionalPosition.class, NetworkEntityMetadataObjectDeserializer.OPT_POSITION);
+		register(NetworkEntityMetadataObjectDirection.class, NetworkEntityMetadataObjectDeserializer.DIRECTION);
+		register(NetworkEntityMetadataObjectOptionalUUID.class, NetworkEntityMetadataObjectDeserializer.OPT_UUID);
+		register(NetworkEntityMetadataObjectBlockData.class, NetworkEntityMetadataObjectDeserializer.BLOCKDATA);
+		register(NetworkEntityMetadataObjectNBT.class, NetworkEntityMetadataObjectDeserializer.NBT);
+		register(NetworkEntityMetadataObjectParticle.class, NetworkEntityMetadataObjectDeserializer.PARTICLE);
+		register(NetworkEntityMetadataObjectVillagerData.class, NetworkEntityMetadataObjectDeserializer.VILLAGER_DATA);
+		register(NetworkEntityMetadataObjectOptionalVarInt.class, NetworkEntityMetadataObjectDeserializer.OPT_VARINT);
+		register(NetworkEntityMetadataObjectEntityPose.class, NetworkEntityMetadataObjectDeserializer.ENTITY_POSE);
 	}
 
-	private static void register(Supplier<? extends ReadableNetworkEntityMetadataObject<?>> supplier) {
-		registry[NetworkEntityMetadataObjectRegistry.getTypeId(supplier.get().getClass(), ProtocolVersionsHelper.LATEST_PC)] = supplier;
+	@SuppressWarnings("unchecked")
+	private static <T extends NetworkEntityMetadataObject<?>> void register(Class<T> clazz, NetworkEntityMetadataObjectDeserializer<T> deserializer) {
+		registry[NetworkEntityMetadataObjectRegistry.getTypeId(clazz, ProtocolVersionsHelper.LATEST_PC)] = (NetworkEntityMetadataObjectDeserializer<NetworkEntityMetadataObject<?>>) deserializer;
 	}
 
 	public static void readDataTo(ByteBuf from, ArrayMap<NetworkEntityMetadataObject<?>> to) {
@@ -73,9 +73,7 @@ public class NetworkEntityMetadataSerializer {
 			}
 			int type = from.readUnsignedByte();
 			try {
-				ReadableNetworkEntityMetadataObject<?> object = registry[type].get();
-				object.readFromStream(from);
-				to.put(key, object);
+				to.put(key, registry[type].read(from));
 			} catch (Exception e) {
 				throw new DecoderException(MessageFormat.format("Unable to decode datawatcher object (type: {0}, index: {1})", type, key), e);
 			}

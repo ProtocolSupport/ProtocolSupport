@@ -4,13 +4,12 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.types.BlockDirection;
-import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class NetworkEntityMetadataObjectDirection extends ReadableNetworkEntityMetadataObject<BlockDirection> {
+public class NetworkEntityMetadataObjectDirection extends NetworkEntityMetadataObject<BlockDirection> {
 
-	@Override
-	public void readFromStream(ByteBuf from) {
-		value = MiscSerializer.readVarIntEnum(from, BlockDirection.CONSTANT_LOOKUP);
+	public NetworkEntityMetadataObjectDirection(BlockDirection direction) {
+		this.value = direction;
 	}
 
 	@Override

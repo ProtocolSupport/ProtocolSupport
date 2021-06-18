@@ -4,25 +4,12 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.VillagerData;
-import protocolsupport.protocol.types.VillagerProfession;
-import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class NetworkEntityMetadataObjectVillagerData extends ReadableNetworkEntityMetadataObject<VillagerData> {
-
-	public NetworkEntityMetadataObjectVillagerData() {
-	}
+public class NetworkEntityMetadataObjectVillagerData extends NetworkEntityMetadataObject<VillagerData> {
 
 	public NetworkEntityMetadataObjectVillagerData(VillagerData vdata) {
 		this.value = vdata;
-	}
-
-	@Override
-	public void readFromStream(ByteBuf from) {
-		value = new VillagerData(
-			VarNumberSerializer.readVarInt(from),
-			VillagerProfession.CONSTANT_LOOKUP.getByOrdinalOrDefault(VarNumberSerializer.readVarInt(from), VillagerProfession.NONE),
-			VarNumberSerializer.readVarInt(from)
-		);
 	}
 
 	@Override

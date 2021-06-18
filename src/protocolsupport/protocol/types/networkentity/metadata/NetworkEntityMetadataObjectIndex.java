@@ -18,7 +18,7 @@ import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEnti
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectEntityPose;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectFloat;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectItemStack;
-import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectNBTTagCompound;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectNBT;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalChat;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalPosition;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalUUID;
@@ -136,8 +136,8 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> SCORE = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> SKIN_FLAGS = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> MAIN_HAND = takeNextIndex(NetworkEntityMetadataObjectByte.class);
-		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectNBTTagCompound> LEFT_SHOULDER_ENTITY = takeNextIndex(NetworkEntityMetadataObjectNBTTagCompound.class);
-		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectNBTTagCompound> RIGHT_SHOULDER_ENTITY = takeNextIndex(NetworkEntityMetadataObjectNBTTagCompound.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectNBT> LEFT_SHOULDER_ENTITY = takeNextIndex(NetworkEntityMetadataObjectNBT.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectNBT> RIGHT_SHOULDER_ENTITY = takeNextIndex(NetworkEntityMetadataObjectNBT.class);
 	}
 
 	public static class Ageable extends Insentient {

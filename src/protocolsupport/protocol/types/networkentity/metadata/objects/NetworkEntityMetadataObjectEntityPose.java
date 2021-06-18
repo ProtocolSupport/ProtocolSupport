@@ -5,13 +5,12 @@ import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.types.EntityPose;
-import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class NetworkEntityMetadataObjectEntityPose extends ReadableNetworkEntityMetadataObject<EntityPose> {
+public class NetworkEntityMetadataObjectEntityPose extends NetworkEntityMetadataObject<EntityPose> {
 
-	@Override
-	public void readFromStream(ByteBuf from) {
-		value = MiscSerializer.readVarIntEnum(from, EntityPose.CONSTANT_LOOKUP);
+	public NetworkEntityMetadataObjectEntityPose(EntityPose pose) {
+		this.value = pose;
 	}
 
 	@Override

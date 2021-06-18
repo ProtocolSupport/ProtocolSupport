@@ -7,9 +7,6 @@ import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEnti
 
 public class NetworkEntityMetadataObjectBlockData extends ReadableNetworkEntityMetadataObject<Integer> {
 
-	public NetworkEntityMetadataObjectBlockData() {
-	}
-
 	public NetworkEntityMetadataObjectBlockData(int blockdata) {
 		this.value = blockdata;
 	}
