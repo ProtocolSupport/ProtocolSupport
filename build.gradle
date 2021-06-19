@@ -161,14 +161,14 @@ test {
 
 
 task generateLocaleList(type: DefaultTask) {doLast{
-	Path i18nDirectory = generatedResourcesResourcesDirectoryPath.resolve("i18n")
+	Path i18nDirectory = generatedResourcesResourcesDirectoryPath.resolve('i18n')
 	Files.createDirectories(i18nDirectory)
-	new PrintWriter(Files.newBufferedWriter(i18nDirectory.resolve("languages"))).withCloseable({
+	new PrintWriter(Files.newBufferedWriter(i18nDirectory.resolve('languages'))).withCloseable({
 		writer ->
-			Files.list(sourceSets.main.resources.srcDirs[0].toPath().resolve(resourcesDirectoryName).resolve("i18n"))
+			Files.list(sourceSets.main.resources.srcDirs[0].toPath().resolve(resourcesDirectoryName).resolve('i18n'))
 			.forEach({
-				String[] split = it.getFileName().toString().split("[.]");
-				if (split.length == 2 && split[1].equals("json")) {
+				String[] split = it.getFileName().toString().split('[.]');
+				if (split.length == 2 && split[1].equals('json')) {
 					writer.println(split[0])
 				}
 			})
@@ -177,12 +177,13 @@ task generateLocaleList(type: DefaultTask) {doLast{
 
 task generateInfo(type: DefaultTask) {doLast{
 	Properties properties = new Properties()
-	properties.setProperty("buildtime", new Date().format("yyyy.MM.dd 'at' HH:mm:ss z"))
-	properties.setProperty("buildhost", System.getProperty("protocolsupport.buildhost", "unknown"))
-	properties.setProperty("buildnumber", System.getProperty("protocolsupport.buildnumber", "unknown"))
-	properties.setProperty("buildgit", System.getProperty("protocolsupport.buildgit", "unknown"))
-	Files.newBufferedWriter(generatedResourcesResourcesDirectoryPath.resolve("buildinfo")).withCloseable({ properties.store(it, "Build info") })
+	properties.setProperty('buildtime', new Date().format('yyyy.MM.dd \'at\' HH:mm:ss z'))
+	properties.setProperty('buildhost', System.getProperty('protocolsupport.buildhost', 'unknown'))
+	properties.setProperty('buildnumber', System.getProperty('protocolsupport.buildnumber', 'unknown'))
+	properties.setProperty('buildgit', System.getProperty('protocolsupport.buildgit', 'unknown'))
+	Files.newBufferedWriter(generatedResourcesResourcesDirectoryPath.resolve('buildinfo')).withCloseable({ properties.store(it, 'Build info') })
 }}
+
 
 processResources {
 	from generatedResourcesDirectoryPath
@@ -192,11 +193,10 @@ processResources {
 	}
 }
 
-
 shadowJar {
 	duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
-	archiveClassifier = ""
+	archiveClassifier = ''
 
 	from sourceSets.main.java.srcDirs
 	from 'LICENSE'
