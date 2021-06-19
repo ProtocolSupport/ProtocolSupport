@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
+import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8.AbstractPassengerStackEntityPassengers.NetworkEntityVehicleData;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
@@ -18,6 +19,10 @@ public abstract class AbstractPassengerStackEntityDestroy extends MiddleEntityDe
 	@Override
 	protected void handle() {
 		entity = entityCache.removeEntity(entityId);
+
+		if (entity == null) {
+			throw CancelMiddlePacketException.INSTANCE;
+		}
 	}
 
 	@Override
