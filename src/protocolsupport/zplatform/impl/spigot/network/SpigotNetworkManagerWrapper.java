@@ -124,7 +124,7 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 	public Player getBukkitPlayer() {
 		PacketListener listener = getPacketListener();
 		if (listener instanceof PlayerConnection) {
-			return ((PlayerConnection) listener).getPlayer();
+			return ((PlayerConnection) listener).b.getBukkitEntity();
 		}
 		return null;
 	}
