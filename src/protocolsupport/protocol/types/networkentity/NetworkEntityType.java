@@ -22,7 +22,7 @@ import protocolsupportbuildprocessor.Preload;
 public enum NetworkEntityType {
 
 	NONE(EType.NONE, EntityType.UNKNOWN),
-	// Specials (Spawned by separate packets)
+	// Specials (Spawned by their own packets)
 	EXP_ORB(EType.SPECIAL, EntityType.EXPERIENCE_ORB),
 	PAINTING(EType.SPECIAL, EntityType.PAINTING),
 	PLAYER(EType.SPECIAL, EntityType.PLAYER),
@@ -100,7 +100,6 @@ public enum NetworkEntityType {
 	AXOLOTL(EType.MOB, EntityType.AXOLOTL),
 	GLOW_SQUID(EType.MOB, EntityType.GLOW_SQUID),
 	GOAT(EType.MOB, EntityType.GOAT),
-	ARMOR_STAND_MOB(EType.MOB, EntityType.ARMOR_STAND),
 	// Objects
 	BOAT(EType.OBJECT, EntityType.BOAT),
 	TNT(EType.OBJECT, EntityType.PRIMED_TNT),
@@ -137,8 +136,9 @@ public enum NetworkEntityType {
 	MINECART_HOPPER(EType.OBJECT, EntityType.MINECART_HOPPER, MINECART),
 	MINECART_COMMAND(EType.OBJECT, EntityType.MINECART_COMMAND, MINECART),
 	GLOW_ITEM_FRAME(EType.OBJECT, EntityType.GLOW_ITEM_FRAME),
-	ARMOR_STAND_OBJECT(EType.OBJECT, EntityType.ARMOR_STAND),
-	THUNDERBOLT(EType.OBJECT, EntityType.LIGHTNING);
+	THUNDERBOLT(EType.OBJECT, EntityType.LIGHTNING),
+	// Objectmobs (spawned both by spawn mob and spawn object packet)
+	ARMOR_STAND(EType.OBJECTMOB, EntityType.ARMOR_STAND);
 
 	private final EType etype;
 	private final int typeId;
@@ -170,7 +170,26 @@ public enum NetworkEntityType {
 	}
 
 	public enum EType {
-		NONE, SPECIAL, OBJECT, MOB
+		NONE, SPECIAL, OBJECT(false, true), MOB(true, false), OBJECTMOB(true, true);
+
+		private boolean mob;
+		private boolean object;
+
+		EType() {
+		}
+
+		EType(boolean mob, boolean object) {
+			this.mob = mob;
+			this.object = object;
+		}
+
+		public boolean isMob() {
+			return mob;
+		}
+
+		public boolean isObject() {
+			return object;
+		}
 	}
 
 	private static final ArrayMap<NetworkEntityType> BY_N_ID = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(NetworkEntityType.values()), (w -> w.typeId));
@@ -194,12 +213,12 @@ public enum NetworkEntityType {
 
 	public static @Nonnull NetworkEntityType getObjectByNetworkTypeId(@Nonnegative int objectTypeId) {
 		NetworkEntityType type = BY_N_ID.get(objectTypeId);
-		return (type != null) && (type.getEType() == EType.OBJECT) ? type : NONE;
+		return (type != null) && (type.getEType().isObject()) ? type : NONE;
 	}
 
 	public static @Nonnull NetworkEntityType getMobByNetworkTypeId(@Nonnegative int mobTypeId) {
 		NetworkEntityType type = BY_N_ID.get(mobTypeId);
-		return (type != null) && (type.getEType() == EType.MOB) ? type : NONE;
+		return (type != null) && (type.getEType().isMob()) ? type : NONE;
 	}
 
 	public static @Nonnull NetworkEntityType getByRegistrySTypeId(@Nonnull String name) {

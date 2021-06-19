@@ -336,11 +336,6 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		}, ProtocolVersionsHelper.DOWN_1_15_2)
 		.register();
 
-		new Mapping(NetworkEntityType.ARMOR_STAND_MOB)
-		.add(NetworkEntityType.ARMOR_STAND_MOB, ProtocolVersionsHelper.UP_1_8)
-		.add(NetworkEntityLegacyDataEntry.NONE, ProtocolVersionsHelper.DOWN_1_7_10)
-		.register();
-
 		registerNoop(NetworkEntityType.BOAT);
 
 		registerNoop(NetworkEntityType.TNT);
@@ -427,11 +422,6 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		.add(NetworkEntityType.FIRECHARGE, ProtocolVersionsHelper.DOWN_1_10)
 		.register();
 
-		new Mapping(NetworkEntityType.ARMOR_STAND_OBJECT)
-		.add(NetworkEntityType.ARMOR_STAND_OBJECT, ProtocolVersionsHelper.UP_1_8)
-		.add(NetworkEntityLegacyDataEntry.NONE, ProtocolVersionsHelper.DOWN_1_7_10)
-		.register();
-
 		register(NetworkEntityType.MINECART, version -> new NetworkEntityLegacyDataEntry(NetworkEntityType.MINECART, new GenericEntityVarIntBlockDataMetadataTransformer(BlockDataLegacyDataRegistry.INSTANCE.getTable(version), NetworkEntityMetadataObjectIndex.Minecart.BLOCK)));
 
 		registerNoop(NetworkEntityType.MINECART_CHEST);
@@ -447,6 +437,11 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		registerNoop(NetworkEntityType.MINECART_COMMAND);
 
 		registerNoop(NetworkEntityType.THUNDERBOLT);
+
+		new Mapping(NetworkEntityType.ARMOR_STAND)
+		.add(NetworkEntityType.ARMOR_STAND, ProtocolVersionsHelper.UP_1_8)
+		.add(NetworkEntityLegacyDataEntry.NONE, ProtocolVersionsHelper.DOWN_1_7_10)
+		.register();
 	}
 
 	protected final class Mapping {

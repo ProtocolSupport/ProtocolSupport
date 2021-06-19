@@ -89,8 +89,7 @@ public class LegacyEntityId {
 		register(NetworkEntityType.EXP_ORB, "XPOrb");
 		register(NetworkEntityType.MUSHROOM_COW, "MushroomCow");
 		register(NetworkEntityType.MINECART_COMMAND, "MinecartCommandBlock");
-		register(NetworkEntityType.ARMOR_STAND_MOB, "ArmorStand");
-		register(NetworkEntityType.ARMOR_STAND_OBJECT, "ArmorStand");
+		register(NetworkEntityType.ARMOR_STAND, "ArmorStand");
 		register(NetworkEntityType.DONKEY, "Donkey");
 		register(NetworkEntityType.LEASH_KNOT, "LeashKnot");
 		register(NetworkEntityType.SKELETON, "Skeleton");
@@ -158,7 +157,7 @@ public class LegacyEntityId {
 		legacyEntityObjectIntId.put(NetworkEntityType.LAMA_SPIT, 68);
 		legacyEntityObjectIntId.put(NetworkEntityType.DRAGON_FIREBALL, 93);
 		legacyEntityObjectIntId.put(NetworkEntityType.EVOCATOR_FANGS, 79);
-		legacyEntityObjectIntId.put(NetworkEntityType.ARMOR_STAND_OBJECT, 78);
+		legacyEntityObjectIntId.put(NetworkEntityType.ARMOR_STAND, 78);
 		legacyEntityObjectIntId.put(NetworkEntityType.MINECART, 10);
 		legacyEntityObjectIntId.put(NetworkEntityType.MINECART_CHEST, 10);
 		legacyEntityObjectIntId.put(NetworkEntityType.MINECART_FURNACE, 10);

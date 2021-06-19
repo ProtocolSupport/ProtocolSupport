@@ -282,8 +282,6 @@ public class NetworkEntityLegacyFormatRegistry extends MappingRegistry<NetworkEn
 
 		registerSimple(NetworkEntityType.STRIDER, StriderNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_16);
 
-		registerSimple(NetworkEntityType.ARMOR_STAND_MOB, ArmorStandNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_8);
-
 		registerSimple(NetworkEntityType.BOAT, BoatNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
 
 		registerSimple(NetworkEntityType.TNT, TNTNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
@@ -340,8 +338,6 @@ public class NetworkEntityLegacyFormatRegistry extends MappingRegistry<NetworkEn
 
 		registerSimple(NetworkEntityType.EVOCATOR_FANGS, BaseNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_11);
 
-		registerSimple(NetworkEntityType.ARMOR_STAND_OBJECT, ArmorStandNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_8);
-
 		registerSimple(NetworkEntityType.MINECART, MinecartNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
 
 		registerSimple(NetworkEntityType.MINECART_CHEST, MinecartNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
@@ -357,6 +353,8 @@ public class NetworkEntityLegacyFormatRegistry extends MappingRegistry<NetworkEn
 		registerSimple(NetworkEntityType.MINECART_COMMAND, MinecartCommandNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
 
 		registerSimple(NetworkEntityType.THUNDERBOLT, BaseNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
+
+		registerSimple(NetworkEntityType.ARMOR_STAND, ArmorStandNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_8);
 	}
 
 	protected final class Mapping {
