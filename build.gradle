@@ -115,7 +115,7 @@ dependencies {
 
 	FileCollection annotationProcessors = fileTree(dir: projectDirectoryPath.resolve('processors'), include: '*.jar')
 
-	runtimeDependencies group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.5-R0.1-SNAPSHOT'
+	runtimeDependencies group: 'io.papermc.paper', name: 'paper-api', version: '1.17-R0.1-SNAPSHOT'
 	runtimeDependencies annotationProcessors
 	runtimeDependencies runtimeLibraries
 
