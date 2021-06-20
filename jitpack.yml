@@ -8,3 +8,8 @@ before_install:
 - "sdk install java 16.0.1-open"
 - "sdk use java 16.0.1-open"
 - "java -version"
+install:
+- "source ~/.sdkman/bin/sdkman-init.sh"
+- "sdk use java 16.0.1-open"
+- "java -version"
+- "bash gradlew build publishToMavenLocal"
