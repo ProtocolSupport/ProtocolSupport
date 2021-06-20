@@ -27,6 +27,7 @@ import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.handler.IPacketListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.IPacketIdCodec;
+import protocolsupport.protocol.pipeline.common.LogicHandler;
 import protocolsupport.protocol.storage.ProtocolStorage;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.protocol.utils.authlib.LoginProfile;
@@ -160,7 +161,8 @@ public class ConnectionImpl extends Connection {
 	}
 
 	protected PacketDataCodecImpl codec = PacketDataCodecImpl.NOOP;
-	protected ChannelHandlerContext logicCtx;
+	protected LogicHandler logicHandler;
+	protected ChannelHandlerContext logicHandlerCtx;
 	protected ChannelHandlerContext rawSendCtx;
 	protected ChannelHandlerContext rawRecvCtx;
 
@@ -174,7 +176,8 @@ public class ConnectionImpl extends Connection {
 
 	public void initIO() {
 		ChannelPipeline pipeline = networkmanager.getChannel().pipeline();
-		this.logicCtx = pipeline.context(ChannelHandlers.LOGIC);
+		this.logicHandlerCtx = pipeline.context(ChannelHandlers.LOGIC);
+		this.logicHandler = (LogicHandler) logicHandlerCtx.handler();
 		this.rawSendCtx = pipeline.context(ChannelHandlers.RAW_CAPTURE_SEND);
 		this.rawRecvCtx = pipeline.context(ChannelHandlers.RAW_CAPTURE_RECEIVE);
 		this.codec.setIOContexts(pipeline.context(ChannelHandlers.ENCODER_TRANSFORMER), pipeline.context(ChannelHandlers.DECODER_TRANSFORMER));
@@ -182,14 +185,25 @@ public class ConnectionImpl extends Connection {
 
 	@Override
 	public void sendPacket(Object packet) {
-		submitIOTask(() -> logicCtx.writeAndFlush(packet, logicCtx.voidPromise()));
+		submitIOTask(() -> {
+			try {
+				logicHandler.write(logicHandlerCtx, packet, logicHandlerCtx.voidPromise());
+				logicHandler.flush(logicHandlerCtx);
+			} catch (Exception e) {
+				logicHandlerCtx.channel().pipeline().fireExceptionCaught(e);
+			}
+		});
 	}
 
 	@Override
 	public void receivePacket(Object packet) {
 		submitIOTask(() -> {
-			logicCtx.fireChannelRead(packet);
-			logicCtx.fireChannelReadComplete();
+			try {
+				logicHandlerCtx.fireChannelRead(packet);
+				logicHandlerCtx.fireChannelReadComplete();
+			} catch (Exception e) {
+				logicHandlerCtx.channel().pipeline().fireExceptionCaught(e);
+			}
 		});
 	}
 
@@ -247,7 +261,7 @@ public class ConnectionImpl extends Connection {
 
 	public void handlePacketSend(Object packet, Collection<Object> storeTo) {
 		try (LPacketEvent packetevent = LPacketEvent.create(packet)) {
-			for (PacketListener listener : packetlisteners) {
+			for (PacketListener listener : flatPacketListeners) {
 				try {
 					listener.onPacketSending(packetevent);
 				} catch (Throwable t) {
@@ -262,7 +276,7 @@ public class ConnectionImpl extends Connection {
 
 	public void handlePacketReceive(Object packet, Collection<Object> storeTo) {
 		try (LPacketEvent packetevent = LPacketEvent.create(packet)) {
-			for (PacketListener listener : packetlisteners) {
+			for (PacketListener listener : flatPacketListeners) {
 				try {
 					listener.onPacketReceiving(packetevent);
 				} catch (Throwable t) {
@@ -313,7 +327,7 @@ public class ConnectionImpl extends Connection {
 
 	public ByteBuf handleRawPacketSend(ByteBuf data) {
 		try (LRawPacketEvent rawpacketevent = LRawPacketEvent.create(data)) {
-			for (PacketListener listener : packetlisteners) {
+			for (PacketListener listener : flatPacketListeners) {
 				try {
 					listener.onRawPacketSending(rawpacketevent);
 				} catch (Throwable t) {
@@ -331,7 +345,7 @@ public class ConnectionImpl extends Connection {
 
 	public ByteBuf handleRawPacketReceive(ByteBuf data) {
 		try (LRawPacketEvent rawpacketevent = LRawPacketEvent.create(data)) {
-			for (PacketListener listener : packetlisteners) {
+			for (PacketListener listener : flatPacketListeners) {
 				try {
 					listener.onRawPacketReceiving(rawpacketevent);
 				} catch (Throwable t) {

@@ -24,7 +24,7 @@ public class ProtocolSupportAPI {
 	private ProtocolSupportAPI() {
 	}
 
-	private static final BigInteger apiversion = BigInteger.valueOf(14);
+	private static final BigInteger apiversion = BigInteger.valueOf(15);
 	/**
 	 * Returns ProtocolSupport API version <br>
 	 * This number is incremented every time API changes (behavior change, method/field added/removed)

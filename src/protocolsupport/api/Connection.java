@@ -2,9 +2,14 @@ package protocolsupport.api;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.BiFunction;
 
@@ -115,15 +120,13 @@ public abstract class Connection {
 	public abstract @Nonnull ScheduledExecutorService getIOExecutor();
 
 	/**
-	 * Receives packet from client <br>
-	 * Packet received by this method skips receive packet listener
+	 * Receives packet from client
 	 * @param packet packet
 	 */
 	public abstract void receivePacket(@Nonnull Object packet);
 
 	/**
-	 * Sends packet to player <br>
-	 * Packet sent by this method skips send packet listener
+	 * Sends packet to player
 	 * @param packet packet
 	 */
 	public abstract void sendPacket(@Nonnull Object packet);
@@ -149,14 +152,36 @@ public abstract class Connection {
 	public abstract @Nonnull NetworkState getNetworkState();
 
 
-	protected final CopyOnWriteArrayList<PacketListener> packetlisteners = new CopyOnWriteArrayList<>();
+	protected final SortedMap<Integer, List<PacketListener>> sortedPacketListeners = new TreeMap<>(Comparator.comparing(k -> -k));
+	protected volatile List<PacketListener> flatPacketListeners = Collections.emptyList();
+
+	protected List<PacketListener> createFlatPacketListeners() {
+		ArrayList<PacketListener> flatList = new ArrayList<>(sortedPacketListeners.size());
+		for (List<PacketListener> priorityList : sortedPacketListeners.values()) {
+			flatList.addAll(priorityList);
+		}
+		return flatList;
+	}
 
 	/**
-	 * Adds packet listener
+	 * Adds packet listener with priority 0
 	 * @param listener packet listener
 	 */
 	public void addPacketListener(@Nonnull PacketListener listener) {
-		packetlisteners.add(listener);
+		addPacketListener(listener, 0);
+	}
+
+	/**
+	 * Adds packet listener with priority
+	 * Listeners with higher priority number are invoked first
+	 * @param listener packet listener
+	 * @param priority priority
+	 */
+	public void addPacketListener(@Nonnull PacketListener listener, int priority) {
+		synchronized (sortedPacketListeners) {
+			sortedPacketListeners.computeIfAbsent(priority, k -> new ArrayList<>()).add(listener);
+			flatPacketListeners = createFlatPacketListeners();
+		}
 	}
 
 	/**
@@ -164,7 +189,18 @@ public abstract class Connection {
 	 * @param listener packet listener
 	 */
 	public void removePacketListener(@Nonnull PacketListener listener) {
-		packetlisteners.remove(listener);
+		synchronized (sortedPacketListeners) {
+			Iterator<Map.Entry<Integer, List<PacketListener>>> sortedPacketListenersIterator = sortedPacketListeners.entrySet().iterator();
+			while (sortedPacketListenersIterator.hasNext()) {
+				Map.Entry<Integer, List<PacketListener>> entry = sortedPacketListenersIterator.next();
+				List<PacketListener> priorityList = entry.getValue();
+				priorityList.remove(listener);
+				if (priorityList.isEmpty()) {
+					sortedPacketListenersIterator.remove();
+				}
+			}
+			flatPacketListeners = createFlatPacketListeners();
+		}
 	}
 
 	protected final ConcurrentHashMap<String, Object> metadata = new ConcurrentHashMap<>();
