@@ -13,7 +13,7 @@ public class EntityEffectRemove extends MiddleEntityEffectRemove {
 	@Override
 	protected void write() {
 		ClientBoundPacketData entityeffectremove = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_EFFECT_REMOVE);
-		entityeffectremove.writeInt(entityId);
+		entityeffectremove.writeInt(entity.getId());
 		entityeffectremove.writeByte(effectId);
 		codec.writeClientbound(entityeffectremove);
 	}

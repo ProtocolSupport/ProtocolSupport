@@ -4,12 +4,15 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
+import protocolsupport.protocol.typeremapper.utils.SkippingTable.ArrayBasedIntSkippingTable;
 
-public abstract class MiddleEntityEffectAdd extends MiddleEntity {
+public abstract class MiddleEntityEffectAdd extends MiddleEntityData {
 
 	protected MiddleEntityEffectAdd(MiddlePacketInit init) {
 		super(init);
 	}
+
+	protected final ArrayBasedIntSkippingTable effectSkipTable = GenericIdSkipper.EFFECT.getTable(version);
 
 	protected int effectId;
 	protected int amplifier;
@@ -17,8 +20,7 @@ public abstract class MiddleEntityEffectAdd extends MiddleEntity {
 	protected int flags;
 
 	@Override
-	protected void decode(ByteBuf serverdata) {
-		super.decode(serverdata);
+	protected void decodeData(ByteBuf serverdata) {
 		effectId = serverdata.readByte();
 		amplifier = serverdata.readByte();
 		duration = VarNumberCodec.readVarInt(serverdata);
@@ -27,7 +29,7 @@ public abstract class MiddleEntityEffectAdd extends MiddleEntity {
 
 	@Override
 	protected void handle() {
-		if (GenericIdSkipper.EFFECT.getTable(version).isSet(effectId)) {
+		if (effectSkipTable.isSet(effectId)) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
 	}

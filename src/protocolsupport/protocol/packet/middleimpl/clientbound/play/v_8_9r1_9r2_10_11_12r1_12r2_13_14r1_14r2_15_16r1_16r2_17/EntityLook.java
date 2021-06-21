@@ -14,7 +14,7 @@ public class EntityLook extends AbstractLocationOffsetEntityLook {
 	@Override
 	protected void write() {
 		ClientBoundPacketData entitylook = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_LOOK);
-		VarNumberCodec.writeVarInt(entitylook, entityId);
+		VarNumberCodec.writeVarInt(entitylook, entity.getId());
 		entitylook.writeByte(yaw);
 		entitylook.writeByte(pitch);
 		entitylook.writeBoolean(onGround);

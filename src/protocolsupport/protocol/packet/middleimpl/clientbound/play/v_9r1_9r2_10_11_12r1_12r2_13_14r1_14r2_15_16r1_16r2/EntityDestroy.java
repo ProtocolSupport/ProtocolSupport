@@ -13,7 +13,7 @@ public class EntityDestroy extends MiddleEntityDestroy {
 
 	@Override
 	protected void write() {
-		codec.writeClientbound(create(entityId));
+		codec.writeClientbound(create(entity.getId()));
 	}
 
 	public static ClientBoundPacketData create(int entityId) {

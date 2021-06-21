@@ -1,10 +1,9 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 
-//TODO: Enum for status id?
-public abstract class MiddleEntityStatus extends ClientBoundMiddlePacket {
+//TODO: enum for status id
+public abstract class MiddleEntityStatus extends MiddleEntityData {
 
 	protected MiddleEntityStatus(MiddlePacketInit init) {
 		super(init);
@@ -12,12 +11,15 @@ public abstract class MiddleEntityStatus extends ClientBoundMiddlePacket {
 
 	protected static final int STATUS_LIVING_DEATH = 3;
 
-	protected int entityId;
 	protected int status;
 
 	@Override
-	protected void decode(ByteBuf serverdata) {
-		entityId = serverdata.readInt();
+	protected int decodeEntityId(ByteBuf serverdata) {
+		return serverdata.readInt();
+	}
+
+	@Override
+	protected void decodeData(ByteBuf serverdata) {
 		status = serverdata.readUnsignedByte();
 	}
 

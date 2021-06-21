@@ -1,20 +1,14 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
-import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
-import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 
-public abstract class MiddleEntityRelMoveLook extends MiddleEntity {
+public abstract class MiddleEntityRelMoveLook extends MiddleEntityData {
 
 	protected MiddleEntityRelMoveLook(MiddlePacketInit init) {
 		super(init);
 	}
 
-	protected final NetworkEntityCache entityCache = cache.getEntityCache();
-
-	protected NetworkEntity entity;
 	protected short relX;
 	protected short relY;
 	protected short relZ;
@@ -23,19 +17,13 @@ public abstract class MiddleEntityRelMoveLook extends MiddleEntity {
 	protected boolean onGround;
 
 	@Override
-	protected void decode(ByteBuf serverdata) {
-		super.decode(serverdata);
-		entity = entityCache.getEntity(entityId);
+	protected void decodeData(ByteBuf serverdata) {
 		relX = serverdata.readShort();
 		relY = serverdata.readShort();
 		relZ = serverdata.readShort();
 		yaw = serverdata.readByte();
 		pitch = serverdata.readByte();
 		onGround = serverdata.readBoolean();
-
-		if (entity == null) {
-			throw CancelMiddlePacketException.INSTANCE;
-		}
 	}
 
 	@Override

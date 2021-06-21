@@ -32,7 +32,7 @@ public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata
 	@Override
 	protected void writeEntityMetadata(NetworkEntityMetadataList remappedMetadata) {
 		ClientBoundPacketData entitymetadataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_METADATA);
-		VarNumberCodec.writeVarInt(entitymetadataPacket, entityId);
+		VarNumberCodec.writeVarInt(entitymetadataPacket, entity.getId());
 		NetworkEntityMetadataSerializer.writeLegacyData(entitymetadataPacket, version, clientCache.getLocale(), remappedMetadata);
 		codec.writeClientbound(entitymetadataPacket);
 	}
@@ -40,7 +40,7 @@ public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata
 	@Override
 	protected void writePlayerUseBed(Position position) {
 		ClientBoundPacketData usebedPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED);
-		VarNumberCodec.writeVarInt(usebedPacket, entityId);
+		VarNumberCodec.writeVarInt(usebedPacket, entity.getId());
 		PositionCodec.writePositionLXYZ(usebedPacket, position);
 		codec.writeClientbound(usebedPacket);
 	}
@@ -62,14 +62,14 @@ public class EntityMetadata extends AbstractPotionItemAsObjectDataEntityMetadata
 			entity -> EntityDestroy.writeDestroyEntity(codec, entity)
 		);
 		codec.writeClientbound(SpawnObject.create(
-			entityId, entityLegacyFormatTable.get(lType).getType(),
+			entity.getId(), entityLegacyFormatTable.get(lType).getType(),
 			ecache.getX(), ecache.getY(), ecache.getZ(),
 			ecache.getPitchB(), ecache.getYawB(),
 			objectdata,
 			velocity.getX(), velocity.getY(), velocity.getZ()
 		));
 		if (objectdata <= 0) {
-			codec.writeClientbound(EntityVelocity.create(entityId, velocity.getX(), velocity.getY(), velocity.getZ()));
+			codec.writeClientbound(EntityVelocity.create(entity.getId(), velocity.getX(), velocity.getY(), velocity.getZ()));
 		}
 	}
 

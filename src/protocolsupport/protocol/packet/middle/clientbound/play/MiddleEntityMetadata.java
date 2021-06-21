@@ -5,7 +5,7 @@ import protocolsupport.protocol.codec.NetworkEntityMetadataSerializer;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
-public abstract class MiddleEntityMetadata extends MiddleEntity {
+public abstract class MiddleEntityMetadata extends MiddleEntityData {
 
 	protected MiddleEntityMetadata(MiddlePacketInit init) {
 		super(init);
@@ -14,8 +14,7 @@ public abstract class MiddleEntityMetadata extends MiddleEntity {
 	protected final ArrayMap<NetworkEntityMetadataObject<?>> metadata = new ArrayMap<>(31);
 
 	@Override
-	protected void decode(ByteBuf serverdata) {
-		super.decode(serverdata);
+	protected void decodeData(ByteBuf serverdata) {
 		NetworkEntityMetadataSerializer.readDataTo(serverdata, metadata);
 	}
 

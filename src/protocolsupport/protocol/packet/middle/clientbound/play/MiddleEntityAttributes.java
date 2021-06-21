@@ -7,22 +7,22 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.codec.UUIDCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
-import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
+import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
+import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkippingTable;
 import protocolsupport.utils.Utils;
 
-public abstract class MiddleEntityAttributes extends MiddleEntity {
-
-	protected final NetworkEntityCache entityCache = cache.getEntityCache();
+public abstract class MiddleEntityAttributes extends MiddleEntityData {
 
 	protected MiddleEntityAttributes(MiddlePacketInit init) {
 		super(init);
 	}
 
+	protected final GenericSkippingTable<String> attributeSkipTable = GenericIdSkipper.ATTRIBUTES.getTable(version);
+
 	protected final LinkedHashMap<String, Attribute> attributes = new LinkedHashMap<>();
 
 	@Override
-	protected void decode(ByteBuf serverdata) {
-		super.decode(serverdata);
+	protected void decodeData(ByteBuf serverdata) {
 		int attributesCount = VarNumberCodec.readVarInt(serverdata);
 		for (int attributeIndex = 0; attributeIndex < attributesCount; attributeIndex++) {
 			String key = StringCodec.readVarIntUTF8String(serverdata);
@@ -43,12 +43,14 @@ public abstract class MiddleEntityAttributes extends MiddleEntity {
 
 	@Override
 	protected void handle() {
-		if (entityId == entityCache.getSelfId()) {
+		if (entity == entityCache.getSelf()) {
 			Attribute attr = attributes.get("generic.max_health");
 			if (attr != null) {
 				cache.getClientCache().setMaxHealth((float) attr.value);
 			}
 		}
+
+		attributes.entrySet().removeIf(entry -> attributeSkipTable.isSet(entry.getKey()));
 	}
 
 	@Override

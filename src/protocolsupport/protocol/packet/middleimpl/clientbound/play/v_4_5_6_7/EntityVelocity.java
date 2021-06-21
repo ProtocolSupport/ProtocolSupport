@@ -12,7 +12,7 @@ public class EntityVelocity extends AbstractPotionItemAsObjectDataEntityVelocity
 
 	@Override
 	protected void write() {
-		codec.writeClientbound(create(entityId, velX, velY, velZ));
+		codec.writeClientbound(create(entity.getId(), velX, velY, velZ));
 	}
 
 	public static ClientBoundPacketData create(int entityId, short velX, short velY, short velZ) {

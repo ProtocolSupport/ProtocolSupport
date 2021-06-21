@@ -4,15 +4,15 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import protocolsupport.protocol.packet.PacketDataCodec;
+import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityPassengers;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17.AbstractKnownEntityPassengers;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.utils.JavaSystemProperty;
 
 /*
  * Multi tree of passengers hierarchy is transformed to a stack (depth first, left to right)
  */
-public abstract class AbstractPassengerStackEntityPassengers extends AbstractKnownEntityPassengers {
+public abstract class AbstractPassengerStackEntityPassengers extends MiddleEntityPassengers {
 
 	protected AbstractPassengerStackEntityPassengers(MiddlePacketInit init) {
 		super(init);
@@ -124,7 +124,7 @@ public abstract class AbstractPassengerStackEntityPassengers extends AbstractKno
 	protected void write() {
 		writeVehiclePassengers(
 			codec, this::createEntityVehicle,
-			vehicle.getDataCache().computeDataIfAbsent(NetworkEntityVehicleData.DATA_KEY, k -> new NetworkEntityVehicleData(vehicle)),
+			entity.getDataCache().computeDataIfAbsent(NetworkEntityVehicleData.DATA_KEY, k -> new NetworkEntityVehicleData(entity)),
 			entityCache.getEntities(passengersIds)
 		);
 	}

@@ -2,21 +2,17 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.codec.ArrayCodec;
-import protocolsupport.protocol.codec.VarNumberCodec;
-import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 
-public abstract class MiddleEntityPassengers extends ClientBoundMiddlePacket {
+public abstract class MiddleEntityPassengers extends MiddleEntityData {
 
 	protected MiddleEntityPassengers(MiddlePacketInit init) {
 		super(init);
 	}
 
-	protected int vehicleId;
 	protected int[] passengersIds;
 
 	@Override
-	protected void decode(ByteBuf serverdata) {
-		vehicleId = VarNumberCodec.readVarInt(serverdata);
+	protected void decodeData(ByteBuf serverdata) {
 		passengersIds = ArrayCodec.readVarIntVarIntArray(serverdata);
 	}
 

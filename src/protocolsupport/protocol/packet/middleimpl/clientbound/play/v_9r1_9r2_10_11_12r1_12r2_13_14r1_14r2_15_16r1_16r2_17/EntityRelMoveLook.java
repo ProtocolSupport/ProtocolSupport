@@ -14,7 +14,7 @@ public class EntityRelMoveLook extends AbstractLocationOffsetEntityRelMoveLook {
 	@Override
 	protected void write() {
 		ClientBoundPacketData entityrelmovelook = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_REL_MOVE_LOOK);
-		VarNumberCodec.writeVarInt(entityrelmovelook, entityId);
+		VarNumberCodec.writeVarInt(entityrelmovelook, entity.getId());
 		entityrelmovelook.writeShort(relX);
 		entityrelmovelook.writeShort(relY);
 		entityrelmovelook.writeShort(relZ);

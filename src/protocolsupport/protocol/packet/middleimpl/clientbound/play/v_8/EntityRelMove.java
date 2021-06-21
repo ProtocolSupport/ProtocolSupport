@@ -10,7 +10,7 @@ public class EntityRelMove extends AbstractEntityTeleportEntityRelMove {
 
 	@Override
 	protected void writeTeleport(double x, double y, double z, byte yaw, byte pitch, boolean onGround) {
-		codec.writeClientbound(EntityTeleport.create(entityId, x, y, z, yaw, pitch, onGround));
+		codec.writeClientbound(EntityTeleport.create(entity.getId(), x, y, z, yaw, pitch, onGround));
 	}
 
 }

@@ -14,7 +14,7 @@ public class EntityEffectAdd extends MiddleEntityEffectAdd {
 	@Override
 	protected void write() {
 		ClientBoundPacketData entityeffectadd = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_EFFECT_ADD);
-		VarNumberCodec.writeVarInt(entityeffectadd, entityId);
+		VarNumberCodec.writeVarInt(entityeffectadd, entity.getId());
 		entityeffectadd.writeByte(effectId);
 		entityeffectadd.writeByte(amplifier);
 		VarNumberCodec.writeVarInt(entityeffectadd, duration);

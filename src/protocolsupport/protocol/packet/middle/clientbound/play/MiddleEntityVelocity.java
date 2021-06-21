@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
 
-public abstract class MiddleEntityVelocity extends MiddleEntity {
+public abstract class MiddleEntityVelocity extends MiddleEntityData {
 
 	protected MiddleEntityVelocity(MiddlePacketInit init) {
 		super(init);
@@ -13,8 +13,7 @@ public abstract class MiddleEntityVelocity extends MiddleEntity {
 	protected short velZ;
 
 	@Override
-	protected void decode(ByteBuf serverdata) {
-		super.decode(serverdata);
+	protected void decodeData(ByteBuf serverdata) {
 		velX = serverdata.readShort();
 		velY = serverdata.readShort();
 		velZ = serverdata.readShort();

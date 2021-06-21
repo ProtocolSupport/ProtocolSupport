@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r1_16r2;
 
-import java.util.ArrayList;
-
 import protocolsupport.protocol.codec.ArrayCodec;
 import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.codec.UUIDCodec;
@@ -9,8 +7,6 @@ import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityAttributes;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
-import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkippingTable;
 
 public class EntityAttributes extends MiddleEntityAttributes {
 
@@ -21,16 +17,9 @@ public class EntityAttributes extends MiddleEntityAttributes {
 	@Override
 	protected void write() {
 		ClientBoundPacketData entityattributes = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_ENTITY_ATTRIBUTES);
-		GenericSkippingTable<String> table = GenericIdSkipper.ATTRIBUTES.getTable(version);
-		ArrayList<Attribute> sendattrs = new ArrayList<>();
+		VarNumberCodec.writeVarInt(entityattributes, entity.getId());
+		entityattributes.writeInt(attributes.size());
 		for (Attribute attribute : attributes.values()) {
-			if (!table.isSet(attribute.getKey())) {
-				sendattrs.add(attribute);
-			}
-		}
-		VarNumberCodec.writeVarInt(entityattributes, entityId);
-		entityattributes.writeInt(sendattrs.size());
-		for (Attribute attribute : sendattrs) {
 			StringCodec.writeVarIntUTF8String(entityattributes, attribute.getKey());
 			entityattributes.writeDouble(attribute.getValue());
 			ArrayCodec.writeVarIntTArray(entityattributes, attribute.getModifiers(), (modifierTo, modifier) -> {

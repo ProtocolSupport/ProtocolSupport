@@ -12,7 +12,7 @@ public class EntityTeleport extends AbstractLocationOffsetEntityTeleport {
 
 	@Override
 	protected void write() {
-		codec.writeClientbound(create(entityId, x, y, z, yaw, pitch));
+		codec.writeClientbound(create(entity.getId(), x, y, z, yaw, pitch));
 	}
 
 	public static ClientBoundPacketData create(int entityId, double x, double y, double z, byte yaw, byte pitch) {
