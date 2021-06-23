@@ -4,6 +4,8 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 import org.bukkit.entity.Player;
 
@@ -147,6 +149,15 @@ public class ConnectionImpl extends Connection {
 		return networkmanager.getChannel().eventLoop();
 	}
 
+	public <V> Future<V> submitIOTask(Callable<V> task) {
+		return getIOExecutor().submit(() -> {
+			if (!isConnected()) {
+				return null;
+			}
+			return task.call();
+		});
+	}
+
 	public void submitIOTask(Runnable task) {
 		getIOExecutor().submit(() -> {
 			try {
@@ -210,7 +221,9 @@ public class ConnectionImpl extends Connection {
 	@Override
 	public void sendRawPacket(byte[] data) {
 		ByteBuf dataInst = Unpooled.wrappedBuffer(data);
-		submitIOTask(() -> rawSendCtx.writeAndFlush(dataInst));
+		submitIOTask(() -> {
+			rawSendCtx.writeAndFlush(dataInst);
+		});
 	}
 
 	@Override

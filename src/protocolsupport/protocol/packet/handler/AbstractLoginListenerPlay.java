@@ -2,9 +2,9 @@ package protocolsupport.protocol.packet.handler;
 
 import java.util.ArrayList;
 import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -21,6 +21,7 @@ import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
+import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
@@ -60,19 +61,11 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 			return;
 		}
 
-		CountDownLatch waitpacketsend = new CountDownLatch(1);
-		networkManager.sendPacket(
-			ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(connection.getProfile()),
-			future -> waitpacketsend.countDown()
-		);
 		try {
-			if (!waitpacketsend.await(5, TimeUnit.SECONDS)) {
-				disconnect(new TextComponent("Timeout while waiting for login success send"));
-				return;
-			}
-		} catch (InterruptedException e) {
-			disconnect(new TextComponent("Interrupt while waiting for login success send"));
-			Thread.currentThread().interrupt();
+			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(connection.getProfile()), 5, TimeUnit.MINUTES);
+		} catch (Throwable t) {
+			disconnect(new TextComponent("Error while waiting for login success send"));
+			Utils.rethrowThreadException(t);
 			return;
 		}
 		networkManager.setProtocol(NetworkState.PLAY);
@@ -161,18 +154,29 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 				//first send join game that will make client actually switch to game state
 				networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createFakeJoinGamePacket());
 				//send disconnect with a little delay
-				connection.getIOExecutor().schedule(() -> disconnectPlay(message), 50, TimeUnit.MILLISECONDS);
+				connection.getIOExecutor().schedule(() -> {
+					try {
+						disconnectNormal(message);
+					} catch (Throwable t) {
+						disconnectError(t);
+					}
+				}, 50, TimeUnit.MILLISECONDS);
 			} else {
-				disconnectPlay(message);
+				disconnectNormal(message);
 			}
-		} catch (Throwable exception) {
-			Bukkit.getLogger().log(Level.SEVERE, "Error whilst disconnecting player", exception);
-			networkManager.close(new TextComponent("Error whilst disconnecting player, force closing connection"));
+		} catch (Throwable t) {
+			disconnectError(t);
 		}
 	}
 
-	protected void disconnectPlay(BaseComponent message) {
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createPlayDisconnectPacket(message), future -> networkManager.close(message));
+	protected void disconnectNormal(BaseComponent message) throws TimeoutException, InterruptedException {
+		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createPlayDisconnectPacket(message), future -> networkManager.close(message), 5, TimeUnit.SECONDS);
+	}
+
+	protected void disconnectError(Throwable t) {
+		Bukkit.getLogger().log(Level.SEVERE, "Error whilst disconnecting player", t);
+		networkManager.close(new TextComponent("Error whilst disconnecting player, force closing connection"));
+		Utils.rethrowThreadException(t);
 	}
 
 	protected abstract JoinData createJoinData();

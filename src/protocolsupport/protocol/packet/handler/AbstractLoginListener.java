@@ -7,7 +7,6 @@ import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -40,6 +39,7 @@ import protocolsupport.protocol.utils.authlib.LoginProfile;
 import protocolsupport.protocol.utils.authlib.MinecraftSessionService;
 import protocolsupport.protocol.utils.authlib.MinecraftSessionService.AuthenticationUnavailableException;
 import protocolsupport.utils.JavaSystemProperty;
+import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupportbuildprocessor.Preload;
@@ -101,10 +101,11 @@ public abstract class AbstractLoginListener implements IPacketListener {
 	public void disconnect(BaseComponent message) {
 		try {
 			Bukkit.getLogger().info(() -> "Disconnecting " + getConnectionRepr() + ": " + message.toLegacyText());
-			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), future -> networkManager.close(message));
+			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), future -> networkManager.close(message), 5, TimeUnit.SECONDS);
 		} catch (Throwable exception) {
 			Bukkit.getLogger().log(Level.SEVERE, "Error whilst disconnecting player", exception);
 			networkManager.close(new TextComponent("Error whilst disconnecting player, force closing connection"));
+			Utils.rethrowThreadException(exception);
 		}
 	}
 
@@ -259,22 +260,18 @@ public abstract class AbstractLoginListener implements IPacketListener {
 		if (hasCompression(connection.getVersion())) {
 			int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
 			if (threshold >= 0) {
-				CountDownLatch waitpacketsend = new CountDownLatch(1);
-				connection.submitIOTask(() -> networkManager.sendPacket(
-					ServerPlatform.get().getPacketFactory().createSetCompressionPacket(threshold),
-					future -> {
-						ServerPlatform.get().getMiscUtils().enableCompression(networkManager.getChannel().pipeline(), threshold);
-						waitpacketsend.countDown();
-					}
-				));
 				try {
-					if (!waitpacketsend.await(5, TimeUnit.SECONDS)) {
-						disconnect(new TextComponent("Timeout while waiting for login success send"));
-						return;
-					}
-				} catch (InterruptedException e) {
-					disconnect(new TextComponent("Interrupt while waiting for login success send"));
-					Thread.currentThread().interrupt();
+					connection.submitIOTask(() -> {
+						networkManager.sendPacket(
+							ServerPlatform.get().getPacketFactory().createSetCompressionPacket(threshold),
+							future -> ServerPlatform.get().getMiscUtils().enableCompression(networkManager.getChannel().pipeline(), threshold),
+							5, TimeUnit.SECONDS
+						);
+						return null;
+					}).get();
+				} catch (Throwable t) {
+					disconnect(new TextComponent("Error while waiting for compression enable send"));
+					Utils.rethrowThreadException(t);
 					return;
 				}
 			}

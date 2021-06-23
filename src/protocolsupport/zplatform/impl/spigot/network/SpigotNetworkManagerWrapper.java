@@ -5,6 +5,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import org.bukkit.entity.Player;
@@ -71,6 +75,34 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 	@Override
 	public void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener) {
 		internal.sendPacket((Packet<?>) packet, genericListener);
+	}
+
+	@Override
+	public void sendPacket(Object packet, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException {
+		CountDownLatch latch = new CountDownLatch(1);
+		sendPacket(packet, future -> latch.countDown());
+		if (!latch.await(timeout, timeunit)) {
+			throw new TimeoutException();
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException {
+		AtomicBoolean flag = new AtomicBoolean(false);
+		CountDownLatch latch = new CountDownLatch(1);
+		sendPacket(packet, future -> {
+			try {
+				if (flag.compareAndSet(false, true)) {
+					((GenericFutureListener) genericListener).operationComplete(future);
+				}
+			} finally {
+				latch.countDown();
+			}
+		});
+		if (!latch.await(timeout, timeunit) && flag.compareAndSet(false, true)) {
+			throw new TimeoutException();
+		}
 	}
 
 	@Override

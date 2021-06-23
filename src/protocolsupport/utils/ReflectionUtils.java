@@ -16,6 +16,11 @@ public class ReflectionUtils {
 	private ReflectionUtils() {
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <E extends Throwable> void sneakyThrow(Throwable e) throws E {
+	    throw (E) e;
+	}
+
 	public static @Nonnull <T extends AccessibleObject> T setAccessible(@Nonnull T object) {
 		object.setAccessible(true);
 		return object;

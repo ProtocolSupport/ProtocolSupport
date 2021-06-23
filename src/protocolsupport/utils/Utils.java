@@ -78,4 +78,13 @@ public class Utils {
 		return TimeUnit.NANOSECONDS.toMillis(System.nanoTime());
 	}
 
+	public static void rethrowThreadException(Throwable t) {
+		if (t instanceof ThreadDeath) {
+			ReflectionUtils.sneakyThrow(t);
+		}
+		if ((t instanceof InterruptedException) && Thread.currentThread().isInterrupted()) {
+			ReflectionUtils.sneakyThrow(t);
+		}
+	}
+
 }

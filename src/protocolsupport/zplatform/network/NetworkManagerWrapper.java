@@ -3,6 +3,8 @@ package protocolsupport.zplatform.network;
 import java.net.InetSocketAddress;
 import java.util.Collection;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.bukkit.entity.Player;
 
@@ -52,6 +54,10 @@ public abstract class NetworkManagerWrapper {
 	public abstract void sendPacket(Object packet);
 
 	public abstract void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener);
+
+	public abstract void sendPacket(Object packet, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException;
+
+	public abstract void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException;
 
 	public abstract void setProtocol(NetworkState state);
 

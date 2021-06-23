@@ -14,6 +14,7 @@ import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.utils.pingresponse.PingResponseHandlerProvider;
 import protocolsupport.utils.JavaSystemProperty;
+import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupportbuildprocessor.Preload;
@@ -50,6 +51,7 @@ public abstract class AbstractStatusListener {
 	public void handleStatusRequest() {
 		if (sentInfo) {
 			networkManager.close(new TextComponent("Status request has already been handled"));
+			return;
 		}
 		sentInfo = true;
 
@@ -64,7 +66,12 @@ public abstract class AbstractStatusListener {
 	}
 
 	public void handlePing(long pingId) {
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createStatusPongPacket(pingId), ChannelFutureListener.CLOSE);
+		try {
+			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createStatusPongPacket(pingId), ChannelFutureListener.CLOSE, 5, TimeUnit.SECONDS);
+		} catch (Throwable t) {
+			networkManager.getChannel().close();
+			Utils.rethrowThreadException(t);
+		}
 	}
 
 }

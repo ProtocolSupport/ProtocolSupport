@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.handler;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.text.MessageFormat;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -15,6 +16,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ThrottleTracker;
 import protocolsupport.protocol.utils.spoofedata.SpoofedData;
 import protocolsupport.protocol.utils.spoofedata.SpoofedDataParser;
+import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
@@ -97,9 +99,10 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 	@Override
 	public void disconnect(BaseComponent message) {
 		try {
-			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), future -> networkManager.close(message));
-		} catch (Throwable exception) {
+			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), future -> networkManager.close(message), 5, TimeUnit.SECONDS);
+		} catch (Throwable t) {
 			networkManager.close(new TextComponent("Error whilst disconnecting player, force closing connection"));
+			Utils.rethrowThreadException(t);
 		}
 	}
 
