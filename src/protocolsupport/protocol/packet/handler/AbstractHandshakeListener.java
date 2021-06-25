@@ -23,6 +23,7 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 public abstract class AbstractHandshakeListener implements IPacketListener {
 
 	protected final NetworkManagerWrapper networkManager;
+
 	protected AbstractHandshakeListener(NetworkManagerWrapper networkmanager) {
 		this.networkManager = networkmanager;
 	}
@@ -35,6 +36,8 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 		switch (nextState) {
 			case LOGIN: {
 				networkManager.setProtocol(NetworkState.LOGIN);
+				networkManager.setPacketListener(getLoginBlackholeListener(networkManager));
+
 				try {
 					final InetAddress address = networkManager.getAddress().getAddress();
 					if (ThrottleTracker.isEnabled() && !ServerPlatform.get().getMiscUtils().isProxyEnabled() && ThrottleTracker.throttle(address)) {
@@ -105,6 +108,8 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 			Utils.rethrowThreadException(t);
 		}
 	}
+
+	protected abstract AbstractLoginListenerBlackhole getLoginBlackholeListener(NetworkManagerWrapper networkManager);
 
 	protected abstract AbstractLoginListener getLoginListener(NetworkManagerWrapper networkManager);
 

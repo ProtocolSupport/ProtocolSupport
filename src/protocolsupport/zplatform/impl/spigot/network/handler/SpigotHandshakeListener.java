@@ -6,6 +6,7 @@ import net.minecraft.network.protocol.handshake.PacketHandshakingInListener;
 import net.minecraft.network.protocol.handshake.PacketHandshakingInSetProtocol;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
+import protocolsupport.protocol.packet.handler.AbstractLoginListenerBlackhole;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
@@ -24,6 +25,11 @@ public class SpigotHandshakeListener extends AbstractHandshakeListener implement
 	@Override
 	public void a(PacketHandshakingInSetProtocol packet) {
 		handleSetProtocol(SpigotMiscUtils.protocolToNetState(packet.b()), packet.c, packet.d);
+	}
+
+	@Override
+	protected AbstractLoginListenerBlackhole getLoginBlackholeListener(NetworkManagerWrapper networkManager) {
+		return new SpigotLoginBlackholeListener(networkManager);
 	}
 
 	@Override
