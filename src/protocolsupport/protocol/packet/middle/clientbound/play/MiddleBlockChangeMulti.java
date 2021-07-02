@@ -2,6 +2,7 @@ package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 
 public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
@@ -10,43 +11,60 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 		super(init);
 	}
 
-	protected long chunkCoordWithSection;
-	protected boolean large; //TODO: figure out what exactly this does, currently set to true if there is more than 64 dirty blocks in a chunk
-	protected long[] records;
+	protected int chunkX;
+	protected int chunkZ;
+	protected int chunkSection;
+	protected boolean skipLight;
+	protected BlockChangeRecord[] records;
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		chunkCoordWithSection = serverdata.readLong();
-		large = serverdata.readBoolean();
-		records = ArrayCodec.readVarIntVarLongArray(serverdata);
+		long chunkCoordWithSection = serverdata.readLong();
+		chunkX = (int) (chunkCoordWithSection >> 42);
+		chunkZ = (int) ((chunkCoordWithSection << 22) >> 42);
+		chunkSection = (int) ((chunkCoordWithSection << 44) >> 44);
+		skipLight = serverdata.readBoolean();
+		records = ArrayCodec.readVarIntTArray(serverdata, BlockChangeRecord.class, recordFrom -> {
+			long recordData = VarNumberCodec.readVarLong(recordFrom);
+			return new BlockChangeRecord(
+				(byte) ((recordData >> 8) & 0xF),
+				(byte) ((recordData >> 4) & 0xF),
+				(byte) (recordData & 0xF),
+				(int) (recordData >>> 12)
+			);
+		});
 	}
 
-	protected static int getChunkX(long coord) {
-		return (int) (coord >> 42);
-	}
+	protected static class BlockChangeRecord {
 
-	protected static int getChunkZ(long coord) {
-		return (int) ((coord << 22) >> 42);
-	}
+		protected final byte relX;
+		protected final byte relY;
+		protected final byte relZ;
+		protected final int blockdata;
 
-	protected static int getChunkSectionY(long coord) {
-		return (int) ((coord << 44) >> 44);
-	}
+		public BlockChangeRecord(byte relX, byte relZ, byte relY, int blockdata) {
+			this.relX = relX;
+			this.relY = relY;
+			this.relZ = relZ;
+			this.blockdata = blockdata;
+		}
 
-	protected static int getRecordBlockData(long record) {
-		return (int) (record >>> 12);
-	}
+		public byte getRelX() {
+			return relX;
+		}
 
-	protected static int getRecordRelX(long record) {
-		return (int) ((record >> 8) & 0xF);
-	}
+		public byte getRelY() {
+			return relY;
+		}
 
-	protected static int getRecordRelZ(long record) {
-		return (int) ((record >> 4) & 0xF);
-	}
+		public byte getRelZ() {
+			return relZ;
+		}
 
-	protected static int getRecordRelY(long record) {
-		return (int) (record & 0xF);
+		public int getBlockData() {
+			return blockdata;
+		}
+
 	}
 
 }

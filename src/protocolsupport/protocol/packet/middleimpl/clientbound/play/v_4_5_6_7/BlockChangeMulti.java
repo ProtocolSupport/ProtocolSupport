@@ -15,19 +15,19 @@ public class BlockChangeMulti extends AbstractChunkCacheBlockChangeMulti {
 		super(init);
 	}
 
-	protected final ArrayBasedIntMappingTable blockDataRemappingTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
+	protected final ArrayBasedIntMappingTable blockLegacyDataTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 
 	@Override
 	protected void write() {
-		int chunkAbsY = getChunkSectionY(chunkCoordWithSection) << 4;
+		int chunkAbsY = chunkSection << 4;
 
 		ClientBoundPacketData blockchangemulti = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_BLOCK_CHANGE_MULTI);
-		PositionCodec.writeIntChunkCoord(blockchangemulti, new ChunkCoord(getChunkX(chunkCoordWithSection), getChunkZ(chunkCoordWithSection)));
+		PositionCodec.writeIntChunkCoord(blockchangemulti, new ChunkCoord(chunkX, chunkZ));
 		blockchangemulti.writeShort(records.length);
 		blockchangemulti.writeInt(records.length * 4);
-		for (long record : records) {
-			blockchangemulti.writeShort((getRecordRelX(record) << 12) | (getRecordRelZ(record) << 8) | chunkAbsY | getRecordRelY(record));
-			blockchangemulti.writeShort(BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockDataRemappingTable, getRecordBlockData(record)));
+		for (BlockChangeRecord record : records) {
+			blockchangemulti.writeShort((record.getRelX() << 12) | (record.getRelZ() << 8) | chunkAbsY | record.getRelY());
+			blockchangemulti.writeShort(BlockRemappingHelper.remapPreFlatteningBlockDataNormal(blockLegacyDataTable, record.getBlockData()));
 		}
 		codec.writeClientbound(blockchangemulti);
 	}

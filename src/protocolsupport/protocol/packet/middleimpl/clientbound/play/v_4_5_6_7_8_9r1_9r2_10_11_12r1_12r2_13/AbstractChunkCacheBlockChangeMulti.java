@@ -1,12 +1,12 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13;
 
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeMulti;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.AbstractLimitedHeightBlockChangeMulti;
 import protocolsupport.protocol.storage.netcache.chunk.LimitedHeightCachedChunk;
 import protocolsupport.protocol.storage.netcache.chunk.LimitedHeightChunkCache;
 import protocolsupport.protocol.types.ChunkCoord;
 
-public abstract class AbstractChunkCacheBlockChangeMulti extends MiddleBlockChangeMulti {
+public abstract class AbstractChunkCacheBlockChangeMulti extends AbstractLimitedHeightBlockChangeMulti {
 
 	protected final LimitedHeightChunkCache chunkCache = cache.getChunkCache();
 
@@ -16,15 +16,14 @@ public abstract class AbstractChunkCacheBlockChangeMulti extends MiddleBlockChan
 
 	@Override
 	protected void handle() {
-		LimitedHeightCachedChunk cachedChunk = chunkCache.get(new ChunkCoord(getChunkX(chunkCoordWithSection), getChunkZ(chunkCoordWithSection)));
+		LimitedHeightCachedChunk cachedChunk = chunkCache.get(new ChunkCoord(chunkX, chunkZ));
 
 		if (cachedChunk == null) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
 
-		int sectionY = getChunkSectionY(chunkCoordWithSection);
-		for (long record : records) {
-			cachedChunk.setBlock(sectionY, LimitedHeightCachedChunk.getBlockIndex(getRecordRelX(record), getRecordRelY(record), getRecordRelZ(record)), (short) getRecordBlockData(record));
+		for (BlockChangeRecord record : records) {
+			cachedChunk.setBlock(chunkSection, LimitedHeightCachedChunk.getBlockIndex(record.getRelX(), record.getRelY(), record.getRelZ()), (short) record.getBlockData());
 		}
 	}
 

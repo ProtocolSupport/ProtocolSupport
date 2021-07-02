@@ -3,8 +3,8 @@ package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_
 import protocolsupport.protocol.codec.PositionCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
-import protocolsupport.protocol.packet.middle.clientbound.play.MiddleBlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.AbstractLimitedHeightBlockChangeMulti;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
@@ -12,25 +12,25 @@ import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.F
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.types.ChunkCoord;
 
-public class BlockChangeMulti extends MiddleBlockChangeMulti {
+public class BlockChangeMulti extends AbstractLimitedHeightBlockChangeMulti {
 
 	public BlockChangeMulti(MiddlePacketInit init) {
 		super(init);
 	}
 
-	protected final ArrayBasedIntMappingTable blockDataRemappingTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
+	protected final ArrayBasedIntMappingTable blockLegacyDataTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockDataRegistry.INSTANCE.getTable(version);
 
 	@Override
 	protected void write() {
-		int chunkAbsY = getChunkSectionY(chunkCoordWithSection) << 4;
+		int chunkAbsY = chunkSection << 4;
 
 		ClientBoundPacketData blockchangemulti = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_BLOCK_CHANGE_MULTI);
-		PositionCodec.writeIntChunkCoord(blockchangemulti, new ChunkCoord(getChunkX(chunkCoordWithSection), getChunkZ(chunkCoordWithSection)));
+		PositionCodec.writeIntChunkCoord(blockchangemulti, new ChunkCoord(chunkX, chunkZ));
 		VarNumberCodec.writeVarInt(blockchangemulti, records.length);
-		for (long record : records) {
-			blockchangemulti.writeShort((getRecordRelX(record) << 12) | (getRecordRelZ(record) << 8) | chunkAbsY | getRecordRelY(record));
-			VarNumberCodec.writeVarInt(blockchangemulti, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, getRecordBlockData(record)));
+		for (BlockChangeRecord record : records) {
+			blockchangemulti.writeShort((record.getRelX() << 12) | (record.getRelZ() << 8) | chunkAbsY | record.getRelY());
+			VarNumberCodec.writeVarInt(blockchangemulti, BlockRemappingHelper.remapFlatteningBlockDataId(blockLegacyDataTable, flatteningBlockDataTable, record.getBlockData()));
 		}
 		codec.writeClientbound(blockchangemulti);
 	}
