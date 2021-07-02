@@ -18,12 +18,12 @@ public class BlockChangeSingle extends AbstractChunkCacheBlockChangeSingle {
 		super(init);
 	}
 
-	protected final ArrayBasedIntMappingTable blockDataRemappingTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
+	protected final ArrayBasedIntMappingTable blockLegacyDataTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockDataRegistry.INSTANCE.getTable(version);
 
 	@Override
 	protected void write() {
-		codec.writeClientbound(create(position, BlockRemappingHelper.remapFlatteningBlockDataId(blockDataRemappingTable, flatteningBlockDataTable, id)));
+		codec.writeClientbound(create(position, BlockRemappingHelper.remapFlatteningBlockDataId(blockLegacyDataTable, flatteningBlockDataTable, blockdata)));
 	}
 
 	public static ClientBoundPacketData create(Position position, int id) {

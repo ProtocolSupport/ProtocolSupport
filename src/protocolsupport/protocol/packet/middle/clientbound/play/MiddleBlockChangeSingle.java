@@ -9,12 +9,12 @@ public abstract class MiddleBlockChangeSingle extends MiddleBlock {
 		super(init);
 	}
 
-	protected int id;
+	protected int blockdata;
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		super.decode(serverdata);
-		id = VarNumberCodec.readVarInt(serverdata);
+		blockdata = VarNumberCodec.readVarInt(serverdata);
 	}
 
 }
