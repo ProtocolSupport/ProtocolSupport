@@ -2,7 +2,7 @@ package protocolsupport.protocol.codec;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.AbstractMap;
+import java.util.Map;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
@@ -16,8 +16,8 @@ public class StringCodec {
 	}
 
 	public static final SimpleTypeSerializer<String> SERIALIZER = new SimpleTypeSerializer<>(
-		new AbstractMap.SimpleEntry<>(StringCodec::writeVarIntUTF8String, ProtocolVersionsHelper.UP_1_7),
-		new AbstractMap.SimpleEntry<>(StringCodec::writeShortUTF16BEString, ProtocolVersionsHelper.DOWN_1_6_4)
+		Map.entry(StringCodec::writeVarIntUTF8String, ProtocolVersionsHelper.UP_1_7),
+		Map.entry(StringCodec::writeShortUTF16BEString, ProtocolVersionsHelper.DOWN_1_6_4)
 	);
 
 	public static String readVarIntUTF8String(ByteBuf from) {

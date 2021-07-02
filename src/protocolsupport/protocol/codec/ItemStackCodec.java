@@ -3,7 +3,7 @@ package protocolsupport.protocol.codec;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.AbstractMap;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -30,8 +30,8 @@ public class ItemStackCodec {
 	}
 
 	public static final SimpleTypeDeserializer<NetworkItemStack> ITEMSTACK_DESERIALIZER = new SimpleTypeDeserializer<>(
-		new AbstractMap.SimpleEntry<>(ItemStackCodec::readItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2)),
-		new AbstractMap.SimpleEntry<>(from -> {
+		Map.entry(ItemStackCodec::readItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2)),
+		Map.entry(from -> {
 			int typeId = from.readShort();
 			if (typeId < 0) {
 				return NetworkItemStack.NULL;
@@ -43,7 +43,7 @@ public class ItemStackCodec {
 				return itemstack;
 			}
 		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_13, ProtocolVersion.MINECRAFT_1_13_1)),
-		new AbstractMap.SimpleEntry<>(from -> {
+		Map.entry(from -> {
 			int typeId = from.readShort();
 			if (typeId < 0) {
 				return NetworkItemStack.NULL;
@@ -56,7 +56,7 @@ public class ItemStackCodec {
 				return itemstack;
 			}
 		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_12_2, ProtocolVersion.MINECRAFT_1_8)),
-		new AbstractMap.SimpleEntry<>(from -> {
+		Map.entry(from -> {
 			int typeId = from.readShort();
 			if (typeId < 0) {
 				return NetworkItemStack.NULL;
@@ -72,8 +72,8 @@ public class ItemStackCodec {
 	);
 
 	public static final SimpleTypeSerializer<NetworkItemStack> ITEMSTACK_SERIALIZER = new SimpleTypeSerializer<>(
-		new AbstractMap.SimpleEntry<>(ItemStackCodec::writeItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2)),
-		new AbstractMap.SimpleEntry<>((to, itemstack) -> {
+		Map.entry(ItemStackCodec::writeItemStack, ProtocolVersion.getAllAfterI(ProtocolVersion.MINECRAFT_1_13_2)),
+		Map.entry((to, itemstack) -> {
 			if (itemstack.isNull()) {
 				to.writeShort(-1);
 			} else {
@@ -82,7 +82,7 @@ public class ItemStackCodec {
 				writeDirectTag(to, itemstack.getNBT());
 			}
 		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_13, ProtocolVersion.MINECRAFT_1_13_1)),
-		new AbstractMap.SimpleEntry<>((to, itemstack) -> {
+		Map.entry((to, itemstack) -> {
 			if (itemstack.isNull()) {
 				to.writeShort(-1);
 			} else {
@@ -92,7 +92,7 @@ public class ItemStackCodec {
 				writeDirectTag(to, itemstack.getNBT());
 			}
 		}, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_12_2, ProtocolVersion.MINECRAFT_1_8)),
-		new AbstractMap.SimpleEntry<>((to, itemstack) -> {
+		Map.entry((to, itemstack) -> {
 			if (itemstack.isNull()) {
 				to.writeShort(-1);
 			} else {
@@ -175,13 +175,13 @@ public class ItemStackCodec {
 
 
 	public static final SimpleTypeDeserializer<NBTCompound> TAG_DESERIALIZER = new SimpleTypeDeserializer<>(
-		new AbstractMap.SimpleEntry<>(ItemStackCodec::readDirectTag, ProtocolVersionsHelper.UP_1_8),
-		new AbstractMap.SimpleEntry<>(ItemStackCodec::readShortTag, ProtocolVersionsHelper.DOWN_1_7_10)
+		Map.entry(ItemStackCodec::readDirectTag, ProtocolVersionsHelper.UP_1_8),
+		Map.entry(ItemStackCodec::readShortTag, ProtocolVersionsHelper.DOWN_1_7_10)
 	);
 
 	public static final SimpleTypeSerializer<NBTCompound> TAG_SERIALIZER = new SimpleTypeSerializer<>(
-		new AbstractMap.SimpleEntry<>(ItemStackCodec::writeDirectTag, ProtocolVersionsHelper.UP_1_8),
-		new AbstractMap.SimpleEntry<>(ItemStackCodec::writeShortTag, ProtocolVersionsHelper.DOWN_1_7_10)
+		Map.entry(ItemStackCodec::writeDirectTag, ProtocolVersionsHelper.UP_1_8),
+		Map.entry(ItemStackCodec::writeShortTag, ProtocolVersionsHelper.DOWN_1_7_10)
 	);
 
 	public static NBTCompound readTag(ByteBuf from, ProtocolVersion version) {

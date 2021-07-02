@@ -1,6 +1,5 @@
 package protocolsupport.protocol.utils.json;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,7 @@ public class SimpleJsonTreeSerializer<M> {
 		private final List<Map.Entry<Class<?>, SimpleJsonObjectSerializer<?, M>>> serializers = new ArrayList<>();
 
 		public <T> Builder<M> registerSerializer(Class<T> clazz, SimpleJsonObjectSerializer<T, M> serializer) {
-			this.serializers.add(new AbstractMap.SimpleEntry<>(clazz, serializer));
+			this.serializers.add(Map.entry(clazz, serializer));
 			return this;
 		}
 
