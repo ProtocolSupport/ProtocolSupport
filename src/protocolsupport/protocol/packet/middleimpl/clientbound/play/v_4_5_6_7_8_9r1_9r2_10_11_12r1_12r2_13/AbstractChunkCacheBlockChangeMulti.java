@@ -16,6 +16,8 @@ public abstract class AbstractChunkCacheBlockChangeMulti extends AbstractLimited
 
 	@Override
 	protected void handle() {
+		super.handle();
+
 		LimitedHeightCachedChunk cachedChunk = chunkCache.get(new ChunkCoord(chunkX, chunkZ));
 
 		if (cachedChunk == null) {
