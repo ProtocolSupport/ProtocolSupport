@@ -12,4 +12,4 @@ install:
 - "source ~/.sdkman/bin/sdkman-init.sh"
 - "sdk use java 16.0.1-open"
 - "java -version"
-- "bash gradlew build publishToMavenLocal"
+- "bash gradlew build publishToMavenLocal --exclude-task test"
