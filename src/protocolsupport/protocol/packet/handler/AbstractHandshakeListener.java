@@ -102,7 +102,12 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 	@Override
 	public void disconnect(BaseComponent message) {
 		try {
-			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), future -> networkManager.close(message), 5, TimeUnit.SECONDS);
+			networkManager.sendPacket(
+				ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message),
+				future -> networkManager.close(message),
+				5, TimeUnit.SECONDS,
+				() -> networkManager.close(new TextComponent("Packet send timed out whilst disconnecting player, force closing connection"))
+			);
 		} catch (Throwable t) {
 			networkManager.close(new TextComponent("Error whilst disconnecting player, force closing connection"));
 			Utils.rethrowThreadException(t);

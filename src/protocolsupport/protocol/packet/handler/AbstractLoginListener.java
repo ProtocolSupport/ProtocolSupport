@@ -101,7 +101,12 @@ public abstract class AbstractLoginListener implements IPacketListener {
 	public void disconnect(BaseComponent message) {
 		try {
 			Bukkit.getLogger().info(() -> "Disconnecting " + getConnectionRepr() + ": " + message.toLegacyText());
-			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message), future -> networkManager.close(message), 5, TimeUnit.SECONDS);
+			networkManager.sendPacket(
+				ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message),
+				future -> networkManager.close(message),
+				5, TimeUnit.SECONDS,
+				() -> networkManager.close(new TextComponent("Packet send timed out whilst disconnecting player, force closing connection"))
+			);
 		} catch (Throwable exception) {
 			Bukkit.getLogger().log(Level.SEVERE, "Error whilst disconnecting player", exception);
 			networkManager.close(new TextComponent("Error whilst disconnecting player, force closing connection"));
@@ -261,16 +266,13 @@ public abstract class AbstractLoginListener implements IPacketListener {
 			int threshold = ServerPlatform.get().getMiscUtils().getCompressionThreshold();
 			if (threshold >= 0) {
 				try {
-					connection.submitIOTask(() -> {
-						networkManager.sendPacket(
-							ServerPlatform.get().getPacketFactory().createSetCompressionPacket(threshold),
-							future -> ServerPlatform.get().getMiscUtils().enableCompression(networkManager.getChannel().pipeline(), threshold),
-							5, TimeUnit.SECONDS
-						);
-						return null;
-					}).get();
+					networkManager.sendPacketBlocking(
+						ServerPlatform.get().getPacketFactory().createSetCompressionPacket(threshold),
+						future -> ServerPlatform.get().getMiscUtils().enableCompression(networkManager.getChannel().pipeline(), threshold),
+						5, TimeUnit.SECONDS
+					);
 				} catch (Throwable t) {
-					disconnect(new TextComponent("Error while waiting for compression enable send"));
+					disconnect(new TextComponent("Error whilst enabling compression"));
 					Utils.rethrowThreadException(t);
 					return;
 				}

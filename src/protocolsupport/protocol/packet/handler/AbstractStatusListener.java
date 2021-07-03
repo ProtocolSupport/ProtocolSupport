@@ -67,7 +67,12 @@ public abstract class AbstractStatusListener {
 
 	public void handlePing(long pingId) {
 		try {
-			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createStatusPongPacket(pingId), ChannelFutureListener.CLOSE, 5, TimeUnit.SECONDS);
+			networkManager.sendPacket(
+				ServerPlatform.get().getPacketFactory().createStatusPongPacket(pingId),
+				ChannelFutureListener.CLOSE, 5,
+				TimeUnit.SECONDS,
+				() -> networkManager.getChannel().close()
+			);
 		} catch (Throwable t) {
 			networkManager.getChannel().close();
 			Utils.rethrowThreadException(t);

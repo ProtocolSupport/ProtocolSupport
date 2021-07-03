@@ -9,6 +9,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import org.bukkit.entity.Player;
@@ -18,6 +19,7 @@ import com.mojang.authlib.properties.Property;
 import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import io.netty.util.concurrent.ScheduledFuture;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.PacketListener;
 import net.minecraft.network.protocol.Packet;
@@ -77,8 +79,25 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 		internal.sendPacket((Packet<?>) packet, genericListener);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void sendPacket(Object packet, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException {
+	public void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, int timeout, TimeUnit timeunit, Runnable timeoutListener) {
+		AtomicReference<ScheduledFuture<?>> timeoutFutureRef = new AtomicReference<>(channel.eventLoop().schedule(timeoutListener, timeout, timeunit));
+		sendPacket(packet, future -> {
+			ScheduledFuture<?> timeoutFuture = timeoutFutureRef.get();
+			boolean done = timeoutFuture.cancel(false);
+			timeoutFuture.cancel(false);
+			if (!done) {
+				((GenericFutureListener) genericListener).operationComplete(future);
+			}
+		});
+	}
+
+	@Override
+	public void sendPacketBlocking(Object packet, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException {
+		if (channel.eventLoop().inEventLoop()) {
+			throw new IllegalStateException("Can't send packet with timeout in event loop");
+		}
 		CountDownLatch latch = new CountDownLatch(1);
 		sendPacket(packet, future -> latch.countDown());
 		if (!latch.await(timeout, timeunit)) {
@@ -88,7 +107,10 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException {
+	public void sendPacketBlocking(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException {
+		if (channel.eventLoop().inEventLoop()) {
+			throw new IllegalStateException("Can't send packet with timeout in event loop");
+		}
 		AtomicBoolean flag = new AtomicBoolean(false);
 		CountDownLatch latch = new CountDownLatch(1);
 		sendPacket(packet, future -> {

@@ -62,7 +62,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 		}
 
 		try {
-			networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(connection.getProfile()), 5, TimeUnit.MINUTES);
+			networkManager.sendPacketBlocking(ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(connection.getProfile()), 5, TimeUnit.MINUTES);
 		} catch (Throwable t) {
 			disconnect(new TextComponent("Error while waiting for login success send"));
 			Utils.rethrowThreadException(t);
@@ -170,7 +170,11 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 	}
 
 	protected void disconnectNormal(BaseComponent message) throws TimeoutException, InterruptedException {
-		networkManager.sendPacket(ServerPlatform.get().getPacketFactory().createPlayDisconnectPacket(message), future -> networkManager.close(message), 5, TimeUnit.SECONDS);
+		networkManager.sendPacket(
+			ServerPlatform.get().getPacketFactory().createPlayDisconnectPacket(message),
+			future -> networkManager.close(message), 5, TimeUnit.SECONDS,
+			() -> networkManager.close(new TextComponent("Packet send timed out whilst disconnecting player, force closing connection"))
+		);
 	}
 
 	protected void disconnectError(Throwable t) {

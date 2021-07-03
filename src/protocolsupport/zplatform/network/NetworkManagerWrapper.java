@@ -55,9 +55,12 @@ public abstract class NetworkManagerWrapper {
 
 	public abstract void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener);
 
-	public abstract void sendPacket(Object packet, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException;
+	public abstract void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, int timeout, TimeUnit timeunit, Runnable timeoutListener);
 
-	public abstract void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException;
+	public abstract void sendPacketBlocking(Object packet, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException;
+
+	public abstract void sendPacketBlocking(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException;
+
 
 	public abstract void setProtocol(NetworkState state);
 
