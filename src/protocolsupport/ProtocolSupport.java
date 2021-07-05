@@ -1,6 +1,7 @@
 package protocolsupport;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.text.MessageFormat;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -20,7 +21,6 @@ import protocolsupport.listeners.emulation.DamageHurtEffectEmulation;
 import protocolsupport.listeners.emulation.LeaveVehicleOnCrouchEmulation;
 import protocolsupport.listeners.emulation.LevitationSlowFallingEmulation;
 import protocolsupport.utils.ResourceUtils;
-import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class ProtocolSupport extends JavaPlugin {
@@ -50,10 +50,10 @@ public class ProtocolSupport extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		try {
-			buildinfo = new BuildInfo();
+			buildinfo = new BuildInfo(ResourceUtils.getAsBufferedReader("buildinfo"));
 		} catch (Throwable t) {
-			getLogger().severe("Unable to load buildinfo, make sure you built this version using Gradle");
-			return;
+			getLogger().warning("Unable to load buildinfo");
+			buildinfo = new BuildInfo();
 		}
 		if (ProtocolSupportFileLog.isEnabled()) {
 			ProtocolSupportFileLog.logInfoMessage("Server version: " + Bukkit.getVersion());
@@ -72,18 +72,22 @@ public class ProtocolSupport extends JavaPlugin {
 			return;
 		}
 		try {
-			ResourceUtils.getAsBufferedReader("preload").lines().forEach(name -> {
-				try {
-					Class.forName(name);
-				} catch (ClassNotFoundException e) {
-					throw new IllegalArgumentException("Class is in preload list, but wasn't found", e);
-				}
-			});
 			ServerPlatform.get().getInjector().onLoad();
 		} catch (Throwable t) {
 			getLogger().log(Level.SEVERE, "Error when loading, shutting down", t);
 			Bukkit.shutdown();
 			return;
+		}
+		try {
+			ResourceUtils.getAsBufferedReader("preload").lines().forEach(name -> {
+				try {
+					Class.forName(name);
+				} catch (ClassNotFoundException e) {
+					getLogger().log(Level.WARNING, "Class is in preload list, but wasn''t found", e);
+				}
+			});
+		} catch (Throwable t) {
+			getLogger().log(Level.WARNING, "Unable to preload classes", t);
 		}
 		loaded = true;
 	}
@@ -134,22 +138,33 @@ public class ProtocolSupport extends JavaPlugin {
 	}
 
 	public static class BuildInfo {
+
 		public final String buildtime;
 		public final String buildhost;
 		public final String buildnumber;
 		public final String buildgit;
-		public BuildInfo() throws IOException {
+
+		public BuildInfo(Reader reader) throws IOException {
 			Properties properties = new Properties();
-			properties.load(ResourceUtils.getAsBufferedReader("buildinfo"));
+			properties.load(reader);
 			buildtime = properties.getProperty("buildtime");
 			buildhost = properties.getProperty("buildhost");
 			buildnumber = properties.getProperty("buildnumber");
 			buildgit = properties.getProperty("buildgit");
 		}
+
+		public BuildInfo() {
+			buildtime = "unknown";
+			buildhost = "unknown";
+			buildnumber = "unknown";
+			buildgit = "unknown";
+		}
+
 		@Override
 		public String toString() {
-			return Utils.toStringAllFields(this);
+			return "[buildtime=" + buildtime + ", buildhost=" + buildhost + ", buildnumber=" + buildnumber + ", buildgit=" + buildgit + "]";
 		}
+
 	}
 
 

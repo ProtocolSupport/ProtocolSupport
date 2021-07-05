@@ -159,33 +159,16 @@ test {
 }
 
 
-
-task generateLocaleList(type: DefaultTask) {doLast{
-	Path i18nDirectory = generatedResourcesResourcesDirectoryPath.resolve('i18n')
-	Files.createDirectories(i18nDirectory)
-	new PrintWriter(Files.newBufferedWriter(i18nDirectory.resolve('languages'))).withCloseable({
-		writer ->
-			Files.list(sourceSets.main.resources.srcDirs[0].toPath().resolve(resourcesDirectoryName).resolve('i18n'))
-			.forEach({
-				String[] split = it.getFileName().toString().split('[.]');
-				if (split.length == 2 && split[1].equals('json')) {
-					writer.println(split[0])
-				}
-			})
-	})
-}}
-
-task generateInfo(type: DefaultTask) {doLast{
-	Properties properties = new Properties()
-	properties.setProperty('buildtime', new Date().format('yyyy.MM.dd \'at\' HH:mm:ss z'))
-	properties.setProperty('buildhost', System.getProperty('protocolsupport.buildhost', 'unknown'))
-	properties.setProperty('buildnumber', System.getProperty('protocolsupport.buildnumber', 'unknown'))
-	properties.setProperty('buildgit', System.getProperty('protocolsupport.buildgit', 'unknown'))
-	Files.newBufferedWriter(generatedResourcesResourcesDirectoryPath.resolve('buildinfo')).withCloseable({ properties.store(it, 'Build info') })
-}}
-
-
 processResources {
+	doFirst {
+		Properties properties = new Properties()
+		properties.setProperty('buildtime', new Date().format('yyyy.MM.dd \'at\' HH:mm:ss z'))
+		properties.setProperty('buildhost', System.getProperty('protocolsupport.buildhost', 'unknown'))
+		properties.setProperty('buildnumber', System.getProperty('protocolsupport.buildnumber', 'unknown'))
+		properties.setProperty('buildgit', System.getProperty('protocolsupport.buildgit', 'unknown'))
+		Files.newBufferedWriter(generatedResourcesResourcesDirectoryPath.resolve('buildinfo')).withCloseable({ properties.store(it, 'Build info') })
+	}
+
 	from generatedResourcesDirectoryPath
 
 	filesMatching('plugin.yml') {
@@ -230,8 +213,6 @@ compileJava.dependsOn(clean)
 compileJava.dependsOn(setupFolders)
 test.dependsOn(cleanTest)
 compileJava.finalizedBy(test)
-processResources.dependsOn(generateInfo)
-processResources.dependsOn(generateLocaleList)
 jar.enabled = false
 jar.finalizedBy(shadowJar)
 shadowJar.finalizedBy(copyFinalJarToTarget)
