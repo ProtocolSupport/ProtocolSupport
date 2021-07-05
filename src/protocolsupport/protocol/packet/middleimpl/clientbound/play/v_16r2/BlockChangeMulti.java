@@ -23,7 +23,11 @@ public class BlockChangeMulti extends AbstractLimitedHeightBlockChangeMulti {
 	@Override
 	protected void write() {
 		ClientBoundPacketData blockchangemulti = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_BLOCK_CHANGE_MULTI);
-		blockchangemulti.writeLong((((long) chunkX) << 42) | (((long) chunkZ) << 20) | chunkSection);
+		blockchangemulti.writeLong(
+			((chunkX & 0x3FFFFFL) << 42) |
+			((chunkZ & 0x3FFFFFL) << 20) |
+			(chunkSection & 0xFFFFF)
+		);
 		blockchangemulti.writeBoolean(skipLight);
 		ArrayCodec.writeVarIntTArray(
 			blockchangemulti, records,
