@@ -116,6 +116,7 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(ClientBoundPacketType.PLAY_COMBAT_BEGIN, 0x34);
 		registry.register(ClientBoundPacketType.PLAY_COMBAT_END, 0x33);
 		registry.register(ClientBoundPacketType.PLAY_COMBAT_DEATH, 0x35);
+		registry.register(ClientBoundPacketType.PLAY_VIBRATION, 0x5);
 		registry.register(ClientBoundPacketType.PLAY_SYNC_PING, 0x30);
 	}
 
