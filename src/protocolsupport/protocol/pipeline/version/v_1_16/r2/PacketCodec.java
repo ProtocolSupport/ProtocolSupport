@@ -92,6 +92,7 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(ClientBoundPacketType.PLAY_TITLE_SUBTEXT, 0x4F);
 		registry.register(ClientBoundPacketType.PLAY_TITLE_ANIMATION, 0x4F);
 		registry.register(ClientBoundPacketType.PLAY_TITLE_CLEAR, 0x4F);
+		registry.register(ClientBoundPacketType.PLAY_ACTIONBAR, 0x4F);
 		registry.register(ClientBoundPacketType.PLAY_PLAYER_LIST_HEADER_FOOTER, 0x53);
 		registry.register(ClientBoundPacketType.PLAY_CHUNK_UNLOAD, 0x1C);
 		registry.register(ClientBoundPacketType.PLAY_WORLD_CUSTOM_SOUND, 0x18);
