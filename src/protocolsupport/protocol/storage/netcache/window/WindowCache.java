@@ -8,6 +8,8 @@ public class WindowCache {
 
 	protected static final byte WINDOW_ID_PLAYER = 0;
 
+	protected int stateId;
+
 	protected WindowType windowType = WindowType.PLAYER;
 	protected byte windowId = WINDOW_ID_PLAYER;
 
@@ -16,6 +18,10 @@ public class WindowCache {
 
 	protected WindowRemapper windowRemapper;
 	protected Object windowMetadata;
+
+	public void setStateId(int stateId) {
+		this.stateId = stateId;
+	}
 
 	public void setPlayerWindow(WindowRemapper playerWindowRemaper) {
 		this.playerWindowRemapper = playerWindowRemaper;
@@ -42,6 +48,10 @@ public class WindowCache {
 		this.windowType = WindowType.PLAYER;
 		this.windowRemapper = playerWindowRemapper;
 		this.windowMetadata = playerWindowMetadata;
+	}
+
+	public int getStateId() {
+		return stateId;
 	}
 
 	public boolean isValidWindowId(int windowId) {

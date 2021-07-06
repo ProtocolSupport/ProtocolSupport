@@ -284,7 +284,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public int getCompressionThreshold() {
-		return SERVER.aw();
+		return SERVER.av();
 	}
 
 	@Override

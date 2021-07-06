@@ -26,6 +26,8 @@ public class InventoryClick extends MiddleInventoryClick {
 
 	@Override
 	protected void handle() {
+		stateId = windowCache.getStateId();
+
 		try {
 			WindowSlot windowSlot = windowCache.getOpenedWindowRemapper().fromClientSlot(windowId, slot);
 			windowId = windowSlot.getWindowId();

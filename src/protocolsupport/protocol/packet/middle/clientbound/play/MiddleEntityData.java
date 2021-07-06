@@ -21,7 +21,7 @@ public abstract class MiddleEntityData extends ClientBoundMiddlePacket {
 	protected void decode(ByteBuf serverdata) {
 		int entityId = decodeEntityId(serverdata);
 		decodeData(serverdata);
-		entity = getEntityInstance(entityId);
+		entity = entityCache.getEntity(entityId);
 
 		if (entity == null) {
 			throw CancelMiddlePacketException.INSTANCE;
@@ -33,9 +33,5 @@ public abstract class MiddleEntityData extends ClientBoundMiddlePacket {
 	}
 
 	protected abstract void decodeData(ByteBuf serverdata);
-
-	protected NetworkEntity getEntityInstance(int entityId) {
-		return entityCache.getEntity(entityId);
-	}
 
 }

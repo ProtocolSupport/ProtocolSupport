@@ -47,7 +47,7 @@ class NetworkEntityTypeTransformTests extends PlatformInit {
 						if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13)) {
 							Assertions.assertDoesNotThrow(
 								() -> FlatteningNetworkEntityIdRegistry.INSTANCE.getTable(version).get(fMappedType.getNetworkTypeId()),
-								"NetworkParticleFlatteningId for ProtocolVersion " + version + " and NetworkEntityType " + type
+								"NetworkEntityTypeFlatteningId for ProtocolVersion " + version + " and NetworkEntityType " + type
 							);
 						}
 						break;
@@ -56,7 +56,7 @@ class NetworkEntityTypeTransformTests extends PlatformInit {
 						if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_14)) {
 							Assertions.assertDoesNotThrow(
 								() -> FlatteningNetworkEntityIdRegistry.INSTANCE.getTable(version).get(fMappedType.getNetworkTypeId()),
-								"NetworkParticleFlatteningId for ProtocolVersion " + version + " and NetworkEntityType " + type
+								"NetworkEntityTypeFlatteningId for ProtocolVersion " + version + " and NetworkEntityType " + type
 							);
 						}
 						break;

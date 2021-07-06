@@ -47,11 +47,21 @@ public class NetworkEntityCache {
 		return result;
 	}
 
-	public NetworkEntity removeEntity(int entityId) {
-		if (entityId != getSelfId()) {
-			return entities.remove(entityId);
+	public ArrayList<NetworkEntity> removeEntities(int... entityIds) {
+		if (entityIds.length == 0) {
+			return new ArrayList<>();
 		}
-		return null;
+		ArrayList<NetworkEntity> result = new ArrayList<>(entityIds.length);
+		for (int entityId : entityIds) {
+			if (entityId == getSelfId()) {
+				continue;
+			}
+			NetworkEntity entity = entities.remove(entityId);
+			if (entity != null) {
+				result.add(entity);
+			}
+		}
+		return result;
 	}
 
 	public void clearEntities() {

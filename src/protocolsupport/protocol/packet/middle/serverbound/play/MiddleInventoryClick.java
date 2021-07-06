@@ -18,6 +18,7 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 	}
 
 	protected byte windowId;
+	protected int stateId;
 	protected int mode;
 	protected int button;
 	protected int slot;
@@ -26,7 +27,7 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void write() {
-		codec.writeServerbound(create(windowId, mode, button, slot, modifiedSlots, clickedItem));
+		codec.writeServerbound(create(windowId, stateId, mode, button, slot, modifiedSlots, clickedItem));
 	}
 
 	public static final int MODE_CLICK = 0;
@@ -37,9 +38,10 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 	public static final int MODE_DRAG = 5;
 	public static final int MODE_DOUBLE_CLICK = 6;
 
-	public static ServerBoundPacketData create(int windowId, int mode, int button, int slot, SlotItem[] modifiedSlot, NetworkItemStack clickedItem) {
+	public static ServerBoundPacketData create(int windowId, int stateId, int mode, int button, int slot, SlotItem[] modifiedSlot, NetworkItemStack clickedItem) {
 		ServerBoundPacketData inventoryclickPacket = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_WINDOW_CLICK);
 		inventoryclickPacket.writeByte(windowId);
+		VarNumberCodec.writeVarInt(inventoryclickPacket, stateId);
 		inventoryclickPacket.writeShort(slot);
 		inventoryclickPacket.writeByte(button);
 		VarNumberCodec.writeVarInt(inventoryclickPacket, mode);

@@ -15,7 +15,9 @@ public abstract class AbstractPassengerStackEntityDestroy extends MiddleEntityDe
 
 	@Override
 	protected void write() {
-		writeDestroy(entity, this::writeRemovePassengers, this::writeLeaveVehicle, this::writeDestroyEntity);
+		for (NetworkEntity entity : entities) {
+			writeDestroy(entity, this::writeRemovePassengers, this::writeLeaveVehicle, this::writeDestroyEntity);
+		}
 	}
 
 	public static void writeDestroy(

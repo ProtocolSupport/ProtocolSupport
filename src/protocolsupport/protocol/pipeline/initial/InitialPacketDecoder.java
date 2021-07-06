@@ -60,7 +60,8 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	protected static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<>(ProtocolVersion.class);
 	static {
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_FUTURE, new protocolsupport.protocol.pipeline.version.v_f.PipeLineBuilder());
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_17, new protocolsupport.protocol.pipeline.version.v_1_17.PipeLineBuilder());
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_17_1, new protocolsupport.protocol.pipeline.version.v_1_17.r2.PipeLineBuilder());
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_17, new protocolsupport.protocol.pipeline.version.v_1_17.r1.PipeLineBuilder());
 		IPipeLineBuilder builder16r2 = new protocolsupport.protocol.pipeline.version.v_1_16.r2.PipeLineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_16_4, builder16r2);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_16_3, builder16r2);

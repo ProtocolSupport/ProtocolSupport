@@ -4,6 +4,7 @@ import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
 public class EntityDestroy extends MiddleEntityDestroy {
 
@@ -13,7 +14,9 @@ public class EntityDestroy extends MiddleEntityDestroy {
 
 	@Override
 	protected void write() {
-		codec.writeClientbound(create(entity.getId()));
+		for (NetworkEntity entity : entities) {
+			codec.writeClientbound(create(entity.getId()));
+		}
 	}
 
 	public static ClientBoundPacketData create(int entityId) {
