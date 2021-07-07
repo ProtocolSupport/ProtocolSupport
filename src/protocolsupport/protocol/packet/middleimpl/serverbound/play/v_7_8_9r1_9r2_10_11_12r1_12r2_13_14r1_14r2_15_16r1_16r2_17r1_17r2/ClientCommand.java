@@ -11,7 +11,7 @@ public class ClientCommand extends MiddleClientCommand {
 		super(init);
 	}
 
-	private static final Command[] commandsById = new Command[] { Command.REQUEST_RESPAWN, Command.GET_STATS };
+	private static final Command[] commandsById = { Command.REQUEST_RESPAWN, Command.GET_STATS };
 
 	@Override
 	protected void read(ByteBuf clientdata) {

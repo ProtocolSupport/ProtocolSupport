@@ -112,7 +112,7 @@ public class WindowTypeIdMappingRegistry extends MappingRegistry<WindowTypeIdMap
 		return new WindowTypeIdMappingTable();
 	}
 
-	public class WindowTypeIdMappingTable extends MappingTable {
+	public static class WindowTypeIdMappingTable extends MappingTable {
 
 		protected final Map<WindowType, Object> windowId = new EnumMap<>(WindowType.class);
 

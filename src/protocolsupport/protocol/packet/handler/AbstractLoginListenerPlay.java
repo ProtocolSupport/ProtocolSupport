@@ -189,7 +189,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 
 	protected abstract void joinGame(Object[] data);
 
-	protected abstract class JoinData {
+	protected abstract static class JoinData {
 
 		public final Player player;
 		public final Object[] data;

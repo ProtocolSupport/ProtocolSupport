@@ -6,7 +6,7 @@ import javax.annotation.Nonnull;
 public class NumberBitsStoragePadded {
 
 	//precomputed table for fast division by numbersPerLong
-	protected static final int[] numbers_per_long_fast_division_mul_add_sh_table = new int[] {
+	protected static final int[] numbers_per_long_fast_division_mul_add_sh_table = {
 		-1, -1, 0, Integer.MIN_VALUE, 0, 0, 1431655765, 1431655765, 0, Integer.MIN_VALUE, 0, 1, 858993459, 858993459, 0,
 		715827882, 715827882, 0, 613566756, 613566756, 0, Integer.MIN_VALUE, 0, 2, 477218588, 477218588, 0, 429496729, 429496729, 0,
 		390451572, 390451572, 0, 357913941, 357913941, 0, 330382099, 330382099, 0, 306783378, 306783378, 0, 286331153, 286331153, 0,

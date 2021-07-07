@@ -150,7 +150,7 @@ public class LegacyCustomPayloadData {
 		}
 	}
 
-	protected static final int[] auto_command_block_bits = new int[] {
+	protected static final int[] auto_command_block_bits = {
 		MiddleUpdateCommandBlock.FLAGS_BIT_TRACK_OUTPUT, MiddleUpdateCommandBlock.FLAGS_BIT_CONDITIONAL, MiddleUpdateCommandBlock.FLAGS_BIT_AUTO
 	};
 

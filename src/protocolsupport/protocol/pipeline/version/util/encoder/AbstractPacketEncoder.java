@@ -33,12 +33,11 @@ public abstract class AbstractPacketEncoder extends ChannelOutboundHandlerAdapte
 
 	@Override
 	public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-		if (!(msg instanceof ByteBuf)) {
+		if (!(msg instanceof ByteBuf input)) {
 			super.write(ctx, msg, promise);
 			return;
 		}
 
-		ByteBuf input = (ByteBuf) msg;
 		if (!input.isReadable()) {
 			input.release();
 			promise.trySuccess();

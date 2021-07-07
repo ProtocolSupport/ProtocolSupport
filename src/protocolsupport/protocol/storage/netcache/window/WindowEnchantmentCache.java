@@ -2,8 +2,8 @@ package protocolsupport.protocol.storage.netcache.window;
 
 public class WindowEnchantmentCache {
 
-	protected final int[] enchantmentIds = new int[] {-1, -1, -1};
-	protected final int[] enchantmentLevels = new int[] {-1, -1, -1};
+	protected final int[] enchantmentIds = {-1, -1, -1};
+	protected final int[] enchantmentLevels = {-1, -1, -1};
 
 	public int updateEnchantmentId(int index, int id) {
 		enchantmentIds[index] = id;

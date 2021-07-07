@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.utils;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashSet;
 
@@ -19,9 +20,7 @@ public class SkippingTable {
 
 		public ArrayBasedIntSkippingTable(int size) {
 			table = new boolean[size];
-			for (int i = 0; i < table.length; i++) {
-				table[i] = false;
-			}
+			Arrays.fill(table, false);
 		}
 
 		@Override

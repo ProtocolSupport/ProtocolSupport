@@ -25,19 +25,19 @@ public class EndermanNetworkEntityMetadataFormatTransformerFactory extends Insen
 
 	protected EndermanNetworkEntityMetadataFormatTransformerFactory() {
 		add(
-			version -> new EndermanCNetworkEntityMetadataObjectCarriedBlockFlatteningIdTransformer(16, FlatteningBlockDataRegistry.INSTANCE.getTable(version)),
+			version -> new EndermanNetworkEntityMetadataObjectCarriedBlockFlatteningIdTransformer(16, FlatteningBlockDataRegistry.INSTANCE.getTable(version)),
 			ProtocolVersionsHelper.UP_1_17
 		);
 		add(
-			version -> new EndermanCNetworkEntityMetadataObjectCarriedBlockFlatteningIdTransformer(15, FlatteningBlockDataRegistry.INSTANCE.getTable(version)),
+			version -> new EndermanNetworkEntityMetadataObjectCarriedBlockFlatteningIdTransformer(15, FlatteningBlockDataRegistry.INSTANCE.getTable(version)),
 			ProtocolVersionsHelper.RANGE__1_15__1_16_4
 		);
 		add(
-			version -> new EndermanCNetworkEntityMetadataObjectCarriedBlockFlatteningIdTransformer(14, FlatteningBlockDataRegistry.INSTANCE.getTable(version)),
+			version -> new EndermanNetworkEntityMetadataObjectCarriedBlockFlatteningIdTransformer(14, FlatteningBlockDataRegistry.INSTANCE.getTable(version)),
 			ProtocolVersionsHelper.ALL_1_14
 		);
 		add(
-			version -> new EndermanCNetworkEntityMetadataObjectCarriedBlockFlatteningIdTransformer(12, FlatteningBlockDataRegistry.INSTANCE.getTable(version)),
+			version -> new EndermanNetworkEntityMetadataObjectCarriedBlockFlatteningIdTransformer(12, FlatteningBlockDataRegistry.INSTANCE.getTable(version)),
 			ProtocolVersionsHelper.ALL_1_13
 		);
 		add(version -> new NetworkEntityMetadataObjectIndexValueTransformer<>(NetworkEntityMetadataObjectIndex.Enderman.CARRIED_BLOCK, 12) {
@@ -81,11 +81,11 @@ public class EndermanNetworkEntityMetadataFormatTransformerFactory extends Insen
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Enderman.STARED_AT, 17), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 	}
 
-	protected class EndermanCNetworkEntityMetadataObjectCarriedBlockFlatteningIdTransformer extends NetworkEntityMetadataObjectIndexValueTransformer<NetworkEntityMetadataObjectBlockData> {
+	protected static class EndermanNetworkEntityMetadataObjectCarriedBlockFlatteningIdTransformer extends NetworkEntityMetadataObjectIndexValueTransformer<NetworkEntityMetadataObjectBlockData> {
 
 		protected final FlatteningBlockDataTable flatteningBlockDataTable;
 
-		protected EndermanCNetworkEntityMetadataObjectCarriedBlockFlatteningIdTransformer(int toIndex, FlatteningBlockDataTable flatteningBlockDataTable) {
+		protected EndermanNetworkEntityMetadataObjectCarriedBlockFlatteningIdTransformer(int toIndex, FlatteningBlockDataTable flatteningBlockDataTable) {
 			super(NetworkEntityMetadataObjectIndex.Enderman.CARRIED_BLOCK, toIndex);
 			this.flatteningBlockDataTable = flatteningBlockDataTable;
 		}

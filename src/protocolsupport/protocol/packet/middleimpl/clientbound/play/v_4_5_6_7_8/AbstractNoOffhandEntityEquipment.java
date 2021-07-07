@@ -20,7 +20,7 @@ public abstract class AbstractNoOffhandEntityEquipment extends AbstractSingleEnt
 	protected abstract void writeToClient0(Slot slot, NetworkItemStack itemstack);
 
 
-	public static final MiddleEntityEquipment.Slot[] SUPPORTED_SLOTS = new MiddleEntityEquipment.Slot[] {
+	public static final MiddleEntityEquipment.Slot[] SUPPORTED_SLOTS = {
 		MiddleEntityEquipment.Slot.MAIN_HAND,
 		MiddleEntityEquipment.Slot.BOOTS,
 		MiddleEntityEquipment.Slot.LEGGINGS,

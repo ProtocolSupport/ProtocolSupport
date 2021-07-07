@@ -67,7 +67,7 @@ public class PreFlatteningNetworkParticleIntIdRegistryDataSerializer {
 
 	private static final Object2IntMap<Class<? extends NetworkParticle>> classToId = new Object2IntOpenHashMap<>();
 	private static final CachedInstanceOfChain<BiFunction<ProtocolVersion, NetworkParticle, int[]>> toData = new CachedInstanceOfChain<>();
-	private static final int[] data_none = new int[0];
+	private static final int[] data_none = {};
 
 	private static <L extends NetworkParticle> void register(Class<L> clazz, Function<L, int[]> function) {
 		register(clazz, (protocol, particle) -> function.apply(particle));

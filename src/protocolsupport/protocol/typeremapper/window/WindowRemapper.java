@@ -45,7 +45,7 @@ public abstract class WindowRemapper {
 
 	public static class ClientItems {
 
-		protected static final ClientItemsSingle[] single_slots_empty = new ClientItemsSingle[0];
+		protected static final ClientItemsSingle[] single_slots_empty = {};
 
 		protected ClientItemsArray[] itemsArrays;
 		protected ClientItemsSingle[] itemsSingle;

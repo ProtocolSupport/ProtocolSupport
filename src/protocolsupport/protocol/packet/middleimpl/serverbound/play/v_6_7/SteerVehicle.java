@@ -10,7 +10,7 @@ public class SteerVehicle extends MiddleSteerVehicle {
 		super(init);
 	}
 
-	protected static final int[] flags_mask = new int[] {FLAGS_BIT_JUMPING, FLAGS_BIT_UNMOUNT};
+	protected static final int[] flags_mask = {FLAGS_BIT_JUMPING, FLAGS_BIT_UNMOUNT};
 
 	@Override
 	protected void read(ByteBuf clientdata) {

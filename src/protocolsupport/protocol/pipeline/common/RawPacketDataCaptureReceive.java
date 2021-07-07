@@ -14,8 +14,7 @@ public class RawPacketDataCaptureReceive extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		if (msg instanceof ByteBuf) {
-			ByteBuf data = (ByteBuf) msg;
+		if (msg instanceof ByteBuf data) {
 			msg = connection.handleRawPacketReceive(data);
 			if (msg == null) {
 				return;
