@@ -21,7 +21,7 @@ public class ResourcePack extends MiddleResourcePack {
 		StringCodec.writeVarIntUTF8String(resourcepackPacket, url);
 		StringCodec.writeVarIntUTF8String(resourcepackPacket, hash);
 		resourcepackPacket.writeBoolean(forced);
-		ChatCodec.serialize(version, clientCache.getLocale(), forcedText);
+		StringCodec.writeVarIntUTF8String(resourcepackPacket, ChatCodec.serialize(version, clientCache.getLocale(), forcedText));
 		codec.writeClientbound(resourcepackPacket);
 	}
 
