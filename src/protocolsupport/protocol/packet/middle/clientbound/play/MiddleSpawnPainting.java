@@ -14,11 +14,11 @@ import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 
-	protected final NetworkEntityCache entityCache = cache.getEntityCache();
-
 	protected MiddleSpawnPainting(MiddlePacketInit init) {
 		super(init);
 	}
+
+	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
 	protected NetworkEntity entity;
 	protected int type;
@@ -33,10 +33,7 @@ public abstract class MiddleSpawnPainting extends ClientBoundMiddlePacket {
 		type = VarNumberCodec.readVarInt(serverdata);
 		PositionCodec.readPosition(serverdata, position);
 		direction = serverdata.readUnsignedByte();
-	}
 
-	@Override
-	protected void handle() {
 		entityCache.addEntity(entity);
 	}
 

@@ -9,11 +9,11 @@ import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 
 public abstract class MiddleSpawnExpOrb extends ClientBoundMiddlePacket {
 
-	protected final NetworkEntityCache entityCache = cache.getEntityCache();
-
 	protected MiddleSpawnExpOrb(MiddlePacketInit init) {
 		super(init);
 	}
+
+	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
 	protected NetworkEntity entity;
 	protected double x;
@@ -28,12 +28,8 @@ public abstract class MiddleSpawnExpOrb extends ClientBoundMiddlePacket {
 		y = serverdata.readDouble();
 		z = serverdata.readDouble();
 		count = serverdata.readShort();
-	}
 
-	@Override
-	protected void handle() {
 		entity.getDataCache().setLocation(x, y, z, (byte) 0, (byte) 0);
-
 		entityCache.addEntity(entity);
 	}
 

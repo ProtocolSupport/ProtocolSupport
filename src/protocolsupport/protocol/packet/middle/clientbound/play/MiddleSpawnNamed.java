@@ -19,12 +19,12 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 
-	protected final PlayerListCache playerlistCache = cache.getPlayerListCache();
-	protected final NetworkEntityCache entityCache = cache.getEntityCache();
-
 	protected MiddleSpawnNamed(MiddlePacketInit init) {
 		super(init);
 	}
+
+	protected final PlayerListCache playerlistCache = cache.getPlayerListCache();
+	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
 	protected NetworkEntity entity;
 	protected PlayerListEntry playerlistEntry;
@@ -55,6 +55,11 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 			}
 			throw CancelMiddlePacketException.INSTANCE;
 		}
+
+		NetworkEntityDataCache ecache = entity.getDataCache();
+		ecache.setLocation(x, y, z, pitch, yaw);
+		ecache.setHeadYaw(yaw);
+		entityCache.addEntity(entity);
 	}
 
 	private String createInvalidEntityMessage(UUID uuid) {
@@ -62,15 +67,6 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 			"Attempted to spawn unknown (not added to playerlist) named entity (uid: {0}, x: {1}, y: {2}, z: {3})",
 			uuid, x, y, z
 		);
-	}
-
-	@Override
-	protected void handle() {
-		NetworkEntityDataCache ecache = entity.getDataCache();
-		ecache.setLocation(x, y, z, pitch, yaw);
-		ecache.setHeadYaw(yaw);
-
-		entityCache.addEntity(entity);
 	}
 
 }

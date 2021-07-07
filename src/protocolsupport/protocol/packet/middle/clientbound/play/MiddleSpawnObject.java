@@ -18,11 +18,11 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 
-	protected final NetworkEntityCache entityCache = cache.getEntityCache();
-
 	protected MiddleSpawnObject(MiddlePacketInit init) {
 		super(init);
 	}
+
+	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
 	protected NetworkEntity entity;
 	protected double x;
@@ -62,6 +62,11 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 		}
 
 		entity = NetworkEntity.createObject(uuid, entityId, type);
+
+		NetworkEntityDataCache ecache = entity.getDataCache();
+		ecache.setLocation(x, y, z, pitch, yaw);
+		ecache.setHeadYaw(yaw);
+		entityCache.addEntity(entity);
 	}
 
 	private String createInvalidEntityMessage(int typeId) {
@@ -69,15 +74,6 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 			"Invalid object entity type id {0} (x: {1}, y: {2}, z: {3})",
 			typeId, x, y, z
 		);
-	}
-
-	@Override
-	protected void handle() {
-		NetworkEntityDataCache ecache = entity.getDataCache();
-		ecache.setLocation(x, y, z, pitch, yaw);
-		ecache.setHeadYaw(yaw);
-
-		entityCache.addEntity(entity);
 	}
 
 }
