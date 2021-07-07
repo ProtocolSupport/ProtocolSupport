@@ -1,14 +1,11 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7;
 
-import java.util.Map.Entry;
-import java.util.UUID;
-
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddlePlayerListSetEntry;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
+import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntryData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 
 public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
@@ -22,34 +19,34 @@ public class PlayerListSetEntry extends MiddlePlayerListSetEntry {
 		String locale = cache.getClientCache().getLocale();
 		switch (action) {
 			case ADD: {
-				for (Entry<UUID, PlayerListOldNewEntry> entry : infos.entrySet()) {
-					PlayerListEntry oldEntry = entry.getValue().getOldEntry();
-					if (oldEntry != null) {
-						codec.writeClientbound(createRemove(version, oldEntry.getCurrentName(locale)));
+				for (PlayerListEntry entry : entries) {
+					PlayerListEntryData oldData = entry.getOldData();
+					if (oldData != null) {
+						codec.writeClientbound(createRemove(version, oldData.getCurrentName(locale)));
 					}
-					PlayerListEntry currentEntry = entry.getValue().getNewEntry();
-					codec.writeClientbound(createAddOrUpdate(version, currentEntry.getCurrentName(locale), (short) currentEntry.getPing()));
+					PlayerListEntryData currentData = entry.getNewData();
+					codec.writeClientbound(createAddOrUpdate(version, currentData.getCurrentName(locale), (short) currentData.getPing()));
 				}
 				break;
 			}
 			case PING: {
-				for (Entry<UUID, PlayerListOldNewEntry> entry : infos.entrySet()) {
-					PlayerListEntry currentEntry = entry.getValue().getNewEntry();
-					codec.writeClientbound(createAddOrUpdate(version, currentEntry.getCurrentName(locale), (short) currentEntry.getPing()));
+				for (PlayerListEntry entry : entries) {
+					PlayerListEntryData currentData = entry.getNewData();
+					codec.writeClientbound(createAddOrUpdate(version, currentData.getCurrentName(locale), (short) currentData.getPing()));
 				}
 				break;
 			}
 			case DISPLAY_NAME: {
-				for (Entry<UUID, PlayerListOldNewEntry> entry : infos.entrySet()) {
-					codec.writeClientbound(createRemove(version, entry.getValue().getOldEntry().getCurrentName(locale)));
-					PlayerListEntry currentEntry = entry.getValue().getNewEntry();
-					codec.writeClientbound(createAddOrUpdate(version, currentEntry.getCurrentName(locale), (short) currentEntry.getPing()));
+				for (PlayerListEntry entry : entries) {
+					codec.writeClientbound(createRemove(version, entry.getOldData().getCurrentName(locale)));
+					PlayerListEntryData currentData = entry.getNewData();
+					codec.writeClientbound(createAddOrUpdate(version, currentData.getCurrentName(locale), (short) currentData.getPing()));
 				}
 				break;
 			}
 			case REMOVE: {
-				for (Entry<UUID, PlayerListOldNewEntry> entry : infos.entrySet()) {
-					codec.writeClientbound(createRemove(version, entry.getValue().getOldEntry().getCurrentName(locale)));
+				for (PlayerListEntry entry : entries) {
+					codec.writeClientbound(createRemove(version, entry.getOldData().getCurrentName(locale)));
 				}
 				break;
 			}

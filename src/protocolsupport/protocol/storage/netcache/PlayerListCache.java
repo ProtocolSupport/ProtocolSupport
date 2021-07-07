@@ -12,21 +12,21 @@ import protocolsupport.utils.Utils;
 
 public class PlayerListCache {
 
-	protected final HashMap<UUID, PlayerListEntry> playerlist = new HashMap<>();
+	protected final HashMap<UUID, PlayerListEntryData> playerlist = new HashMap<>();
 
-	public void addEntry(UUID uuid, PlayerListEntry entry) {
-		playerlist.put(uuid, entry);
+	public PlayerListEntryData add(UUID uuid, PlayerListEntryData entry) {
+		return playerlist.put(uuid, entry);
 	}
 
-	public PlayerListEntry getEntry(UUID uuid) {
+	public PlayerListEntryData get(UUID uuid) {
 		return playerlist.get(uuid);
 	}
 
-	public PlayerListEntry removeEntry(UUID uuid) {
+	public PlayerListEntryData remove(UUID uuid) {
 		return playerlist.remove(uuid);
 	}
 
-	public static class PlayerListEntry {
+	public static class PlayerListEntryData {
 
 		protected final String name;
 		protected String displayNameJson;
@@ -35,7 +35,7 @@ public class PlayerListCache {
 
 		protected final ArrayList<ProfileProperty> properties = new ArrayList<>();
 
-		public PlayerListEntry(String name, int ping, GameMode gamemode, String displayNameJson, Collection<ProfileProperty> properties) {
+		public PlayerListEntryData(String name, int ping, GameMode gamemode, String displayNameJson, Collection<ProfileProperty> properties) {
 			this.name = name;
 			this.ping = ping;
 			this.gamemode = gamemode;
@@ -89,8 +89,8 @@ public class PlayerListCache {
 		}
 
 		@Override
-		public PlayerListEntry clone() {
-			return new PlayerListEntry(name, ping, gamemode, displayNameJson, properties);
+		public PlayerListEntryData clone() {
+			return new PlayerListEntryData(name, ping, gamemode, displayNameJson, properties);
 		}
 
 	}

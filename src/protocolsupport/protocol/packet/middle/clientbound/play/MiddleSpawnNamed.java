@@ -12,7 +12,7 @@ import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.storage.netcache.NetworkEntityCache;
 import protocolsupport.protocol.storage.netcache.PlayerListCache;
-import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
+import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntryData;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 import protocolsupport.zplatform.ServerPlatform;
@@ -27,7 +27,7 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 	protected final NetworkEntityCache entityCache = cache.getEntityCache();
 
 	protected NetworkEntity entity;
-	protected PlayerListEntry playerlistEntry;
+	protected PlayerListEntryData playerlistEntry;
 	protected double x;
 	protected double y;
 	protected double z;
@@ -45,7 +45,7 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 		yaw = serverdata.readByte();
 		pitch = serverdata.readByte();
 
-		playerlistEntry = playerlistCache.getEntry(uuid);
+		playerlistEntry = playerlistCache.get(uuid);
 		if (playerlistEntry == null) {
 			if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 				ProtocolSupport.logWarning(createInvalidEntityMessage(uuid));

@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.clientbound.play;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
@@ -12,20 +12,20 @@ import protocolsupport.protocol.codec.UUIDCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
 import protocolsupport.protocol.storage.netcache.PlayerListCache;
-import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntry;
+import protocolsupport.protocol.storage.netcache.PlayerListCache.PlayerListEntryData;
 import protocolsupport.protocol.types.GameMode;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
 public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 
-	protected final PlayerListCache playerlistCache = cache.getPlayerListCache();
-
 	protected MiddlePlayerListSetEntry(MiddlePacketInit init) {
 		super(init);
 	}
 
+	protected final PlayerListCache playerlistCache = cache.getPlayerListCache();
+
 	protected Action action;
-	protected final HashMap<UUID, PlayerListOldNewEntry> infos = new HashMap<>();
+	protected List<PlayerListEntry> entries = new ArrayList<>();
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
@@ -35,10 +35,6 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 			UUID uuid = UUIDCodec.readUUID2L(serverdata);
 			switch (action) {
 				case ADD: {
-					PlayerListEntry oldEntry = playerlistCache.getEntry(uuid);
-					if (oldEntry != null) {
-						oldEntry = oldEntry.clone();
-					}
 					String username = StringCodec.readVarIntUTF8String(serverdata);
 					ArrayList<ProfileProperty> properties = new ArrayList<>();
 					int propertiesCount = VarNumberCodec.readVarInt(serverdata);
@@ -57,28 +53,31 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 					if (serverdata.readBoolean()) {
 						displayNameJson = StringCodec.readVarIntUTF8String(serverdata);
 					}
-					PlayerListEntry currentEntry = new PlayerListEntry(username, ping, gamemode, displayNameJson, properties);
-					playerlistCache.addEntry(uuid, currentEntry);
-					infos.put(uuid, new PlayerListOldNewEntry(oldEntry, currentEntry));
+					PlayerListEntryData currentData = new PlayerListEntryData(username, ping, gamemode, displayNameJson, properties);
+					PlayerListEntryData oldData = playerlistCache.add(uuid, currentData);
+					if (oldData != null) {
+						oldData = oldData.clone();
+					}
+					entries.add(new PlayerListEntry(uuid, oldData, currentData));
 					break;
 				}
 				case GAMEMODE: {
 					GameMode gamemode = GameMode.getById(VarNumberCodec.readVarInt(serverdata));
-					PlayerListEntry currentEntry = playerlistCache.getEntry(uuid);
-					if (currentEntry != null) {
-						PlayerListEntry oldEntry = currentEntry.clone();
-						currentEntry.setGameMode(gamemode);
-						infos.put(uuid, new PlayerListOldNewEntry(oldEntry, currentEntry));
+					PlayerListEntryData currentData = playerlistCache.get(uuid);
+					if (currentData != null) {
+						PlayerListEntryData oldData = currentData.clone();
+						currentData.setGameMode(gamemode);
+						entries.add(new PlayerListEntry(uuid, oldData, currentData));
 					}
 					break;
 				}
 				case PING: {
 					int ping = VarNumberCodec.readVarInt(serverdata);
-					PlayerListEntry currentEntry = playerlistCache.getEntry(uuid);
-					if (currentEntry != null) {
-						PlayerListEntry oldEntry = currentEntry.clone();
-						currentEntry.setPing(ping);
-						infos.put(uuid, new PlayerListOldNewEntry(oldEntry, currentEntry));
+					PlayerListEntryData currentData = playerlistCache.get(uuid);
+					if (currentData != null) {
+						PlayerListEntryData oldData = currentData.clone();
+						currentData.setPing(ping);
+						entries.add(new PlayerListEntry(uuid, oldData, currentData));
 					}
 					break;
 				}
@@ -87,18 +86,18 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 					if (serverdata.readBoolean()) {
 						displayNameJson = StringCodec.readVarIntUTF8String(serverdata);
 					}
-					PlayerListEntry currentEntry = playerlistCache.getEntry(uuid);
-					if (currentEntry != null) {
-						PlayerListEntry oldEntry = currentEntry.clone();
-						currentEntry.setDisplayNameJson(displayNameJson);
-						infos.put(uuid, new PlayerListOldNewEntry(oldEntry, currentEntry));
+					PlayerListEntryData currentData = playerlistCache.get(uuid);
+					if (currentData != null) {
+						PlayerListEntryData oldData = currentData.clone();
+						currentData.setDisplayNameJson(displayNameJson);
+						entries.add(new PlayerListEntry(uuid, oldData, currentData));
 					}
 					break;
 				}
 				case REMOVE: {
-					PlayerListEntry oldEntry = playerlistCache.removeEntry(uuid);
-					if (oldEntry != null) {
-						infos.put(uuid, new PlayerListOldNewEntry(oldEntry, null));
+					PlayerListEntryData oldData = playerlistCache.remove(uuid);
+					if (oldData != null) {
+						entries.add(new PlayerListEntry(uuid, oldData, null));
 					}
 					break;
 				}
@@ -108,24 +107,30 @@ public abstract class MiddlePlayerListSetEntry extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void cleanup() {
-		infos.clear();
+		entries.clear();
 	}
 
-	protected static class PlayerListOldNewEntry {
+	protected static class PlayerListEntry {
 
-		protected final PlayerListEntry oldEntry;
-		protected final PlayerListEntry newEntry;
+		protected final UUID uuid;
+		protected final PlayerListEntryData oldEntry;
+		protected final PlayerListEntryData newEntry;
 
-		public PlayerListOldNewEntry(PlayerListEntry oldEntry, PlayerListEntry newEntry) {
+		public PlayerListEntry(UUID uuid, PlayerListEntryData oldEntry, PlayerListEntryData newEntry) {
+			this.uuid = uuid;
 			this.oldEntry = oldEntry;
 			this.newEntry = newEntry;
 		}
 
-		public PlayerListEntry getOldEntry() {
+		public UUID getUUID() {
+			return uuid;
+		}
+
+		public PlayerListEntryData getOldData() {
 			return oldEntry;
 		}
 
-		public PlayerListEntry getNewEntry() {
+		public PlayerListEntryData getNewData() {
 			return newEntry;
 		}
 
