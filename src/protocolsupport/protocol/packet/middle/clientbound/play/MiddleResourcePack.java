@@ -15,14 +15,18 @@ public abstract class MiddleResourcePack extends ClientBoundMiddlePacket {
 	protected String url;
 	protected String hash;
 	protected boolean forced;
-	protected BaseComponent forcedText;
+	protected BaseComponent message;
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		url = StringCodec.readVarIntUTF8String(serverdata);
 		hash = StringCodec.readVarIntUTF8String(serverdata);
 		forced = serverdata.readBoolean();
-		forcedText = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(serverdata), true);
+		if (serverdata.readBoolean()) {
+			message = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(serverdata), true);
+		} else {
+			message = null;
+		}
 	}
 
 }
