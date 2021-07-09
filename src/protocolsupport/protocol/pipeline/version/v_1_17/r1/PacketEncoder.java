@@ -73,6 +73,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.T
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.TitleSubText;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.TitleText;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.UpdateMap;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.Vibration;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.WorldBorderCenter;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.WorldBorderInit;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.WorldBorderLerpSize;
@@ -229,6 +230,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_SET_VIEW_CENTER, SetViewCenter::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_UPDATE_VIEW_DISTANCE, UpdateViewDistance::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_BLOCK_BREAK_CONFIRM, BlockBreakConfirm::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_VIBRATION, Vibration::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_SYNC_PING, SyncPing::new);
 	}
 

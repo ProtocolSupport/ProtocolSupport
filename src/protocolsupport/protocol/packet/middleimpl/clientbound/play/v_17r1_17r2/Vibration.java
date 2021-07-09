@@ -7,7 +7,7 @@ import protocolsupport.protocol.types.VibrationPath;
 
 public class Vibration extends MiddleVibration {
 
-	protected Vibration(MiddlePacketInit init) {
+	public Vibration(MiddlePacketInit init) {
 		super(init);
 	}
 

@@ -4,7 +4,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleVibration;
 
 public class NoopVibration extends MiddleVibration {
 
-	protected NoopVibration(MiddlePacketInit init) {
+	public NoopVibration(MiddlePacketInit init) {
 		super(init);
 	}
 

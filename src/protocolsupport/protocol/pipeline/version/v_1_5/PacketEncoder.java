@@ -37,6 +37,7 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopTitl
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopUnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopUpdateViewDistance;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopVehicleMove;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopVibration;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldBorderCenter;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldBorderInit;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.noop.NoopWorldBorderLerpSize;
@@ -226,6 +227,7 @@ public class PacketEncoder extends AbstractPacketEncoder {
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_LOOK_AT, NoopLookAt::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_SET_VIEW_CENTER, NoopSetViewCenter::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_UPDATE_VIEW_DISTANCE, NoopUpdateViewDistance::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_VIBRATION, NoopVibration::new);
 	}
 
 }
