@@ -7,12 +7,14 @@ import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemappingHelper;
+import protocolsupport.protocol.types.VibrationPath;
 import protocolsupport.protocol.types.particle.NetworkParticle;
 import protocolsupport.protocol.types.particle.types.NetworkParticleBlock;
 import protocolsupport.protocol.types.particle.types.NetworkParticleDust;
 import protocolsupport.protocol.types.particle.types.NetworkParticleDustTransition;
 import protocolsupport.protocol.types.particle.types.NetworkParticleFallingDust;
 import protocolsupport.protocol.types.particle.types.NetworkParticleItem;
+import protocolsupport.protocol.types.particle.types.NetworkParticleVibration;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.TypeSerializer;
 import protocolsupport.protocol.utils.i18n.I18NData;
@@ -31,7 +33,10 @@ public class FlatteningNetworkParticleDataSerializer extends TypeSerializer<Netw
 			to.writeFloat(particle.getTargetRed());
 			to.writeFloat(particle.getTargetGreen());
 			to.writeFloat(particle.getTargetBlue());
-		});
+		}, ProtocolVersionsHelper.UP_1_17);
+		register(NetworkParticleVibration.class, (to, particle) -> {
+			VibrationPath.writeNetworkData(to, particle.getPath());
+		}, ProtocolVersionsHelper.UP_1_17);
 		register(NetworkParticleDust.class, (to, particle) -> {
 			to.writeFloat(particle.getRed());
 			to.writeFloat(particle.getGreen());
