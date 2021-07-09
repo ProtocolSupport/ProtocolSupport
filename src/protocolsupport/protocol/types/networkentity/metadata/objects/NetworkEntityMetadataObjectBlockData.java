@@ -3,17 +3,12 @@ package protocolsupport.protocol.types.networkentity.metadata.objects;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.codec.VarNumberCodec;
-import protocolsupport.protocol.types.networkentity.metadata.ReadableNetworkEntityMetadataObject;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 
-public class NetworkEntityMetadataObjectBlockData extends ReadableNetworkEntityMetadataObject<Integer> {
+public class NetworkEntityMetadataObjectBlockData extends NetworkEntityMetadataObject<Integer> {
 
 	public NetworkEntityMetadataObjectBlockData(int blockdata) {
 		this.value = blockdata;
-	}
-
-	@Override
-	public void readFromStream(ByteBuf from) {
-		value = VarNumberCodec.readVarInt(from);
 	}
 
 	@Override
