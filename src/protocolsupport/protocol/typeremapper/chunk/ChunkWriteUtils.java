@@ -1,7 +1,5 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
-import java.util.BitSet;
-
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.codec.ArrayCodec;
 import protocolsupport.utils.netty.RecyclableWrapCompressor;
@@ -9,12 +7,6 @@ import protocolsupport.utils.netty.RecyclableWrapCompressor;
 public class ChunkWriteUtils {
 
 	private ChunkWriteUtils() {
-	}
-
-	public static int computeLimitedHeightMask(BitSet mask, int offest, int limit) {
-		BitSet limitedMask = mask.get(offest, offest + limit);
-		long[] longarray = limitedMask.toLongArray();
-		return (int) (longarray.length > 0 ? longarray[0] : 0);
 	}
 
 	public static void writeBBLight(ByteBuf to, byte[] light) {

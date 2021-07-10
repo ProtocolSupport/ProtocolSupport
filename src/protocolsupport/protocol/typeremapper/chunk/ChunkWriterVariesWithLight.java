@@ -1,5 +1,6 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.Map;
 
@@ -18,7 +19,6 @@ import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
 import protocolsupport.protocol.utils.NumberBitsStorageCompact;
-import protocolsupport.utils.BitUtils;
 
 public class ChunkWriterVariesWithLight {
 
@@ -29,10 +29,10 @@ public class ChunkWriterVariesWithLight {
 		ByteBuf buffer,
 		int globalPaletteBitsPerBlock,
 		IntMappingTable blockDataRemappingTable, FlatteningBlockDataTable flatteningBlockDataTable,
-		LimitedHeightCachedChunk chunk, int mask, boolean hasSkyLight
+		LimitedHeightCachedChunk chunk, BitSet mask, boolean hasSkyLight
 	) {
 		for (int sectionIndex = 0; sectionIndex < ChunkConstants.LEGACY_LIMITED_HEIGHT_CHUNK_BLOCK_SECTIONS; sectionIndex++) {
-			if (BitUtils.isIBitSet(mask, sectionIndex)) {
+			if (mask.get(sectionIndex)) {
 				CachedChunkSectionBlockStorage section = chunk.getBlocksSection(sectionIndex);
 
 				if (section != null) {
@@ -85,10 +85,10 @@ public class ChunkWriterVariesWithLight {
 		ByteBuf buffer,
 		int globalPaletteBitsPerBlock,
 		IntMappingTable blockDataRemappingTable,
-		LimitedHeightCachedChunk chunk, int mask, boolean hasSkyLight
+		LimitedHeightCachedChunk chunk, BitSet mask, boolean hasSkyLight
 	) {
 		for (int sectionIndex = 0; sectionIndex < ChunkConstants.LEGACY_LIMITED_HEIGHT_CHUNK_BLOCK_SECTIONS; sectionIndex++) {
-			if (BitUtils.isIBitSet(mask, sectionIndex)) {
+			if (mask.get(sectionIndex)) {
 				CachedChunkSectionBlockStorage section = chunk.getBlocksSection(sectionIndex);
 
 				if (section != null) {
@@ -136,11 +136,11 @@ public class ChunkWriterVariesWithLight {
 		}
 	}
 
-	public static int writeTiles(ByteBuf buffer, LimitedHeightCachedChunk chunk, int mask) {
+	public static int writeTiles(ByteBuf buffer, LimitedHeightCachedChunk chunk, BitSet mask) {
 		int count = 0;
 		Map<Position, TileEntity>[] tiles = chunk.getTiles();
 		for (int sectionNumber = 0; sectionNumber < tiles.length; sectionNumber++) {
-			if (BitUtils.isIBitSet(mask, sectionNumber)) {
+			if (mask.get(sectionNumber)) {
 				Collection<TileEntity> sectionTiles = tiles[sectionNumber].values();
 				for (TileEntity tile : sectionTiles) {
 					ItemStackCodec.writeDirectTag(buffer, tile.getNBT());

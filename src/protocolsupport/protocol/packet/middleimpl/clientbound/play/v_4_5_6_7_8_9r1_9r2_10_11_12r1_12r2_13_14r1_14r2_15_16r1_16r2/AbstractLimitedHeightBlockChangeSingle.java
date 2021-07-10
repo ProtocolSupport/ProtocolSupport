@@ -13,7 +13,7 @@ public abstract class AbstractLimitedHeightBlockChangeSingle extends MiddleBlock
 	@Override
 	protected void handle() {
 		int y = position.getY();
-		if ((y < 0) || ((y >> 4) >= ChunkConstants.LEGACY_LIMITED_HEIGHT_CHUNK_BLOCK_SECTIONS)) {
+		if ((y < 0) || (y >= ChunkConstants.LEGACY_LIMITED_HEIGHT_CHUNK_BLOCK)) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
 	}

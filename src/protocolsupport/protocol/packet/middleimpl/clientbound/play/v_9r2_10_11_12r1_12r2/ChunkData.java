@@ -14,6 +14,7 @@ import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
+import protocolsupport.utils.CollectionsUtils;
 
 public class ChunkData extends AbstractChunkCacheChunkData {
 
@@ -29,12 +30,12 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
 		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
 		chunkdataPacket.writeBoolean(full);
-		VarNumberCodec.writeVarInt(chunkdataPacket, limitedBlockMask);
+		VarNumberCodec.writeVarInt(chunkdataPacket, CollectionsUtils.getBitSetFirstLong(mask));
 		MiscDataCodec.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
 			ChunkWriterVariesWithLight.writeSectionsCompactPreFlattening(
 				to, 13,
 				chunksections.blockLegacyDataTable,
-				chunksections.cachedChunk, chunksections.limitedBlockMask, chunksections.clientCache.hasDimensionSkyLight()
+				chunksections.cachedChunk, chunksections.mask, chunksections.clientCache.hasDimensionSkyLight()
 			);
 			if (chunksections.full) {
 				int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(chunksections.biomes);
@@ -44,7 +45,7 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 			}
 		});
 		MiscDataCodec.writeVarIntCountPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
-			return ChunkWriterVariesWithLight.writeTiles(to, chunksections.cachedChunk, chunksections.limitedBlockMask);
+			return ChunkWriterVariesWithLight.writeTiles(to, chunksections.cachedChunk, chunksections.mask);
 		});
 		codec.writeClientbound(chunkdataPacket);
 	}

@@ -37,7 +37,7 @@ public class ChunkData extends MiddleChunkData {
 	protected void write() {
 		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
 		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
-		ArrayCodec.writeVarIntLongArray(chunkdataPacket, blockMask.toLongArray());
+		ArrayCodec.writeVarIntLongArray(chunkdataPacket, mask.toLongArray());
 		ItemStackCodec.writeDirectTag(chunkdataPacket, heightmaps);
 		VarNumberCodec.writeVarInt(chunkdataPacket, biomes.length);
 		for (int biome : biomes) {
@@ -48,7 +48,7 @@ public class ChunkData extends MiddleChunkData {
 				to,
 				15,
 				chunksections.blockLegacyDataTable, chunksections.flatteningBlockDataTable,
-				chunksections.sections, chunksections.blockMask
+				chunksections.sections, chunksections.mask
 			);
 		});
 		ArrayCodec.writeVarIntTArray(

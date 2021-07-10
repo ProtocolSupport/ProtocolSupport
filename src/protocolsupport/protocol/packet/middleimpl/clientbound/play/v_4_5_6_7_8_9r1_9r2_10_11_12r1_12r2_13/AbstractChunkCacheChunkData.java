@@ -8,7 +8,6 @@ import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
-import protocolsupport.utils.BitUtils;
 
 public abstract class AbstractChunkCacheChunkData extends AbstractLimitedHeightChunkData {
 
@@ -34,12 +33,12 @@ public abstract class AbstractChunkCacheChunkData extends AbstractLimitedHeightC
 		full = !cachedChunk.checkHadFull();
 
 		for (int sectionIndex = 0; sectionIndex < ChunkConstants.LEGACY_LIMITED_HEIGHT_CHUNK_BLOCK_SECTIONS; sectionIndex++) {
-			if (BitUtils.isIBitSet(limitedBlockMask, sectionIndex)) {
-				cachedChunk.setBlocksSection(sectionIndex, new CachedChunkSectionBlockStorage(sections[sectionIndex + limitedHeightOffset]));
+			if (mask.get(sectionIndex)) {
+				cachedChunk.setBlocksSection(sectionIndex, new CachedChunkSectionBlockStorage(sections[sectionIndex]));
 			} else {
 				cachedChunk.setBlocksSection(sectionIndex, null);
 				if (!full) {
-					limitedBlockMask = BitUtils.setIBit(limitedBlockMask, sectionIndex);
+					mask.set(sectionIndex);
 				}
 			}
 		}
@@ -47,13 +46,13 @@ public abstract class AbstractChunkCacheChunkData extends AbstractLimitedHeightC
 		for (TileEntity tile : tiles) {
 			Position position = tile.getPosition();
 			int y = position.getY();
-			int sectionNumber = y >> 4;
+			int sectionIndex = y >> 4;
 			if (tileRemapper.tileThatNeedsBlockData(tile.getType())) {
-				tile = tileRemapper.remap(tile, cachedChunk.getBlock(sectionNumber, LimitedHeightCachedChunk.getBlockIndex(position.getX() & 0xF, y & 0xF, position.getZ() & 0xF)));
+				tile = tileRemapper.remap(tile, cachedChunk.getBlock(sectionIndex, LimitedHeightCachedChunk.getBlockIndex(position.getX() & 0xF, y & 0xF, position.getZ() & 0xF)));
 			} else {
 				tile = tileRemapper.remap(tile);
 			}
-			cachedChunk.getTiles(sectionNumber).put(position, tile);
+			cachedChunk.getTiles(sectionIndex).put(position, tile);
 		}
 	}
 

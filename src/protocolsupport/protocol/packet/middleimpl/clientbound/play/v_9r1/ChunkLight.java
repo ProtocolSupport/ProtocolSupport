@@ -14,22 +14,22 @@ import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
-import protocolsupport.utils.BitUtils;
+import protocolsupport.utils.CollectionsUtils;
 
 public class ChunkLight extends AbstractChunkCacheChunkLight {
-
-	protected final ArrayBasedIntMappingTable blockLegacyDataTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 
 	public ChunkLight(MiddlePacketInit init) {
 		super(init);
 	}
+
+	protected final ArrayBasedIntMappingTable blockLegacyDataTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 
 	@Override
 	protected void write() {
 		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
 		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
 		chunkdataPacket.writeBoolean(false); //full
-		VarNumberCodec.writeVarInt(chunkdataPacket, blockMask);
+		VarNumberCodec.writeVarInt(chunkdataPacket, CollectionsUtils.getBitSetFirstLong(blockMask));
 		MiscDataCodec.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
 			ChunkWriterVariesWithLight.writeSectionsCompactPreFlattening(
 				to,
@@ -40,10 +40,10 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 		});
 		codec.writeClientbound(chunkdataPacket);
 
-		Map<Position, TileEntity>[] tiles = cachedChunk.getTiles();
-		for (int sectionNumber = 0; sectionNumber < tiles.length; sectionNumber++) {
-			if (BitUtils.isIBitSet(blockMask, sectionNumber)) {
-				for (TileEntity tile : tiles[sectionNumber].values()) {
+		Map<Position, TileEntity>[] sectionTiles = cachedChunk.getTiles();
+		for (int sectionIndex = 0; sectionIndex < sectionTiles.length; sectionIndex++) {
+			if (blockMask.get(sectionIndex)) {
+				for (TileEntity tile : sectionTiles[sectionIndex].values()) {
 					codec.writeClientbound(BlockTileUpdate.create(version, tile));
 				}
 			}

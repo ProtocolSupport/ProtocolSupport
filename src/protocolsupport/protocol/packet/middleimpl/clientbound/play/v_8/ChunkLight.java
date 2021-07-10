@@ -13,7 +13,7 @@ import protocolsupport.protocol.typeremapper.chunk.ChunkWriterShort;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
-import protocolsupport.utils.BitUtils;
+import protocolsupport.utils.CollectionsUtils;
 
 public class ChunkLight extends AbstractChunkCacheChunkLight {
 
@@ -28,17 +28,17 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
 		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
 		chunkdataPacket.writeBoolean(false); //full
-		chunkdataPacket.writeShort(blockMask);
+		chunkdataPacket.writeShort(CollectionsUtils.getBitSetFirstLong(blockMask));
 		ArrayCodec.writeVarIntByteArray(chunkdataPacket, ChunkWriterShort.serializeSections(
 			blockLegacyDataTable,
 			cachedChunk, blockMask, clientCache.hasDimensionSkyLight()
 		));
 		codec.writeClientbound(chunkdataPacket);
 
-		Map<Position, TileEntity>[] tiles = cachedChunk.getTiles();
-		for (int sectionNumber = 0; sectionNumber < tiles.length; sectionNumber++) {
-			if (BitUtils.isIBitSet(blockMask, sectionNumber)) {
-				for (TileEntity tile : tiles[sectionNumber].values()) {
+		Map<Position, TileEntity>[] sectionTiles = cachedChunk.getTiles();
+		for (int sectionIndex = 0; sectionIndex < sectionTiles.length; sectionIndex++) {
+			if (blockMask.get(sectionIndex)) {
+				for (TileEntity tile : sectionTiles[sectionIndex].values()) {
 					codec.writeClientbound(BlockTileUpdate.create(version, tile));
 				}
 			}

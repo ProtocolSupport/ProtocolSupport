@@ -19,6 +19,7 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
+import protocolsupport.utils.CollectionsUtils;
 
 public class ChunkData extends AbstractLimitedHeightChunkData {
 
@@ -37,7 +38,7 @@ public class ChunkData extends AbstractLimitedHeightChunkData {
 		PositionCodec.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(true); //full
 		chunkdata.writeBoolean(true); //use existing light
-		VarNumberCodec.writeVarInt(chunkdata, limitedBlockMask);
+		VarNumberCodec.writeVarInt(chunkdata, CollectionsUtils.getBitSetFirstLong(mask));
 		ItemStackCodec.writeDirectTag(chunkdata, heightmaps);
 		for (int biome : LegacyBiomeData.toLegacy1024EntryBiomeData(biomes)) {
 			chunkdata.writeInt(BiomeRemapper.mapCustomBiome(clientCache, biomeLegacyDataTable, biome));
@@ -47,7 +48,7 @@ public class ChunkData extends AbstractLimitedHeightChunkData {
 				to,
 				15,
 				chunksections.blockLegacyDataTable, chunksections.flatteningBlockDataTable,
-				chunksections.sections, chunksections.limitedBlockMask, chunksections.limitedHeightOffset
+				chunksections.sections, chunksections.mask
 			);
 		});
 		ArrayCodec.writeVarIntTArray(

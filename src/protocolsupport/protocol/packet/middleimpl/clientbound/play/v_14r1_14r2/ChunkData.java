@@ -20,6 +20,7 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
+import protocolsupport.utils.CollectionsUtils;
 
 public class ChunkData extends AbstractLimitedHeightChunkData {
 
@@ -37,13 +38,13 @@ public class ChunkData extends AbstractLimitedHeightChunkData {
 		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
 		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
 		chunkdataPacket.writeBoolean(true); //full
-		VarNumberCodec.writeVarInt(chunkdataPacket, limitedBlockMask);
+		VarNumberCodec.writeVarInt(chunkdataPacket, CollectionsUtils.getBitSetFirstLong(mask));
 		ItemStackCodec.writeDirectTag(chunkdataPacket, ChunkHeightMapTransformer.transform(heightmaps));
 		MiscDataCodec.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
 			ChunkWriterVaries.writeSectionsCompact(
 				to, 14,
 				chunksections.blockLegacyDataTable, chunksections.flatteningBlockDataTable,
-				chunksections.sections, chunksections.limitedBlockMask, chunksections.limitedHeightOffset
+				chunksections.sections, chunksections.mask
 			);
 			int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(chunksections.biomes);
 			for (int biomeId : legacyBiomeData) {

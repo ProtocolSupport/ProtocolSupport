@@ -18,6 +18,7 @@ import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVaries;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
+import protocolsupport.utils.CollectionsUtils;
 
 public class ChunkData extends AbstractLimitedHeightChunkData {
 
@@ -35,7 +36,7 @@ public class ChunkData extends AbstractLimitedHeightChunkData {
 		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
 		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
 		chunkdataPacket.writeBoolean(true); //full
-		VarNumberCodec.writeVarInt(chunkdataPacket, limitedBlockMask);
+		VarNumberCodec.writeVarInt(chunkdataPacket, CollectionsUtils.getBitSetFirstLong(mask));
 		ItemStackCodec.writeDirectTag(chunkdataPacket, heightmaps);
 		VarNumberCodec.writeVarInt(chunkdataPacket, biomes.length);
 		for (int biome : biomes) {
@@ -46,7 +47,7 @@ public class ChunkData extends AbstractLimitedHeightChunkData {
 				to,
 				15,
 				chunksections.blockLegacyDataTable, chunksections.flatteningBlockDataTable,
-				chunksections.sections, chunksections.limitedBlockMask, chunksections.limitedHeightOffset
+				chunksections.sections, chunksections.mask
 			);
 		});
 		ArrayCodec.writeVarIntTArray(

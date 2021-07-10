@@ -2,6 +2,7 @@ package protocolsupport.utils;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.EnumMap;
@@ -19,6 +20,12 @@ import javax.annotation.Nullable;
 public class CollectionsUtils {
 
 	private CollectionsUtils() {
+	}
+
+	public static int getBitSetFirstLong(BitSet set) {
+		//TODO: Use unsafe/reflection to access internal storage to avoid copy operation
+		long[] array = set.toLongArray();
+		return (int) (array.length > 0 ? array[0] : 0);
 	}
 
 	public static @Nonnull <K, V extends Enum<V>> Map<K, V> makeEnumMappingMap(@Nonnull Class<V> e, @Nonnull Function<V, K> mapping) {

@@ -16,6 +16,7 @@ import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTa
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
+import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.netty.RecyclableWrapCompressor;
 
 public class ChunkData extends AbstractChunkCacheChunkData {
@@ -32,27 +33,27 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 		String locale = clientCache.getLocale();
 		boolean hasSkyLight = clientCache.hasDimensionSkyLight();
 
-		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
-		PositionCodec.writeIntChunkCoord(chunkdata, coord);
-		chunkdata.writeBoolean(full);
-		if ((limitedBlockMask == 0) && full) {
-			chunkdata.writeShort(1);
-			chunkdata.writeShort(0);
+		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
+		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
+		chunkdataPacket.writeBoolean(full);
+		if (mask.isEmpty() && full) {
+			chunkdataPacket.writeShort(1);
+			chunkdataPacket.writeShort(0);
 			byte[] compressed = ChunkWriteUtils.getEmptySectionByte(hasSkyLight);
-			chunkdata.writeInt(compressed.length);
-			chunkdata.writeBytes(compressed);
+			chunkdataPacket.writeInt(compressed.length);
+			chunkdataPacket.writeBytes(compressed);
 		} else {
-			chunkdata.writeShort(limitedBlockMask);
-			chunkdata.writeShort(0);
+			chunkdataPacket.writeShort(CollectionsUtils.getBitSetFirstLong(mask));
+			chunkdataPacket.writeShort(0);
 			byte[] compressed = RecyclableWrapCompressor.compressStatic(ChunkWriterByte.serializeSectionsAndBiomes(
 				biomeLegacyDataTable, blockLegacyDataTable,
 				clientCache, full ? biomes : null,
-				cachedChunk, limitedBlockMask, hasSkyLight
+				cachedChunk, mask, hasSkyLight
 			));
-			chunkdata.writeInt(compressed.length);
-			chunkdata.writeBytes(compressed);
+			chunkdataPacket.writeInt(compressed.length);
+			chunkdataPacket.writeBytes(compressed);
 		}
-		codec.writeClientbound(chunkdata);
+		codec.writeClientbound(chunkdataPacket);
 
 		for (Map<Position, TileEntity> sectionTiles : cachedChunk.getTiles()) {
 			for (TileEntity tile : sectionTiles.values()) {

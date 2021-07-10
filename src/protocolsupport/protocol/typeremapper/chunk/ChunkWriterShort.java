@@ -1,11 +1,12 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
+import java.util.BitSet;
+
 import protocolsupport.protocol.storage.netcache.chunk.CachedChunkSectionBlockStorage;
 import protocolsupport.protocol.storage.netcache.chunk.LimitedHeightCachedChunk;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
-import protocolsupport.utils.BitUtils;
 
 public class ChunkWriterShort {
 
@@ -14,9 +15,9 @@ public class ChunkWriterShort {
 
 	public static byte[] serializeSections(
 		IntMappingTable blockDataRemappingTable,
-		LimitedHeightCachedChunk chunk, int mask, boolean hasSkyLight
+		LimitedHeightCachedChunk chunk, BitSet mask, boolean hasSkyLight
 	) {
-		int columnsCount = Integer.bitCount(mask);
+		int columnsCount = mask.cardinality();
 		byte[] data = new byte[((hasSkyLight ? 12288 : 10240) * columnsCount)];
 
 		int blockIdIndex = 0;
@@ -24,7 +25,7 @@ public class ChunkWriterShort {
 		int skyLightIndex = 10240 * columnsCount;
 
 		for (int sectionIndex = 0; sectionIndex < ChunkConstants.LEGACY_LIMITED_HEIGHT_CHUNK_BLOCK_SECTIONS; sectionIndex++) {
-			if (BitUtils.isIBitSet(mask, sectionIndex)) {
+			if (mask.get(sectionIndex)) {
 				CachedChunkSectionBlockStorage section = chunk.getBlocksSection(sectionIndex);
 
 				if (section != null) {

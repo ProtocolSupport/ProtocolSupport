@@ -20,6 +20,7 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
+import protocolsupport.utils.CollectionsUtils;
 
 public class ChunkData extends AbstractLimitedHeightChunkData {
 
@@ -37,7 +38,7 @@ public class ChunkData extends AbstractLimitedHeightChunkData {
 		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
 		PositionCodec.writeIntChunkCoord(chunkdata, coord);
 		chunkdata.writeBoolean(true); //full
-		VarNumberCodec.writeVarInt(chunkdata, limitedBlockMask);
+		VarNumberCodec.writeVarInt(chunkdata, CollectionsUtils.getBitSetFirstLong(mask));
 		ItemStackCodec.writeDirectTag(chunkdata, ChunkHeightMapTransformer.transform(heightmaps));
 		for (int biome : LegacyBiomeData.toLegacy1024EntryBiomeData(biomes)) {
 			chunkdata.writeInt(BiomeRemapper.mapLegacyBiome(clientCache, biomeLegacyDataTable, biome));
@@ -46,7 +47,7 @@ public class ChunkData extends AbstractLimitedHeightChunkData {
 			ChunkWriterVaries.writeSectionsCompact(
 				to, 14,
 				chunksections.blockLegacyDataTable, chunksections.flatteningBlockDataTable,
-				chunksections.sections, chunksections.limitedBlockMask, chunksections.limitedHeightOffset
+				chunksections.sections, chunksections.mask
 			);
 		});
 		ArrayCodec.writeVarIntTArray(

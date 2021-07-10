@@ -20,6 +20,7 @@ import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTa
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
+import protocolsupport.utils.CollectionsUtils;
 
 public class ChunkData extends AbstractChunkCacheChunkData {
 
@@ -35,15 +36,15 @@ public class ChunkData extends AbstractChunkCacheChunkData {
 		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
 		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
 		chunkdataPacket.writeBoolean(full);
-		if ((limitedBlockMask == 0) && full) {
+		if (mask.isEmpty() && full) {
 			chunkdataPacket.writeShort(1);
 			ArrayCodec.writeVarIntByteArray(chunkdataPacket, ChunkWriteUtils.getEmptySectionShort(clientCache.hasDimensionSkyLight()));
 		} else {
-			chunkdataPacket.writeShort(limitedBlockMask);
+			chunkdataPacket.writeShort(CollectionsUtils.getBitSetFirstLong(mask));
 			MiscDataCodec.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
 				to.writeBytes(ChunkWriterShort.serializeSections(
 					chunksections.blockLegacyDataTable,
-					chunksections.cachedChunk, chunksections.limitedBlockMask, chunksections.clientCache.hasDimensionSkyLight()
+					chunksections.cachedChunk, chunksections.mask, chunksections.clientCache.hasDimensionSkyLight()
 				));
 				if (chunksections.full) {
 					int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(chunksections.biomes);

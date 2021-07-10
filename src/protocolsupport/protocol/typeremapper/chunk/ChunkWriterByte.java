@@ -1,5 +1,7 @@
 package protocolsupport.protocol.typeremapper.chunk;
 
+import java.util.BitSet;
+
 import org.bukkit.NamespacedKey;
 
 import protocolsupport.protocol.storage.netcache.IBiomeRegistry;
@@ -12,7 +14,6 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
 import protocolsupport.protocol.types.chunk.ChunkConstants;
-import protocolsupport.utils.BitUtils;
 
 public class ChunkWriterByte {
 
@@ -22,9 +23,9 @@ public class ChunkWriterByte {
 	public static byte[] serializeSectionsAndBiomes(
 		GenericMappingTable<NamespacedKey> biomeRemappingTable, IntMappingTable blockDataRemappingTable,
 		IBiomeRegistry biomeRegistry, int[] biomeData,
-		LimitedHeightCachedChunk chunk, int mask, boolean hasSkyLight
+		LimitedHeightCachedChunk chunk, BitSet mask, boolean hasSkyLight
 	) {
-		int columnsCount = Integer.bitCount(mask);
+		int columnsCount = mask.cardinality();
 		byte[] data = new byte[((hasSkyLight ? 10240 : 8192) * columnsCount) + (biomeData != null ? 256 : 0)];
 
 		int blockIdIndex = 0;
@@ -33,7 +34,7 @@ public class ChunkWriterByte {
 		int skyLightIndex = 8192 * columnsCount;
 
 		for (int sectionIndex = 0; sectionIndex < ChunkConstants.LEGACY_LIMITED_HEIGHT_CHUNK_BLOCK_SECTIONS; sectionIndex++) {
-			if (BitUtils.isIBitSet(mask, sectionIndex)) {
+			if (mask.get(sectionIndex)) {
 				CachedChunkSectionBlockStorage section = chunk.getBlocksSection(sectionIndex);
 
 				if (section != null) {

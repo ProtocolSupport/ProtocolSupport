@@ -19,7 +19,7 @@ public abstract class MiddleChunkData extends ClientBoundMiddlePacket {
 	}
 
 	protected ChunkCoord coord;
-	protected BitSet blockMask;
+	protected BitSet mask;
 	protected NBTCompound heightmaps;
 	protected int[] biomes;
 	protected ChunkSectonBlockData[] sections;
@@ -29,15 +29,15 @@ public abstract class MiddleChunkData extends ClientBoundMiddlePacket {
 	protected void decode(ByteBuf serverdata) {
 		coord = PositionCodec.readIntChunkCoord(serverdata);
 
-		blockMask = BitSet.valueOf(ArrayCodec.readVarIntLongArray(serverdata));
+		mask = BitSet.valueOf(ArrayCodec.readVarIntLongArray(serverdata));
 		heightmaps = ItemStackCodec.readDirectTag(serverdata);
 		biomes = ArrayCodec.readVarIntVarIntArray(serverdata);
 
 		{
 			ByteBuf chunkdata = ArrayCodec.readVarIntByteArraySlice(serverdata);
-			sections = new ChunkSectonBlockData[blockMask.length()];
+			sections = new ChunkSectonBlockData[mask.length()];
 			for (int sectionIndex = 0; sectionIndex < sections.length; sectionIndex++) {
-				if (blockMask.get(sectionIndex)) {
+				if (mask.get(sectionIndex)) {
 					sections[sectionIndex] = ChunkSectonBlockData.readFromStream(chunkdata);
 				}
 			}

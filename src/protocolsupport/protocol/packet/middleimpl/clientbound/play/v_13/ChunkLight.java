@@ -11,6 +11,7 @@ import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
+import protocolsupport.utils.CollectionsUtils;
 
 public class ChunkLight extends AbstractChunkCacheChunkLight {
 
@@ -23,21 +24,21 @@ public class ChunkLight extends AbstractChunkCacheChunkLight {
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData chunkdata = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
-		PositionCodec.writeIntChunkCoord(chunkdata, coord);
-		chunkdata.writeBoolean(false); //full
-		VarNumberCodec.writeVarInt(chunkdata, blockMask);
-		MiscDataCodec.writeVarIntLengthPrefixedType(chunkdata, this, (to, chunksections) -> {
+		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
+		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
+		chunkdataPacket.writeBoolean(false); //full
+		VarNumberCodec.writeVarInt(chunkdataPacket, CollectionsUtils.getBitSetFirstLong(blockMask));
+		MiscDataCodec.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
 			ChunkWriterVariesWithLight.writeSectionsCompactFlattening(
 				to, 14,
 				chunksections.blockLegacyDataTable, chunksections.flatteningBlockDataTable,
 				chunksections.cachedChunk, chunksections.blockMask, chunksections.clientCache.hasDimensionSkyLight()
 			);
 		});
-		MiscDataCodec.writeVarIntCountPrefixedType(chunkdata, this, (to, chunksections) -> {
+		MiscDataCodec.writeVarIntCountPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
 			return ChunkWriterVariesWithLight.writeTiles(to, chunksections.cachedChunk, chunksections.blockMask);
 		});
-		codec.writeClientbound(chunkdata);
+		codec.writeClientbound(chunkdataPacket);
 	}
 
 }
