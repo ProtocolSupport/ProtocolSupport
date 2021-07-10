@@ -17,8 +17,15 @@ public class NetworkEntityTransformHelper {
 	private NetworkEntityTransformHelper() {
 	}
 
-	public static NetworkEntityType transformTypeFormat(NetworkEntityType type, NetworkEntityLegacyDataTable dataTable, NetworkEntityLegacyFormatTable formatTable) {
-		return formatTable.get(dataTable.get(type).getType()).getType();
+	public static @Nonnull NetworkEntityType transformTypeFormat(
+		@Nonnull NetworkEntityType type,
+		@Nonnull NetworkEntityLegacyDataTable dataTable, @Nonnull NetworkEntityLegacyFormatTable formatTable
+	) {
+		NetworkEntityType lType = dataTable.get(type).getType();
+		if (lType == NetworkEntityType.NONE) {
+			return NetworkEntityType.NONE;
+		}
+		return formatTable.get(lType).getType();
 	}
 
 	public static void transformMetadata(
