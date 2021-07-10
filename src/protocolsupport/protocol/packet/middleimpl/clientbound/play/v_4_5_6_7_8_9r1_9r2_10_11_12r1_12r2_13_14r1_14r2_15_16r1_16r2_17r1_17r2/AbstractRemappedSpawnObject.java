@@ -40,8 +40,6 @@ public abstract class AbstractRemappedSpawnObject extends MiddleSpawnObject {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
 
-		super.handle();
-
 		lType = lLType;
 		lObjectdata = entityLegacyObjectdataDataTable.get(lLType).applyAsInt(objectdata);
 		fType = entityLegacyFormatTable.get(lLType).getType();

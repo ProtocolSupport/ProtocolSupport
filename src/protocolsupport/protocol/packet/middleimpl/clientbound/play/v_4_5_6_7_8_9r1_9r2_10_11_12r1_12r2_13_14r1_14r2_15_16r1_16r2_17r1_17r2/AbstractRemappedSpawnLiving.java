@@ -31,8 +31,6 @@ public abstract class AbstractRemappedSpawnLiving extends MiddleSpawnLiving {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
 
-		super.handle();
-
 		lType = lLType;
 		fType = entityLegacyFormatTable.get(lType).getType();
 		NetworkEntityLegacyLocationOffsetRegistry.LocationOffset offset = entityLegacyLocationOffsetTable.get(fType);

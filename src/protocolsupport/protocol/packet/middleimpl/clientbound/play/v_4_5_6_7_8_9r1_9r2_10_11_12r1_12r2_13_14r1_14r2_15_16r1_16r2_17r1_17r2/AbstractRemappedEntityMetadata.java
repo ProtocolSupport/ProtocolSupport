@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2;
 
 import protocolsupport.protocol.codec.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
+import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleEntityMetadata;
 import protocolsupport.protocol.typeremapper.entity.NetworkEntityTransformHelper;
 import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry;
@@ -24,10 +25,14 @@ public abstract class AbstractRemappedEntityMetadata extends MiddleEntityMetadat
 
 	@Override
 	protected void handle() {
-		super.handle();
-
 		NetworkEntityLegacyDataEntry legacyEntityEntry = entityLegacyDataTable.get(entity.getType());
-		lType = legacyEntityEntry.getType();
+		NetworkEntityType lLType = legacyEntityEntry.getType();
+
+		if (lLType == NetworkEntityType.NONE) {
+			throw CancelMiddlePacketException.INSTANCE;
+		}
+
+		lType = lLType;
 		NetworkEntityTransformHelper.transformMetadata(entity, metadata, legacyEntityEntry, entityLegacyFormatTable, fMetadata);
 	}
 
