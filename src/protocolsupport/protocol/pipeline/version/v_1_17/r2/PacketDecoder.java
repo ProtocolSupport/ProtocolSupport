@@ -10,7 +10,6 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_10_11_12r1_
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.AdvancementTab;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13_14r1_14r2_15_16r1_16r2_17r1_17r2.CraftRecipeRequest;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13_14r1_14r2_15_16r1_16r2_17r1_17r2.CustomPayload;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13_14r1_14r2_15_16r1_16r2_17r1_17r2.EditBook;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13_14r1_14r2_15_16r1_16r2_17r1_17r2.NameItem;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13_14r1_14r2_15_16r1_16r2_17r1_17r2.PickItem;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13_14r1_14r2_15_16r1_16r2_17r1_17r2.QueryEntityNBT;
@@ -32,6 +31,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_16r2_17r1_1
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_16r2_17r1_17r2.RecipeBookState;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_17r1_17r2.ClientSettings;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_17r1_17r2.SyncPong;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_17r2.EditBook;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_17r2.InventoryClick;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.CreativeSetSlot;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.Flying;

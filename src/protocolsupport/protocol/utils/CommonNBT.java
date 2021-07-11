@@ -1,5 +1,6 @@
 package protocolsupport.protocol.utils;
 
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
 import java.util.UUID;
@@ -61,6 +62,16 @@ public class CommonNBT {
 	}
 
 	public static final String BOOK_PAGES = "pages";
+	public static final String BOOK_TITLE = "title";
+
+	public static String[] getBookPages(NBTCompound tag) {
+		List<NBTString> pagesTags = tag.getStringListTagOrThrow(CommonNBT.BOOK_PAGES).getTags();
+		String[] pages = new String[pagesTags.size()];
+		for (int i = 0; i < pagesTags.size(); i++) {
+			pages[i] = pagesTags.get(i).getValue();
+		}
+		return pages;
+	}
 
 	public static final String BOOK_ENCHANTMENTS = "StoredEnchantments";
 

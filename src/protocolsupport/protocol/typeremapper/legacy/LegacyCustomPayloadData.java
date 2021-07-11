@@ -2,8 +2,6 @@ package protocolsupport.protocol.typeremapper.legacy;
 
 import java.nio.charset.StandardCharsets;
 
-import org.bukkit.Material;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocolsupport.api.ProtocolVersion;
@@ -25,7 +23,6 @@ import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.CommonNBT;
-import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.BitUtils;
 
@@ -43,22 +40,18 @@ public class LegacyCustomPayloadData {
 	public static void transformAndWriteBookEdit(PacketDataCodec codec, ProtocolVersion version, int heldSlot, ByteBuf data) {
 		NetworkItemStack book = ItemStackCodec.readItemStack(data, version);
 		if (!book.isNull()) {
-			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
-			codec.writeServerbound(MiddleEditBook.create(book, false, heldSlot));
+			codec.writeServerbound(MiddleEditBook.create(heldSlot, CommonNBT.getBookPages(book.getNBT()), null));
 		}
 	}
 
 	public static void transformAndWriteBookSign(PacketDataCodec codec, ProtocolVersion version, int heldSlot, ByteBuf data) {
 		NetworkItemStack book = ItemStackCodec.readItemStack(data, version);
 		if (!book.isNull()) {
-			book.setTypeId(ItemMaterialLookup.getRuntimeId(Material.WRITABLE_BOOK));
+			NBTCompound rootTag = book.getNBT();
 			if (version == ProtocolVersion.MINECRAFT_1_8) {
-				NBTCompound rootTag = book.getNBT();
-				if (rootTag != null) {
-					CommonNBTTransformer.toLegacyChatList(rootTag.getStringListTagOrNull(CommonNBT.BOOK_PAGES), I18NData.DEFAULT_LOCALE);
-				}
+				CommonNBTTransformer.toLegacyChatList(rootTag.getStringListTagOrNull(CommonNBT.BOOK_PAGES), I18NData.DEFAULT_LOCALE);
 			}
-			codec.writeServerbound(MiddleEditBook.create(book, true, heldSlot));
+			codec.writeServerbound(MiddleEditBook.create(heldSlot, CommonNBT.getBookPages(rootTag), rootTag.getStringTagValueOrThrow(CommonNBT.BOOK_TITLE)));
 		}
 	}
 

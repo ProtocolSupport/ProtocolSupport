@@ -1,11 +1,11 @@
 package protocolsupport.protocol.packet.middle.serverbound.play;
 
-import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.ArrayCodec;
+import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
-import protocolsupport.protocol.types.NetworkItemStack;
 
 public abstract class MiddleEditBook extends ServerBoundMiddlePacket {
 
@@ -13,21 +13,26 @@ public abstract class MiddleEditBook extends ServerBoundMiddlePacket {
 		super(init);
 	}
 
-	protected NetworkItemStack book;
-	protected boolean signing;
 	protected int slot;
+	protected String[] pages;
+	protected String title;
 
 	@Override
 	protected void write() {
-		codec.writeServerbound(create(book, signing, slot));
+		codec.writeServerbound(create(slot, pages, title));
 	}
 
-	public static ServerBoundPacketData create(NetworkItemStack book, boolean signing, int slot) {
-		ServerBoundPacketData editbook = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_EDIT_BOOK);
-		ItemStackCodec.writeItemStack(editbook, book);
-		editbook.writeBoolean(signing);
-		VarNumberCodec.writeVarInt(editbook, slot);
-		return editbook;
+	public static ServerBoundPacketData create(int slot, String[] pages, String title) {
+		ServerBoundPacketData editbookPacket = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_EDIT_BOOK);
+		VarNumberCodec.writeVarInt(editbookPacket, slot);
+		ArrayCodec.writeVarIntVarIntUTF8StringArray(editbookPacket, pages);
+		if (title != null) {
+			editbookPacket.writeBoolean(true);
+			StringCodec.writeVarIntUTF8String(editbookPacket, title);
+		} else {
+			editbookPacket.writeBoolean(false);
+		}
+		return editbookPacket;
 	}
 
 }
