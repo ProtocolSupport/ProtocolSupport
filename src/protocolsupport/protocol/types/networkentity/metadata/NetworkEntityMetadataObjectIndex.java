@@ -327,7 +327,6 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 
 	public static class Shulker extends Insentient {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectDirection> DIRECTION = takeNextIndex(NetworkEntityMetadataObjectDirection.class);
-		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectOptionalPosition> ATTACHMENT_POS = takeNextIndex(NetworkEntityMetadataObjectOptionalPosition.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> SHIELD_HEIGHT = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> COLOR = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 	}
