@@ -23,8 +23,6 @@ public abstract class AbstractLocationOffsetEntityRelMoveLook extends MiddleEnti
 
 	@Override
 	protected void handle() {
-		super.handle();
-
 		entityLegacyLocationOffset = entityLegacyLocationOffsetTable.get(NetworkEntityTransformHelper.transformTypeFormat(entity.getType(), entityLegacyDataTable, entityLegacyFormatTable));
 		if (entityLegacyLocationOffset != null) {
 			yaw += entityLegacyLocationOffset.getYaw();

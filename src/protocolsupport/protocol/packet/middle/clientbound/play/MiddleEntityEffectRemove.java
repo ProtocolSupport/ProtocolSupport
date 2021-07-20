@@ -21,7 +21,7 @@ public abstract class MiddleEntityEffectRemove extends MiddleEntityData {
 	}
 
 	@Override
-	protected void handle() {
+	protected void decodeDataLast(ByteBuf serverdata) {
 		if (effectSkipTable.isSet(effectId)) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}

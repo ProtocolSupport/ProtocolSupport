@@ -26,7 +26,7 @@ public abstract class MiddleEntityTeleport extends MiddleEntityData {
 	}
 
 	@Override
-	protected void handle() {
+	protected void decodeDataLast(ByteBuf serverdata) {
 		entity.getDataCache().setLocation(x, y, z, pitch, yaw);
 	}
 

@@ -22,7 +22,7 @@ public abstract class MiddleEntityRelMove extends MiddleEntityData {
 	}
 
 	@Override
-	protected void handle() {
+	protected void decodeDataLast(ByteBuf serverdata) {
 		entity.getDataCache().addLocation(relX, relY, relZ);
 	}
 

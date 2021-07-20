@@ -21,8 +21,6 @@ public abstract class AbstractLocationOffsetEntityTeleport extends MiddleEntityT
 
 	@Override
 	protected void handle() {
-		super.handle();
-
 		NetworkEntityLegacyLocationOffsetRegistry.LocationOffset offset = entityLegacyLocationOffsetTable.get(NetworkEntityTransformHelper.transformTypeFormat(entity.getType(), entityLegacyDataTable, entityLegacyFormatTable));
 		if (offset != null) {
 			x += offset.getX();

@@ -27,7 +27,7 @@ public abstract class MiddleEntityRelMoveLook extends MiddleEntityData {
 	}
 
 	@Override
-	protected void handle() {
+	protected void decodeDataLast(ByteBuf serverdata) {
 		NetworkEntityDataCache ecache = entity.getDataCache();
 		ecache.addLocation(relX, relY, relZ);
 		ecache.setLook(pitch, yaw);

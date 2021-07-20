@@ -16,7 +16,7 @@ public abstract class MiddleEntityHeadRotation extends MiddleEntityData {
 	}
 
 	@Override
-	protected void handle() {
+	protected void decodeDataLast(ByteBuf serverdata) {
 		entity.getDataCache().setHeadYaw(headRot);
 	}
 

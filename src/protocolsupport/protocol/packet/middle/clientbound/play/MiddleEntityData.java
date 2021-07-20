@@ -26,6 +26,8 @@ public abstract class MiddleEntityData extends ClientBoundMiddlePacket {
 		if (entity == null) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}
+
+		decodeDataLast(serverdata);
 	}
 
 	protected int decodeEntityId(ByteBuf serverdata) {
@@ -33,5 +35,8 @@ public abstract class MiddleEntityData extends ClientBoundMiddlePacket {
 	}
 
 	protected abstract void decodeData(ByteBuf serverdata);
+
+	protected void decodeDataLast(ByteBuf serverdata) {
+	}
 
 }

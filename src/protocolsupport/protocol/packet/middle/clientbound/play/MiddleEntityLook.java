@@ -20,7 +20,7 @@ public abstract class MiddleEntityLook extends MiddleEntityData {
 	}
 
 	@Override
-	protected void handle() {
+	protected void decodeDataLast(ByteBuf serverdata) {
 		entity.getDataCache().setLook(pitch, yaw);
 	}
 
