@@ -8,6 +8,7 @@ import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySe
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySetSlot;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.storage.netcache.ClientCache;
+import protocolsupport.protocol.storage.netcache.InventoryTransactionCache;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper.ClientItems;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper.ClientItemsArray;
@@ -21,6 +22,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 	}
 
 	protected final ClientCache clientCache = cache.getClientCache();
+	protected final InventoryTransactionCache transactioncache = cache.getTransactionCache();
 
 	@Override
 	protected void write() {
@@ -40,6 +42,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 			));
 		}
 		codec.writeClientbound(InventorySetSlot.create(version, locale, MiddleInventorySetSlot.WINDOW_ID_PLAYER_CURSOR, -1, cursor));
+		codec.writeClientbound(InventorySetSlot.createTransaction(transactioncache.storeInvStateServerId(stateId)));
 	}
 
 	protected static ClientBoundPacketData create(ProtocolVersion version, String locale, byte windowId, NetworkItemStack[] items) {

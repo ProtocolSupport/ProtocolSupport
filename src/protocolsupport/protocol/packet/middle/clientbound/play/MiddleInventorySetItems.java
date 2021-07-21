@@ -31,8 +31,6 @@ public abstract class MiddleInventorySetItems extends ClientBoundMiddlePacket {
 		items = ArrayCodec.readVarIntTArray(serverdata, NetworkItemStack.class, ItemStackCodec::readItemStack);
 		cursor = ItemStackCodec.readItemStack(serverdata);
 
-		windowCache.setStateId(stateId);
-
 		if (!windowCache.isValidWindowId(windowId) && (windowId != WINDOW_ID_PLAYER_INVENTORY)) {
 			throw CancelMiddlePacketException.INSTANCE;
 		}

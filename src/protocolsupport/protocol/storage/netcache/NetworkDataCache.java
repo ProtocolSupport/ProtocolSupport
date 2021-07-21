@@ -50,6 +50,11 @@ public class NetworkDataCache {
 		return chunkcache;
 	}
 
+	protected final InventoryTransactionCache transactioncache = new InventoryTransactionCache();
+	public InventoryTransactionCache getTransactionCache() {
+		return transactioncache;
+	}
+
 	@Override
 	public String toString() {
 		return Utils.toStringAllFields(this);

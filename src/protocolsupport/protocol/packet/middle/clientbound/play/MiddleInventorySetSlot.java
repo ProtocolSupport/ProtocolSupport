@@ -32,8 +32,6 @@ public abstract class MiddleInventorySetSlot extends ClientBoundMiddlePacket {
 		slot = serverdata.readShort();
 		itemstack = ItemStackCodec.readItemStack(serverdata);
 
-		windowCache.setStateId(stateId);
-
 		if (
 			!windowCache.isValidWindowId(windowId) &&
 			(windowId != WINDOW_ID_PLAYER_INVENTORY) &&

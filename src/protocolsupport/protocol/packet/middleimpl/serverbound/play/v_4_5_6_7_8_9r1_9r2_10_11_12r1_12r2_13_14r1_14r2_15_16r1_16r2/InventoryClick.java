@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.codec.ItemStackCodec;
 import protocolsupport.protocol.packet.middle.CancelMiddlePacketException;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryClick;
+import protocolsupport.protocol.storage.netcache.InventoryTransactionCache;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper.NoSuchSlotException;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper.WindowSlot;
 
@@ -13,6 +14,8 @@ public class InventoryClick extends MiddleInventoryClick {
 		super(init);
 		modifiedSlots = new SlotItem[0];
 	}
+
+	protected final InventoryTransactionCache transactioncache = cache.getTransactionCache();
 
 	@Override
 	protected void read(ByteBuf clientdata) {
@@ -26,7 +29,7 @@ public class InventoryClick extends MiddleInventoryClick {
 
 	@Override
 	protected void handle() {
-		stateId = windowCache.getStateId();
+		stateId = transactioncache.getInvStateServerId();
 
 		try {
 			WindowSlot windowSlot = windowCache.getOpenedWindowRemapper().fromClientSlot(windowId, slot);

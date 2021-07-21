@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleSyncPong;
-import protocolsupport.protocol.storage.netcache.KeepAliveCache;
+import protocolsupport.protocol.storage.netcache.InventoryTransactionCache;
 
 public class InventoryConfirmTransaction extends ServerBoundMiddlePacket {
 
@@ -11,7 +11,7 @@ public class InventoryConfirmTransaction extends ServerBoundMiddlePacket {
 		super(init);
 	}
 
-	protected final KeepAliveCache keepaliveCache = cache.getKeepAliveCache();
+	protected final InventoryTransactionCache transactioncache = cache.getTransactionCache();
 
 	protected short actionNumber;
 
@@ -24,7 +24,12 @@ public class InventoryConfirmTransaction extends ServerBoundMiddlePacket {
 
 	@Override
 	protected void write() {
-		codec.writeServerbound(MiddleSyncPong.create(keepaliveCache.tryConfirmSyncPing(actionNumber)));
+		int syncpingServerId = transactioncache.trySyncPingConfirm(actionNumber);
+		if (syncpingServerId != InventoryTransactionCache.INVALID_ID) {
+			codec.writeServerbound(MiddleSyncPong.create(syncpingServerId));
+		}
+
+		transactioncache.tryInvStateSync(actionNumber);
 	}
 
 }
