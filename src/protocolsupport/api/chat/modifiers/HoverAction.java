@@ -17,7 +17,7 @@ import protocolsupport.protocol.types.nbt.mojangson.MojangsonParser;
 import protocolsupport.protocol.types.nbt.mojangson.MojangsonSerializer;
 import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.NamespacedKeyUtils;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class HoverAction {
 
@@ -142,7 +142,7 @@ public class HoverAction {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 	public enum Type {
@@ -194,7 +194,7 @@ public class HoverAction {
 
 		@Override
 		public String toString() {
-			return Utils.toStringAllFields(this);
+			return ReflectionUtils.toStringAllFields(this);
 		}
 
 	}

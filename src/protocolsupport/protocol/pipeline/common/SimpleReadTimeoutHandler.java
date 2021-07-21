@@ -6,7 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.ReadTimeoutException;
 import io.netty.util.concurrent.ScheduledFuture;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.MiscUtils;
 
 public class SimpleReadTimeoutHandler extends ChannelInboundHandlerAdapter {
 
@@ -44,7 +44,7 @@ public class SimpleReadTimeoutHandler extends ChannelInboundHandlerAdapter {
 	}
 
 	public void setLastRead() {
-		this.lastReadTime = Utils.currentTimeMillisFromNanoTime();
+		this.lastReadTime = MiscUtils.currentTimeMillisFromNanoTime();
 	}
 
 	private void initialize(final ChannelHandlerContext ctx) {
@@ -53,7 +53,7 @@ public class SimpleReadTimeoutHandler extends ChannelInboundHandlerAdapter {
 			@Override
 			public void run() {
 				if (ctx.channel().isOpen()) {
-					long untilTimeout = timeoutTime - (Utils.currentTimeMillisFromNanoTime() - lastReadTime);
+					long untilTimeout = timeoutTime - (MiscUtils.currentTimeMillisFromNanoTime() - lastReadTime);
 					if (untilTimeout <= 0) {
 						ctx.fireExceptionCaught(ReadTimeoutException.INSTANCE);
 					} else {

@@ -16,7 +16,7 @@ import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.storage.ThrottleTracker;
 import protocolsupport.protocol.utils.spoofedata.SpoofedData;
 import protocolsupport.protocol.utils.spoofedata.SpoofedDataParser;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.MiscUtils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
@@ -110,7 +110,7 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 			);
 		} catch (Throwable t) {
 			networkManager.close(new TextComponent("Error whilst disconnecting player, force closing connection"));
-			Utils.rethrowThreadException(t);
+			MiscUtils.rethrowThreadException(t);
 		}
 	}
 

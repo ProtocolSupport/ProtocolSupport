@@ -2,7 +2,7 @@ package protocolsupport.protocol.types;
 
 import java.util.Objects;
 
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class Position {
 
@@ -54,7 +54,7 @@ public class Position {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 	@Override

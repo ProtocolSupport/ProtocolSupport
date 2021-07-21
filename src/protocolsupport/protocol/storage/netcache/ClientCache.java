@@ -10,7 +10,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.NamespacedKeyUtils;
 import protocolsupport.protocol.utils.i18n.I18NData;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class ClientCache implements IBiomeRegistry {
 
@@ -167,7 +167,7 @@ public class ClientCache implements IBiomeRegistry {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 }

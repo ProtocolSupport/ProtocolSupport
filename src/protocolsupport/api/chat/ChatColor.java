@@ -7,7 +7,8 @@ import java.util.Map;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.MiscUtils;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -119,7 +120,7 @@ public class ChatColor {
 		ChatColor similarColor = null;
 		long similarColorDiff = Long.MAX_VALUE;
 		for (ChatColor basic : BASIC_BY_BUKKIT.values()) {
-			long colorDiff = Utils.getColorDiff(getRed(), basic.getRed(), getGreen(), basic.getGreen(), getBlue(), basic.getBlue());
+			long colorDiff = MiscUtils.getColorDiff(getRed(), basic.getRed(), getGreen(), basic.getGreen(), getBlue(), basic.getBlue());
 			if (colorDiff <= similarColorDiff) {
 				similarColorDiff = colorDiff;
 				similarColor = basic;
@@ -138,7 +139,7 @@ public class ChatColor {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 }

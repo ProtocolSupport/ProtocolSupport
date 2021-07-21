@@ -6,7 +6,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import protocolsupport.protocol.utils.PrimitiveTypeUtils;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class NetworkEntityDataCache {
 
@@ -165,7 +165,7 @@ public class NetworkEntityDataCache {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 }

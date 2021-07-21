@@ -46,7 +46,7 @@ import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.ItemSpawnEggData;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftItemData;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.CollectionsUtils;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -155,7 +155,7 @@ public class ItemStackLegacyFormat {
 
 		protected void set(int runtimeId, ItemStackLegacyFormatOperator operator, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
-				getTable(version).set(runtimeId, Utils.createSingletonArrayList(operator));
+				getTable(version).set(runtimeId, CollectionsUtils.createSingletonArrayList(operator));
 			}
 		}
 

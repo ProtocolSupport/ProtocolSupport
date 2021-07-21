@@ -39,7 +39,7 @@ import protocolsupport.protocol.utils.authlib.LoginProfile;
 import protocolsupport.protocol.utils.authlib.MinecraftSessionService;
 import protocolsupport.protocol.utils.authlib.MinecraftSessionService.AuthenticationUnavailableException;
 import protocolsupport.utils.JavaSystemProperty;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.MiscUtils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupportbuildprocessor.Preload;
@@ -110,7 +110,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 		} catch (Throwable exception) {
 			Bukkit.getLogger().log(Level.SEVERE, "Error whilst disconnecting player", exception);
 			networkManager.close(new TextComponent("Error whilst disconnecting player, force closing connection"));
-			Utils.rethrowThreadException(exception);
+			MiscUtils.rethrowThreadException(exception);
 		}
 	}
 
@@ -273,7 +273,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 					);
 				} catch (Throwable t) {
 					disconnect(new TextComponent("Error whilst enabling compression"));
-					Utils.rethrowThreadException(t);
+					MiscUtils.rethrowThreadException(t);
 					return;
 				}
 			}

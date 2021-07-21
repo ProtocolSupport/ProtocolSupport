@@ -7,7 +7,7 @@ import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleTabComplete;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.MiscUtils;
 
 public class TabComplete extends MiddleTabComplete {
 
@@ -19,7 +19,7 @@ public class TabComplete extends MiddleTabComplete {
 	protected void write() {
 		String prefix = start <= 1 ? "/" : "";
 		ClientBoundPacketData tabcomplete = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_TAB_COMPLETE);
-		StringCodec.writeShortUTF16BEString(tabcomplete, Utils.clampString(String.join("\u0000", Arrays.stream(matches).map(input -> prefix + input.getMatch()).collect(Collectors.toList())), Short.MAX_VALUE));
+		StringCodec.writeShortUTF16BEString(tabcomplete, MiscUtils.clampString(String.join("\u0000", Arrays.stream(matches).map(input -> prefix + input.getMatch()).collect(Collectors.toList())), Short.MAX_VALUE));
 		codec.writeClientbound(tabcomplete);
 	}
 

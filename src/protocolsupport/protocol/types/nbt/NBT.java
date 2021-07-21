@@ -1,6 +1,6 @@
 package protocolsupport.protocol.types.nbt;
 
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public abstract class NBT {
 
@@ -17,7 +17,7 @@ public abstract class NBT {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 }

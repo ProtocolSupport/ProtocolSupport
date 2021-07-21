@@ -1,6 +1,6 @@
 package protocolsupport.protocol.storage.netcache;
 
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class MovementCache {
 
@@ -30,7 +30,7 @@ public class MovementCache {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 }

@@ -5,6 +5,9 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -14,6 +17,29 @@ import sun.misc.Unsafe;
 public class ReflectionUtils {
 
 	private ReflectionUtils() {
+	}
+
+	public static @Nonnull String toStringAllFields(@Nonnull Object obj) {
+		StringJoiner joiner = new StringJoiner(", ");
+		Class<?> clazz = obj.getClass();
+		do {
+			try {
+				for (Field field : clazz.getDeclaredFields()) {
+					if (!Modifier.isStatic(field.getModifiers())) {
+						setAccessible(field);
+						Object value = field.get(obj);
+						if ((value == null) || !value.getClass().isArray()) {
+							joiner.add(field.getName() + ": " + Objects.toString(value));
+						} else {
+							joiner.add(field.getName() + ": " + Arrays.deepToString(new Object[] {value}));
+						}
+					}
+				}
+			} catch (IllegalAccessException e) {
+				throw new UncheckedReflectionException("Unable to get object fields values", e);
+			}
+		} while ((clazz = clazz.getSuperclass()) != null);
+		return obj.getClass().getName() + "(" + joiner.toString() + ")";
 	}
 
 	@SuppressWarnings("unchecked")

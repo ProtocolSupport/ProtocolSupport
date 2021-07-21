@@ -10,7 +10,7 @@ import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.Modifier;
 import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 import protocolsupport.protocol.utils.i18n.I18NData;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public abstract class BaseComponent {
 
@@ -290,7 +290,7 @@ public abstract class BaseComponent {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 

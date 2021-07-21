@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.Validate;
 
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class ProfileProperty {
 
@@ -62,7 +62,7 @@ public class ProfileProperty {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 	@Override

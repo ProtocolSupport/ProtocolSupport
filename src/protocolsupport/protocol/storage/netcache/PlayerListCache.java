@@ -8,7 +8,7 @@ import java.util.UUID;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.types.GameMode;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class PlayerListCache {
 
@@ -85,7 +85,7 @@ public class PlayerListCache {
 
 		@Override
 		public String toString() {
-			return Utils.toStringAllFields(this);
+			return ReflectionUtils.toStringAllFields(this);
 		}
 
 		@Override
@@ -97,7 +97,7 @@ public class PlayerListCache {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 }

@@ -2,7 +2,7 @@ package protocolsupport.protocol.storage.netcache.window;
 
 import protocolsupport.protocol.typeremapper.window.WindowRemapper;
 import protocolsupport.protocol.types.WindowType;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class WindowCache {
 
@@ -70,7 +70,7 @@ public class WindowCache {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 }

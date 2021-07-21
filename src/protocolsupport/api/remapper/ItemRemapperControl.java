@@ -9,7 +9,7 @@ import protocolsupport.protocol.typeremapper.itemstack.legacy.ItemStackLegacyDat
 import protocolsupport.protocol.typeremapper.itemstack.legacy.ItemStackLegacyDataTypeMappingOperator;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.CollectionsUtils;
 
 public class ItemRemapperControl {
 
@@ -60,7 +60,7 @@ public class ItemRemapperControl {
 	 * @param to runtime item id to which remap will occur
 	 */
 	public void setRemap(int from, int to) {
-		table.set(from, Utils.createSingletonArrayList(new ItemStackLegacyDataTypeMappingOperator(to)));
+		table.set(from, CollectionsUtils.createSingletonArrayList(new ItemStackLegacyDataTypeMappingOperator(to)));
 	}
 
 }

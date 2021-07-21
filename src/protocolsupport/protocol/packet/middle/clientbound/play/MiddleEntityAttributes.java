@@ -9,7 +9,7 @@ import protocolsupport.protocol.codec.UUIDCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkippingTable;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public abstract class MiddleEntityAttributes extends MiddleEntityData {
 
@@ -84,7 +84,7 @@ public abstract class MiddleEntityAttributes extends MiddleEntityData {
 
 		@Override
 		public String toString() {
-			return Utils.toStringAllFields(this);
+			return ReflectionUtils.toStringAllFields(this);
 		}
 
 	}
@@ -115,7 +115,7 @@ public abstract class MiddleEntityAttributes extends MiddleEntityData {
 
 		@Override
 		public String toString() {
-			return Utils.toStringAllFields(this);
+			return ReflectionUtils.toStringAllFields(this);
 		}
 
 	}

@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public abstract class MiddlePacket {
 
@@ -19,7 +19,7 @@ public abstract class MiddlePacket {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 	public static interface MiddlePacketInit {

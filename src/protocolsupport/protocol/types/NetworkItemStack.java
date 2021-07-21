@@ -1,7 +1,7 @@
 package protocolsupport.protocol.types;
 
 import protocolsupport.protocol.types.nbt.NBTCompound;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class NetworkItemStack {
 
@@ -106,7 +106,7 @@ public class NetworkItemStack {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 	@Override

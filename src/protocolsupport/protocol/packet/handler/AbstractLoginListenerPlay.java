@@ -21,7 +21,7 @@ import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
 import protocolsupport.protocol.pipeline.common.SimpleReadTimeoutHandler;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.MiscUtils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
@@ -65,7 +65,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 			networkManager.sendPacketBlocking(ServerPlatform.get().getPacketFactory().createLoginSuccessPacket(connection.getProfile()), 5, TimeUnit.MINUTES);
 		} catch (Throwable t) {
 			disconnect(new TextComponent("Error while waiting for login success send"));
-			Utils.rethrowThreadException(t);
+			MiscUtils.rethrowThreadException(t);
 			return;
 		}
 		networkManager.setProtocol(NetworkState.PLAY);
@@ -180,7 +180,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 	protected void disconnectError(Throwable t) {
 		Bukkit.getLogger().log(Level.SEVERE, "Error whilst disconnecting player", t);
 		networkManager.close(new TextComponent("Error whilst disconnecting player, force closing connection"));
-		Utils.rethrowThreadException(t);
+		MiscUtils.rethrowThreadException(t);
 	}
 
 	protected abstract JoinData createJoinData();

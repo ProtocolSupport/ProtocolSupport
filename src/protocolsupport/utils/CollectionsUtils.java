@@ -1,6 +1,7 @@
 package protocolsupport.utils;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
@@ -26,6 +27,20 @@ public class CollectionsUtils {
 		//TODO: Use unsafe/reflection to access internal storage to avoid copy operation
 		long[] array = set.toLongArray();
 		return (int) (array.length > 0 ? array[0] : 0);
+	}
+
+	public static @Nullable <T> T getFromArrayOrNull(@Nonnull T[] array, @Nonnegative int index) {
+		if ((index >= 0) && (index < array.length)) {
+			return array[index];
+		} else {
+			return null;
+		}
+	}
+
+	public static @Nonnull <T> ArrayList<T> createSingletonArrayList(@Nullable T element) {
+		ArrayList<T> list = new ArrayList<>(1);
+		list.add(element);
+		return list;
 	}
 
 	public static @Nonnull <K, V extends Enum<V>> Map<K, V> makeEnumMappingMap(@Nonnull Class<V> e, @Nonnull Function<V, K> mapping) {
@@ -91,7 +106,7 @@ public class CollectionsUtils {
 
 		@SuppressWarnings("unchecked")
 		public @Nullable T get(@Nonnegative int key) {
-			return (T) Utils.getFromArrayOrNull(array, key + offset);
+			return (T) CollectionsUtils.getFromArrayOrNull(array, key + offset);
 		}
 
 		public void put(@Nonnegative int key, @Nullable T value) {
@@ -117,7 +132,7 @@ public class CollectionsUtils {
 
 		@Override
 		public String toString() {
-			return Utils.toStringAllFields(this);
+			return ReflectionUtils.toStringAllFields(this);
 		}
 
 	}

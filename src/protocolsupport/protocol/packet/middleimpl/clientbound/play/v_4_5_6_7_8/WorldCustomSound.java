@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleWorldCustomSound;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.basic.SoundRemapper;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.MiscUtils;
 
 public class WorldCustomSound extends MiddleWorldCustomSound {
 
@@ -35,7 +35,7 @@ public class WorldCustomSound extends MiddleWorldCustomSound {
 		ClientBoundPacketData worldcustomsound = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WORLD_CUSTOM_SOUND);
 		sound = SoundRemapper.getSoundName(version, sound);
 		if (version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_5_2)) {
-			sound = Utils.clampString(sound, 32);
+			sound = MiscUtils.clampString(sound, 32);
 		}
 		StringCodec.writeString(worldcustomsound, version, sound);
 		worldcustomsound.writeInt(x);

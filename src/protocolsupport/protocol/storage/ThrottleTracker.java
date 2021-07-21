@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 
 import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.MiscUtils;
 
 public class ThrottleTracker {
 
@@ -26,7 +26,7 @@ public class ThrottleTracker {
 
 	public static boolean throttle(InetAddress address) {
 		synchronized (tracker) {
-			long ctime = Utils.currentTimeMillisFromNanoTime();
+			long ctime = MiscUtils.currentTimeMillisFromNanoTime();
 			LongIterator iterator = tracker.values().iterator();
 			while (iterator.hasNext()) {
 				if (iterator.nextLong() < ctime) {

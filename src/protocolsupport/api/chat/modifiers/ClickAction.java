@@ -3,7 +3,7 @@ package protocolsupport.api.chat.modifiers;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class ClickAction {
 
@@ -42,7 +42,7 @@ public class ClickAction {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 	public enum Type {

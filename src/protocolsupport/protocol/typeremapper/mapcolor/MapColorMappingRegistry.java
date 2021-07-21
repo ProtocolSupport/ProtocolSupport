@@ -5,7 +5,7 @@ import java.util.Arrays;
 import protocolsupport.protocol.typeremapper.utils.MappingRegistry.IntMappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.MiscUtils;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -43,7 +43,7 @@ public class MapColorMappingRegistry extends IntMappingRegistry<ArrayBasedIntMap
 	}
 
 	protected static long getDiff(IMapColor color1, IMapColor color2) {
-		return Utils.getColorDiff(color1.getRed(), color2.getRed(), color1.getGreen(), color2.getGreen(), color1.getBlue(), color2.getBlue());
+		return MiscUtils.getColorDiff(color1.getRed(), color2.getRed(), color1.getGreen(), color2.getGreen(), color1.getBlue(), color2.getBlue());
 	}
 
 	@Override

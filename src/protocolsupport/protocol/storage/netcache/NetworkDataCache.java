@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import protocolsupport.protocol.storage.netcache.chunk.LimitedHeightChunkCache;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class NetworkDataCache {
 
@@ -57,7 +57,7 @@ public class NetworkDataCache {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 }

@@ -13,7 +13,7 @@ import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.utils.i18n.I18NData;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.MiscUtils;
 
 public class SpawnNamed extends MiddleSpawnNamed {
 
@@ -27,7 +27,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 		VarNumberCodec.writeVarInt(spawnnamed, entity.getId());
 		UUID uuid = entity.getUUID();
 		StringCodec.writeVarIntUTF8String(spawnnamed, version == ProtocolVersion.MINECRAFT_1_7_10 ? uuid.toString() : uuid.toString().replace("-", ""));
-		StringCodec.writeVarIntUTF8String(spawnnamed, Utils.clampString(playerlistEntry.getUserName(), 16));
+		StringCodec.writeVarIntUTF8String(spawnnamed, MiscUtils.clampString(playerlistEntry.getUserName(), 16));
 		if (version == ProtocolVersion.MINECRAFT_1_7_10) {
 			MiscDataCodec.writeVarIntCountPrefixedType(spawnnamed, playerlistEntry.getProperties(), (to, properties) -> {
 				int signedCount = properties.size();

@@ -19,9 +19,9 @@ import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftItemData;
+import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
-import protocolsupport.utils.Utils;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -47,7 +47,7 @@ public class ItemStackLegacyData {
 				JsonObject entriesObject = rootObject.get(versionString).getAsJsonObject();
 				ItemStackLegacyDataTable table = getTable(version);
 				for (String itemidString : entriesObject.keySet()) {
-					table.set(Integer.parseInt(itemidString), Utils.createSingletonArrayList(new ItemStackLegacyDataTypeMappingOperator(JsonUtils.getInt(entriesObject, itemidString))));
+					table.set(Integer.parseInt(itemidString), CollectionsUtils.createSingletonArrayList(new ItemStackLegacyDataTypeMappingOperator(JsonUtils.getInt(entriesObject, itemidString))));
 				}
 			}
 
@@ -66,7 +66,7 @@ public class ItemStackLegacyData {
 
 		protected void set(int runtimeId, UnaryOperator<NetworkItemStack> operator, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
-				getTable(version).set(runtimeId, Utils.createSingletonArrayList(operator));
+				getTable(version).set(runtimeId, CollectionsUtils.createSingletonArrayList(operator));
 			}
 		}
 

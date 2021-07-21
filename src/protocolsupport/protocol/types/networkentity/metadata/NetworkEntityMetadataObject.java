@@ -2,7 +2,7 @@ package protocolsupport.protocol.types.networkentity.metadata;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public abstract class NetworkEntityMetadataObject<T> {
 
@@ -20,7 +20,7 @@ public abstract class NetworkEntityMetadataObject<T> {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 }

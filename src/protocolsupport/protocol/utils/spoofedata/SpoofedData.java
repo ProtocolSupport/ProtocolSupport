@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 import protocolsupport.api.utils.ProfileProperty;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class SpoofedData {
 
@@ -61,7 +61,7 @@ public class SpoofedData {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 }

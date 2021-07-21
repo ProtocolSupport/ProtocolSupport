@@ -7,7 +7,7 @@ import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleSpawnNamed;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.utils.i18n.I18NData;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.MiscUtils;
 
 public class SpawnNamed extends MiddleSpawnNamed {
 
@@ -19,7 +19,7 @@ public class SpawnNamed extends MiddleSpawnNamed {
 	protected void write() {
 		ClientBoundPacketData spawnnamed = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SPAWN_NAMED);
 		spawnnamed.writeInt(entity.getId());
-		StringCodec.writeShortUTF16BEString(spawnnamed, Utils.clampString(playerlistEntry.getUserName(), 16));
+		StringCodec.writeShortUTF16BEString(spawnnamed, MiscUtils.clampString(playerlistEntry.getUserName(), 16));
 		spawnnamed.writeInt((int) (x * 32));
 		spawnnamed.writeInt((int) (y * 32));
 		spawnnamed.writeInt((int) (z * 32));

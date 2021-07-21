@@ -3,7 +3,7 @@ package protocolsupport.protocol.utils;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.MiscUtils;
 
 public class NumberBitsStorageCompact {
 
@@ -14,7 +14,7 @@ public class NumberBitsStorageCompact {
 	public NumberBitsStorageCompact(@Nonnegative int bitsPerNumber, @Nonnegative int size) {
 		this.bitsPerNumber = bitsPerNumber;
 		this.singleNumberMask = (1L << bitsPerNumber) - 1L;
-		this.storage = new long[Utils.ceilToBase(size * bitsPerNumber, Long.SIZE) / Long.SIZE];
+		this.storage = new long[MiscUtils.ceilToBase(size * bitsPerNumber, Long.SIZE) / Long.SIZE];
 	}
 
 	public @Nonnegative int getBitsPerNumber() {

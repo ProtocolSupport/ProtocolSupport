@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_7_8_9r1_9r
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleClientCommand;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.CollectionsUtils;
 
 public class ClientCommand extends MiddleClientCommand {
 
@@ -15,7 +15,7 @@ public class ClientCommand extends MiddleClientCommand {
 
 	@Override
 	protected void read(ByteBuf clientdata) {
-		command = Utils.getFromArrayOrNull(commandsById, VarNumberCodec.readVarInt(clientdata));
+		command = CollectionsUtils.getFromArrayOrNull(commandsById, VarNumberCodec.readVarInt(clientdata));
 	}
 
 }

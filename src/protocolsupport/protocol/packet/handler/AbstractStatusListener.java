@@ -14,7 +14,7 @@ import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.utils.pingresponse.PingResponseHandlerProvider;
 import protocolsupport.utils.JavaSystemProperty;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.MiscUtils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 import protocolsupportbuildprocessor.Preload;
@@ -75,7 +75,7 @@ public abstract class AbstractStatusListener {
 			);
 		} catch (Throwable t) {
 			networkManager.getChannel().close();
-			Utils.rethrowThreadException(t);
+			MiscUtils.rethrowThreadException(t);
 		}
 	}
 

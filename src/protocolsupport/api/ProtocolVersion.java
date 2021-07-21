@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.Validate;
 
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.CollectionsUtils;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -183,7 +183,7 @@ public enum ProtocolVersion {
 	 */
 	public @Nullable ProtocolVersion next() {
 		Validate.isTrue(getProtocolType() != ProtocolType.UNKNOWN, "Can't get next version for unknown protocol type");
-		return Utils.getFromArrayOrNull(byOrderId.get(getProtocolType()), orderId.id + 1);
+		return CollectionsUtils.getFromArrayOrNull(byOrderId.get(getProtocolType()), orderId.id + 1);
 	}
 
 	/**
@@ -194,7 +194,7 @@ public enum ProtocolVersion {
 	 */
 	public @Nullable ProtocolVersion previous() {
 		Validate.isTrue(getProtocolType() != ProtocolType.UNKNOWN, "Can't get next version for unknown protocol type");
-		return Utils.getFromArrayOrNull(byOrderId.get(getProtocolType()), orderId.id - 1);
+		return CollectionsUtils.getFromArrayOrNull(byOrderId.get(getProtocolType()), orderId.id - 1);
 	}
 
 	/**

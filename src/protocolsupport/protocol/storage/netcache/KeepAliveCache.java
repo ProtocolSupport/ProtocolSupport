@@ -1,7 +1,7 @@
 package protocolsupport.protocol.storage.netcache;
 
 import io.netty.util.internal.ThreadLocalRandom;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class KeepAliveCache {
 
@@ -33,7 +33,7 @@ public class KeepAliveCache {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 }

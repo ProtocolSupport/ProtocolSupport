@@ -1,7 +1,7 @@
 package protocolsupport.api.chat.modifiers;
 
 import protocolsupport.api.chat.ChatColor;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class Modifier {
 
@@ -141,7 +141,7 @@ public class Modifier {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 

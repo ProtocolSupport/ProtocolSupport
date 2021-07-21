@@ -3,7 +3,7 @@ package protocolsupport.protocol.types.networkentity;
 import java.util.Objects;
 import java.util.UUID;
 
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.ReflectionUtils;
 
 public class NetworkEntity {
 
@@ -77,7 +77,7 @@ public class NetworkEntity {
 
 	@Override
 	public String toString() {
-		return Utils.toStringAllFields(this);
+		return ReflectionUtils.toStringAllFields(this);
 	}
 
 }

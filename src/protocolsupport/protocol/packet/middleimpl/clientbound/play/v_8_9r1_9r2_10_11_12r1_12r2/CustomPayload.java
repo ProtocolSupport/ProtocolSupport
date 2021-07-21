@@ -8,7 +8,7 @@ import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleCustomPayload;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.legacy.LegacyCustomPayloadChannelName;
-import protocolsupport.utils.Utils;
+import protocolsupport.utils.MiscUtils;
 
 public class CustomPayload extends MiddleCustomPayload {
 
@@ -18,7 +18,7 @@ public class CustomPayload extends MiddleCustomPayload {
 
 	@Override
 	protected String getClientTag(String tag) {
-		return Utils.clampString(LegacyCustomPayloadChannelName.toLegacy(tag), 20);
+		return MiscUtils.clampString(LegacyCustomPayloadChannelName.toLegacy(tag), 20);
 	}
 
 	@Override
