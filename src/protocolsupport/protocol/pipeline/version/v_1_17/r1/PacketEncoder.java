@@ -52,6 +52,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r1_16r2_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2_17r1_17r2.ChangeDimension;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_16r2_17r1_17r2.UnlockRecipes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1.EntityDestroy;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1.InventorySetItems;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1.InventorySetSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.Actionbar;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.BlockChangeMulti;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.BlockChangeSingle;
@@ -80,8 +82,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.W
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.WorldBorderSize;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.WorldBorderWarnDelay;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.WorldBorderWarnDistance;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1.InventorySetItems;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1.InventorySetSlot;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.InventoryClose;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.InventoryData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.ScoreboardDisplay;

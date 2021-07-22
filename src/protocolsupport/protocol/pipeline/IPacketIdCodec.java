@@ -11,7 +11,7 @@ import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
 
 public abstract class IPacketIdCodec {
 
-	protected final PacketIdTransformerRegistry registry = new PacketIdTransformerRegistry(ClientBoundPacketType.getValuesCount());
+	protected final ClientboundPacketIdTransformerRegistry registry = new ClientboundPacketIdTransformerRegistry(ClientBoundPacketType.getValuesCount());
 
 	public abstract int readPacketId(ByteBuf from);
 
@@ -26,13 +26,13 @@ public abstract class IPacketIdCodec {
 	}
 
 
-	protected static class PacketIdTransformerRegistry {
+	protected static class ClientboundPacketIdTransformerRegistry {
 
 		protected static final int NO_ENTRY = -1;
 
 		protected final int[] registry;
 
-		public PacketIdTransformerRegistry(int size) {
+		public ClientboundPacketIdTransformerRegistry(int size) {
 			this.registry = new int[size];
 			Arrays.fill(registry, NO_ENTRY);
 		}
@@ -44,7 +44,7 @@ public abstract class IPacketIdCodec {
 		public int getPacketId(ClientBoundPacketType type) {
 			int id = registry[type.ordinal()];
 			if (id == NO_ENTRY) {
-				throw new NoSuchElementException("No packet id found for and packet id " + type.getId());
+				throw new NoSuchElementException("No packet id found for clientbound packet type " + type.name());
 			}
 			return id;
 		}

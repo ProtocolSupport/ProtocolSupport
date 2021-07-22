@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.codec.ArrayCodec;
@@ -42,7 +42,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 			));
 		}
 		codec.writeClientbound(InventorySetSlot.create(version, locale, MiddleInventorySetSlot.WINDOW_ID_PLAYER_CURSOR, -1, cursor));
-		codec.writeClientbound(InventorySetSlot.createTransaction(transactioncache.storeInvStateServerId(stateId)));
+		codec.writeClientbound(SyncPing.createTransaction(transactioncache.storeInvStateServerId(stateId)));
 	}
 
 	protected static ClientBoundPacketData create(ProtocolVersion version, String locale, byte windowId, NetworkItemStack[] items) {

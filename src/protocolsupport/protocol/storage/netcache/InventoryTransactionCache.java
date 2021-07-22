@@ -45,7 +45,7 @@ public class InventoryTransactionCache {
 
 	protected short invstateClientIdCurrent = generateInitialValue(invstateClientIdFirst);
 	protected int invstateServerId = INVALID_ID;
-	protected boolean invstateSync = false;
+	protected boolean invstateSync = true;
 
 	public short storeInvStateServerId(int serverId) {
 		this.invstateServerId = serverId;

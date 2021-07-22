@@ -1,4 +1,4 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.codec.ItemStackCodec;
@@ -6,7 +6,6 @@ import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventorySetSlot;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
 import protocolsupport.protocol.storage.netcache.ClientCache;
-import protocolsupport.protocol.storage.netcache.InventoryTransactionCache;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper.NoSuchSlotException;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper.WindowSlot;
 import protocolsupport.protocol.types.NetworkItemStack;
@@ -18,38 +17,31 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 	}
 
 	protected final ClientCache clientCache = cache.getClientCache();
-	protected final InventoryTransactionCache transactioncache = cache.getTransactionCache();
 
 	@Override
 	protected void write() {
 		String locale = clientCache.getLocale();
 
 		if (windowId == WINDOW_ID_PLAYER_CURSOR) {
-			writeWithTansaction(create(version, locale, windowId, slot, itemstack));
+			codec.writeClientbound(create(version, locale, windowId, slot, itemstack));
 			return;
 		}
 
 		if (windowId == WINDOW_ID_PLAYER_INVENTORY) {
-			//TODO: remap for versions that don't actually support this special window id
-			writeWithTansaction(create(version, locale, windowId, slot, itemstack));
+			codec.writeClientbound(create(version, locale, windowId, slot, itemstack));
 			return;
 		}
 
 		if (windowId == WINDOW_ID_PLAYER_HOTBAR) {
-			writeWithTansaction(create(version, locale, windowId, slot, itemstack));
+			codec.writeClientbound(create(version, locale, windowId, slot, itemstack));
 			return;
 		}
 
 		try {
 			WindowSlot windowSlot = windowCache.getOpenedWindowRemapper().toClientSlot(windowId, slot);
-			writeWithTansaction(create(version, locale, windowSlot.getWindowId(), windowSlot.getSlot(), itemstack));
+			codec.writeClientbound(create(version, locale, windowSlot.getWindowId(), windowSlot.getSlot(), itemstack));
 		} catch (NoSuchSlotException e) {
 		}
-	}
-
-	protected void writeWithTansaction(ClientBoundPacketData packet) {
-		codec.writeClientbound(packet);
-		codec.writeClientbound(InventorySetSlot.createTransaction(transactioncache.storeInvStateServerId(stateId)));
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, String locale, byte windowId, int slot, NetworkItemStack itemstack) {
@@ -58,14 +50,6 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 		windowslot.writeShort(slot);
 		ItemStackCodec.writeItemStack(windowslot, version, locale, itemstack);
 		return windowslot;
-	}
-
-	public static ClientBoundPacketData createTransaction(int id) {
-		ClientBoundPacketData inventorytransactionPacket = ClientBoundPacketData.create(ClientBoundPacketType.CLIENTBOUND_LEGACY_PLAY_WINDOW_TRANSACTION);
-		inventorytransactionPacket.writeByte(0); //window id (0 - player window id)
-		inventorytransactionPacket.writeShort(id);
-		inventorytransactionPacket.writeBoolean(false); //accepted (false - not)
-		return inventorytransactionPacket;
 	}
 
 }
