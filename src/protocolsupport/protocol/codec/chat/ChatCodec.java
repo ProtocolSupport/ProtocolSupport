@@ -33,7 +33,7 @@ public class ChatCodec {
 	.registerTypeHierarchyAdapter(BaseComponent.class, ComponentSerializer.DEFAULT_INSTANCE)
 	.registerTypeHierarchyAdapter(Modifier.class, ModifierSerializer.INSTANCE)
 	.registerTypeHierarchyAdapter(ClickAction.class, ClickActionSerializer.INSTANCE)
-	.registerTypeHierarchyAdapter(HoverAction.class, HoverActionSerializer.INSTANCE)
+	.registerTypeHierarchyAdapter(HoverAction.class, new HoverActionSerializer(ProtocolVersionsHelper.LATEST_PC))
 	.create();
 
 	private static final Map<ProtocolVersion, SimpleJsonTreeSerializer<String>> serializers = new EnumMap<>(ProtocolVersion.class);
@@ -50,15 +50,17 @@ public class ChatCodec {
 			.setTranslateSerializer(ServerTranslateTranslateComponentContentSerializer.INSTANCE)
 			.build();
 
-		register(
-			new SimpleJsonTreeSerializer.Builder<String>()
-			.registerSerializer(BaseComponent.class, serverTranslateComponentSerializer)
-			.registerSerializer(Modifier.class, ModifierSerializer.INSTANCE)
-			.registerSerializer(ClickAction.class, UrlFixClickActionSerializer.INSTANCE)
-			.registerSerializer(HoverAction.class, HoverActionSerializer.INSTANCE)
-			.build(),
-			ProtocolVersionsHelper.UP_1_16
-		);
+		for (ProtocolVersion version : ProtocolVersionsHelper.UP_1_16) {
+			register(
+				new SimpleJsonTreeSerializer.Builder<String>()
+				.registerSerializer(BaseComponent.class, serverTranslateComponentSerializer)
+				.registerSerializer(Modifier.class, ModifierSerializer.INSTANCE)
+				.registerSerializer(ClickAction.class, UrlFixClickActionSerializer.INSTANCE)
+				.registerSerializer(HoverAction.class, new HoverActionSerializer(version))
+				.build(),
+				version
+			);
+		}
 
 		for (ProtocolVersion version : ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_12, ProtocolVersion.MINECRAFT_1_15_2)) {
 			register(

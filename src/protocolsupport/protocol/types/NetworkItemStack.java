@@ -20,7 +20,7 @@ public class NetworkItemStack {
 	}
 
 	public boolean isNull() {
-		return false;
+		return runtimeId <= 0;
 	}
 
 	public int getTypeId() {

@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.util.Locale;
 import java.util.UUID;
 
+import org.bukkit.Material;
 import org.bukkit.Registry;
 import org.bukkit.inventory.ItemStack;
 
@@ -15,14 +16,21 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 
+import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.modifiers.HoverAction;
 import protocolsupport.api.chat.modifiers.HoverAction.EntityInfo;
+import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry;
+import protocolsupport.protocol.typeremapper.entity.format.NetworkEntityLegacyFormatRegistry.NetworkEntityLegacyFormatTable;
+import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry;
+import protocolsupport.protocol.typeremapper.entity.legacy.NetworkEntityLegacyDataRegistry.NetworkEntityLegacyDataTable;
+import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemappingHelper;
 import protocolsupport.protocol.types.NetworkBukkitItemStack;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.mojangson.MojangsonParser;
 import protocolsupport.protocol.types.nbt.mojangson.MojangsonSerializer;
+import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.NamespacedKeyUtils;
 import protocolsupport.protocol.utils.json.SimpleJsonObjectSerializer;
@@ -31,9 +39,14 @@ import protocolsupport.utils.JsonUtils;
 
 public class HoverActionSerializer implements JsonDeserializer<HoverAction>, SimpleJsonObjectSerializer<HoverAction, String> {
 
-	public static final HoverActionSerializer INSTANCE = new HoverActionSerializer();
+	protected final ProtocolVersion version;
+	protected final NetworkEntityLegacyDataTable legacyEntityEntryTable;
+	protected final NetworkEntityLegacyFormatTable entityDataFormatTable;
 
-	protected HoverActionSerializer() {
+	public HoverActionSerializer(ProtocolVersion version) {
+		this.version = version;
+		this.legacyEntityEntryTable = NetworkEntityLegacyDataRegistry.INSTANCE.getTable(version);
+		this.entityDataFormatTable = NetworkEntityLegacyFormatRegistry.INSTANCE.getTable(version);
 	}
 
 	protected static final String key_action = "action";
@@ -114,11 +127,15 @@ public class HoverActionSerializer implements JsonDeserializer<HoverAction>, Sim
 				break;
 			}
 			case SHOW_ENTITY: {
-				EntityInfo einfo = (EntityInfo) action.getContents();
+				EntityInfo entityinfo = (EntityInfo) action.getContents();
+				NetworkEntityType etype = legacyEntityEntryTable.get(NetworkEntityType.getByBukkitType(entityinfo.getType())).getType();
+				if (etype != NetworkEntityType.NONE) {
+					etype = entityDataFormatTable.get(etype).getType();
+				}
 				JsonObject einfoJson = new JsonObject();
-				einfoJson.addProperty("type", einfo.getType().getKey().toString());
-				einfoJson.addProperty("id", einfo.getUUID().toString());
-				BaseComponent displayname = einfo.getDisplayName();
+				einfoJson.addProperty("type", etype.getKey());
+				einfoJson.addProperty("id", entityinfo.getUUID().toString());
+				BaseComponent displayname = entityinfo.getDisplayName();
 				if (displayname != null) {
 					einfoJson.add("name", serializer.serialize(displayname, locale));
 				}
@@ -126,13 +143,17 @@ public class HoverActionSerializer implements JsonDeserializer<HoverAction>, Sim
 				break;
 			}
 			case SHOW_ITEM: {
-				NetworkItemStack itemstack = NetworkBukkitItemStack.create((ItemStack) action.getContents());
+				NetworkItemStack itemstack = ItemStackRemappingHelper.toLegacyItemData(version, locale, NetworkBukkitItemStack.create((ItemStack) action.getContents()));
 				JsonObject itemstackJson = new JsonObject();
-				itemstackJson.addProperty("id", ItemMaterialLookup.getByRuntimeId(itemstack.getTypeId()).getKey().toString());
-				itemstackJson.addProperty("count", itemstack.getAmount());
-				NBTCompound nbt = itemstack.getNBT();
-				if (nbt != null) {
-					itemstackJson.addProperty("tag", MojangsonSerializer.serialize(nbt));
+				if (!itemstack.isNull()) {
+					itemstackJson.addProperty("id", ItemMaterialLookup.getByRuntimeId(itemstack.getTypeId()).getKey().toString());
+					itemstackJson.addProperty("count", itemstack.getAmount());
+					NBTCompound nbt = itemstack.getNBT();
+					if (nbt != null) {
+						itemstackJson.addProperty("tag", MojangsonSerializer.serialize(nbt));
+					}
+				} else {
+					itemstackJson.addProperty("id", Material.AIR.getKey().toString());
 				}
 				json.add(key_contents, itemstackJson);
 				break;
