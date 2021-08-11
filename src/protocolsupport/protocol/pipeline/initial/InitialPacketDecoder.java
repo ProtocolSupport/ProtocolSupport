@@ -157,7 +157,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 			int firstbyte = buffer.readUnsignedByte();
 			if (firstbyte == 0) {
 				encapsulatedinfo = EncapsulatedProtocolUtils.readInfo(buffer);
-				buffer.discardReadBytes();
+				buffer.unwrap().discardReadBytes();
 			}
 			buffer.readerIndex(0);
 			firstread = false;
