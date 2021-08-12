@@ -19,6 +19,8 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13_14r1_14r
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_13_14r1_14r2_15_16r1_16r2_17r1_17r2.UpdateCommandMinecart;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14r1_14r2_15_16r1_16r2_17r1_17r2.BlockDig;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14r1_14r2_15_16r1_16r2_17r1_17r2.BlockPlace;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14r1_14r2_15_16r1_16r2_17r1_17r2.DifficultyChange;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14r1_14r2_15_16r1_16r2_17r1_17r2.DifficultyLock;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14r1_14r2_15_16r1_16r2_17r1_17r2.QueryBlockNBT;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14r1_14r2_15_16r1_16r2_17r1_17r2.UpdateCommandBlock;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_14r1_14r2_15_16r1_16r2_17r1_17r2.UpdateSign;
@@ -71,6 +73,7 @@ public class PacketDecoder extends AbstractModernPacketDecoder {
 		registry.register(NetworkState.STATUS, 0x01, Ping::new);
 		registry.register(NetworkState.PLAY, 0x00, TeleportAccept::new);
 		registry.register(NetworkState.PLAY, 0x01, QueryBlockNBT::new);
+		registry.register(NetworkState.PLAY, 0x02, DifficultyChange::new);
 		registry.register(NetworkState.PLAY, 0x03, Chat::new);
 		registry.register(NetworkState.PLAY, 0x04, ClientCommand::new);
 		registry.register(NetworkState.PLAY, 0x05, ClientSettings::new);
@@ -84,6 +87,7 @@ public class PacketDecoder extends AbstractModernPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x0D, UseEntity::new);
 		registry.register(NetworkState.PLAY, 0x0E, JigsawGenerate::new);
 		registry.register(NetworkState.PLAY, 0x0F, KeepAlive::new);
+		registry.register(NetworkState.PLAY, 0x10, DifficultyLock::new);
 		registry.register(NetworkState.PLAY, 0x11, Move::new);
 		registry.register(NetworkState.PLAY, 0x12, MoveLook::new);
 		registry.register(NetworkState.PLAY, 0x13, Look::new);
