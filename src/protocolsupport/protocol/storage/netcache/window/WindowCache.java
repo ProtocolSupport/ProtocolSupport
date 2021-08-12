@@ -2,7 +2,7 @@ package protocolsupport.protocol.storage.netcache.window;
 
 import protocolsupport.protocol.typeremapper.window.WindowRemapper;
 import protocolsupport.protocol.types.WindowType;
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class WindowCache {
 

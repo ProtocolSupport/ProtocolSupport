@@ -74,8 +74,8 @@ import protocolsupport.protocol.types.nbt.serializer.DefaultNBTSerializer;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.LoginProfile;
-import protocolsupport.utils.ReflectionUtils;
-import protocolsupport.utils.UncheckedReflectionException;
+import protocolsupport.utils.reflection.ReflectionUtils;
+import protocolsupport.utils.reflection.UncheckedReflectionException;
 import protocolsupport.zplatform.PlatformUtils;
 import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.impl.spigot.network.handler.SpigotHandshakeListener;
@@ -213,7 +213,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@SuppressWarnings("unchecked")
 	protected static final Map<Particle, MinecraftKey> getParticleKeyMap() {
 		try {
-			return (Map<Particle, MinecraftKey>) ReflectionUtils.getField(CraftParticle.class, "particles").get(null);
+			return (Map<Particle, MinecraftKey>) ReflectionUtils.findField(CraftParticle.class, "particles").get(null);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new UncheckedReflectionException(e);
 		}
@@ -267,16 +267,16 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public void enableDebug() {
 		try {
-			ReflectionUtils.getField(DedicatedServerProperties.class, "debug").set(SERVER.getDedicatedServerProperties(), true);
+			ReflectionUtils.findField(DedicatedServerProperties.class, "debug").set(SERVER.getDedicatedServerProperties(), true);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new UncheckedReflectionException("Exception occured while enabled debug", e);
+			throw new UncheckedReflectionException("Exception occured while enabling debug", e);
 		}
 	}
 
 	@Override
 	public void disableDebug() {
 		try {
-			ReflectionUtils.getField(DedicatedServerProperties.class, "debug").set(SERVER.getDedicatedServerProperties(), false);
+			ReflectionUtils.findField(DedicatedServerProperties.class, "debug").set(SERVER.getDedicatedServerProperties(), false);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new UncheckedReflectionException("Exception occured while disabling debug", e);
 		}

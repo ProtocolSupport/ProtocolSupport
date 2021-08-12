@@ -3,7 +3,7 @@ package protocolsupport.protocol.types.networkentity;
 import java.util.Objects;
 import java.util.UUID;
 
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class NetworkEntity {
 

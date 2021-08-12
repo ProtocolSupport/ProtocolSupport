@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import protocolsupport.protocol.storage.netcache.chunk.LimitedHeightChunkCache;
 import protocolsupport.protocol.storage.netcache.window.WindowCache;
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class NetworkDataCache {
 

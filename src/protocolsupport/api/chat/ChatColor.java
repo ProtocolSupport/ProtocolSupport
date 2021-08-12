@@ -7,8 +7,8 @@ import java.util.Map;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import protocolsupport.utils.ReflectionUtils;
 import protocolsupport.utils.MiscUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload

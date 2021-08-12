@@ -2,7 +2,7 @@ package protocolsupport.protocol.types;
 
 import java.util.Objects;
 
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class ChunkCoord {
 

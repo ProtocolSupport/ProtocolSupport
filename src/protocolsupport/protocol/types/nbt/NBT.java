@@ -1,6 +1,6 @@
 package protocolsupport.protocol.types.nbt;
 
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public abstract class NBT {
 

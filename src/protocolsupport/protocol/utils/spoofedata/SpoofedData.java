@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 import protocolsupport.api.utils.ProfileProperty;
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class SpoofedData {
 

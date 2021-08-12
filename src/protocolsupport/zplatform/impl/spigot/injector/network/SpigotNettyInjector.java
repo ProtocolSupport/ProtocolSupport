@@ -11,7 +11,7 @@ import io.netty.channel.ChannelFuture;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.chat.ChatComponentText;
 import net.minecraft.server.network.ServerConnection;
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
 
 public class SpigotNettyInjector {

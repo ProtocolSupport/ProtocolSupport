@@ -1,4 +1,4 @@
-package protocolsupport.utils;
+package protocolsupport.utils.reflection;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.AccessibleObject;
@@ -11,6 +11,7 @@ import java.util.StringJoiner;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import sun.misc.Unsafe;
 
@@ -43,6 +44,11 @@ public class ReflectionUtils {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static <T> Class<T> generifyClass(Class<?> clazz) {
+		return (Class<T>) clazz;
+	}
+
+	@SuppressWarnings("unchecked")
 	public static <E extends Throwable> void sneakyThrow(Throwable e) throws E {
 	    throw (E) e;
 	}
@@ -52,7 +58,7 @@ public class ReflectionUtils {
 		return object;
 	}
 
-	public static @Nonnull Field getField(@Nonnull Class<?> clazz, @Nonnull String name) {
+	public static @Nonnull Field findField(@Nonnull Class<?> clazz, @Nonnull String name) {
 		do {
 			for (Field field : clazz.getDeclaredFields()) {
 				if (field.getName().equals(name)) {
@@ -63,7 +69,7 @@ public class ReflectionUtils {
 		throw new UncheckedReflectionException("Can't find field " + name + " in class " + clazz + " or it's superclasses");
 	}
 
-	public static @Nonnull Method getMethod(@Nonnull Class<?> clazz, @Nonnull String name, @Nonnegative int paramlength) {
+	public static @Nonnull Method findMethod(@Nonnull Class<?> clazz, @Nonnull String name, @Nonnegative int paramlength) {
 		do {
 			for (Method method : clazz.getDeclaredMethods()) {
 				if (method.getName().equals(name) && (method.getParameterTypes().length == paramlength)) {
@@ -74,17 +80,18 @@ public class ReflectionUtils {
 		throw new UncheckedReflectionException("Can't find method " + name + " with params length " + paramlength + " in class " + clazz + " or it's superclasses");
 	}
 
-	public static void setFieldValue(@Nonnull Field field, @Nonnull Object object, @Nonnull Object value) {
-		try {
-			field.set(object, value);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new UncheckedReflectionException(e);
-		}
+	public static boolean isStaticFinalField(@Nonnull Field field) {
+		int modifiers = field.getModifiers();
+		return Modifier.isFinal(modifiers) && Modifier.isStatic(modifiers);
 	}
 
-	public static void setStaticFinalFieldValue(@Nonnull Class<?> clazz, @Nonnull String fieldname, @Nonnull Object value) {
+	public static void setStaticFinalFieldValue(@Nonnull Class<?> clazz, @Nonnull String name, @Nullable Object value) {
+		setStaticFinalFieldValue(findField(clazz, name), value);
+	}
+
+	public static void setStaticFinalFieldValue(@Nonnull Field field, @Nullable Object value) {
 		try {
-			sffs.set(clazz, fieldname, value);
+			sffs.set(field, value);
 		} catch (UncheckedReflectionException t) {
 			throw t;
 		} catch (Throwable t) {
@@ -95,7 +102,7 @@ public class ReflectionUtils {
 
 	protected static interface StaticFinalFieldSetter {
 
-		public void set(Class<?> clazz, String fieldname, Object value);
+		public void set(Field field, Object value);
 
 	}
 
@@ -112,9 +119,8 @@ public class ReflectionUtils {
 		}
 
 		@Override
-		public void set(Class<?> clazz, String fieldname, Object value) {
+		public void set(Field field, Object value) {
 			try {
-				Field field = clazz.getDeclaredField(fieldname);
 				if ((value != null) && !field.getType().isInstance(value)) {
 					throw new IllegalArgumentException("Can't set field type " + field.getType().getName() + " to " + value.getClass().getName());
 				}
@@ -139,13 +145,12 @@ public class ReflectionUtils {
 		}
 
 		@Override
-		public void set(Class<?> clazz, String fieldname, Object value) {
+		public void set(Field field, Object value) {
 			try {
-				Field field = setAccessible(clazz.getDeclaredField(fieldname));
 				implLookup
 				.findSetter(Field.class, "modifiers", int.class)
 				.invokeExact(field, field.getModifiers() & ~Modifier.FINAL);
-				field.set(null, value);
+				setAccessible(field).set(null, value);
 			} catch (Throwable e) {
 				throw new UncheckedReflectionException(e);
 			}
@@ -162,7 +167,7 @@ public class ReflectionUtils {
 		}
 
 		@Override
-		public void set(Class<?> clazz, String fieldname, Object value) {
+		public void set(Field field, Object value) {
 			throw exception;
 		}
 

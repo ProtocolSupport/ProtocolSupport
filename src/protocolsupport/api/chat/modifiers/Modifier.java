@@ -1,7 +1,7 @@
 package protocolsupport.api.chat.modifiers;
 
 import protocolsupport.api.chat.ChatColor;
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class Modifier {
 

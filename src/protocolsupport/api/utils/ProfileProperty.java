@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.Validate;
 
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class ProfileProperty {
 

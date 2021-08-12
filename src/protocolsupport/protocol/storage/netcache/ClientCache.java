@@ -10,7 +10,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.NamespacedKeyUtils;
 import protocolsupport.protocol.utils.i18n.I18NData;
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class ClientCache implements IBiomeRegistry {
 

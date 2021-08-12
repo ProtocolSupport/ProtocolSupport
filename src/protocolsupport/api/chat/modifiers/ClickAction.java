@@ -3,7 +3,7 @@ package protocolsupport.api.chat.modifiers;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class ClickAction {
 

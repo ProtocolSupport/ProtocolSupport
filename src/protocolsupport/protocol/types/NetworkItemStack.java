@@ -1,7 +1,7 @@
 package protocolsupport.protocol.types;
 
 import protocolsupport.protocol.types.nbt.NBTCompound;
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class NetworkItemStack {
 

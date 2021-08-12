@@ -6,7 +6,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import protocolsupport.protocol.utils.PrimitiveTypeUtils;
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class NetworkEntityDataCache {
 

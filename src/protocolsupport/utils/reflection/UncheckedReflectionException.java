@@ -1,4 +1,4 @@
-package protocolsupport.utils;
+package protocolsupport.utils.reflection;
 
 public class UncheckedReflectionException extends RuntimeException {
 

@@ -1,6 +1,5 @@
 package protocolsupport.zplatform.impl.spigot;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -45,8 +44,9 @@ import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
 import protocolsupport.api.utils.Profile;
-import protocolsupport.utils.ReflectionUtils;
-import protocolsupport.utils.UncheckedReflectionException;
+import protocolsupport.utils.reflection.FieldReader;
+import protocolsupport.utils.reflection.ReflectionUtils;
+import protocolsupport.utils.reflection.UncheckedReflectionException;
 import protocolsupport.zplatform.PlatformPacketFactory;
 
 public class SpigotPacketFactory implements PlatformPacketFactory {
@@ -965,40 +965,39 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	protected static final Map<Class<? extends Packet<?>>, EnumProtocol> protocolmap = getProtocolMap();
-	protected static final Field directionMapField = getDirectionMapField();
-	protected static final Field packetIdMapField = getPacketIdMapField();
+	protected static final FieldReader<Map<EnumProtocolDirection, Object>> directionMapField = getDirectionMapField();
+	protected static final FieldReader<Map<Class<? extends Packet<?>>, Integer>> packetIdMapField = getPacketIdMapField();
 
 	@SuppressWarnings("unchecked")
 	protected static final Map<Class<? extends Packet<?>>, EnumProtocol> getProtocolMap() {
 		try {
-			return (Map<Class<? extends Packet<?>>, EnumProtocol>) ReflectionUtils.getField(EnumProtocol.class, "h").get(null);
+			return (Map<Class<? extends Packet<?>>, EnumProtocol>) ReflectionUtils.findField(EnumProtocol.class, "h").get(null);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new UncheckedReflectionException(e);
 		}
 	}
 
-	protected static Field getDirectionMapField() {
+	protected static FieldReader<Map<EnumProtocolDirection, Object>> getDirectionMapField() {
 		try {
-			return ReflectionUtils.getField(EnumProtocol.class, "j");
+			return FieldReader.of(EnumProtocol.class, "j", ReflectionUtils.generifyClass(Map.class));
 		} catch (IllegalArgumentException e) {
 			throw new UncheckedReflectionException(e);
 		}
 	}
 
-	protected static Field getPacketIdMapField() {
+	protected static FieldReader<Map<Class<? extends Packet<?>>, Integer>> getPacketIdMapField() {
 		try {
-			return ReflectionUtils.getField(SpigotPacketFactory.class.getClassLoader().loadClass(EnumProtocol.class.getName() + "$a"), "a");
+			return FieldReader.of(SpigotPacketFactory.class.getClassLoader().loadClass(EnumProtocol.class.getName() + "$a"), "a", ReflectionUtils.generifyClass(Map.class));
 		} catch (IllegalArgumentException | ClassNotFoundException e) {
 			throw new UncheckedReflectionException(e);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected static int getPacketId(Class<?> packetClass, EnumProtocolDirection direction) {
 		try {
 			EnumProtocol protocol = protocolmap.get(packetClass);
-			Object registry = ((Map<EnumProtocolDirection, Object>) directionMapField.get(protocol)).get(direction);
-			return ((Map<Class<? extends Packet<?>>, Integer>) packetIdMapField.get(registry)).get(packetClass);
+			Object registry = directionMapField.get(protocol).get(direction);
+			return packetIdMapField.get(registry).get(packetClass);
 		} catch (Exception e) {
 			throw new RuntimeException("Unable to get packet id", e);
 		}

@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.packet.PacketDataCodec;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public abstract class MiddlePacket {
 

@@ -1,5 +1,7 @@
 package protocolsupport.utils;
 
+import protocolsupport.utils.reflection.ReflectionUtils;
+
 public class Vector3S {
 
 	public static final Vector3S ZERO = new Vector3S((short) 0, (short) 0, (short) 0);

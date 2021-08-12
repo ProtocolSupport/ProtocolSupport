@@ -2,7 +2,7 @@ package protocolsupport.protocol.types.networkentity.metadata;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public abstract class NetworkEntityMetadataObject<T> {
 

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class NetworkEntityCache {
 

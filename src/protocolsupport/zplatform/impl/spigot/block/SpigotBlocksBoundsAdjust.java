@@ -13,7 +13,8 @@ import net.minecraft.world.level.block.CarpetBlock;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.VoxelShapes;
 import protocolsupport.ProtocolSupport;
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.FieldWriter;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class SpigotBlocksBoundsAdjust {
 
@@ -32,12 +33,12 @@ public class SpigotBlocksBoundsAdjust {
 			ReflectionUtils.setStaticFinalFieldValue(CarpetBlock.class, "a", VoxelShapes.create(0, 0, 0, 1.0D, 0.00001, 1.0D));
 
 			{
-				Field shapesField1 = ReflectionUtils.getField(BlockTall.class, "g");
-				Field shapesField2 = ReflectionUtils.getField(BlockTall.class, "h");
+				FieldWriter<VoxelShape[]> shapesField1 = FieldWriter.of(BlockTall.class, "g", VoxelShape[].class);
+				FieldWriter<VoxelShape[]> shapesField2 = FieldWriter.of(BlockTall.class, "h", VoxelShape[].class);
 				Consumer<BlockIronBars> setBarsBounds = bars -> {
 					VoxelShape[] shapes = createBarsShapes();
-					ReflectionUtils.setFieldValue(shapesField1, bars, shapes);
-					ReflectionUtils.setFieldValue(shapesField2, bars, shapes);
+					shapesField1.set(bars, shapes);
+					shapesField2.set(bars, shapes);
 				};
 				for (Field field : Blocks.class.getFields()) {
 					Block block = (Block) field.get(null);

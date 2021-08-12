@@ -17,7 +17,7 @@ import protocolsupport.protocol.types.nbt.mojangson.MojangsonParser;
 import protocolsupport.protocol.types.nbt.mojangson.MojangsonSerializer;
 import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupport.protocol.utils.NamespacedKeyUtils;
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class HoverAction {
 

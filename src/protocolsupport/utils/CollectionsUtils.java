@@ -18,6 +18,8 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import protocolsupport.utils.reflection.ReflectionUtils;
+
 public class CollectionsUtils {
 
 	private CollectionsUtils() {

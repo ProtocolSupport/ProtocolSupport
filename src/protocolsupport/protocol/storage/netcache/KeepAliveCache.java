@@ -1,7 +1,7 @@
 package protocolsupport.protocol.storage.netcache;
 
 import io.netty.util.internal.ThreadLocalRandom;
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class KeepAliveCache {
 

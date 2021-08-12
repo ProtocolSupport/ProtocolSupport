@@ -5,6 +5,8 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
+import protocolsupport.utils.reflection.ReflectionUtils;
+
 public class MiscUtils {
 
 	private MiscUtils() {

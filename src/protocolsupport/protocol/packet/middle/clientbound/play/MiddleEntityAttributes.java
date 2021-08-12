@@ -9,7 +9,7 @@ import protocolsupport.protocol.codec.UUIDCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.GenericSkippingTable;
-import protocolsupport.utils.ReflectionUtils;
+import protocolsupport.utils.reflection.ReflectionUtils;
 
 public abstract class MiddleEntityAttributes extends MiddleEntityData {
 
