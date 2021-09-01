@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import protocolsupport.protocol.utils.i18n.I18NData;
 
@@ -110,12 +111,23 @@ public class TranslationAPI {
 	}
 
 	/**
-	 * Returns the translation string for given locale and translation key
+	 * Returns the translation string for given locale and translation key<br>
+	 * Returns key itself if no translation string exist
 	 * @param locale locale
 	 * @param key translation key
 	 * @return translation string
 	 */
 	public static @Nonnull String getTranslationString(@Nonnull String locale, @Nonnull String key) {
+		return I18NData.getTranslationStringOrKey(locale, key);
+	}
+
+	/**
+	 * Returns the translation string for given locale and translation key
+	 * @param locale locale
+	 * @param key translation key
+	 * @return translation string
+	 */
+	public static @Nullable String getTranslationStringIfExists(@Nonnull String locale, @Nonnull String key) {
 		return I18NData.getTranslationString(locale, key);
 	}
 

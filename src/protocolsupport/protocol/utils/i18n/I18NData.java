@@ -70,11 +70,16 @@ public class I18NData {
 		if (deftlstring != null) {
 			return deftlstring;
 		}
-		return key;
+		return null;
+	}
+
+	public static String getTranslationStringOrKey(String locale, String key) {
+		String tlstring = getTranslationString(locale, key);
+		return tlstring != null ? tlstring : key;
 	}
 
 	public static String translate(String locale, String key, String... args) {
-		return String.format(getTranslationString(locale, key), (Object[]) args);
+		return String.format(getTranslationStringOrKey(locale, key), (Object[]) args);
 	}
 
 }
