@@ -18,6 +18,9 @@ public class MapColorMappingRegistry extends IntMappingRegistry<ArrayBasedIntMap
 		IMapColor[] legacyColors = getAllMapColors(LegacyBaseMapColor.values(), new int[] {180, 220, 255, 220});
 
 		for (IMapColor color : colors) {
+			if (color.getId() > 231) {
+				register(color.getId(), getSimilarMapColor(color, colors, 231 - 4).getId(), ProtocolVersionsHelper.DOWN_1_16_4);
+			}
 			if (color.getId() > 203) {
 				register(color.getId(), getSimilarMapColor(color, colors, 203 - 4).getId(), ProtocolVersionsHelper.DOWN_1_15_2);
 			}
