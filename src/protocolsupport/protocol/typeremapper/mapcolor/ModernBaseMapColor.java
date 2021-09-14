@@ -60,7 +60,10 @@ public enum ModernBaseMapColor implements IMapColor {
 	WARPED_NYLIUM(22, 126, 134),
 	WARPED_STEM(58, 142, 140),
 	WARPED_HYPHAE(86, 44, 62),
-	WARPED_WART_BLOCK(20, 180, 133);
+	WARPED_WART_BLOCK(20, 180, 133),
+	DEEPSLATE(100, 100, 100),
+	RAW_IRON(216, 175, 147),
+	GLOW_LICHEN(127, 167, 150);
 
 	private final int r;
 	private final int g;
