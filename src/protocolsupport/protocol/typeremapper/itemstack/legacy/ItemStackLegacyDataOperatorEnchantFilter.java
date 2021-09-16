@@ -20,23 +20,25 @@ public class ItemStackLegacyDataOperatorEnchantFilter implements UnaryOperator<N
 	public NetworkItemStack apply(NetworkItemStack itemstack) {
 		NBTCompound rootTag = itemstack.getNBT();
 		if (rootTag != null) {
-			rootTag.setTag(CommonNBT.MODERN_ENCHANTMENTS, filterEnchantList(enchSkipTable, rootTag.getCompoundListTagOrNull(CommonNBT.MODERN_ENCHANTMENTS)));
-			rootTag.setTag(CommonNBT.BOOK_ENCHANTMENTS, filterEnchantList(enchSkipTable, rootTag.getCompoundListTagOrNull(CommonNBT.BOOK_ENCHANTMENTS)));
+			filterEnchantList(enchSkipTable, rootTag.getCompoundListTagOrNull(CommonNBT.MODERN_ENCHANTMENTS));
+			filterEnchantList(enchSkipTable, rootTag.getCompoundListTagOrNull(CommonNBT.BOOK_ENCHANTMENTS));
 		}
 		return itemstack;
 	}
 
-	protected NBTList<NBTCompound> filterEnchantList(GenericSkippingTable<String> enchSkipTable, NBTList<NBTCompound> oldList) {
-		if (oldList == null) {
-			return null;
+	protected static void filterEnchantList(GenericSkippingTable<String> enchSkipTable, NBTList<NBTCompound> enchList) {
+		if ((enchList == null) || enchList.isEmpty()) {
+			return;
 		}
-		NBTList<NBTCompound> newList = NBTList.createCompoundList();
-		for (NBTCompound enchData : oldList.getTags()) {
-			if (!enchSkipTable.isSet(enchData.getStringTagValueOrDefault("id", ""))) {
-				newList.addTag(enchData);
+		for (int i = enchList.size() - 1; i >= 0; i--) {
+			String enchId = enchList.getTag(i).getStringTagValueOrNull("id");
+			if ((enchId == null) || enchSkipTable.isSet(enchId)) {
+				enchList.removeTag(i);
 			}
 		}
-		return newList;
+		if (enchList.isEmpty()) {
+			enchList.addTag(CommonNBT.createFakeEnchantmentTag());
+		}
 	}
 
 }

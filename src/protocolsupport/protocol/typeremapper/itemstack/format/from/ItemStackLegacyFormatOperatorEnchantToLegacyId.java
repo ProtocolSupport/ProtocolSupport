@@ -26,16 +26,11 @@ public class ItemStackLegacyFormatOperatorEnchantToLegacyId extends ItemStackNBT
 		return tag;
 	}
 
-	protected NBTList<NBTCompound> apply(NBTList<NBTCompound> oldList) {
-		NBTList<NBTCompound> newList = NBTList.createCompoundList();
-		for (NBTCompound enchData : oldList.getTags()) {
-			Enchantment ench = Enchantment.getByKey(NamespacedKeyUtils.fromString(enchData.getStringTagValueOrNull("id")));
-			if (ench != null) {
-				enchData.setTag("id", new NBTShort(LegacyEnchantmentId.getId(ench)));
-				newList.addTag(enchData);
-			}
+	protected NBTList<NBTCompound> apply(NBTList<NBTCompound> enchList) {
+		for (NBTCompound enchData : enchList.getTags()) {
+			enchData.setTag("id", new NBTShort(LegacyEnchantmentId.getId(Enchantment.getByKey(NamespacedKeyUtils.fromString(enchData.getStringTagValueOrThrow("id"))))));
 		}
-		return newList;
+		return enchList;
 	}
 
 }

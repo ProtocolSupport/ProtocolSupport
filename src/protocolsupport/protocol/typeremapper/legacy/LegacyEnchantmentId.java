@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import org.bukkit.enchantments.Enchantment;
 
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
+import protocolsupport.protocol.utils.CommonNBT;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -16,6 +17,7 @@ public class LegacyEnchantmentId {
 
 	private LegacyEnchantmentId() {
 	}
+
 
 	private static final short legacyIdNone = -1;
 	private static final Object2ShortOpenHashMap<Enchantment> toLegacyId = new Object2ShortOpenHashMap<>();
@@ -58,6 +60,7 @@ public class LegacyEnchantmentId {
 		register(Enchantment.ARROW_INFINITE, (short) 51);
 		register(Enchantment.LUCK, (short) 61);
 		register(Enchantment.LURE, (short) 62);
+		register(CommonNBT.FAKE_ENCHANTMENT, (short) 127);
 	}
 
 	public static @Nonnegative short getId(@Nonnull Enchantment ench) {

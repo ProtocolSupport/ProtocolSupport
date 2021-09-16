@@ -1,5 +1,8 @@
 package protocolsupport.protocol.typeremapper.basic;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.potion.PotionEffectType;
@@ -23,6 +26,20 @@ public class GenericIdSkipper {
 	}
 
 	public static final GenericSkippingRegistry<String, GenericSkippingTable<String>> ENCHANT = new GenericSkippingRegistry<String, GenericSkippingTable<String>>() {
+		static class EnchantSkippingTable extends GenericSkippingTable<String> {
+			static final Set<String> real = new HashSet<>();
+			static {
+				for (Enchantment ench : Enchantment.values()) {
+					NamespacedKey enchKey = ench.getKey();
+					real.add(enchKey.toString());
+					real.add(enchKey.getKey());
+				}
+			}
+			@Override
+			public boolean isSet(String id) {
+				return !real.contains(id) || super.isSet(id);
+			}
+		}
 		{
 			register(Enchantment.SOUL_SPEED, ProtocolVersionsHelper.DOWN_1_15_2);
 			register(Enchantment.QUICK_CHARGE, ProtocolVersionsHelper.DOWN_1_13_2);
@@ -47,7 +64,7 @@ public class GenericIdSkipper {
 		}
 		@Override
 		protected GenericSkippingTable<String> createTable() {
-			return new GenericSkippingTable<>();
+			return new EnchantSkippingTable();
 		}
 	};
 

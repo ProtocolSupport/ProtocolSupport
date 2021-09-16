@@ -1,7 +1,20 @@
 package protocolsupport.protocol.utils;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.Map.Entry;
+
+import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.entity.EntityCategory;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+
+import io.papermc.paper.enchantments.EnchantmentRarity;
+import net.kyori.adventure.text.Component;
+
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -79,6 +92,58 @@ public class CommonNBT {
 
 	public static final String LEGACY_ENCHANTMENTS = "ench";
 
+	@SuppressWarnings("deprecation")
+	public static final Enchantment FAKE_ENCHANTMENT = new Enchantment(new NamespacedKey("ps", "fake")) {
+		public boolean isTreasure() {
+			return false;
+		}
+		public boolean isTradeable() {
+			return false;
+		}
+		public boolean isDiscoverable() {
+			return false;
+		}
+		public boolean isCursed() {
+			return false;
+		}
+		public int getStartLevel() {
+			return 0;
+		}
+		public int getMaxLevel() {
+			return 0;
+		}
+		public EnchantmentRarity getRarity() {
+			return EnchantmentRarity.COMMON;
+		}
+		public String getName() {
+			return getKey().toString();
+		}
+		public EnchantmentTarget getItemTarget() {
+			return EnchantmentTarget.WEAPON;
+		}
+		public float getDamageIncrease(int level, EntityCategory entityCategory) {
+			return 0;
+		}
+		public Set<EquipmentSlot> getActiveSlots() {
+			return Collections.emptySet();
+		}
+		public Component displayName(int level) {
+			return Component.text(getKey().toString());
+		}
+		public boolean conflictsWith(Enchantment other) {
+			return false;
+		}
+		public boolean canEnchantItem(ItemStack item) {
+			return false;
+		}
+	};
+
+	public static NBTCompound createFakeEnchantmentTag() {
+		NBTCompound tag = new NBTCompound();
+		tag.setTag("id", new NBTString(FAKE_ENCHANTMENT.getKey().toString()));
+		tag.setTag("lvl", new NBTByte((byte) 1));
+		return tag;
+	}
 
 	public static final String MOB_SPAWNER_SPAWNDATA = "SpawnData";
 
