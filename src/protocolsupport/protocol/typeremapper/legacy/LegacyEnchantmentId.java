@@ -6,6 +6,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
@@ -20,12 +21,18 @@ public class LegacyEnchantmentId {
 
 
 	private static final short legacyIdNone = -1;
-	private static final Object2ShortOpenHashMap<Enchantment> toLegacyId = new Object2ShortOpenHashMap<>();
-	private static final Enchantment[] byLegacyId = new Enchantment[128];
+	private static final Object2ShortOpenHashMap<String> toLegacyId = new Object2ShortOpenHashMap<>();
+	private static final String[] byLegacyId = new String[128];
+
+	private static void register(@Nonnull NamespacedKey key, @Nonnegative short id) {
+		toLegacyId.put(key.getKey(), id);
+		String keyStr = key.toString();
+		toLegacyId.put(keyStr, id);
+		byLegacyId[id] = keyStr;
+	}
 
 	private static void register(@Nonnull Enchantment ench, @Nonnegative short id) {
-		toLegacyId.put(ench, id);
-		byLegacyId[id] = ench;
+		register(ench.getKey(), id);
 	}
 
 	static {
@@ -60,18 +67,18 @@ public class LegacyEnchantmentId {
 		register(Enchantment.ARROW_INFINITE, (short) 51);
 		register(Enchantment.LUCK, (short) 61);
 		register(Enchantment.LURE, (short) 62);
-		register(CommonNBT.FAKE_ENCHANTMENT, (short) 127);
+		register(CommonNBT.FAKE_ENCHANTMENT_KEY, (short) 127);
 	}
 
-	public static @Nonnegative short getId(@Nonnull Enchantment ench) {
-		short legacyId = toLegacyId.getShort(ench);
+	public static @Nonnegative short getId(@Nonnull String key) {
+		short legacyId = toLegacyId.getShort(key);
 		if (legacyId == legacyIdNone) {
-			throw new IllegalArgumentException(MessageFormat.format("Missing enchantment {0} legacy id", ench));
+			throw new IllegalArgumentException(MessageFormat.format("Missing enchantment {0} legacy id", key));
 		}
 		return legacyId;
 	}
 
-	public static @Nullable Enchantment getById(@Nonnegative int id) {
+	public static @Nullable String getById(@Nonnegative int id) {
 		if ((id >= 0) && (id < byLegacyId.length)) {
 			return byLegacyId[id];
 		} else {

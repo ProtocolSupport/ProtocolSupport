@@ -1,7 +1,5 @@
 package protocolsupport.protocol.typeremapper.itemstack.format.to;
 
-import org.bukkit.enchantments.Enchantment;
-
 import protocolsupport.protocol.typeremapper.itemstack.format.ItemStackNBTLegacyFormatOperator;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEnchantmentId;
 import protocolsupport.protocol.types.NetworkItemStack;
@@ -31,9 +29,9 @@ public class ItemStackLegacyFormatOperatorEnchantFromLegacyId extends ItemStackN
 		for (NBTCompound enchData : oldList.getTags()) {
 			NBTNumber enchId = enchData.getNumberTagOrNull("id");
 			if (enchId != null) {
-				Enchantment ench = LegacyEnchantmentId.getById(enchId.getAsInt());
+				String ench = LegacyEnchantmentId.getById(enchId.getAsInt());
 				if (ench != null) {
-					enchData.setTag("id", new NBTString(ench.getKey().toString()));
+					enchData.setTag("id", new NBTString(ench));
 					newList.addTag(enchData);
 				}
 			}

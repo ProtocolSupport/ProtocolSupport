@@ -14,16 +14,17 @@ class NetworkItemStackEnchantTests {
 
 	@Test
 	void testFakeEnchantmentRegistered() {
-		int id = Assertions.assertDoesNotThrow(() -> LegacyEnchantmentId.getId(CommonNBT.FAKE_ENCHANTMENT));
-		Assertions.assertEquals(CommonNBT.FAKE_ENCHANTMENT, LegacyEnchantmentId.getById(id));
+		int id = Assertions.assertDoesNotThrow(() -> LegacyEnchantmentId.getId(CommonNBT.FAKE_ENCHANTMENT_KEY_STR));
+		Assertions.assertEquals(CommonNBT.FAKE_ENCHANTMENT_KEY_STR, LegacyEnchantmentId.getById(id));
 	}
 
 	@Test
 	void testLegacyId() {
 		GenericSkippingTable<String> enchSkipTable = GenericIdSkipper.ENCHANT.getTable(ProtocolVersion.MINECRAFT_1_12_2);
 		for (Enchantment ench : Enchantment.values()) {
-			if (!enchSkipTable.isSet(ench.getKey().toString())) {
-				Assertions.assertDoesNotThrow(() -> LegacyEnchantmentId.getId(ench));
+			String key = ench.getKey().toString();
+			if (!enchSkipTable.isSet(key)) {
+				Assertions.assertDoesNotThrow(() -> LegacyEnchantmentId.getId(key));
 			}
 		}
 	}

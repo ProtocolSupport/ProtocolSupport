@@ -1,7 +1,5 @@
 package protocolsupport.protocol.typeremapper.itemstack.format.from;
 
-import org.bukkit.enchantments.Enchantment;
-
 import protocolsupport.protocol.typeremapper.itemstack.format.ItemStackNBTLegacyFormatOperator;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEnchantmentId;
 import protocolsupport.protocol.types.NetworkItemStack;
@@ -9,7 +7,6 @@ import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTList;
 import protocolsupport.protocol.types.nbt.NBTShort;
 import protocolsupport.protocol.utils.CommonNBT;
-import protocolsupport.protocol.utils.NamespacedKeyUtils;
 
 public class ItemStackLegacyFormatOperatorEnchantToLegacyId extends ItemStackNBTLegacyFormatOperator {
 
@@ -28,7 +25,7 @@ public class ItemStackLegacyFormatOperatorEnchantToLegacyId extends ItemStackNBT
 
 	protected NBTList<NBTCompound> apply(NBTList<NBTCompound> enchList) {
 		for (NBTCompound enchData : enchList.getTags()) {
-			enchData.setTag("id", new NBTShort(LegacyEnchantmentId.getId(Enchantment.getByKey(NamespacedKeyUtils.fromString(enchData.getStringTagValueOrThrow("id"))))));
+			enchData.setTag("id", new NBTShort(LegacyEnchantmentId.getId(enchData.getStringTagValueOrThrow("id"))));
 		}
 		return enchList;
 	}
