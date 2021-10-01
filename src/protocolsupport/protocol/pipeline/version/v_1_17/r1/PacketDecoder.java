@@ -36,7 +36,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_17r1.Invent
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_17r1_17r2.ClientSettings;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_17r1_17r2.SyncPong;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.CreativeSetSlot;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.Flying;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.Ground;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.HeldSlot;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.InventoryButton;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.InventoryClose;
@@ -91,7 +91,7 @@ public class PacketDecoder extends AbstractModernPacketDecoder {
 		registry.register(NetworkState.PLAY, 0x11, Move::new);
 		registry.register(NetworkState.PLAY, 0x12, MoveLook::new);
 		registry.register(NetworkState.PLAY, 0x13, Look::new);
-		registry.register(NetworkState.PLAY, 0x14, Flying::new);
+		registry.register(NetworkState.PLAY, 0x14, Ground::new);
 		registry.register(NetworkState.PLAY, 0x15, MoveVehicle::new);
 		registry.register(NetworkState.PLAY, 0x16, SteerBoat::new);
 		registry.register(NetworkState.PLAY, 0x17, PickItem::new);

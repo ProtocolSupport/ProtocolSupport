@@ -18,6 +18,7 @@ public enum ServerBoundPacketType {
 	PLAY_POSITION(ServerPlatform.get().getPacketFactory().getInPlayPositionPacketId()),
 	PLAY_LOOK(ServerPlatform.get().getPacketFactory().getInPlayLookPacketId()),
 	PLAY_POSITION_LOOK(ServerPlatform.get().getPacketFactory().getInPlayPositionLookPacketId()),
+	PLAY_GROUND(ServerPlatform.get().getPacketFactory().getInPlayGroundPacketId()),
 	PLAY_BLOCK_DIG(ServerPlatform.get().getPacketFactory().getInPlayBlockDigPacketId()),
 	PLAY_BLOCK_PLACE(ServerPlatform.get().getPacketFactory().getInPlayBlockPlacePacketId()),
 	PLAY_HELD_SLOT(ServerPlatform.get().getPacketFactory().getInPlayHeldSlotPacketId()),

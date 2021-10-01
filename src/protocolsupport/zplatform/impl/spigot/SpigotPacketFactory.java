@@ -770,6 +770,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
+	public int getInPlayGroundPacketId() {
+		return getInId(PacketPlayInFlying.d.class);
+	}
+
+	@Override
 	public int getInPlayBlockDigPacketId() {
 		return getInId(PacketPlayInBlockDig.class);
 	}

@@ -290,6 +290,8 @@ public interface PlatformPacketFactory {
 
 	public int getInPlayPositionLookPacketId();
 
+	public int getInPlayGroundPacketId();
+
 	public int getInPlayBlockDigPacketId();
 
 	public int getInPlayBlockPlacePacketId();
