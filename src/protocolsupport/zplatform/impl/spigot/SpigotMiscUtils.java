@@ -48,6 +48,7 @@ import net.minecraft.nbt.NBTReadLimiter;
 import net.minecraft.network.EnumProtocol;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.chat.IChatBaseComponent.ChatSerializer;
+import net.minecraft.network.protocol.game.PacketPlayOutSetSlot;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.dedicated.DedicatedServerProperties;
@@ -55,6 +56,8 @@ import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.server.network.PlayerConnection;
 import net.minecraft.server.network.ServerConnection;
+import net.minecraft.world.entity.player.PlayerInventory;
+import net.minecraft.world.inventory.ContainerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.phys.AxisAlignedBB;
 import protocolsupport.api.chat.ChatAPI;
@@ -157,6 +160,20 @@ public class SpigotMiscUtils implements PlatformUtils {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void updatePlayerInventorySlot(Player player, int slot) {
+		if (slot < PlayerInventory.getHotbarSize()) {
+			slot += 36;
+		} else if (slot > 39) {
+			slot += 5;
+		} else if (slot > 35) {
+			slot = 8 - (slot - 36);
+		}
+		EntityPlayer platformPlayer = ((CraftPlayer) player).getHandle();
+		ContainerPlayer platformPlayerContainer = platformPlayer.bU;
+		platformPlayer.b.sendPacket(new PacketPlayOutSetSlot(platformPlayerContainer.j, platformPlayerContainer.incrementStateId(), slot, platformPlayerContainer.getSlot(slot).getItem()));
 	}
 
 	@Override

@@ -33,7 +33,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_1
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_15_16r1_16r2_17r1_17r2.EntitySound;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_15_16r1_16r2_17r1_17r2.EntityStatus;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_15_16r1_16r2_17r1_17r2.InventoryHorseOpen;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_15_16r1_16r2_17r1_17r2.InventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_15_16r1_16r2_17r1_17r2.MerchantTradeList;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_15_16r1_16r2_17r1_17r2.ServerDifficulty;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_14r1_14r2_15_16r1_16r2_17r1_17r2.SetViewCenter;
@@ -62,6 +61,8 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.C
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.DeclareTags;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.EntityAttributes;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.Explosion;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.InventoryClose;
+import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.InventoryOpen;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.ResourcePack;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.SetPosition;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.SpawnPosition;
@@ -82,7 +83,6 @@ import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2.W
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r2.EntityDestroy;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r2.InventorySetItems;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r2.InventorySetSlot;
-import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.InventoryClose;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.InventoryData;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.ScoreboardDisplay;
 import protocolsupport.protocol.packet.middleimpl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.TimeUpdate;

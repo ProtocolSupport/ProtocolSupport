@@ -32,6 +32,7 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_16r1_16r2_1
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_16r2_17r1_17r2.RecipeBookRecipe;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_16r2_17r1_17r2.RecipeBookState;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_17r1_17r2.ClientSettings;
+import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_17r1_17r2.InventoryClose;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_17r1_17r2.SyncPong;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_17r2.EditBook;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_17r2.InventoryClick;
@@ -39,7 +40,6 @@ import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.Ground;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.HeldSlot;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.InventoryButton;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.InventoryClose;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.Look;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.Chat;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.ClientCommand;

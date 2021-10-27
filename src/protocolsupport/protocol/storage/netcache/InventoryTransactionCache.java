@@ -43,27 +43,56 @@ public class InventoryTransactionCache {
 	}
 
 
-	protected short invstateClientIdCurrent = generateInitialValue(invstateClientIdFirst);
-	protected int invstateServerId = INVALID_ID;
-	protected boolean invstateSync = true;
 
-	public short storeInvStateServerId(int serverId) {
-		this.invstateServerId = serverId;
-		this.invstateSync = false;
-		if (++invstateClientIdCurrent > invstateClientIdLast) {
-			invstateClientIdCurrent = invstateClientIdFirst;
-		}
-		return invstateClientIdCurrent;
+	protected InvStateSync playerInventrySyncState = new InvStateSync();
+	protected InvStateSync openInventorySyncState = playerInventrySyncState;
+
+	public void openInventory() {
+		openInventorySyncState = new InvStateSync();
 	}
 
-	public void tryInvStateSync(short clientId) {
-		if (clientId == invstateClientIdCurrent) {
-			invstateSync = true;
-		}
+	public void closeInventory() {
+		openInventorySyncState = playerInventrySyncState;
 	}
 
-	public int getInvStateServerId() {
-		return invstateSync ? invstateServerId : INVALID_ID;
+	public short storeInventoryStateServerId(int serverId, boolean player) {
+		return (player ? playerInventrySyncState : openInventorySyncState).storeServerId(serverId);
+	}
+
+	public void tryInventoryStateSync(short clientId) {
+		playerInventrySyncState.trySync(clientId);
+		openInventorySyncState.trySync(clientId);
+	}
+
+	public int getInventoryStateServerId() {
+		return openInventorySyncState.getSyncServerId();
+	}
+
+	protected static class InvStateSync {
+
+		protected int serverId = INVALID_ID;
+		protected short clientIdCurrent = generateInitialValue(invstateClientIdFirst);
+		protected boolean sync = true;
+
+		public short storeServerId(int serverId) {
+			this.serverId = serverId;
+			this.sync = false;
+			if (++clientIdCurrent > invstateClientIdLast) {
+				clientIdCurrent = invstateClientIdFirst;
+			}
+			return clientIdCurrent;
+		}
+
+		public void trySync(short clientId) {
+			if (clientId == clientIdCurrent) {
+				sync = true;
+			}
+		}
+
+		public int getSyncServerId() {
+			return sync ? serverId : INVALID_ID;
+		}
+
 	}
 
 }

@@ -29,6 +29,8 @@ public interface PlatformUtils {
 
 	public ConnectionImpl getConnection(Player player);
 
+	public void updatePlayerInventorySlot(Player player, int slot);
+
 	public ItemStack createBukkitItemStackFromNetwork(NetworkItemStack stack);
 
 	public NetworkItemStack createNetworkItemStackFromBukkit(ItemStack itemstack);

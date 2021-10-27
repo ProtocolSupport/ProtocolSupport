@@ -30,7 +30,7 @@ public class InventoryClick extends MiddleInventoryClick {
 
 	@Override
 	protected void handle() {
-		stateId = transactioncache.getInvStateServerId();
+		stateId = transactioncache.getInventoryStateServerId();
 
 		try {
 			WindowSlot windowSlot = windowCache.getOpenedWindowRemapper().fromClientSlot(windowId, slot);

@@ -22,7 +22,7 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	protected final WindowTypeIdMappingTable windowTypeIdMappingTable = WindowTypeIdMappingRegistry.INSTANCE.getTable(version);
 
 	@Override
-	protected void writeToClient0() {
+	protected void write0() {
 		ClientBoundPacketData windowopen = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WINDOW_OPEN);
 		writeData(
 			windowopen,

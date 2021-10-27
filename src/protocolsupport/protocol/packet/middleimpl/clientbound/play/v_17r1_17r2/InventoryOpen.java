@@ -1,6 +1,7 @@
-package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_13;
+package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_17r1_17r2;
 
 import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.codec.chat.ChatCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleInventoryOpen;
@@ -20,23 +21,12 @@ public class InventoryOpen extends MiddleInventoryOpen {
 	protected final WindowTypeIdMappingTable windowTypeIdMappingTable = WindowTypeIdMappingRegistry.INSTANCE.getTable(version);
 
 	@Override
-	public void write0() {
+	protected void write0() {
 		ClientBoundPacketData windowopen = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WINDOW_OPEN);
-		writeData(
-			windowopen,
-			windowId,
-			(String) windowTypeIdMappingTable.get(windowRemapper.toClientWindowType(type)),
-			ChatCodec.serialize(version, clientCache.getLocale(), title),
-			windowRemapper.toClientWindowSlots(0)
-		);
+		VarNumberCodec.writeVarInt(windowopen, windowId);
+		VarNumberCodec.writeVarInt(windowopen, ((Number) windowTypeIdMappingTable.get(windowRemapper.toClientWindowType(type))).intValue());
+		StringCodec.writeVarIntUTF8String(windowopen, ChatCodec.serialize(version, clientCache.getLocale(), title));
 		codec.writeClientbound(windowopen);
-	}
-
-	public static void writeData(ClientBoundPacketData to, int windowId, String type, String titleJson, int slots) {
-		to.writeByte(windowId);
-		StringCodec.writeVarIntUTF8String(to, type);
-		StringCodec.writeVarIntUTF8String(to, titleJson);
-		to.writeByte(slots);
 	}
 
 }

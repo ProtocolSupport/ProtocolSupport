@@ -42,7 +42,7 @@ public class InventorySetItems extends MiddleInventorySetItems {
 			));
 		}
 		codec.writeClientbound(InventorySetSlot.create(version, locale, MiddleInventorySetSlot.WINDOW_ID_PLAYER_CURSOR, -1, cursor));
-		codec.writeClientbound(SyncPing.createTransaction(transactioncache.storeInvStateServerId(stateId)));
+		codec.writeClientbound(SyncPing.createTransaction(transactioncache.storeInventoryStateServerId(stateId, windowId == WINDOW_ID_PLAYER_INVENTORY)));
 	}
 
 	protected static ClientBoundPacketData create(ProtocolVersion version, String locale, byte windowId, NetworkItemStack[] items) {

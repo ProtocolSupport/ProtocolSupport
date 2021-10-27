@@ -30,6 +30,8 @@ public abstract class MiddleInventoryClick extends ServerBoundMiddlePacket {
 		codec.writeServerbound(create(windowId, stateId, mode, button, slot, modifiedSlots, clickedItem));
 	}
 
+	public static final int WINDOW_ID_PLAYER = 0;
+
 	public static final int MODE_CLICK = 0;
 	public static final int MODE_SHIFT_CLICK = 1;
 	public static final int MODE_NUMBER_KEY = 2;

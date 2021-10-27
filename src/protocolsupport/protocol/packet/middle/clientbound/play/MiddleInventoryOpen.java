@@ -45,12 +45,16 @@ public abstract class MiddleInventoryOpen extends ClientBoundMiddlePacket {
 		if (windowSkipper.isSet(type)) {
 			codec.writeServerboundAndFlush(MiddleInventoryClose.create(windowId));
 		} else {
-			windowRemapper = windowsRemapper.get(type, 0);
-			windowCache.setOpenedWindow(windowId, type, 0, windowRemapper);
-			writeToClient0();
+			initWindow();
+			write0();
 		}
 	}
 
-	protected abstract void writeToClient0();
+	protected void initWindow() {
+		windowRemapper = windowsRemapper.get(type, 0);
+		windowCache.setOpenedWindow(windowId, type, 0, windowRemapper);
+	}
+
+	protected abstract void write0();
 
 }

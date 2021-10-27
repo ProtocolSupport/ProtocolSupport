@@ -29,7 +29,7 @@ public class InventoryConfirmTransaction extends ServerBoundMiddlePacket {
 			codec.writeServerbound(MiddleSyncPong.create(syncpingServerId));
 		}
 
-		transactioncache.tryInvStateSync(actionNumber);
+		transactioncache.tryInventoryStateSync(actionNumber);
 	}
 
 }

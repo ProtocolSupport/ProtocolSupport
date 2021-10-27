@@ -25,31 +25,31 @@ public class InventorySetSlot extends MiddleInventorySetSlot {
 		String locale = clientCache.getLocale();
 
 		if (windowId == WINDOW_ID_PLAYER_CURSOR) {
-			writeWithTansaction(create(version, locale, windowId, slot, itemstack));
+			writeWithTansaction(create(version, locale, windowId, slot, itemstack), true);
 			return;
 		}
 
 		if (windowId == WINDOW_ID_PLAYER_INVENTORY) {
 			//TODO: remap for versions that don't actually support this special window id
-			writeWithTansaction(create(version, locale, windowId, slot, itemstack));
+			writeWithTansaction(create(version, locale, windowId, slot, itemstack), true);
 			return;
 		}
 
 		if (windowId == WINDOW_ID_PLAYER_HOTBAR) {
-			writeWithTansaction(create(version, locale, windowId, slot, itemstack));
+			writeWithTansaction(create(version, locale, windowId, slot, itemstack), true);
 			return;
 		}
 
 		try {
 			WindowSlot windowSlot = windowCache.getOpenedWindowRemapper().toClientSlot(windowId, slot);
-			writeWithTansaction(create(version, locale, windowSlot.getWindowId(), windowSlot.getSlot(), itemstack));
+			writeWithTansaction(create(version, locale, windowSlot.getWindowId(), windowSlot.getSlot(), itemstack), false);
 		} catch (NoSuchSlotException e) {
 		}
 	}
 
-	protected void writeWithTansaction(ClientBoundPacketData packet) {
+	protected void writeWithTansaction(ClientBoundPacketData packet, boolean player) {
 		codec.writeClientbound(packet);
-		codec.writeClientbound(SyncPing.createTransaction(transactioncache.storeInvStateServerId(stateId)));
+		codec.writeClientbound(SyncPing.createTransaction(transactioncache.storeInventoryStateServerId(stateId, player)));
 	}
 
 	public static ClientBoundPacketData create(ProtocolVersion version, String locale, byte windowId, int slot, NetworkItemStack itemstack) {

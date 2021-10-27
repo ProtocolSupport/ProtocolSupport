@@ -29,7 +29,7 @@ public class InventoryClick extends MiddleInventoryClick {
 
 	@Override
 	protected void handle() {
-		stateId = transactioncache.getInvStateServerId();
+		stateId = transactioncache.getInventoryStateServerId();
 
 		try {
 			WindowSlot windowSlot = windowCache.getOpenedWindowRemapper().fromClientSlot(windowId, slot);
@@ -40,7 +40,7 @@ public class InventoryClick extends MiddleInventoryClick {
 		}
 
 		if ((button == 0) && (mode == MODE_SHIFT_CLICK)) {
-			modifiedSlots = new SlotItem[0];
+			clickedItem = null;
 		}
 	}
 

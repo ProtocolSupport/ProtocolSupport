@@ -20,6 +20,7 @@ import protocolsupport.listeners.emulation.BlockPlaceSelfSoundEmulation;
 import protocolsupport.listeners.emulation.DamageHurtEffectEmulation;
 import protocolsupport.listeners.emulation.LeaveVehicleOnCrouchEmulation;
 import protocolsupport.listeners.emulation.LevitationSlowFallingEmulation;
+import protocolsupport.listeners.emulation.UpdateHandSlotOnItemDropEmulation;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupport.zplatform.ServerPlatform;
 
@@ -115,6 +116,7 @@ public class ProtocolSupport extends JavaPlugin {
 			return;
 		}
 		ServerPlatform.get().getInjector().onEnable();
+
 		getCommand("protocolsupport").setExecutor(new CommandHandler());
 
 		PluginManager pluginmanager = getServer().getPluginManager();
@@ -125,6 +127,7 @@ public class ProtocolSupport extends JavaPlugin {
 		pluginmanager.registerEvents(new BlockPlaceSelfSoundEmulation(), this);
 		pluginmanager.registerEvents(new DamageHurtEffectEmulation(), this);
 		pluginmanager.registerEvents(new LeaveVehicleOnCrouchEmulation(), this);
+		pluginmanager.registerEvents(new UpdateHandSlotOnItemDropEmulation(), this);
 		new LevitationSlowFallingEmulation().runTaskTimer(this, 1, 1);
 	}
 
