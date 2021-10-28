@@ -27,7 +27,7 @@ public class BlockPlaceSelfSoundEmulation implements Listener {
 			SoundGroup soundgroup = event.getBlock().getBlockData().getSoundGroup();
 			player.playSound(
 				event.getBlock().getLocation(),
-				soundgroup.getStepSound(),
+				soundgroup.getPlaceSound(),
 				SoundCategory.BLOCKS,
 				(soundgroup.getVolume() + 1.0F) / 2.0F,
 				soundgroup.getPitch() * 0.8F
