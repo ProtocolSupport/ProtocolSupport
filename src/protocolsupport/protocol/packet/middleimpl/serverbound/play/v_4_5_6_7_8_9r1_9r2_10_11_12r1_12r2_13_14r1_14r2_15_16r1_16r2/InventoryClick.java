@@ -7,6 +7,7 @@ import protocolsupport.protocol.packet.middle.serverbound.play.MiddleInventoryCl
 import protocolsupport.protocol.storage.netcache.InventoryTransactionCache;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper.NoSuchSlotException;
 import protocolsupport.protocol.typeremapper.window.WindowRemapper.WindowSlot;
+import protocolsupport.protocol.types.NetworkItemStack;
 
 public class InventoryClick extends MiddleInventoryClick {
 
@@ -40,7 +41,7 @@ public class InventoryClick extends MiddleInventoryClick {
 		}
 
 		if ((button == 0) && (mode == MODE_SHIFT_CLICK)) {
-			clickedItem = null;
+			clickedItem = NetworkItemStack.NULL;
 		}
 	}
 
