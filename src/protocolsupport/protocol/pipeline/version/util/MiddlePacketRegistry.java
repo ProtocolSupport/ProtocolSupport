@@ -5,25 +5,25 @@ import java.util.function.Function;
 
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
-import protocolsupport.protocol.packet.middle.MiddlePacket;
-import protocolsupport.protocol.packet.middle.MiddlePacket.MiddlePacketInit;
+import protocolsupport.protocol.packet.middle.IMiddlePacket;
+import protocolsupport.protocol.packet.middle.MiddlePacket.IMiddlePacketInit;
 
 @SuppressWarnings("unchecked")
-public class MiddlePacketRegistry<T extends MiddlePacket> {
+public class MiddlePacketRegistry<T extends IMiddlePacket> {
 
-	protected final MiddlePacketInit connection;
+	protected final IMiddlePacketInit connection;
 
-	public MiddlePacketRegistry(MiddlePacketInit connection) {
+	public MiddlePacketRegistry(IMiddlePacketInit connection) {
 		this.connection = connection;
 	}
 
 	protected final Lazy<T>[] registry = new Lazy[NetworkState.values().length << 8];
 
-	public void register(NetworkState state, ClientBoundPacketType packetType, Function<MiddlePacketInit, T> middlepacket) {
+	public void register(NetworkState state, ClientBoundPacketType packetType, Function<IMiddlePacketInit, T> middlepacket) {
 		register(state, packetType.getId(), middlepacket);
 	}
 
-	public void register(NetworkState state, int packetId, Function<MiddlePacketInit, T> middlepacket) {
+	public void register(NetworkState state, int packetId, Function<IMiddlePacketInit, T> middlepacket) {
 		registry[toKey(state, packetId)] = new Lazy<>(connection, middlepacket);
 	}
 
@@ -37,10 +37,10 @@ public class MiddlePacketRegistry<T extends MiddlePacket> {
 
 	protected static class Lazy<T> {
 
-		protected final MiddlePacketInit init;
-		protected final Function<MiddlePacketInit, T> func;
+		protected final IMiddlePacketInit init;
+		protected final Function<IMiddlePacketInit, T> func;
 
-		public Lazy(MiddlePacketInit init, Function<MiddlePacketInit, T> middlepacket) {
+		public Lazy(IMiddlePacketInit init, Function<IMiddlePacketInit, T> middlepacket) {
 			this.init = init;
 			this.func = middlepacket;
 		}

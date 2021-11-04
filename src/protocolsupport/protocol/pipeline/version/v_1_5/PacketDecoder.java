@@ -1,43 +1,42 @@
 package protocolsupport.protocol.pipeline.version.v_1_5;
 
 import protocolsupport.api.utils.NetworkState;
-import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_4_5_6.ClientLogin;
-import protocolsupport.protocol.packet.middleimpl.serverbound.handshake.v_5.Ping;
-import protocolsupport.protocol.packet.middleimpl.serverbound.login.v_4_5_6_7.EncryptionResponse;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5.EntityAction;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5.MoveLook;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5.PlayerAbilities;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6.Chat;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6.ClientCommand;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6.ClientSettings;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6.CustomPayload;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6.KickDisconnect;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6.TabComplete;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6.UpdateSign;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6.UseEntity;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.Animation;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.BlockDig;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.BlockPlace;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.KeepAlive;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7.Move;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.InventoryClick;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.InventoryClose;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.InventoryConfirmTransaction;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.CreativeSetSlot;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.Ground;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.HeldSlot;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.InventoryButton;
-import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.Look;
+import protocolsupport.protocol.packet.middle.impl.serverbound.IServerboundMiddlePacketV5;
+import protocolsupport.protocol.packet.middle.impl.serverbound.handshake.v_4_5_6.ClientLogin;
+import protocolsupport.protocol.packet.middle.impl.serverbound.handshake.v_5.Ping;
+import protocolsupport.protocol.packet.middle.impl.serverbound.login.v_4_5_6_7.EncryptionResponse;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5.EntityAction;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5.MoveLook;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5.PlayerAbilities;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6.Chat;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6.ClientCommand;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6.ClientSettings;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6.CustomPayload;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6.KickDisconnect;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6.TabComplete;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6.UpdateSign;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6.UseEntity;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6_7.Animation;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6_7.BlockDig;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6_7.BlockPlace;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6_7.KeepAlive;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6_7.Move;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.InventoryClick;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.InventoryClose;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.InventoryConfirmTransaction;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.CreativeSetSlot;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.Ground;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.HeldSlot;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.InventoryButton;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.Look;
+import protocolsupport.protocol.pipeline.IPacketDataChannelIO;
 import protocolsupport.protocol.pipeline.version.util.decoder.AbstractLegacyPacketDecoder;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 
-public class PacketDecoder extends AbstractLegacyPacketDecoder {
+public class PacketDecoder extends AbstractLegacyPacketDecoder<IServerboundMiddlePacketV5> {
 
-	public PacketDecoder(ConnectionImpl connection) {
-		super(connection);
-	}
-
-	{
+	public PacketDecoder(IPacketDataChannelIO io, NetworkDataCache cache) {
+		super(io, cache);
 		registry.register(NetworkState.HANDSHAKING, 0x02, ClientLogin::new);
 		registry.register(NetworkState.HANDSHAKING, 0xFE, Ping::new);
 		registry.register(NetworkState.LOGIN, 0xFC, EncryptionResponse::new);

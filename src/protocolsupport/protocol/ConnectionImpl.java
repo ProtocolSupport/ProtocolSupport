@@ -28,6 +28,7 @@ import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.protocol.packet.handler.IPacketListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
+import protocolsupport.protocol.pipeline.IPacketDataChannelIO;
 import protocolsupport.protocol.pipeline.IPacketIdCodec;
 import protocolsupport.protocol.pipeline.common.LogicHandler;
 import protocolsupport.protocol.storage.ProtocolStorage;
@@ -40,24 +41,30 @@ public class ConnectionImpl extends Connection {
 
 	protected static final AttributeKey<ConnectionImpl> key = AttributeKey.valueOf("PSConnectionImpl");
 
-	protected final NetworkManagerWrapper networkmanager;
-
-	public ConnectionImpl(NetworkManagerWrapper networkmanager) {
-		this.networkmanager = networkmanager;
-		this.networkmanager.getChannel().attr(key).set(this);
-	}
-
 	public static ConnectionImpl getFromChannel(Channel channel) {
 		return channel.attr(key).get();
 	}
 
+
+	protected final NetworkManagerWrapper networkmanager;
+	protected final PacketDataChannelIO packetdataIO;
+	protected LogicHandler logicHandler;
+	protected ChannelHandlerContext logicHandlerCtx;
+	protected ChannelHandlerContext rawSendCtx;
+	protected ChannelHandlerContext rawRecvCtx;
+
+	public ConnectionImpl(NetworkManagerWrapper networkmanager) {
+		this.networkmanager = networkmanager;
+		this.packetdataIO = new PacketDataChannelIO(this);
+		this.networkmanager.getChannel().attr(key).set(this);
+	}
+
 	public void destroy() {
-		Object listener = networkmanager.getPacketListener();
-		if (listener instanceof IPacketListener) {
-			((IPacketListener) listener).destroy();
+		if (networkmanager.getPacketListener() instanceof IPacketListener ilistener) {
+			ilistener.destroy();
 		}
-		if (codec != null) {
-			codec.release();
+		if (packetdataIO != null) {
+			packetdataIO.destroy();
 		}
 	}
 
@@ -65,8 +72,21 @@ public class ConnectionImpl extends Connection {
 		this.version = version;
 	}
 
+	public void initPacketDataIO(IPacketIdCodec packetIdCodec) {
+		ChannelPipeline pipeline = networkmanager.getChannel().pipeline();
+		this.logicHandlerCtx = pipeline.context(ChannelHandlers.LOGIC);
+		this.logicHandler = (LogicHandler) logicHandlerCtx.handler();
+		this.rawSendCtx = pipeline.context(ChannelHandlers.RAW_CAPTURE_SEND);
+		this.rawRecvCtx = pipeline.context(ChannelHandlers.RAW_CAPTURE_RECEIVE);
+		this.packetdataIO.init(packetIdCodec, pipeline.context(ChannelHandlers.ENCODER_TRANSFORMER), pipeline.context(ChannelHandlers.DECODER_TRANSFORMER));
+	}
+
 	public NetworkManagerWrapper getNetworkManagerWrapper() {
 		return networkmanager;
+	}
+
+	public IPacketDataChannelIO getPacketDataIO() {
+		return packetdataIO;
 	}
 
 	@Override
@@ -91,9 +111,8 @@ public class ConnectionImpl extends Connection {
 			player.kickPlayer(message.toLegacyText());
 			return;
 		}
-		Object packetListener = networkmanager.getPacketListener();
-		if (packetListener instanceof IPacketListener) {
-			((IPacketListener) packetListener).disconnect(message);
+		if (networkmanager.getPacketListener() instanceof IPacketListener ilistener) {
+			ilistener.disconnect(message);
 			return;
 		}
 		close();
@@ -169,29 +188,6 @@ public class ConnectionImpl extends Connection {
 				ProtocolSupport.logErrorWarning("Unhandled exception occured in task submitted to event loop", e);
 			}
 		});
-	}
-
-	protected PacketDataCodecImpl codec = PacketDataCodecImpl.NOOP;
-	protected LogicHandler logicHandler;
-	protected ChannelHandlerContext logicHandlerCtx;
-	protected ChannelHandlerContext rawSendCtx;
-	protected ChannelHandlerContext rawRecvCtx;
-
-	public PacketDataCodecImpl getCodec() {
-		return codec;
-	}
-
-	public void initCodec(IPacketIdCodec packetIdCodec) {
-		this.codec = new PacketDataCodecImpl(this, packetIdCodec);
-	}
-
-	public void initIO() {
-		ChannelPipeline pipeline = networkmanager.getChannel().pipeline();
-		this.logicHandlerCtx = pipeline.context(ChannelHandlers.LOGIC);
-		this.logicHandler = (LogicHandler) logicHandlerCtx.handler();
-		this.rawSendCtx = pipeline.context(ChannelHandlers.RAW_CAPTURE_SEND);
-		this.rawRecvCtx = pipeline.context(ChannelHandlers.RAW_CAPTURE_RECEIVE);
-		this.codec.setIOContexts(pipeline.context(ChannelHandlers.ENCODER_TRANSFORMER), pipeline.context(ChannelHandlers.DECODER_TRANSFORMER));
 	}
 
 	@Override

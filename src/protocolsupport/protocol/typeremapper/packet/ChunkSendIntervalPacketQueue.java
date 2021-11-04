@@ -3,13 +3,14 @@ package protocolsupport.protocol.typeremapper.packet;
 import java.util.ArrayDeque;
 import java.util.concurrent.TimeUnit;
 
-import protocolsupport.protocol.PacketDataCodecImpl.ClientBoundPacketDataProcessor;
+import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.PacketData;
-import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.pipeline.IPacketDataChannelIO.IPacketDataProcessor;
+import protocolsupport.protocol.pipeline.IPacketDataChannelIO.IPacketDataProcessorContext;
 import protocolsupport.utils.JavaSystemProperty;
 
-public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor {
+public class ChunkSendIntervalPacketQueue implements IPacketDataProcessor {
 
 	protected static final long chunkSendInterval = TimeUnit.MILLISECONDS.toNanos(JavaSystemProperty.getValue("chunksend18interval", 5L, Long::parseLong));
 
@@ -30,17 +31,17 @@ public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor
 	}
 
 	@Override
-	public void process(ClientBoundPacketData packet) {
+	public void processClientbound(IPacketDataProcessorContext ctx, ClientBoundPacketData packetdata) {
 		if (locked) {
-			switch (packet.getPacketType()) {
+			switch (packetdata.getPacketType()) {
 				case PLAY_RESPAWN: {
 					clearQueue();
-					write(packet);
+					ctx.writeClientbound(packetdata);
 					break;
 				}
 				case PLAY_ENTITY_PASSENGERS: {
-					queue.add(packet.clone());
-					write(packet);
+					queue.add(packetdata.clone());
+					ctx.writeClientbound(packetdata);
 					break;
 				}
 				case PLAY_CHUNK_SINGLE:
@@ -52,33 +53,33 @@ public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor
 				case PLAY_BLOCK_TILE:
 				case CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN:
 				case CLIENTBOUND_LEGACY_PLAY_USE_BED: {
-					queue.add(packet);
+					queue.add(packetdata);
 					break;
 				}
 				default: {
-					write(packet);
+					ctx.writeClientbound(packetdata);
 					break;
 				}
 			}
 		} else {
-			write(packet);
-			if (shouldLock(packet)) {
-				lock();
+			ctx.writeClientbound(packetdata);
+			if (shouldLock(packetdata)) {
+				lock(ctx);
 			}
 		}
 	}
 
-	protected void lock() {
+	protected void lock(IPacketDataProcessorContext ctx) {
 		locked = true;
-		getIOExecutor().schedule(
+		ctx.getIOExecutor().schedule(
 			() -> {
 				locked = false;
 				if (!queue.isEmpty()) {
 					ClientBoundPacketData qPacket = null;
 					while ((qPacket = queue.pollFirst()) != null) {
-						write(qPacket);
+						ctx.writeClientbound(qPacket);
 						if (shouldLock(qPacket)) {
-							lock();
+							lock(ctx);
 						}
 					}
 				}
@@ -88,7 +89,7 @@ public class ChunkSendIntervalPacketQueue extends ClientBoundPacketDataProcessor
 	}
 
 	@Override
-	public void release() {
+	public void processorRemoved(IPacketDataProcessorContext ctx) {
 		clearQueue();
 	}
 

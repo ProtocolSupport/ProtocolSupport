@@ -1,0 +1,51 @@
+package protocolsupport.protocol.packet.middle.impl.clientbound.play.v_9r1_9r2;
+
+import protocolsupport.api.ProtocolVersion;
+import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.StringCodec;
+import protocolsupport.protocol.packet.ClientBoundPacketData;
+import protocolsupport.protocol.packet.ClientBoundPacketType;
+import protocolsupport.protocol.packet.middle.base.clientbound.play.MiddleWorldCustomSound;
+import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV9r1;
+import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV9r2;
+import protocolsupport.protocol.typeremapper.basic.SoundRemapper;
+import protocolsupport.protocol.types.SoundCategory;
+
+public class WorldCustomSound extends MiddleWorldCustomSound implements
+IClientboundMiddlePacketV9r1,
+IClientboundMiddlePacketV9r2 {
+
+	public WorldCustomSound(IMiddlePacketInit init) {
+		super(init);
+	}
+
+	@Override
+	protected void write() {
+		io.writeClientbound(create(version, x, y, z, id, category, volume, pitch));
+	}
+
+	public static ClientBoundPacketData create(
+		ProtocolVersion version,
+		double x, double y, double z,
+		String sound, SoundCategory category, float volume, float pitch
+	) {
+		return create(version, (int) (x * 8), (int) (y * 8), (int) (z * 8), sound, category, volume, pitch);
+	}
+
+	public static ClientBoundPacketData create(
+		ProtocolVersion version,
+		int x, int y, int z,
+		String sound, SoundCategory category, float volume, float pitch
+	) {
+		ClientBoundPacketData worldcustomsound = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_WORLD_CUSTOM_SOUND);
+		StringCodec.writeVarIntUTF8String(worldcustomsound, SoundRemapper.getSoundName(version, sound));
+		MiscDataCodec.writeVarIntEnum(worldcustomsound, category);
+		worldcustomsound.writeInt(x);
+		worldcustomsound.writeInt(y);
+		worldcustomsound.writeInt(z);
+		worldcustomsound.writeFloat(volume);
+		worldcustomsound.writeByte((int) (pitch * 63.5));
+		return worldcustomsound;
+	}
+
+}

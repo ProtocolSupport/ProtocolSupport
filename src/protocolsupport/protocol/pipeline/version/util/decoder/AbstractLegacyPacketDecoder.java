@@ -3,14 +3,16 @@ package protocolsupport.protocol.pipeline.version.util.decoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.middle.base.serverbound.IServerboundMiddlePacket;
+import protocolsupport.protocol.pipeline.IPacketDataChannelIO;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.utils.netty.ReplayingDecoderByteBuf;
 import protocolsupport.utils.netty.ReplayingDecoderByteBuf.EOFSignal;
 
-public abstract class AbstractLegacyPacketDecoder extends AbstractPacketDecoder {
+public abstract class AbstractLegacyPacketDecoder<T extends IServerboundMiddlePacket> extends AbstractPacketDecoder<T> {
 
-	protected AbstractLegacyPacketDecoder(ConnectionImpl connection) {
-		super(connection);
+	protected AbstractLegacyPacketDecoder(IPacketDataChannelIO io, NetworkDataCache cache) {
+		super(io, cache);
 	}
 
 	protected final ReplayingDecoderByteBuf buffer = new ReplayingDecoderByteBuf(Unpooled.buffer());

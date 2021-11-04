@@ -3,12 +3,14 @@ package protocolsupport.protocol.pipeline.version.util.decoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
-import protocolsupport.protocol.ConnectionImpl;
+import protocolsupport.protocol.packet.middle.base.serverbound.IServerboundMiddlePacket;
+import protocolsupport.protocol.pipeline.IPacketDataChannelIO;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 
-public abstract class AbstractModernPacketDecoder extends AbstractPacketDecoder {
+public abstract class AbstractModernPacketDecoder<T extends IServerboundMiddlePacket> extends AbstractPacketDecoder<T> {
 
-	protected AbstractModernPacketDecoder(ConnectionImpl connection) {
-		super(connection);
+	protected AbstractModernPacketDecoder(IPacketDataChannelIO io, NetworkDataCache cache) {
+		super(io, cache);
 	}
 
 	@Override

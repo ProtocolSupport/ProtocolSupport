@@ -1,40 +1,41 @@
 package protocolsupport.protocol.typeremapper.packet;
 
-import protocolsupport.protocol.PacketDataCodecImpl.ServerBoundPacketDataProcessor;
+import protocolsupport.protocol.packet.ServerBoundPacketData;
 import protocolsupport.protocol.packet.ServerBoundPacketType;
-import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.pipeline.IPacketDataChannelIO.IPacketDataProcessor;
+import protocolsupport.protocol.pipeline.IPacketDataChannelIO.IPacketDataProcessorContext;
 
-public class AnimatePacketReorderer extends ServerBoundPacketDataProcessor {
+public class AnimatePacketReorderer implements IPacketDataProcessor {
 
-	protected ServerBoundPacketData animatePacket;
+	protected ServerBoundPacketData animationPacket;
 
 	@Override
-	public void process(ServerBoundPacketData packet) {
-		ServerBoundPacketType packetType = packet.getPacketType();
+	public void processServerbound(IPacketDataProcessorContext ctx, ServerBoundPacketData packetdata) {
+		ServerBoundPacketType packetType = packetdata.getPacketType();
 
-		if (animatePacket != null) {
+		if (animationPacket != null) {
 			if (packetType == ServerBoundPacketType.PLAY_USE_ENTITY) {
-				read(packet);
-				read(animatePacket);
-				animatePacket = null;
+				ctx.writeServerbound(packetdata);
+				ctx.writeServerbound(animationPacket);
+				animationPacket = null;
 				return;
 			} else {
-				read(animatePacket);
-				animatePacket = null;
+				ctx.writeServerbound(animationPacket);
+				animationPacket = null;
 			}
 		}
 
 		if (packetType == ServerBoundPacketType.PLAY_ANIMATION) {
-			animatePacket = packet;
+			animationPacket = packetdata;
 		} else {
-			read(packet);
+			ctx.writeServerbound(packetdata);
 		}
 	}
 
 	@Override
-	public void release() {
-		if (animatePacket != null) {
-			animatePacket.release();
+	public void processorRemoved(IPacketDataProcessorContext ctx) {
+		if (animationPacket != null) {
+			animationPacket.release();
 		}
 	}
 

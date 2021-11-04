@@ -19,8 +19,8 @@ import io.netty.channel.MultithreadEventLoopGroup;
 import protocolsupport.api.utils.Profile;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
-import protocolsupport.protocol.pipeline.IPacketPrepender;
-import protocolsupport.protocol.pipeline.IPacketSplitter;
+import protocolsupport.protocol.pipeline.IPacketFrameEncoder;
+import protocolsupport.protocol.pipeline.IPacketFrameDecoder;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.utils.authlib.LoginProfile;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
@@ -73,7 +73,7 @@ public interface PlatformUtils {
 
 	public void enableEncryption(ChannelPipeline pipeline, SecretKey key, boolean fullEncryption);
 
-	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender);
+	public void setFraming(ChannelPipeline pipeline, IPacketFrameDecoder splitter, IPacketFrameEncoder prepender);
 
 	public AbstractHandshakeListener createHandshakeListener(NetworkManagerWrapper networkmanager);
 

@@ -67,8 +67,8 @@ import protocolsupport.api.utils.Profile;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.protocol.pipeline.IPacketPrepender;
-import protocolsupport.protocol.pipeline.IPacketSplitter;
+import protocolsupport.protocol.pipeline.IPacketFrameEncoder;
+import protocolsupport.protocol.pipeline.IPacketFrameDecoder;
 import protocolsupport.protocol.pipeline.common.PacketDecrypter;
 import protocolsupport.protocol.pipeline.common.PacketEncrypter;
 import protocolsupport.protocol.types.NetworkItemStack;
@@ -84,8 +84,8 @@ import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.impl.spigot.network.handler.SpigotHandshakeListener;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketCompressor;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketDecompressor;
-import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedPrepender;
-import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedSplitter;
+import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedFrameEncoder;
+import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedFrameDecoder;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotMiscUtils implements PlatformUtils {
@@ -367,9 +367,9 @@ public class SpigotMiscUtils implements PlatformUtils {
 	}
 
 	@Override
-	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender) {
-		((SpigotWrappedSplitter) pipeline.get(SpigotChannelHandlers.SPLITTER)).setRealSplitter(splitter);
-		((SpigotWrappedPrepender) pipeline.get(SpigotChannelHandlers.PREPENDER)).setRealPrepender(prepender);
+	public void setFraming(ChannelPipeline pipeline, IPacketFrameDecoder splitter, IPacketFrameEncoder prepender) {
+		((SpigotWrappedFrameDecoder) pipeline.get(SpigotChannelHandlers.SPLITTER)).setDecoder(splitter);
+		((SpigotWrappedFrameEncoder) pipeline.get(SpigotChannelHandlers.PREPENDER)).setEncoder(prepender);
 	}
 
 }

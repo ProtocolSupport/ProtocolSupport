@@ -5,14 +5,14 @@ import java.util.List;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.CorruptedFrameException;
-import protocolsupport.protocol.pipeline.IPacketSplitter;
+import protocolsupport.protocol.pipeline.IPacketFrameDecoder;
 
-public class VarIntFrameDecoder implements IPacketSplitter {
+public class VarIntFrameDecoder implements IPacketFrameDecoder {
 
 	private int packetLength = -1;
 
 	@Override
-	public void split(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) {
+	public void decodeFrame(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) {
 		if (packetLength == -1) {
 			input.markReaderIndex();
 			int tmpPacketLength = 0;

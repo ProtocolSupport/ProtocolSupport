@@ -4,12 +4,12 @@ import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import protocolsupport.protocol.pipeline.IPacketSplitter;
+import protocolsupport.protocol.pipeline.IPacketFrameDecoder;
 
-public class NoOpFrameDecoder implements IPacketSplitter {
+public class NoOpFrameDecoder implements IPacketFrameDecoder {
 
 	@Override
-	public void split(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) {
+	public void decodeFrame(ChannelHandlerContext ctx, ByteBuf input, List<Object> list) {
 		list.add(input.readSlice(input.readableBytes()).retain());
 	}
 

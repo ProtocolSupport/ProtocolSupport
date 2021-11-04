@@ -6,29 +6,31 @@ import java.util.Arrays;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderException;
-import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.PacketDataCodecImpl;
 import protocolsupport.protocol.codec.MiscDataCodec;
-import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
-import protocolsupport.protocol.pipeline.version.util.ConnectionImplMiddlePacketInit;
+import protocolsupport.protocol.packet.middle.base.serverbound.IServerboundMiddlePacket;
+import protocolsupport.protocol.pipeline.IPacketDataChannelIO;
+import protocolsupport.protocol.pipeline.version.util.MiddlePacketInitImpl;
 import protocolsupport.protocol.pipeline.version.util.MiddlePacketRegistry;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.zplatform.ServerPlatform;
 
-public abstract class AbstractPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
+public abstract class AbstractPacketDecoder<T extends IServerboundMiddlePacket> extends SimpleChannelInboundHandler<ByteBuf> {
 
-	protected final ConnectionImpl connection;
-	protected final MiddlePacketRegistry<ServerBoundMiddlePacket> registry;
-	protected final PacketDataCodecImpl codec;
+	protected final IPacketDataChannelIO io;
+	protected final MiddlePacketRegistry<T> registry;
 
-	protected AbstractPacketDecoder(ConnectionImpl connection) {
-		this.connection = connection;
-		this.codec = connection.getCodec();
-		this.registry = new MiddlePacketRegistry<>(new ConnectionImplMiddlePacketInit(connection));
+	protected AbstractPacketDecoder(IPacketDataChannelIO io, NetworkDataCache cache) {
+		this.io = io;
+		this.registry = new MiddlePacketRegistry<>(new MiddlePacketInitImpl(io, cache));
+	}
+
+	public MiddlePacketRegistry<T> getMiddlePacketRegistry() {
+		return registry;
 	}
 
 
 	protected void decodeAndTransform(ByteBuf input) {
-		registry.getTransformer(connection.getNetworkState(), codec.readPacketId(input)).decode(input);
+		registry.getTransformer(io.getNetworkState(), io.readPacketId(input)).decode(input);
 	}
 
 	protected void throwFailedTransformException(Exception exception, ByteBuf input) throws Exception {

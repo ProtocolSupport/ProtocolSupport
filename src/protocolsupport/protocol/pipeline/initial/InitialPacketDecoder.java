@@ -21,7 +21,7 @@ import protocolsupport.protocol.codec.MiscDataCodec;
 import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.protocol.pipeline.IPipeLineBuilder;
+import protocolsupport.protocol.pipeline.IPipelineBuilder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameDecoder;
 import protocolsupport.protocol.pipeline.common.VarIntFrameEncoder;
 import protocolsupport.utils.JavaSystemProperty;
@@ -57,58 +57,58 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		}
 	}
 
-	protected static final EnumMap<ProtocolVersion, IPipeLineBuilder> pipelineBuilders = new EnumMap<>(ProtocolVersion.class);
+	protected static final EnumMap<ProtocolVersion, IPipelineBuilder> pipelineBuilders = new EnumMap<>(ProtocolVersion.class);
 	static {
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_FUTURE, new protocolsupport.protocol.pipeline.version.v_f.PipeLineBuilder());
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_17_1, new protocolsupport.protocol.pipeline.version.v_1_17.r2.PipeLineBuilder());
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_17, new protocolsupport.protocol.pipeline.version.v_1_17.r1.PipeLineBuilder());
-		IPipeLineBuilder builder16r2 = new protocolsupport.protocol.pipeline.version.v_1_16.r2.PipeLineBuilder();
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_FUTURE, new protocolsupport.protocol.pipeline.version.v_f.PipelineBuilder());
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_17_1, new protocolsupport.protocol.pipeline.version.v_1_17.r2.PipelineBuilder());
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_17, new protocolsupport.protocol.pipeline.version.v_1_17.r1.PipelineBuilder());
+		IPipelineBuilder builder16r2 = new protocolsupport.protocol.pipeline.version.v_1_16.r2.PipelineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_16_4, builder16r2);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_16_3, builder16r2);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_16_2, builder16r2);
-		IPipeLineBuilder builder16r1 = new protocolsupport.protocol.pipeline.version.v_1_16.r1.PipeLineBuilder();
+		IPipelineBuilder builder16r1 = new protocolsupport.protocol.pipeline.version.v_1_16.r1.PipelineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_16_1, builder16r1);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_16, builder16r1);
-		IPipeLineBuilder builder15 = new protocolsupport.protocol.pipeline.version.v_1_15.PipeLineBuilder();
+		IPipelineBuilder builder15 = new protocolsupport.protocol.pipeline.version.v_1_15.PipelineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_15_2, builder15);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_15_1, builder15);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_15, builder15);
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_14_4, new protocolsupport.protocol.pipeline.version.v_1_14.r2.PipeLineBuilder());
-		IPipeLineBuilder builder14r1 = new protocolsupport.protocol.pipeline.version.v_1_14.r1.PipeLineBuilder();
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_14_4, new protocolsupport.protocol.pipeline.version.v_1_14.r2.PipelineBuilder());
+		IPipelineBuilder builder14r1 = new protocolsupport.protocol.pipeline.version.v_1_14.r1.PipelineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_14_3, builder14r1);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_14_2, builder14r1);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_14_1, builder14r1);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_14, builder14r1);
-		IPipeLineBuilder builder13 = new protocolsupport.protocol.pipeline.version.v_1_13.PipeLineBuilder();
+		IPipelineBuilder builder13 = new protocolsupport.protocol.pipeline.version.v_1_13.PipelineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_13_2, builder13);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_13_1, builder13);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_13, builder13);
-		IPipeLineBuilder builder12 = new protocolsupport.protocol.pipeline.version.v_1_12.r2.PipeLineBuilder();
+		IPipelineBuilder builder12 = new protocolsupport.protocol.pipeline.version.v_1_12.r2.PipelineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_12_2, builder12);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_12_1, builder12);
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_12, new protocolsupport.protocol.pipeline.version.v_1_12.r1.PipeLineBuilder());
-		IPipeLineBuilder builder11 = new protocolsupport.protocol.pipeline.version.v_1_11.PipeLineBuilder();
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_12, new protocolsupport.protocol.pipeline.version.v_1_12.r1.PipelineBuilder());
+		IPipelineBuilder builder11 = new protocolsupport.protocol.pipeline.version.v_1_11.PipelineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_11_1, builder11);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_11, builder11);
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_10, new protocolsupport.protocol.pipeline.version.v_1_10.PipeLineBuilder());
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_9_4, new protocolsupport.protocol.pipeline.version.v_1_9.r2.PipeLineBuilder());
-		IPipeLineBuilder builder9r1 = new protocolsupport.protocol.pipeline.version.v_1_9.r1.PipeLineBuilder();
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_10, new protocolsupport.protocol.pipeline.version.v_1_10.PipelineBuilder());
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_9_4, new protocolsupport.protocol.pipeline.version.v_1_9.r2.PipelineBuilder());
+		IPipelineBuilder builder9r1 = new protocolsupport.protocol.pipeline.version.v_1_9.r1.PipelineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_9_2, builder9r1);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_9_1, builder9r1);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_9, builder9r1);
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_8, new protocolsupport.protocol.pipeline.version.v_1_8.PipeLineBuilder());
-		IPipeLineBuilder builder7 = new protocolsupport.protocol.pipeline.version.v_1_7.PipeLineBuilder();
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_8, new protocolsupport.protocol.pipeline.version.v_1_8.PipelineBuilder());
+		IPipelineBuilder builder7 = new protocolsupport.protocol.pipeline.version.v_1_7.PipelineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_7_10, builder7);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_7_5, builder7);
-		IPipeLineBuilder builder6 = new protocolsupport.protocol.pipeline.version.v_1_6.PipeLineBuilder();
+		IPipelineBuilder builder6 = new protocolsupport.protocol.pipeline.version.v_1_6.PipelineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_6_4, builder6);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_6_2, builder6);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_6_1, builder6);
-		IPipeLineBuilder builder5 = new protocolsupport.protocol.pipeline.version.v_1_5.PipeLineBuilder();
+		IPipelineBuilder builder5 = new protocolsupport.protocol.pipeline.version.v_1_5.PipelineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_5_2, builder5);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_5_1, builder5);
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_4_7, new protocolsupport.protocol.pipeline.version.v_1_4.PipeLineBuilder());
-		pipelineBuilders.put(ProtocolVersion.MINECRAFT_LEGACY, new protocolsupport.protocol.pipeline.version.v_l.PipeLineBuilder());
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_4_7, new protocolsupport.protocol.pipeline.version.v_1_4.PipelineBuilder());
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_LEGACY, new protocolsupport.protocol.pipeline.version.v_l.PipelineBuilder());
 	}
 
 	protected final ReplayingDecoderByteBuf buffer = new ReplayingDecoderByteBuf(Unpooled.buffer());
@@ -270,11 +270,14 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
 	protected void setProtocol(Channel channel, ProtocolVersion version) {
 		ConnectionImpl connection = prepare(channel, version);
-		IPipeLineBuilder builder = pipelineBuilders.get(connection.getVersion());
-		builder.buildCodec(channel, connection);
-		connection.initIO();
+		IPipelineBuilder builder = pipelineBuilders.get(connection.getVersion());
+
+		builder.buildCodec(channel.pipeline(), connection.getPacketDataIO(), connection.getCache());
+		connection.initPacketDataIO(builder.getPacketIdCodec());
+		builder.buildPostProcessor(connection.getPacketDataIO());
+
 		if (encapsulatedinfo == null) {
-			builder.buildPipeLine(channel, connection);
+			builder.buildTransport(channel.pipeline());
 		} else {
 			PlatformUtils putils = ServerPlatform.get().getMiscUtils();
 			putils.setFraming(channel.pipeline(), new VarIntFrameDecoder(), new VarIntFrameEncoder());
@@ -285,6 +288,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 				connection.changeAddress(encapsulatedinfo.getAddress());
 			}
 		}
+
 		buffer.readerIndex(0);
 		channel.pipeline().firstContext().fireChannelRead(buffer.unwrap());
 	}

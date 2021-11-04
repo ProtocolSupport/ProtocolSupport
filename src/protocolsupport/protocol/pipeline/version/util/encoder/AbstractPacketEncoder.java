@@ -9,27 +9,30 @@ import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
-import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.PacketDataCodecImpl;
 import protocolsupport.protocol.codec.MiscDataCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
-import protocolsupport.protocol.packet.middle.ClientBoundMiddlePacket;
-import protocolsupport.protocol.pipeline.version.util.ConnectionImplMiddlePacketInit;
+import protocolsupport.protocol.packet.middle.base.clientbound.IClientboundMiddlePacket;
+import protocolsupport.protocol.pipeline.IPacketDataChannelIO;
+import protocolsupport.protocol.pipeline.version.util.MiddlePacketInitImpl;
 import protocolsupport.protocol.pipeline.version.util.MiddlePacketRegistry;
+import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.utils.netty.CombinedResultChannelPromise;
 import protocolsupport.zplatform.ServerPlatform;
 
-public abstract class AbstractPacketEncoder extends ChannelOutboundHandlerAdapter {
+public abstract class AbstractPacketEncoder<T extends IClientboundMiddlePacket> extends ChannelOutboundHandlerAdapter {
 
-	protected final ConnectionImpl connection;
-	protected final MiddlePacketRegistry<ClientBoundMiddlePacket> registry;
-	protected final PacketDataCodecImpl codec;
+	protected final IPacketDataChannelIO io;
+	protected final MiddlePacketRegistry<T> registry;
 
-	protected AbstractPacketEncoder(ConnectionImpl connection) {
-		this.connection = connection;
-		this.codec = connection.getCodec();
-		this.registry = new MiddlePacketRegistry<>(new ConnectionImplMiddlePacketInit(connection));
+	protected AbstractPacketEncoder(IPacketDataChannelIO io, NetworkDataCache cache) {
+		this.io = io;
+		this.registry = new MiddlePacketRegistry<>(new MiddlePacketInitImpl(io, cache));
 	}
+
+	public MiddlePacketRegistry<T> getMiddlePacketRegistry() {
+		return registry;
+	}
+
 
 	@Override
 	public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
@@ -44,18 +47,18 @@ public abstract class AbstractPacketEncoder extends ChannelOutboundHandlerAdapte
 			return;
 		}
 
-		ClientBoundMiddlePacket packetTransformer = null;
+		IClientboundMiddlePacket packetTransformer = null;
 		try {
-			packetTransformer = registry.getTransformer(connection.getNetworkState(), VarNumberCodec.readVarInt(input));
+			packetTransformer = registry.getTransformer(io.getNetworkState(), VarNumberCodec.readVarInt(input));
 			CombinedResultChannelPromise combinedPromise = new CombinedResultChannelPromise(ctx.channel(), promise);
-			codec.setWritePromise(combinedPromise);
+			io.setWritePromise(combinedPromise);
 			try {
 				packetTransformer.encode(input);
 				if (input.isReadable()) {
 					throw new DecoderException("Data not read fully, bytes left " + input.readableBytes());
 				}
 			} finally {
-				codec.clearWritePromise();
+				io.clearWritePromise();
 			}
 			combinedPromise.closeUsageRegister();
 		} catch (Throwable exception) {

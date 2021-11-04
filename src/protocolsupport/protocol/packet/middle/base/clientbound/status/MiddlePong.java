@@ -1,0 +1,19 @@
+package protocolsupport.protocol.packet.middle.base.clientbound.status;
+
+import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.packet.middle.base.clientbound.ClientBoundMiddlePacket;
+
+public abstract class MiddlePong extends ClientBoundMiddlePacket {
+
+	protected MiddlePong(IMiddlePacketInit init) {
+		super(init);
+	}
+
+	protected long pingId;
+
+	@Override
+	protected void decode(ByteBuf serverdata) {
+		pingId = serverdata.readLong();
+	}
+
+}

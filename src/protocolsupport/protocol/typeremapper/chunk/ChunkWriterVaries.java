@@ -5,7 +5,7 @@ import java.util.BitSet;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.codec.ArrayCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
-import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.typeremapper.block.BlockRemappingHelper;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;

@@ -1,53 +1,34 @@
 package protocolsupport.protocol.pipeline;
 
-import java.util.Arrays;
-import java.util.NoSuchElementException;
-
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.packet.ClientBoundPacketType;
-import protocolsupport.protocol.packet.PacketData;
-import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
-import protocolsupport.protocol.packet.middleimpl.ServerBoundPacketData;
+import protocolsupport.protocol.codec.VarNumberCodec;
+import protocolsupport.protocol.packet.ClientBoundPacketData;
+import protocolsupport.protocol.packet.ServerBoundPacketData;
 
-public abstract class IPacketIdCodec {
+public interface IPacketIdCodec {
 
-	protected final ClientboundPacketIdTransformerRegistry registry = new ClientboundPacketIdTransformerRegistry(ClientBoundPacketType.getValuesCount());
-
-	public abstract int readPacketId(ByteBuf from);
-
-	protected abstract void writePacketId(PacketData<?, ?> to, int packetId);
-
-	public void writeServerBoundPacketId(ServerBoundPacketData to) {
-		writePacketId(to, to.getPacketType().getId());
+	public static void writeServerBoundPacketId(ServerBoundPacketData to) {
+		int packetId = to.getPacketType().getId();
+		to.writeHeadSpace(VarNumberCodec.calculateVarIntSize(packetId), packetId, VarNumberCodec::writeVarInt);
 	}
 
-	public void writeClientBoundPacketId(ClientBoundPacketData to) {
-		writePacketId(to, registry.getPacketId(to.getPacketType()));
-	}
+	public static final IPacketIdCodec LATEST = new IPacketIdCodec() {
 
-
-	protected static class ClientboundPacketIdTransformerRegistry {
-
-		protected static final int NO_ENTRY = -1;
-
-		protected final int[] registry;
-
-		public ClientboundPacketIdTransformerRegistry(int size) {
-			this.registry = new int[size];
-			Arrays.fill(registry, NO_ENTRY);
+		@Override
+		public int readServerBoundPacketId(ByteBuf from) {
+			return VarNumberCodec.readVarInt(from);
 		}
 
-		public void register(ClientBoundPacketType type, int newPacketId) {
-			registry[type.ordinal()] = newPacketId;
+		@Override
+		public void writeClientBoundPacketId(ClientBoundPacketData to) {
+			int packetId = to.getPacketType().getId();
+			to.writeHeadSpace(VarNumberCodec.calculateVarIntSize(packetId), packetId, VarNumberCodec::writeVarInt);
 		}
 
-		public int getPacketId(ClientBoundPacketType type) {
-			int id = registry[type.ordinal()];
-			if (id == NO_ENTRY) {
-				throw new NoSuchElementException("No packet id found for clientbound packet type " + type.name());
-			}
-			return id;
-		}
-	}
+	};
+
+	public int readServerBoundPacketId(ByteBuf from);
+
+	public void writeClientBoundPacketId(ClientBoundPacketData to);
 
 }

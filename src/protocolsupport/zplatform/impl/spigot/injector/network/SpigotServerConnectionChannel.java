@@ -21,8 +21,8 @@ import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper
 import protocolsupport.zplatform.impl.spigot.network.handler.SpigotFakePacketListener;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketDecoder;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketEncoder;
-import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedPrepender;
-import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedSplitter;
+import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedFrameEncoder;
+import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedFrameDecoder;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotServerConnectionChannel extends ChannelInitializer {
@@ -40,8 +40,8 @@ public class SpigotServerConnectionChannel extends ChannelInitializer {
 		pipeline.addBefore(SpigotChannelHandlers.NETWORK_MANAGER, ChannelHandlers.LOGIC, new LogicHandler(connection, Packet.class));
 		pipeline.remove("legacy_query");
 		pipeline.replace(SpigotChannelHandlers.READ_TIMEOUT, SpigotChannelHandlers.READ_TIMEOUT, new SimpleReadTimeoutHandler(30));
-		pipeline.replace(SpigotChannelHandlers.SPLITTER, SpigotChannelHandlers.SPLITTER, new SpigotWrappedSplitter());
-		pipeline.replace(SpigotChannelHandlers.PREPENDER, SpigotChannelHandlers.PREPENDER, new SpigotWrappedPrepender());
+		pipeline.replace(SpigotChannelHandlers.SPLITTER, SpigotChannelHandlers.SPLITTER, new SpigotWrappedFrameDecoder());
+		pipeline.replace(SpigotChannelHandlers.PREPENDER, SpigotChannelHandlers.PREPENDER, new SpigotWrappedFrameEncoder());
 		pipeline.addAfter(SpigotChannelHandlers.PREPENDER, ChannelHandlers.RAW_CAPTURE_SEND, new RawPacketDataCaptureSend(connection));
 		pipeline.addAfter(SpigotChannelHandlers.SPLITTER, ChannelHandlers.RAW_CAPTURE_RECEIVE, new RawPacketDataCaptureReceive(connection));
 		if (replaceDecoderEncoder) {

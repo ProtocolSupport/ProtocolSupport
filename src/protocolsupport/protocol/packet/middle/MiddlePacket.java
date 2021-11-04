@@ -1,20 +1,20 @@
 package protocolsupport.protocol.packet.middle;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.packet.PacketDataCodec;
+import protocolsupport.protocol.pipeline.IPacketDataIO;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
 import protocolsupport.utils.reflection.ReflectionUtils;
 
-public abstract class MiddlePacket {
+public abstract class MiddlePacket implements IMiddlePacket {
 
-	protected final PacketDataCodec codec;
+	protected final IPacketDataIO io;
 	protected final NetworkDataCache cache;
 	protected final ProtocolVersion version;
 
-	protected MiddlePacket(MiddlePacketInit init) {
-		this.codec = init.getCodec();
+	protected MiddlePacket(IMiddlePacketInit init) {
+		this.io = init.getIO();
 		this.cache = init.getCache();
-		this.version = init.getVersion();
+		this.version = io.getVersion();
 	}
 
 	@Override
@@ -22,11 +22,9 @@ public abstract class MiddlePacket {
 		return ReflectionUtils.toStringAllFields(this);
 	}
 
-	public static interface MiddlePacketInit {
+	public static interface IMiddlePacketInit {
 
-		public PacketDataCodec getCodec();
-
-		public ProtocolVersion getVersion();
+		public IPacketDataIO getIO();
 
 		public NetworkDataCache getCache();
 
