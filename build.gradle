@@ -6,7 +6,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath group: 'com.github.HurricaneGamesOrg', name: 'ManualGradleDependencySupplier', version: 'f6f36bec29'
+		classpath group: 'com.github.Shevchik', name: 'ManualGradleDependencySupplier', version: 'da3dbf04be'
 	}
 }
 
@@ -16,7 +16,7 @@ plugins {
 	id 'maven-publish'
 }
 
-apply plugin: 'org.hurricanegames.ManualGradleDependencySupplier'
+apply plugin: 'io.github.shevchik.ManualGradleDependencySupplier'
 
 
 gradle.startParameter.showStacktrace = org.gradle.api.logging.configuration.ShowStacktrace.ALWAYS
@@ -32,13 +32,12 @@ version '1.17.1-2-dev'
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.Files
-import java.nio.file.SimpleFileVisitor
-import java.nio.file.FileVisitResult
-import java.nio.file.attribute.BasicFileAttributes
+import java.nio.file.StandardCopyOption;
 
-import org.hurricanegames.manualgradledependencysupplier.DependencySupplier
-import org.hurricanegames.manualgradledependencysupplier.BuildDependencySupplier
-import org.hurricanegames.manualgradledependencysupplier.ManualGradleDependencySupplier
+import io.github.shevchik.manualgradledependencysupplier.DependencySupplier
+import io.github.shevchik.manualgradledependencysupplier.BuildDependencySupplier
+import io.github.shevchik.manualgradledependencysupplier.ManualGradleDependencySupplier
+import io.github.shevchik.manualgradledependencysupplier.FilterZipFileDependencySupplier
 
 
 Path projectDirectoryPath = projectDir.toPath().toAbsolutePath()
@@ -84,40 +83,32 @@ repositories {
 	}
 }
 
-configurations {
-	runtimeDependencies
-	compileOnly {
-		extendsFrom runtimeDependencies
-	}
-	testImplementation {
-	    extendsFrom runtimeDependencies
-	}
-}
-
 dependencies {
 	Path spigotBuildDirectoryPath = projectBuildDirectoryPath.resolve('spigot')
-	FileCollection runtimeLibraries = ManualGradleDependencySupplier.supplyDependecies(
-		projectDirectoryPath.resolve('libraries_runtime'),
-		[
-			new BuildDependencySupplier(
-				'spigot-1.17.1-1.jar',
-				new URL('https://hub.spigotmc.org/jenkins/job/BuildTools/128/artifact/target/BuildTools.jar'),
-				spigotBuildDirectoryPath,
-				'BuildTools.jar',
-				['java', '-jar', 'BuildTools.jar', '--rev', '1.17.1'],
-				['spigot-1.17.1.jar']
-			).setBuildEnv([
-				'MAVEN_OPTS': '-Dmaven.repo.local=' + spigotBuildDirectoryPath.resolve('m2').toString() + ' -Xmx1024M'
-			])
-		],
-		true
-	)
+
+	DependencySupplier spigotDependencySupplier = new BuildDependencySupplier(
+		new URL('https://hub.spigotmc.org/jenkins/job/BuildTools/128/artifact/target/BuildTools.jar'),
+		spigotBuildDirectoryPath,
+		'BuildTools.jar',
+		['java', '-jar', 'BuildTools.jar', '--rev', '1.17.1'],
+		['spigot-1.17.1.jar']
+	).setBuildEnv([
+		'MAVEN_OPTS': '-Dmaven.repo.local=' + spigotBuildDirectoryPath.resolve('m2').toString() + ' -Xmx1024M'
+	])
 
 	FileCollection annotationProcessors = fileTree(dir: projectDirectoryPath.resolve('processors'), include: '*.jar')
 
-	runtimeDependencies group: 'io.papermc.paper', name: 'paper-api', version: '1.17-R0.1-SNAPSHOT'
-	runtimeDependencies annotationProcessors
-	runtimeDependencies runtimeLibraries
+	compileOnly group: 'io.netty', name: 'netty-all', version: '4.1.70.Final'
+	compileOnly group: 'io.papermc.paper', name: 'paper-api', version: '1.17.1-R0.1-SNAPSHOT'
+	compileOnly annotationProcessors
+	compileOnly ManualGradleDependencySupplier.supplyDependecies([
+		new FilterZipFileDependencySupplier(
+			spigotDependencySupplier,
+			['/net/minecraft', '/com/mojang', '/org/bukkit/craftbukkit', '/org/spigotmc'], true,
+			spigotBuildDirectoryPath,
+			'spigot-1.17.1-1-filtered-compile.jar'
+		)
+	])
 
 
 	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
@@ -127,16 +118,19 @@ dependencies {
 
 	annotationProcessor annotationProcessors
 
+	testImplementation ManualGradleDependencySupplier.supplyDependecies([
+		new FilterZipFileDependencySupplier(
+			spigotDependencySupplier,
+			['/com/google/gson'], false,
+			spigotBuildDirectoryPath,
+			'spigot-1.17.1-1-filtered-test.jar'
+		)
+	])
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.2.0'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
 }
 
 compileJava {
-	doFirst {
-	    classpath -= configurations.runtimeDependencies
-	    classpath += configurations.runtimeDependencies
-	}
-
 	options.encoding = 'UTF-8'
 	options.incremental = false
 	options.compilerArgs << ('-Aprotocolsupportbuildprocessor.generatedresourcesdirectory=' + generatedResourcesResourcesDirectoryPath.resolve('preload').toString())
@@ -147,9 +141,6 @@ test {
 	Path workingDirectoryPath = projectDirectoryPath.resolve('testsRun');
 
 	doFirst {
-		classpath -= configurations.runtimeDependencies
-		classpath += configurations.runtimeDependencies
-
 		Files.createDirectories(workingDirectoryPath)
 	}
 
@@ -204,14 +195,12 @@ task copyFinalJarToTarget(type: DefaultTask) {doLast{
 	Files.copy(
 		shadowJar.archiveFile.get().getAsFile().toPath().toAbsolutePath(),
 		targetJarDirectory.resolve(shadowJar.archiveBaseName.get() + '.jar'),
-		java.nio.file.StandardCopyOption.REPLACE_EXISTING
+		StandardCopyOption.REPLACE_EXISTING
 	)
 }}
 
 
-compileJava.dependsOn(clean)
 compileJava.dependsOn(setupFolders)
-test.dependsOn(cleanTest)
 compileJava.finalizedBy(test)
 jar.enabled = false
 jar.finalizedBy(shadowJar)
