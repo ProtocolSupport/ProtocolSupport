@@ -1,14 +1,15 @@
 package protocolsupport.protocol.typeremapper.block;
 
 import java.util.Arrays;
+import java.util.Map.Entry;
 
 import org.bukkit.Material;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData;
-import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
 
@@ -25,8 +26,8 @@ public class PreFlatteningBlockIdData {
 		Arrays.fill(toLegacyId, Material.LEGACY_BEDROCK.getId() << 4);
 
 		JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("preflatteningblockdataid.json"));
-		for (String blockdataString : rootObject.keySet()) {
-			toLegacyId[Integer.parseInt(blockdataString)] = JsonUtils.getInt(rootObject, blockdataString);
+		for (Entry<String, JsonElement> blockdataEntry : rootObject.entrySet()) {
+			toLegacyId[Integer.parseInt(blockdataEntry.getKey())] = blockdataEntry.getValue().getAsInt();
 		}
 	}
 

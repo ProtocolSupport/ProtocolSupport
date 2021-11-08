@@ -3,11 +3,13 @@ package protocolsupport.protocol.typeremapper.itemstack.legacy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import org.bukkit.Material;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import protocolsupport.api.ProtocolVersion;
@@ -20,7 +22,6 @@ import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftItemData;
 import protocolsupport.utils.CollectionsUtils;
-import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
 
@@ -42,12 +43,10 @@ public class ItemStackLegacyData {
 			clear();
 
 			JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("legacyitemtype.json"));
-			for (String versionString : rootObject.keySet()) {
-				ProtocolVersion version = ProtocolVersion.valueOf(versionString);
-				JsonObject entriesObject = rootObject.get(versionString).getAsJsonObject();
-				ItemStackLegacyDataTable table = getTable(version);
-				for (String itemidString : entriesObject.keySet()) {
-					table.set(Integer.parseInt(itemidString), CollectionsUtils.createSingletonArrayList(new ItemStackLegacyDataTypeMappingOperator(JsonUtils.getInt(entriesObject, itemidString))));
+			for (Entry<String, JsonElement> rootEntry : rootObject.entrySet()) {
+				ItemStackLegacyDataTable table = getTable(ProtocolVersion.valueOf(rootEntry.getKey()));
+				for (Entry<String, JsonElement> itemidEntry : rootEntry.getValue().getAsJsonObject().entrySet()) {
+					table.set(Integer.parseInt(itemidEntry.getKey()), CollectionsUtils.createSingletonArrayList(new ItemStackLegacyDataTypeMappingOperator(itemidEntry.getValue().getAsInt())));
 				}
 			}
 

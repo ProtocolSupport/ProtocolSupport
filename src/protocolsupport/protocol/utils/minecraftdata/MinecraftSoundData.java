@@ -1,12 +1,14 @@
 package protocolsupport.protocol.utils.minecraftdata;
 
+import java.util.Map.Entry;
+
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
 
@@ -24,8 +26,8 @@ public class MinecraftSoundData {
 
 	static {
 		JsonObject rootObject = ResourceUtils.getAsJsonObject(MinecraftDataResourceUtils.getResourcePath("sounds.json"));
-		for (String soundidString : rootObject.keySet()) {
-			register(Integer.parseInt(soundidString), JsonUtils.getString(rootObject, soundidString));
+		for (Entry<String, JsonElement> soundidnameEntry : rootObject.entrySet()) {
+			register(Integer.parseInt(soundidnameEntry.getKey()), soundidnameEntry.getValue().getAsString());
 		}
 	}
 

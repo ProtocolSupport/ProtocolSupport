@@ -1,16 +1,17 @@
 package protocolsupport.protocol.typeremapper.itemstack;
 
 import java.util.Arrays;
+import java.util.Map.Entry;
 
 import org.bukkit.Material;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftItemData;
-import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
 
@@ -36,8 +37,8 @@ public class PreFlatteningItemIdData {
 		Arrays.fill(toLegacyId, combinedLegacyStoneId);
 
 		JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("preflatteningitemid.json"));
-		for (String blockdataString : rootObject.keySet()) {
-			register(Integer.parseInt(blockdataString), JsonUtils.getInt(rootObject, blockdataString));
+		for (Entry<String, JsonElement> itemEntry : rootObject.entrySet()) {
+			register(Integer.parseInt(itemEntry.getKey()), itemEntry.getValue().getAsInt());
 		}
 	}
 

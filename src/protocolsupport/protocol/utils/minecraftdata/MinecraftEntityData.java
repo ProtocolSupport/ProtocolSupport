@@ -1,15 +1,17 @@
 package protocolsupport.protocol.utils.minecraftdata;
 
+import java.util.Map.Entry;
+
 import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnull;
 
 import org.bukkit.NamespacedKey;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import protocolsupport.utils.JsonUtils;
 import protocolsupportbuildprocessor.Preload;
 
 @Preload
@@ -27,8 +29,8 @@ public class MinecraftEntityData {
 
 	static {
 		JsonObject rootObject = MinecraftDataResourceUtils.getResourceAsJsonObject("entity.json");
-		for (String entityNameString : rootObject.keySet()) {
-			register(entityNameString, JsonUtils.getInt(rootObject, entityNameString));
+		for (Entry<String, JsonElement> entitynameidEntry : rootObject.entrySet()) {
+			register(entitynameidEntry.getKey(), entitynameidEntry.getValue().getAsInt());
 		}
 	}
 

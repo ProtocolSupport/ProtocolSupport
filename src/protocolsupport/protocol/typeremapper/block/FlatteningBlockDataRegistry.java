@@ -1,5 +1,8 @@
 package protocolsupport.protocol.typeremapper.block;
 
+import java.util.Map.Entry;
+
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import protocolsupport.api.ProtocolVersion;
@@ -19,14 +22,13 @@ public class FlatteningBlockDataRegistry extends MappingRegistry<FlatteningBlock
 
 	public FlatteningBlockDataRegistry() {
 		JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("flatteningblockdata.json"));
-		for (String versionString : rootObject.keySet()) {
-			JsonObject entriesObject = rootObject.get(versionString).getAsJsonObject();
-			FlatteningBlockDataTable table = getTable(ProtocolVersion.valueOf(versionString));
-			for (String blockdataidString : entriesObject.keySet()) {
-				JsonObject entryObject = entriesObject.get(blockdataidString).getAsJsonObject();
+		for (Entry<String, JsonElement> rootEntry : rootObject.entrySet()) {
+			FlatteningBlockDataTable table = getTable(ProtocolVersion.valueOf(rootEntry.getKey()));
+			for (Entry<String, JsonElement> blockdataidEntry : rootEntry.getValue().getAsJsonObject().entrySet()) {
+				JsonObject blockdataidObject = blockdataidEntry.getValue().getAsJsonObject();
 				table.set(
-					Integer.parseInt(blockdataidString),
-					new FlatteningBlockDataEntry(JsonUtils.getInt(entryObject, "bdId"), JsonUtils.getInt(entryObject, "bId"))
+					Integer.parseInt(blockdataidEntry.getKey()),
+					new FlatteningBlockDataEntry(JsonUtils.getInt(blockdataidObject, "bdId"), JsonUtils.getInt(blockdataidObject, "bId"))
 				);
 			}
 		}

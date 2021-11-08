@@ -1,12 +1,14 @@
 package protocolsupport.protocol.utils.minecraftdata;
 
+import java.util.Map.Entry;
+
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
 
@@ -28,8 +30,8 @@ public class MinecraftPotionData {
 
 	static {
 		JsonObject rootObject = ResourceUtils.getAsJsonObject(MinecraftDataResourceUtils.getResourcePath("potions.json"));
-		for (String potionidString : rootObject.keySet()) {
-			register(Integer.parseInt(potionidString), JsonUtils.getString(rootObject, potionidString));
+		for (Entry<String, JsonElement> potionidnameEntry : rootObject.entrySet()) {
+			register(Integer.parseInt(potionidnameEntry.getKey()), potionidnameEntry.getValue().getAsString());
 		}
 	}
 

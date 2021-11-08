@@ -1,5 +1,8 @@
 package protocolsupport.protocol.typeremapper.entity;
 
+import java.util.Map.Entry;
+
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import protocolsupport.api.ProtocolVersion;
@@ -7,7 +10,6 @@ import protocolsupport.protocol.typeremapper.utils.MappingRegistry.IntMappingReg
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ThrowingArrayBasedIntTable;
 import protocolsupport.protocol.utils.MappingsData;
-import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
 
@@ -18,11 +20,10 @@ public class FlatteningNetworkEntityIdRegistry extends IntMappingRegistry<Throwi
 
 	public FlatteningNetworkEntityIdRegistry() {
 		JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("flatteningentity.json"));
-		for (String versionString : rootObject.keySet()) {
-			JsonObject entriesObject = rootObject.get(versionString).getAsJsonObject();
-			ArrayBasedIntMappingTable table = getTable(ProtocolVersion.valueOf(versionString));
-			for (String entityidString : entriesObject.keySet()) {
-				table.set(Integer.parseInt(entityidString), JsonUtils.getInt(entriesObject, entityidString));
+		for (Entry<String, JsonElement> rootEntry : rootObject.entrySet()) {
+			ArrayBasedIntMappingTable table = getTable(ProtocolVersion.valueOf(rootEntry.getKey()));
+			for (Entry<String, JsonElement> entityidEntry : rootEntry.getValue().getAsJsonObject().entrySet()) {
+				table.set(Integer.parseInt(entityidEntry.getKey()), entityidEntry.getValue().getAsInt());
 			}
 		}
 	}

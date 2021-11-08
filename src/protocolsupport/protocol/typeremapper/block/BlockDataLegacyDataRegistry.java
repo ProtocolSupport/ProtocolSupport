@@ -1,5 +1,8 @@
 package protocolsupport.protocol.typeremapper.block;
 
+import java.util.Map.Entry;
+
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import protocolsupport.api.ProtocolVersion;
@@ -7,7 +10,6 @@ import protocolsupport.protocol.typeremapper.utils.MappingRegistry.IntMappingReg
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.utils.MappingsData;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftBlockData;
-import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
 
@@ -24,11 +26,10 @@ public class BlockDataLegacyDataRegistry extends IntMappingRegistry<ArrayBasedIn
 		clear();
 
 		JsonObject rootObject = ResourceUtils.getAsJsonObject(MappingsData.getResourcePath("legacyblockdata.json"));
-		for (String versionString : rootObject.keySet()) {
-			JsonObject entriesObject = rootObject.get(versionString).getAsJsonObject();
-			ArrayBasedIntMappingTable table = getTable(ProtocolVersion.valueOf(versionString));
-			for (String blockdataidString : entriesObject.keySet()) {
-				table.set(Integer.parseInt(blockdataidString), JsonUtils.getInt(entriesObject, blockdataidString));
+		for (Entry<String, JsonElement> rootEntry : rootObject.entrySet()) {
+			ArrayBasedIntMappingTable table = getTable(ProtocolVersion.valueOf(rootEntry.getKey()));
+			for (Entry<String, JsonElement> blockdataidEntry : rootEntry.getValue().getAsJsonObject().entrySet()) {
+				table.set(Integer.parseInt(blockdataidEntry.getKey()), blockdataidEntry.getValue().getAsInt());
 			}
 		}
 	}
