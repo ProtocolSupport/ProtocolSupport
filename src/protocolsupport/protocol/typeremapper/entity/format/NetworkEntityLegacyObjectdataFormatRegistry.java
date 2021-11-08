@@ -35,7 +35,10 @@ public class NetworkEntityLegacyObjectdataFormatRegistry extends MappingRegistry
 		register(NetworkEntityType.FALLING_OBJECT, (IntUnaryOperator) PreFlatteningBlockIdData::getCombinedIdM12, ProtocolVersionsHelper.RANGE__1_8__1_12_2);
 		register(NetworkEntityType.FALLING_OBJECT, (IntUnaryOperator) PreFlatteningBlockIdData::getCombinedIdM16, ProtocolVersionsHelper.DOWN_1_7_10);
 
-		register(NetworkEntityType.ARROW, (IntUnaryOperator) entityId -> entityId - 1, ProtocolVersionsHelper.DOWN_1_8);
+		IntUnaryOperator entityIdOffset = entityId -> entityId + 1;
+		register(NetworkEntityType.ARROW, entityIdOffset, ProtocolVersionsHelper.RANGE__1_9__1_13_2);
+		register(NetworkEntityType.TIPPED_ARROW, entityIdOffset, ProtocolVersionsHelper.RANGE__1_9__1_13_2);
+		register(NetworkEntityType.SPECTRAL_ARROW, entityIdOffset, ProtocolVersionsHelper.RANGE__1_9__1_13_2);
 
 		register(NetworkEntityType.MINECART, (IntUnaryOperator) i -> 0, ProtocolVersionsHelper.DOWN_1_8);
 		register(NetworkEntityType.MINECART_CHEST, (IntUnaryOperator) i -> 1, ProtocolVersionsHelper.DOWN_1_8);
