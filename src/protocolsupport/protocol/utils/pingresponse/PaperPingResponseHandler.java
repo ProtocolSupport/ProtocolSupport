@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.spigotmc.SpigotConfig;
@@ -16,9 +15,11 @@ import com.destroystokyo.paper.network.StatusClient;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import protocolsupport.api.Connection;
 import protocolsupport.api.events.ServerPingResponseEvent;
 import protocolsupport.api.events.ServerPingResponseEvent.ProtocolInfo;
+import protocolsupport.protocol.codec.chat.ChatCodec;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class PaperPingResponseHandler extends PingResponseHandler {
@@ -35,7 +36,7 @@ public class PaperPingResponseHandler extends PingResponseHandler {
 	public ServerPingResponseEvent createResponse(Connection connection) {
 		PaperServerListPingEvent bevent = new PaperServerListPingEvent(
 			new StatusClientImpl(connection),
-			Bukkit.getMotd(),
+			Bukkit.motd(),
 			Bukkit.getOnlinePlayers().size(), Bukkit.getMaxPlayers(),
 			createServerVersionString(), connection.getVersion().getId(),
 			Bukkit.getServerIcon()
@@ -51,9 +52,9 @@ public class PaperPingResponseHandler extends PingResponseHandler {
 			connection,
 			new ProtocolInfo(bevent.getProtocolVersion(), bevent.getVersion()),
 			bevent.getServerIcon() != null ? ServerPlatform.get().getMiscUtils().convertBukkitIconToBase64(bevent.getServerIcon()) : null,
-			bevent.getMotd(),
+			ChatCodec.deserializeTree(GsonComponentSerializer.gson().serializeToTree(bevent.motd())),
 			bevent.getNumPlayers(), bevent.getMaxPlayers(),
-			bevent.getPlayerSample().stream().map(PlayerProfile::getName).collect(Collectors.toList())
+			bevent.getPlayerSample().stream().map(PlayerProfile::getName).toList()
 		);
 		Bukkit.getPluginManager().callEvent(revent);
 

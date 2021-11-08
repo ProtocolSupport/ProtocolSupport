@@ -65,9 +65,9 @@ public abstract class AbstractHandshakeListener implements IPacketListener {
 				}
 				hostname = event.getHostname();
 				boolean proxyEnabled = event.shouldParseHostname() && ServerPlatform.get().getMiscUtils().isProxyEnabled();
-				SpoofedData sdata = SpoofedDataParser.tryParse(hostname, proxyEnabled);
+				SpoofedData sdata = SpoofedDataParser.tryParse(connection, hostname, proxyEnabled);
 				if (sdata.isFailed()) {
-					disconnect(BaseComponent.fromMessage(sdata.getFailMessage()));
+					disconnect(sdata.getFailMessage());
 					return;
 				}
 				if (proxyEnabled) {

@@ -97,6 +97,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	protected void joinWorld() {
 		if (!ServerPlatform.get().getMiscUtils().isRunning()) {
 			disconnect(BaseComponent.fromMessage(org.spigotmc.SpigotConfig.restartMessage));

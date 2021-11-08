@@ -104,6 +104,7 @@ public class ConnectionImpl extends Connection {
 		networkmanager.close(new TextComponent("Force connection close"));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void disconnect(BaseComponent message) {
 		Player player = getPlayer();

@@ -3,12 +3,13 @@ package protocolsupport.protocol.utils.spoofedata;
 import java.util.Collection;
 import java.util.UUID;
 
+import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class SpoofedData {
 
-	public static SpoofedData createFailed(String failmessage) {
+	public static SpoofedData createFailed(BaseComponent failmessage) {
 		return new SpoofedData(null, null, null, null, failmessage);
 	}
 
@@ -25,9 +26,9 @@ public class SpoofedData {
 	private final UUID uuid;
 	private final Collection<ProfileProperty> properties;
 
-	private final String failMessage;
+	private final BaseComponent failMessage;
 
-	protected SpoofedData(String hostname, String address, UUID uuid, Collection<ProfileProperty> properties, String failmessage) {
+	protected SpoofedData(String hostname, String address, UUID uuid, Collection<ProfileProperty> properties, BaseComponent failmessage) {
 		this.hostname = hostname;
 		this.address = address;
 		this.uuid = uuid;
@@ -55,7 +56,7 @@ public class SpoofedData {
 		return failMessage != null;
 	}
 
-	public String getFailMessage() {
+	public BaseComponent getFailMessage() {
 		return failMessage;
 	}
 

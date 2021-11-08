@@ -4,7 +4,6 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -19,6 +18,7 @@ import protocolsupport.zplatform.ServerPlatform;
 
 public class SpigotPingResponseHandler extends PingResponseHandler {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public ServerPingResponseEvent createResponse(Connection connection) {
 		List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
@@ -39,7 +39,7 @@ public class SpigotPingResponseHandler extends PingResponseHandler {
 			bevent.players.stream()
 			.limit(SpigotConfig.playerSample)
 			.map(Player::getName)
-			.collect(Collectors.toList())
+			.toList()
 		);
 		Bukkit.getPluginManager().callEvent(revent);
 
@@ -49,6 +49,8 @@ public class SpigotPingResponseHandler extends PingResponseHandler {
 	protected static class InternalServerListPingEvent extends ServerListPingEvent {
 
 		protected final List<Player> players;
+
+		@SuppressWarnings("deprecation")
 		protected InternalServerListPingEvent(InetAddress address, String motd, int maxPlayers, List<Player> players) {
 			super(address, motd, maxPlayers);
 			this.players = players;

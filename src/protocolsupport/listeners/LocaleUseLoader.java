@@ -10,6 +10,7 @@ import protocolsupport.api.TranslationAPI;
 
 public class LocaleUseLoader implements Listener {
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onLocaleChange(PlayerLocaleChangeEvent event) {
 		if (TranslationAPI.isBuiltInLoaderEnabled()) {

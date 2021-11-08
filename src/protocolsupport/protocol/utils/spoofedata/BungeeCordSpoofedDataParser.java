@@ -5,6 +5,8 @@ import java.util.Collection;
 
 import com.google.common.reflect.TypeToken;
 
+import protocolsupport.api.Connection;
+import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.utils.authlib.UUIDTypeAdapter;
 import protocolsupport.utils.JsonUtils;
@@ -15,11 +17,11 @@ public class BungeeCordSpoofedDataParser extends SpoofedDataParser {
 	protected static final Type properties_type = new TypeToken<Collection<ProfileProperty>>() {}.getType();
 
 	@Override
-	protected SpoofedData parse(String data, boolean proxyEnabled) {
+	protected SpoofedData parse(Connection connection, String data, boolean proxyEnabled) {
 		final String[] split = data.split("\u0000");
 		if (proxyEnabled) {
 			if ((split.length != 3) && (split.length != 4)) {
-				return SpoofedData.createFailed("Ip forwarding is enabled but spoofed data can't be decoded or is missing");
+				return SpoofedData.createFailed(new TextComponent("Ip forwarding is enabled but spoofed data can't be decoded or is missing"));
 			} else {
 				return SpoofedData.create(split[0],
 					split[1],

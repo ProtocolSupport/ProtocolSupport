@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
-import java.util.stream.Collectors;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -67,8 +66,8 @@ import protocolsupport.api.utils.Profile;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
-import protocolsupport.protocol.pipeline.IPacketFrameEncoder;
 import protocolsupport.protocol.pipeline.IPacketFrameDecoder;
+import protocolsupport.protocol.pipeline.IPacketFrameEncoder;
 import protocolsupport.protocol.pipeline.common.PacketDecrypter;
 import protocolsupport.protocol.pipeline.common.PacketEncrypter;
 import protocolsupport.protocol.types.NetworkItemStack;
@@ -84,8 +83,8 @@ import protocolsupport.zplatform.impl.spigot.network.SpigotChannelHandlers;
 import protocolsupport.zplatform.impl.spigot.network.handler.SpigotHandshakeListener;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketCompressor;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketDecompressor;
-import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedFrameEncoder;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedFrameDecoder;
+import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedFrameEncoder;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotMiscUtils implements PlatformUtils {
@@ -139,8 +138,8 @@ public class SpigotMiscUtils implements PlatformUtils {
 			entry.getKey(),
 			entry.getValue().stream()
 			.map(p -> new Property(p.getName(), p.getValue(), p.getSignature()))
-			.collect(Collectors.toList()))
-		);
+			.toList()
+		));
 		return mojangGameProfile;
 	}
 
@@ -150,8 +149,8 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public ConnectionImpl getConnection(Player player) {
-		if (player instanceof CraftPlayer) {
-			PlayerConnection connection = ((CraftPlayer) player).getHandle().b;
+		if (player instanceof CraftPlayer craftPlayer) {
+			PlayerConnection connection = craftPlayer.getHandle().b;
 			if (connection != null) {
 				Channel channel = connection.a.k;
 				if (channel != null) {

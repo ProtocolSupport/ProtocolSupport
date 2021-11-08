@@ -2,6 +2,8 @@ package protocolsupport.protocol.utils.spoofedata;
 
 import com.destroystokyo.paper.event.player.PlayerHandshakeEvent;
 
+import protocolsupport.api.Connection;
+
 public abstract class SpoofedDataParser {
 
 	protected static final SpoofedDataParser current = selectParser();
@@ -16,10 +18,10 @@ public abstract class SpoofedDataParser {
 		return bungeecordparser;
 	}
 
-	public static SpoofedData tryParse(String data, boolean proxyEnabled) {
-		return current.parse(data, proxyEnabled);
+	public static SpoofedData tryParse(Connection connecton, String data, boolean proxyEnabled) {
+		return current.parse(connecton, data, proxyEnabled);
 	}
 
-	protected abstract SpoofedData parse(String data, boolean proxyEnabled);
+	protected abstract SpoofedData parse(Connection connecton, String data, boolean proxyEnabled);
 
 }
