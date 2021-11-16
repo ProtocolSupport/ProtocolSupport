@@ -33,6 +33,17 @@ public abstract class AbstractChunkCacheChunkLight extends AbstractLimitedHeight
 			cachedChunk = chunkCache.add(coord);
 		}
 
+		BitSet fullLightMask = new BitSet();
+		fullLightMask.or(setSkyLightMask);
+		fullLightMask.or(emptySkyLightMask);
+		fullLightMask.or(setBlockLightMask);
+		fullLightMask.or(emptyBlockLightMask);
+		blockMask = fullLightMask.get(1, 1 + ChunkConstants.LEGACY_LIMITED_HEIGHT_CHUNK_BLOCK_SECTIONS);
+
+		if (blockMask.isEmpty()) {
+			throw MiddlePacketCancelException.INSTANCE;
+		}
+
 		for (int sectionIndex = 1; sectionIndex < (ChunkConstants.LEGACY_LIMITED_HEIGHT_CHUNK_LIGHT_SECTIONS - 1); sectionIndex++) {
 			if (setSkyLightMask.get(sectionIndex)) {
 				cachedChunk.setSkyLightSection(sectionIndex - 1, skyLight[sectionIndex]);
@@ -50,13 +61,6 @@ public abstract class AbstractChunkCacheChunkLight extends AbstractLimitedHeight
 		if (!chunkLoaded) {
 			throw MiddlePacketCancelException.INSTANCE;
 		}
-
-		BitSet fullLightMask = new BitSet();
-		fullLightMask.or(setSkyLightMask);
-		fullLightMask.or(emptySkyLightMask);
-		fullLightMask.or(setBlockLightMask);
-		fullLightMask.or(emptyBlockLightMask);
-		blockMask = fullLightMask.get(1, 1 + ChunkConstants.LEGACY_LIMITED_HEIGHT_CHUNK_BLOCK_SECTIONS);
 	}
 
 }
