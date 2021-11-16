@@ -1,22 +1,9 @@
-buildscript {
-	repositories {
-		mavenCentral()
-		maven {
-			url 'https://jitpack.io'
-		}
-	}
-	dependencies {
-		classpath group: 'com.github.Shevchik', name: 'ManualGradleDependencySupplier', version: 'da3dbf04be'
-	}
-}
-
 plugins {
 	id 'java'
 	id 'com.github.johnrengelman.shadow' version '7.0.0'
+	id 'io.github.shevchik.ManualGradleDependencySupplier' version '3.0'
 	id 'maven-publish'
 }
-
-apply plugin: 'io.github.shevchik.ManualGradleDependencySupplier'
 
 
 gradle.startParameter.showStacktrace = org.gradle.api.logging.configuration.ShowStacktrace.ALWAYS
