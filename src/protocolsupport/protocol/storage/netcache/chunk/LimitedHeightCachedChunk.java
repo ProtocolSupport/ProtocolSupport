@@ -72,6 +72,13 @@ public class LimitedHeightCachedChunk {
 		this.tiles[sectionNumber].clear();
 	}
 
+	public boolean resetBlocksSection(int sectionNumber) {
+		boolean hadBlocks = this.blocks[sectionNumber] != null;
+		this.blocks[sectionNumber] = null;
+		this.tiles[sectionNumber].clear();
+		return hadBlocks;
+	}
+
 	public void setSkyLightSection(int sectionNumber, byte[] skyLight) {
 		this.skyLight[sectionNumber] = skyLight;
 	}
