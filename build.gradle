@@ -31,12 +31,10 @@ Path projectDirectoryPath = projectDir.toPath().toAbsolutePath()
 Path projectBuildDirectoryPath = getBuildDir().toPath()
 
 
-Path generatedResourcesDirectoryPath = projectDirectoryPath.resolve('gen')
-String resourcesDirectoryName = 'resources';
-Path generatedResourcesResourcesDirectoryPath = generatedResourcesDirectoryPath.resolve(resourcesDirectoryName)
+Path generatedResourcesDirectoryPath = projectBuildDirectoryPath.resolve('gen')
+Path generatedResourcesResourcesDirectoryPath = generatedResourcesDirectoryPath.resolve('resources')
 
 task setupFolders(type: DefaultTask) {doLast{
-	generatedResourcesDirectoryPath.toFile().deleteDir()
 	Files.createDirectories(generatedResourcesDirectoryPath)
 	Files.createDirectories(generatedResourcesResourcesDirectoryPath)
 }}
