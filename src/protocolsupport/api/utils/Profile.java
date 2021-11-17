@@ -25,36 +25,27 @@ public abstract class Profile {
 		return UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(StandardCharsets.UTF_8));
 	}
 
-	protected volatile boolean onlineMode;
 
-	protected volatile String originalname;
-	protected volatile UUID originaluuid;
 
 	/**
 	 * Returns true if this player logged in using online-mode
 	 * @return true if this player logged in using online-mode
 	 */
-	public boolean isOnlineMode() {
-		return onlineMode;
-	}
+	public abstract boolean isOnlineMode();
 
 	/**
 	 * Returns original name of the player <br>
 	 * This name is set from handshake and from online mode query response
 	 * @return original name of the player
 	 */
-	public @Nullable String getOriginalName() {
-		return originalname;
-	}
+	public abstract @Nullable String getOriginalName();
 
 	/**
 	 * Returns original uuid of the player <br>
 	 * This uuid is set from online mode profile query response or offline mode uuid generation or spoofed data <br>
 	 * @return original name of the player
 	 */
-	public @Nullable UUID getOriginalUUID() {
-		return originaluuid;
-	}
+	public abstract @Nullable UUID getOriginalUUID();
 
 	/**
 	 * Returns current name <br>

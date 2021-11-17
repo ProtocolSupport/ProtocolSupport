@@ -9,8 +9,9 @@ import com.mojang.authlib.GameProfile;
 
 import protocolsupport.api.utils.Profile;
 import protocolsupport.api.utils.ProfileProperty;
+import protocolsupport.protocol.utils.authlib.AbstractProfile;
 
-public class SpigotWrappedGameProfile extends Profile {
+public class SpigotWrappedGameProfile extends AbstractProfile {
 
 	protected final GameProfile platformProfile;
 

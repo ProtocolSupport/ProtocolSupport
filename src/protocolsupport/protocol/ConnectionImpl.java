@@ -147,11 +147,11 @@ public class ConnectionImpl extends Connection {
 	}
 
 	public LoginProfile getLoginProfile() {
-		return (LoginProfile) profile;
+		return (LoginProfile) profile.get();
 	}
 
 	public void setWrappedProfile(Player player) {
-		profile = ServerPlatform.get().getMiscUtils().createWrappedProfile(getLoginProfile(), player);
+		profile.set(ServerPlatform.get().getMiscUtils().createWrappedProfile(getLoginProfile(), player));
 	}
 
 	@Override

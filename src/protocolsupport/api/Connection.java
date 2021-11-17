@@ -7,8 +7,10 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.BiFunction;
@@ -23,13 +25,14 @@ import io.netty.buffer.ReadOnlyByteBuf;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.api.utils.Profile;
+import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.utils.authlib.LoginProfile;
 
 @SuppressWarnings("deprecation")
 public abstract class Connection {
 
+	protected final WrappedProfile profile = new WrappedProfile(new LoginProfile());
 	protected volatile ProtocolVersion version = ProtocolVersion.UNKNOWN;
-	protected volatile Profile profile = new LoginProfile();
 
 	/**
 	 * Returns native network manager object <br>
@@ -398,6 +401,59 @@ public abstract class Connection {
 				this.cancelled = cancelled;
 			}
 
+		}
+
+	}
+
+	protected static class WrappedProfile extends Profile {
+
+		protected volatile Profile profile;
+
+		public WrappedProfile(Profile profile) {
+			this.profile = profile;
+		}
+
+		public Profile get() {
+			return profile;
+		}
+
+		public void set(Profile profile) {
+			this.profile = profile;
+		}
+
+		@Override
+		public boolean isOnlineMode() {
+			return profile.isOnlineMode();
+		}
+
+		@Override
+		public String getOriginalName() {
+			return profile.getOriginalName();
+		}
+
+		@Override
+		public UUID getOriginalUUID() {
+			return profile.getOriginalUUID();
+		}
+
+		@Override
+		public String getName() {
+			return profile.getName();
+		}
+
+		@Override
+		public UUID getUUID() {
+			return profile.getUUID();
+		}
+
+		@Override
+		public Set<String> getPropertiesNames() {
+			return profile.getPropertiesNames();
+		}
+
+		@Override
+		public Set<ProfileProperty> getProperties(String name) {
+			return profile.getProperties(name);
 		}
 
 	}

@@ -10,10 +10,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import protocolsupport.api.utils.Profile;
 import protocolsupport.api.utils.ProfileProperty;
 
-public class LoginProfile extends Profile {
+public class LoginProfile extends AbstractProfile {
 
 	protected volatile String name;
 	protected volatile UUID uuid;
