@@ -61,7 +61,9 @@ public abstract class Connection {
 	 * If sending disconnect message is impossible, just closes the connection
 	 * @param message disconnect message
 	 */
-	public abstract void disconnect(@Nonnull String message);
+	public void disconnect(@Nonnull String message) {
+		disconnect(BaseComponent.fromMessage(message));
+	}
 
 	/**
 	 * Returns address the player connected to/pinged

@@ -21,9 +21,9 @@ import java.nio.file.Paths
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption;
 
+import io.github.shevchik.manualgradledependencysupplier.ManualGradleDependencySupplier
 import io.github.shevchik.manualgradledependencysupplier.DependencySupplier
 import io.github.shevchik.manualgradledependencysupplier.BuildDependencySupplier
-import io.github.shevchik.manualgradledependencysupplier.ManualGradleDependencySupplier
 import io.github.shevchik.manualgradledependencysupplier.FilterZipFileDependencySupplier
 
 

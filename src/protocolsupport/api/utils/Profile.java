@@ -8,13 +8,11 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-
 import protocolsupport.api.events.PlayerProfileCompleteEvent;
 
 /**
  * Client profile (name, uuid, properties) <br>
- * This profile may not be complete and may change until {@link AsyncPlayerPreLoginEvent}
+ * This profile may not be complete and may change until {@link PlayerProfileCompleteEvent}
  */
 public abstract class Profile {
 

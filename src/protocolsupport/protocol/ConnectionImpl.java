@@ -120,11 +120,6 @@ public class ConnectionImpl extends Connection {
 	}
 
 	@Override
-	public void disconnect(String message) {
-		disconnect(BaseComponent.fromMessage(message));
-	}
-
-	@Override
 	public InetSocketAddress getVirtualHost() {
 		return networkmanager.getVirtualHost();
 	}

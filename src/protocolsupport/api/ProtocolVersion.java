@@ -4,7 +4,6 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.EnumMap;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -74,8 +73,7 @@ public enum ProtocolVersion {
 
 	private static final ProtocolVersion[] allSupported = Arrays.stream(ProtocolVersion.values())
 	.filter(ProtocolVersion::isSupported)
-	.collect(Collectors.toList())
-	.toArray(new ProtocolVersion[0]);
+	.toArray(ProtocolVersion[]::new);
 
 	private static final EnumMap<ProtocolType, ProtocolVersion[]> byOrderId = new EnumMap<>(ProtocolType.class);
 	static {
