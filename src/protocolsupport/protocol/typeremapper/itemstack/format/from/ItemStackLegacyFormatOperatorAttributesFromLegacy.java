@@ -1,9 +1,9 @@
-package protocolsupport.protocol.typeremapper.itemstack.format.to;
+package protocolsupport.protocol.typeremapper.itemstack.format.from;
 
 import java.util.UUID;
 
 import protocolsupport.protocol.typeremapper.itemstack.format.ItemStackNBTLegacyFormatOperator;
-import protocolsupport.protocol.typeremapper.itemstack.format.from.ItemStackLegacyFormatOperatorAttributesToLegacy;
+import protocolsupport.protocol.typeremapper.itemstack.format.to.ItemStackLegacyFormatOperatorAttributesToLegacy;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEntityAttribute;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;

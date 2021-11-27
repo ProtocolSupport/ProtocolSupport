@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.itemstack.format.from;
+package protocolsupport.protocol.typeremapper.itemstack.format.to;
 
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.protocol.typeremapper.itemstack.format.ItemStackNBTLegacyFormatOperator;

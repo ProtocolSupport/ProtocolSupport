@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.itemstack.format.to;
+package protocolsupport.protocol.typeremapper.itemstack.format.from;
 
 import protocolsupport.protocol.typeremapper.itemstack.format.ItemStackNBTLegacyFormatOperator;
 import protocolsupport.protocol.typeremapper.legacy.LegacyEnchantmentId;

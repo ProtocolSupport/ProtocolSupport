@@ -6,14 +6,11 @@ import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.CommonNBT;
 
-public class ItemStackLegacyFormatOperatorLoreFromLegacyText extends ItemStackNBTLegacyFormatOperator {
+public class ItemStackLegacyFormatOperatorBookPagesToLegacyText extends ItemStackNBTLegacyFormatOperator {
 
 	@Override
 	public NBTCompound apply(String locale, NetworkItemStack itemstack, NBTCompound tag) {
-		NBTCompound displayTag = tag.getCompoundTagOrNull(CommonNBT.DISPLAY);
-		if (displayTag != null) {
-			CommonNBTTransformer.fromLegacyChatList(displayTag.getStringListTagOrNull(CommonNBT.DISPLAY_LORE));
-		}
+		CommonNBTTransformer.toLegacyChatList(tag.getStringListTagOrNull(CommonNBT.BOOK_PAGES), locale);
 		return tag;
 	}
 

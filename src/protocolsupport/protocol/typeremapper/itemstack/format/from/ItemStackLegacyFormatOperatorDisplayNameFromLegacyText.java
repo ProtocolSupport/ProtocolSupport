@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.itemstack.format.to;
+package protocolsupport.protocol.typeremapper.itemstack.format.from;
 
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.TextComponent;

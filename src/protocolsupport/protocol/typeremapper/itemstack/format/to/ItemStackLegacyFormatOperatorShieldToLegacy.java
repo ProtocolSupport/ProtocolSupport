@@ -8,7 +8,7 @@ import protocolsupport.protocol.types.nbt.NBTInt;
 import protocolsupport.protocol.types.nbt.NBTNumber;
 import protocolsupport.protocol.utils.CommonNBT;
 
-public class ItemStackLegacyFormatOperatorShieldFromLegacy implements ItemStackLegacyFormatOperator {
+public class ItemStackLegacyFormatOperatorShieldToLegacy implements ItemStackLegacyFormatOperator {
 
 	@Override
 	public NetworkItemStack apply(String locale, NetworkItemStack itemstack) {
@@ -16,9 +16,9 @@ public class ItemStackLegacyFormatOperatorShieldFromLegacy implements ItemStackL
 		if (rootTag != null) {
 			NBTCompound blockTag = rootTag.getCompoundTagOrNull(CommonNBT.BLOCK_TAG);
 			if (blockTag != null) {
-				NBTNumber base = blockTag.getNumberTagOrNull(CommonNBT.BANNER_BASE);
-				if (base != null) {
-					blockTag.setTag(CommonNBT.BANNER_BASE, new NBTInt(15 - base.getAsInt()));
+				NBTNumber baseTag = blockTag.getNumberTagOrNull(CommonNBT.BANNER_BASE);
+				if (baseTag != null) {
+					blockTag.setTag(CommonNBT.BANNER_BASE, new NBTInt(15 - baseTag.getAsInt()));
 				}
 				LegacyBanner.transformBanner(blockTag);
 			}

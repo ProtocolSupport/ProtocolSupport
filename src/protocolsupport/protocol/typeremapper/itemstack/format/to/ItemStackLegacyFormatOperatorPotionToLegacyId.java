@@ -1,4 +1,4 @@
-package protocolsupport.protocol.typeremapper.itemstack.format.from;
+package protocolsupport.protocol.typeremapper.itemstack.format.to;
 
 import protocolsupport.protocol.typeremapper.itemstack.format.ItemStackLegacyFormatOperator;
 import protocolsupport.protocol.typeremapper.legacy.LegacyPotionId;
