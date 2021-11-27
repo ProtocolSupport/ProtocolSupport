@@ -13,7 +13,7 @@ defaultTasks 'build'
 
 
 group 'protocolsupport'
-version '1.17.1-2'
+version '1.17.1-3-dev'
 
 
 import java.nio.file.Path
