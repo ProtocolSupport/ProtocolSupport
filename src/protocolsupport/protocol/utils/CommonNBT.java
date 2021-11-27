@@ -14,6 +14,7 @@ import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTIntArray;
 import protocolsupport.protocol.types.nbt.NBTList;
 import protocolsupport.protocol.types.nbt.NBTNumber;
+import protocolsupport.protocol.types.nbt.NBTShort;
 import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.minecraftdata.MinecraftPotionData;
@@ -88,7 +89,7 @@ public class CommonNBT {
 	public static NBTCompound createFakeEnchantmentTag() {
 		NBTCompound tag = new NBTCompound();
 		tag.setTag("id", new NBTString(FAKE_ENCHANTMENT_KEY_STR));
-		tag.setTag("lvl", new NBTByte((byte) 1));
+		tag.setTag("lvl", new NBTShort((short) 1));
 		return tag;
 	}
 
