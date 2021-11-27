@@ -30,7 +30,7 @@ public class PandaNetworkEntityMetadataFormatTransformerFactory extends AgeableN
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Panda.GENE_HIDDEN, 20), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Panda.GENE_HIDDEN, 19), ProtocolVersionsHelper.ALL_1_14);
 
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Panda.PANDA_FLAGS, 22), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Panda.PANDA_FLAGS, 22), ProtocolVersionsHelper.UP_1_17);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Panda.PANDA_FLAGS, 21), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
 		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Panda.PANDA_FLAGS, 20), ProtocolVersionsHelper.ALL_1_14);
 	}
