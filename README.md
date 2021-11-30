@@ -27,8 +27,7 @@ Spigot: https://www.spigotmc.org/resources/protocolsupport.7201/
 
 BukkitDev: https://dev.bukkit.org/projects/protocolsupport/
 
-Main Jenkins: https://build.hurricanegames.org/job/ProtocolSupport/<br>
-Backup Jenkins: https://ci.velocitypowered.com/job/ProtocolSupport/
+Main Jenkins: https://build.hurricanegames.org/job/ProtocolSupport/
 
 ---
 
