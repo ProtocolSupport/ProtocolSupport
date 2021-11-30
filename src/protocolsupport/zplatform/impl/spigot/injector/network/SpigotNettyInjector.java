@@ -21,7 +21,7 @@ public class SpigotNettyInjector {
 
 	@SuppressWarnings("unchecked")
 	public static void inject() throws IllegalAccessException, NoSuchFieldException {
-		ServerConnection serverConnection = SpigotMiscUtils.SERVER.getServerConnection();
+		ServerConnection serverConnection = SpigotMiscUtils.SERVER.ad();
 		Collection<NetworkManager> nmList = null;
 		try {
 			nmList = (Collection<NetworkManager>) ReflectionUtils.setAccessible(ServerConnection.class.getDeclaredField("g")).get(serverConnection);
@@ -94,7 +94,7 @@ public class SpigotNettyInjector {
 			synchronized (networkManagers) {
 				for (NetworkManager nm : networkManagers) {
 					if ((nm.k != null) && nm.k.localAddress().equals(channel.localAddress())) {
-						nm.close(new ChatComponentText("ProtocolSupport channel reset"));
+						nm.a(new ChatComponentText("ProtocolSupport channel reset"));
 					}
 				}
 			}

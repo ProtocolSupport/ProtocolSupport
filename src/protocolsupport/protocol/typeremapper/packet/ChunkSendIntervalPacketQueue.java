@@ -19,7 +19,7 @@ public class ChunkSendIntervalPacketQueue implements IPacketDataProcessor {
 	}
 
 	protected static boolean shouldLock(ClientBoundPacketData packet) {
-		return packet.getPacketType() == ClientBoundPacketType.PLAY_CHUNK_SINGLE;
+		return packet.getPacketType() == ClientBoundPacketType.PLAY_CHUNK_DATA;
 	}
 
 	protected boolean locked = false;
@@ -44,7 +44,7 @@ public class ChunkSendIntervalPacketQueue implements IPacketDataProcessor {
 					ctx.writeClientbound(packetdata);
 					break;
 				}
-				case PLAY_CHUNK_SINGLE:
+				case PLAY_CHUNK_DATA:
 				case PLAY_CHUNK_UNLOAD:
 				case PLAY_BLOCK_CHANGE_SINGLE:
 				case PLAY_BLOCK_CHANGE_MULTI:

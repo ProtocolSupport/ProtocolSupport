@@ -35,6 +35,7 @@ import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopTit
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopTitleSubText;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopTitleText;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopUnlockRecipes;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopUpdateSimulationDistance;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopUpdateViewDistance;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopVehicleMove;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopVibration;
@@ -101,9 +102,9 @@ import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.InventorySetItems;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.InventorySetSlot;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.SyncPing;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.InventoryData;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.ScoreboardDisplay;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.TimeUpdate;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.InventoryData;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.ScoreboardDisplay;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.TimeUpdate;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_5_6_7.InventoryOpen;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_5_6_7.ScoreboardObjective;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_5_6_7.ScoreboardScore;
@@ -156,7 +157,7 @@ public class PacketEncoder extends AbstractPacketEncoder<IClientboundMiddlePacke
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_ENTITY_EFFECT_REMOVE, EntityEffectRemove::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_ENTITY_SOUND, EntitySound::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_SET_EXPERIENCE, SetExperience::new);
-		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_CHUNK_SINGLE, ChunkData::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_CHUNK_DATA, ChunkData::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_BLOCK_CHANGE_MULTI, BlockChangeMulti::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_BLOCK_CHANGE_SINGLE, BlockChangeSingle::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_BLOCK_BREAK_CONFIRM, BlockBreakConfirm::new);
@@ -227,6 +228,7 @@ public class PacketEncoder extends AbstractPacketEncoder<IClientboundMiddlePacke
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_SET_VIEW_CENTER, NoopSetViewCenter::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_UPDATE_VIEW_DISTANCE, NoopUpdateViewDistance::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_VIBRATION, NoopVibration::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_UPDATE_SIMULATION_DISTANCE, NoopUpdateSimulationDistance::new);
 	}
 
 }

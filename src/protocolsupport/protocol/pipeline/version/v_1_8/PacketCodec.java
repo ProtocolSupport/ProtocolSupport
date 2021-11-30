@@ -46,7 +46,7 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(ClientBoundPacketType.PLAY_ENTITY_EFFECT_REMOVE, 0x1E);
 		registry.register(ClientBoundPacketType.PLAY_SET_EXPERIENCE, 0x1F);
 		registry.register(ClientBoundPacketType.PLAY_ENTITY_ATTRIBUTES, 0x20);
-		registry.register(ClientBoundPacketType.PLAY_CHUNK_SINGLE, 0x21);
+		registry.register(ClientBoundPacketType.PLAY_CHUNK_DATA, 0x21);
 		registry.register(ClientBoundPacketType.PLAY_BLOCK_CHANGE_MULTI, 0x22);
 		registry.register(ClientBoundPacketType.PLAY_BLOCK_CHANGE_SINGLE, 0x23);
 		registry.register(ClientBoundPacketType.PLAY_BLOCK_ACTION, 0x24);

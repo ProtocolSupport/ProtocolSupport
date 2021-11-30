@@ -129,14 +129,13 @@ public class JsonUtils {
 	}
 
 	public static final Gson GSON = new Gson();
-	public static final JsonParser PARSER = new JsonParser();
 
 	public static @Nonnull JsonObject readJsonObject(@Nonnull Reader reader) {
-		return PARSER.parse(reader).getAsJsonObject();
+		return JsonParser.parseReader(reader).getAsJsonObject();
 	}
 
 	public static @Nonnull JsonArray readJsonArray(@Nonnull Reader reader) {
-		return PARSER.parse(reader).getAsJsonArray();
+		return JsonParser.parseReader(reader).getAsJsonArray();
 	}
 
 }

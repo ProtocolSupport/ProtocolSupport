@@ -10,7 +10,6 @@ import protocolsupport.protocol.codec.ArrayCodec;
 import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.base.clientbound.ClientBoundMiddlePacket;
-import protocolsupport.protocol.utils.NamespacedKeyUtils;
 
 public abstract class MiddleDeclareTags extends ClientBoundMiddlePacket {
 
@@ -31,7 +30,7 @@ public abstract class MiddleDeclareTags extends ClientBoundMiddlePacket {
 		tagsMap = new LinkedHashMap<>();
 		int count = VarNumberCodec.readVarInt(serverdata);
 		for (int index = 0; index < count; index++) {
-			NamespacedKey key = NamespacedKeyUtils.fromString(StringCodec.readVarIntUTF8String(serverdata));
+			NamespacedKey key = NamespacedKey.fromString(StringCodec.readVarIntUTF8String(serverdata));
 			Tag[] tags = ArrayCodec.readVarIntTArray(serverdata, Tag.class, tagFrom -> {
 				return new Tag(StringCodec.readVarIntUTF8String(tagFrom), ArrayCodec.readVarIntVarIntArray(tagFrom));
 			});

@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.inventory.ItemStack;
 
@@ -32,7 +33,6 @@ import protocolsupport.protocol.types.nbt.mojangson.MojangsonParser;
 import protocolsupport.protocol.types.nbt.mojangson.MojangsonSerializer;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
-import protocolsupport.protocol.utils.NamespacedKeyUtils;
 import protocolsupport.protocol.utils.json.SimpleJsonObjectSerializer;
 import protocolsupport.protocol.utils.json.SimpleJsonTreeSerializer;
 import protocolsupport.utils.JsonUtils;
@@ -72,7 +72,7 @@ public class HoverActionSerializer implements JsonDeserializer<HoverAction>, Sim
 				case SHOW_ENTITY: {
 					JsonObject entityinfoJson = JsonUtils.getAsJsonObject(contentsJson, "hover contents");
 					return new HoverAction(new EntityInfo(
-						Registry.ENTITY_TYPE.get(NamespacedKeyUtils.fromString(JsonUtils.getString(entityinfoJson, "type"))),
+						Registry.ENTITY_TYPE.get(NamespacedKey.fromString(JsonUtils.getString(entityinfoJson, "type"))),
 						UUID.fromString(JsonUtils.getString(entityinfoJson, "id")),
 						(BaseComponent) (entityinfoJson.has("name") ? ctx.deserialize(JsonUtils.getJsonObject(entityinfoJson, "name"), BaseComponent.class) : null)
 					));

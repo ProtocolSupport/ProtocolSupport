@@ -23,14 +23,14 @@ public class SpigotBlocksBoundsAdjust {
 
 	public static void inject() {
 		try {
-			ReflectionUtils.setStaticFinalFieldValue(BlockWaterLily.class, "a", VoxelShapes.create(0.0625D, 0.0, 0.0625D, 0.9375D, 0.015625D, 0.9375D));
+			ReflectionUtils.setStaticFinalFieldValue(BlockWaterLily.class, "a", VoxelShapes.a(0.0625D, 0.0, 0.0625D, 0.9375D, 0.015625D, 0.9375D));
 
-			ReflectionUtils.setStaticFinalFieldValue(BlockLadder.class, "d", VoxelShapes.create(0.0D, 0.0D, 0.0D, 0.125D, 1.0D, 1.0D));
-			ReflectionUtils.setStaticFinalFieldValue(BlockLadder.class, "e", VoxelShapes.create(0.875D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D));
-			ReflectionUtils.setStaticFinalFieldValue(BlockLadder.class, "f", VoxelShapes.create(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.125D));
-			ReflectionUtils.setStaticFinalFieldValue(BlockLadder.class, "g", VoxelShapes.create(0.0D, 0.0D, 0.875D, 1.0D, 1.0D, 1.0D));
+			ReflectionUtils.setStaticFinalFieldValue(BlockLadder.class, "d", VoxelShapes.a(0.0D, 0.0D, 0.0D, 0.125D, 1.0D, 1.0D));
+			ReflectionUtils.setStaticFinalFieldValue(BlockLadder.class, "e", VoxelShapes.a(0.875D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D));
+			ReflectionUtils.setStaticFinalFieldValue(BlockLadder.class, "f", VoxelShapes.a(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.125D));
+			ReflectionUtils.setStaticFinalFieldValue(BlockLadder.class, "g", VoxelShapes.a(0.0D, 0.0D, 0.875D, 1.0D, 1.0D, 1.0D));
 
-			ReflectionUtils.setStaticFinalFieldValue(CarpetBlock.class, "a", VoxelShapes.create(0, 0, 0, 1.0D, 0.00001, 1.0D));
+			ReflectionUtils.setStaticFinalFieldValue(CarpetBlock.class, "a", VoxelShapes.a(0, 0, 0, 1.0D, 0.00001, 1.0D));
 
 			{
 				FieldWriter<VoxelShape[]> shapesField1 = FieldWriter.of(BlockTall.class, "g", VoxelShape[].class);

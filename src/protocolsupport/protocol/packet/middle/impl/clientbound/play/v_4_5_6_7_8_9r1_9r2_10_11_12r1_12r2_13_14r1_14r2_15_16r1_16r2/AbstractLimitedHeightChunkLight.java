@@ -23,8 +23,15 @@ public abstract class AbstractLimitedHeightChunkLight extends MiddleChunkLight {
 		setBlockLightMask = setBlockLightMask.get(limitedHeightOffset, limitedHeightOffsetEnd);
 		emptySkyLightMask = emptySkyLightMask.get(limitedHeightOffset, limitedHeightOffsetEnd);
 		emptyBlockLightMask = emptyBlockLightMask.get(limitedHeightOffset, limitedHeightOffsetEnd);
-		skyLight = Arrays.copyOfRange(skyLight, limitedHeightOffset, limitedHeightOffsetEnd);
-		blockLight = Arrays.copyOfRange(blockLight, limitedHeightOffset, limitedHeightOffsetEnd);
+		skyLight = limitLight(skyLight, limitedHeightOffset, limitedHeightOffsetEnd);
+		blockLight = limitLight(blockLight, limitedHeightOffset, limitedHeightOffsetEnd);
+	}
+
+	public static byte[][] limitLight(byte[][] light, int limitedHeightOffset, int limitedHeightOffsetEnd) {
+		if (light.length < limitedHeightOffset) {
+			return new byte[0][];
+		}
+		return Arrays.copyOfRange(light, limitedHeightOffset, Math.min(light.length, limitedHeightOffsetEnd));
 	}
 
 }

@@ -12,13 +12,13 @@ import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.block.data.BlockData;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import protocolsupport.protocol.utils.NamespacedKeyUtils;
 import protocolsupport.utils.JsonUtils;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupportbuildprocessor.Preload;
@@ -115,7 +115,7 @@ public class MinecraftBlockData {
 		protected BlockDataInfo[] data;
 
 		protected BlockInfo(@Nonnull String name, @Nonnegative int networkId, @Nonnull BlockDataInfo[] data) {
-			this.material = Registry.MATERIAL.get(NamespacedKeyUtils.fromString(name));
+			this.material = Registry.MATERIAL.get(NamespacedKey.fromString(name));
 			this.networkId = networkId;
 			this.data = data;
 			for (BlockDataInfo info : data) {

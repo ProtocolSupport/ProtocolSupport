@@ -9,6 +9,8 @@ import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.base.clientbound.play.MiddleStartGame;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV16r2;
 import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTFloat;
+import protocolsupport.protocol.types.nbt.NBTInt;
 import protocolsupport.protocol.types.nbt.NBTString;
 
 public class StartGame extends MiddleStartGame implements IClientboundMiddlePacketV16r2 {
@@ -26,7 +28,7 @@ public class StartGame extends MiddleStartGame implements IClientboundMiddlePack
 		startgame.writeByte(gamemodePrevious.getId());
 		ArrayCodec.writeVarIntVarIntUTF8StringArray(startgame, worlds);
 		ItemStackCodec.writeDirectTag(startgame, toLegacyDimensionRegistry(dimensions));
-		ItemStackCodec.writeDirectTag(startgame, dimension);
+		ItemStackCodec.writeDirectTag(startgame, toLegacyDimensionType(dimension));
 		StringCodec.writeVarIntUTF8String(startgame, world);
 		startgame.writeLong(hashedSeed);
 		VarNumberCodec.writeVarInt(startgame, maxplayers);
@@ -39,9 +41,15 @@ public class StartGame extends MiddleStartGame implements IClientboundMiddlePack
 	}
 
 	protected static NBTCompound toLegacyDimensionRegistry(NBTCompound dimensionsTag) {
+		NBTCompound dimensionRegistryTag = dimensionsTag.getCompoundTagOrThrow("minecraft:dimension_type");
+		for (NBTCompound dimensionEntryTag : dimensionRegistryTag.getCompoundListTagOrThrow("value")) {
+			toLegacyDimensionType(dimensionEntryTag.getCompoundTagOrThrow("element"));
+		}
 		NBTCompound biomeRegistryTag = dimensionsTag.getCompoundTagOrThrow("minecraft:worldgen/biome");
-		for (NBTCompound biomeEntryTag : biomeRegistryTag.getCompoundListTagOrThrow("value").getTags()) {
+		for (NBTCompound biomeEntryTag : biomeRegistryTag.getCompoundListTagOrThrow("value")) {
 			NBTCompound biomeDataTag = biomeEntryTag.getCompoundTagOrThrow("element");
+			biomeDataTag.setTag("depth", new NBTFloat(0F));
+			biomeDataTag.setTag("scale", new NBTFloat(0F));
 			biomeDataTag.setTag("category", new NBTString(toLegacyBiomeCategory(biomeDataTag.getStringTagOrThrow("category").getValue())));
 		}
 		return dimensionsTag;
@@ -49,6 +57,7 @@ public class StartGame extends MiddleStartGame implements IClientboundMiddlePack
 
 	protected static String toLegacyBiomeCategory(String category) {
 		switch (category) {
+			case "mountain":
 			case "underground": {
 				return "none";
 			}
@@ -56,6 +65,12 @@ public class StartGame extends MiddleStartGame implements IClientboundMiddlePack
 				return category;
 			}
 		}
+	}
+
+	public static NBTCompound toLegacyDimensionType(NBTCompound dimensionDataTag) {
+		dimensionDataTag.setTag("logical_height", new NBTInt(Math.min(256, dimensionDataTag.getNumberTagOrThrow("logical_height").getAsInt())));
+		dimensionDataTag.setTag("height", new NBTInt(Math.min(256, dimensionDataTag.getNumberTagOrThrow("height").getAsInt())));
+		return dimensionDataTag;
 	}
 
 }

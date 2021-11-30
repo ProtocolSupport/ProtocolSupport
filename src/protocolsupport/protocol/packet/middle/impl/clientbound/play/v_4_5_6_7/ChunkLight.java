@@ -11,7 +11,7 @@ import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddl
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV7;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheChunkLight;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
-import protocolsupport.protocol.typeremapper.chunk.ChunkWriterByte;
+import protocolsupport.protocol.typeremapper.chunk.ChunkBlockdataLegacyWriterByte;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
@@ -36,12 +36,12 @@ IClientboundMiddlePacketV7
 		String locale = clientCache.getLocale();
 		boolean hasSkyLight = clientCache.hasDimensionSkyLight();
 
-		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
+		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_DATA);
 		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
 		chunkdataPacket.writeBoolean(false); //full
 		chunkdataPacket.writeShort(CollectionsUtils.getBitSetFirstLong(blockMask));
 		chunkdataPacket.writeShort(0); //mask high bits
-		byte[] compressed = RecyclableWrapCompressor.compressStatic(ChunkWriterByte.serializeSectionsAndBiomes(
+		byte[] compressed = RecyclableWrapCompressor.compressStatic(ChunkBlockdataLegacyWriterByte.serializeSectionsAndBiomes(
 			null, blockLegacyDataTable,
 			null, null,
 			cachedChunk, blockMask, hasSkyLight

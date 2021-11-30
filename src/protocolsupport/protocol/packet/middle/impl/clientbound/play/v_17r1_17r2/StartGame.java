@@ -9,6 +9,9 @@ import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.base.clientbound.play.MiddleStartGame;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV17r1;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV17r2;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTFloat;
+import protocolsupport.protocol.types.nbt.NBTString;
 
 public class StartGame extends MiddleStartGame implements
 IClientboundMiddlePacketV17r1,
@@ -26,7 +29,7 @@ IClientboundMiddlePacketV17r2 {
 		startgame.writeByte(gamemodeCurrent.getId());
 		startgame.writeByte(gamemodePrevious.getId());
 		ArrayCodec.writeVarIntVarIntUTF8StringArray(startgame, worlds);
-		ItemStackCodec.writeDirectTag(startgame, dimensions);
+		ItemStackCodec.writeDirectTag(startgame, toLegacyDimensionRegistry(dimensions));
 		ItemStackCodec.writeDirectTag(startgame, dimension);
 		StringCodec.writeVarIntUTF8String(startgame, world);
 		startgame.writeLong(hashedSeed);
@@ -37,6 +40,28 @@ IClientboundMiddlePacketV17r2 {
 		startgame.writeBoolean(worldDebug);
 		startgame.writeBoolean(worldFlat);
 		io.writeClientbound(startgame);
+	}
+
+	protected static NBTCompound toLegacyDimensionRegistry(NBTCompound dimensionsTag) {
+		NBTCompound biomeRegistryTag = dimensionsTag.getCompoundTagOrThrow("minecraft:worldgen/biome");
+		for (NBTCompound biomeEntryTag : biomeRegistryTag.getCompoundListTagOrThrow("value").getTags()) {
+			NBTCompound biomeDataTag = biomeEntryTag.getCompoundTagOrThrow("element");
+			biomeDataTag.setTag("depth", new NBTFloat(0F));
+			biomeDataTag.setTag("scale", new NBTFloat(0F));
+			biomeDataTag.setTag("category", new NBTString(toLegacyBiomeCategory(biomeDataTag.getStringTagOrThrow("category").getValue())));
+		}
+		return dimensionsTag;
+	}
+
+	protected static String toLegacyBiomeCategory(String category) {
+		switch (category) {
+			case "mountain": {
+				return "none";
+			}
+			default: {
+				return category;
+			}
+		}
 	}
 
 }

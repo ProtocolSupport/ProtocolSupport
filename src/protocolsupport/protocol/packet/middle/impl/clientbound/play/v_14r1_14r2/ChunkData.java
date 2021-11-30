@@ -11,14 +11,15 @@ import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV14r1;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV14r2;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_14r1_14r2_15.ChunkLight;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.AbstractLimitedHeightChunkData;
-import protocolsupport.protocol.typeremapper.basic.BiomeRemapper;
+import protocolsupport.protocol.typeremapper.basic.BiomeTransformer;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
-import protocolsupport.protocol.typeremapper.chunk.ChunkHeightMapTransformer;
-import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVaries;
-import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
+import protocolsupport.protocol.typeremapper.chunk.ChunkBiomeLegacyWriter;
+import protocolsupport.protocol.typeremapper.chunk.ChunkBlockdataLegacyWriterPaletted;
+import protocolsupport.protocol.typeremapper.chunk.ChunkHeightMapLegacyWriter;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
@@ -32,27 +33,28 @@ IClientboundMiddlePacketV14r2 {
 		super(init);
 	}
 
-	protected final GenericMappingTable<NamespacedKey> biomeLegacyDataTable = BiomeRemapper.REGISTRY.getTable(version);
+	protected final GenericMappingTable<NamespacedKey> biomeLegacyDataTable = BiomeTransformer.REGISTRY.getTable(version);
 	protected final IntMappingTable blockLegacyDataTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockDataRegistry.INSTANCE.getTable(version);
 	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
+		io.writeClientbound(ChunkLight.create(coord, setSkyLightMask, setBlockLightMask, emptySkyLightMask, emptyBlockLightMask, skyLight, blockLight));
+
+		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_DATA);
 		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
 		chunkdataPacket.writeBoolean(true); //full
 		VarNumberCodec.writeVarInt(chunkdataPacket, CollectionsUtils.getBitSetFirstLong(mask));
-		ItemStackCodec.writeDirectTag(chunkdataPacket, ChunkHeightMapTransformer.transform(heightmaps));
-		MiscDataCodec.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
-			ChunkWriterVaries.writeSectionsCompact(
+		ItemStackCodec.writeDirectTag(chunkdataPacket, ChunkHeightMapLegacyWriter.transform(heightmaps));
+		MiscDataCodec.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunkdataInstance) -> {
+			ChunkBlockdataLegacyWriterPaletted.writeSectionsBlockdataCompact(
 				to, 14,
-				chunksections.blockLegacyDataTable, chunksections.flatteningBlockDataTable,
-				chunksections.sections, chunksections.mask
+				chunkdataInstance.blockLegacyDataTable, chunkdataInstance.flatteningBlockDataTable,
+				chunkdataInstance.sections, chunkdataInstance.mask
 			);
-			int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(chunksections.biomes);
-			for (int biomeId : legacyBiomeData) {
-				to.writeInt(BiomeRemapper.mapLegacyBiome(chunksections.clientCache, chunksections.biomeLegacyDataTable, biomeId));
+			for (int biomeId : ChunkBiomeLegacyWriter.toPerBlockBiomeData(chunkdataInstance.clientCache, chunkdataInstance.biomeLegacyDataTable, chunkdataInstance.sections[0].getBiomes())) {
+				to.writeInt(biomeId);
 			}
 		});
 		ArrayCodec.writeVarIntTArray(

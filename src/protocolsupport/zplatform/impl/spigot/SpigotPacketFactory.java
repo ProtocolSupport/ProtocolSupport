@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
 
 import com.mojang.authlib.GameProfile;
 
@@ -128,10 +128,10 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		playerSample.a(gprofiles);
 
 		ServerPing serverping = new ServerPing();
-		serverping.setFavicon(icon);
-		serverping.setMOTD(SpigotMiscUtils.toPlatformMessage(motd));
-		serverping.setPlayerSample(playerSample);
-		serverping.setServerInfo(new ServerData(info.getName(), info.getId()));
+		serverping.a(icon);
+		serverping.a(SpigotMiscUtils.toPlatformMessage(motd));
+		serverping.a(playerSample);
+		serverping.a(new ServerData(info.getName(), info.getId()));
 
 		return new PacketStatusOutServerInfo(serverping);
 	}
@@ -354,8 +354,8 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getOutPlayChunkSinglePacketId() {
-		return getOutId(PacketPlayOutMapChunk.class);
+	public int getOutPlayChunkDataPacketId() {
+		return getOutId(ClientboundLevelChunkWithLightPacket.class);
 	}
 
 	@Override
@@ -616,6 +616,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getOutPlayUpdateViewDistancePacketId() {
 		return getOutId(PacketPlayOutViewDistance.class);
+	}
+
+	@Override
+	public int getOutPlayUpdateSimulationDistancePacketId() {
+		return getOutId(ClientboundSetSimulationDistancePacket.class);
 	}
 
 	@Override
@@ -1008,11 +1013,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 		}
 	}
 
-	protected static final int getOutId(Class<?> packetClass) {
+	protected static final int getOutId(Class<? extends Packet<?>> packetClass) {
 		return getPacketId(packetClass, EnumProtocolDirection.b);
 	}
 
-	protected static final int getInId(Class<?> packetClass) {
+	protected static final int getInId(Class<? extends Packet<?>> packetClass) {
 		return getPacketId(packetClass, EnumProtocolDirection.a);
 	}
 

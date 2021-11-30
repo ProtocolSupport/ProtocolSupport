@@ -10,7 +10,7 @@ import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddl
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheChunkLight;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
-import protocolsupport.protocol.typeremapper.chunk.ChunkWriterShort;
+import protocolsupport.protocol.typeremapper.chunk.ChunkBlockdataLegacyWriterShort;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.TileEntity;
@@ -26,11 +26,11 @@ public class ChunkLight extends AbstractChunkCacheChunkLight implements IClientb
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
+		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_DATA);
 		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
 		chunkdataPacket.writeBoolean(false); //full
 		chunkdataPacket.writeShort(CollectionsUtils.getBitSetFirstLong(blockMask));
-		ArrayCodec.writeVarIntByteArray(chunkdataPacket, ChunkWriterShort.serializeSections(
+		ArrayCodec.writeVarIntByteArray(chunkdataPacket, ChunkBlockdataLegacyWriterShort.serializeSections(
 			blockLegacyDataTable,
 			cachedChunk, blockMask, clientCache.hasDimensionSkyLight()
 		));

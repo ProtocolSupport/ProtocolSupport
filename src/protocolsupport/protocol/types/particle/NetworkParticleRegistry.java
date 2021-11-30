@@ -3,7 +3,6 @@ package protocolsupport.protocol.types.particle;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnegative;
@@ -18,8 +17,8 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import protocolsupport.protocol.types.particle.types.NetworkParticleAmbientEntityEffect;
 import protocolsupport.protocol.types.particle.types.NetworkParticleAngryVillager;
 import protocolsupport.protocol.types.particle.types.NetworkParticleAsh;
-import protocolsupport.protocol.types.particle.types.NetworkParticleBarrier;
 import protocolsupport.protocol.types.particle.types.NetworkParticleBlock;
+import protocolsupport.protocol.types.particle.types.NetworkParticleBlockMarker;
 import protocolsupport.protocol.types.particle.types.NetworkParticleBubble;
 import protocolsupport.protocol.types.particle.types.NetworkParticleBubbleColumnUp;
 import protocolsupport.protocol.types.particle.types.NetworkParticleBubblePop;
@@ -76,7 +75,6 @@ import protocolsupport.protocol.types.particle.types.NetworkParticleLandingLava;
 import protocolsupport.protocol.types.particle.types.NetworkParticleLandingObsidianTear;
 import protocolsupport.protocol.types.particle.types.NetworkParticleLargeSmoke;
 import protocolsupport.protocol.types.particle.types.NetworkParticleLava;
-import protocolsupport.protocol.types.particle.types.NetworkParticleLight;
 import protocolsupport.protocol.types.particle.types.NetworkParticleMycelium;
 import protocolsupport.protocol.types.particle.types.NetworkParticleNautilus;
 import protocolsupport.protocol.types.particle.types.NetworkParticleNote;
@@ -127,8 +125,7 @@ public class NetworkParticleRegistry {
 	static {
 		register(NetworkParticleAmbientEntityEffect::new, Particle.SPELL_MOB_AMBIENT);
 		register(NetworkParticleAngryVillager::new, Particle.VILLAGER_ANGRY);
-		register(NetworkParticleBarrier::new, Particle.BARRIER);
-		register(NetworkParticleLight::new, Particle.LIGHT);
+		register(NetworkParticleBlockMarker::new, Particle.BLOCK_MARKER);
 		register(NetworkParticleBlock::new, Particle.BLOCK_CRACK);
 		register(NetworkParticleBubble::new, Particle.WATER_BUBBLE);
 		register(NetworkParticleCloud::new, Particle.CLOUD);
@@ -220,7 +217,7 @@ public class NetworkParticleRegistry {
 		return
 			idToParticle.values().stream()
 			.map(Supplier::get)
-			.collect(Collectors.toList());
+			.toList();
 	}
 
 	public static @Nonnull NetworkParticle fromId(@Nonnegative int id) {

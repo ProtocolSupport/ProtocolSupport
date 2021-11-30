@@ -13,8 +13,8 @@ import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.particle.NetworkParticle;
 import protocolsupport.protocol.types.particle.types.NetworkParticleAmbientEntityEffect;
 import protocolsupport.protocol.types.particle.types.NetworkParticleAngryVillager;
-import protocolsupport.protocol.types.particle.types.NetworkParticleBarrier;
 import protocolsupport.protocol.types.particle.types.NetworkParticleBlock;
+import protocolsupport.protocol.types.particle.types.NetworkParticleBlockMarker;
 import protocolsupport.protocol.types.particle.types.NetworkParticleBubble;
 import protocolsupport.protocol.types.particle.types.NetworkParticleCloud;
 import protocolsupport.protocol.types.particle.types.NetworkParticleCrit;
@@ -112,7 +112,7 @@ public class PreFlatteningNetworkParticleIntIdRegistryDataSerializer {
 		classToId.put(NetworkParticleItemSnowball.class, 31);
 		classToId.put(NetworkParticleItemSlime.class, 33);
 		classToId.put(NetworkParticleHeart.class, 34);
-		classToId.put(NetworkParticleBarrier.class, 35);
+		classToId.put(NetworkParticleBlockMarker.class, 35);
 		classToId.put(NetworkParticleItem.class, 36);
 		classToId.put(NetworkParticleBlock.class, 37);
 		classToId.put(NetworkParticleRain.class, 39);

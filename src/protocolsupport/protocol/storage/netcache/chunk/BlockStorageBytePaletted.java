@@ -16,7 +16,7 @@ public class BlockStorageBytePaletted implements BlockStorage {
 		}
 	}
 
-	protected final byte[] blocks = new byte[ChunkConstants.BLOCKS_IN_SECTION];
+	protected final byte[] blocks = new byte[ChunkConstants.SECTION_BLOCK_COUNT];
 	protected final BlockStorageBytePaletted.Palette palette;
 
 	public BlockStorageBytePaletted() {
@@ -100,7 +100,7 @@ public class BlockStorageBytePaletted implements BlockStorage {
 				if (cRuntimeId == max_size) {
 					throw MaxSizeReachedException.instance;
 				}
-				runtimeToGlobal[cRuntimeId] = (short) k;
+				runtimeToGlobal[cRuntimeId] = k;
 				return (byte) cRuntimeId;
 			});
 		}

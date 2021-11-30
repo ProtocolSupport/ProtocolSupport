@@ -40,6 +40,7 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 	protected long hashedSeed;
 	protected int maxplayers;
 	protected int renderDistance;
+	protected int simulationDistance;
 	protected boolean reducedDebugInfo;
 	protected boolean respawnScreenEnabled;
 	protected boolean worldDebug;
@@ -62,6 +63,7 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 			maxplayers = forcedMaxPlayers;
 		}
 		renderDistance = VarNumberCodec.readVarInt(serverdata);
+		simulationDistance = VarNumberCodec.readVarInt(serverdata);
 		reducedDebugInfo = serverdata.readBoolean();
 		respawnScreenEnabled = serverdata.readBoolean();
 		worldDebug = serverdata.readBoolean();

@@ -45,7 +45,7 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(ClientBoundPacketType.PLAY_CHUNK_UNLOAD, 0x1D);
 		registry.register(ClientBoundPacketType.PLAY_GAME_STATE_CHANGE, 0x1E);
 		registry.register(ClientBoundPacketType.PLAY_KEEP_ALIVE, 0x1F);
-		registry.register(ClientBoundPacketType.PLAY_CHUNK_SINGLE, 0x20);
+		registry.register(ClientBoundPacketType.PLAY_CHUNK_DATA, 0x20);
 		registry.register(ClientBoundPacketType.PLAY_WORLD_EVENT, 0x21);
 		registry.register(ClientBoundPacketType.PLAY_WORLD_PARTICLES, 0x22);
 		registry.register(ClientBoundPacketType.PLAY_START_GAME, 0x23);

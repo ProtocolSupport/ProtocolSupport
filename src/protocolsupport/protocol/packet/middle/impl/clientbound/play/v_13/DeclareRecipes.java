@@ -4,7 +4,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV13;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_13_14r1_14r2_15_16r1_16r2_17r1_17r2.AbstractDeclareRecipes;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.AbstractDeclareRecipes;
 import protocolsupport.protocol.types.recipe.Recipe;
 import protocolsupport.protocol.types.recipe.RecipeType;
 

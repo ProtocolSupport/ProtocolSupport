@@ -12,11 +12,11 @@ import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV8;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheChunkData;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_8_9r1_9r2_10_11_12r1_12r2_13.BlockTileUpdate;
-import protocolsupport.protocol.typeremapper.basic.BiomeRemapper;
+import protocolsupport.protocol.typeremapper.basic.BiomeTransformer;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
-import protocolsupport.protocol.typeremapper.chunk.ChunkWriteUtils;
-import protocolsupport.protocol.typeremapper.chunk.ChunkWriterShort;
-import protocolsupport.protocol.typeremapper.legacy.LegacyBiomeData;
+import protocolsupport.protocol.typeremapper.chunk.ChunkBiomeLegacyWriter;
+import protocolsupport.protocol.typeremapper.chunk.ChunkBlockdataLegacyWriterShort;
+import protocolsupport.protocol.typeremapper.chunk.ChunkLegacyWriteUtils;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
 import protocolsupport.protocol.types.Position;
@@ -29,28 +29,27 @@ public class ChunkData extends AbstractChunkCacheChunkData implements IClientbou
 		super(init);
 	}
 
-	protected final GenericMappingTable<NamespacedKey> biomeLegacyDataTable = BiomeRemapper.REGISTRY.getTable(version);
+	protected final GenericMappingTable<NamespacedKey> biomeLegacyDataTable = BiomeTransformer.REGISTRY.getTable(version);
 	protected final IntMappingTable blockLegacyDataTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
+		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_DATA);
 		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
 		chunkdataPacket.writeBoolean(full);
 		if (mask.isEmpty() && full) {
 			chunkdataPacket.writeShort(1);
-			ArrayCodec.writeVarIntByteArray(chunkdataPacket, ChunkWriteUtils.getEmptySectionShort(clientCache.hasDimensionSkyLight()));
+			ArrayCodec.writeVarIntByteArray(chunkdataPacket, ChunkLegacyWriteUtils.getEmptySectionShort(clientCache.hasDimensionSkyLight()));
 		} else {
 			chunkdataPacket.writeShort(CollectionsUtils.getBitSetFirstLong(mask));
-			MiscDataCodec.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
-				to.writeBytes(ChunkWriterShort.serializeSections(
-					chunksections.blockLegacyDataTable,
-					chunksections.cachedChunk, chunksections.mask, chunksections.clientCache.hasDimensionSkyLight()
+			MiscDataCodec.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunkdataInstance) -> {
+				to.writeBytes(ChunkBlockdataLegacyWriterShort.serializeSections(
+					chunkdataInstance.blockLegacyDataTable,
+					chunkdataInstance.cachedChunk, chunkdataInstance.mask, chunkdataInstance.clientCache.hasDimensionSkyLight()
 				));
-				if (chunksections.full) {
-					int[] legacyBiomeData = LegacyBiomeData.toLegacyBiomeData(chunksections.biomes);
-					for (int biomeId : legacyBiomeData) {
-						to.writeByte(BiomeRemapper.mapLegacyBiome(chunksections.clientCache, chunksections.biomeLegacyDataTable, biomeId));
+				if (chunkdataInstance.full) {
+					for (int biomeId : ChunkBiomeLegacyWriter.toPerBlockBiomeData(chunkdataInstance.clientCache, chunkdataInstance.biomeLegacyDataTable, chunkdataInstance.sections[0].getBiomes())) {
+						to.writeByte(biomeId);
 					}
 				}
 			});

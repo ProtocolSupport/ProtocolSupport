@@ -6,7 +6,7 @@ import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddl
 import protocolsupport.protocol.packet.middle.impl.clientbound.login.noop.NoopSetCompression;
 import protocolsupport.protocol.packet.middle.impl.clientbound.login.v_4_5_6_7.EncryptionRequest;
 import protocolsupport.protocol.packet.middle.impl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15.LoginSuccess;
-import protocolsupport.protocol.packet.middle.impl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.LoginDisconnect;
+import protocolsupport.protocol.packet.middle.impl.clientbound.login.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.LoginDisconnect;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopActionbar;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopAdvancements;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopAdvanementsTab;
@@ -31,6 +31,7 @@ import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopTit
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopTitleSubText;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopTitleText;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopUnlockRecipes;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopUpdateSimulationDistance;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopUpdateViewDistance;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopVehicleMove;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.noop.NoopVibration;
@@ -70,9 +71,9 @@ import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.InventorySetItems;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.InventorySetSlot;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.SyncPing;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.InventoryData;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.ScoreboardDisplay;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.TimeUpdate;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.InventoryData;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.ScoreboardDisplay;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.TimeUpdate;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_5_6_7.InventoryOpen;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_5_6_7.ScoreboardObjective;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_5_6_7.ScoreboardScore;
@@ -84,7 +85,7 @@ import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_6_7.Invent
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_6_7.SetHealth;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_6_7_8.EntityLeash;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_6_7_8.EntityPassengers;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.PlayerAbilities;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.PlayerAbilities;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_7.BlockAction;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_7.BlockBreakAnimation;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_7.BlockBreakConfirm;
@@ -105,12 +106,12 @@ import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_7_8.SpawnE
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_7_8.SpawnLiving;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2.TabComplete;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13.ChangeDimension;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.EntityAnimation;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.GameStateChange;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.HeldSlot;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.KickDisconnect;
-import protocolsupport.protocol.packet.middle.impl.clientbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.Pong;
-import protocolsupport.protocol.packet.middle.impl.clientbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.ServerInfo;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.EntityAnimation;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.GameStateChange;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.HeldSlot;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.KickDisconnect;
+import protocolsupport.protocol.packet.middle.impl.clientbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.Pong;
+import protocolsupport.protocol.packet.middle.impl.clientbound.status.v_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.ServerInfo;
 import protocolsupport.protocol.pipeline.IPacketDataChannelIO;
 import protocolsupport.protocol.pipeline.version.util.encoder.AbstractPacketEncoder;
 import protocolsupport.protocol.storage.netcache.NetworkDataCache;
@@ -157,7 +158,7 @@ public class PacketEncoder extends AbstractPacketEncoder<IClientboundMiddlePacke
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_SET_EXPERIENCE, SetExperience::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_ENTITY_ATTRIBUTES, EntityAttributes::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_ENTITY_SOUND, EntitySound::new);
-		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_CHUNK_SINGLE, ChunkData::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_CHUNK_DATA, ChunkData::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_BLOCK_CHANGE_MULTI, BlockChangeMulti::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_BLOCK_CHANGE_SINGLE, BlockChangeSingle::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_BLOCK_BREAK_CONFIRM, BlockBreakConfirm::new);
@@ -227,6 +228,7 @@ public class PacketEncoder extends AbstractPacketEncoder<IClientboundMiddlePacke
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_SET_VIEW_CENTER, NoopSetViewCenter::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_UPDATE_VIEW_DISTANCE, NoopUpdateViewDistance::new);
 		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_VIBRATION, NoopVibration::new);
+		registry.register(NetworkState.PLAY, ClientBoundPacketType.PLAY_UPDATE_SIMULATION_DISTANCE, NoopUpdateSimulationDistance::new);
 	}
 
 }

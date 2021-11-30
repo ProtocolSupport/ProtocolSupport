@@ -20,6 +20,7 @@ IServerboundMiddlePacketV6 {
 		super(init);
 		mainHand = MainHand.RIGHT;
 		disableTextFilter = true;
+		list = true;
 	}
 
 	@Override

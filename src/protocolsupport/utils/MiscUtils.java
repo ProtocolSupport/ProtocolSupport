@@ -24,6 +24,10 @@ public class MiscUtils {
 		return ceil;
 	}
 
+	public static int ceilLog2(long mumber) {
+		return Long.SIZE - Long.numberOfLeadingZeros(mumber - 1);
+	}
+
 	public static long getColorDiff(int r1, int r2, int g1, int g2, int b1, int b2) {
 		long rmean = (r1 + r2) / 2;
 		long r = r1 - r2;

@@ -6,7 +6,7 @@ import protocolsupport.protocol.utils.NumberBitsStoragePadded;
 public class BlockStorageDirect extends NumberBitsStoragePadded implements BlockStorage {
 
 	public BlockStorageDirect() {
-		super(ChunkConstants.GLOBAL_PALETTE_BITS_PER_BLOCK, ChunkConstants.BLOCKS_IN_SECTION);
+		super(ChunkConstants.PALETTED_STORAGE_BLOCKS_GLOBAL_BITS, ChunkConstants.SECTION_BLOCK_COUNT);
 	}
 
 	public BlockStorageDirect(NumberBitsStoragePadded other) {

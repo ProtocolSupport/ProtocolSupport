@@ -35,6 +35,7 @@ IServerboundMiddlePacketV16r2 {
 	public ClientSettings(IMiddlePacketInit init) {
 		super(init);
 		disableTextFilter = true;
+		list = true;
 	}
 
 	@Override

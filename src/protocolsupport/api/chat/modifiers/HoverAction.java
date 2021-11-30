@@ -3,6 +3,7 @@ package protocolsupport.api.chat.modifiers;
 import java.io.IOException;
 import java.util.UUID;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -16,7 +17,6 @@ import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.protocol.types.nbt.mojangson.MojangsonParser;
 import protocolsupport.protocol.types.nbt.mojangson.MojangsonSerializer;
 import protocolsupport.protocol.utils.CommonNBT;
-import protocolsupport.protocol.utils.NamespacedKeyUtils;
 import protocolsupport.utils.reflection.ReflectionUtils;
 
 public class HoverAction {
@@ -35,7 +35,7 @@ public class HoverAction {
 					NBTString etype = compound.getStringTagOrNull("type");
 					NBTString euuid = compound.getStringTagOrNull("id");
 					yield new EntityInfo(
-						etype != null ? Registry.ENTITY_TYPE.get(NamespacedKeyUtils.fromString(etype.getValue())) : null,
+						etype != null ? Registry.ENTITY_TYPE.get(NamespacedKey.fromString(etype.getValue())) : null,
 						euuid != null ? UUID.fromString(euuid.getValue()) : null,
 						compound.getStringTagValueOrNull("name")
 					);

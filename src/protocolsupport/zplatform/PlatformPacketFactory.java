@@ -124,7 +124,11 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayEntityAttributesPacketId();
 
-	public int getOutPlayChunkSinglePacketId();
+	public int getOutPlayChunkDataPacketId();
+
+	public int getOutPlayChunkLightPacketId();
+
+	public int getOutPlayChunkUnloadPacketId();
 
 	public int getOutPlayBlockChangeMultiPacketId();
 
@@ -190,8 +194,6 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlaySetPassengersPacketId();
 
-	public int getOutPlayChunkUnloadPacketId();
-
 	public int getOutPlayWorldCustomSoundPacketId();
 
 	public int getOutPlayServerDifficultyPacketId();
@@ -222,11 +224,11 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayLookAtPacketId();
 
-	public int getOutPlayChunkLightPacketId();
-
 	public int getOutPlaySetViewCenterPacketId();
 
 	public int getOutPlayUpdateViewDistancePacketId();
+
+	public int getOutPlayUpdateSimulationDistancePacketId();
 
 	public int getOutPlayMerchantTradeListPacketId();
 

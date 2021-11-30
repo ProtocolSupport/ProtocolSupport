@@ -13,8 +13,8 @@ import protocolsupport.protocol.typeremapper.utils.MappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.ArrayBasedIntMappingTable;
 import protocolsupport.protocol.types.particle.NetworkParticle;
 import protocolsupport.protocol.types.particle.types.NetworkParticleAsh;
-import protocolsupport.protocol.types.particle.types.NetworkParticleBarrier;
 import protocolsupport.protocol.types.particle.types.NetworkParticleBlock;
+import protocolsupport.protocol.types.particle.types.NetworkParticleBlockMarker;
 import protocolsupport.protocol.types.particle.types.NetworkParticleBubble;
 import protocolsupport.protocol.types.particle.types.NetworkParticleBubbleColumnUp;
 import protocolsupport.protocol.types.particle.types.NetworkParticleBubblePop;
@@ -57,7 +57,6 @@ import protocolsupport.protocol.types.particle.types.NetworkParticleItem;
 import protocolsupport.protocol.types.particle.types.NetworkParticleLandingHoney;
 import protocolsupport.protocol.types.particle.types.NetworkParticleLandingLava;
 import protocolsupport.protocol.types.particle.types.NetworkParticleLandingObsidianTear;
-import protocolsupport.protocol.types.particle.types.NetworkParticleLight;
 import protocolsupport.protocol.types.particle.types.NetworkParticleNautilus;
 import protocolsupport.protocol.types.particle.types.NetworkParticlePoof;
 import protocolsupport.protocol.types.particle.types.NetworkParticlePortal;
@@ -96,6 +95,15 @@ public class NetworkParticleLegacyData {
 	public static class NetworkPartcleLegacyDataRegistry extends MappingRegistry<NetworkParticleLegacyDataTable> {
 
 		protected NetworkPartcleLegacyDataRegistry() {
+			for (ProtocolVersion version : ProtocolVersionsHelper.UP_1_18) {
+				ArrayBasedIntMappingTable blockLegacyDataTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
+				register(NetworkParticleBlockMarker.class, original -> new NetworkParticleBlockMarker(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount(),
+					blockLegacyDataTable.get(original.getBlockData())
+				), version);
+			}
+
 			for (ProtocolVersion version : ProtocolVersionsHelper.ALL) {
 				ArrayBasedIntMappingTable blockLegacyDataTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 				register(NetworkParticleBlock.class, original -> new NetworkParticleBlock(
@@ -316,7 +324,6 @@ public class NetworkParticleLegacyData {
 			registerSkip(NetworkParticleSnowflake.class, ProtocolVersionsHelper.DOWN_1_16_4);
 			registerSkip(NetworkParticleWaxOn.class, ProtocolVersionsHelper.DOWN_1_16_4);
 			registerSkip(NetworkParticleWaxOff.class, ProtocolVersionsHelper.DOWN_1_16_4);
-			registerSkip(NetworkParticleLight.class, ProtocolVersionsHelper.DOWN_1_16_4);
 			registerSkip(NetworkParticleGlowSquidInk.class, ProtocolVersionsHelper.DOWN_1_16_4);
 			registerSkip(NetworkParticleGlow.class, ProtocolVersionsHelper.DOWN_1_16_4);
 			registerSkip(NetworkParticleElectricSpark.class, ProtocolVersionsHelper.DOWN_1_16_4);
@@ -346,7 +353,7 @@ public class NetworkParticleLegacyData {
 			registerSkip(NetworkParticleDamageIndicator.class, ProtocolVersionsHelper.DOWN_1_8);
 			registerSkip(NetworkParticleSweepAttack.class, ProtocolVersionsHelper.DOWN_1_8);
 			registerSkip(NetworkParticleElderGuardian.class, ProtocolVersionsHelper.DOWN_1_7_10);
-			registerSkip(NetworkParticleBarrier.class, ProtocolVersionsHelper.DOWN_1_7_10);
+			registerSkip(NetworkParticleBlockMarker.class, ProtocolVersionsHelper.DOWN_1_7_10);
 		}
 
 		@SuppressWarnings("unchecked")

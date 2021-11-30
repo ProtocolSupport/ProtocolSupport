@@ -12,7 +12,9 @@ public class ClientSettings extends MiddleClientSettings implements IServerbound
 
 	public ClientSettings(IMiddlePacketInit init) {
 		super(init);
+		mainHand = MainHand.RIGHT;
 		disableTextFilter = true;
+		list = true;
 	}
 
 	@Override
@@ -22,7 +24,6 @@ public class ClientSettings extends MiddleClientSettings implements IServerbound
 		chatMode = MiscDataCodec.readByteEnum(clientdata, ChatMode.CONSTANT_LOOKUP);
 		chatColors = clientdata.readBoolean();
 		skinFlags = clientdata.readUnsignedByte();
-		mainHand = MainHand.RIGHT;
 	}
 
 }

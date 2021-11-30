@@ -26,7 +26,7 @@ public class SpigotLoginListener extends AbstractLoginListener implements Packet
 
 	@Override
 	public void a(IChatBaseComponent msg) {
-		Bukkit.getLogger().info(getConnectionRepr() + " lost connection: " + msg.getText());
+		Bukkit.getLogger().info(getConnectionRepr() + " lost connection: " + msg.a());
 	}
 
 	@Override

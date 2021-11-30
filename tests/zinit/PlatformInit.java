@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.craftbukkit.Main;
-import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
 import org.junit.jupiter.api.Assertions;
 
 import net.minecraft.server.MinecraftServer;

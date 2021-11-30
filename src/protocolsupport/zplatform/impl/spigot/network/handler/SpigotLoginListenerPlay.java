@@ -2,7 +2,6 @@ package protocolsupport.zplatform.impl.spigot.network.handler;
 
 import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -65,9 +64,9 @@ import net.minecraft.network.protocol.login.PacketLoginInStart;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.level.WorldServer;
-import net.minecraft.server.players.ExpirableListEntry;
 import net.minecraft.server.players.GameProfileBanEntry;
 import net.minecraft.server.players.IpBanEntry;
+import net.minecraft.server.players.JsonList;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.level.World;
 import protocolsupport.protocol.packet.handler.AbstractLoginListenerPlay;
@@ -85,7 +84,7 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 
 	@Override
 	protected JoinData createJoinData() {
-		WorldServer worldserver = server.getWorldServer(World.f);
+		WorldServer worldserver = server.a(World.f);
 		EntityPlayer entity = new EntityPlayer(
 			server,
 			worldserver,
@@ -102,55 +101,49 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void checkBans(PlayerLoginEvent event, Object[] data) {
-		PlayerList playerlist = server.getPlayerList();
+		PlayerList playerlist = server.ac();
 
-		GameProfile mojangGameProfile = ((EntityPlayer) data[0]).getProfile();
+		GameProfile mojangGameProfile = ((EntityPlayer) data[0]).fp();
 		SocketAddress address = networkManager.getAddress();
 
-		if (playerlist.getProfileBans().isBanned(mojangGameProfile)) {
-			GameProfileBanEntry profileban = playerlist.getProfileBans().get(mojangGameProfile);
-			if (isBanned(profileban)) {
-				String reason = "You are banned from this server!\nReason: " + profileban.getReason();
-				if (profileban.getExpires() != null) {
-					reason = reason + "\nYour ban will be removed on " +  new SimpleDateFormat(BAN_DATE_FORMAT_STRING).format(profileban.getExpires());
-				}
-				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, reason);
+		GameProfileBanEntry profileban = ((JsonList<GameProfile, GameProfileBanEntry>) playerlist.f()).b(mojangGameProfile);
+		if (profileban != null) {
+			String reason = "You are banned from this server!\nReason: " + profileban.d();
+			if (profileban.c() != null) {
+				reason = reason + "\nYour ban will be removed on " +  new SimpleDateFormat(BAN_DATE_FORMAT_STRING).format(profileban.c());
 			}
-		} else if (!playerlist.isWhitelisted(mojangGameProfile)) {
+			event.disallow(PlayerLoginEvent.Result.KICK_BANNED, reason);
+			return;
+		}
+
+		if (!playerlist.c(mojangGameProfile)) {
 			event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, SpigotConfig.whitelistMessage);
-		} else if (playerlist.getIPBans().isBanned(address)) {
-			IpBanEntry ipban = playerlist.getIPBans().get(address);
-			if (isBanned(ipban)) {
-				String reason = "Your IP address is banned from this server!\nReason: " + ipban.getReason();
-				if (ipban.getExpires() != null) {
-					reason = reason + "\nYour ban will be removed on " + new SimpleDateFormat(BAN_DATE_FORMAT_STRING).format(ipban.getExpires());
-				}
-				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, reason);
+			return;
+		}
+
+		IpBanEntry ipban = playerlist.g().b(address);
+		if (ipban != null) {
+			String reason = "Your IP address is banned from this server!\nReason: " + ipban.d();
+			if (ipban.c() != null) {
+				reason = reason + "\nYour ban will be removed on " + new SimpleDateFormat(BAN_DATE_FORMAT_STRING).format(ipban.c());
 			}
-		} else if ((playerlist.j.size() >= playerlist.getMaxPlayers()) && !playerlist.isOp(mojangGameProfile)) {
+			event.disallow(PlayerLoginEvent.Result.KICK_BANNED, reason);
+			return;
+		}
+
+		if ((playerlist.j.size() >= playerlist.n()) && !playerlist.f(mojangGameProfile)) {
 			event.disallow(PlayerLoginEvent.Result.KICK_FULL, SpigotConfig.serverFullMessage);
 		}
 	}
 
-	protected static boolean isBanned(ExpirableListEntry<?> entry) {
-		if (entry == null) {
-			return false;
-		}
-		Date expireDate = entry.getExpires();
-		if (expireDate == null) {
-			return true;
-		}
-		return expireDate.after(new Date());
-	}
-
 	@Override
 	protected void joinGame(Object[] data) {
-		server.getPlayerList().a((NetworkManager) networkManager.unwrap(), (EntityPlayer) data[0]);
+		server.ac().a((NetworkManager) networkManager.unwrap(), (EntityPlayer) data[0]);
 	}
 
 	@Override
 	public void a(IChatBaseComponent ichatbasecomponent) {
-		Bukkit.getLogger().info(getConnectionRepr() + " lost connection: " + ichatbasecomponent.getText());
+		Bukkit.getLogger().info(getConnectionRepr() + " lost connection: " + ichatbasecomponent.a());
 	}
 
 	@Override

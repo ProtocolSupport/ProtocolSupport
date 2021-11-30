@@ -42,7 +42,7 @@ public class PacketCodec extends BytePacketCodec {
 		registry.register(ClientBoundPacketType.PLAY_ENTITY_EFFECT_ADD, 0x29);
 		registry.register(ClientBoundPacketType.PLAY_ENTITY_EFFECT_REMOVE, 0x2A);
 		registry.register(ClientBoundPacketType.PLAY_SET_EXPERIENCE, 0x2B);
-		registry.register(ClientBoundPacketType.PLAY_CHUNK_SINGLE, 0x33);
+		registry.register(ClientBoundPacketType.PLAY_CHUNK_DATA, 0x33);
 		registry.register(ClientBoundPacketType.PLAY_BLOCK_CHANGE_MULTI, 0x34);
 		registry.register(ClientBoundPacketType.PLAY_BLOCK_CHANGE_SINGLE, 0x35);
 		registry.register(ClientBoundPacketType.PLAY_BLOCK_ACTION, 0x36);

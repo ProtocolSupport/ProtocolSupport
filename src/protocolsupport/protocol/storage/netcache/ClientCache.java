@@ -8,7 +8,6 @@ import org.bukkit.NamespacedKey;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import protocolsupport.protocol.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.NamespacedKeyUtils;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.reflection.ReflectionUtils;
 
@@ -37,6 +36,7 @@ public class ClientCache implements IBiomeRegistry {
 	protected String world;
 	protected NBTCompound dimension;
 	protected int minY;
+	protected int height;
 	protected boolean dimensionSkyLight;
 	protected boolean raining;
 
@@ -53,6 +53,7 @@ public class ClientCache implements IBiomeRegistry {
 			this.world = world;
 			this.dimension = dimension;
 			this.minY = dimension.getNumberTagOrThrow("min_y").getAsInt();
+			this.height = dimension.getNumberTagOrThrow("height").getAsInt();
 			this.dimensionSkyLight = dimension.getNumberTagOrThrow("has_skylight").getAsInt() == 1;
 			this.raining = false;
 		}
@@ -60,6 +61,10 @@ public class ClientCache implements IBiomeRegistry {
 
 	public int getMinY() {
 		return minY;
+	}
+
+	public int getHeight() {
+		return height;
 	}
 
 	public void setDimensionSkyLight(boolean hasSkyLight) {
@@ -100,6 +105,11 @@ public class ClientCache implements IBiomeRegistry {
 	}
 
 	@Override
+	public int getBiomesCount() {
+		return biomeId.size();
+	}
+
+	@Override
 	public int getBiomeId(NamespacedKey biome) {
 		return biomeId.getOrDefault(biome, -1);
 	}
@@ -120,7 +130,7 @@ public class ClientCache implements IBiomeRegistry {
 			throw new IllegalStateException("Dimension biome registry is empty");
 		}
 		for (NBTCompound biomeData : biomeRegistry.getCompoundListTagOrThrow("value").getTags()) {
-			registerBiome(NamespacedKeyUtils.fromString(biomeData.getStringTagValueOrThrow("name")), biomeData.getNumberTagOrThrow("id").getAsInt());
+			registerBiome(NamespacedKey.fromString(biomeData.getStringTagValueOrThrow("name")), biomeData.getNumberTagOrThrow("id").getAsInt());
 		}
 	}
 

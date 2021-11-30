@@ -6,23 +6,23 @@ import protocolsupport.protocol.codec.ArrayCodec;
 import protocolsupport.protocol.codec.ItemStackCodec;
 import protocolsupport.protocol.codec.MiscDataCodec;
 import protocolsupport.protocol.codec.PositionCodec;
-import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
-import protocolsupport.protocol.packet.middle.base.clientbound.play.MiddleChunkData;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV17r1;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV17r2;
-import protocolsupport.protocol.storage.netcache.ClientCache;
-import protocolsupport.protocol.typeremapper.basic.BiomeRemapper;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2_18.ChunkLight;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.AbstractMaskChunkData;
+import protocolsupport.protocol.typeremapper.basic.BiomeTransformer;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
-import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVaries;
+import protocolsupport.protocol.typeremapper.chunk.ChunkBiomeLegacyWriter;
+import protocolsupport.protocol.typeremapper.chunk.ChunkBlockdataLegacyWriterPaletted;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.GenericMappingTable;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
 
-public class ChunkData extends MiddleChunkData implements
+public class ChunkData extends AbstractMaskChunkData implements
 IClientboundMiddlePacketV17r1,
 IClientboundMiddlePacketV17r2 {
 
@@ -30,31 +30,27 @@ IClientboundMiddlePacketV17r2 {
 		super(init);
 	}
 
-	protected final ClientCache clientCache = cache.getClientCache();
-
-	protected final GenericMappingTable<NamespacedKey> biomeLegacyDataTable = BiomeRemapper.REGISTRY.getTable(version);
+	protected final GenericMappingTable<NamespacedKey> biomeLegacyDataTable = BiomeTransformer.REGISTRY.getTable(version);
 	protected final IntMappingTable blockLegacyDataTable = BlockDataLegacyDataRegistry.INSTANCE.getTable(version);
 	protected final FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockDataRegistry.INSTANCE.getTable(version);
 	protected final TileEntityRemapper tileRemapper = TileEntityRemapper.getRemapper(version);
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
+		io.writeClientbound(ChunkLight.create(coord, trustEdges, setSkyLightMask, setBlockLightMask, emptySkyLightMask, emptyBlockLightMask, skyLight, blockLight));
+
+		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_DATA);
 		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
 		ArrayCodec.writeVarIntLongArray(chunkdataPacket, mask.toLongArray());
 		ItemStackCodec.writeDirectTag(chunkdataPacket, heightmaps);
-		VarNumberCodec.writeVarInt(chunkdataPacket, biomes.length);
-		for (int biome : biomes) {
-			VarNumberCodec.writeVarInt(chunkdataPacket, BiomeRemapper.mapCustomBiome(clientCache, biomeLegacyDataTable, biome));
-		}
-		MiscDataCodec.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
-			ChunkWriterVaries.writeSectionsPadded(
-				to,
-				15,
-				chunksections.blockLegacyDataTable, chunksections.flatteningBlockDataTable,
-				chunksections.sections, chunksections.mask
-			);
-		});
+		MiscDataCodec.writeVarIntCountPrefixedType(chunkdataPacket, this, (biomesTo, chunkdataInstance) -> ChunkBiomeLegacyWriter.writeBiomes(
+			biomesTo, chunkdataInstance.clientCache, chunkdataInstance.biomeLegacyDataTable, chunkdataInstance.sections
+		));
+		MiscDataCodec.writeVarIntLengthPrefixedType(chunkdataPacket, this, (sectionsTo, chunkdataInstance) -> ChunkBlockdataLegacyWriterPaletted.writeSectionsBlockdataPadded(
+			sectionsTo,
+			15, chunkdataInstance.blockLegacyDataTable, chunkdataInstance.flatteningBlockDataTable,
+			chunkdataInstance.sections, chunkdataInstance.mask
+		));
 		ArrayCodec.writeVarIntTArray(
 			chunkdataPacket,
 			tiles,

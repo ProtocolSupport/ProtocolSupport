@@ -14,6 +14,7 @@ IServerboundMiddlePacketV17r2 {
 
 	public ClientSettings(IMiddlePacketInit init) {
 		super(init);
+		list = true;
 	}
 
 	@Override

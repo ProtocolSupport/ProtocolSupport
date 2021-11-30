@@ -17,12 +17,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
-import org.bukkit.craftbukkit.v1_17_R1.CraftParticle;
-import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_17_R1.util.CraftIconCache;
+import org.bukkit.craftbukkit.v1_18_R1.CraftParticle;
+import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_18_R1.util.CraftIconCache;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
@@ -163,7 +163,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public void updatePlayerInventorySlot(Player player, int slot) {
-		if (slot < PlayerInventory.getHotbarSize()) {
+		if (slot < PlayerInventory.g()) {
 			slot += 36;
 		} else if (slot > 39) {
 			slot += 5;
@@ -171,8 +171,8 @@ public class SpigotMiscUtils implements PlatformUtils {
 			slot = 8 - (slot - 36);
 		}
 		EntityPlayer platformPlayer = ((CraftPlayer) player).getHandle();
-		ContainerPlayer platformPlayerContainer = platformPlayer.bU;
-		platformPlayer.b.sendPacket(new PacketPlayOutSetSlot(platformPlayerContainer.j, platformPlayerContainer.incrementStateId(), slot, platformPlayerContainer.getSlot(slot).getItem()));
+		ContainerPlayer platformPlayerContainer = platformPlayer.bV;
+		platformPlayer.b.a(new PacketPlayOutSetSlot(platformPlayerContainer.j, platformPlayerContainer.k(), slot, platformPlayerContainer.a(slot).e()));
 	}
 
 	@Override
@@ -182,19 +182,19 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public Profile createWrappedProfile(LoginProfile loginProfile, Player player) {
-		return new SpigotWrappedGameProfile(loginProfile, ((CraftPlayer) player).getHandle().getProfile());
+		return new SpigotWrappedGameProfile(loginProfile, ((CraftPlayer) player).getHandle().fp());
 	}
 
 	@Override
 	public ItemStack createBukkitItemStackFromNetwork(NetworkItemStack stack) {
-		net.minecraft.world.item.ItemStack nmsitemstack = new net.minecraft.world.item.ItemStack(Item.getById(stack.getTypeId()), stack.getAmount());
+		net.minecraft.world.item.ItemStack nmsitemstack = new net.minecraft.world.item.ItemStack(Item.b(stack.getTypeId()), stack.getAmount());
 		NBTCompound rootTag = stack.getNBT();
 		if (rootTag != null) {
 			//TODO: a faster way to do that
 			ByteBuf buffer = Unpooled.buffer();
 			try {
 				DefaultNBTSerializer.INSTANCE.serializeTag(new ByteBufOutputStream(buffer), rootTag);
-				nmsitemstack.setTag(NBTCompressedStreamTools.a(new ByteBufInputStream(buffer), NBTReadLimiter.a));
+				nmsitemstack.c(NBTCompressedStreamTools.a(new ByteBufInputStream(buffer), NBTReadLimiter.a));
 			} catch (IOException e) {
 				throw new UncheckedIOException(e);
 			}
@@ -215,7 +215,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 			net.minecraft.world.item.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(itemstack);
 			ByteBuf buffer = Unpooled.buffer();
 			try {
-				NBTCompressedStreamTools.a(nmsItemStack.getTag(), (DataOutput) new ByteBufOutputStream(buffer));
+				NBTCompressedStreamTools.a(nmsItemStack.s(), (DataOutput) new ByteBufOutputStream(buffer));
 				networkItemStack.setNBT((NBTCompound) DefaultNBTSerializer.INSTANCE.deserializeTag(new ByteBufInputStream(buffer)));
 			} catch (IOException e) {
 				throw new UncheckedIOException(e);
@@ -242,7 +242,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 		if (key == null) {
 			return null;
 		}
-		return new NamespacedKey(key.getNamespace(), key.getKey());
+		return new NamespacedKey(key.b(), key.a());
 	}
 
 	@Override
@@ -262,7 +262,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public boolean isRunning() {
-		return SERVER.isRunning();
+		return SERVER.v();
 	}
 
 	@Override
@@ -272,7 +272,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public boolean isProxyPreventionEnabled() {
-		return SERVER.getDedicatedServerProperties().b;
+		return SERVER.a().b;
 	}
 
 	@Override
@@ -283,7 +283,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public void enableDebug() {
 		try {
-			ReflectionUtils.findField(DedicatedServerProperties.class, "debug").set(SERVER.getDedicatedServerProperties(), true);
+			ReflectionUtils.findField(DedicatedServerProperties.class, "debug").set(SERVER.a(), true);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new UncheckedReflectionException("Exception occured while enabling debug", e);
 		}
@@ -292,7 +292,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 	@Override
 	public void disableDebug() {
 		try {
-			ReflectionUtils.findField(DedicatedServerProperties.class, "debug").set(SERVER.getDedicatedServerProperties(), false);
+			ReflectionUtils.findField(DedicatedServerProperties.class, "debug").set(SERVER.a(), false);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new UncheckedReflectionException("Exception occured while disabling debug", e);
 		}
@@ -300,12 +300,12 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public int getCompressionThreshold() {
-		return SERVER.av();
+		return SERVER.au();
 	}
 
 	@Override
 	public KeyPair getEncryptionKeyPair() {
-		return SERVER.getKeyPair();
+		return SERVER.L();
 	}
 
 	@Override
@@ -322,7 +322,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public String getVersionName() {
-		return SERVER.getVersion();
+		return SERVER.G();
 	}
 
 	@Override
@@ -336,6 +336,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 		return ((CraftIconCache) icon).value;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public MultithreadEventLoopGroup getServerIOEventLoopGroup() {
 		if (Epoll.isAvailable() && SERVER.m()) {

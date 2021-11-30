@@ -10,7 +10,7 @@ import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
-import protocolsupport.protocol.typeremapper.chunk.ChunkWriterVariesWithLight;
+import protocolsupport.protocol.typeremapper.chunk.ChunkBlockdataLegacyWriterPalettedWithLight;
 import protocolsupport.protocol.typeremapper.utils.MappingTable.IntMappingTable;
 import protocolsupport.utils.CollectionsUtils;
 
@@ -25,20 +25,20 @@ public class ChunkLight extends AbstractChunkCacheChunkLight implements IClientb
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
+		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_DATA);
 		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);
 		chunkdataPacket.writeBoolean(false); //full
 		VarNumberCodec.writeVarInt(chunkdataPacket, CollectionsUtils.getBitSetFirstLong(blockMask));
-		MiscDataCodec.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
-			ChunkWriterVariesWithLight.writeSectionsCompactFlattening(
+		MiscDataCodec.writeVarIntLengthPrefixedType(chunkdataPacket, this, (to, chunkdataInstance) -> {
+			ChunkBlockdataLegacyWriterPalettedWithLight.writeSectionsBlockdataLightCompactFlattening(
 				to, 14,
-				chunksections.blockLegacyDataTable, chunksections.flatteningBlockDataTable,
-				chunksections.cachedChunk, chunksections.blockMask, chunksections.clientCache.hasDimensionSkyLight()
+				chunkdataInstance.blockLegacyDataTable, chunkdataInstance.flatteningBlockDataTable,
+				chunkdataInstance.cachedChunk, chunkdataInstance.blockMask, chunkdataInstance.clientCache.hasDimensionSkyLight()
 			);
 		});
-		MiscDataCodec.writeVarIntCountPrefixedType(chunkdataPacket, this, (to, chunksections) -> {
-			return ChunkWriterVariesWithLight.writeTiles(to, chunksections.cachedChunk, chunksections.blockMask);
-		});
+		MiscDataCodec.writeVarIntCountPrefixedType(chunkdataPacket, this, (to, chunksections) -> ChunkBlockdataLegacyWriterPalettedWithLight.writeTiles(
+			to, chunksections.cachedChunk, chunksections.blockMask
+		));
 		io.writeClientbound(chunkdataPacket);
 	}
 

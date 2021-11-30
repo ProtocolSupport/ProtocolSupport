@@ -14,6 +14,7 @@ public class ClientSettings extends MiddleClientSettings implements IServerbound
 		super(init);
 		mainHand = MainHand.RIGHT;
 		disableTextFilter = true;
+		list = true;
 	}
 
 	@Override

@@ -15,7 +15,7 @@ public class ChunkUnload extends AbstractChunkCacheChunkUnload implements IClien
 
 	@Override
 	protected void write() {
-		ClientBoundPacketData chunkunload = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_SINGLE);
+		ClientBoundPacketData chunkunload = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_DATA);
 		PositionCodec.writeIntChunkCoord(chunkunload, chunk);
 		chunkunload.writeBoolean(true);
 		chunkunload.writeShort(0);

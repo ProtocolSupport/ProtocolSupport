@@ -46,7 +46,7 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public InetSocketAddress getAddress() {
-		return (InetSocketAddress) internal.getSocketAddress();
+		return (InetSocketAddress) internal.c();
 	}
 
 	@Override
@@ -61,22 +61,22 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public boolean isConnected() {
-		return internal.isConnected();
+		return internal.h();
 	}
 
 	@Override
 	public void close(BaseComponent closeMessage) {
-		internal.close(SpigotMiscUtils.toPlatformMessage(closeMessage));
+		internal.a(SpigotMiscUtils.toPlatformMessage(closeMessage));
 	}
 
 	@Override
 	public void sendPacket(Object packet) {
-		internal.sendPacket((Packet<?>) packet);
+		internal.a((Packet<?>) packet);
 	}
 
 	@Override
 	public void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener) {
-		internal.sendPacket((Packet<?>) packet, genericListener);
+		internal.a((Packet<?>) packet, genericListener);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -129,7 +129,7 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public void setProtocol(NetworkState state) {
-		internal.setProtocol(SpigotMiscUtils.netStateToProtocol(state));
+		internal.a(SpigotMiscUtils.netStateToProtocol(state));
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public void setPacketListener(Object listener) {
-		internal.setPacketListener((PacketListener) listener);
+		internal.a((PacketListener) listener);
 	}
 
 	@Override

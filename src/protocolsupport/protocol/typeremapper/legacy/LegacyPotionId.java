@@ -8,7 +8,6 @@ import org.bukkit.NamespacedKey;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import protocolsupport.protocol.utils.NamespacedKeyUtils;
 import protocolsupport.utils.BitUtils;
 import protocolsupportbuildprocessor.Preload;
 
@@ -27,7 +26,7 @@ public class LegacyPotionId {
 	private static final int bitmaskThrowable = BitUtils.createIBitMaskFromBit(14);
 
 	private static void register(String name, int id, int... additionalIds) {
-		NamespacedKey key = NamespacedKeyUtils.fromString(name);
+		NamespacedKey key = NamespacedKey.fromString(name);
 		toLegacyTypeId.put(key.getKey(), id);
 		toLegacyTypeId.put(key.toString(), id);
 		fromLegacyTypeId.put(id, key.toString());

@@ -22,15 +22,16 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 	protected int skinFlags;
 	protected MainHand mainHand;
 	protected boolean disableTextFilter;
+	protected boolean list;
 
 	@Override
 	protected void write() {
 		cache.getClientCache().setLocale(locale);
 
-		io.writeServerbound(create(locale, viewDist, chatMode, chatColors, skinFlags, mainHand, disableTextFilter));
+		io.writeServerbound(create(locale, viewDist, chatMode, chatColors, skinFlags, mainHand, disableTextFilter, list));
 	}
 
-	public static ServerBoundPacketData create(String locale, int viewDist, ChatMode chatMode, boolean chatColors, int skinFlags, MainHand mainHand, boolean disableTextFilter) {
+	public static ServerBoundPacketData create(String locale, int viewDist, ChatMode chatMode, boolean chatColors, int skinFlags, MainHand mainHand, boolean disableTextFilter, boolean list) {
 		ServerBoundPacketData clientsettingsPacket = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_SETTINGS);
 		StringCodec.writeVarIntUTF8String(clientsettingsPacket, locale);
 		clientsettingsPacket.writeByte(viewDist);
@@ -39,6 +40,7 @@ public abstract class MiddleClientSettings extends ServerBoundMiddlePacket {
 		clientsettingsPacket.writeByte(skinFlags);
 		MiscDataCodec.writeVarIntEnum(clientsettingsPacket, mainHand);
 		clientsettingsPacket.writeBoolean(disableTextFilter);
+		clientsettingsPacket.writeBoolean(list);
 		return clientsettingsPacket;
 	}
 

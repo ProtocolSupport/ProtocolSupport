@@ -1,7 +1,5 @@
 package protocolsupport.protocol.packet.middle.impl.clientbound.play.v_16r1;
 
-import java.util.Map;
-
 import protocolsupport.protocol.codec.ArrayCodec;
 import protocolsupport.protocol.codec.ItemStackCodec;
 import protocolsupport.protocol.codec.StringCodec;
@@ -11,9 +9,9 @@ import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.base.clientbound.play.MiddleStartGame;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV16r1;
 import protocolsupport.protocol.typeremapper.legacy.LegacyDimension;
-import protocolsupport.protocol.types.nbt.NBT;
 import protocolsupport.protocol.types.nbt.NBTByte;
 import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTInt;
 import protocolsupport.protocol.types.nbt.NBTList;
 
 public class StartGame extends MiddleStartGame implements IClientboundMiddlePacketV16r1 {
@@ -45,15 +43,13 @@ public class StartGame extends MiddleStartGame implements IClientboundMiddlePack
 	protected static NBTCompound toLegacyDimensionRegistry(NBTCompound dimensions) {
 		NBTCompound legacyRegistry = new NBTCompound();
 		NBTList<NBTCompound> legacyDimensions = NBTList.createCompoundList();
-		for (NBTCompound dimension : dimensions.getCompoundTagOrThrow("minecraft:dimension_type").getCompoundListTagOrThrow("value").getTags()) {
-			NBTCompound dimensionSettings = dimension.getCompoundTagOrThrow("element");
-			NBTCompound legacyDimension = new NBTCompound();
-			legacyDimension.setTag("name", dimension.getTagOrNull("name"));
-			for (Map.Entry<String, NBT> dimensionSettingsEntry : dimensionSettings.getTags().entrySet()) {
-				legacyDimension.setTag(dimensionSettingsEntry.getKey(), dimensionSettingsEntry.getValue());
-			}
-			legacyDimension.setTag("shrunk", new NBTByte(dimensionSettings.getNumberTagOrThrow("coordinate_scale").getAsDouble() != 1.0));
-			legacyDimensions.addTag(legacyDimension);
+		for (NBTCompound dimensionEntryTag : dimensions.getCompoundTagOrThrow("minecraft:dimension_type").getCompoundListTagOrThrow("value").getTags()) {
+			NBTCompound dimensionDataTag = dimensionEntryTag.getCompoundTagOrThrow("element");
+			dimensionDataTag.setTag("name", dimensionEntryTag.getTagOrThrow("name"));
+			dimensionDataTag.setTag("logical_height", new NBTInt(Math.min(256, dimensionDataTag.getNumberTagOrThrow("logical_height").getAsInt())));
+			dimensionDataTag.setTag("height", new NBTInt(Math.min(256, dimensionDataTag.getNumberTagOrThrow("height").getAsInt())));
+			dimensionDataTag.setTag("shrunk", new NBTByte(dimensionDataTag.getNumberTagOrThrow("coordinate_scale").getAsDouble() != 1.0));
+			legacyDimensions.addTag(dimensionDataTag);
 		}
 		legacyRegistry.setTag("dimension", legacyDimensions);
 		return legacyRegistry;

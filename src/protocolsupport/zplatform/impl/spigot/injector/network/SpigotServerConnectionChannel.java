@@ -21,8 +21,8 @@ import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper
 import protocolsupport.zplatform.impl.spigot.network.handler.SpigotFakePacketListener;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketDecoder;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotPacketEncoder;
-import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedFrameEncoder;
 import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedFrameDecoder;
+import protocolsupport.zplatform.impl.spigot.network.pipeline.SpigotWrappedFrameEncoder;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotServerConnectionChannel extends ChannelInitializer {

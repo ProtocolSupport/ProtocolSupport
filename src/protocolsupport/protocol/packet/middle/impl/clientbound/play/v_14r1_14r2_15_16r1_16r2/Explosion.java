@@ -9,7 +9,7 @@ import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddl
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV15;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV16r1;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV16r2;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2.WorldCustomSound;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.WorldCustomSound;
 import protocolsupport.protocol.typeremapper.basic.SoundRemapper;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.SoundCategory;
