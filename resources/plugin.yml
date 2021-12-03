@@ -1,14 +1,14 @@
 name: ProtocolSupport
 main: protocolsupport.ProtocolSupport
 version: ${version}
-api-version: 1.17
+api-version: 1.18
 load: STARTUP
 
 commands:
   protocolsupport:
     description: All ProtocolSupport commands
     aliases: ps
-    usage: '/protocolsupport help'
+    usage: '/<command> help'
 
 website: 'https://github.com/ProtocolSupport/ProtocolSupport'
 authors:
