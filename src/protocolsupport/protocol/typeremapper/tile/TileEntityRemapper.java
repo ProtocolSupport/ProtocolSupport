@@ -117,6 +117,10 @@ public class TileEntityRemapper {
 			ProtocolVersionsHelper.ALL_PC
 		);
 
+		for (TileEntityType type : TileEntityType.values()) {
+			register(type, TileEntityAppendTypeAndPositionRemapper.INSTANCE, ProtocolVersionsHelper.DOWN_1_17_1);
+		}
+
 		register(TileEntityType.PISTON, new TileEntityPistonRemapper(), ProtocolVersionsHelper.DOWN_1_12_2);
 
 		register(TileEntityType.BANNER, new TileEntityBannerRemapper(), ProtocolVersionsHelper.DOWN_1_12_2);
