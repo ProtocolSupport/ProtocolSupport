@@ -19,7 +19,7 @@ import protocolsupportbuildprocessor.Preload;
 public enum ProtocolVersion {
 
 	MINECRAFT_FUTURE(-1, ProtocolType.PC),
-	MINECRAFT_1_18(757, ProtocolType.PC, "1.18"),
+	MINECRAFT_1_18(757, ProtocolType.PC, "1.18-1.18.1"),
 	MINECRAFT_1_17_1(756, ProtocolType.PC, "1.17.1"),
 	MINECRAFT_1_17(755, ProtocolType.PC, "1.17"),
 	MINECRAFT_1_16_4(754, ProtocolType.PC, "1.16.4-1.16.5"),

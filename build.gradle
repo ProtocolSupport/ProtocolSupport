@@ -13,7 +13,7 @@ defaultTasks 'build'
 
 
 group 'protocolsupport'
-version '1.18-1-dev'
+version '1.18.1-1'
 
 
 import java.nio.file.Path
@@ -96,24 +96,24 @@ dependencies {
 			new URL('https://hub.spigotmc.org/jenkins/job/BuildTools/138/artifact/target/BuildTools.jar'),
 			spigotBuildDirectoryPath,
 			'BuildTools.jar',
-			['java', '-jar', 'BuildTools.jar', '--rev', '1.18'],
-			['spigot-1.18.jar']
+			['java', '-jar', 'BuildTools.jar', '--rev', '1.18.1'],
+			['spigot-1.18.1.jar']
 		).setBuildEnv([
 			'MAVEN_OPTS': '-Dmaven.repo.local=' + spigotBuildDirectoryPath.resolve('m2').toString() + ' -Xmx1024M'
 		]),
-		'META-INF/versions/spigot-1.18-R0.1-SNAPSHOT.jar',
+		'META-INF/versions/spigot-1.18.1-R0.1-SNAPSHOT.jar',
 		spigotBuildDirectoryPath,
-		'spigot-1.18-real.jar'
+		'spigot-1.18.1-real.jar'
 	)
 
 	compileOnly group: 'com.github.ProtocolSupport', name: 'ProtocolSupportBuildProcessor', version: '907b3e20db'
-	compileOnly group: 'io.papermc.paper', name: 'paper-api', version: '1.18-R0.1-SNAPSHOT'
+	compileOnly group: 'io.papermc.paper', name: 'paper-api', version: '1.18.1-R0.1-SNAPSHOT'
 	compileOnly ManualGradleDependencySupplier.supplyDependecies([
 		new FilterZipFileDependencySupplier(
 			spigotDependencySupplier,
 			['/net/minecraft', '/com/mojang', '/org/bukkit/craftbukkit', '/org/spigotmc'], true,
 			spigotBuildDirectoryPath,
-			'spigot-1.18-real-filtered-compile.jar'
+			'spigot-1.18.1-real-filtered-compile.jar'
 		)
 	])
 	compileOnly group: 'io.netty', name: 'netty-all', version: '4.1.70.Final'
@@ -125,7 +125,7 @@ dependencies {
 
 	annotationProcessor group: 'com.github.ProtocolSupport', name: 'ProtocolSupportBuildProcessor', version: '907b3e20db'
 
-	testImplementation group: 'org.spigotmc', name: 'spigot-api', version: '1.18-R0.1-SNAPSHOT' 
+	testImplementation group: 'org.spigotmc', name: 'spigot-api', version: '1.18.1-R0.1-SNAPSHOT' 
 	testImplementation ManualGradleDependencySupplier.supplyDependecies([
 		spigotDependencySupplier
 	])
@@ -135,9 +135,9 @@ dependencies {
 	testImplementation group: 'com.mojang', name: 'brigadier', version: '1.0.18'
 	testImplementation group: 'com.mojang', name: 'datafixerupper', version: '4.0.26'
 	testImplementation group: 'com.mojang', name: 'javabridge', version: '1.2.24'
-	testImplementation group: 'org.apache.logging.log4j', name: 'log4j', version: '2.14.1', ext: 'pom'
-	testImplementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.1'
-	testImplementation group: 'org.apache.logging.log4j', name: 'log4j-iostreams', version: '2.14.1'
+	testImplementation group: 'org.apache.logging.log4j', name: 'log4j', version: '2.15.0', ext: 'pom'
+	testImplementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.15.0'
+	testImplementation group: 'org.apache.logging.log4j', name: 'log4j-iostreams', version: '2.15.0'
 	testImplementation group: 'net.sf.jopt-simple', name: 'jopt-simple', version: '5.0.4'
 	testImplementation group: 'jline', name: 'jline', version: '2.12.1'
 	testImplementation group: 'com.github.oshi', name: 'oshi-core', version: '5.8.5'
