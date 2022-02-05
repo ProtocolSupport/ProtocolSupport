@@ -1,75 +1,63 @@
 package protocolsupport.protocol.types;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
-import org.bukkit.NamespacedKey;
-
+import protocolsupport.protocol.utils.minecraftdata.MinecraftTileData;
 import protocolsupport.utils.CollectionsUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public enum TileEntityType {
 
-	UNKNOWN(0, "__faketype_unknown"),
-	MOB_SPAWNER(1, "mob_spawner"),
-	COMMAND_BLOCK(2, "command_block"),
-	BEACON(3, "beacon"),
-	SKULL(4, "skull"),
-	CONDUIT(5, "conduit"),
-	BANNER(6, "banner"),
-	STRUCTURE(7, "structure_block"),
-	END_GATEWAY(8, "end_gateway"),
-	SIGN(9, "sign"),
-	SHULKER_BOX(10, "shulker_box"),
-	BED(11, "bed"),
-	JIGSAW(12, "jigsaw"),
-	CAMPFIRE(13, "campfire"),
-	BEEHIVE(14, "beehive"),
-	FURNACE(-1, "furnace"),
-	CHEST(-1, "chest"),
-	TRAPPED_CHEST(-1, "trapped_chest"),
-	ENDER_CHEST(-1, "ender_chest"),
-	JUKEXBOX(-1, "jukebox"),
-	DISPENSER(-1, "dispenser"),
-	DROPPER(-1, "dropper"),
-	NOTE_BLOCK(-1, "noteblock"),
-	PISTON(-1, "piston"),
-	BREWING_STAND(-1, "brewing_stand"),
-	ENCHANTING_TABLE(-1, "enchanting_table"),
-	END_PORTAL(-1, "end_portal"),
-	DAYLIGHT_DETECTOR(-1, "daylight_detector"),
-	HOPPER(-1, "hopper"),
-	COMPARATOR(-1, "comparator"),
-	STRUCTURE_BLOCK(-1, "structure_block"),
-	BARREL(-1, "barrel"),
-	SMOKER(-1, "smoker"),
-	BLAST_FURNACE(-1, "blast_furnace"),
-	LECTERN(-1, "lectern"),
-	BELL(-1, "bell");
+	UNKNOWN("___unknown"),
+	MOB_SPAWNER("mob_spawner"),
+	COMMAND_BLOCK("command_block"),
+	BEACON("beacon"),
+	SKULL("skull"),
+	CONDUIT("conduit"),
+	BANNER("banner"),
+	STRUCTURE("structure_block"),
+	END_GATEWAY("end_gateway"),
+	SIGN("sign"),
+	SHULKER_BOX("shulker_box"),
+	BED("bed"),
+	JIGSAW("jigsaw"),
+	CAMPFIRE("campfire"),
+	BEEHIVE("beehive"),
+	FURNACE("furnace"),
+	CHEST("chest"),
+	TRAPPED_CHEST("trapped_chest"),
+	ENDER_CHEST("ender_chest"),
+	JUKEXBOX("jukebox"),
+	DISPENSER("dispenser"),
+	DROPPER("dropper"),
+	PISTON("piston"),
+	BREWING_STAND("brewing_stand"),
+	ENCHANTING_TABLE("enchanting_table"),
+	END_PORTAL("end_portal"),
+	DAYLIGHT_DETECTOR("daylight_detector"),
+	HOPPER("hopper"),
+	COMPARATOR("comparator"),
+	STRUCTURE_BLOCK("structure_block"),
+	BARREL("barrel"),
+	SMOKER("smoker"),
+	BLAST_FURNACE("blast_furnace"),
+	LECTERN("lectern"),
+	BELL("bell"),
+	SKULK_SENSOR("sculk_sensor");
 
-	private static final HashMap<String, TileEntityType> by_r_id = new HashMap<>();
-	private static final ArrayMap<TileEntityType> by_n_id = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(values()).filter(v -> v.networkId > 0), (v -> v.networkId));
-	static {
-		Arrays.stream(values()).forEach(v -> {
-			by_r_id.put(v.registryId, v);
-			by_r_id.put(NamespacedKey.minecraft(v.registryId).toString(), v);
-		});
-	}
+	private static final ArrayMap<TileEntityType> by_n_id = CollectionsUtils.makeEnumMappingArrayMap(Arrays.stream(values()), (v -> v.networkId));
 
 	public static TileEntityType getByNetworkId(int id) {
 		TileEntityType type = by_n_id.get(id);
 		return type != null ? type : UNKNOWN;
 	}
 
-	public static TileEntityType getByRegistryId(String type) {
-		return by_r_id.getOrDefault(type, TileEntityType.UNKNOWN);
-	}
-
 	private final int networkId;
 	private final String registryId;
-	TileEntityType(int networkId, String registryId) {
-		this.networkId = networkId;
+
+	TileEntityType(String registryId) {
 		this.registryId = registryId;
+		this.networkId = MinecraftTileData.getIdByName(registryId);
 	}
 
 	public String getRegistryId() {

@@ -13,6 +13,7 @@ import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddl
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV7;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractChunkCacheBlockTileUpdate;
 import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
+import protocolsupport.protocol.typeremapper.legacy.LegacyTileEntityId;
 import protocolsupport.protocol.types.TileEntity;
 import protocolsupport.protocol.types.TileEntityType;
 import protocolsupport.protocol.utils.CommonNBT;
@@ -45,7 +46,7 @@ IClientboundMiddlePacketV7
 		} else {
 			ClientBoundPacketData blocktileupdate = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_BLOCK_TILE);
 			PositionCodec.writePositionISI(blocktileupdate, tile.getPosition());
-			blocktileupdate.writeByte(type.getNetworkId());
+			blocktileupdate.writeByte(LegacyTileEntityId.toLegacyId(type));
 			ItemStackCodec.writeShortTag(blocktileupdate, tile.getNBT());
 			return blocktileupdate;
 		}

@@ -12,6 +12,7 @@ import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddl
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV16r2;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV17r1;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV17r2;
+import protocolsupport.protocol.typeremapper.legacy.LegacyTileEntityId;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
 
 public class BlockTileUpdate extends MiddleBlockTileUpdate implements
@@ -35,7 +36,7 @@ IClientboundMiddlePacketV17r2 {
 
 		ClientBoundPacketData blocktileupdate = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_BLOCK_TILE);
 		PositionCodec.writePosition(blocktileupdate, tile.getPosition());
-		blocktileupdate.writeByte(tile.getType().getNetworkId());
+		blocktileupdate.writeByte(LegacyTileEntityId.toLegacyId(tile.getType()));
 		ItemStackCodec.writeDirectTag(blocktileupdate, tile.getNBT());
 		io.writeClientbound(blocktileupdate);
 	}
