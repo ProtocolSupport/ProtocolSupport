@@ -29,7 +29,7 @@ public class SpigotPacketEncoder extends MessageToByteEncoder<Packet<PacketListe
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, Packet<PacketListener> packet, ByteBuf data) throws Exception {
-		EnumProtocol currentProtocol = ctx.channel().attr(NetworkManager.c).get();
+		EnumProtocol currentProtocol = ctx.channel().attr(NetworkManager.e).get();
 		final Integer packetId = currentProtocol.a(EnumProtocolDirection.b, packet);
 		if (packetId == null) {
 			throw new EncoderException("Can't serialize unregistered packet " + packet.getClass().getName());

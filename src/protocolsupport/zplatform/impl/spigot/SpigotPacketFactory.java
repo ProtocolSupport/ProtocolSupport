@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 
 import com.mojang.authlib.GameProfile;
 
@@ -997,7 +997,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	protected static FieldReader<Map<Class<? extends Packet<?>>, Integer>> getPacketIdMapField() {
 		try {
-			return FieldReader.of(SpigotPacketFactory.class.getClassLoader().loadClass(EnumProtocol.class.getName() + "$a"), "a", ReflectionUtils.generifyClass(Map.class));
+			return FieldReader.of(SpigotPacketFactory.class.getClassLoader().loadClass(EnumProtocol.class.getName() + "$a"), "b", ReflectionUtils.generifyClass(Map.class));
 		} catch (IllegalArgumentException | ClassNotFoundException e) {
 			throw new UncheckedReflectionException(e);
 		}

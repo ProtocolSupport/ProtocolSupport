@@ -56,7 +56,7 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public void setAddress(InetSocketAddress address) {
-		internal.l = address;
+		internal.n = address;
 	}
 
 	@Override
@@ -134,7 +134,7 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public NetworkState getNetworkState() {
-		return SpigotMiscUtils.protocolToNetState(getChannel().attr(NetworkManager.c).get());
+		return SpigotMiscUtils.protocolToNetState(getChannel().attr(NetworkManager.e).get());
 	}
 
 	@Override

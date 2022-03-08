@@ -1,13 +1,18 @@
 package protocolsupport.protocol.utils.pingresponse;
 
 import java.net.InetSocketAddress;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import org.bukkit.Bukkit;
+import org.bukkit.profile.PlayerTextures;
+import org.jetbrains.annotations.Nullable;
 import org.spigotmc.SpigotConfig;
 
 import com.destroystokyo.paper.event.server.PaperServerListPingEvent;
@@ -96,6 +101,11 @@ public class PaperPingResponseHandler extends PingResponseHandler {
 		}
 
 		@Override
+		public UUID getUniqueId() {
+			return uuid;
+		}
+
+		@Override
 		public UUID getId() {
 			return uuid;
 		}
@@ -119,9 +129,10 @@ public class PaperPingResponseHandler extends PingResponseHandler {
 			return currentId;
 		}
 
+		@SuppressWarnings("deprecation")
 		@Override
-		public Set<ProfileProperty> getProperties() {
-			return Collections.emptySet();
+		public CompletableFuture<org.bukkit.profile.PlayerProfile> update() {
+			return CompletableFuture.completedFuture(this);
 		}
 
 		@Override
@@ -155,6 +166,11 @@ public class PaperPingResponseHandler extends PingResponseHandler {
 		}
 
 		@Override
+		public Set<ProfileProperty> getProperties() {
+			return Collections.emptySet();
+		}
+
+		@Override
 		public boolean hasProperty(String propertyName) {
 			return false;
 		}
@@ -162,6 +178,63 @@ public class PaperPingResponseHandler extends PingResponseHandler {
 		@Override
 		public boolean removeProperty(String propertyName) {
 			return false;
+		}
+
+		protected static final PlayerTextures TEXTURES_NOOP = new PlayerTextures() {
+			@Override
+			public void setSkin(@Nullable URL skinUrl, @Nullable SkinModel skinModel) {
+			}
+			
+			@Override
+			public void setSkin(@Nullable URL skinUrl) {
+			}
+			
+			@Override
+			public void setCape(@Nullable URL capeUrl) {
+			}
+			
+			@Override
+			public boolean isSigned() {
+				return false;
+			}
+			
+			@Override
+			public boolean isEmpty() {
+				return true;
+			}
+			
+			@Override
+			public long getTimestamp() {
+				return 0;
+			}
+			
+			@Override
+			public SkinModel getSkinModel() {
+				return SkinModel.CLASSIC;
+			}
+			
+			@Override
+			public URL getSkin() {
+				return null;
+			}
+			
+			@Override
+			public URL getCape() {
+				return null;
+			}
+			
+			@Override
+			public void clear() {
+			}
+		};
+
+		@Override
+		public PlayerTextures getTextures() {
+			return TEXTURES_NOOP;
+		}
+
+		@Override
+		public void setTextures(PlayerTextures textures) {
 		}
 
 		@Override
@@ -174,6 +247,16 @@ public class PaperPingResponseHandler extends PingResponseHandler {
 
 		@Override
 		public void setProperty(ProfileProperty arg0) {
+		}
+
+		@Override
+		public Map<String, Object> serialize() {
+			return Collections.emptyMap();
+		}
+
+		@Override
+		public NameUUIDPlayerProfile clone() {
+			return new NameUUIDPlayerProfile(uuid, name);
 		}
 
 	}

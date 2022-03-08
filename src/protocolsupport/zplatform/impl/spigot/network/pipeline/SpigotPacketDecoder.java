@@ -24,7 +24,7 @@ public class SpigotPacketDecoder extends ByteToMessageDecoder {
 		if (!input.isReadable()) {
 			return;
 		}
-		EnumProtocol protocol = ctx.channel().attr(NetworkManager.c).get();
+		EnumProtocol protocol = ctx.channel().attr(NetworkManager.e).get();
 		wrapper.setBuf(input);
 		int packetId = VarNumberCodec.readVarInt(wrapper);
 		Packet<?> packet = protocol.a(EnumProtocolDirection.a, packetId, nativeSerializer);

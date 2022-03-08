@@ -17,12 +17,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
-import org.bukkit.craftbukkit.v1_18_R1.CraftParticle;
-import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_18_R1.util.CraftIconCache;
+import org.bukkit.craftbukkit.v1_18_R2.CraftParticle;
+import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_18_R2.util.CraftIconCache;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
@@ -152,7 +152,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 		if (player instanceof CraftPlayer craftPlayer) {
 			PlayerConnection connection = craftPlayer.getHandle().b;
 			if (connection != null) {
-				Channel channel = connection.a.k;
+				Channel channel = connection.a.m;
 				if (channel != null) {
 					return ConnectionImpl.getFromChannel(channel);
 				}
@@ -171,8 +171,8 @@ public class SpigotMiscUtils implements PlatformUtils {
 			slot = 8 - (slot - 36);
 		}
 		EntityPlayer platformPlayer = ((CraftPlayer) player).getHandle();
-		ContainerPlayer platformPlayerContainer = platformPlayer.bV;
-		platformPlayer.b.a(new PacketPlayOutSetSlot(platformPlayerContainer.j, platformPlayerContainer.k(), slot, platformPlayerContainer.a(slot).e()));
+		ContainerPlayer platformPlayerContainer = platformPlayer.bU;
+		platformPlayer.b.a(new PacketPlayOutSetSlot(platformPlayerContainer.j, platformPlayerContainer.k(), slot, platformPlayerContainer.b(slot).e()));
 	}
 
 	@Override
@@ -182,7 +182,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public Profile createWrappedProfile(LoginProfile loginProfile, Player player) {
-		return new SpigotWrappedGameProfile(loginProfile, ((CraftPlayer) player).getHandle().fp());
+		return new SpigotWrappedGameProfile(loginProfile, ((CraftPlayer) player).getHandle().fq());
 	}
 
 	@Override
@@ -215,7 +215,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 			net.minecraft.world.item.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(itemstack);
 			ByteBuf buffer = Unpooled.buffer();
 			try {
-				NBTCompressedStreamTools.a(nmsItemStack.s(), (DataOutput) new ByteBufOutputStream(buffer));
+				NBTCompressedStreamTools.a(nmsItemStack.u(), (DataOutput) new ByteBufOutputStream(buffer));
 				networkItemStack.setNBT((NBTCompound) DefaultNBTSerializer.INSTANCE.deserializeTag(new ByteBufInputStream(buffer)));
 			} catch (IOException e) {
 				throw new UncheckedIOException(e);

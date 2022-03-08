@@ -103,7 +103,7 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 	protected void checkBans(PlayerLoginEvent event, Object[] data) {
 		PlayerList playerlist = server.ac();
 
-		GameProfile mojangGameProfile = ((EntityPlayer) data[0]).fp();
+		GameProfile mojangGameProfile = ((EntityPlayer) data[0]).fq();
 		SocketAddress address = networkManager.getAddress();
 
 		GameProfileBanEntry profileban = ((JsonList<GameProfile, GameProfileBanEntry>) playerlist.f()).b(mojangGameProfile);
