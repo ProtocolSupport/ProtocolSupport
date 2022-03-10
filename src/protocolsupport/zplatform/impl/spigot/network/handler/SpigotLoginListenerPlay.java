@@ -84,7 +84,7 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 
 	@Override
 	protected JoinData createJoinData() {
-		WorldServer worldserver = server.a(World.f);
+		WorldServer worldserver = server.a(World.e);
 		EntityPlayer entity = new EntityPlayer(
 			server,
 			worldserver,
