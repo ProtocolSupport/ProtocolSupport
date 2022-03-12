@@ -9,6 +9,7 @@ import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.base.clientbound.play.MiddleStartGame;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV17r1;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV17r2;
+import protocolsupport.protocol.typeremapper.legacy.LegacyDimension;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTFloat;
 import protocolsupport.protocol.types.nbt.NBTString;
@@ -30,7 +31,7 @@ IClientboundMiddlePacketV17r2 {
 		startgame.writeByte(gamemodePrevious.getId());
 		ArrayCodec.writeVarIntVarIntUTF8StringArray(startgame, worlds);
 		ItemStackCodec.writeDirectTag(startgame, toLegacyDimensionRegistry(dimensions));
-		ItemStackCodec.writeDirectTag(startgame, dimension);
+		ItemStackCodec.writeDirectTag(startgame, toLegacyDimensionType(dimension));
 		StringCodec.writeVarIntUTF8String(startgame, world);
 		startgame.writeLong(hashedSeed);
 		VarNumberCodec.writeVarInt(startgame, maxplayers);
@@ -43,6 +44,10 @@ IClientboundMiddlePacketV17r2 {
 	}
 
 	protected static NBTCompound toLegacyDimensionRegistry(NBTCompound dimensionsTag) {
+		NBTCompound dimensionRegistryTag = dimensionsTag.getCompoundTagOrThrow("minecraft:dimension_type");
+		for (NBTCompound dimensionEntryTag : dimensionRegistryTag.getCompoundListTagOrThrow("value")) {
+			toLegacyDimensionType(dimensionEntryTag.getCompoundTagOrThrow("element"));
+		}
 		NBTCompound biomeRegistryTag = dimensionsTag.getCompoundTagOrThrow("minecraft:worldgen/biome");
 		for (NBTCompound biomeEntryTag : biomeRegistryTag.getCompoundListTagOrThrow("value").getTags()) {
 			NBTCompound biomeDataTag = biomeEntryTag.getCompoundTagOrThrow("element");
@@ -51,6 +56,11 @@ IClientboundMiddlePacketV17r2 {
 			biomeDataTag.setTag("category", new NBTString(toLegacyBiomeCategory(biomeDataTag.getStringTagOrThrow("category").getValue())));
 		}
 		return dimensionsTag;
+	}
+
+	public static NBTCompound toLegacyDimensionType(NBTCompound dimensionDataTag) {
+		dimensionDataTag.setTag("infiniburn", new NBTString(LegacyDimension.getLegacyResource(dimensionDataTag.getStringTagOrThrow("infiniburn").getValue())));
+		return dimensionDataTag;
 	}
 
 	protected static String toLegacyBiomeCategory(String category) {

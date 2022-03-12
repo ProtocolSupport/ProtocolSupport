@@ -8,6 +8,7 @@ import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.base.clientbound.play.MiddleStartGame;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV16r2;
+import protocolsupport.protocol.typeremapper.legacy.LegacyDimension;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTFloat;
 import protocolsupport.protocol.types.nbt.NBTInt;
@@ -55,6 +56,13 @@ public class StartGame extends MiddleStartGame implements IClientboundMiddlePack
 		return dimensionsTag;
 	}
 
+	public static NBTCompound toLegacyDimensionType(NBTCompound dimensionDataTag) {
+		dimensionDataTag.setTag("infiniburn", new NBTString(LegacyDimension.getLegacyResource(dimensionDataTag.getStringTagOrThrow("infiniburn").getValue())));
+		dimensionDataTag.setTag("logical_height", new NBTInt(Math.min(256, dimensionDataTag.getNumberTagOrThrow("logical_height").getAsInt())));
+		dimensionDataTag.setTag("height", new NBTInt(Math.min(256, dimensionDataTag.getNumberTagOrThrow("height").getAsInt())));
+		return dimensionDataTag;
+	}
+
 	protected static String toLegacyBiomeCategory(String category) {
 		switch (category) {
 			case "mountain":
@@ -65,12 +73,6 @@ public class StartGame extends MiddleStartGame implements IClientboundMiddlePack
 				return category;
 			}
 		}
-	}
-
-	public static NBTCompound toLegacyDimensionType(NBTCompound dimensionDataTag) {
-		dimensionDataTag.setTag("logical_height", new NBTInt(Math.min(256, dimensionDataTag.getNumberTagOrThrow("logical_height").getAsInt())));
-		dimensionDataTag.setTag("height", new NBTInt(Math.min(256, dimensionDataTag.getNumberTagOrThrow("height").getAsInt())));
-		return dimensionDataTag;
 	}
 
 }

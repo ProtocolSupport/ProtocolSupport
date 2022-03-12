@@ -13,6 +13,7 @@ import protocolsupport.protocol.types.nbt.NBTByte;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.nbt.NBTInt;
 import protocolsupport.protocol.types.nbt.NBTList;
+import protocolsupport.protocol.types.nbt.NBTString;
 
 public class StartGame extends MiddleStartGame implements IClientboundMiddlePacketV16r1 {
 
@@ -46,6 +47,7 @@ public class StartGame extends MiddleStartGame implements IClientboundMiddlePack
 		for (NBTCompound dimensionEntryTag : dimensions.getCompoundTagOrThrow("minecraft:dimension_type").getCompoundListTagOrThrow("value").getTags()) {
 			NBTCompound dimensionDataTag = dimensionEntryTag.getCompoundTagOrThrow("element");
 			dimensionDataTag.setTag("name", dimensionEntryTag.getTagOrThrow("name"));
+			dimensionDataTag.setTag("infiniburn", new NBTString(LegacyDimension.getLegacyResource(dimensionDataTag.getStringTagOrThrow("infiniburn").getValue())));
 			dimensionDataTag.setTag("logical_height", new NBTInt(Math.min(256, dimensionDataTag.getNumberTagOrThrow("logical_height").getAsInt())));
 			dimensionDataTag.setTag("height", new NBTInt(Math.min(256, dimensionDataTag.getNumberTagOrThrow("height").getAsInt())));
 			dimensionDataTag.setTag("shrunk", new NBTByte(dimensionDataTag.getNumberTagOrThrow("coordinate_scale").getAsDouble() != 1.0));

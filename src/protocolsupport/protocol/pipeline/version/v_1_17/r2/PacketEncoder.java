@@ -49,12 +49,12 @@ import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_16r1_16r2_
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_16r1_16r2_17r1_17r2_18.EntityEquipment;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_16r1_16r2_17r1_17r2_18.SpawnObject;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_16r2_17r1_17r2_18.UnlockRecipes;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2.ChangeDimension;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2.ChunkData;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2.StartGame;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2_18.Actionbar;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2_18.BlockChangeMulti;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2_18.BlockChangeSingle;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2_18.ChangeDimension;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2_18.ChunkLight;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2_18.CombatBegin;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2_18.CombatDeath;

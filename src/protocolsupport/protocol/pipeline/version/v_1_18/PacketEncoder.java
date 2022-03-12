@@ -50,7 +50,6 @@ import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_16r2_17r1_
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2_18.Actionbar;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2_18.BlockChangeMulti;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2_18.BlockChangeSingle;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2_18.ChangeDimension;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2_18.ChunkLight;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2_18.CombatBegin;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2_18.CombatDeath;
@@ -81,6 +80,7 @@ import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r2_18.En
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r2_18.InventorySetItems;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r2_18.InventorySetSlot;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_18.BlockTileUpdate;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_18.ChangeDimension;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_18.ChunkData;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_18.StartGame;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_18.UpdateSimulationDistance;

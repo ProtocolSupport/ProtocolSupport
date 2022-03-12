@@ -47,4 +47,11 @@ public class LegacyDimension {
 		return flat ? "flat" : "default";
 	}
 
+	public static @Nonnull String getLegacyResource(String resource) {
+		if (resource.isEmpty()) {
+			return resource;
+		}
+		return resource.charAt(0) == '#' ? resource.substring(1) : resource;
+	}
+
 }
