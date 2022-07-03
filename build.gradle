@@ -120,7 +120,7 @@ dependencies {
 	compileOnly group: 'com.mojang', name: 'authlib', version: '3.2.38'
 	compileOnly group: 'com.mojang', name: 'brigadier', version: '1.0.18'
 
-	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12'
 	implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
 
 	annotationProcessor group: 'com.github.ProtocolSupport', name: 'ProtocolSupportBuildProcessor', version: '907b3e20db'
