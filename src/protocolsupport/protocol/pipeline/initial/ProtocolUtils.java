@@ -12,20 +12,12 @@ public class ProtocolUtils {
 	}
 
 	protected static ProtocolVersion get16PingVersion(int protocolId) {
-		switch (protocolId) {
-			case 78: {
-				return ProtocolVersion.MINECRAFT_1_6_4;
-			}
-			case 74: {
-				return ProtocolVersion.MINECRAFT_1_6_2;
-			}
-			case 73: {
-				return ProtocolVersion.MINECRAFT_1_6_1;
-			}
-			default: {
-				return ProtocolVersion.MINECRAFT_1_6_4;
-			}
-		}
+		return switch (protocolId) {
+			case 78 -> ProtocolVersion.MINECRAFT_1_6_4;
+			case 74 -> ProtocolVersion.MINECRAFT_1_6_2;
+			case 73 -> ProtocolVersion.MINECRAFT_1_6_1;
+			default -> ProtocolVersion.MINECRAFT_1_6_4;
+		};
 	}
 
 	protected static ProtocolVersion readOldHandshake(ByteBuf data) {

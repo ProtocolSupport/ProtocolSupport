@@ -6,7 +6,7 @@ import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV8;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8.AbstractNoOffhandEntityEquipment;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4__8.AbstractNoOffhandEntityEquipment;
 import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.types.NetworkItemStack;
 

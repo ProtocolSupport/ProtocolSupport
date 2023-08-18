@@ -17,6 +17,7 @@ public abstract class MiddleEntitySound extends ClientBoundMiddlePacket {
 	protected int entityId;
 	protected float volume;
 	protected float pitch;
+	protected long seed;
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
@@ -25,6 +26,7 @@ public abstract class MiddleEntitySound extends ClientBoundMiddlePacket {
 		entityId = VarNumberCodec.readVarInt(serverdata);
 		volume = serverdata.readFloat();
 		pitch = serverdata.readFloat();
+		seed = serverdata.readLong();
 	}
 
 }

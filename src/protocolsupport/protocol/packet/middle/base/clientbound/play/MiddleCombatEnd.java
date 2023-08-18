@@ -11,12 +11,10 @@ public abstract class MiddleCombatEnd extends ClientBoundMiddlePacket {
 	}
 
 	protected int duration;
-	protected int opponentId;
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		this.duration = VarNumberCodec.readVarInt(serverdata);
-		this.opponentId = serverdata.readInt();
 	}
 
 }

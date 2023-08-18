@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middle.base.clientbound.play;
 
-import java.util.HashMap;
+import java.text.MessageFormat;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -11,17 +12,20 @@ import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.base.clientbound.ClientBoundMiddlePacket;
 import protocolsupport.protocol.types.command.CommandNode;
-import protocolsupport.protocol.types.command.CommandNodeDoubleProperties;
-import protocolsupport.protocol.types.command.CommandNodeEntityProperties;
-import protocolsupport.protocol.types.command.CommandNodeIntegerProperties;
-import protocolsupport.protocol.types.command.CommandNodeLongProperties;
-import protocolsupport.protocol.types.command.CommandNodeProperties;
-import protocolsupport.protocol.types.command.CommandNodeRangeProperties;
-import protocolsupport.protocol.types.command.CommandNodeResourceOrTagProperties;
-import protocolsupport.protocol.types.command.CommandNodeResourceProperties;
-import protocolsupport.protocol.types.command.CommandNodeScoreHolderProperties;
-import protocolsupport.protocol.types.command.CommandNodeSimpleProperties;
-import protocolsupport.protocol.types.command.CommandNodeStringProperties;
+import protocolsupport.protocol.types.command.CommandNodeArgumentDoubleProperties;
+import protocolsupport.protocol.types.command.CommandNodeArgumentEntityProperties;
+import protocolsupport.protocol.types.command.CommandNodeArgumentFloatProperties;
+import protocolsupport.protocol.types.command.CommandNodeArgumentIntegerProperties;
+import protocolsupport.protocol.types.command.CommandNodeArgumentLongProperties;
+import protocolsupport.protocol.types.command.CommandNodeArgumentProperties;
+import protocolsupport.protocol.types.command.CommandNodeArgumentResourceKeyProperties;
+import protocolsupport.protocol.types.command.CommandNodeArgumentResourceOrTagKeyProperties;
+import protocolsupport.protocol.types.command.CommandNodeArgumentResourceOrTagProperties;
+import protocolsupport.protocol.types.command.CommandNodeArgumentResourceProperties;
+import protocolsupport.protocol.types.command.CommandNodeArgumentScoreHolderProperties;
+import protocolsupport.protocol.types.command.CommandNodeArgumentStringProperties;
+import protocolsupport.protocol.types.command.CommandNodeArgumentTimeProperties;
+import protocolsupport.protocol.types.command.CommandNodeArgumentType;
 import protocolsupport.utils.BitUtils;
 
 public abstract class MiddleDeclareCommands extends ClientBoundMiddlePacket {
@@ -47,55 +51,63 @@ public abstract class MiddleDeclareCommands extends ClientBoundMiddlePacket {
 	protected static final int NODE_TYPE_LITERAL = 1;
 	protected static final int NODE_TYPE_ARGUMENT = 2;
 
-	protected static final Map<String, Function<ByteBuf, CommandNodeProperties>> propertiesDeserializer = new HashMap<>();
+	protected static final Map<CommandNodeArgumentType, Function<ByteBuf, CommandNodeArgumentProperties>> argumentPropertiesDeserializer = new EnumMap<>(CommandNodeArgumentType.class);
 	static {
-		propertiesDeserializer.put("brigadier:double", data -> {
+		argumentPropertiesDeserializer.put(CommandNodeArgumentType.DOUBLE, data -> {
 			int flags = data.readByte();
 			double min = BitUtils.isIBitSet(flags, 0) ? data.readDouble() : Double.MIN_VALUE;
 			double max = BitUtils.isIBitSet(flags, 1) ? data.readDouble() : Double.MAX_VALUE;
-			return new CommandNodeDoubleProperties(flags, min, max);
+			return new CommandNodeArgumentDoubleProperties(flags, min, max);
 		});
-		propertiesDeserializer.put("brigadier:float", data -> {
+		argumentPropertiesDeserializer.put(CommandNodeArgumentType.FLOAT, data -> {
 			int flags = data.readByte();
 			float min = BitUtils.isIBitSet(flags, 0) ? data.readFloat() : Float.MIN_VALUE;
 			float max = BitUtils.isIBitSet(flags, 1) ? data.readFloat() : Float.MAX_VALUE;
-			return new CommandNodeDoubleProperties(flags, min, max);
+			return new CommandNodeArgumentFloatProperties(flags, min, max);
 		});
-		propertiesDeserializer.put("brigadier:long", data -> {
+		argumentPropertiesDeserializer.put(CommandNodeArgumentType.LONG, data -> {
 			int flags = data.readByte();
 			long min = BitUtils.isIBitSet(flags, 0) ? data.readLong() : Long.MIN_VALUE;
 			long max = BitUtils.isIBitSet(flags, 1) ? data.readLong() : Long.MAX_VALUE;
-			return new CommandNodeLongProperties(flags, min, max);
+			return new CommandNodeArgumentLongProperties(flags, min, max);
 		});
-		propertiesDeserializer.put("brigadier:integer", data -> {
+		argumentPropertiesDeserializer.put(CommandNodeArgumentType.INTEGER, data -> {
 			int flags = data.readByte();
 			int min = BitUtils.isIBitSet(flags, 0) ? data.readInt() : Integer.MIN_VALUE;
 			int max = BitUtils.isIBitSet(flags, 1) ? data.readInt() : Integer.MAX_VALUE;
-			return new CommandNodeIntegerProperties(flags, min, max);
+			return new CommandNodeArgumentIntegerProperties(flags, min, max);
 		});
-		propertiesDeserializer.put("brigadier:string", data -> {
-			CommandNodeStringProperties.Type type = MiscDataCodec.readVarIntEnum(data, CommandNodeStringProperties.Type.CONSTANT_LOOKUP);
-			return new CommandNodeStringProperties(type);
+		argumentPropertiesDeserializer.put(CommandNodeArgumentType.STRING, data -> {
+			CommandNodeArgumentStringProperties.StringType type = MiscDataCodec.readVarIntEnum(data, CommandNodeArgumentStringProperties.StringType.CONSTANT_LOOKUP);
+			return new CommandNodeArgumentStringProperties(type);
 		});
-		propertiesDeserializer.put("minecraft:entity", data -> {
+		argumentPropertiesDeserializer.put(CommandNodeArgumentType.ENTITY, data -> {
 			int flags = data.readByte();
-			return new CommandNodeEntityProperties(flags);
+			return new CommandNodeArgumentEntityProperties(flags);
 		});
-		propertiesDeserializer.put("minecraft:score_holder", data -> {
+		argumentPropertiesDeserializer.put(CommandNodeArgumentType.SCORE_HOLDER, data -> {
 			int flags = data.readByte();
-			return new CommandNodeScoreHolderProperties(flags);
+			return new CommandNodeArgumentScoreHolderProperties(flags);
 		});
-		propertiesDeserializer.put("minecraft:range", data -> {
-			boolean allowDecimals = data.readBoolean();
-			return new CommandNodeRangeProperties(allowDecimals);
+		argumentPropertiesDeserializer.put(CommandNodeArgumentType.TIME, data -> {
+			int min = data.readInt();
+			return new CommandNodeArgumentTimeProperties(min);
 		});
-		propertiesDeserializer.put("minecraft:resource_or_tag", data -> {
+		argumentPropertiesDeserializer.put(CommandNodeArgumentType.RESOURCE_OR_TAG, data -> {
 			String identifier = StringCodec.readVarIntUTF8String(data);
-			return new CommandNodeResourceOrTagProperties(identifier);
+			return new CommandNodeArgumentResourceOrTagProperties(identifier);
 		});
-		propertiesDeserializer.put("minecraft:resource", data -> {
+		argumentPropertiesDeserializer.put(CommandNodeArgumentType.RESOURCE_OR_TAG_KEY, data -> {
 			String identifier = StringCodec.readVarIntUTF8String(data);
-			return new CommandNodeResourceProperties(identifier);
+			return new CommandNodeArgumentResourceOrTagKeyProperties(identifier);
+		});
+		argumentPropertiesDeserializer.put(CommandNodeArgumentType.RESOURCE, data -> {
+			String identifier = StringCodec.readVarIntUTF8String(data);
+			return new CommandNodeArgumentResourceProperties(identifier);
+		});
+		argumentPropertiesDeserializer.put(CommandNodeArgumentType.RESOURCE_KEY, data -> {
+			String identifier = StringCodec.readVarIntUTF8String(data);
+			return new CommandNodeArgumentResourceKeyProperties(identifier);
 		});
 	}
 
@@ -105,19 +117,21 @@ public abstract class MiddleDeclareCommands extends ClientBoundMiddlePacket {
 		int[] childNodesIndexes = ArrayCodec.readVarIntVarIntArray(data);
 		int redirectNodeIndex = BitUtils.isIBitSet(flags, NODE_FLAGS_HAS_REDIRECT_BIT) ? VarNumberCodec.readVarInt(data) : -1;
 		String name = (nodeType == NODE_TYPE_LITERAL) || (nodeType == NODE_TYPE_ARGUMENT) ? StringCodec.readVarIntUTF8String(data) : null;
-		String parser = nodeType == NODE_TYPE_ARGUMENT ? StringCodec.readVarIntUTF8String(data) : null;
-		CommandNodeProperties properties = null;
-		if (parser != null) {
-			Function<ByteBuf, CommandNodeProperties> propertiesFunc = propertiesDeserializer.get(parser);
+		CommandNodeArgumentType argumentType = nodeType == NODE_TYPE_ARGUMENT ? CommandNodeArgumentType.CONSTANT_LOOKUP.getByOrdinalOrDefault(VarNumberCodec.readVarInt(data), CommandNodeArgumentType.STRING) : null;
+		CommandNodeArgumentProperties argumentProperties = null;
+		if (argumentType != null) {
+			Function<ByteBuf, CommandNodeArgumentProperties> propertiesFunc = argumentPropertiesDeserializer.get(argumentType);
 			if (propertiesFunc != null) {
-				properties = propertiesFunc.apply(data);
+				argumentProperties = propertiesFunc.apply(data);
+				if (argumentType != argumentProperties.getType()) {
+					throw new IllegalStateException(MessageFormat.format("Command argument type missmatch, expected {0}, returend {1}", argumentType, argumentProperties.getType()));
+				}
 			} else {
-				properties = new CommandNodeSimpleProperties(parser);
+				argumentProperties = new CommandNodeArgumentProperties(argumentType);
 			}
 		}
 		String suggestionsType = BitUtils.isIBitSet(flags, NODE_FLAGS_HAS_SUGGESTIONS_TYPE) ? StringCodec.readVarIntUTF8String(data) : null;
-		return new CommandNode(flags, childNodesIndexes, redirectNodeIndex, name, parser, properties, suggestionsType);
+		return new CommandNode(flags, childNodesIndexes, redirectNodeIndex, name, argumentProperties, suggestionsType);
 	}
-
 
 }

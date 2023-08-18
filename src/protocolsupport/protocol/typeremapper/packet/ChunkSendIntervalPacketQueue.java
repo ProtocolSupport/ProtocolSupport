@@ -51,8 +51,8 @@ public class ChunkSendIntervalPacketQueue implements IPacketDataProcessor {
 				case PLAY_BLOCK_ACTION:
 				case PLAY_BLOCK_BREAK_ANIMATION:
 				case PLAY_BLOCK_TILE:
-				case CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN:
-				case CLIENTBOUND_LEGACY_PLAY_USE_BED: {
+				case LEGACY_PLAY_UPDATE_SIGN:
+				case LEGACY_PLAY_USE_BED: {
 					queue.add(packetdata);
 					break;
 				}

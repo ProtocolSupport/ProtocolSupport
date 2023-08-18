@@ -11,9 +11,9 @@ public abstract class MiddleExplosion extends ClientBoundMiddlePacket {
 		super(init);
 	}
 
-	protected float x;
-	protected float y;
-	protected float z;
+	protected double x;
+	protected double y;
+	protected double z;
 	protected float radius;
 	protected Position[] blocks;
 	protected float pMotX;
@@ -22,9 +22,9 @@ public abstract class MiddleExplosion extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		x = serverdata.readFloat();
-		y = serverdata.readFloat();
-		z = serverdata.readFloat();
+		x = serverdata.readDouble();
+		y = serverdata.readDouble();
+		z = serverdata.readDouble();
 		radius = serverdata.readFloat();
 		blocks = ArrayCodec.readVarIntTArray(serverdata, Position.class, posFrom -> new Position(posFrom.readByte(), posFrom.readByte(), posFrom.readByte()));
 		pMotX = serverdata.readFloat();

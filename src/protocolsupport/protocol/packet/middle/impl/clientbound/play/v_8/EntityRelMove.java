@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.impl.clientbound.play.v_8;
 
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV8;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8.AbstractEntityTeleportEntityRelMove;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4__8.AbstractEntityTeleportEntityRelMove;
 
 public class EntityRelMove extends AbstractEntityTeleportEntityRelMove implements IClientboundMiddlePacketV8 {
 

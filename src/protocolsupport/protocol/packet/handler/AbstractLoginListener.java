@@ -6,7 +6,6 @@ import java.net.InetSocketAddress;
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -103,7 +102,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 			Bukkit.getLogger().info(() -> "Disconnecting " + getConnectionRepr() + ": " + message.toLegacyText());
 			networkManager.sendPacket(
 				ServerPlatform.get().getPacketFactory().createLoginDisconnectPacket(message),
-				future -> networkManager.close(message),
+				() -> networkManager.close(message),
 				5, TimeUnit.SECONDS,
 				() -> networkManager.close(new TextComponent("Packet send timed out whilst disconnecting player, force closing connection"))
 			);
@@ -154,7 +153,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 
 	public static interface EncryptionPacketWrapper {
 
-		public byte[] getNonce(PrivateKey key) throws GeneralSecurityException;
+		public boolean isNonceValid(byte[] nonce, PrivateKey key) throws GeneralSecurityException;
 
 		public SecretKey getSecretKey(PrivateKey key) throws GeneralSecurityException;
 
@@ -166,7 +165,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 		loginprocessor.execute(() -> {
 			try {
 				final PrivateKey privatekey = ServerPlatform.get().getMiscUtils().getEncryptionKeyPair().getPrivate();
-				if (!Arrays.equals(randomBytes, encryptionpakcet.getNonce(privatekey))) {
+				if (!encryptionpakcet.isNonceValid(randomBytes, privatekey)) {
 					throw new IllegalStateException("Invalid nonce!");
 				}
 				SecretKey loginKey = encryptionpakcet.getSecretKey(privatekey);
@@ -268,7 +267,7 @@ public abstract class AbstractLoginListener implements IPacketListener {
 				try {
 					networkManager.sendPacketBlocking(
 						ServerPlatform.get().getPacketFactory().createSetCompressionPacket(threshold),
-						future -> ServerPlatform.get().getMiscUtils().enableCompression(networkManager.getChannel().pipeline(), threshold),
+						() -> ServerPlatform.get().getMiscUtils().enableCompression(networkManager.getChannel().pipeline(), threshold),
 						5, TimeUnit.SECONDS
 					);
 				} catch (Throwable t) {

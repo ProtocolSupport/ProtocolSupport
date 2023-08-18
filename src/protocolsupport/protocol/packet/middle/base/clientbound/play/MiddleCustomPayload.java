@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.BytesCodec;
 import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.base.clientbound.ClientBoundMiddlePacket;
 import protocolsupport.protocol.typeremapper.basic.CustomPayloadTransformerRegistry;
@@ -65,7 +65,7 @@ public abstract class MiddleCustomPayload extends ClientBoundMiddlePacket {
 				if (transformer != null) {
 					custom = true;
 					tag = transformer.getClientTag();
-					data = Unpooled.wrappedBuffer(transformer.transformDataClientbound(custompayloadMetadata, MiscDataCodec.readAllBytes(data)));
+					data = Unpooled.wrappedBuffer(transformer.transformDataClientbound(custompayloadMetadata, BytesCodec.readAllBytes(data)));
 				}
 			}
 		}

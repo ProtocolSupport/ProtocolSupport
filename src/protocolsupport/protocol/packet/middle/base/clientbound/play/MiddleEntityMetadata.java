@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.base.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.codec.NetworkEntityMetadataSerializer;
+import protocolsupport.protocol.codec.NetworkEntityMetadataCodec;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
@@ -15,7 +15,7 @@ public abstract class MiddleEntityMetadata extends MiddleEntityData {
 
 	@Override
 	protected void decodeData(ByteBuf serverdata) {
-		NetworkEntityMetadataSerializer.readDataTo(serverdata, metadata);
+		NetworkEntityMetadataCodec.readDataTo(serverdata, metadata);
 	}
 
 	@Override

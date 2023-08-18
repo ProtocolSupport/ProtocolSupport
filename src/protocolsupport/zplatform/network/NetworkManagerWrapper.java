@@ -9,8 +9,6 @@ import java.util.concurrent.TimeoutException;
 import org.bukkit.entity.Player;
 
 import io.netty.channel.Channel;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.utils.NetworkState;
 import protocolsupport.api.utils.ProfileProperty;
@@ -53,13 +51,13 @@ public abstract class NetworkManagerWrapper {
 
 	public abstract void sendPacket(Object packet);
 
-	public abstract void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener);
+	public abstract void sendPacket(Object packet, PacketSendListener genericListener);
 
-	public abstract void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, int timeout, TimeUnit timeunit, Runnable timeoutListener);
+	public abstract void sendPacket(Object packet, PacketSendListener genericListener, int timeout, TimeUnit timeunit, Runnable timeoutListener);
 
 	public abstract void sendPacketBlocking(Object packet, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException;
 
-	public abstract void sendPacketBlocking(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException;
+	public abstract void sendPacketBlocking(Object packet, PacketSendListener genericListener, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException;
 
 
 	public abstract void setProtocol(NetworkState state);
@@ -77,5 +75,13 @@ public abstract class NetworkManagerWrapper {
 	public abstract void setSpoofedProfile(UUID uuid, Collection<ProfileProperty> properties);
 
 	public abstract Player getBukkitPlayer();
+
+
+	@FunctionalInterface
+	public static interface PacketSendListener {
+
+		public void call();
+
+	}
 
 }

@@ -28,9 +28,9 @@ public class StartGame extends MiddleStartGame implements IClientboundMiddlePack
 		startgame.writeByte(gamemodeCurrent.getId());
 		startgame.writeByte(gamemodePrevious.getId());
 		ArrayCodec.writeVarIntVarIntUTF8StringArray(startgame, worlds);
-		ItemStackCodec.writeDirectTag(startgame, toLegacyDimensionRegistry(dimensions));
-		ItemStackCodec.writeDirectTag(startgame, toLegacyDimensionType(dimension));
-		StringCodec.writeVarIntUTF8String(startgame, world);
+		ItemStackCodec.writeDirectTag(startgame, toLegacyDimensionRegistry(registries));
+		ItemStackCodec.writeDirectTag(startgame, toLegacyDimensionType(clientCache.getDimension()));
+		StringCodec.writeVarIntUTF8String(startgame, worldName);
 		startgame.writeLong(hashedSeed);
 		VarNumberCodec.writeVarInt(startgame, maxplayers);
 		VarNumberCodec.writeVarInt(startgame, renderDistance);
@@ -51,8 +51,9 @@ public class StartGame extends MiddleStartGame implements IClientboundMiddlePack
 			NBTCompound biomeDataTag = biomeEntryTag.getCompoundTagOrThrow("element");
 			biomeDataTag.setTag("depth", new NBTFloat(0F));
 			biomeDataTag.setTag("scale", new NBTFloat(0F));
-			biomeDataTag.setTag("category", new NBTString(toLegacyBiomeCategory(biomeDataTag.getStringTagOrThrow("category").getValue())));
+			biomeDataTag.setTag("category", new NBTString("none"));
 		}
+		dimensionsTag.removeTag("minecraft:chat_type");
 		return dimensionsTag;
 	}
 
@@ -61,18 +62,6 @@ public class StartGame extends MiddleStartGame implements IClientboundMiddlePack
 		dimensionDataTag.setTag("logical_height", new NBTInt(Math.min(256, dimensionDataTag.getNumberTagOrThrow("logical_height").getAsInt())));
 		dimensionDataTag.setTag("height", new NBTInt(Math.min(256, dimensionDataTag.getNumberTagOrThrow("height").getAsInt())));
 		return dimensionDataTag;
-	}
-
-	protected static String toLegacyBiomeCategory(String category) {
-		switch (category) {
-			case "mountain":
-			case "underground": {
-				return "none";
-			}
-			default: {
-				return category;
-			}
-		}
 	}
 
 }

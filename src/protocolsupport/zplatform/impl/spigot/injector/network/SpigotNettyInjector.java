@@ -9,7 +9,7 @@ import java.util.ListIterator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.chat.ChatComponentText;
+import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.server.network.ServerConnection;
 import protocolsupport.utils.reflection.ReflectionUtils;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
@@ -94,7 +94,7 @@ public class SpigotNettyInjector {
 			synchronized (networkManagers) {
 				for (NetworkManager nm : networkManagers) {
 					if ((nm.m != null) && nm.m.localAddress().equals(channel.localAddress())) {
-						nm.a(new ChatComponentText("ProtocolSupport channel reset"));
+						nm.a(IChatBaseComponent.b("ProtocolSupport channel reset"));
 					}
 				}
 			}

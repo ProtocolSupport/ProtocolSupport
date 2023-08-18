@@ -16,23 +16,12 @@ public class LegacyDimension {
 	}
 
 	public static int getIntId(@Nonnull NBTCompound dimension) {
-		switch (dimension.getStringTagValueOrThrow("effects")) {
-			case "overworld":
-			case "minecraft:overworld": {
-				return 0;
-			}
-			case "the_nether":
-			case "minecraft:the_nether": {
-				return -1;
-			}
-			case "the_end":
-			case "minecraft:the_end": {
-				return 1;
-			}
-			default: {
-				throw new IllegalArgumentException(MessageFormat.format("Unknown dimension {0}", dimension));
-			}
-		}
+		return switch (dimension.getStringTagValueOrThrow("effects")) {
+			case "overworld", "minecraft:overworld" -> 0;
+			case "the_nether", "minecraft:the_nether" -> -1;
+			case "the_end", "minecraft:the_end" -> 1;
+			default -> throw new IllegalArgumentException(MessageFormat.format("Unknown dimension {0}", dimension));
+		};
 	}
 
 	public static boolean hasSkyLight(int dimensionId) {

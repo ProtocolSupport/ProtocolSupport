@@ -82,7 +82,6 @@ public class CommonNBT {
 
 	public static final String LEGACY_ENCHANTMENTS = "ench";
 
-	@SuppressWarnings("deprecation")
 	public static final NamespacedKey FAKE_ENCHANTMENT_KEY = new NamespacedKey("ps", "fake");
 	public static final String FAKE_ENCHANTMENT_KEY_STR = FAKE_ENCHANTMENT_KEY.toString();
 

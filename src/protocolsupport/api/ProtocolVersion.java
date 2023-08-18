@@ -19,6 +19,11 @@ import protocolsupportbuildprocessor.Preload;
 public enum ProtocolVersion {
 
 	MINECRAFT_FUTURE(-1, ProtocolType.PC),
+	MINECRAFT_1_20(763, ProtocolType.PC, "1.20-1.20.1"),
+	MINECRAFT_1_19_4(762, ProtocolType.PC, "1.19.4"),
+	MINECRAFT_1_19_3(761, ProtocolType.PC, "1.19.3"),
+	MINECRAFT_1_19_2(760, ProtocolType.PC, "1.19.1-1.19.2"),
+	MINECRAFT_1_19(759, ProtocolType.PC, "1.19"),
 	MINECRAFT_1_18_2(758, ProtocolType.PC, "1.18.2"),
 	MINECRAFT_1_18(757, ProtocolType.PC, "1.18-1.18.1"),
 	MINECRAFT_1_17_1(756, ProtocolType.PC, "1.17.1"),
@@ -287,14 +292,10 @@ public enum ProtocolVersion {
 	 * @throws IllegalArgumentException if protocol type has no supported protocol versions
 	 */
 	public static @Nonnull ProtocolVersion getLatest(ProtocolType type) {
-		switch (type) {
-			case PC: {
-				return MINECRAFT_1_18_2;
-			}
-			default: {
-				throw new IllegalArgumentException(MessageFormat.format("No supported versions for protocol type {0}", type));
-			}
-		}
+		return switch (type) {
+			case PC -> MINECRAFT_1_20;
+			default -> throw new IllegalArgumentException(MessageFormat.format("No supported versions for protocol type {0}", type));
+		};
 	}
 
 	/**
@@ -304,14 +305,10 @@ public enum ProtocolVersion {
 	 * @throws IllegalArgumentException if protocol type has no supported protocol versions
 	 */
 	public static @Nonnull ProtocolVersion getOldest(ProtocolType type) {
-		switch (type) {
-			case PC: {
-				return MINECRAFT_1_4_7;
-			}
-			default: {
-				throw new IllegalArgumentException(MessageFormat.format("No supported versions for protocol type {0}", type));
-			}
-		}
+		return switch (type) {
+			case PC -> MINECRAFT_1_4_7;
+			default -> throw new IllegalArgumentException(MessageFormat.format("No supported versions for protocol type {0}", type));
+		};
 	}
 
 	/**

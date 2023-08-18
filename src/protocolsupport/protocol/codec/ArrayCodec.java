@@ -1,9 +1,13 @@
 package protocolsupport.protocol.codec;
 
 import java.lang.reflect.Array;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.RandomAccess;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.ObjIntConsumer;
 
@@ -31,7 +35,7 @@ public class ArrayCodec {
 
 
 	public static byte[] readVarIntByteArray(ByteBuf from) {
-		return MiscDataCodec.readBytes(from, VarNumberCodec.readVarInt(from));
+		return BytesCodec.readBytes(from, VarNumberCodec.readVarInt(from));
 	}
 
 	public static ByteBuf readVarIntByteArraySlice(ByteBuf from, int limit) {
@@ -83,6 +87,21 @@ public class ArrayCodec {
 	}
 
 
+	public static <K, V> Map<K, V> readVarIntMap(ByteBuf from, Function<ByteBuf, K> keyReader, BiFunction<ByteBuf, K, V> valueReader, int limit) {
+		int size = VarNumberCodec.readVarInt(from);
+		MiscDataCodec.checkLimit(size, limit);
+
+		Map<K, V> map = new HashMap<>();
+		while (size-- > 0) {
+			K key = keyReader.apply(from);
+			V value = valueReader.apply(from, key);
+			map.put(key, value);
+		}
+		return map;
+	}
+
+
+
 	public static void writeShortByteArray(ByteBuf to, ByteBuf data) {
 		to.writeShort(data.readableBytes());
 		to.writeBytes(data);
@@ -113,11 +132,18 @@ public class ArrayCodec {
 		}
 	}
 
-	public static <T, A extends List<T> & RandomAccess> void writeVarIntTArray(ByteBuf to, A array, BiConsumer<ByteBuf, T> elementWriter) {
+	@SuppressWarnings("unchecked")
+	public static <T, A extends Collection<T>> void writeVarIntTArray(ByteBuf to, A array, BiConsumer<ByteBuf, T> elementWriter) {
 		int size = array.size();
 		VarNumberCodec.writeVarInt(to, size);
-		for (int i = 0; i < size; i++) {
-			elementWriter.accept(to, array.get(i));
+		if ((array instanceof RandomAccess) && array instanceof List list) {
+			for (int i = 0; i < size; i++) {
+				elementWriter.accept(to, (T) list.get(i));
+			}
+		} else {
+			for (T element : array) {
+				elementWriter.accept(to, element);
+			}
 		}
 	}
 
@@ -146,6 +172,15 @@ public class ArrayCodec {
 		VarNumberCodec.writeVarInt(to, array.length);
 		for (long element : array) {
 			to.writeLong(element);
+		}
+	}
+
+
+	public static <K, V> void writeVarIntMap(ByteBuf to, Map<K, V> map, BiConsumer<ByteBuf, K> keyWriter, BiConsumer<ByteBuf, V> valueWriter) {
+		VarNumberCodec.writeVarInt(to, map.size());
+		for (Map.Entry<K, V> entry : map.entrySet()) {
+			keyWriter.accept(to, entry.getKey());
+			valueWriter.accept(to, entry.getValue());
 		}
 	}
 

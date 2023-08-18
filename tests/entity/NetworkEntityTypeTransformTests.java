@@ -42,7 +42,7 @@ class NetworkEntityTypeTransformTests extends PlatformInit {
 				Assertions.assertNotEquals(NetworkEntityType.NONE, mappedType, "NetworkEntityLegacyFormatEntry#getType for ProtocolVersion " + version + " and NetworkEntityType " + type + "");
 
 				NetworkEntityType fMappedType = mappedType;
-				switch (mappedType.getEType()) {
+				switch (mappedType.getMetaType()) {
 					case MOB: {
 						if (version.isAfterOrEq(ProtocolVersion.MINECRAFT_1_13)) {
 							Assertions.assertDoesNotThrow(

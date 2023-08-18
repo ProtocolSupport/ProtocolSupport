@@ -1,6 +1,7 @@
 package protocolsupport.protocol.packet.middle.base.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
+import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.MiddlePacketCancelException;
 import protocolsupport.protocol.typeremapper.basic.GenericIdSkipper;
 import protocolsupport.protocol.typeremapper.utils.SkippingTable.ArrayBasedIntSkippingTable;
@@ -17,7 +18,7 @@ public abstract class MiddleEntityEffectRemove extends MiddleEntityData {
 
 	@Override
 	protected void decodeData(ByteBuf serverdata) {
-		effectId = serverdata.readByte();
+		effectId = VarNumberCodec.readVarInt(serverdata);
 	}
 
 	@Override

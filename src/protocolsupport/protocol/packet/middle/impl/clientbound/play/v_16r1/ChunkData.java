@@ -10,8 +10,8 @@ import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV16r1;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_16r1_16r2.ChunkLight;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13_14r1_14r2_15_16r1_16r2.AbstractLimitedHeightChunkData;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_16r1__16r2.ChunkLight;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4__16r2.AbstractLimitedHeightChunkData;
 import protocolsupport.protocol.typeremapper.basic.BiomeTransformer;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
@@ -36,7 +36,7 @@ public class ChunkData extends AbstractLimitedHeightChunkData implements IClient
 
 	@Override
 	protected void write() {
-		io.writeClientbound(ChunkLight.create(coord, trustEdges, setSkyLightMask, setBlockLightMask, emptySkyLightMask, emptyBlockLightMask, skyLight, blockLight));
+		io.writeClientbound(ChunkLight.create(coord, false, setSkyLightMask, setBlockLightMask, emptySkyLightMask, emptyBlockLightMask, skyLight, blockLight));
 
 		ClientBoundPacketData chunkdataPacket = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_CHUNK_DATA);
 		PositionCodec.writeIntChunkCoord(chunkdataPacket, coord);

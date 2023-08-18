@@ -7,7 +7,6 @@ import javax.crypto.SecretKey;
 
 import org.bukkit.Bukkit;
 
-import net.minecraft.network.NetworkManager;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.protocol.login.PacketLoginInCustomPayload;
 import net.minecraft.network.protocol.login.PacketLoginInEncryptionBegin;
@@ -15,7 +14,6 @@ import net.minecraft.network.protocol.login.PacketLoginInListener;
 import net.minecraft.network.protocol.login.PacketLoginInStart;
 import net.minecraft.util.CryptographyException;
 import protocolsupport.protocol.packet.handler.AbstractLoginListener;
-import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotLoginListener extends AbstractLoginListener implements PacketLoginInListener {
@@ -31,7 +29,7 @@ public class SpigotLoginListener extends AbstractLoginListener implements Packet
 
 	@Override
 	public void a(PacketLoginInStart packet) {
-		handleLoginStart(packet.b().getName());
+		handleLoginStart(packet.a());
 	}
 
 	@Override
@@ -46,12 +44,8 @@ public class SpigotLoginListener extends AbstractLoginListener implements Packet
 				}
 			}
 			@Override
-			public byte[] getNonce(PrivateKey key) throws GeneralSecurityException {
-				try {
-					return packet.b(key);
-				} catch (CryptographyException e) {
-					throw new GeneralSecurityException(e);
-				}
+			public boolean isNonceValid(byte[] nonce, PrivateKey key) throws GeneralSecurityException {
+				return packet.a(nonce, key);
 			}
 		});
 	}
@@ -66,8 +60,8 @@ public class SpigotLoginListener extends AbstractLoginListener implements Packet
 	}
 
 	@Override
-	public NetworkManager a() {
-		return ((SpigotNetworkManagerWrapper) this.networkManager).unwrap();
+	public boolean a() {
+		return networkManager.isConnected();
 	}
 
 }

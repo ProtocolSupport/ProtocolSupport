@@ -1,7 +1,6 @@
 package protocolsupport.zplatform;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.bukkit.entity.Entity;
 
@@ -11,7 +10,7 @@ import protocolsupport.api.utils.Profile;
 
 public interface PlatformPacketFactory {
 
-	public Object createOutboundChatPacket(String message, int position, UUID uuid);
+	public Object createOutboundSystemChatPacket(String message, boolean overlay);
 
 	public Object createTabHeaderFooterPacket(BaseComponent header, BaseComponent footer);
 
@@ -60,11 +59,23 @@ public interface PlatformPacketFactory {
 
 	public int getOutStatusPongPacketId();
 
+	public int getOutPlayBundleSeparatorPacketId();
+
+	public int getOutPlayServerDataPacketId();
+
+	public int getOutPlayGameFeaturesPacketId();
+
 	public int getOutPlayKeepAlivePacketId();
 
 	public int getOutPlayLoginPacketId();
 
-	public int getOutPlayChatPacketId();
+	public int getOutPlayPlayerMessagePacketId();
+
+	public int getOutPlayPlayerMessageDeletePacketId();
+
+	public int getOutPlaySystemMessagePacketId();
+
+	public int getOutPlaySystemPlayerMessagePacketId();
 
 	public int getOutPlayUpdateTimePacketId();
 
@@ -86,11 +97,7 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayCollectEffectPacketId();
 
-	public int getOutPlaySpawnObjectPacketId();
-
-	public int getOutPlaySpawnLivingPacketId();
-
-	public int getOutPlaySpawnPaintingPacketId();
+	public int getOutPlaySpawnEntityPacketId();
 
 	public int getOutPlaySpawnExpOrbPacketId();
 
@@ -120,6 +127,10 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayEntitySoundPacketId();
 
+	public int getOutPlayEntityDamageEventPacketId();
+
+	public int getOutPlayEntityHurtAnimationPacketId();
+
 	public int getOutPlayExperiencePacketId();
 
 	public int getOutPlayEntityAttributesPacketId();
@@ -137,6 +148,8 @@ public interface PlatformPacketFactory {
 	public int getOutPlayBlockActionPacketId();
 
 	public int getOutPlayBlockBreakAnimationPacketId();
+
+	public int getOutPlayBlockChangeAckPacketId();
 
 	public int getOutPlayExplosionPacketId();
 
@@ -168,7 +181,9 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayStatisticsPacketId();
 
-	public int getOutPlayPlayerInfoPacketId();
+	public int getOutPlayPlayerInfoUpdatePacketId();
+
+	public int getOutPlayPlayerInfoRemovePacketId();
 
 	public int getOutPlayAbilitiesPacketId();
 
@@ -193,8 +208,6 @@ public interface PlatformPacketFactory {
 	public int getOutPlayPlayerListHeaderFooterPacketId();
 
 	public int getOutPlaySetPassengersPacketId();
-
-	public int getOutPlayWorldCustomSoundPacketId();
 
 	public int getOutPlayServerDifficultyPacketId();
 
@@ -234,8 +247,6 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayBookOpenPacketId();
 
-	public int getOutPlayAcknowledgePlayerDiggingPacketId();
-
 	public int getOutPlayTitleTextPacketId();
 
 	public int getOutPlayTitleSubTextPacketId();
@@ -264,8 +275,6 @@ public interface PlatformPacketFactory {
 
 	public int getOutPlayCombatDeathPacketId();
 
-	public int getOutPlayVibration();
-
 	public int getOutPlaySyncPing();
 
 	public int getInHandshakeStartPacketId();
@@ -282,7 +291,13 @@ public interface PlatformPacketFactory {
 
 	public int getInPlayKeepAlivePacketId();
 
-	public int getInPlayChatPacketId();
+	public int getInPlayChatMessageAckPacketId();
+
+	public int getInPlayChatSessionPacketId();
+
+	public int getInPlayChatCommandPacketId();
+
+	public int getInPlayChatMessagePacketId();
 
 	public int getInPlayUseEntityPacketId();
 

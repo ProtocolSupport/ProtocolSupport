@@ -105,6 +105,9 @@ public class ChatCodec {
 	}
 
 	public static String serialize(ProtocolVersion version, String locale, BaseComponent component) {
+		if (component == null) {
+			return null;
+		}
 		return JsonUtils.GSON.toJson(serializeTree(version, locale, component));
 	}
 

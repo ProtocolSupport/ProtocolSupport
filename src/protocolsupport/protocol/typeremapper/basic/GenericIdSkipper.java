@@ -41,6 +41,7 @@ public class GenericIdSkipper {
 			}
 		}
 		{
+			register(Enchantment.SWIFT_SNEAK, ProtocolVersionsHelper.DOWN_1_18_2);
 			register(Enchantment.SOUL_SPEED, ProtocolVersionsHelper.DOWN_1_15_2);
 			register(Enchantment.QUICK_CHARGE, ProtocolVersionsHelper.DOWN_1_13_2);
 			register(Enchantment.PIERCING, ProtocolVersionsHelper.DOWN_1_13_2);

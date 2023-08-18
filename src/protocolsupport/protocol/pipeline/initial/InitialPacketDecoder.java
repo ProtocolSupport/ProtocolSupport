@@ -17,7 +17,7 @@ import protocolsupport.api.ProtocolSupportAPI;
 import protocolsupport.api.ProtocolType;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.ConnectionImpl;
-import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.BytesCodec;
 import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.pipeline.ChannelHandlers;
@@ -60,6 +60,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 	protected static final EnumMap<ProtocolVersion, IPipelineBuilder> pipelineBuilders = new EnumMap<>(ProtocolVersion.class);
 	static {
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_FUTURE, new protocolsupport.protocol.pipeline.version.v_f.PipelineBuilder());
+		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_20, new protocolsupport.protocol.pipeline.version.v_1_20.PipelineBuilder());
 		IPipelineBuilder builder18 = new protocolsupport.protocol.pipeline.version.v_1_18.PipelineBuilder();
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_18_2, builder18);
 		pipelineBuilders.put(ProtocolVersion.MINECRAFT_1_18, builder18);
@@ -228,7 +229,7 @@ public class InitialPacketDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 		if (encapsulatedinfo.hasCompression()) {
 			int uncompressedlength = VarNumberCodec.readVarInt(firstpacketdata);
 			if (uncompressedlength != 0) {
-				firstpacketdata = Unpooled.wrappedBuffer(Decompressor.decompressStatic(MiscDataCodec.readAllBytes(firstpacketdata), uncompressedlength));
+				firstpacketdata = Unpooled.wrappedBuffer(Decompressor.decompressStatic(BytesCodec.readAllBytes(firstpacketdata), uncompressedlength));
 			}
 		}
 		int firstbyte = firstpacketdata.readUnsignedByte();

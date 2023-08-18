@@ -3,6 +3,7 @@ package protocolsupport.protocol.codec;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.types.ChunkCoord;
 import protocolsupport.protocol.types.Position;
+import protocolsupport.protocol.types.WorldPosition;
 
 public class PositionCodec {
 
@@ -11,6 +12,17 @@ public class PositionCodec {
 
 	public static void skipPositionL(ByteBuf from) {
 		from.skipBytes(Long.BYTES);
+	}
+
+	public static WorldPosition readWorldPosition(ByteBuf from) {
+		WorldPosition position = new WorldPosition(null, 0, 0, 0);
+		readWorldPosition(from, position);
+		return position;
+	}
+
+	public static void readWorldPosition(ByteBuf from, WorldPosition to) {
+		to.setWorld(StringCodec.readVarIntUTF8String(from));
+		readPosition(from, to);
 	}
 
 	public static Position readPosition(ByteBuf from) {
@@ -54,6 +66,11 @@ public class PositionCodec {
 
 	public static Position readPositionIII(ByteBuf from) {
 		return new Position(from.readInt(), from.readInt(), from.readInt());
+	}
+
+	public static void writeWorldPosition(ByteBuf to, WorldPosition position) {
+		StringCodec.writeVarIntUTF8String(to, position.getWorld());
+		writePosition(to, position);
 	}
 
 	public static void writePosition(ByteBuf to, Position position) {

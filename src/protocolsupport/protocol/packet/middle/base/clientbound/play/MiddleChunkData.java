@@ -29,7 +29,6 @@ public abstract class MiddleChunkData extends ClientBoundMiddlePacket {
 	protected NBTCompound heightmaps;
 	protected ChunkSectionData[] sections;
 	protected TileEntity[] tiles;
-	protected boolean trustEdges;
 	protected BitSet setSkyLightMask;
 	protected BitSet setBlockLightMask;
 	protected BitSet emptySkyLightMask;
@@ -59,8 +58,6 @@ public abstract class MiddleChunkData extends ClientBoundMiddlePacket {
 			NBTCompound tag = ItemStackCodec.readDirectTag(serverdata);
 			return new TileEntity(type, new Position((coord.getX() << 4) | (xz >> 4), y, (coord.getZ() << 4) | (xz & 0xF)), tag);
 		});
-
-		trustEdges = serverdata.readBoolean();
 
 		setSkyLightMask = BitSet.valueOf(ArrayCodec.readVarIntLongArray(serverdata));
 		setBlockLightMask = BitSet.valueOf(ArrayCodec.readVarIntLongArray(serverdata));

@@ -46,6 +46,24 @@ public class ServerPingResponseEvent extends ConnectionEvent {
 		setPlayers(players);
 	}
 
+	@Deprecated
+	public ServerPingResponseEvent(
+		Connection connection,
+		ProtocolInfo info, String icon, String motd, boolean sendChatPreviews,
+		int onlinePlayers, int maxPlayers, List<String> players
+	) {
+		this(connection, info, icon, BaseComponent.fromMessage(motd), onlinePlayers, maxPlayers, players);
+	}
+
+	@Deprecated
+	public ServerPingResponseEvent(
+		Connection connection,
+		ProtocolInfo info, String icon, BaseComponent motd, boolean sendChatPreviews,
+		int onlinePlayers, int maxPlayers, List<String> players
+	) {
+		this(connection, info, icon, motd, onlinePlayers, maxPlayers, players);
+	}
+
 	/**
 	 * Returns protocol info
 	 * @return protocol info
@@ -114,6 +132,23 @@ public class ServerPingResponseEvent extends ConnectionEvent {
 	public void setJsonMotd(BaseComponent motd) {
 		this.motd = motd != null ? motd : new TextComponent("");
 	}
+
+	/**
+	 * Returns if server should send chat previews
+	 * @return true if server should send chat previews
+	 */
+	@Deprecated
+	public boolean shouldSendChatPreviews() {
+    	return false;
+	}
+
+	/**
+	 * Sets if server should send chat previews
+	 * @param value true if server should send chat previews
+	 */
+	@Deprecated
+    public void setShouldSendChatPreviews(boolean value) {
+    }
 
 	/**
 	 * Returns online players count

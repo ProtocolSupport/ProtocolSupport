@@ -24,6 +24,7 @@ import protocolsupport.protocol.types.particle.types.NetworkParticleBubbleColumn
 import protocolsupport.protocol.types.particle.types.NetworkParticleBubblePop;
 import protocolsupport.protocol.types.particle.types.NetworkParticleCampfireCozySmoke;
 import protocolsupport.protocol.types.particle.types.NetworkParticleCampfireSignalSmoke;
+import protocolsupport.protocol.types.particle.types.NetworkParticleCherryLeaves;
 import protocolsupport.protocol.types.particle.types.NetworkParticleCloud;
 import protocolsupport.protocol.types.particle.types.NetworkParticleComposter;
 import protocolsupport.protocol.types.particle.types.NetworkParticleCrimsonSpore;
@@ -41,6 +42,7 @@ import protocolsupport.protocol.types.particle.types.NetworkParticleDrippingWate
 import protocolsupport.protocol.types.particle.types.NetworkParticleDust;
 import protocolsupport.protocol.types.particle.types.NetworkParticleDustTransition;
 import protocolsupport.protocol.types.particle.types.NetworkParticleEffect;
+import protocolsupport.protocol.types.particle.types.NetworkParticleEggCrack;
 import protocolsupport.protocol.types.particle.types.NetworkParticleElderGuardian;
 import protocolsupport.protocol.types.particle.types.NetworkParticleElectricSpark;
 import protocolsupport.protocol.types.particle.types.NetworkParticleEnchant;
@@ -83,10 +85,15 @@ import protocolsupport.protocol.types.particle.types.NetworkParticlePortal;
 import protocolsupport.protocol.types.particle.types.NetworkParticleRain;
 import protocolsupport.protocol.types.particle.types.NetworkParticleReversePortal;
 import protocolsupport.protocol.types.particle.types.NetworkParticleScrape;
+import protocolsupport.protocol.types.particle.types.NetworkParticleSculkCharge;
+import protocolsupport.protocol.types.particle.types.NetworkParticleSculkChargePop;
+import protocolsupport.protocol.types.particle.types.NetworkParticleSculkSoul;
+import protocolsupport.protocol.types.particle.types.NetworkParticleShriek;
 import protocolsupport.protocol.types.particle.types.NetworkParticleSmallFlame;
 import protocolsupport.protocol.types.particle.types.NetworkParticleSmoke;
 import protocolsupport.protocol.types.particle.types.NetworkParticleSneeze;
 import protocolsupport.protocol.types.particle.types.NetworkParticleSnowflake;
+import protocolsupport.protocol.types.particle.types.NetworkParticleSonicBoom;
 import protocolsupport.protocol.types.particle.types.NetworkParticleSoul;
 import protocolsupport.protocol.types.particle.types.NetworkParticleSoulFlame;
 import protocolsupport.protocol.types.particle.types.NetworkParticleSpit;
@@ -125,8 +132,8 @@ public class NetworkParticleRegistry {
 	static {
 		register(NetworkParticleAmbientEntityEffect::new, Particle.SPELL_MOB_AMBIENT);
 		register(NetworkParticleAngryVillager::new, Particle.VILLAGER_ANGRY);
-		register(NetworkParticleBlockMarker::new, Particle.BLOCK_MARKER);
 		register(NetworkParticleBlock::new, Particle.BLOCK_CRACK);
+		register(NetworkParticleBlockMarker::new, Particle.BLOCK_MARKER);
 		register(NetworkParticleBubble::new, Particle.WATER_BUBBLE);
 		register(NetworkParticleCloud::new, Particle.CLOUD);
 		register(NetworkParticleCrit::new, Particle.CRIT);
@@ -147,10 +154,14 @@ public class NetworkParticleRegistry {
 		register(NetworkParticleEntityEffect::new, Particle.SPELL_MOB);
 		register(NetworkParticleExplosionEmitter::new, Particle.EXPLOSION_HUGE);
 		register(NetworkParticleExplosion::new, Particle.EXPLOSION_LARGE);
+		register(NetworkParticleSonicBoom::new, Particle.SONIC_BOOM);
 		register(NetworkParticleFallingDust::new, Particle.FALLING_DUST);
 		register(NetworkParticleFirework::new, Particle.FIREWORKS_SPARK);
 		register(NetworkParticleFishing::new, Particle.WATER_WAKE);
 		register(NetworkParticleFlame::new, Particle.FLAME);
+		register(NetworkParticleSculkSoul::new, Particle.SCULK_SOUL);
+		register(NetworkParticleSculkCharge::new, Particle.SCULK_CHARGE);
+		register(NetworkParticleSculkChargePop::new, Particle.SCULK_CHARGE_POP);
 		register(NetworkParticleSoulFlame::new, Particle.SOUL_FIRE_FLAME);
 		register(NetworkParticleSoul::new, Particle.SOUL);
 		register(NetworkParticleFlash::new, Particle.FLASH);
@@ -211,6 +222,9 @@ public class NetworkParticleRegistry {
 		register(NetworkParticleWaxOff::new, Particle.WAX_OFF);
 		register(NetworkParticleElectricSpark::new, Particle.ELECTRIC_SPARK);
 		register(NetworkParticleScrape::new, Particle.SCRAPE);
+		register(NetworkParticleShriek::new, Particle.SHRIEK);
+		register(NetworkParticleCherryLeaves::new, Particle.CHERRY_LEAVES);
+		register(NetworkParticleEggCrack::new, Particle.EGG_CRACK);
 	}
 
 	public static List<NetworkParticle> getAll() {

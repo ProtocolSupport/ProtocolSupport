@@ -8,6 +8,7 @@ import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.base.clientbound.play.MiddleStartGame;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV16r1;
+import protocolsupport.protocol.storage.netcache.ClientCache;
 import protocolsupport.protocol.typeremapper.legacy.LegacyDimension;
 import protocolsupport.protocol.types.nbt.NBTByte;
 import protocolsupport.protocol.types.nbt.NBTCompound;
@@ -21,6 +22,8 @@ public class StartGame extends MiddleStartGame implements IClientboundMiddlePack
 		super(init);
 	}
 
+	protected final ClientCache clientCache = new ClientCache();
+
 	@Override
 	protected void write() {
 		ClientBoundPacketData startgame = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_START_GAME);
@@ -28,9 +31,9 @@ public class StartGame extends MiddleStartGame implements IClientboundMiddlePack
 		startgame.writeByte(gamemodeCurrent.getId() | (hardcore ? 0x8 : 0));
 		startgame.writeByte(gamemodePrevious.getId());
 		ArrayCodec.writeVarIntVarIntUTF8StringArray(startgame, worlds);
-		ItemStackCodec.writeDirectTag(startgame, toLegacyDimensionRegistry(dimensions));
-		StringCodec.writeVarIntUTF8String(startgame, LegacyDimension.getStringId(dimension));
-		StringCodec.writeVarIntUTF8String(startgame, world);
+		ItemStackCodec.writeDirectTag(startgame, toLegacyDimensionRegistry(registries));
+		StringCodec.writeVarIntUTF8String(startgame, LegacyDimension.getStringId(clientCache.getDimension()));
+		StringCodec.writeVarIntUTF8String(startgame, worldName);
 		startgame.writeLong(hashedSeed);
 		startgame.writeByte(maxplayers);
 		VarNumberCodec.writeVarInt(startgame, renderDistance);

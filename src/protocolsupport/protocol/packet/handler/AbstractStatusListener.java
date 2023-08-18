@@ -6,7 +6,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import io.netty.channel.ChannelFutureListener;
 import protocolsupport.ProtocolSupport;
 import protocolsupport.ProtocolSupportFileLog;
 import protocolsupport.api.chat.components.TextComponent;
@@ -69,8 +68,7 @@ public abstract class AbstractStatusListener {
 		try {
 			networkManager.sendPacket(
 				ServerPlatform.get().getPacketFactory().createStatusPongPacket(pingId),
-				ChannelFutureListener.CLOSE, 5,
-				TimeUnit.SECONDS,
+				() -> networkManager.getChannel().close(), 5, TimeUnit.SECONDS,
 				() -> networkManager.getChannel().close()
 			);
 		} catch (Throwable t) {

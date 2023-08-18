@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.base.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.BytesCodec;
 import protocolsupport.protocol.packet.middle.base.clientbound.ClientBoundMiddlePacket;
 
 public abstract class MiddleQueryNBTResponse extends ClientBoundMiddlePacket {
@@ -15,7 +15,7 @@ public abstract class MiddleQueryNBTResponse extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		data = MiscDataCodec.readAllBytesSlice(serverdata);
+		data = BytesCodec.readAllBytesSlice(serverdata);
 	}
 
 }

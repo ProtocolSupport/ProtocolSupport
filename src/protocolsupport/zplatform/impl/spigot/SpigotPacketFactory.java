@@ -1,17 +1,19 @@
 package protocolsupport.zplatform.impl.spigot;
 
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
 
 import com.mojang.authlib.GameProfile;
 
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.EnumProtocol;
 import net.minecraft.network.PacketDataSerializer;
-import net.minecraft.network.chat.ChatMessageType;
 import net.minecraft.network.chat.IChatBaseComponent.ChatSerializer;
 import net.minecraft.network.protocol.EnumProtocolDirection;
 import net.minecraft.network.protocol.Packet;
@@ -36,8 +38,6 @@ import net.minecraft.network.protocol.status.PacketStatusInStart;
 import net.minecraft.network.protocol.status.PacketStatusOutPong;
 import net.minecraft.network.protocol.status.PacketStatusOutServerInfo;
 import net.minecraft.network.protocol.status.ServerPing;
-import net.minecraft.network.protocol.status.ServerPing.ServerData;
-import net.minecraft.network.protocol.status.ServerPing.ServerPingPlayerSample;
 import net.minecraft.resources.MinecraftKey;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
@@ -52,8 +52,8 @@ import protocolsupport.zplatform.PlatformPacketFactory;
 public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	@Override
-	public Object createOutboundChatPacket(String message, int position, UUID uuid) {
-		return new PacketPlayOutChat(ChatSerializer.a(message), ChatMessageType.a((byte) position), uuid);
+	public Object createOutboundSystemChatPacket(String message, boolean overlay) {
+		return new ClientboundSystemChatPacket(ChatSerializer.a(message), overlay);
 	}
 
 	protected static final BaseComponent emptyMessage = new TextComponent("");
@@ -119,19 +119,18 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	private final UUID profileUUID = UUID.randomUUID();
 	@Override
 	public Object createStatusServerInfoPacket(List<String> profiles, ProtocolInfo info, String icon, BaseComponent motd, int onlinePlayers, int maxPlayers) {
-		ServerPingPlayerSample playerSample = new ServerPingPlayerSample(maxPlayers, onlinePlayers);
-
-		com.mojang.authlib.GameProfile[] gprofiles = new com.mojang.authlib.GameProfile[profiles.size()];
-		for (int i = 0; i < profiles.size(); i++) {
-			gprofiles[i] = new com.mojang.authlib.GameProfile(profileUUID, profiles.get(i));
+		List<com.mojang.authlib.GameProfile> gprofiles = new ArrayList<>(profiles.size());
+		for (String profile : profiles) {
+			gprofiles.add(new com.mojang.authlib.GameProfile(profileUUID, profile));
 		}
-		playerSample.a(gprofiles);
 
-		ServerPing serverping = new ServerPing();
-		serverping.a(icon);
-		serverping.a(SpigotMiscUtils.toPlatformMessage(motd));
-		serverping.a(playerSample);
-		serverping.a(new ServerData(info.getName(), info.getId()));
+		ServerPing serverping = new ServerPing(
+			SpigotMiscUtils.toPlatformMessage(motd),
+			Optional.of(new ServerPing.ServerPingPlayerSample(maxPlayers, onlinePlayers, gprofiles)),
+			Optional.of(new ServerPing.ServerData(info.getName(), info.getId())),
+			icon != null ? Optional.of(new ServerPing.a(Base64.getDecoder().decode(icon))) : Optional.empty(),
+			false
+		);
 
 		return new PacketStatusOutServerInfo(serverping);
 	}
@@ -194,6 +193,21 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
+	public int getOutPlayBundleSeparatorPacketId() {
+		return 0; //TODO: implement packet id extraction
+	}
+
+	@Override
+	public int getOutPlayServerDataPacketId() {
+		return getOutId(ClientboundServerDataPacket.class);
+	}
+
+	@Override
+	public int getOutPlayGameFeaturesPacketId() {
+		return getOutId(ClientboundUpdateEnabledFeaturesPacket.class);
+	}
+
+	@Override
 	public int getOutPlayKeepAlivePacketId() {
 		return getOutId(PacketPlayOutKeepAlive.class);
 	}
@@ -204,8 +218,23 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getOutPlayChatPacketId() {
-		return getOutId(PacketPlayOutChat.class);
+	public int getOutPlayPlayerMessagePacketId() {
+		return getOutId(ClientboundPlayerChatPacket.class);
+	}
+
+	@Override
+	public int getOutPlayPlayerMessageDeletePacketId() {
+		return getOutId(ClientboundDeleteChatPacket.class);
+	}
+
+	@Override
+	public int getOutPlaySystemMessagePacketId() {
+		return getOutId(ClientboundSystemChatPacket.class);
+	}
+
+	@Override
+	public int getOutPlaySystemPlayerMessagePacketId() {
+		return getOutId(ClientboundDisguisedChatPacket.class);
 	}
 
 	@Override
@@ -259,18 +288,8 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getOutPlaySpawnObjectPacketId() {
+	public int getOutPlaySpawnEntityPacketId() {
 		return getOutId(PacketPlayOutSpawnEntity.class);
-	}
-
-	@Override
-	public int getOutPlaySpawnLivingPacketId() {
-		return getOutId(PacketPlayOutSpawnEntityLiving.class);
-	}
-
-	@Override
-	public int getOutPlaySpawnPaintingPacketId() {
-		return getOutId(PacketPlayOutSpawnEntityPainting.class);
 	}
 
 	@Override
@@ -344,6 +363,16 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
+	public int getOutPlayEntityDamageEventPacketId() {
+		return getOutId(ClientboundDamageEventPacket.class);
+	}
+
+	@Override
+	public int getOutPlayEntityHurtAnimationPacketId() {
+		return getOutId(ClientboundHurtAnimationPacket.class);
+	}
+
+	@Override
 	public int getOutPlayExperiencePacketId() {
 		return getOutId(PacketPlayOutExperience.class);
 	}
@@ -376,6 +405,11 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getOutPlayBlockBreakAnimationPacketId() {
 		return getOutId(PacketPlayOutBlockBreakAnimation.class);
+	}
+
+	@Override
+	public int getOutPlayBlockChangeAckPacketId() {
+		return getOutId(ClientboundBlockChangedAckPacket.class);
 	}
 
 	@Override
@@ -454,8 +488,13 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getOutPlayPlayerInfoPacketId() {
-		return getOutId(PacketPlayOutPlayerInfo.class);
+	public int getOutPlayPlayerInfoUpdatePacketId() {
+		return getOutId(ClientboundPlayerInfoUpdatePacket.class);
+	}
+
+	@Override
+	public int getOutPlayPlayerInfoRemovePacketId() {
+		return getOutId(ClientboundPlayerInfoRemovePacket.class);
 	}
 
 	@Override
@@ -521,11 +560,6 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@Override
 	public int getOutPlayChunkUnloadPacketId() {
 		return getOutId(PacketPlayOutUnloadChunk.class);
-	}
-
-	@Override
-	public int getOutPlayWorldCustomSoundPacketId() {
-		return getOutId(PacketPlayOutCustomSoundEffect.class);
 	}
 
 	@Override
@@ -629,11 +663,6 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getOutPlayAcknowledgePlayerDiggingPacketId() {
-		return getOutId(PacketPlayOutBlockBreak.class);
-	}
-
-	@Override
 	public int getOutPlayTitleTextPacketId() {
 		return getOutId(ClientboundSetTitleTextPacket.class);
 	}
@@ -704,11 +733,6 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getOutPlayVibration() {
-		return getOutId(ClientboundAddVibrationSignalPacket.class);
-	}
-
-	@Override
 	public int getOutPlaySyncPing() {
 		return getOutId(ClientboundPingPacket.class);
 	}
@@ -750,7 +774,22 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	}
 
 	@Override
-	public int getInPlayChatPacketId() {
+	public int getInPlayChatMessageAckPacketId() {
+		return getInId(ServerboundChatAckPacket.class);
+	}
+
+	@Override
+	public int getInPlayChatSessionPacketId() {
+		return getInId(ServerboundChatSessionUpdatePacket.class);
+	}
+
+	@Override
+	public int getInPlayChatCommandPacketId() {
+		return getInId(ServerboundChatCommandPacket.class);
+	}
+
+	@Override
+	public int getInPlayChatMessagePacketId() {
 		return getInId(PacketPlayInChat.class);
 	}
 
@@ -981,7 +1020,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 	@SuppressWarnings("unchecked")
 	protected static final Map<Class<? extends Packet<?>>, EnumProtocol> getProtocolMap() {
 		try {
-			return (Map<Class<? extends Packet<?>>, EnumProtocol>) ReflectionUtils.findField(EnumProtocol.class, "h").get(null);
+			return (Map<Class<? extends Packet<?>>, EnumProtocol>) ReflectionUtils.findField(EnumProtocol.class, "i").get(null);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new UncheckedReflectionException(e);
 		}
@@ -989,7 +1028,7 @@ public class SpigotPacketFactory implements PlatformPacketFactory {
 
 	protected static FieldReader<Map<EnumProtocolDirection, Object>> getDirectionMapField() {
 		try {
-			return FieldReader.of(EnumProtocol.class, "j", ReflectionUtils.generifyClass(Map.class));
+			return FieldReader.of(EnumProtocol.class, "k", ReflectionUtils.generifyClass(Map.class));
 		} catch (IllegalArgumentException e) {
 			throw new UncheckedReflectionException(e);
 		}

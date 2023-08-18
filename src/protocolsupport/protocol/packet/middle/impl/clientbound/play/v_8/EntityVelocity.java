@@ -4,9 +4,9 @@ import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV8;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8.AbstractPotionItemAsObjectDataEntityVelocity;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4__8.AbstractLegacyPotionItemEntityVelocity;
 
-public class EntityVelocity extends AbstractPotionItemAsObjectDataEntityVelocity implements IClientboundMiddlePacketV8 {
+public class EntityVelocity extends AbstractLegacyPotionItemEntityVelocity implements IClientboundMiddlePacketV8 {
 
 	public EntityVelocity(IMiddlePacketInit init) {
 		super(init);

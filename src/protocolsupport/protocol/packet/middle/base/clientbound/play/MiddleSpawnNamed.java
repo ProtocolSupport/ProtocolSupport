@@ -37,7 +37,7 @@ public abstract class MiddleSpawnNamed extends ClientBoundMiddlePacket {
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		int playerEntityId = VarNumberCodec.readVarInt(serverdata);
-		UUID uuid = UUIDCodec.readUUID2L(serverdata);
+		UUID uuid = UUIDCodec.readUUID(serverdata);
 		entity = NetworkEntity.createPlayer(uuid, playerEntityId);
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();

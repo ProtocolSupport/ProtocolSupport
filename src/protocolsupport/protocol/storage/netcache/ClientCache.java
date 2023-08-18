@@ -1,13 +1,20 @@
 package protocolsupport.protocol.storage.netcache;
 
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.NamespacedKey;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import protocolsupport.api.chat.modifiers.Modifier;
 import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.protocol.types.nbt.NBTString;
 import protocolsupport.protocol.utils.i18n.I18NData;
 import protocolsupport.utils.reflection.ReflectionUtils;
 
@@ -33,6 +40,7 @@ public class ClientCache implements IBiomeRegistry {
 		return respawnScreenEnabled;
 	}
 
+	protected final Map<String, NBTCompound> dimensions = new LinkedHashMap<>();
 	protected String world;
 	protected NBTCompound dimension;
 	protected int minY;
@@ -48,10 +56,10 @@ public class ClientCache implements IBiomeRegistry {
 		return dimension;
 	}
 
-	public void setCurrentWorld(String world, NBTCompound dimension) {
+	public void setCurrentWorld(String world) {
 		if (!world.equals(this.world)) {
 			this.world = world;
-			this.dimension = dimension;
+			this.dimension = dimensions.get(world);
 			this.minY = dimension.getNumberTagOrThrow("min_y").getAsInt();
 			this.height = dimension.getNumberTagOrThrow("height").getAsInt();
 			this.dimensionSkyLight = dimension.getNumberTagOrThrow("has_skylight").getAsInt() == 1;
@@ -124,13 +132,44 @@ public class ClientCache implements IBiomeRegistry {
 		return biomeId.values().iterator().nextInt();
 	}
 
-	public void setDimensionCodec(NBTCompound dimensionCodec) {
+	protected final Int2ObjectMap<NetworkChatType> chattypes = new Int2ObjectOpenHashMap<>();
+
+	public NetworkChatType getChatType(int id) {
+		return chattypes.get(id);
+	}
+
+	public void setRegistries(NBTCompound dimensionCodec) {
+		dimensions.clear();
+		NBTCompound dimensionRegistry = dimensionCodec.getCompoundTagOrNull("minecraft:dimension_type");
+		if ((dimensionRegistry == null) || dimensionRegistry.isEmpty()) {
+			throw new IllegalStateException("Dimension registry is empty");
+		}
+		for (NBTCompound dimensionData : dimensionRegistry.getCompoundListTagOrThrow("value").getTags()) {
+			dimensions.put(dimensionData.getStringTagValueOrThrow("name"), dimensionData.getCompoundTagOrThrow("element"));
+		}
+
+		Arrays.fill(biomeById, null);
+		biomeId.clear();
 		NBTCompound biomeRegistry = dimensionCodec.getCompoundTagOrNull("minecraft:worldgen/biome");
 		if ((biomeRegistry == null) || biomeRegistry.isEmpty()) {
 			throw new IllegalStateException("Dimension biome registry is empty");
 		}
 		for (NBTCompound biomeData : biomeRegistry.getCompoundListTagOrThrow("value").getTags()) {
 			registerBiome(NamespacedKey.fromString(biomeData.getStringTagValueOrThrow("name")), biomeData.getNumberTagOrThrow("id").getAsInt());
+		}
+
+		chattypes.clear();
+		NBTCompound chattypeRegistry = dimensionCodec.getCompoundTagOrThrow("minecraft:chat_type");
+		if ((chattypeRegistry == null) || chattypeRegistry.isEmpty()) {
+			throw new IllegalStateException("Dimension biome registry is empty");
+		}
+		for (NBTCompound chattypeValue : chattypeRegistry.getCompoundListTagOrThrow("value").getTags()) {
+			int id = chattypeValue.getNumberTagOrThrow("id").getAsInt();
+			NBTCompound chattypeElementChat = chattypeValue.getCompoundTagOrThrow("element").getCompoundTagOrThrow("chat");
+			String translationKey = chattypeElementChat.getStringTagValueOrThrow("translation_key");
+			String[] translationParameters = chattypeElementChat.getStringListTagOrThrow("parameters").getTags().stream().map(NBTString::getValue).toArray(String[]::new);
+			//TODO: modifier
+			chattypes.put(id, new NetworkChatType(translationKey, translationParameters, null));
 		}
 	}
 
@@ -178,6 +217,12 @@ public class ClientCache implements IBiomeRegistry {
 	@Override
 	public String toString() {
 		return ReflectionUtils.toStringAllFields(this);
+	}
+
+	public static record NetworkChatType(String translationKey, String[] translationParameters, Modifier style) {
+		public static final String PARAMETER_SENDER = "sender";
+		public static final String PARAMETER_TARGET = "target";
+		public static final String PARAMETER_CONTENT = "content";
 	}
 
 }

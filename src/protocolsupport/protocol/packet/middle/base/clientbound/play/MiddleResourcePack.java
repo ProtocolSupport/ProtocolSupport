@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middle.base.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.chat.components.BaseComponent;
+import protocolsupport.protocol.codec.OptionalCodec;
 import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.base.clientbound.ClientBoundMiddlePacket;
 
@@ -22,11 +23,7 @@ public abstract class MiddleResourcePack extends ClientBoundMiddlePacket {
 		url = StringCodec.readVarIntUTF8String(serverdata);
 		hash = StringCodec.readVarIntUTF8String(serverdata);
 		forced = serverdata.readBoolean();
-		if (serverdata.readBoolean()) {
-			message = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(serverdata), true);
-		} else {
-			message = null;
-		}
+		message = OptionalCodec.readOptional(serverdata, messageData -> ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(messageData), true));
 	}
 
 }

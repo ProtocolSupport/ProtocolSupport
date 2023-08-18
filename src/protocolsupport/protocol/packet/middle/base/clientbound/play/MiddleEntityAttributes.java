@@ -32,7 +32,7 @@ public abstract class MiddleEntityAttributes extends MiddleEntityData {
 			}
 			AttributeModifier[] modifiers = new AttributeModifier[VarNumberCodec.readVarInt(serverdata)];
 			for (int modifierIndex = 0; modifierIndex < modifiers.length; modifierIndex++) {
-				UUID uuid = UUIDCodec.readUUID2L(serverdata);
+				UUID uuid = UUIDCodec.readUUID(serverdata);
 				double amount = serverdata.readDouble();
 				int operation = serverdata.readByte();
 				modifiers[modifierIndex] = new AttributeModifier(uuid, amount, operation);

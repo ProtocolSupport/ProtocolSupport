@@ -24,9 +24,10 @@ public class SpigotPingResponseHandler extends PingResponseHandler {
 		List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
 
 		String motd = Bukkit.getMotd();
+		int numPlayers = Bukkit.getOnlinePlayers().size();
 		int maxPlayers = Bukkit.getMaxPlayers();
 
-		InternalServerListPingEvent bevent = new InternalServerListPingEvent(connection.getAddress().getAddress(), motd, maxPlayers, players);
+		InternalServerListPingEvent bevent = new InternalServerListPingEvent(connection.getVirtualHost().toString(), connection.getAddress().getAddress(), motd, numPlayers, maxPlayers, players);
 		bevent.setServerIcon(Bukkit.getServerIcon());
 		Bukkit.getPluginManager().callEvent(bevent);
 
@@ -50,9 +51,8 @@ public class SpigotPingResponseHandler extends PingResponseHandler {
 
 		protected final List<Player> players;
 
-		@SuppressWarnings("deprecation")
-		protected InternalServerListPingEvent(InetAddress address, String motd, int maxPlayers, List<Player> players) {
-			super(address, motd, maxPlayers);
+		protected InternalServerListPingEvent(String hostname, InetAddress address, String motd, int numPlayers, int maxPlayers, List<Player> players) {
+			super(hostname, address, motd, numPlayers, maxPlayers);
 			this.players = players;
 		}
 

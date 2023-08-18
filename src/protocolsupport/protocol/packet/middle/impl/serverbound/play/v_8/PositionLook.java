@@ -2,7 +2,7 @@ package protocolsupport.protocol.packet.middle.impl.serverbound.play.v_8;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.packet.middle.impl.serverbound.IServerboundMiddlePacketV8;
-import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4_5_6_7_8.AbstractMoveLook;
+import protocolsupport.protocol.packet.middle.impl.serverbound.play.v_4__8.AbstractMoveLook;
 
 public class PositionLook extends AbstractMoveLook implements IServerboundMiddlePacketV8 {
 

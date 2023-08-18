@@ -124,20 +124,12 @@ public class HoverAction {
 
 	@Override
 	public HoverAction clone() {
-		switch (type) {
-			case SHOW_TEXT: {
-				return new HoverAction(getText().clone());
-			}
-			case SHOW_ITEM: {
-				return new HoverAction(getItemStack().clone());
-			}
-			case SHOW_ENTITY: {
-				return new HoverAction(getEntity().clone());
-			}
-			default: {
-				throw new IllegalStateException("Unknown hover type " + type);
-			}
-		}
+		return switch (type) {
+			case SHOW_TEXT -> new HoverAction(getText().clone());
+			case SHOW_ITEM -> new HoverAction(getItemStack().clone());
+			case SHOW_ENTITY -> new HoverAction(getEntity().clone());
+			default -> throw new IllegalStateException("Unknown hover type " + type);
+		};
 	}
 
 	@Override

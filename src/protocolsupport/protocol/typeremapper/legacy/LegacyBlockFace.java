@@ -10,35 +10,35 @@ public class LegacyBlockFace {
 	}
 
 	public static byte getLegacyRotatableId(@Nonnull BlockFace face) {
-		switch (face) {
-			case SOUTH: return 0;
-			case SOUTH_SOUTH_WEST: return 1;
-			case SOUTH_WEST: return 2;
-			case WEST_SOUTH_WEST: return 3;
-			case WEST: return 4;
-			case WEST_NORTH_WEST: return 5;
-			case NORTH_WEST: return 6;
-			case NORTH_NORTH_WEST: return 7;
-			case NORTH: return 8;
-			case NORTH_NORTH_EAST: return 9;
-			case NORTH_EAST: return 10;
-			case EAST_NORTH_EAST: return 11;
-			case EAST: return 12;
-			case EAST_SOUTH_EAST: return 13;
-			case SOUTH_EAST: return 14;
-			case SOUTH_SOUTH_EAST: return 15;
-			default: return 0;
-		}
+		return switch (face) {
+			case SOUTH -> 0;
+			case SOUTH_SOUTH_WEST -> 1;
+			case SOUTH_WEST -> 2;
+			case WEST_SOUTH_WEST -> 3;
+			case WEST -> 4;
+			case WEST_NORTH_WEST -> 5;
+			case NORTH_WEST -> 6;
+			case NORTH_NORTH_WEST -> 7;
+			case NORTH -> 8;
+			case NORTH_NORTH_EAST -> 9;
+			case NORTH_EAST -> 10;
+			case EAST_NORTH_EAST -> 11;
+			case EAST -> 12;
+			case EAST_SOUTH_EAST -> 13;
+			case SOUTH_EAST -> 14;
+			case SOUTH_SOUTH_EAST -> 15;
+			default -> 0;
+		};
 	}
 
 	public static byte getLegacyDirectionalId(@Nonnull BlockFace face) {
-		switch (face) {
-			case NORTH: return 2;
-			case SOUTH: return 3;
-			case WEST: return 4;
-			case EAST: return 5;
-			default: return 1;
-		}
+		return switch (face) {
+			case NORTH -> 2;
+			case SOUTH -> 3;
+			case WEST -> 4;
+			case EAST -> 5;
+			default -> 1;
+		};
 	}
 
 }

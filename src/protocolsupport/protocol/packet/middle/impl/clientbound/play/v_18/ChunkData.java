@@ -11,7 +11,7 @@ import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.base.clientbound.play.MiddleChunkData;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV18;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1_17r2_18.ChunkLight;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_17r1__18.ChunkLight;
 import protocolsupport.protocol.typeremapper.basic.BiomeTransformer;
 import protocolsupport.protocol.typeremapper.block.BlockDataLegacyDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
@@ -53,7 +53,7 @@ public class ChunkData extends MiddleChunkData implements IClientboundMiddlePack
 			VarNumberCodec.writeVarInt(tileTo, tile.getType().getNetworkId());
 			ItemStackCodec.writeDirectTag(tileTo, tile.getNBT());
 		});
-		ChunkLight.writeData(chunkdataPacket, trustEdges, setSkyLightMask, setBlockLightMask, emptySkyLightMask, emptyBlockLightMask, skyLight, blockLight);
+		ChunkLight.writeData(chunkdataPacket, false, setSkyLightMask, setBlockLightMask, emptySkyLightMask, emptyBlockLightMask, skyLight, blockLight);
 		io.writeClientbound(chunkdataPacket);
 	}
 

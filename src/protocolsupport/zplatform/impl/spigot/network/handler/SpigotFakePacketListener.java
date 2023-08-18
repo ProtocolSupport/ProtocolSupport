@@ -1,9 +1,7 @@
 package protocolsupport.zplatform.impl.spigot.network.handler;
 
-import net.minecraft.network.NetworkManager;
 import net.minecraft.network.PacketListener;
 import net.minecraft.network.chat.IChatBaseComponent;
-import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotFakePacketListener implements PacketListener {
@@ -19,8 +17,8 @@ public class SpigotFakePacketListener implements PacketListener {
 	}
 
 	@Override
-	public NetworkManager a() {
-		return ((SpigotNetworkManagerWrapper) this.networkManager).unwrap();
+	public boolean a() {
+		return networkManager.isConnected();
 	}
 
 }

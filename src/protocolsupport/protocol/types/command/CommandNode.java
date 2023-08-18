@@ -6,17 +6,15 @@ public class CommandNode {
 	protected final int[] childNodesIndexes;
 	protected final int redirectNodeIndex;
 	protected final String name;
-	protected final String parser;
-	protected final CommandNodeProperties properties;
+	protected final CommandNodeArgumentProperties argumentProperties;
 	protected final String suggestType;
 
-	public CommandNode(int flags, int[] childNodesIndexes, int redirectNodeIndex, String name, String parser, CommandNodeProperties properties, String suggestType) {
+	public CommandNode(int flags, int[] childNodesIndexes, int redirectNodeIndex, String name, CommandNodeArgumentProperties argumentProperties, String suggestType) {
 		this.flags = flags;
 		this.childNodesIndexes = childNodesIndexes;
 		this.redirectNodeIndex = redirectNodeIndex;
 		this.name = name;
-		this.parser = parser;
-		this.properties = properties;
+		this.argumentProperties = argumentProperties;
 		this.suggestType = suggestType;
 	}
 
@@ -39,16 +37,9 @@ public class CommandNode {
 		return name;
 	}
 
-
-	public String getParser() {
-		return parser;
+	public CommandNodeArgumentProperties getArgumentProperties() {
+		return argumentProperties;
 	}
-
-
-	public CommandNodeProperties getProperties() {
-		return properties;
-	}
-
 
 	public String getSuggestType() {
 		return suggestType;

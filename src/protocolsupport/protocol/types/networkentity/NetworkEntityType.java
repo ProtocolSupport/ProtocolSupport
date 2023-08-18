@@ -21,131 +21,138 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public enum NetworkEntityType {
 
-	NONE(EType.NONE, EntityType.UNKNOWN),
-	// Specials (Spawned by their own packets)
-	EXP_ORB(EType.SPECIAL, EntityType.EXPERIENCE_ORB),
-	PAINTING(EType.SPECIAL, EntityType.PAINTING),
-	PLAYER(EType.SPECIAL, EntityType.PLAYER),
-	// Mobs
-	COW(EType.MOB, EntityType.COW),
-	MUSHROOM_COW(EType.MOB, EntityType.MUSHROOM_COW),
-	CHICKEN(EType.MOB, EntityType.CHICKEN),
-	SQUID(EType.MOB, EntityType.SQUID),
-	COMMON_HORSE(EType.MOB, EntityType.HORSE),
-	ZOMBIE_HORSE(EType.MOB, EntityType.ZOMBIE_HORSE),
-	SKELETON_HORSE(EType.MOB, EntityType.SKELETON_HORSE),
-	DONKEY(EType.MOB, EntityType.DONKEY),
-	MULE(EType.MOB, EntityType.MULE),
-	LAMA(EType.MOB, EntityType.LLAMA),
-	BAT(EType.MOB, EntityType.BAT),
-	OCELOT(EType.MOB, EntityType.OCELOT),
-	WOLF(EType.MOB, EntityType.WOLF),
-	PIG(EType.MOB, EntityType.PIG),
-	RABBIT(EType.MOB, EntityType.RABBIT),
-	SHEEP(EType.MOB, EntityType.SHEEP),
-	POLAR_BEAR(EType.MOB, EntityType.POLAR_BEAR),
-	VILLAGER(EType.MOB, EntityType.VILLAGER),
-	BEE(EType.MOB, EntityType.BEE),
-	ENDERMAN(EType.MOB, EntityType.ENDERMAN),
-	GIANT(EType.MOB, EntityType.GIANT),
-	SILVERFISH(EType.MOB, EntityType.SILVERFISH),
-	ENDERMITE(EType.MOB, EntityType.ENDERMITE),
-	ENDER_DRAGON(EType.MOB, EntityType.ENDER_DRAGON),
-	SNOWMAN(EType.MOB, EntityType.SNOWMAN),
-	ZOMBIE(EType.MOB, EntityType.ZOMBIE),
-	ZOMBIE_VILLAGER(EType.MOB, EntityType.ZOMBIE_VILLAGER, ZOMBIE),
-	HUSK(EType.MOB, EntityType.HUSK, ZOMBIE),
-	DROWNED(EType.MOB, EntityType.DROWNED, ZOMBIE),
-	BLAZE(EType.MOB, EntityType.BLAZE),
-	SPIDER(EType.MOB, EntityType.SPIDER),
-	CAVE_SPIDER(EType.MOB, EntityType.CAVE_SPIDER, SPIDER),
-	CREEPER(EType.MOB, EntityType.CREEPER),
-	GHAST(EType.MOB, EntityType.GHAST),
-	SLIME(EType.MOB, EntityType.SLIME),
-	MAGMA_CUBE(EType.MOB, EntityType.MAGMA_CUBE, SLIME),
-	SKELETON(EType.MOB, EntityType.SKELETON),
-	WITHER_SKELETON(EType.MOB, EntityType.WITHER_SKELETON, SKELETON),
-	STRAY(EType.MOB, EntityType.STRAY, SKELETON),
-	WITCH(EType.MOB, EntityType.WITCH),
-	IRON_GOLEM(EType.MOB, EntityType.IRON_GOLEM),
-	SHULKER(EType.MOB, EntityType.SHULKER),
-	WITHER(EType.MOB, EntityType.WITHER),
-	GUARDIAN(EType.MOB, EntityType.GUARDIAN),
-	ELDER_GUARDIAN(EType.MOB, EntityType.ELDER_GUARDIAN, GUARDIAN),
-	VINDICATOR(EType.MOB, EntityType.VINDICATOR),
-	EVOKER(EType.MOB, EntityType.EVOKER),
-	ILLUSIONER(EType.MOB, EntityType.ILLUSIONER, EVOKER),
-	VEX(EType.MOB, EntityType.VEX),
-	PARROT(EType.MOB, EntityType.PARROT),
-	PHANTOM(EType.MOB, EntityType.PHANTOM),
-	DOLPHIN(EType.MOB, EntityType.DOLPHIN),
-	TURTLE(EType.MOB, EntityType.TURTLE),
-	COD(EType.MOB, EntityType.COD),
-	SALMON(EType.MOB, EntityType.SALMON),
-	PUFFERFISH(EType.MOB, EntityType.PUFFERFISH),
-	TROPICAL_FISH(EType.MOB, EntityType.TROPICAL_FISH),
-	TRADER_LAMA(EType.MOB, EntityType.TRADER_LLAMA, LAMA),
-	WANDERING_TRADER(EType.MOB, EntityType.WANDERING_TRADER),
-	CAT(EType.MOB, EntityType.CAT),
-	FOX(EType.MOB, EntityType.FOX),
-	PANDA(EType.MOB, EntityType.PANDA),
-	PILLAGER(EType.MOB, EntityType.PILLAGER),
-	RAVAGER(EType.MOB, EntityType.RAVAGER),
-	PIGLIN(EType.MOB, EntityType.PIGLIN),
-	PIGLIN_BRUTE(EType.MOB, EntityType.PIGLIN_BRUTE),
-	ZOMBIFIED_PIGLIN(EType.MOB, EntityType.ZOMBIFIED_PIGLIN, ZOMBIE),
-	HOGLIN(EType.MOB, EntityType.HOGLIN),
-	ZOGLIN(EType.MOB, EntityType.ZOGLIN),
-	STRIDER(EType.MOB, EntityType.STRIDER),
-	AXOLOTL(EType.MOB, EntityType.AXOLOTL),
-	GLOW_SQUID(EType.MOB, EntityType.GLOW_SQUID),
-	GOAT(EType.MOB, EntityType.GOAT),
-	// Objects
-	BOAT(EType.OBJECT, EntityType.BOAT),
-	TNT(EType.OBJECT, EntityType.PRIMED_TNT),
-	SNOWBALL(EType.OBJECT, EntityType.SNOWBALL),
-	EGG(EType.OBJECT, EntityType.EGG),
-	FIREBALL(EType.OBJECT, EntityType.FIREBALL),
-	FIRECHARGE(EType.OBJECT, EntityType.SMALL_FIREBALL),
-	ENDERPEARL(EType.OBJECT, EntityType.ENDER_PEARL),
-	WITHER_SKULL(EType.OBJECT, EntityType.WITHER_SKULL, FIREBALL),
-	FALLING_OBJECT(EType.OBJECT, EntityType.FALLING_BLOCK),
-	ENDEREYE(EType.OBJECT, EntityType.ENDER_SIGNAL),
-	POTION(EType.OBJECT, EntityType.SPLASH_POTION),
-	EXP_BOTTLE(EType.OBJECT, EntityType.THROWN_EXP_BOTTLE),
-	LEASH_KNOT(EType.OBJECT, EntityType.LEASH_HITCH),
-	FISHING_FLOAT(EType.OBJECT, EntityType.FISHING_HOOK),
-	ITEM(EType.OBJECT, EntityType.DROPPED_ITEM),
-	ARROW(EType.OBJECT, EntityType.ARROW),
-	SPECTRAL_ARROW(EType.OBJECT, EntityType.SPECTRAL_ARROW, ARROW),
-	TIPPED_ARROW(EType.OBJECT, EntityType.ARROW, ARROW),
-	THROWN_TRIDENT(EType.OBJECT, EntityType.TRIDENT, ARROW),
-	FIREWORK(EType.OBJECT, EntityType.FIREWORK),
-	ITEM_FRAME(EType.OBJECT, EntityType.ITEM_FRAME),
-	ENDER_CRYSTAL(EType.OBJECT, EntityType.ENDER_CRYSTAL),
-	AREA_EFFECT_CLOUD(EType.OBJECT, EntityType.AREA_EFFECT_CLOUD),
-	SHULKER_BULLET(EType.OBJECT, EntityType.SHULKER_BULLET),
-	LAMA_SPIT(EType.OBJECT, EntityType.LLAMA_SPIT),
-	DRAGON_FIREBALL(EType.OBJECT, EntityType.DRAGON_FIREBALL),
-	EVOCATOR_FANGS(EType.OBJECT, EntityType.EVOKER_FANGS),
-	MINECART(EType.OBJECT, EntityType.MINECART),
-	MINECART_CHEST(EType.OBJECT, EntityType.MINECART_CHEST, MINECART),
-	MINECART_FURNACE(EType.OBJECT, EntityType.MINECART_FURNACE, MINECART),
-	MINECART_TNT(EType.OBJECT, EntityType.MINECART_TNT, MINECART),
-	MINECART_MOB_SPAWNER(EType.OBJECT, EntityType.MINECART_MOB_SPAWNER, MINECART),
-	MINECART_HOPPER(EType.OBJECT, EntityType.MINECART_HOPPER, MINECART),
-	MINECART_COMMAND(EType.OBJECT, EntityType.MINECART_COMMAND, MINECART),
-	GLOW_ITEM_FRAME(EType.OBJECT, EntityType.GLOW_ITEM_FRAME),
-	THUNDERBOLT(EType.OBJECT, EntityType.LIGHTNING),
-	// Objectmobs (spawned both by spawn mob and spawn object packet)
-	ARMOR_STAND(EType.OBJECTMOB, EntityType.ARMOR_STAND);
+	NONE(NetworkEntityMetaType.NONE, EntityType.UNKNOWN),
+	THUNDERBOLT(NetworkEntityMetaType.SPECIAL, EntityType.LIGHTNING),
+	EXP_ORB(NetworkEntityMetaType.SPECIAL, EntityType.EXPERIENCE_ORB),
+	PLAYER(NetworkEntityMetaType.SPECIAL, EntityType.PLAYER),
+	COW(NetworkEntityMetaType.MOB, EntityType.COW),
+	MUSHROOM_COW(NetworkEntityMetaType.MOB, EntityType.MUSHROOM_COW),
+	CHICKEN(NetworkEntityMetaType.MOB, EntityType.CHICKEN),
+	SQUID(NetworkEntityMetaType.MOB, EntityType.SQUID),
+	COMMON_HORSE(NetworkEntityMetaType.MOB, EntityType.HORSE),
+	ZOMBIE_HORSE(NetworkEntityMetaType.MOB, EntityType.ZOMBIE_HORSE),
+	SKELETON_HORSE(NetworkEntityMetaType.MOB, EntityType.SKELETON_HORSE),
+	DONKEY(NetworkEntityMetaType.MOB, EntityType.DONKEY),
+	MULE(NetworkEntityMetaType.MOB, EntityType.MULE),
+	LAMA(NetworkEntityMetaType.MOB, EntityType.LLAMA),
+	BAT(NetworkEntityMetaType.MOB, EntityType.BAT),
+	OCELOT(NetworkEntityMetaType.MOB, EntityType.OCELOT),
+	WOLF(NetworkEntityMetaType.MOB, EntityType.WOLF),
+	PIG(NetworkEntityMetaType.MOB, EntityType.PIG),
+	RABBIT(NetworkEntityMetaType.MOB, EntityType.RABBIT),
+	SHEEP(NetworkEntityMetaType.MOB, EntityType.SHEEP),
+	POLAR_BEAR(NetworkEntityMetaType.MOB, EntityType.POLAR_BEAR),
+	VILLAGER(NetworkEntityMetaType.MOB, EntityType.VILLAGER),
+	BEE(NetworkEntityMetaType.MOB, EntityType.BEE),
+	ENDERMAN(NetworkEntityMetaType.MOB, EntityType.ENDERMAN),
+	GIANT(NetworkEntityMetaType.MOB, EntityType.GIANT),
+	SILVERFISH(NetworkEntityMetaType.MOB, EntityType.SILVERFISH),
+	ENDERMITE(NetworkEntityMetaType.MOB, EntityType.ENDERMITE),
+	ENDER_DRAGON(NetworkEntityMetaType.MOB, EntityType.ENDER_DRAGON),
+	SNOWMAN(NetworkEntityMetaType.MOB, EntityType.SNOWMAN),
+	ZOMBIE(NetworkEntityMetaType.MOB, EntityType.ZOMBIE),
+	ZOMBIE_VILLAGER(NetworkEntityMetaType.MOB, EntityType.ZOMBIE_VILLAGER, ZOMBIE),
+	HUSK(NetworkEntityMetaType.MOB, EntityType.HUSK, ZOMBIE),
+	DROWNED(NetworkEntityMetaType.MOB, EntityType.DROWNED, ZOMBIE),
+	BLAZE(NetworkEntityMetaType.MOB, EntityType.BLAZE),
+	SPIDER(NetworkEntityMetaType.MOB, EntityType.SPIDER),
+	CAVE_SPIDER(NetworkEntityMetaType.MOB, EntityType.CAVE_SPIDER, SPIDER),
+	CREEPER(NetworkEntityMetaType.MOB, EntityType.CREEPER),
+	GHAST(NetworkEntityMetaType.MOB, EntityType.GHAST),
+	SLIME(NetworkEntityMetaType.MOB, EntityType.SLIME),
+	MAGMA_CUBE(NetworkEntityMetaType.MOB, EntityType.MAGMA_CUBE, SLIME),
+	SKELETON(NetworkEntityMetaType.MOB, EntityType.SKELETON),
+	WITHER_SKELETON(NetworkEntityMetaType.MOB, EntityType.WITHER_SKELETON, SKELETON),
+	STRAY(NetworkEntityMetaType.MOB, EntityType.STRAY, SKELETON),
+	WITCH(NetworkEntityMetaType.MOB, EntityType.WITCH),
+	IRON_GOLEM(NetworkEntityMetaType.MOB, EntityType.IRON_GOLEM),
+	SHULKER(NetworkEntityMetaType.MOB, EntityType.SHULKER),
+	WITHER(NetworkEntityMetaType.MOB, EntityType.WITHER),
+	GUARDIAN(NetworkEntityMetaType.MOB, EntityType.GUARDIAN),
+	ELDER_GUARDIAN(NetworkEntityMetaType.MOB, EntityType.ELDER_GUARDIAN, GUARDIAN),
+	VINDICATOR(NetworkEntityMetaType.MOB, EntityType.VINDICATOR),
+	EVOKER(NetworkEntityMetaType.MOB, EntityType.EVOKER),
+	ILLUSIONER(NetworkEntityMetaType.MOB, EntityType.ILLUSIONER, EVOKER),
+	VEX(NetworkEntityMetaType.MOB, EntityType.VEX),
+	PARROT(NetworkEntityMetaType.MOB, EntityType.PARROT),
+	PHANTOM(NetworkEntityMetaType.MOB, EntityType.PHANTOM),
+	DOLPHIN(NetworkEntityMetaType.MOB, EntityType.DOLPHIN),
+	TURTLE(NetworkEntityMetaType.MOB, EntityType.TURTLE),
+	COD(NetworkEntityMetaType.MOB, EntityType.COD),
+	SALMON(NetworkEntityMetaType.MOB, EntityType.SALMON),
+	PUFFERFISH(NetworkEntityMetaType.MOB, EntityType.PUFFERFISH),
+	TROPICAL_FISH(NetworkEntityMetaType.MOB, EntityType.TROPICAL_FISH),
+	TRADER_LAMA(NetworkEntityMetaType.MOB, EntityType.TRADER_LLAMA, LAMA),
+	WANDERING_TRADER(NetworkEntityMetaType.MOB, EntityType.WANDERING_TRADER),
+	CAT(NetworkEntityMetaType.MOB, EntityType.CAT),
+	FOX(NetworkEntityMetaType.MOB, EntityType.FOX),
+	PANDA(NetworkEntityMetaType.MOB, EntityType.PANDA),
+	PILLAGER(NetworkEntityMetaType.MOB, EntityType.PILLAGER),
+	RAVAGER(NetworkEntityMetaType.MOB, EntityType.RAVAGER),
+	PIGLIN(NetworkEntityMetaType.MOB, EntityType.PIGLIN),
+	PIGLIN_BRUTE(NetworkEntityMetaType.MOB, EntityType.PIGLIN_BRUTE),
+	ZOMBIFIED_PIGLIN(NetworkEntityMetaType.MOB, EntityType.ZOMBIFIED_PIGLIN, ZOMBIE),
+	HOGLIN(NetworkEntityMetaType.MOB, EntityType.HOGLIN),
+	ZOGLIN(NetworkEntityMetaType.MOB, EntityType.ZOGLIN),
+	WARDEN(NetworkEntityMetaType.MOB, EntityType.WARDEN),
+	STRIDER(NetworkEntityMetaType.MOB, EntityType.STRIDER),
+	AXOLOTL(NetworkEntityMetaType.MOB, EntityType.AXOLOTL),
+	GLOW_SQUID(NetworkEntityMetaType.MOB, EntityType.GLOW_SQUID),
+	GOAT(NetworkEntityMetaType.MOB, EntityType.GOAT),
+	ALLAY(NetworkEntityMetaType.MOB, EntityType.ALLAY),
+	TAPDOLE(NetworkEntityMetaType.MOB, EntityType.TADPOLE),
+	FROG(NetworkEntityMetaType.MOB, EntityType.FROG),
+	CAMEL(NetworkEntityMetaType.MOB, EntityType.CAMEL),
+	SNIFFER(NetworkEntityMetaType.MOB, EntityType.SNIFFER),
+	PAINTING(NetworkEntityMetaType.OBJECT, EntityType.PAINTING),
+	BOAT(NetworkEntityMetaType.OBJECT, EntityType.BOAT),
+	BOAT_CHEST(NetworkEntityMetaType.OBJECT, EntityType.CHEST_BOAT),
+	TNT(NetworkEntityMetaType.OBJECT, EntityType.PRIMED_TNT),
+	SNOWBALL(NetworkEntityMetaType.OBJECT, EntityType.SNOWBALL),
+	EGG(NetworkEntityMetaType.OBJECT, EntityType.EGG),
+	FIREBALL(NetworkEntityMetaType.OBJECT, EntityType.FIREBALL),
+	FIRECHARGE(NetworkEntityMetaType.OBJECT, EntityType.SMALL_FIREBALL),
+	ENDERPEARL(NetworkEntityMetaType.OBJECT, EntityType.ENDER_PEARL),
+	WITHER_SKULL(NetworkEntityMetaType.OBJECT, EntityType.WITHER_SKULL, FIREBALL),
+	FALLING_OBJECT(NetworkEntityMetaType.OBJECT, EntityType.FALLING_BLOCK),
+	ENDEREYE(NetworkEntityMetaType.OBJECT, EntityType.ENDER_SIGNAL),
+	POTION(NetworkEntityMetaType.OBJECT, EntityType.SPLASH_POTION),
+	EXP_BOTTLE(NetworkEntityMetaType.OBJECT, EntityType.THROWN_EXP_BOTTLE),
+	LEASH_KNOT(NetworkEntityMetaType.OBJECT, EntityType.LEASH_HITCH),
+	FISHING_FLOAT(NetworkEntityMetaType.OBJECT, EntityType.FISHING_HOOK),
+	ITEM(NetworkEntityMetaType.OBJECT, EntityType.DROPPED_ITEM),
+	ARROW(NetworkEntityMetaType.OBJECT, EntityType.ARROW),
+	SPECTRAL_ARROW(NetworkEntityMetaType.OBJECT, EntityType.SPECTRAL_ARROW, ARROW),
+	TIPPED_ARROW(NetworkEntityMetaType.OBJECT, EntityType.ARROW, ARROW),
+	THROWN_TRIDENT(NetworkEntityMetaType.OBJECT, EntityType.TRIDENT, ARROW),
+	FIREWORK(NetworkEntityMetaType.OBJECT, EntityType.FIREWORK),
+	ITEM_FRAME(NetworkEntityMetaType.OBJECT, EntityType.ITEM_FRAME),
+	ENDER_CRYSTAL(NetworkEntityMetaType.OBJECT, EntityType.ENDER_CRYSTAL),
+	AREA_EFFECT_CLOUD(NetworkEntityMetaType.OBJECT, EntityType.AREA_EFFECT_CLOUD),
+	SHULKER_BULLET(NetworkEntityMetaType.OBJECT, EntityType.SHULKER_BULLET),
+	LAMA_SPIT(NetworkEntityMetaType.OBJECT, EntityType.LLAMA_SPIT),
+	DRAGON_FIREBALL(NetworkEntityMetaType.OBJECT, EntityType.DRAGON_FIREBALL),
+	EVOCATOR_FANGS(NetworkEntityMetaType.OBJECT, EntityType.EVOKER_FANGS),
+	MINECART(NetworkEntityMetaType.OBJECT, EntityType.MINECART),
+	MINECART_CHEST(NetworkEntityMetaType.OBJECT, EntityType.MINECART_CHEST, MINECART),
+	MINECART_FURNACE(NetworkEntityMetaType.OBJECT, EntityType.MINECART_FURNACE, MINECART),
+	MINECART_TNT(NetworkEntityMetaType.OBJECT, EntityType.MINECART_TNT, MINECART),
+	MINECART_MOB_SPAWNER(NetworkEntityMetaType.OBJECT, EntityType.MINECART_MOB_SPAWNER, MINECART),
+	MINECART_HOPPER(NetworkEntityMetaType.OBJECT, EntityType.MINECART_HOPPER, MINECART),
+	MINECART_COMMAND(NetworkEntityMetaType.OBJECT, EntityType.MINECART_COMMAND, MINECART),
+	GLOW_ITEM_FRAME(NetworkEntityMetaType.OBJECT, EntityType.GLOW_ITEM_FRAME),
+	INTERACTION(NetworkEntityMetaType.OBJECT, EntityType.INTERACTION),
+	DISPLAY_BLOCK(NetworkEntityMetaType.OBJECT, EntityType.BLOCK_DISPLAY),
+	DISPLAY_ITEM(NetworkEntityMetaType.OBJECT, EntityType.ITEM_DISPLAY),
+	DISPLAY_TEXT(NetworkEntityMetaType.OBJECT, EntityType.TEXT_DISPLAY),
+	ARMOR_STAND(NetworkEntityMetaType.OBJECTMOB, EntityType.ARMOR_STAND);
 
-	private final EType etype;
+	private final NetworkEntityMetaType etype;
 	private final int typeId;
 	private final EntityType bukkitType;
 	private final NetworkEntityType superType;
 
-	public @Nonnull EType getEType() {
+	public @Nonnull NetworkEntityMetaType getMetaType() {
 		return etype;
 	}
 
@@ -169,16 +176,16 @@ public enum NetworkEntityType {
 		return ((type == this) || ((getSuperType() != null) && getSuperType().isOfType(type)));
 	}
 
-	public enum EType {
+	public enum NetworkEntityMetaType {
 		NONE, SPECIAL, OBJECT(false, true), MOB(true, false), OBJECTMOB(true, true);
 
 		private boolean mob;
 		private boolean object;
 
-		EType() {
+		NetworkEntityMetaType() {
 		}
 
-		EType(boolean mob, boolean object) {
+		NetworkEntityMetaType(boolean mob, boolean object) {
 			this.mob = mob;
 			this.object = object;
 		}
@@ -213,12 +220,12 @@ public enum NetworkEntityType {
 
 	public static @Nonnull NetworkEntityType getObjectByNetworkTypeId(@Nonnegative int objectTypeId) {
 		NetworkEntityType type = BY_N_ID.get(objectTypeId);
-		return (type != null) && (type.getEType().isObject()) ? type : NONE;
+		return (type != null) && (type.getMetaType().isObject()) ? type : NONE;
 	}
 
 	public static @Nonnull NetworkEntityType getMobByNetworkTypeId(@Nonnegative int mobTypeId) {
 		NetworkEntityType type = BY_N_ID.get(mobTypeId);
-		return (type != null) && (type.getEType().isMob()) ? type : NONE;
+		return (type != null) && (type.getMetaType().isMob()) ? type : NONE;
 	}
 
 	public static @Nonnull NetworkEntityType getByRegistrySTypeId(@Nonnull String name) {
@@ -229,14 +236,14 @@ public enum NetworkEntityType {
 		return BY_B_TYPE.getOrDefault(btype, NONE);
 	}
 
-	NetworkEntityType(@Nonnull EType etype, @Nonnull EntityType bukkitType, @Nullable NetworkEntityType superType) {
+	NetworkEntityType(@Nonnull NetworkEntityMetaType etype, @Nonnull EntityType bukkitType, @Nullable NetworkEntityType superType) {
 		this.etype = etype;
 		this.bukkitType = bukkitType;
 		this.typeId = MinecraftEntityData.getIdByName(getKey());
 		this.superType = superType;
 	}
 
-	NetworkEntityType(@Nonnull EType etype, @Nonnull EntityType bukkitType) {
+	NetworkEntityType(@Nonnull NetworkEntityMetaType etype, @Nonnull EntityType bukkitType) {
 		this(etype, bukkitType, null);
 	}
 

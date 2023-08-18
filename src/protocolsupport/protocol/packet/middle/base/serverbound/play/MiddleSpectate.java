@@ -18,7 +18,7 @@ public abstract class MiddleSpectate extends ServerBoundMiddlePacket {
 	@Override
 	protected void write() {
 		ServerBoundPacketData spetate = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_SPECTATE);
-		UUIDCodec.writeUUID2L(spetate, entityUUID);
+		UUIDCodec.writeUUID(spetate, entityUUID);
 		io.writeServerbound(spetate);
 	}
 

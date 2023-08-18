@@ -34,25 +34,12 @@ public class LegacyCatNetworkEntityMetadataFormatTransformerFactory extends Tame
 	}
 
 	protected static int getLegacyCatVariant(int modernType) {
-		switch (modernType) {
-			case 10: {
-				return 1;
-			}
-			case 0:
-			case 5:
-			case 6: {
-				return 2;
-			}
-			case 4:
-			case 7:
-			case 8:
-			case 9: {
-				return 3;
-			}
-			default: {
-				return modernType;
-			}
-		}
+		return switch (modernType) {
+			case 10 -> 1;
+			case 0, 5, 6 -> 2;
+			case 4, 7, 8, 9 -> 3;
+			default -> modernType;
+		};
 	}
 
 }

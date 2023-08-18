@@ -56,6 +56,9 @@ import net.minecraft.network.protocol.game.PacketPlayInUseEntity;
 import net.minecraft.network.protocol.game.PacketPlayInUseItem;
 import net.minecraft.network.protocol.game.PacketPlayInVehicleMove;
 import net.minecraft.network.protocol.game.PacketPlayInWindowClick;
+import net.minecraft.network.protocol.game.ServerboundChatAckPacket;
+import net.minecraft.network.protocol.game.ServerboundChatCommandPacket;
+import net.minecraft.network.protocol.game.ServerboundChatSessionUpdatePacket;
 import net.minecraft.network.protocol.game.ServerboundPongPacket;
 import net.minecraft.network.protocol.login.PacketLoginInCustomPayload;
 import net.minecraft.network.protocol.login.PacketLoginInEncryptionBegin;
@@ -71,10 +74,9 @@ import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.level.World;
 import protocolsupport.protocol.packet.handler.AbstractLoginListenerPlay;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
-import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implements PacketLoginInListener, PacketListenerPlayIn {
+public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay<EntityPlayer> implements PacketLoginInListener, PacketListenerPlayIn {
 
 	protected static final MinecraftServer server = SpigotMiscUtils.SERVER;
 
@@ -83,14 +85,14 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 	}
 
 	@Override
-	protected JoinData createJoinData() {
-		WorldServer worldserver = server.a(World.e);
+	protected JoinData<EntityPlayer> createJoinData() {
+		WorldServer worldserver = server.a(World.h);
 		EntityPlayer entity = new EntityPlayer(
 			server,
 			worldserver,
 			SpigotMiscUtils.toMojangGameProfile(connection.getLoginProfile())
 		);
-		return new JoinData(entity.getBukkitEntity(), entity) {
+		return new JoinData<>(entity.getBukkitEntity(), entity) {
 			@Override
 			protected void close() {
 			}
@@ -100,10 +102,10 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 	protected static final String BAN_DATE_FORMAT_STRING = "yyyy-MM-dd 'at' HH:mm:ss z";
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void checkBans(PlayerLoginEvent event, Object[] data) {
+	protected void checkBans(PlayerLoginEvent event, EntityPlayer entityplayer) {
 		PlayerList playerlist = server.ac();
 
-		GameProfile mojangGameProfile = ((EntityPlayer) data[0]).fq();
+		GameProfile mojangGameProfile = entityplayer.fM();
 		SocketAddress address = networkManager.getAddress();
 
 		GameProfileBanEntry profileban = ((JsonList<GameProfile, GameProfileBanEntry>) playerlist.f()).b(mojangGameProfile);
@@ -131,19 +133,24 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 			return;
 		}
 
-		if ((playerlist.j.size() >= playerlist.n()) && !playerlist.f(mojangGameProfile)) {
+		if ((playerlist.k.size() >= playerlist.n()) && !playerlist.d(mojangGameProfile)) {
 			event.disallow(PlayerLoginEvent.Result.KICK_FULL, SpigotConfig.serverFullMessage);
 		}
 	}
 
 	@Override
-	protected void joinGame(Object[] data) {
-		server.ac().a((NetworkManager) networkManager.unwrap(), (EntityPlayer) data[0]);
+	protected void joinGame(EntityPlayer entityplayer) {
+		server.ac().a((NetworkManager) networkManager.unwrap(), entityplayer);
 	}
 
 	@Override
 	public void a(IChatBaseComponent ichatbasecomponent) {
 		Bukkit.getLogger().info(getConnectionRepr() + " lost connection: " + ichatbasecomponent.a());
+	}
+
+	@Override
+	public boolean a() {
+		return networkManager.isConnected();
 	}
 
 	@Override
@@ -339,8 +346,15 @@ public class SpigotLoginListenerPlay extends AbstractLoginListenerPlay implement
 	}
 
 	@Override
-	public NetworkManager a() {
-		return ((SpigotNetworkManagerWrapper) this.networkManager).unwrap();
+	public void a(ServerboundChatCommandPacket var1) {
+	}
+
+	@Override
+	public void a(ServerboundChatAckPacket var1) {
+	}
+
+	@Override
+	public void a(ServerboundChatSessionUpdatePacket var1) {
 	}
 
 }

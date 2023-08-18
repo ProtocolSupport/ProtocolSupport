@@ -1,6 +1,5 @@
 package protocolsupport.zplatform.impl.spigot.network.handler;
 
-import net.minecraft.network.NetworkManager;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.protocol.handshake.PacketHandshakingInListener;
 import net.minecraft.network.protocol.handshake.PacketHandshakingInSetProtocol;
@@ -9,7 +8,6 @@ import protocolsupport.protocol.packet.handler.AbstractLoginListener;
 import protocolsupport.protocol.packet.handler.AbstractLoginListenerBlackhole;
 import protocolsupport.protocol.packet.handler.AbstractStatusListener;
 import protocolsupport.zplatform.impl.spigot.SpigotMiscUtils;
-import protocolsupport.zplatform.impl.spigot.network.SpigotNetworkManagerWrapper;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotHandshakeListener extends AbstractHandshakeListener implements PacketHandshakingInListener {
@@ -24,7 +22,7 @@ public class SpigotHandshakeListener extends AbstractHandshakeListener implement
 
 	@Override
 	public void a(PacketHandshakingInSetProtocol packet) {
-		handleSetProtocol(SpigotMiscUtils.protocolToNetState(packet.b()), packet.c, packet.d);
+		handleSetProtocol(SpigotMiscUtils.protocolToNetState(packet.a()), packet.c, packet.d);
 	}
 
 	@Override
@@ -43,8 +41,8 @@ public class SpigotHandshakeListener extends AbstractHandshakeListener implement
 	}
 
 	@Override
-	public NetworkManager a() {
-		return ((SpigotNetworkManagerWrapper) this.networkManager).unwrap();
+	public boolean a() {
+		return networkManager.isConnected();
 	}
 
 }

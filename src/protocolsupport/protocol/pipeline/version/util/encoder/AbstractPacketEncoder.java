@@ -9,7 +9,7 @@ import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
-import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.BytesCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.base.clientbound.IClientboundMiddlePacket;
 import protocolsupport.protocol.pipeline.IPacketDataChannelIO;
@@ -67,7 +67,7 @@ public abstract class AbstractPacketEncoder<T extends IClientboundMiddlePacket> 
 				throw new EncoderException(MessageFormat.format(
 					"Unable to transform or read clientbound middle packet(type {0}, data {1})",
 					packetTransformer != null ? packetTransformer.getClass().getName() : "unknown",
-					Arrays.toString(MiscDataCodec.readAllBytes(input))
+					Arrays.toString(BytesCodec.readAllBytes(input))
 				), exception);
 			} else {
 				throw exception;

@@ -1,6 +1,6 @@
 package protocolsupport.protocol.typeremapper.entity.format.metadata.object.misc;
 
-import protocolsupport.protocol.codec.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
+import protocolsupport.protocol.codec.NetworkEntityMetadataCodec.NetworkEntityMetadataList;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.object.NetworkEntityMetadataFormatTransformer;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;

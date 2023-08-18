@@ -2,8 +2,8 @@ package protocolsupport.protocol.packet.middle.impl.clientbound.play.v_8;
 
 import protocolsupport.protocol.packet.middle.base.clientbound.play.MiddleEntityEquipment;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV8;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8.AbstractNoOffhandEntityEquipment;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2_13.AbstractRemoveEquipmentOnDeathEntityStatus;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4__13.AbstractRemoveEquipmentOnDeathEntityStatus;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4__8.AbstractNoOffhandEntityEquipment;
 import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.utils.i18n.I18NData;
 

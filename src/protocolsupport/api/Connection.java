@@ -72,7 +72,7 @@ public abstract class Connection {
 	 * Returns address the player connected to/pinged
 	 * @return address the player connected to/pinged
 	 */
-	public abstract @Nullable InetSocketAddress getVirtualHost();
+	public abstract @Nonnull InetSocketAddress getVirtualHost();
 
 	/**
 	 * Returns real remote address

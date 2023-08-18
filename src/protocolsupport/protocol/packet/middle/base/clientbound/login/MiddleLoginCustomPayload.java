@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.base.clientbound.login;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.BytesCodec;
 import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.base.clientbound.ClientBoundMiddlePacket;
@@ -20,7 +20,7 @@ public abstract class MiddleLoginCustomPayload extends ClientBoundMiddlePacket {
 	protected void decode(ByteBuf serverdata) {
 		id = VarNumberCodec.readVarInt(serverdata);
 		tag = StringCodec.readVarIntUTF8String(serverdata);
-		data = MiscDataCodec.readAllBytesSlice(serverdata);
+		data = BytesCodec.readAllBytesSlice(serverdata);
 	}
 
 	@Override

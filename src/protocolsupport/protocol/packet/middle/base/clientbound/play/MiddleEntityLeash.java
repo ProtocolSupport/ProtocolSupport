@@ -1,20 +1,22 @@
 package protocolsupport.protocol.packet.middle.base.clientbound.play;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.protocol.packet.middle.base.clientbound.ClientBoundMiddlePacket;
 
-public abstract class MiddleEntityLeash extends ClientBoundMiddlePacket {
+public abstract class MiddleEntityLeash extends MiddleEntityData {
 
 	protected MiddleEntityLeash(IMiddlePacketInit init) {
 		super(init);
 	}
 
-	protected int entityId;
 	protected int vehicleId;
 
 	@Override
-	protected void decode(ByteBuf serverdata) {
-		entityId = serverdata.readInt();
+	protected int decodeEntityId(ByteBuf serverdata) {
+		return serverdata.readInt();
+	}
+
+	@Override
+	protected void decodeData(ByteBuf serverdata) {
 		vehicleId = serverdata.readInt();
 	}
 

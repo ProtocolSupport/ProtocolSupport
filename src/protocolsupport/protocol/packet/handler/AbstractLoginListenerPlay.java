@@ -25,7 +25,7 @@ import protocolsupport.utils.MiscUtils;
 import protocolsupport.zplatform.ServerPlatform;
 import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
-public abstract class AbstractLoginListenerPlay implements IPacketListener {
+public abstract class AbstractLoginListenerPlay<T> implements IPacketListener {
 
 	protected final NetworkManagerWrapper networkManager;
 	protected final ConnectionImpl connection;
@@ -111,7 +111,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 			}
 		}
 
-		JoinData joindata = createJoinData();
+		JoinData<T> joindata = createJoinData();
 
 		connection.setWrappedProfile(joindata.player);
 
@@ -173,7 +173,7 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 	protected void disconnectNormal(BaseComponent message) throws TimeoutException, InterruptedException {
 		networkManager.sendPacket(
 			ServerPlatform.get().getPacketFactory().createPlayDisconnectPacket(message),
-			future -> networkManager.close(message), 5, TimeUnit.SECONDS,
+			() -> networkManager.close(message), 5, TimeUnit.SECONDS,
 			() -> networkManager.close(new TextComponent("Packet send timed out whilst disconnecting player, force closing connection"))
 		);
 	}
@@ -184,18 +184,18 @@ public abstract class AbstractLoginListenerPlay implements IPacketListener {
 		MiscUtils.rethrowThreadException(t);
 	}
 
-	protected abstract JoinData createJoinData();
+	protected abstract JoinData<T> createJoinData();
 
-	protected abstract void checkBans(PlayerLoginEvent event, Object[] data);
+	protected abstract void checkBans(PlayerLoginEvent event, T data);
 
-	protected abstract void joinGame(Object[] data);
+	protected abstract void joinGame(T data);
 
-	protected abstract static class JoinData {
+	protected abstract static class JoinData<T> {
 
 		public final Player player;
-		public final Object[] data;
+		public final T data;
 
-		protected JoinData(Player player, Object... data) {
+		protected JoinData(Player player, T data) {
 			this.player = player;
 			this.data = data;
 		}

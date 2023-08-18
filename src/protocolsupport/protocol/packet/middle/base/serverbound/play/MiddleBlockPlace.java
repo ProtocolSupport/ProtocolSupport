@@ -22,13 +22,14 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 	protected float cY;
 	protected float cZ;
 	protected boolean insideblock;
+	protected int sequence;
 
 	@Override
 	protected void write() {
-		io.writeServerbound(create(position, face, hand, cX, cY, cZ, insideblock));
+		io.writeServerbound(create(position, face, hand, cX, cY, cZ, insideblock, sequence));
 	}
 
-	public static ServerBoundPacketData create(Position position, int face, UsedHand hand, float cX, float cY, float cZ, boolean insideblock) {
+	public static ServerBoundPacketData create(Position position, int face, UsedHand hand, float cX, float cY, float cZ, boolean insideblock, int sequence) {
 		if (face != -1) {
 			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_USE_ITEM);
 			MiscDataCodec.writeVarIntEnum(creator, hand);
@@ -38,10 +39,12 @@ public abstract class MiddleBlockPlace extends ServerBoundMiddlePacket {
 			creator.writeFloat(cY);
 			creator.writeFloat(cZ);
 			creator.writeBoolean(insideblock);
+			VarNumberCodec.writeVarInt(creator, sequence);
 			return creator;
 		} else {
 			ServerBoundPacketData creator = ServerBoundPacketData.create(ServerBoundPacketType.PLAY_BLOCK_PLACE);
 			MiscDataCodec.writeVarIntEnum(creator, hand);
+			VarNumberCodec.writeVarInt(creator, sequence);
 			return creator;
 		}
 	}

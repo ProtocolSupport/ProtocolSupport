@@ -16,7 +16,6 @@ public abstract class MiddleChunkLight extends ClientBoundMiddlePacket {
 	}
 
 	protected ChunkCoord coord;
-	protected boolean trustEdges;
 	protected BitSet setSkyLightMask;
 	protected BitSet setBlockLightMask;
 	protected BitSet emptySkyLightMask;
@@ -27,7 +26,6 @@ public abstract class MiddleChunkLight extends ClientBoundMiddlePacket {
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		coord = PositionCodec.readVarIntChunkCoord(serverdata);
-		trustEdges = serverdata.readBoolean();
 
 		setSkyLightMask = BitSet.valueOf(ArrayCodec.readVarIntLongArray(serverdata));
 		setBlockLightMask = BitSet.valueOf(ArrayCodec.readVarIntLongArray(serverdata));

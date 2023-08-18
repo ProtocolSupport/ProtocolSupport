@@ -1,12 +1,11 @@
 package protocolsupport.protocol.storage.netcache;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
 
 import protocolsupport.api.chat.ChatAPI;
 import protocolsupport.api.utils.ProfileProperty;
+import protocolsupport.protocol.types.ChatSession;
 import protocolsupport.protocol.types.GameMode;
 import protocolsupport.utils.reflection.ReflectionUtils;
 
@@ -29,58 +28,73 @@ public class PlayerListCache {
 	public static class PlayerListEntryData {
 
 		protected final String name;
+		protected final ProfileProperty[] properties;
 		protected String displayNameJson;
-		protected int ping;
+		protected Integer ping;
 		protected GameMode gamemode;
+		protected ChatSession chatData;
+		protected Boolean display;
 
-		protected final ArrayList<ProfileProperty> properties = new ArrayList<>();
-
-		public PlayerListEntryData(String name, int ping, GameMode gamemode, String displayNameJson, Collection<ProfileProperty> properties) {
+		public PlayerListEntryData(String name, ProfileProperty[] properties, Boolean display, ChatSession chatData, Integer ping, GameMode gamemode, String displayNameJson) {
 			this.name = name;
+			this.properties = properties;
+			this.display = display;
+			this.displayNameJson = displayNameJson;
+			this.chatData = chatData;
 			this.ping = ping;
 			this.gamemode = gamemode;
-			this.displayNameJson = displayNameJson;
-			this.properties.addAll(properties);
 		}
 
 		public String getUserName() {
 			return name;
 		}
 
+		public ProfileProperty[] getProperties() {
+			return properties;
+		}
+
+		public ChatSession getChatSession() {
+			return chatData;
+		}
+
+		public Boolean getDisplay() {
+			return display != null ? display : Boolean.TRUE;
+		}
+
 		public String getDisplayNameJson() {
 			return displayNameJson;
+		}
+
+		public int getPing() {
+			return ping != null ? ping : 0;
+		}
+
+		public GameMode getGameMode() {
+			return gamemode != null ? gamemode : GameMode.NOT_SET;
+		}
+
+		public String getLegacyDisplayName() {
+			return displayNameJson != null ? ChatAPI.fromJSON(displayNameJson, true).toLegacyText() : name;
+		}
+
+		public void setChatData(ChatSession chatData) {
+			this.chatData = chatData;
+		}
+
+		public void setDisplay(Boolean display) {
+			this.display = display;
 		}
 
 		public void setDisplayNameJson(String displayNameJson) {
 			this.displayNameJson = displayNameJson;
 		}
 
-		public int getPing() {
-			return ping;
-		}
-
-		public void setPing(int ping) {
-			this.ping = ping;
-		}
-
-		public GameMode getGameMode() {
-			return gamemode;
-		}
-
 		public void setGameMode(GameMode gamemode) {
 			this.gamemode = gamemode;
 		}
 
-		public String getCurrentName(String locale) {
-			return displayNameJson != null ? ChatAPI.fromJSON(displayNameJson, true).toLegacyText(locale) : name;
-		}
-
-		public void addProperty(ProfileProperty property) {
-			properties.add(property);
-		}
-
-		public ArrayList<ProfileProperty> getProperties() {
-			return properties;
+		public void setPing(Integer ping) {
+			this.ping = ping;
 		}
 
 		@Override
@@ -90,7 +104,7 @@ public class PlayerListCache {
 
 		@Override
 		public PlayerListEntryData clone() {
-			return new PlayerListEntryData(name, ping, gamemode, displayNameJson, properties);
+			return new PlayerListEntryData(name, properties, display, chatData, ping, gamemode, displayNameJson);
 		}
 
 	}

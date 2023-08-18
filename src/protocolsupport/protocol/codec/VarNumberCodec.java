@@ -12,54 +12,14 @@ public class VarNumberCodec {
 	public static final int MAX_LENGTH = 5;
 
 	public static int calculateVarIntSize(int value) {
-		switch (Integer.numberOfLeadingZeros(value)) {
-			case 32:
-			case 31:
-			case 30:
-			case 29:
-			case 28:
-			case 27:
-			case 26:
-			case 25: {
-				return 1;
-			}
-			case 24:
-			case 23:
-			case 22:
-			case 21:
-			case 20:
-			case 19:
-			case 18: {
-				return 2;
-			}
-			case 17:
-			case 16:
-			case 15:
-			case 14:
-			case 13:
-			case 12:
-			case 11: {
-				return 3;
-			}
-			case 10:
-			case 9:
-			case 8:
-			case 7:
-			case 6:
-			case 5:
-			case 4: {
-				return 4;
-			}
-			case 3:
-			case 2:
-			case 1:
-			case 0: {
-				return 5;
-			}
-			default: {
-				throw new IllegalStateException("Reached impossible branch while calculating var number " + value + " length");
-			}
-		}
+		return switch (Integer.numberOfLeadingZeros(value)) {
+			case 32, 31, 30, 29, 28, 27, 26, 25 -> 1;
+			case 24, 23, 22, 21, 20, 19, 18 -> 2;
+			case 17, 16, 15, 14, 13, 12, 11 -> 3;
+			case 10, 9, 8, 7, 6, 5, 4 -> 4;
+			case 3, 2, 1, 0 -> 5;
+			default -> throw new IllegalStateException("Reached impossible branch while calculating var number " + value + " length");
+		};
 	}
 
 	public static void writeFixedSizeVarInt(ByteBuf to, int i) {

@@ -138,6 +138,7 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectByte> MAIN_HAND = takeNextIndex(NetworkEntityMetadataObjectByte.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectNBT> LEFT_SHOULDER_ENTITY = takeNextIndex(NetworkEntityMetadataObjectNBT.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectNBT> RIGHT_SHOULDER_ENTITY = takeNextIndex(NetworkEntityMetadataObjectNBT.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectOptionalPosition> DEATH_LOCATION = takeNextIndex(NetworkEntityMetadataObjectOptionalPosition.class);
 	}
 
 	public static class Ageable extends Insentient {
@@ -272,6 +273,8 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 
 	public static class Goat extends Ageable {
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> SCREAMING = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> HAS_LEFT_HORN = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> HAS_RIGHT_HORN = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 	}
 
 	public static class Enderman extends Insentient {
@@ -412,6 +415,10 @@ public class NetworkEntityMetadataObjectIndex<T extends NetworkEntityMetadataObj
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> LEFT_PADDLE = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectBoolean> RIGHT_PADDLE = takeNextIndex(NetworkEntityMetadataObjectBoolean.class);
 		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> SPLASH_TIMER = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
+	}
+
+	public static class Painting extends Entity {
+		public static final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVarInt> VARIANT = takeNextIndex(NetworkEntityMetadataObjectVarInt.class);
 	}
 
 	public static class Tnt extends Entity {

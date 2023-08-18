@@ -7,7 +7,7 @@ import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV8;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8_9r1_9r2_10_11_12r1_12r2.AbstractScoreboardTeam;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4__12r2.AbstractScoreboardTeam;
 import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 import protocolsupport.utils.MiscUtils;
 

@@ -21,15 +21,18 @@ public class StartGame extends MiddleStartGame implements IClientboundMiddlePack
 
 	@Override
 	protected void write() {
+		NBTCompound dimension = clientCache.getDimension();
+		boolean legacyResource = version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_18);
+
 		ClientBoundPacketData startgame = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_START_GAME);
 		startgame.writeInt(player.getId());
 		startgame.writeBoolean(hardcore);
 		startgame.writeByte(gamemodeCurrent.getId());
 		startgame.writeByte(gamemodePrevious.getId());
 		ArrayCodec.writeVarIntVarIntUTF8StringArray(startgame, worlds);
-		ItemStackCodec.writeDirectTag(startgame, version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_18) ? toLegacyDimensionRegistry(dimensions) : dimensions);
-		ItemStackCodec.writeDirectTag(startgame, version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_18) ? toLegacyDimensionType(dimension) : dimension);
-		StringCodec.writeVarIntUTF8String(startgame, world);
+		ItemStackCodec.writeDirectTag(startgame, toLegacyDimensionRegistry(registries, legacyResource));
+		ItemStackCodec.writeDirectTag(startgame, toLegacyDimensionType(dimension, legacyResource));
+		StringCodec.writeVarIntUTF8String(startgame, worldName);
 		startgame.writeLong(hashedSeed);
 		VarNumberCodec.writeVarInt(startgame, maxplayers);
 		VarNumberCodec.writeVarInt(startgame, renderDistance);
@@ -41,16 +44,28 @@ public class StartGame extends MiddleStartGame implements IClientboundMiddlePack
 		io.writeClientbound(startgame);
 	}
 
-	protected static NBTCompound toLegacyDimensionRegistry(NBTCompound dimensionsTag) {
+	protected static NBTCompound toLegacyDimensionRegistry(NBTCompound dimensionsTag, boolean legacyResource) {
 		NBTCompound dimensionRegistryTag = dimensionsTag.getCompoundTagOrThrow("minecraft:dimension_type");
 		for (NBTCompound dimensionEntryTag : dimensionRegistryTag.getCompoundListTagOrThrow("value")) {
-			toLegacyDimensionType(dimensionEntryTag.getCompoundTagOrThrow("element"));
+			toLegacyDimensionType(dimensionEntryTag.getCompoundTagOrThrow("element"), legacyResource);
 		}
+		NBTCompound biomeRegistryTag = dimensionsTag.getCompoundTagOrThrow("minecraft:worldgen/biome");
+		for (NBTCompound biomeEntryTag : biomeRegistryTag.getCompoundListTagOrThrow("value").getTags()) {
+			NBTCompound biomeDataTag = biomeEntryTag.getCompoundTagOrThrow("element");
+			biomeDataTag.setTag("category", new NBTString("none"));
+			biomeDataTag.setTag("precipitation", new NBTString("none"));
+		}
+		dimensionsTag.removeTag("minecraft:chat_type");
+		dimensionsTag.removeTag("minecraft:trim_material");
+		dimensionsTag.removeTag("minecraft:trim_pattern");
+		dimensionsTag.removeTag("minecraft:damage_type");
 		return dimensionsTag;
 	}
 
-	public static NBTCompound toLegacyDimensionType(NBTCompound dimensionDataTag) {
-		dimensionDataTag.setTag("infiniburn", new NBTString(LegacyDimension.getLegacyResource(dimensionDataTag.getStringTagOrThrow("infiniburn").getValue())));
+	public static NBTCompound toLegacyDimensionType(NBTCompound dimensionDataTag, boolean legacyResource) {
+		if (legacyResource) {
+			dimensionDataTag.setTag("infiniburn", new NBTString(LegacyDimension.getLegacyResource(dimensionDataTag.getStringTagOrThrow("infiniburn").getValue())));
+		}
 		return dimensionDataTag;
 	}
 

@@ -3,6 +3,7 @@ package protocolsupport.protocol.packet.middle.base.clientbound.play;
 import io.netty.buffer.ByteBuf;
 import protocolsupport.protocol.codec.VarNumberCodec;
 
+//TODO: do something with block confirmation
 public abstract class MiddleBlockBreakConfirm extends MiddleBlock {
 
 	protected MiddleBlockBreakConfirm(IMiddlePacketInit init) {

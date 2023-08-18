@@ -30,7 +30,6 @@ public class MaterialAPI {
 	 * @param material block material
 	 * @return all possible block data states
 	 */
-	@SuppressWarnings("deprecation")
 	public static @Nonnull List<BlockData> getBlockDataList(@Nonnull Material material) {
 		if (material.isLegacy()) {
 			throw new IllegalArgumentException(MessageFormat.format("Material {0} is legacy", material));
@@ -72,7 +71,6 @@ public class MaterialAPI {
 	 * @param material block material
 	 * @return network id
 	 */
-	@SuppressWarnings("deprecation")
 	public static @CheckForSigned int getBlockNetworkId(@Nonnull Material material) {
 		if (material.isLegacy()) {
 			throw new IllegalArgumentException(MessageFormat.format("Material {0} is legacy", material));
@@ -123,7 +121,6 @@ public class MaterialAPI {
 	 * @param material item material
 	 * @return item network id
 	 */
-	@SuppressWarnings("deprecation")
 	public static @CheckForSigned int getItemNetworkId(@Nonnull Material material) {
 		if (material.isLegacy()) {
 			throw new IllegalArgumentException(MessageFormat.format("Material {0} is legacy", material));
@@ -169,7 +166,7 @@ public class MaterialAPI {
 	 * @return entity type
 	 */
 	public static @Nullable EntityType getEntityLivingTypeByNetworkId(@Nonnegative int id) {
-		return NetworkEntityType.getMobByNetworkTypeId(id).getBukkitType();
+		return NetworkEntityType.getByNetworkTypeId(id).getBukkitType();
 	}
 
 	/**
@@ -179,7 +176,7 @@ public class MaterialAPI {
 	 * @return entity type
 	 */
 	public static @Nullable EntityType getEntityObjectTypeByNetworkId(@Nonnegative int id) {
-		return NetworkEntityType.getObjectByNetworkTypeId(id).getBukkitType();
+		return NetworkEntityType.getByNetworkTypeId(id).getBukkitType();
 	}
 
 }

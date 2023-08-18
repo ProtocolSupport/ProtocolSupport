@@ -4,6 +4,8 @@ import io.netty.buffer.ByteBuf;
 import protocolsupport.api.tab.TabAPI;
 import protocolsupport.protocol.codec.ArrayCodec;
 import protocolsupport.protocol.codec.ItemStackCodec;
+import protocolsupport.protocol.codec.OptionalCodec;
+import protocolsupport.protocol.codec.PositionCodec;
 import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.middle.base.clientbound.ClientBoundMiddlePacket;
@@ -14,6 +16,7 @@ import protocolsupport.protocol.typeremapper.window.WindowsRemapper;
 import protocolsupport.protocol.typeremapper.window.WindowsRemappersRegistry;
 import protocolsupport.protocol.types.GameMode;
 import protocolsupport.protocol.types.WindowType;
+import protocolsupport.protocol.types.WorldPosition;
 import protocolsupport.protocol.types.nbt.NBTCompound;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 
@@ -34,9 +37,9 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 	protected GameMode gamemodeCurrent;
 	protected GameMode gamemodePrevious;
 	protected String[] worlds;
-	protected NBTCompound dimensions;
-	protected NBTCompound dimension;
-	protected String world;
+	protected NBTCompound registries;
+	protected String worldType;
+	protected String worldName;
 	protected long hashedSeed;
 	protected int maxplayers;
 	protected int renderDistance;
@@ -45,6 +48,8 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 	protected boolean respawnScreenEnabled;
 	protected boolean worldDebug;
 	protected boolean worldFlat;
+	protected WorldPosition deathPosition;
+	protected int portalCooldown;
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
@@ -53,9 +58,9 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 		gamemodeCurrent = GameMode.getById(serverdata.readByte());
 		gamemodePrevious = GameMode.getById(serverdata.readByte());
 		worlds = ArrayCodec.readVarIntVarIntUTF8StringArray(serverdata);
-		dimensions = ItemStackCodec.readDirectTag(serverdata);
-		dimension = ItemStackCodec.readDirectTag(serverdata);
-		world = StringCodec.readVarIntUTF8String(serverdata);
+		registries = ItemStackCodec.readDirectTag(serverdata);
+		worldType = StringCodec.readVarIntUTF8String(serverdata);
+		worldName = StringCodec.readVarIntUTF8String(serverdata);
 		hashedSeed = serverdata.readLong();
 		maxplayers = VarNumberCodec.readVarInt(serverdata);
 		int forcedMaxPlayers = TabAPI.getMaxTabSize();
@@ -68,12 +73,14 @@ public abstract class MiddleStartGame extends ClientBoundMiddlePacket {
 		respawnScreenEnabled = serverdata.readBoolean();
 		worldDebug = serverdata.readBoolean();
 		worldFlat = serverdata.readBoolean();
+		deathPosition = OptionalCodec.readOptional(serverdata, PositionCodec::readWorldPosition);
+		portalCooldown = VarNumberCodec.readVarInt(serverdata);
 	}
 
 	@Override
 	protected void handle() {
-		clientCache.setDimensionCodec(dimensions);
-		clientCache.setCurrentWorld(world, dimension);
+		clientCache.setRegistries(registries);
+		clientCache.setCurrentWorld(worldType);
 		clientCache.setRespawnScreenEnabled(respawnScreenEnabled);
 		windowCache.setPlayerWindow(windowsRemapper.get(WindowType.PLAYER, 0));
 		entityCache.clearEntities();

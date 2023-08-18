@@ -3,7 +3,7 @@ package protocolsupport.protocol.typeremapper.legacy;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
-import protocolsupport.protocol.types.VillagerProfession;
+import protocolsupport.protocol.types.networkentity.data.VillagerProfession;
 
 public class LegacyVillagerProfession {
 
@@ -11,28 +11,14 @@ public class LegacyVillagerProfession {
 	}
 
 	public static @Nonnegative int toLegacyId(@Nonnull VillagerProfession villagerdata) {
-		switch (villagerdata) {
-			case FARMER: {
-				return 0;
-			}
-			case LIBRARIAN: {
-				return 1;
-			}
-			case CLERIC: {
-				return 2;
-			}
-			case TOOLSMITH:
-			case WEAPONSMITH:
-			case ARMORER: {
-				return 3;
-			}
-			case BUTCHER: {
-				return 4;
-			}
-			default: {
-				return 0;
-			}
-		}
+		return switch (villagerdata) {
+			case FARMER -> 0;
+			case LIBRARIAN -> 1;
+			case CLERIC -> 2;
+			case TOOLSMITH, WEAPONSMITH, ARMORER -> 3;
+			case BUTCHER -> 4;
+			default -> 0;
+		};
 	}
 
 }

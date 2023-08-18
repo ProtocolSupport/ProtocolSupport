@@ -7,6 +7,8 @@ import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.base.clientbound.play.MiddleChangeDimension;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV18;
+import protocolsupport.protocol.types.nbt.NBTCompound;
+import protocolsupport.utils.BitUtils;
 
 public class ChangeDimension extends MiddleChangeDimension implements IClientboundMiddlePacketV18 {
 
@@ -16,15 +18,17 @@ public class ChangeDimension extends MiddleChangeDimension implements IClientbou
 
 	@Override
 	protected void write() {
+		NBTCompound dimension = clientCache.getDimension();
+
 		ClientBoundPacketData changedimension = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_RESPAWN);
-		ItemStackCodec.writeDirectTag(changedimension, version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_18) ? StartGame.toLegacyDimensionType(dimension) : dimension);
-		StringCodec.writeVarIntUTF8String(changedimension, world);
+		ItemStackCodec.writeDirectTag(changedimension, StartGame.toLegacyDimensionType(dimension, version.isBeforeOrEq(ProtocolVersion.MINECRAFT_1_18)));
+		StringCodec.writeVarIntUTF8String(changedimension, worldName);
 		changedimension.writeLong(hashedSeed);
 		changedimension.writeByte(gamemodeCurrent.getId());
 		changedimension.writeByte(gamemodePrevious.getId());
 		changedimension.writeBoolean(worldDebug);
 		changedimension.writeBoolean(worldFlat);
-		changedimension.writeBoolean(keepEntityMetadata);
+		changedimension.writeBoolean(BitUtils.isIBitSet(keepDataFlags, KEEP_DATA_FLAGS_BIT_METADATA));
 		io.writeClientbound(changedimension);
 	}
 

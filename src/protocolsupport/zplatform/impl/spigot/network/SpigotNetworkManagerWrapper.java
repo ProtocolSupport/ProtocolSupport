@@ -17,8 +17,6 @@ import org.bukkit.entity.Player;
 import com.mojang.authlib.properties.Property;
 
 import io.netty.channel.Channel;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import io.netty.util.concurrent.ScheduledFuture;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.PacketListener;
@@ -51,7 +49,7 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 
 	@Override
 	public InetSocketAddress getRawAddress() {
-		return (InetSocketAddress) internal.getRawAddress();
+		return (InetSocketAddress) internal.m.remoteAddress();
 	}
 
 	@Override
@@ -75,20 +73,23 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 	}
 
 	@Override
-	public void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener) {
-		internal.a((Packet<?>) packet, genericListener);
+	public void sendPacket(Object packet, PacketSendListener genericListener) {
+		internal.a((Packet<?>) packet, new net.minecraft.network.PacketSendListener() {
+			@Override
+			public void a() {
+				genericListener.call();
+			}
+		});
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, int timeout, TimeUnit timeunit, Runnable timeoutListener) {
+	public void sendPacket(Object packet, PacketSendListener genericListener, int timeout, TimeUnit timeunit, Runnable timeoutListener) {
 		AtomicReference<ScheduledFuture<?>> timeoutFutureRef = new AtomicReference<>(channel.eventLoop().schedule(timeoutListener, timeout, timeunit));
-		sendPacket(packet, future -> {
+		sendPacket(packet, () -> {
 			ScheduledFuture<?> timeoutFuture = timeoutFutureRef.get();
 			boolean done = timeoutFuture.cancel(false);
-			timeoutFuture.cancel(false);
 			if (!done) {
-				((GenericFutureListener) genericListener).operationComplete(future);
+				genericListener.call();
 			}
 		});
 	}
@@ -99,24 +100,23 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 			throw new IllegalStateException("Can't send packet with timeout in event loop");
 		}
 		CountDownLatch latch = new CountDownLatch(1);
-		sendPacket(packet, future -> latch.countDown());
+		sendPacket(packet, () -> latch.countDown());
 		if (!latch.await(timeout, timeunit)) {
 			throw new TimeoutException();
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void sendPacketBlocking(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException {
+	public void sendPacketBlocking(Object packet, PacketSendListener genericListener, int timeout, TimeUnit timeunit) throws TimeoutException, InterruptedException {
 		if (channel.eventLoop().inEventLoop()) {
 			throw new IllegalStateException("Can't send packet with timeout in event loop");
 		}
 		AtomicBoolean flag = new AtomicBoolean(false);
 		CountDownLatch latch = new CountDownLatch(1);
-		sendPacket(packet, future -> {
+		sendPacket(packet, () -> {
 			try {
 				if (flag.compareAndSet(false, true)) {
-					((GenericFutureListener) genericListener).operationComplete(future);
+					genericListener.call();
 				}
 			} finally {
 				latch.countDown();
@@ -177,8 +177,8 @@ public class SpigotNetworkManagerWrapper extends NetworkManagerWrapper {
 	@Override
 	public Player getBukkitPlayer() {
 		PacketListener listener = getPacketListener();
-		if (listener instanceof PlayerConnection) {
-			return ((PlayerConnection) listener).b.getBukkitEntity();
+		if (listener instanceof PlayerConnection connection) {
+			return connection.b.getBukkitEntity();
 		}
 		return null;
 	}

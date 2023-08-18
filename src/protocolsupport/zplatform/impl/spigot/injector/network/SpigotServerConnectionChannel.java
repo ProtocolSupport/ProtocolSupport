@@ -27,7 +27,7 @@ import protocolsupport.zplatform.network.NetworkManagerWrapper;
 
 public class SpigotServerConnectionChannel extends ChannelInitializer {
 
-	private static final boolean replaceDecoderEncoder = JavaSystemProperty.getValue("replaceencoderdecoder", false, Boolean::parseBoolean);
+	protected static final boolean replaceDecoderEncoder = JavaSystemProperty.getValue("replaceencoderdecoder", false, Boolean::parseBoolean);
 
 	@Override
 	protected void initChannel(Channel channel) {

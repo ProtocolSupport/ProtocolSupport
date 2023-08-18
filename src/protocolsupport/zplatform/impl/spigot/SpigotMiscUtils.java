@@ -4,6 +4,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.security.KeyPair;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -17,12 +18,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
-import org.bukkit.craftbukkit.v1_18_R2.CraftParticle;
-import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_18_R2.util.CraftIconCache;
+import org.bukkit.craftbukkit.v1_20_R1.CraftParticle;
+import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R1.util.CraftIconCache;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
@@ -45,6 +46,7 @@ import io.netty.channel.epoll.Epoll;
 import net.minecraft.nbt.NBTCompressedStreamTools;
 import net.minecraft.nbt.NBTReadLimiter;
 import net.minecraft.network.EnumProtocol;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.chat.IChatBaseComponent.ChatSerializer;
 import net.minecraft.network.protocol.game.PacketPlayOutSetSlot;
@@ -76,6 +78,7 @@ import protocolsupport.protocol.types.nbt.serializer.DefaultNBTSerializer;
 import protocolsupport.protocol.utils.ItemMaterialLookup;
 import protocolsupport.protocol.utils.MinecraftEncryption;
 import protocolsupport.protocol.utils.authlib.LoginProfile;
+import protocolsupport.utils.reflection.FieldReader;
 import protocolsupport.utils.reflection.ReflectionUtils;
 import protocolsupport.utils.reflection.UncheckedReflectionException;
 import protocolsupport.zplatform.PlatformUtils;
@@ -92,43 +95,23 @@ public class SpigotMiscUtils implements PlatformUtils {
 	public static final DedicatedServer SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 
 	public static NetworkState protocolToNetState(EnumProtocol state) {
-		switch (state) {
-			case a: {
-				return NetworkState.HANDSHAKING;
-			}
-			case b: {
-				return NetworkState.PLAY;
-			}
-			case c: {
-				return NetworkState.STATUS;
-			}
-			case d: {
-				return NetworkState.LOGIN;
-			}
-			default: {
-				throw new IllegalArgumentException("Unknown state " + state);
-			}
-		}
+		return switch (state) {
+			case a -> NetworkState.HANDSHAKING;
+			case b -> NetworkState.PLAY;
+			case c -> NetworkState.STATUS;
+			case d -> NetworkState.LOGIN;
+			default -> throw new IllegalArgumentException("Unknown state " + state);
+		};
 	}
 
 	public static EnumProtocol netStateToProtocol(NetworkState state) {
-		switch (state) {
-			case HANDSHAKING: {
-				return EnumProtocol.a;
-			}
-			case PLAY: {
-				return EnumProtocol.b;
-			}
-			case STATUS: {
-				return EnumProtocol.c;
-			}
-			case LOGIN: {
-				return EnumProtocol.d;
-			}
-			default: {
-				throw new IllegalArgumentException("Unknown state " + state);
-			}
-		}
+		return switch (state) {
+			case HANDSHAKING -> EnumProtocol.a;
+			case PLAY -> EnumProtocol.b;
+			case STATUS -> EnumProtocol.c;
+			case LOGIN -> EnumProtocol.d;
+			default -> throw new IllegalArgumentException("Unknown state " + state);
+		};
 	}
 
 	public static GameProfile toMojangGameProfile(LoginProfile profile) {
@@ -147,12 +130,14 @@ public class SpigotMiscUtils implements PlatformUtils {
 		return ChatSerializer.a(ChatAPI.toJSON(message));
 	}
 
+	private static final FieldReader<NetworkManager> networkManagerFieldReader = FieldReader.of(PlayerConnection.class, "h", NetworkManager.class);
+
 	@Override
 	public ConnectionImpl getConnection(Player player) {
 		if (player instanceof CraftPlayer craftPlayer) {
-			PlayerConnection connection = craftPlayer.getHandle().b;
+			PlayerConnection connection = craftPlayer.getHandle().c;
 			if (connection != null) {
-				Channel channel = connection.a.m;
+				Channel channel = networkManagerFieldReader.get(connection).m;
 				if (channel != null) {
 					return ConnectionImpl.getFromChannel(channel);
 				}
@@ -171,8 +156,8 @@ public class SpigotMiscUtils implements PlatformUtils {
 			slot = 8 - (slot - 36);
 		}
 		EntityPlayer platformPlayer = ((CraftPlayer) player).getHandle();
-		ContainerPlayer platformPlayerContainer = platformPlayer.bU;
-		platformPlayer.b.a(new PacketPlayOutSetSlot(platformPlayerContainer.j, platformPlayerContainer.k(), slot, platformPlayerContainer.b(slot).e()));
+		ContainerPlayer platformPlayerContainer = platformPlayer.bQ;
+		platformPlayer.c.a(new PacketPlayOutSetSlot(platformPlayerContainer.j, platformPlayerContainer.k(), slot, platformPlayerContainer.b(slot).e()));
 	}
 
 	@Override
@@ -182,7 +167,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public Profile createWrappedProfile(LoginProfile loginProfile, Player player) {
-		return new SpigotWrappedGameProfile(loginProfile, ((CraftPlayer) player).getHandle().fq());
+		return new SpigotWrappedGameProfile(loginProfile, ((CraftPlayer) player).getHandle().fM());
 	}
 
 	@Override
@@ -215,7 +200,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 			net.minecraft.world.item.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(itemstack);
 			ByteBuf buffer = Unpooled.buffer();
 			try {
-				NBTCompressedStreamTools.a(nmsItemStack.u(), (DataOutput) new ByteBufOutputStream(buffer));
+				NBTCompressedStreamTools.a(nmsItemStack.v(), (DataOutput) new ByteBufOutputStream(buffer));
 				networkItemStack.setNBT((NBTCompound) DefaultNBTSerializer.INSTANCE.deserializeTag(new ByteBufInputStream(buffer)));
 			} catch (IOException e) {
 				throw new UncheckedIOException(e);
@@ -235,7 +220,6 @@ public class SpigotMiscUtils implements PlatformUtils {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public NamespacedKey getParticleKey(Particle particle) {
 		MinecraftKey key = particleKeyMap.get(particle);
@@ -300,7 +284,7 @@ public class SpigotMiscUtils implements PlatformUtils {
 
 	@Override
 	public int getCompressionThreshold() {
-		return SERVER.au();
+		return SERVER.av();
 	}
 
 	@Override
@@ -330,16 +314,16 @@ public class SpigotMiscUtils implements PlatformUtils {
 		if (icon == null) {
 			return null;
 		}
-		if (!(icon instanceof CraftIconCache)) {
+		if (!(icon instanceof CraftIconCache craftIcon)) {
 			throw new IllegalArgumentException(icon + " was not created by " + CraftServer.class);
 		}
-		return ((CraftIconCache) icon).value;
+		return Base64.getEncoder().encodeToString(craftIcon.value);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public MultithreadEventLoopGroup getServerIOEventLoopGroup() {
-		if (Epoll.isAvailable() && SERVER.m()) {
+		if (Epoll.isAvailable() && SERVER.n()) {
 			return ServerConnection.b.a();
 		} else {
 			return ServerConnection.a.a();

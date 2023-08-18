@@ -22,20 +22,96 @@ public enum RecipeType {
 			return new ShapedRecipe(id, data);
 		}
 	},
-	CRAFTING_SPECIAL_ARMORDYE,
-	CRAFTING_SPECIAL_BOOKCLONING,
-	CRAFTING_SPECIAL_MAPCLONING,
-	CRAFTING_SPECIAL_MAPEXTENDING,
-	CRAFTING_SPECIAL_FIREWORK_ROCKET,
-	CRAFTING_SPECIAL_FIREWORK_STAR,
-	CRAFTING_SPECIAL_FIREWORK_STAR_FADE,
-	CRAFTING_SPECIAL_REPAIRITEM,
-	CRAFTING_SPECIAL_TIPPEDARROW,
-	CRAFTING_SPECIAL_BANNERDUPLICATE,
-	CRAFTING_SPECIAL_BANNERADDPATTERN,
-	CRAFTING_SPECIAL_SHIELDDECORATION,
-	CRAFTING_SPECIAL_SHULKERBOXCOLORING,
-	CRAFTING_SPECIAL_SUSPICIOUSSTEW,
+	CRAFTING_SPECIAL_ARMORDYE {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SpecialRecipe(id, RecipeType.CRAFTING_SPECIAL_ARMORDYE, data);
+		}
+	},
+	CRAFTING_SPECIAL_BOOKCLONING {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SpecialRecipe(id, RecipeType.CRAFTING_SPECIAL_BOOKCLONING, data);
+		}
+	},
+	CRAFTING_SPECIAL_MAPCLONING {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SpecialRecipe(id, RecipeType.CRAFTING_SPECIAL_MAPCLONING, data);
+		}
+	},
+	CRAFTING_SPECIAL_MAPEXTENDING {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SpecialRecipe(id, RecipeType.CRAFTING_SPECIAL_MAPEXTENDING, data);
+		}
+	},
+	CRAFTING_SPECIAL_FIREWORK_ROCKET {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SpecialRecipe(id, RecipeType.CRAFTING_SPECIAL_FIREWORK_ROCKET, data);
+		}
+	},
+	CRAFTING_SPECIAL_FIREWORK_STAR {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SpecialRecipe(id, RecipeType.CRAFTING_SPECIAL_FIREWORK_STAR, data);
+		}
+	},
+	CRAFTING_SPECIAL_FIREWORK_STAR_FADE {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SpecialRecipe(id, RecipeType.CRAFTING_SPECIAL_FIREWORK_STAR_FADE, data);
+		}
+	},
+	CRAFTING_SPECIAL_REPAIRITEM {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SpecialRecipe(id, RecipeType.CRAFTING_SPECIAL_REPAIRITEM, data);
+		}
+	},
+	CRAFTING_SPECIAL_TIPPEDARROW {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SpecialRecipe(id, RecipeType.CRAFTING_SPECIAL_TIPPEDARROW, data);
+		}
+	},
+	CRAFTING_SPECIAL_BANNERDUPLICATE {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SpecialRecipe(id, RecipeType.CRAFTING_SPECIAL_BANNERDUPLICATE, data);
+		}
+	},
+	CRAFTING_SPECIAL_BANNERADDPATTERN {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SpecialRecipe(id, RecipeType.CRAFTING_SPECIAL_BANNERADDPATTERN, data);
+		}
+	},
+	CRAFTING_SPECIAL_SHIELDDECORATION {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SpecialRecipe(id, RecipeType.CRAFTING_SPECIAL_SHIELDDECORATION, data);
+		}
+	},
+	CRAFTING_SPECIAL_SHULKERBOXCOLORING {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SpecialRecipe(id, RecipeType.CRAFTING_SPECIAL_SHULKERBOXCOLORING, data);
+		}
+	},
+	CRAFTING_SPECIAL_SUSPICIOUSSTEW {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SpecialRecipe(id, RecipeType.CRAFTING_SPECIAL_SUSPICIOUSSTEW, data);
+		}
+	},
+	CRAFTING_DECORATED_POT {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SpecialRecipe(id, RecipeType.CRAFTING_DECORATED_POT, data);
+		}
+	},
 	SMELTING {
 		@Override
 		public Recipe read(String id, ByteBuf data) {
@@ -66,10 +142,16 @@ public enum RecipeType {
 			return new StonecuttingRecipe(id, data);
 		}
 	},
-	SMITHING {
+	SMITHING_TRANSFORM {
 		@Override
 		public Recipe read(String id, ByteBuf data) {
-			return new SmithingRecipe(id, data);
+			return new SmithingTransformRecipe(id, data);
+		}
+	},
+	SMITHING_TRIM {
+		@Override
+		public Recipe read(String id, ByteBuf data) {
+			return new SmithingTrimRecipe(id, data);
 		}
 	};
 

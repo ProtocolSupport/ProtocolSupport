@@ -28,7 +28,7 @@ public abstract class MiddleBossBar extends ClientBoundMiddlePacket {
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
-		uuid = UUIDCodec.readUUID2L(serverdata);
+		uuid = UUIDCodec.readUUID(serverdata);
 		action = MiscDataCodec.readVarIntEnum(serverdata, Action.CONSTANT_LOOKUP);
 		switch (action) {
 			case ADD: {

@@ -30,7 +30,6 @@ public abstract class MiddleSetPosition extends ClientBoundMiddlePacket {
 	protected float pitch;
 	protected int flags;
 	protected int teleportConfirmId;
-	protected boolean leaveVehicle;
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
@@ -42,7 +41,6 @@ public abstract class MiddleSetPosition extends ClientBoundMiddlePacket {
 		pitch = serverdata.readFloat();
 		flags = serverdata.readByte();
 		teleportConfirmId = VarNumberCodec.readVarInt(serverdata);
-		leaveVehicle = serverdata.readBoolean();
 	}
 
 	@Override

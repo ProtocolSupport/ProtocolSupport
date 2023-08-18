@@ -5,8 +5,8 @@ import java.util.UUID;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.api.utils.ProfileProperty;
 import protocolsupport.protocol.codec.MiscDataCodec;
-import protocolsupport.protocol.codec.NetworkEntityMetadataSerializer;
-import protocolsupport.protocol.codec.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
+import protocolsupport.protocol.codec.NetworkEntityMetadataCodec;
+import protocolsupport.protocol.codec.NetworkEntityMetadataCodec.NetworkEntityMetadataList;
 import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketData;
@@ -31,15 +31,13 @@ public class SpawnNamed extends MiddleSpawnNamed implements IClientboundMiddlePa
 		StringCodec.writeVarIntUTF8String(spawnnamed, MiscUtils.clampString(playerlistEntry.getUserName(), 16));
 		if (version == ProtocolVersion.MINECRAFT_1_7_10) {
 			MiscDataCodec.writeVarIntCountPrefixedType(spawnnamed, playerlistEntry.getProperties(), (to, properties) -> {
-				int signedCount = properties.size();
-				for (int i = 0; i < properties.size(); i++) {
-					ProfileProperty property = properties.get(i);
+				int signedCount = 0;
+				for (ProfileProperty property : properties) {
 					if (property.hasSignature()) {
 						StringCodec.writeVarIntUTF8String(to, property.getName());
 						StringCodec.writeVarIntUTF8String(to, property.getValue());
 						StringCodec.writeVarIntUTF8String(to, property.getSignature());
-					} else {
-						signedCount--;
+						signedCount++;
 					}
 				}
 				return signedCount;
@@ -51,7 +49,7 @@ public class SpawnNamed extends MiddleSpawnNamed implements IClientboundMiddlePa
 		spawnnamed.writeByte(yaw);
 		spawnnamed.writeByte(pitch);
 		spawnnamed.writeShort(0);
-		NetworkEntityMetadataSerializer.writeLegacyData(spawnnamed, version, I18NData.DEFAULT_LOCALE, NetworkEntityMetadataList.EMPTY);
+		NetworkEntityMetadataCodec.writeLegacyData(spawnnamed, version, I18NData.DEFAULT_LOCALE, NetworkEntityMetadataList.EMPTY);
 		io.writeClientbound(spawnnamed);
 	}
 

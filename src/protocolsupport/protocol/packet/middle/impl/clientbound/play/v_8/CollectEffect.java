@@ -4,8 +4,8 @@ import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV8;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8.AbstractSoundCollectEffect;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8.WorldCustomSound;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4__8.AbstractSoundCollectEffect;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4__8.WorldSound;
 
 public class CollectEffect extends AbstractSoundCollectEffect implements IClientboundMiddlePacketV8 {
 
@@ -23,7 +23,7 @@ public class CollectEffect extends AbstractSoundCollectEffect implements IClient
 
 	@Override
 	protected void writeCollectSound(String sound, double x, double y, double z, float volume, float pitch) {
-		io.writeClientbound(WorldCustomSound.create(version, x, y, z, sound, volume, pitch));
+		io.writeClientbound(WorldSound.createCustomSound(version, x, y, z, sound, volume, pitch));
 	}
 
 }

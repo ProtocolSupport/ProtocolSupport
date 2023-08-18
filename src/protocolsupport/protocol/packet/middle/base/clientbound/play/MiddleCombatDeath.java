@@ -14,13 +14,11 @@ public abstract class MiddleCombatDeath extends ClientBoundMiddlePacket {
 	}
 
 	protected int playerId;
-	protected int killerId;
 	protected BaseComponent message;
 
 	@Override
 	protected void decode(ByteBuf serverdata) {
 		playerId = VarNumberCodec.readVarInt(serverdata);
-		killerId = serverdata.readInt();
 		message = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(serverdata), true);
 	}
 

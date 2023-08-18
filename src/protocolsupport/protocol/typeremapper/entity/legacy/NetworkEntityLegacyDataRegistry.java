@@ -55,6 +55,36 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 
 		registerNoop(NetworkEntityType.SQUID);
 
+		new Mapping(NetworkEntityType.CAMEL)
+		.add(NetworkEntityType.CAMEL, ProtocolVersionsHelper.UP_1_20)
+		.add(NetworkEntityType.LAMA, ProtocolVersionsHelper.UP_1_11)
+		.add(NetworkEntityType.COMMON_HORSE, BattleHorseInitDefaultMetadataTransformer.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_10)
+		.add(NetworkEntityType.COW, ProtocolVersionsHelper.DOWN_1_5_2)
+		.register();
+
+		new Mapping(NetworkEntityType.SNIFFER)
+		.add(NetworkEntityType.SNIFFER, ProtocolVersionsHelper.UP_1_20)
+		.add(NetworkEntityType.DONKEY, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_6_1, ProtocolVersion.MINECRAFT_1_19_4))
+		.add(NetworkEntityType.COW, ProtocolVersionsHelper.DOWN_1_5_2)
+		.register();
+
+		new Mapping(NetworkEntityType.ALLAY)
+		.add(NetworkEntityType.ALLAY, ProtocolVersionsHelper.UP_1_19)
+		.add(NetworkEntityType.BAT, ProtocolVersionsHelper.DOWN_1_18_2)
+		.register();
+
+		new Mapping(NetworkEntityType.TAPDOLE)
+		.add(NetworkEntityType.TAPDOLE, ProtocolVersionsHelper.UP_1_19)
+		.add(NetworkEntityType.TROPICAL_FISH, ProtocolVersionsHelper.RANGE__1_13__1_18_2)
+		.add(NetworkEntityType.BAT, BatInitDefaultMetadataTranfromer.INSTANCE, ProtocolVersionsHelper.DOWN_1_12_2)
+		.register();
+
+		new Mapping(NetworkEntityType.FROG)
+		.add(NetworkEntityType.FROG, ProtocolVersionsHelper.UP_1_19)
+		.add(NetworkEntityType.TROPICAL_FISH, ProtocolVersionsHelper.RANGE__1_13__1_18_2)
+		.add(NetworkEntityType.BAT, BatInitDefaultMetadataTranfromer.INSTANCE, ProtocolVersionsHelper.DOWN_1_12_2)
+		.register();
+
 		new Mapping(NetworkEntityType.GLOW_SQUID)
 		.add(NetworkEntityType.GLOW_SQUID, ProtocolVersionsHelper.UP_1_17)
 		.add(NetworkEntityType.SQUID, ProtocolVersionsHelper.DOWN_1_16_4)
@@ -326,6 +356,12 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		.add(NetworkEntityType.CAVE_SPIDER, SpiderInitDefaultMetadataTransformer.INSTANCE, ProtocolVersionsHelper.DOWN_1_15_2)
 		.register();
 
+		new Mapping(NetworkEntityType.WARDEN)
+		.add(NetworkEntityType.WARDEN, ProtocolVersionsHelper.UP_1_19)
+		.add(NetworkEntityType.ELDER_GUARDIAN, ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_18_2))
+		.add(NetworkEntityType.SQUID, ProtocolVersionsHelper.DOWN_1_7_10)
+		.register();
+
 		new Mapping(NetworkEntityType.STRIDER)
 		.add(NetworkEntityType.STRIDER, ProtocolVersionsHelper.UP_1_16)
 		.add(NetworkEntityType.PIG, meta -> {
@@ -337,6 +373,11 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		.register();
 
 		registerNoop(NetworkEntityType.BOAT);
+
+		new Mapping(NetworkEntityType.BOAT_CHEST)
+		.add(NetworkEntityType.BOAT_CHEST, ProtocolVersionsHelper.UP_1_19)
+		.add(NetworkEntityType.BOAT, ProtocolVersionsHelper.DOWN_1_18_2)
+		.register();
 
 		registerNoop(NetworkEntityType.TNT);
 
@@ -437,6 +478,26 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		registerNoop(NetworkEntityType.MINECART_COMMAND);
 
 		registerNoop(NetworkEntityType.THUNDERBOLT);
+
+		new Mapping(NetworkEntityType.DISPLAY_BLOCK)
+		.add(NetworkEntityType.DISPLAY_BLOCK, ProtocolVersionsHelper.UP_1_20)
+		.add(NetworkEntityLegacyDataEntry.NONE, ProtocolVersionsHelper.DOWN_1_19_4) //TODO: think of a replacement (falling block (armorstand with block on head)?)
+		.register();
+
+		new Mapping(NetworkEntityType.DISPLAY_ITEM)
+		.add(NetworkEntityType.DISPLAY_ITEM, ProtocolVersionsHelper.UP_1_20)
+		.add(NetworkEntityLegacyDataEntry.NONE, ProtocolVersionsHelper.DOWN_1_19_4) //TODO: think of a replacement (item (armorstand with block on head)?)
+		.register();
+
+		new Mapping(NetworkEntityType.DISPLAY_TEXT)
+		.add(NetworkEntityType.DISPLAY_TEXT, ProtocolVersionsHelper.UP_1_20)
+		.add(NetworkEntityLegacyDataEntry.NONE, ProtocolVersionsHelper.DOWN_1_19_4) //TODO: armor stand
+		.register();
+
+		new Mapping(NetworkEntityType.INTERACTION)
+		.add(NetworkEntityType.INTERACTION, ProtocolVersionsHelper.UP_1_20)
+		.add(NetworkEntityLegacyDataEntry.NONE, ProtocolVersionsHelper.DOWN_1_19_4) //TODO: armor stand
+		.register();
 
 		new Mapping(NetworkEntityType.ARMOR_STAND)
 		.add(NetworkEntityType.ARMOR_STAND, ProtocolVersionsHelper.UP_1_8)

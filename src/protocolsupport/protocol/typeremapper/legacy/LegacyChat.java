@@ -373,17 +373,11 @@ public class LegacyChat {
 			}
 		}
 
-		switch (components.size()) {
-			case 0: {
-				return new TextComponent("");
-			}
-			case 1: {
-				return components.get(0);
-			}
-			default: {
-				return new TextComponent("").withSiblings(components);
-			}
-		}
+		return switch (components.size()) {
+			case 0 -> new TextComponent("");
+			case 1 -> components.get(0);
+			default -> new TextComponent("").withSiblings(components);
+		};
 	}
 
 	public static String clampLegacyText(String text, int limit) {

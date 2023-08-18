@@ -14,7 +14,6 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 	protected int chunkX;
 	protected int chunkZ;
 	protected int chunkSection;
-	protected boolean skipLight;
 	protected BlockChangeRecord[] records;
 
 	@Override
@@ -23,7 +22,6 @@ public abstract class MiddleBlockChangeMulti extends ClientBoundMiddlePacket {
 		chunkX = (int) (chunkCoordWithSection >> 42);
 		chunkZ = (int) ((chunkCoordWithSection << 22) >> 42);
 		chunkSection = (int) ((chunkCoordWithSection << 44) >> 44);
-		skipLight = serverdata.readBoolean();
 		records = ArrayCodec.readVarIntTArray(serverdata, BlockChangeRecord.class, recordFrom -> {
 			long recordData = VarNumberCodec.readVarLong(recordFrom);
 			return new BlockChangeRecord(

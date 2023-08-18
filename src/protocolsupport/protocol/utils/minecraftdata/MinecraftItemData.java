@@ -1,6 +1,5 @@
 package protocolsupport.protocol.utils.minecraftdata;
 
-import java.util.Arrays;
 import java.util.Map.Entry;
 import java.util.stream.Stream;
 
@@ -9,6 +8,7 @@ import javax.annotation.Nonnull;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -21,16 +21,6 @@ import protocolsupportbuildprocessor.Preload;
 public class MinecraftItemData {
 
 	private MinecraftItemData() {
-	}
-
-	public static final int ITEM_COUNT = (int) getItems().count();
-
-	@SuppressWarnings("deprecation")
-	public static Stream<Material> getItems() {
-		return
-			Arrays.stream(Material.values())
-			.filter(mat -> !mat.isLegacy())
-			.filter(Material::isItem);
 	}
 
 	private static final Object2IntMap<String> nameToId = new Object2IntOpenHashMap<>();
@@ -47,8 +37,17 @@ public class MinecraftItemData {
 		}
 	}
 
+	public static final int ITEM_COUNT = (int) getItems().count();
+
 	public static @CheckForSigned int getIdByName(@Nonnull String id) {
 		return nameToId.getOrDefault(id, -1);
 	}
+
+	public static Stream<Material> getItems() {
+		return nameToId.keySet().stream()
+			.map(name -> Registry.MATERIAL.get(NamespacedKey.fromString(name)))
+			.filter(Material::isItem);
+	}
+
 
 }

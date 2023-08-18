@@ -20,6 +20,7 @@ import protocolsupport.protocol.types.particle.types.NetworkParticleBubbleColumn
 import protocolsupport.protocol.types.particle.types.NetworkParticleBubblePop;
 import protocolsupport.protocol.types.particle.types.NetworkParticleCampfireCozySmoke;
 import protocolsupport.protocol.types.particle.types.NetworkParticleCampfireSignalSmoke;
+import protocolsupport.protocol.types.particle.types.NetworkParticleCherryLeaves;
 import protocolsupport.protocol.types.particle.types.NetworkParticleCloud;
 import protocolsupport.protocol.types.particle.types.NetworkParticleComposter;
 import protocolsupport.protocol.types.particle.types.NetworkParticleCrimsonSpore;
@@ -35,9 +36,11 @@ import protocolsupport.protocol.types.particle.types.NetworkParticleDrippingObsi
 import protocolsupport.protocol.types.particle.types.NetworkParticleDrippingWater;
 import protocolsupport.protocol.types.particle.types.NetworkParticleDust;
 import protocolsupport.protocol.types.particle.types.NetworkParticleDustTransition;
+import protocolsupport.protocol.types.particle.types.NetworkParticleEggCrack;
 import protocolsupport.protocol.types.particle.types.NetworkParticleElderGuardian;
 import protocolsupport.protocol.types.particle.types.NetworkParticleElectricSpark;
 import protocolsupport.protocol.types.particle.types.NetworkParticleEndRod;
+import protocolsupport.protocol.types.particle.types.NetworkParticleExplosion;
 import protocolsupport.protocol.types.particle.types.NetworkParticleFallingBlossom;
 import protocolsupport.protocol.types.particle.types.NetworkParticleFallingDripstoneLava;
 import protocolsupport.protocol.types.particle.types.NetworkParticleFallingDripstoneWater;
@@ -63,9 +66,14 @@ import protocolsupport.protocol.types.particle.types.NetworkParticlePortal;
 import protocolsupport.protocol.types.particle.types.NetworkParticleRain;
 import protocolsupport.protocol.types.particle.types.NetworkParticleReversePortal;
 import protocolsupport.protocol.types.particle.types.NetworkParticleScrape;
+import protocolsupport.protocol.types.particle.types.NetworkParticleSculkCharge;
+import protocolsupport.protocol.types.particle.types.NetworkParticleSculkChargePop;
+import protocolsupport.protocol.types.particle.types.NetworkParticleSculkSoul;
+import protocolsupport.protocol.types.particle.types.NetworkParticleShriek;
 import protocolsupport.protocol.types.particle.types.NetworkParticleSmallFlame;
 import protocolsupport.protocol.types.particle.types.NetworkParticleSneeze;
 import protocolsupport.protocol.types.particle.types.NetworkParticleSnowflake;
+import protocolsupport.protocol.types.particle.types.NetworkParticleSonicBoom;
 import protocolsupport.protocol.types.particle.types.NetworkParticleSoul;
 import protocolsupport.protocol.types.particle.types.NetworkParticleSoulFlame;
 import protocolsupport.protocol.types.particle.types.NetworkParticleSpit;
@@ -122,6 +130,59 @@ public class NetworkParticleLegacyData {
 					ItemStackRemappingHelper.toLegacyItemData(version, I18NData.DEFAULT_LOCALE, original.getItemStack())
 				), version);
 			}
+
+			register(
+				NetworkParticleEggCrack.class,
+				original -> new NetworkParticleHappyVillager(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.DOWN_1_19_4
+			);
+
+			register(
+				NetworkParticleSonicBoom.class,
+				original -> new NetworkParticleExplosion(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.DOWN_1_18_2
+			);
+			register(
+				NetworkParticleShriek.class,
+				original -> new NetworkParticlePoof(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.DOWN_1_18_2
+			);
+			register(
+				NetworkParticleSculkSoul.class,
+				original -> new NetworkParticleSoul(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.RANGE__1_16__1_18_2
+			);
+			registerSkip(NetworkParticleSculkSoul.class, ProtocolVersionsHelper.DOWN_1_15_2);
+			register(
+				NetworkParticleSculkCharge.class,
+				original -> new NetworkParticleSoul(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.RANGE__1_16__1_18_2
+			);
+			registerSkip(NetworkParticleSculkCharge.class, ProtocolVersionsHelper.DOWN_1_15_2);
+			register(
+				NetworkParticleSculkChargePop.class,
+				original -> new NetworkParticleSoul(
+					original.getOffsetX(), original.getOffsetY(), original.getOffsetZ(),
+					original.getData(), original.getCount()
+				),
+				ProtocolVersionsHelper.RANGE__1_16__1_18_2
+			);
+			registerSkip(NetworkParticleSculkChargePop.class, ProtocolVersionsHelper.DOWN_1_15_2);
 
 			register(
 				NetworkParticleDustTransition.class,
@@ -319,6 +380,7 @@ public class NetworkParticleLegacyData {
 			);
 
 			//TODO: think of possible mappings
+			registerSkip(NetworkParticleCherryLeaves.class, ProtocolVersionsHelper.DOWN_1_19_4);
 			registerSkip(NetworkParticleFallingBlossom.class, ProtocolVersionsHelper.DOWN_1_16_4);
 			registerSkip(NetworkParticleSporeBlossomAir.class, ProtocolVersionsHelper.DOWN_1_16_4);
 			registerSkip(NetworkParticleSnowflake.class, ProtocolVersionsHelper.DOWN_1_16_4);

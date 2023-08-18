@@ -1,6 +1,7 @@
 package protocolsupport.protocol.codec;
 
 import java.text.MessageFormat;
+import java.util.BitSet;
 import java.util.function.BiConsumer;
 import java.util.function.ObjIntConsumer;
 import java.util.function.ToIntBiFunction;
@@ -8,10 +9,17 @@ import java.util.function.ToIntBiFunction;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 import protocolsupport.protocol.utils.EnumConstantLookup;
+import protocolsupport.utils.MathUtils;
 
 public class MiscDataCodec {
 
 	private MiscDataCodec() {
+	}
+
+	public static void checkLimit(int length, int limit) {
+		if (length > limit) {
+			throw new DecoderException(MessageFormat.format("Size {0} is bigger than allowed {1}", length, limit));
+		}
 	}
 
 	public static <T extends Enum<T>> T readVarIntEnum(ByteBuf from, EnumConstantLookup<T> lookup) {
@@ -22,6 +30,10 @@ public class MiscDataCodec {
 		return lookup.getByOrdinal(from.readByte());
 	}
 
+	public static BitSet readFixedBitSet(ByteBuf from, int length) {
+		return BitSet.valueOf(BytesCodec.readBytes(from, MathUtils.ceilDiv(length, Byte.SIZE)));
+	}
+
 	public static void writeVarIntEnum(ByteBuf to, Enum<?> e) {
 		VarNumberCodec.writeVarInt(to, e.ordinal());
 	}
@@ -30,31 +42,11 @@ public class MiscDataCodec {
 		to.writeByte(e.ordinal());
 	}
 
-	public static byte[] readAllBytes(ByteBuf buf) {
-		return MiscDataCodec.readBytes(buf, buf.readableBytes());
+	public static void writeFixedBitSet(ByteBuf to, BitSet bitset, int length) {
+		byte[] data = bitset.toByteArray();
+		to.writeBytes(data);
+		to.writeZero(MathUtils.ceilDiv(length, Byte.SIZE) - data.length);
 	}
-
-	public static ByteBuf readAllBytesSlice(ByteBuf from) {
-		return from.readSlice(from.readableBytes());
-	}
-
-	public static ByteBuf readAllBytesSlice(ByteBuf buf, int limit) {
-		checkLimit(buf.readableBytes(), limit);
-		return readAllBytesSlice(buf);
-	}
-
-	public static byte[] readBytes(ByteBuf buf, int length) {
-		byte[] result = new byte[length];
-		buf.readBytes(result);
-		return result;
-	}
-
-	protected static void checkLimit(int length, int limit) {
-		if (length > limit) {
-			throw new DecoderException(MessageFormat.format("Size {0} is bigger than allowed {1}", length, limit));
-		}
-	}
-
 
 	public static <T> void writeVarIntCountPrefixedType(ByteBuf to, T type, ToIntBiFunction<ByteBuf, T> typeWriter) {
 		writeCountPrefixedType(to, VarNumberCodec::writeFixedSizeVarInt, type, typeWriter);

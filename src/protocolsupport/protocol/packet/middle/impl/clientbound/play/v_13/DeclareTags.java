@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.impl.clientbound.play.v_13;
 import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV13;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_13_14r1_14r2_15_16r1_16r2_17r1_17r2_18.AbstractDeclareTags;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_13__20.AbstractDeclareTags;
 
 public class DeclareTags extends AbstractDeclareTags implements IClientboundMiddlePacketV13 {
 

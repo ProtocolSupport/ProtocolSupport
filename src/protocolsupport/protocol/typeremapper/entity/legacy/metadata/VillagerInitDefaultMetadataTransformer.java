@@ -2,8 +2,8 @@ package protocolsupport.protocol.typeremapper.entity.legacy.metadata;
 
 import java.util.function.Consumer;
 
-import protocolsupport.protocol.types.VillagerData;
-import protocolsupport.protocol.types.VillagerProfession;
+import protocolsupport.protocol.types.networkentity.data.VillagerData;
+import protocolsupport.protocol.types.networkentity.data.VillagerProfession;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVillagerData;

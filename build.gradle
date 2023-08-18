@@ -13,7 +13,7 @@ defaultTasks 'build'
 
 
 group 'protocolsupport'
-version '1.18.2-1-dev'
+version '1.20-1-dev'
 
 
 import java.nio.file.Path
@@ -78,70 +78,62 @@ repositories {
 	}
 }
 
-configurations {
-	spigotLibraries
-	compileOnly {
-		extendsFrom spigotLibraries
-	}
-	testImplementation {
-	    extendsFrom spigotLibraries
-	}
-}
-
 dependencies {
-	Path spigotBuildDirectoryPath = projectBuildDirectoryPath.resolve('spigot')
+	Path spigotBuildDirectoryPath = projectBuildDirectoryPath.resolve('spigot-1.20.1')
 
 	DependencySupplier spigotDependencySupplier = new UnpackZipFileDependencySupplier(
 		new BuildDependencySupplier(
-			new URL('https://hub.spigotmc.org/jenkins/job/BuildTools/146/artifact/target/BuildTools.jar'),
+			new URL('https://hub.spigotmc.org/jenkins/job/BuildTools/156/artifact/target/BuildTools.jar'),
 			spigotBuildDirectoryPath,
 			'BuildTools.jar',
-			['java', '-jar', 'BuildTools.jar', '--rev', '1.18.2'],
-			['spigot-1.18.2.jar']
+			['java', '-jar', 'BuildTools.jar', '--rev', '1.20.1'],
+			['spigot-1.20.1.jar']
 		).setBuildEnv([
-			'MAVEN_OPTS': '-Dmaven.repo.local=' + spigotBuildDirectoryPath.resolve('m2').toString() + ' -Xmx1024M'
+			'MAVEN_OPTS': '-Dmaven.repo.local=' + spigotBuildDirectoryPath.resolve('mrepo').toString() + ' -Xmx1024M'
 		]),
-		'META-INF/versions/spigot-1.18.2-R0.1-SNAPSHOT.jar',
+		'META-INF/versions/spigot-1.20.1-R0.1-SNAPSHOT.jar',
 		spigotBuildDirectoryPath,
-		'spigot-1.18.2-real.jar'
+		'spigot-1.20.1-real.jar'
 	)
 
 	compileOnly group: 'com.github.ProtocolSupport', name: 'ProtocolSupportBuildProcessor', version: '907b3e20db'
-	compileOnly group: 'io.papermc.paper', name: 'paper-api', version: '1.18.2-R0.1-SNAPSHOT'
+	compileOnly group: 'io.papermc.paper', name: 'paper-api', version: '1.20.1-R0.1-SNAPSHOT'
 	compileOnly ManualGradleDependencySupplier.supplyDependecies([
 		new FilterZipFileDependencySupplier(
 			spigotDependencySupplier,
 			['/net/minecraft', '/com/mojang', '/org/bukkit/craftbukkit', '/org/spigotmc'], true,
 			spigotBuildDirectoryPath,
-			'spigot-1.18.2-real-filtered-compile.jar'
+			'spigot-1.20.1-real-filtered-compile.jar'
 		)
 	])
-	compileOnly group: 'io.netty', name: 'netty-all', version: '4.1.70.Final'
-	compileOnly group: 'com.mojang', name: 'authlib', version: '3.2.38'
-	compileOnly group: 'com.mojang', name: 'brigadier', version: '1.0.18'
+	compileOnly group: 'com.mojang', name: 'brigadier', version: '1.1.8'
+	compileOnly group: 'com.mojang', name: 'authlib', version: '4.0.43'
+	compileOnly group: 'io.netty', name: 'netty-all', version: '4.1.82.Final'
 
 	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
 	implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
 
 	annotationProcessor group: 'com.github.ProtocolSupport', name: 'ProtocolSupportBuildProcessor', version: '907b3e20db'
 
-	testImplementation group: 'org.spigotmc', name: 'spigot-api', version: '1.18.2-R0.1-SNAPSHOT' 
+	testImplementation group: 'org.spigotmc', name: 'spigot-api', version: '1.20.1-R0.1-SNAPSHOT' 
 	testImplementation ManualGradleDependencySupplier.supplyDependecies([
 		spigotDependencySupplier
 	])
-	testImplementation group: 'it.unimi.dsi', name: 'fastutil', version: '8.5.6'
-	testImplementation group: 'io.netty', name: 'netty-all', version: '4.1.70.Final'
-	testImplementation group: 'com.mojang', name: 'authlib', version: '3.3.39'
-	testImplementation group: 'com.mojang', name: 'brigadier', version: '1.0.18'
-	testImplementation group: 'com.mojang', name: 'datafixerupper', version: '4.1.27'
-	testImplementation group: 'com.mojang', name: 'javabridge', version: '1.2.24'
-	testImplementation group: 'com.mojang', name: 'logging', version: '1.0.0'
-	testImplementation group: 'org.apache.logging.log4j', name: 'log4j', version: '2.17.0', ext: 'pom'
-	testImplementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.0'
-	testImplementation group: 'org.apache.logging.log4j', name: 'log4j-iostreams', version: '2.17.0'
-	testImplementation group: 'net.sf.jopt-simple', name: 'jopt-simple', version: '5.0.4'
+	testImplementation group: 'com.mojang', name: 'authlib', version: '4.0.43'
+	testImplementation group: 'com.mojang', name: 'brigadier', version: '1.1.8'
+	testImplementation group: 'com.mojang', name: 'datafixerupper', version: '6.0.8'
+	testImplementation group: 'com.mojang', name: 'logging', version: '1.1.1'
+	testImplementation group: 'io.netty', name: 'netty-all', version: '4.1.82.Final'
+	testImplementation group: 'it.unimi.dsi', name: 'fastutil', version: '8.5.9'
+	testImplementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+	testImplementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+	testImplementation group: 'org.joml', name: 'joml', version: '1.10.5'
+	testImplementation group: 'com.github.oshi', name: 'oshi-core', version: '6.2.2'
+	testImplementation group: 'org.apache.logging.log4j', name: 'log4j', version: '2.19.0', ext: 'pom'
+	testImplementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.19.0'
+	testImplementation group: 'org.apache.logging.log4j', name: 'log4j-iostreams', version: '2.19.0'
 	testImplementation group: 'jline', name: 'jline', version: '2.12.1'
-	testImplementation group: 'com.github.oshi', name: 'oshi-core', version: '5.8.5'
+	testImplementation group: 'net.sf.jopt-simple', name: 'jopt-simple', version: '5.0.4'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.2.0'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
 }

@@ -1,7 +1,6 @@
 package protocolsupport.api.chat;
 
 import java.text.MessageFormat;
-import java.util.UUID;
 
 import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
@@ -143,8 +142,6 @@ public class ChatAPI {
 		sendMessage(conection, toJSON(message), position);
 	}
 
-	protected static final UUID sender_system = new UUID(0, 0);
-
 	/**
 	 * Sends message to client<br>
 	 * Allows setting position of the message
@@ -159,7 +156,7 @@ public class ChatAPI {
 		if (conection.getNetworkState() != NetworkState.PLAY) {
 			throw new IllegalArgumentException("Connection state should be " + NetworkState.PLAY + ", but was " + conection.getNetworkState());
 		}
-		conection.sendPacket(ServerPlatform.get().getPacketFactory().createOutboundChatPacket(messageJson, position.ordinal(), sender_system));
+		conection.sendPacket(ServerPlatform.get().getPacketFactory().createOutboundSystemChatPacket(messageJson, position == MessagePosition.HOTBAR));
 	}
 
 	public static class JsonParseException extends RuntimeException {
@@ -170,7 +167,7 @@ public class ChatAPI {
 	}
 
 	public enum MessagePosition {
-		CHAT, SYSMESSAGE, HOTBAR
+		CHAT, SYSMESSAGE, HOTBAR, SAY, MSG, TEAMMSG, EMOTE, TELLRAW
 	}
 
 }

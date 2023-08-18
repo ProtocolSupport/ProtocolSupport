@@ -6,6 +6,8 @@ import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.base.clientbound.play.MiddleChangeDimension;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV16r2;
+import protocolsupport.protocol.storage.netcache.ClientCache;
+import protocolsupport.utils.BitUtils;
 
 public class ChangeDimension extends MiddleChangeDimension implements IClientboundMiddlePacketV16r2 {
 
@@ -13,17 +15,19 @@ public class ChangeDimension extends MiddleChangeDimension implements IClientbou
 		super(init);
 	}
 
+	protected final ClientCache clientCache = cache.getClientCache();
+
 	@Override
 	protected void write() {
 		ClientBoundPacketData changedimension = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_RESPAWN);
-		ItemStackCodec.writeDirectTag(changedimension, StartGame.toLegacyDimensionType(dimension));
-		StringCodec.writeVarIntUTF8String(changedimension, world);
+		ItemStackCodec.writeDirectTag(changedimension, StartGame.toLegacyDimensionType(clientCache.getDimension()));
+		StringCodec.writeVarIntUTF8String(changedimension, worldName);
 		changedimension.writeLong(hashedSeed);
 		changedimension.writeByte(gamemodeCurrent.getId());
 		changedimension.writeByte(gamemodePrevious.getId());
 		changedimension.writeBoolean(worldDebug);
 		changedimension.writeBoolean(worldFlat);
-		changedimension.writeBoolean(keepEntityMetadata);
+		changedimension.writeBoolean(BitUtils.isIBitSet(keepDataFlags, KEEP_DATA_FLAGS_BIT_METADATA));
 		io.writeClientbound(changedimension);
 	}
 

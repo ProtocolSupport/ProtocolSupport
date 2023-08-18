@@ -36,29 +36,15 @@ public class LegacyCustomPayloadChannelName {
 	public static final String LEGACY_TRADE_LIST = "MC|TrList";
 
 	public static String toLegacy(String modernName) {
-		switch (modernName) {
-			case MODERN_REGISTER: {
-				return LEGACY_REGISTER;
-			}
-			case MODERN_UNREGISTER: {
-				return LEGACY_UNREGISTER;
-			}
-			case MODERN_BRAND: {
-				return LEGACY_BRAND;
-			}
-			case MODERN_BUNGEE: {
-				return LEGACY_BUNGEE;
-			}
-			case MODERN_TRADE_LIST: {
-				return LEGACY_TRADE_LIST;
-			}
-			case MODERN_BOOK_OPEN: {
-				return LEGACY_BOOK_OPEN;
-			}
-			default: {
-				return modernName;
-			}
-		}
+		return switch (modernName) {
+			case MODERN_REGISTER -> LEGACY_REGISTER;
+			case MODERN_UNREGISTER -> LEGACY_UNREGISTER;
+			case MODERN_BRAND -> LEGACY_BRAND;
+			case MODERN_BUNGEE -> LEGACY_BUNGEE;
+			case MODERN_TRADE_LIST -> LEGACY_TRADE_LIST;
+			case MODERN_BOOK_OPEN -> LEGACY_BOOK_OPEN;
+			default -> modernName;
+		};
 	}
 
 	protected static final Pattern valid_pattern = Pattern.compile("[a-z0-9._-]+\\:[a-z0-9._-]*");

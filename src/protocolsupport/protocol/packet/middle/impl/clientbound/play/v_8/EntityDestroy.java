@@ -6,10 +6,10 @@ import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV8;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8.AbstractPassengerStackEntityDestroy;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8.AbstractPassengerStackEntityPassengers;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8.AbstractPassengerStackEntityPassengers.NetworkEntityVehicleData;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_6_7_8.EntityPassengers;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4__8.AbstractPassengerStackEntityDestroy;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4__8.AbstractPassengerStackEntityPassengers;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4__8.AbstractPassengerStackEntityPassengers.NetworkEntityVehicleData;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_6__8.EntityPassengers;
 import protocolsupport.protocol.pipeline.IPacketDataIO;
 
 public class EntityDestroy extends AbstractPassengerStackEntityDestroy implements IClientboundMiddlePacketV8 {

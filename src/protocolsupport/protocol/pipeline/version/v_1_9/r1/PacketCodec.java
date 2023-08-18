@@ -14,11 +14,11 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(ClientBoundPacketType.LOGIN_SET_COMPRESSION, 0x03);
 		registry.register(ClientBoundPacketType.STATUS_SERVER_INFO, 0x00);
 		registry.register(ClientBoundPacketType.STATUS_PONG, 0x01);
-		registry.register(ClientBoundPacketType.PLAY_SPAWN_OBJECT, 0x00);
+		registry.register(ClientBoundPacketType.LEGACY_PLAY_SPAWN_OBJECT, 0x00);
 		registry.register(ClientBoundPacketType.PLAY_SPAWN_EXP_ORB, 0x01);
-		registry.register(ClientBoundPacketType.CLIENTBOUND_LEGACY_PLAY_SPAWN_GLOBAL, 0x02);
-		registry.register(ClientBoundPacketType.PLAY_SPAWN_LIVING, 0x03);
-		registry.register(ClientBoundPacketType.PLAY_SPAWN_PAINTING, 0x04);
+		registry.register(ClientBoundPacketType.LEGACY_PLAY_SPAWN_GLOBAL, 0x02);
+		registry.register(ClientBoundPacketType.PLAY_SPAWN_ENTITY, 0x03);
+		registry.register(ClientBoundPacketType.LEGACY_PLAY_SPAWN_PAINTING, 0x04);
 		registry.register(ClientBoundPacketType.PLAY_SPAWN_NAMED, 0x05);
 		registry.register(ClientBoundPacketType.PLAY_ENTITY_ANIMATION, 0x06);
 		registry.register(ClientBoundPacketType.PLAY_BLOCK_BREAK_ANIMATION, 0x08);
@@ -28,9 +28,9 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(ClientBoundPacketType.PLAY_BOSS_BAR, 0x0C);
 		registry.register(ClientBoundPacketType.PLAY_SERVER_DIFFICULTY, 0x0D);
 		registry.register(ClientBoundPacketType.PLAY_TAB_COMPLETE, 0x0E);
-		registry.register(ClientBoundPacketType.PLAY_CHAT, 0x0F);
+		registry.register(ClientBoundPacketType.PLAY_PLAYER_MESSAGE, 0x0F);
 		registry.register(ClientBoundPacketType.PLAY_BLOCK_CHANGE_MULTI, 0x10);
-		registry.register(ClientBoundPacketType.CLIENTBOUND_LEGACY_PLAY_WINDOW_TRANSACTION, 0x11);
+		registry.register(ClientBoundPacketType.LEGACY_PLAY_WINDOW_TRANSACTION, 0x11);
 		registry.register(ClientBoundPacketType.PLAY_WINDOW_CLOSE, 0x12);
 		registry.register(ClientBoundPacketType.PLAY_WINDOW_OPEN, 0x13);
 		registry.register(ClientBoundPacketType.PLAY_WINDOW_SET_ITEMS, 0x14);
@@ -38,7 +38,7 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(ClientBoundPacketType.PLAY_WINDOW_SET_SLOT, 0x16);
 		registry.register(ClientBoundPacketType.PLAY_SET_COOLDOWN, 0x17);
 		registry.register(ClientBoundPacketType.PLAY_CUSTOM_PAYLOAD, 0x18);
-		registry.register(ClientBoundPacketType.PLAY_WORLD_CUSTOM_SOUND, 0x19);
+		registry.register(ClientBoundPacketType.LEGACY_PLAY_WORLD_CUSTOM_SOUND, 0x19);
 		registry.register(ClientBoundPacketType.PLAY_KICK_DISCONNECT, 0x1A);
 		registry.register(ClientBoundPacketType.PLAY_ENTITY_STATUS, 0x1B);
 		registry.register(ClientBoundPacketType.PLAY_EXPLOSION, 0x1C);
@@ -59,9 +59,9 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(ClientBoundPacketType.PLAY_COMBAT_BEGIN, 0x2C);
 		registry.register(ClientBoundPacketType.PLAY_COMBAT_END, 0x2C);
 		registry.register(ClientBoundPacketType.PLAY_COMBAT_DEATH, 0x2C);
-		registry.register(ClientBoundPacketType.PLAY_PLAYER_INFO, 0x2D);
+		registry.register(ClientBoundPacketType.PLAY_PLAYER_LIST_ENTRY_UPDATE, 0x2D);
 		registry.register(ClientBoundPacketType.PLAY_POSITION, 0x2E);
-		registry.register(ClientBoundPacketType.CLIENTBOUND_LEGACY_PLAY_USE_BED, 0x2F);
+		registry.register(ClientBoundPacketType.LEGACY_PLAY_USE_BED, 0x2F);
 		registry.register(ClientBoundPacketType.PLAY_ENTITY_DESTROY, 0x30);
 		registry.register(ClientBoundPacketType.PLAY_ENTITY_EFFECT_REMOVE, 0x31);
 		registry.register(ClientBoundPacketType.PLAY_RESOURCE_PACK, 0x32);
@@ -92,7 +92,7 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(ClientBoundPacketType.PLAY_TITLE_SUBTEXT, 0x45);
 		registry.register(ClientBoundPacketType.PLAY_TITLE_ANIMATION, 0x45);
 		registry.register(ClientBoundPacketType.PLAY_TITLE_CLEAR, 0x45);
-		registry.register(ClientBoundPacketType.CLIENTBOUND_LEGACY_PLAY_UPDATE_SIGN, 0x46);
+		registry.register(ClientBoundPacketType.LEGACY_PLAY_UPDATE_SIGN, 0x46);
 		registry.register(ClientBoundPacketType.PLAY_PLAYER_LIST_HEADER_FOOTER, 0x48);
 		registry.register(ClientBoundPacketType.PLAY_COLLECT_EFFECT, 0x49);
 		registry.register(ClientBoundPacketType.PLAY_ENTITY_TELEPORT, 0x4A);

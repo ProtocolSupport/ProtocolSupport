@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.impl.clientbound.play.v_6;
 import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
 import protocolsupport.protocol.packet.middle.impl.clientbound.IClientboundMiddlePacketV6;
-import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4_5_6_7_8.AbstractLegacyTeleportConfirmSetPosition;
+import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4__8.AbstractLegacyTeleportConfirmSetPosition;
 
 public class SetPosition extends AbstractLegacyTeleportConfirmSetPosition implements IClientboundMiddlePacketV6 {
 

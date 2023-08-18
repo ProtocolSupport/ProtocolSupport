@@ -1,7 +1,7 @@
 package protocolsupport.protocol.packet.middle.impl.clientbound.play.v_8;
 
-import protocolsupport.protocol.codec.NetworkEntityMetadataSerializer;
-import protocolsupport.protocol.codec.NetworkEntityMetadataSerializer.NetworkEntityMetadataList;
+import protocolsupport.protocol.codec.NetworkEntityMetadataCodec;
+import protocolsupport.protocol.codec.NetworkEntityMetadataCodec.NetworkEntityMetadataList;
 import protocolsupport.protocol.codec.UUIDCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketData;
@@ -20,14 +20,14 @@ public class SpawnNamed extends MiddleSpawnNamed implements IClientboundMiddlePa
 	protected void write() {
 		ClientBoundPacketData spawnnamed = ClientBoundPacketData.create(ClientBoundPacketType.PLAY_SPAWN_NAMED);
 		VarNumberCodec.writeVarInt(spawnnamed, entity.getId());
-		UUIDCodec.writeUUID2L(spawnnamed, entity.getUUID());
+		UUIDCodec.writeUUID(spawnnamed, entity.getUUID());
 		spawnnamed.writeInt((int) (x * 32));
 		spawnnamed.writeInt((int) (y * 32));
 		spawnnamed.writeInt((int) (z * 32));
 		spawnnamed.writeByte(yaw);
 		spawnnamed.writeByte(pitch);
 		spawnnamed.writeShort(0);
-		NetworkEntityMetadataSerializer.writeLegacyData(spawnnamed, version, I18NData.DEFAULT_LOCALE, NetworkEntityMetadataList.EMPTY);
+		NetworkEntityMetadataCodec.writeLegacyData(spawnnamed, version, I18NData.DEFAULT_LOCALE, NetworkEntityMetadataList.EMPTY);
 		io.writeClientbound(spawnnamed);
 	}
 

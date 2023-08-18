@@ -56,33 +56,18 @@ public class MojangsonParser {
 				try {
 					int lastCharIndex = string.length() - 1;
 					int lastStringChar = string.codePointAt(lastCharIndex);
-					switch (lastStringChar) {
-						case MojangsonConstants.type_byte:
-						case MojangsonConstants.type_byte_u: {
-							return new NBTByte(Byte.parseByte(string.substring(0, lastCharIndex)));
-						}
-						case MojangsonConstants.type_short:
-						case MojangsonConstants.type_short_u: {
-							return new NBTShort(Short.parseShort(string.substring(0, lastCharIndex)));
-						}
-						case MojangsonConstants.type_long:
-						case MojangsonConstants.type_long_u: {
-							return new NBTLong(Long.parseLong(string.substring(0, lastCharIndex)));
-						}
-						case MojangsonConstants.type_float:
-						case MojangsonConstants.type_float_u: {
-							return new NBTFloat(Float.parseFloat(string.substring(0, lastCharIndex)));
-						}
-						case MojangsonConstants.type_double:
-						case MojangsonConstants.type_double_u: {
-							return new NBTDouble(Double.parseDouble(string.substring(0, lastCharIndex)));
-						}
-						default: {
+					return switch (lastStringChar) {
+						case MojangsonConstants.type_byte, MojangsonConstants.type_byte_u -> new NBTByte(Byte.parseByte(string.substring(0, lastCharIndex)));
+						case MojangsonConstants.type_short, MojangsonConstants.type_short_u -> new NBTShort(Short.parseShort(string.substring(0, lastCharIndex)));
+						case MojangsonConstants.type_long, MojangsonConstants.type_long_u -> new NBTLong(Long.parseLong(string.substring(0, lastCharIndex)));
+						case MojangsonConstants.type_float, MojangsonConstants.type_float_u -> new NBTFloat(Float.parseFloat(string.substring(0, lastCharIndex)));
+						case MojangsonConstants.type_double, MojangsonConstants.type_double_u -> new NBTDouble(Double.parseDouble(string.substring(0, lastCharIndex)));
+						default -> {
 							double d = Double.parseDouble(string);
 							int i = (int) d;
-							return d == i ? new NBTInt(i) : new NBTDouble(d);
+							yield d == i ? new NBTInt(i) : new NBTDouble(d);
 						}
-					}
+					};
 				} catch (NumberFormatException e) {
 					return new NBTString(string);
 				}

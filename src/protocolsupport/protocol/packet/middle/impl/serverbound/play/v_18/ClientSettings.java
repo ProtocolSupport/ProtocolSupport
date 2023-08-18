@@ -5,9 +5,12 @@ import protocolsupport.protocol.codec.MiscDataCodec;
 import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.middle.base.serverbound.play.MiddleClientSettings;
 import protocolsupport.protocol.packet.middle.impl.serverbound.IServerboundMiddlePacketV18;
+import protocolsupport.protocol.packet.middle.impl.serverbound.IServerboundMiddlePacketV20;
 import protocolsupport.protocol.utils.EnumConstantLookup;
 
-public class ClientSettings extends MiddleClientSettings implements IServerboundMiddlePacketV18 {
+public class ClientSettings extends MiddleClientSettings implements
+IServerboundMiddlePacketV18,
+IServerboundMiddlePacketV20 {
 
 	public ClientSettings(IMiddlePacketInit init) {
 		super(init);

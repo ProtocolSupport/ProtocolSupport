@@ -17,7 +17,7 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(ClientBoundPacketType.STATUS_PONG, 0x1);
 		registry.register(ClientBoundPacketType.PLAY_KEEP_ALIVE, 0x21);
 		registry.register(ClientBoundPacketType.PLAY_START_GAME, 0x26);
-		registry.register(ClientBoundPacketType.PLAY_CHAT, 0xF);
+		registry.register(ClientBoundPacketType.PLAY_PLAYER_MESSAGE, 0xF);
 		registry.register(ClientBoundPacketType.PLAY_UPDATE_TIME, 0x59);
 		registry.register(ClientBoundPacketType.PLAY_SPAWN_POSITION, 0x4B);
 		registry.register(ClientBoundPacketType.PLAY_SET_HEALTH, 0x52);
@@ -28,9 +28,9 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(ClientBoundPacketType.PLAY_HELD_SLOT, 0x48);
 		registry.register(ClientBoundPacketType.PLAY_SPAWN_NAMED, 0x4);
 		registry.register(ClientBoundPacketType.PLAY_COLLECT_EFFECT, 0x61);
-		registry.register(ClientBoundPacketType.PLAY_SPAWN_OBJECT, 0x0);
-		registry.register(ClientBoundPacketType.PLAY_SPAWN_LIVING, 0x2);
-		registry.register(ClientBoundPacketType.PLAY_SPAWN_PAINTING, 0x3);
+		registry.register(ClientBoundPacketType.LEGACY_PLAY_SPAWN_OBJECT, 0x0);
+		registry.register(ClientBoundPacketType.PLAY_SPAWN_ENTITY, 0x2);
+		registry.register(ClientBoundPacketType.LEGACY_PLAY_SPAWN_PAINTING, 0x3);
 		registry.register(ClientBoundPacketType.PLAY_SPAWN_EXP_ORB, 0x1);
 		registry.register(ClientBoundPacketType.PLAY_ENTITY_DESTROY, 0x3A);
 		registry.register(ClientBoundPacketType.PLAY_ENTITY_VELOCITY, 0x4F);
@@ -70,7 +70,7 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(ClientBoundPacketType.PLAY_UPDATE_MAP, 0x27);
 		registry.register(ClientBoundPacketType.PLAY_SIGN_EDITOR, 0x2F);
 		registry.register(ClientBoundPacketType.PLAY_STATISTICS, 0x7);
-		registry.register(ClientBoundPacketType.PLAY_PLAYER_INFO, 0x36);
+		registry.register(ClientBoundPacketType.PLAY_PLAYER_LIST_ENTRY_UPDATE, 0x36);
 		registry.register(ClientBoundPacketType.PLAY_PLAYER_ABILITIES, 0x32);
 		registry.register(ClientBoundPacketType.PLAY_TAB_COMPLETE, 0x11);
 		registry.register(ClientBoundPacketType.PLAY_SCOREBOARD_OBJECTIVE, 0x53);
@@ -83,7 +83,7 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(ClientBoundPacketType.PLAY_CAMERA, 0x47);
 		registry.register(ClientBoundPacketType.PLAY_PLAYER_LIST_HEADER_FOOTER, 0x5F);
 		registry.register(ClientBoundPacketType.PLAY_CHUNK_UNLOAD, 0x1D);
-		registry.register(ClientBoundPacketType.PLAY_WORLD_CUSTOM_SOUND, 0x19);
+		registry.register(ClientBoundPacketType.LEGACY_PLAY_WORLD_CUSTOM_SOUND, 0x19);
 		registry.register(ClientBoundPacketType.PLAY_SERVER_DIFFICULTY, 0xE);
 		registry.register(ClientBoundPacketType.PLAY_BOSS_BAR, 0xD);
 		registry.register(ClientBoundPacketType.PLAY_VEHICLE_MOVE, 0x2C);
@@ -102,7 +102,7 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(ClientBoundPacketType.PLAY_UPDATE_SIMULATION_DISTANCE, 0x57);
 		registry.register(ClientBoundPacketType.PLAY_MERCHANT_TRADE_LIST, 0x28);
 		registry.register(ClientBoundPacketType.PLAY_BOOK_OPEN, 0x2D);
-		registry.register(ClientBoundPacketType.PLAY_BLOCK_BREAK_CONFIRM, 0x8);
+		registry.register(ClientBoundPacketType.LEGACY_PLAY_BLOCK_BREAK_CONFIRM, 0x8);
 		registry.register(ClientBoundPacketType.PLAY_TITLE_TEXT, 0x5A);
 		registry.register(ClientBoundPacketType.PLAY_TITLE_SUBTEXT, 0x58);
 		registry.register(ClientBoundPacketType.PLAY_TITLE_ANIMATION, 0x5B);
@@ -117,7 +117,6 @@ public class PacketCodec extends VarIntPacketCodec {
 		registry.register(ClientBoundPacketType.PLAY_COMBAT_BEGIN, 0x34);
 		registry.register(ClientBoundPacketType.PLAY_COMBAT_END, 0x33);
 		registry.register(ClientBoundPacketType.PLAY_COMBAT_DEATH, 0x35);
-		registry.register(ClientBoundPacketType.PLAY_VIBRATION, 0x5);
 		registry.register(ClientBoundPacketType.PLAY_SYNC_PING, 0x30);
 	}
 

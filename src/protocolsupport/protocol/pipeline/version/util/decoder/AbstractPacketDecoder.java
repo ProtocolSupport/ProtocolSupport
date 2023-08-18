@@ -6,7 +6,7 @@ import java.util.Arrays;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderException;
-import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.BytesCodec;
 import protocolsupport.protocol.packet.middle.base.serverbound.IServerboundMiddlePacket;
 import protocolsupport.protocol.pipeline.IPacketDataChannelIO;
 import protocolsupport.protocol.pipeline.version.util.MiddlePacketInitImpl;
@@ -37,7 +37,7 @@ public abstract class AbstractPacketDecoder<T extends IServerboundMiddlePacket> 
 		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 			throw new DecoderException(MessageFormat.format(
 				"Unable to transform or read serverbound middle packet(data {0})",
-				Arrays.toString(MiscDataCodec.readAllBytes(input))
+				Arrays.toString(BytesCodec.readAllBytes(input))
 			), exception);
 		} else {
 			throw exception;

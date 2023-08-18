@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
-import protocolsupport.protocol.codec.MiscDataCodec;
+import protocolsupport.protocol.codec.BytesCodec;
 import protocolsupport.protocol.types.nbt.NBTByte;
 import protocolsupport.protocol.types.nbt.NBTByteArray;
 import protocolsupport.protocol.types.nbt.NBTCompound;
@@ -61,7 +61,7 @@ class NBTSerializersTests {
 	void testSerialize() throws Exception {
 		ByteBufOutputStream stream = new ByteBufOutputStream(Unpooled.buffer());
 		DefaultNBTSerializer.INSTANCE.serializeTag(stream, tag);
-		Assertions.assertArrayEquals(serializedTagData, MiscDataCodec.readAllBytes(stream.buffer()));
+		Assertions.assertArrayEquals(serializedTagData, BytesCodec.readAllBytes(stream.buffer()));
 	}
 
 	@Test
