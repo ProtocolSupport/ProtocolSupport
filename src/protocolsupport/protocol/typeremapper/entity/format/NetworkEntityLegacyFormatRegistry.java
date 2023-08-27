@@ -51,6 +51,7 @@ import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ageable.PolarBearNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ageable.RabbitNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ageable.SheepNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ageable.SnifferNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ageable.StriderNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ageable.TurtleNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.ageable.VillagerNetworkEntityMetadataFormatTransformerFactory;
@@ -58,6 +59,7 @@ import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.fish.PufferFishNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.fish.TropicalFishNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.horse.BattleHorseNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.horse.CamelNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.horse.CargoHorseNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.horse.LamaEntityNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.horse.LegacyDonkeyNetworkEntityMetadataFormatTransformerFactory;
@@ -76,9 +78,13 @@ import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.living.zombie.ZombieVillagerNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.object.AreaEffectNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.object.BoatNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.object.DisplayBlockNetworkEntityMetadataTransformerFactory;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.object.DisplayItemNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.object.DisplayTextNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.object.EnderCrystalNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.object.FireworkNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.object.FishingFloatNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.object.InteractionNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.object.ItemEntityNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.object.ItemFrameNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.object.PotionNetworkEntityMetadataFormatTransformerFactoryFactory;
@@ -91,10 +97,12 @@ import protocolsupport.protocol.typeremapper.entity.format.metadata.types.object
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.object.minecart.MinecartFurnaceNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.object.minecart.MinecartNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.special.ArmorStandNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.special.PaintingNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.special.PlayerNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.typeremapper.utils.MappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingTable;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndexRegistry;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupportbuildprocessor.Preload;
 
@@ -108,7 +116,7 @@ public class NetworkEntityLegacyFormatRegistry extends MappingRegistry<NetworkEn
 
 		registerSimple(NetworkEntityType.EXP_ORB, BaseNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
 
-		registerSimple(NetworkEntityType.PAINTING, BaseNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
+		registerSimple(NetworkEntityType.PAINTING, PaintingNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
 
 		registerSimple(NetworkEntityType.COW, AgeableNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
 
@@ -142,9 +150,9 @@ public class NetworkEntityLegacyFormatRegistry extends MappingRegistry<NetworkEn
 		.add(NetworkEntityType.COMMON_HORSE, LegacyMuleNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.RANGE__1_6__1_10)
 		.register();
 
-		registerSimple(NetworkEntityType.CAMEL, InsentientNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_20); //TODO: data format
+		registerSimple(NetworkEntityType.CAMEL, CamelNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_20);
 
-		registerSimple(NetworkEntityType.SNIFFER, InsentientNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_20); //TODO: data format
+		registerSimple(NetworkEntityType.SNIFFER, SnifferNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_20);
 
 		registerSimple(NetworkEntityType.LAMA, LamaEntityNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_11);
 
@@ -233,7 +241,7 @@ public class NetworkEntityLegacyFormatRegistry extends MappingRegistry<NetworkEn
 
 		new Mapping(NetworkEntityType.ELDER_GUARDIAN)
 		.add(NetworkEntityType.ELDER_GUARDIAN, GuardianNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_11)
-		.add(NetworkEntityType.GUARDIAN, new GuardianNetworkEntityMetadataFormatTransformerFactory(true), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_10))
+		.add(NetworkEntityType.GUARDIAN, new GuardianNetworkEntityMetadataFormatTransformerFactory<>(NetworkEntityMetadataObjectIndexRegistry.GuardianIndexRegistry.INSTANCE, true), ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_8, ProtocolVersion.MINECRAFT_1_10))
 		.register();
 
 		registerSimple(NetworkEntityType.VINDICATOR, IllagerNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_11);
@@ -371,13 +379,13 @@ public class NetworkEntityLegacyFormatRegistry extends MappingRegistry<NetworkEn
 
 		registerSimple(NetworkEntityType.THUNDERBOLT, BaseNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.ALL_PC);
 
-		registerSimple(NetworkEntityType.DISPLAY_BLOCK, BaseNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_20); //TODO: data format
+		registerSimple(NetworkEntityType.DISPLAY_BLOCK, DisplayBlockNetworkEntityMetadataTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_20);
 
-		registerSimple(NetworkEntityType.DISPLAY_ITEM, BaseNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_20); //TODO: data format
+		registerSimple(NetworkEntityType.DISPLAY_ITEM, DisplayItemNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_20);
 
-		registerSimple(NetworkEntityType.DISPLAY_TEXT, BaseNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_20); //TODO: data format
+		registerSimple(NetworkEntityType.DISPLAY_TEXT, DisplayTextNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_20);
 
-		registerSimple(NetworkEntityType.INTERACTION, BaseNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_20); //TODO: data format
+		registerSimple(NetworkEntityType.INTERACTION, InteractionNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_20);
 
 		registerSimple(NetworkEntityType.ARMOR_STAND, ArmorStandNetworkEntityMetadataFormatTransformerFactory.INSTANCE, ProtocolVersionsHelper.UP_1_8);
 	}
@@ -385,30 +393,30 @@ public class NetworkEntityLegacyFormatRegistry extends MappingRegistry<NetworkEn
 	protected final class Mapping {
 
 		private final NetworkEntityType from;
-		private final ArrayList<ImmutableTriple<NetworkEntityType, NetworkEntityMetadataFormatTransformerFactory, ProtocolVersion[]>> remaps = new ArrayList<>();
+		private final ArrayList<ImmutableTriple<NetworkEntityType, NetworkEntityMetadataFormatTransformerFactory<? extends NetworkEntityMetadataObjectIndexRegistry>, ProtocolVersion[]>> remaps = new ArrayList<>();
 
 		public Mapping(NetworkEntityType from) {
 			this.from = from;
 		}
 
-		public Mapping add(NetworkEntityType to, NetworkEntityMetadataFormatTransformerFactory metadataTransformerFactory, ProtocolVersion... versions) {
+		public Mapping add(NetworkEntityType to, NetworkEntityMetadataFormatTransformerFactory<? extends NetworkEntityMetadataObjectIndexRegistry> metadataTransformerFactory, ProtocolVersion... versions) {
 			remaps.add(ImmutableTriple.of(to, metadataTransformerFactory, versions));
 			return this;
 		}
 
 		public void register() {
-			for (ImmutableTriple<NetworkEntityType, NetworkEntityMetadataFormatTransformerFactory, ProtocolVersion[]> triple : remaps) {
+			for (ImmutableTriple<NetworkEntityType, NetworkEntityMetadataFormatTransformerFactory<? extends NetworkEntityMetadataObjectIndexRegistry>, ProtocolVersion[]> triple : remaps) {
 				NetworkEntityLegacyFormatRegistry.this.register(from, triple.getLeft(), triple.getMiddle(), triple.getRight());
 			}
 		}
 
 	}
 
-	protected void registerSimple(NetworkEntityType type, NetworkEntityMetadataFormatTransformerFactory metadataTransformerFactory, ProtocolVersion... versions) {
+	protected void registerSimple(NetworkEntityType type, NetworkEntityMetadataFormatTransformerFactory<? extends NetworkEntityMetadataObjectIndexRegistry> metadataTransformerFactory, ProtocolVersion... versions) {
 		register(type, type, metadataTransformerFactory, versions);
 	}
 
-	protected void register(NetworkEntityType from, NetworkEntityType to, NetworkEntityMetadataFormatTransformerFactory metadataTransformerFactory, ProtocolVersion... versions) {
+	protected void register(NetworkEntityType from, NetworkEntityType to, NetworkEntityMetadataFormatTransformerFactory<? extends NetworkEntityMetadataObjectIndexRegistry> metadataTransformerFactory, ProtocolVersion... versions) {
 		Arrays.stream(versions).forEach(version -> getTable(version).set(from, new NetworkEntityLegacyFormatEntry(to, metadataTransformerFactory.get(version))));
 	}
 

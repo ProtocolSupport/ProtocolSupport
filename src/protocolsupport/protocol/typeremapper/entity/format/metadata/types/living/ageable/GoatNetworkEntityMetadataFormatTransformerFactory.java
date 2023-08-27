@@ -2,15 +2,17 @@ package protocolsupport.protocol.typeremapper.entity.format.metadata.types.livin
 
 import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.base.AgeableNetworkEntityMetadataFormatTransformerFactory;
-import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndexRegistry;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
-public class GoatNetworkEntityMetadataFormatTransformerFactory extends AgeableNetworkEntityMetadataFormatTransformerFactory {
+public class GoatNetworkEntityMetadataFormatTransformerFactory<R extends NetworkEntityMetadataObjectIndexRegistry.GoatIndexRegistry> extends AgeableNetworkEntityMetadataFormatTransformerFactory<NetworkEntityMetadataObjectIndexRegistry.GoatIndexRegistry> {
 
-	public static final GoatNetworkEntityMetadataFormatTransformerFactory INSTANCE = new GoatNetworkEntityMetadataFormatTransformerFactory();
+	public static final GoatNetworkEntityMetadataFormatTransformerFactory<NetworkEntityMetadataObjectIndexRegistry.GoatIndexRegistry> INSTANCE = new GoatNetworkEntityMetadataFormatTransformerFactory<>(NetworkEntityMetadataObjectIndexRegistry.GoatIndexRegistry.INSTANCE);
 
-	protected GoatNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Goat.SCREAMING, 17), ProtocolVersionsHelper.UP_1_17);
+	protected GoatNetworkEntityMetadataFormatTransformerFactory(R registry) {
+		super(registry);
+
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(registry.SCREAMING, 17), ProtocolVersionsHelper.UP_1_17);
 	}
 
 }

@@ -3,7 +3,7 @@ package protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4__13;
 import protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4__18.AbstractLegacyPaintingEntityMetadata;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
-import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndexRegistry;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalPosition;
 
 public abstract class AbstractPlayerUseBedAsPacketEntityMetadata extends AbstractLegacyPaintingEntityMetadata {
@@ -17,7 +17,7 @@ public abstract class AbstractPlayerUseBedAsPacketEntityMetadata extends Abstrac
 		super.write();
 
 		if (lType == NetworkEntityType.PLAYER) {
-			NetworkEntityMetadataObjectOptionalPosition bedpositionObject = NetworkEntityMetadataObjectIndex.EntityLiving.BED_LOCATION.getObject(metadata);
+			NetworkEntityMetadataObjectOptionalPosition bedpositionObject = NetworkEntityMetadataObjectIndexRegistry.EntityLivingIndexRegistry.INSTANCE.BED_LOCATION.getObject(metadata);
 			if (bedpositionObject != null) {
 				Position bedposition = bedpositionObject.getValue();
 				if (bedposition != null) {

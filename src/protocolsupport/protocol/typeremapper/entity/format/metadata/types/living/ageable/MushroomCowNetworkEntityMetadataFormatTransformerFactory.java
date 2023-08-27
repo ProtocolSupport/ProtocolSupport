@@ -2,17 +2,19 @@ package protocolsupport.protocol.typeremapper.entity.format.metadata.types.livin
 
 import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.base.AgeableNetworkEntityMetadataFormatTransformerFactory;
-import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndexRegistry;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
-public class MushroomCowNetworkEntityMetadataFormatTransformerFactory extends AgeableNetworkEntityMetadataFormatTransformerFactory {
+public class MushroomCowNetworkEntityMetadataFormatTransformerFactory<R extends NetworkEntityMetadataObjectIndexRegistry.MushroomCowIndexRegistry> extends AgeableNetworkEntityMetadataFormatTransformerFactory<R> {
 
-	public static final MushroomCowNetworkEntityMetadataFormatTransformerFactory INSTANCE = new MushroomCowNetworkEntityMetadataFormatTransformerFactory();
+	public static final MushroomCowNetworkEntityMetadataFormatTransformerFactory<NetworkEntityMetadataObjectIndexRegistry.MushroomCowIndexRegistry> INSTANCE = new MushroomCowNetworkEntityMetadataFormatTransformerFactory<>(NetworkEntityMetadataObjectIndexRegistry.MushroomCowIndexRegistry.INSTANCE);
 
-	protected MushroomCowNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MushroomCow.VARIANT, 17), ProtocolVersionsHelper.UP_1_17);
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MushroomCow.VARIANT, 16), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MushroomCow.VARIANT, 15), ProtocolVersionsHelper.ALL_1_14);
+	protected MushroomCowNetworkEntityMetadataFormatTransformerFactory(R registry) {
+		super(registry);
+
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(registry.VARIANT, 17), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(registry.VARIANT, 16), ProtocolVersionsHelper.RANGE__1_15__1_16_4);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(registry.VARIANT, 15), ProtocolVersionsHelper.ALL_1_14);
 	}
 
 }

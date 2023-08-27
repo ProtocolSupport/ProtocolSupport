@@ -2,6 +2,7 @@ package protocolsupport.protocol.types.particle.types;
 
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.utils.Any;
+import protocolsupport.protocol.codec.VibrationPathCodec;
 import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.VibrationPath;
 import protocolsupport.protocol.types.particle.NetworkParticle;
@@ -11,7 +12,7 @@ public class NetworkParticleVibration extends NetworkParticle {
 	protected VibrationPath path;
 
 	public NetworkParticleVibration() {
-		path = new VibrationPath(new Position(0, 0, 0), new Any<>(new Position(0, 0, 0), null), 0);
+		path = new VibrationPath(new Any<>(new Position(0, 0, 0), null), 0);
 	}
 
 	public NetworkParticleVibration(float offsetX, float offsetY, float offsetZ, float data, int count, VibrationPath path) {
@@ -25,7 +26,7 @@ public class NetworkParticleVibration extends NetworkParticle {
 
 	@Override
 	public void readData(ByteBuf from) {
-		path = VibrationPath.fromNetworkData(from);
+		path = VibrationPathCodec.readVibrationPath(from);
 	}
 
 }

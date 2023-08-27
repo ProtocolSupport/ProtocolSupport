@@ -2,13 +2,16 @@ package protocolsupport.protocol.typeremapper.entity.format.metadata.types.livin
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.object.misc.NetworkEntityMetadataObjectAddOnFirstUpdateTransformer;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndexRegistry;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVarInt;
 
-public class LegacyStrayNetworkEntityMetadataFormatTransformerFactory extends LegacySkeletonNetworkEntityMetadataFormatTransformerFactory {
+public class LegacyStrayNetworkEntityMetadataFormatTransformerFactory<R extends NetworkEntityMetadataObjectIndexRegistry.InsentientIndexRegistry> extends LegacySkeletonNetworkEntityMetadataFormatTransformerFactory<R> {
 
-	public static final LegacyStrayNetworkEntityMetadataFormatTransformerFactory INSTANCE = new LegacyStrayNetworkEntityMetadataFormatTransformerFactory();
+	public static final LegacyStrayNetworkEntityMetadataFormatTransformerFactory<NetworkEntityMetadataObjectIndexRegistry.InsentientIndexRegistry> INSTANCE = new LegacyStrayNetworkEntityMetadataFormatTransformerFactory<>(NetworkEntityMetadataObjectIndexRegistry.InsentientIndexRegistry.INSTANCE);
 
-	protected LegacyStrayNetworkEntityMetadataFormatTransformerFactory() {
+	protected LegacyStrayNetworkEntityMetadataFormatTransformerFactory(R registry) {
+		super(registry);
+
 		add(new NetworkEntityMetadataObjectAddOnFirstUpdateTransformer(12, new NetworkEntityMetadataObjectVarInt(2)), ProtocolVersion.MINECRAFT_1_10);
 	}
 

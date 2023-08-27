@@ -8,7 +8,7 @@ import protocolsupport.protocol.types.NetworkItemStack;
 import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
-import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndexRegistry;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectItemStack;
 import protocolsupport.protocol.utils.PrimitiveTypeUtils;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
@@ -27,7 +27,7 @@ public abstract class AbstractLegacyPotionItemEntityMetadata extends AbstractPla
 			PotionNetworkEntityData potiondata = edata.getData(PotionNetworkEntityData.DATA_KEY);
 			if (potiondata != null) {
 				potiondata.updateMetadata(metadata);
-				NetworkEntityMetadataObjectItemStack item = NetworkEntityMetadataObjectIndex.Potion.ITEM.getObject(metadata);
+				NetworkEntityMetadataObjectItemStack item = NetworkEntityMetadataObjectIndexRegistry.PotionIndexRegistry.INSTANCE.ITEM.getObject(metadata);
 				if (item != null) {
 					fMetadata.clear();
 					writePotionRespawn(item.getValue(), potiondata.getVelocity());
@@ -111,14 +111,15 @@ public abstract class AbstractLegacyPotionItemEntityMetadata extends AbstractPla
 		}
 
 		public void updateMetadata(ArrayMap<NetworkEntityMetadataObject<?>> metadata) {
-			NetworkEntityMetadataObjectIndex.Entity.BASE_FLAGS.copy(metadata, this.metadata);
-			NetworkEntityMetadataObjectIndex.Entity.AIR.copy(metadata, this.metadata);
-			NetworkEntityMetadataObjectIndex.Entity.NAMETAG.copy(metadata, this.metadata);
-			NetworkEntityMetadataObjectIndex.Entity.NAMETAG_VISIBLE.copy(metadata, this.metadata);
-			NetworkEntityMetadataObjectIndex.Entity.SILENT.copy(metadata, this.metadata);
-			NetworkEntityMetadataObjectIndex.Entity.NO_GRAVITY.copy(metadata, this.metadata);
-			NetworkEntityMetadataObjectIndex.Entity.POSE.copy(metadata, this.metadata);
-			NetworkEntityMetadataObjectIndex.Potion.ITEM.copy(metadata, this.metadata);
+			NetworkEntityMetadataObjectIndexRegistry.PotionIndexRegistry registry = NetworkEntityMetadataObjectIndexRegistry.PotionIndexRegistry.INSTANCE;
+			registry.BASE_FLAGS.copy(metadata, this.metadata);
+			registry.AIR.copy(metadata, this.metadata);
+			registry.NAMETAG.copy(metadata, this.metadata);
+			registry.NAMETAG_VISIBLE.copy(metadata, this.metadata);
+			registry.SILENT.copy(metadata, this.metadata);
+			registry.NO_GRAVITY.copy(metadata, this.metadata);
+			registry.POSE.copy(metadata, this.metadata);
+			registry.ITEM.copy(metadata, this.metadata);
 		}
 
 		public ArrayMap<NetworkEntityMetadataObject<?>> getMetadata() {

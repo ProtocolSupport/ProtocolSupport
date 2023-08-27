@@ -5,25 +5,27 @@ import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value
 import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataObjectIndexValueTransformer;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.base.BaseNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
-import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndexRegistry;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectOptionalVarInt;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVarInt;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
-public class FireworkNetworkEntityMetadataFormatTransformerFactory extends BaseNetworkEntityMetadataFormatTransformerFactory {
+public class FireworkNetworkEntityMetadataFormatTransformerFactory<R extends NetworkEntityMetadataObjectIndexRegistry.FireworkIndexRegistry> extends BaseNetworkEntityMetadataFormatTransformerFactory<R> {
 
-	public static final FireworkNetworkEntityMetadataFormatTransformerFactory INSTANCE = new FireworkNetworkEntityMetadataFormatTransformerFactory();
+	public static final FireworkNetworkEntityMetadataFormatTransformerFactory<NetworkEntityMetadataObjectIndexRegistry.FireworkIndexRegistry> INSTANCE = new FireworkNetworkEntityMetadataFormatTransformerFactory<>(NetworkEntityMetadataObjectIndexRegistry.FireworkIndexRegistry.INSTANCE);
 
-	protected FireworkNetworkEntityMetadataFormatTransformerFactory() {
-		add(version -> new NetworkEntityMetadataObjectIndexValueItemStackToLegacyFormatTransformer(NetworkEntityMetadataObjectIndex.Firework.ITEM, 8, version), ProtocolVersionsHelper.UP_1_17);
-		add(version -> new NetworkEntityMetadataObjectIndexValueItemStackToLegacyFormatTransformer(NetworkEntityMetadataObjectIndex.Firework.ITEM, 7, version), ProtocolVersionsHelper.RANGE__1_14__1_16_4);
-		add(version -> new NetworkEntityMetadataObjectIndexValueItemStackToLegacyFormatTransformer(NetworkEntityMetadataObjectIndex.Firework.ITEM, 6, version), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
-		add(version -> new NetworkEntityMetadataObjectIndexValueItemStackToLegacyFormatTransformer(NetworkEntityMetadataObjectIndex.Firework.ITEM, 5, version), ProtocolVersionsHelper.ALL_1_9);
-		add(version -> new NetworkEntityMetadataObjectIndexValueItemStackToLegacyFormatTransformer(NetworkEntityMetadataObjectIndex.Firework.ITEM, 8, version), ProtocolVersionsHelper.DOWN_1_8);
+	protected FireworkNetworkEntityMetadataFormatTransformerFactory(R registry) {
+		super(registry);
 
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Firework.USER, 9), ProtocolVersionsHelper.UP_1_17);
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Firework.USER, 8), ProtocolVersionsHelper.RANGE__1_14__1_16_4);
-		add(new NetworkEntityMetadataObjectIndexValueTransformer<>(NetworkEntityMetadataObjectIndex.Firework.USER, 7) {
+		add(version -> new NetworkEntityMetadataObjectIndexValueItemStackToLegacyFormatTransformer(registry.ITEM, 8, version), ProtocolVersionsHelper.UP_1_17);
+		add(version -> new NetworkEntityMetadataObjectIndexValueItemStackToLegacyFormatTransformer(registry.ITEM, 7, version), ProtocolVersionsHelper.RANGE__1_14__1_16_4);
+		add(version -> new NetworkEntityMetadataObjectIndexValueItemStackToLegacyFormatTransformer(registry.ITEM, 6, version), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
+		add(version -> new NetworkEntityMetadataObjectIndexValueItemStackToLegacyFormatTransformer(registry.ITEM, 5, version), ProtocolVersionsHelper.ALL_1_9);
+		add(version -> new NetworkEntityMetadataObjectIndexValueItemStackToLegacyFormatTransformer(registry.ITEM, 8, version), ProtocolVersionsHelper.DOWN_1_8);
+
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(registry.USER, 9), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(registry.USER, 8), ProtocolVersionsHelper.RANGE__1_14__1_16_4);
+		add(new NetworkEntityMetadataObjectIndexValueTransformer<>(registry.USER, 7) {
 			@Override
 			public NetworkEntityMetadataObject<?> transformValue(NetworkEntityMetadataObjectOptionalVarInt object) {
 				return new NetworkEntityMetadataObjectVarInt(object.getValue() != null ? object.getValue() : 0);

@@ -3,10 +3,11 @@ package protocolsupport.protocol.typeremapper.particle;
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.codec.ItemStackCodec;
 import protocolsupport.protocol.codec.VarNumberCodec;
+import protocolsupport.protocol.codec.VibrationPathCodec;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry;
 import protocolsupport.protocol.typeremapper.block.FlatteningBlockDataRegistry.FlatteningBlockDataTable;
 import protocolsupport.protocol.typeremapper.itemstack.ItemStackRemappingHelper;
-import protocolsupport.protocol.types.VibrationPath;
+import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.particle.NetworkParticle;
 import protocolsupport.protocol.types.particle.types.NetworkParticleBlock;
 import protocolsupport.protocol.types.particle.types.NetworkParticleBlockMarker;
@@ -29,6 +30,10 @@ public class FlatteningNetworkParticleDataSerializer extends TypeSerializer<Netw
 			FlatteningBlockDataTable flatteningBlockDataTable = FlatteningBlockDataRegistry.INSTANCE.getTable(version);
 			register(NetworkParticleBlockMarker.class, (to, particle) -> VarNumberCodec.writeVarInt(to, flatteningBlockDataTable.getId(particle.getBlockData())), version);
 		}
+		register(NetworkParticleVibration.class, (to, particle) -> {
+			//TODO: somehow pass the particle/entity location here?
+			VibrationPathCodec.writeVibrationPathSource(to, new Position(0, 0, 0), particle.getPath());
+		});
 		register(NetworkParticleDustTransition.class, (to, particle) -> {
 			to.writeFloat(particle.getRed());
 			to.writeFloat(particle.getGreen());
@@ -39,8 +44,8 @@ public class FlatteningNetworkParticleDataSerializer extends TypeSerializer<Netw
 			to.writeFloat(particle.getTargetBlue());
 		}, ProtocolVersionsHelper.UP_1_17);
 		register(NetworkParticleVibration.class, (to, particle) -> {
-			VibrationPath.writeNetworkData(to, particle.getPath());
-		}, ProtocolVersionsHelper.UP_1_17);
+			VibrationPathCodec.writeVibrationPath(to, particle.getPath());
+		}, ProtocolVersionsHelper.RANGE__1_17__1_18_2);
 		register(NetworkParticleDust.class, (to, particle) -> {
 			to.writeFloat(particle.getRed());
 			to.writeFloat(particle.getGreen());

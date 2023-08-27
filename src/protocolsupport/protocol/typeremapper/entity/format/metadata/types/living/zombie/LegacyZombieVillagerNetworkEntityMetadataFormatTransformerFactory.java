@@ -10,37 +10,42 @@ import protocolsupport.protocol.typeremapper.legacy.LegacyVillagerProfession;
 import protocolsupport.protocol.types.networkentity.NetworkEntity;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndexRegistry;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVarInt;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVillagerData;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
-public class LegacyZombieVillagerNetworkEntityMetadataFormatTransformerFactory extends ZombieVillagerNetworkEntityMetadataFormatTransformerFactory {
+public class LegacyZombieVillagerNetworkEntityMetadataFormatTransformerFactory<R extends NetworkEntityMetadataObjectIndexRegistry.ZombieVillagerIndexRegistry> extends ZombieVillagerNetworkEntityMetadataFormatTransformerFactory<R> {
 
-	public static final LegacyZombieVillagerNetworkEntityMetadataFormatTransformerFactory INSTANCE = new LegacyZombieVillagerNetworkEntityMetadataFormatTransformerFactory();
+	public static final LegacyZombieVillagerNetworkEntityMetadataFormatTransformerFactory<NetworkEntityMetadataObjectIndexRegistry.ZombieVillagerIndexRegistry> INSTANCE = new LegacyZombieVillagerNetworkEntityMetadataFormatTransformerFactory<>(NetworkEntityMetadataObjectIndexRegistry.ZombieVillagerIndexRegistry.INSTANCE);
 
-	protected LegacyZombieVillagerNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.ZombieVillager.CONVERTING, 14), ProtocolVersion.MINECRAFT_1_10);
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.ZombieVillager.CONVERTING, 13), ProtocolVersionsHelper.ALL_1_9);
-		add(new NetworkEntityMetadataObjectIndexValueBooleanToByteTransformer(NetworkEntityMetadataObjectIndex.ZombieVillager.CONVERTING, 14), ProtocolVersionsHelper.DOWN_1_8);
+	protected LegacyZombieVillagerNetworkEntityMetadataFormatTransformerFactory(R registry) {
+		super(registry);
 
-		add(new NetworkEntityMetadataLegacyZombieVillagerTypeTransformer(13), ProtocolVersion.MINECRAFT_1_10);
-		add(new NetworkEntityMetadataLegacyZombieVillagerTypeTransformer(12), ProtocolVersionsHelper.ALL_1_9);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(registry.CONVERTING, 14), ProtocolVersion.MINECRAFT_1_10);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(registry.CONVERTING, 13), ProtocolVersionsHelper.ALL_1_9);
+		add(new NetworkEntityMetadataObjectIndexValueBooleanToByteTransformer(registry.CONVERTING, 14), ProtocolVersionsHelper.DOWN_1_8);
+
+		add(new NetworkEntityMetadataLegacyZombieVillagerTypeTransformer(registry.VDATA, 13), ProtocolVersion.MINECRAFT_1_10);
+		add(new NetworkEntityMetadataLegacyZombieVillagerTypeTransformer(registry.VDATA, 12), ProtocolVersionsHelper.ALL_1_9);
 		add(new NetworkEntityMetadataObjectAddOnFirstUpdateTransformer(13, new NetworkEntityMetadataObjectByte((byte) 1)), ProtocolVersionsHelper.DOWN_1_8);
 	}
 
 	protected static class NetworkEntityMetadataLegacyZombieVillagerTypeTransformer extends NetworkEntityMetadataFormatTransformer {
 
+		protected final NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVillagerData> fromIndex;
 		protected final int toIndex;
 
-		public NetworkEntityMetadataLegacyZombieVillagerTypeTransformer(int toIndex) {
+		public NetworkEntityMetadataLegacyZombieVillagerTypeTransformer(NetworkEntityMetadataObjectIndex<NetworkEntityMetadataObjectVillagerData> fromIndex, int toIndex) {
+			this.fromIndex = fromIndex;
 			this.toIndex =  toIndex;
 		}
 
 		@Override
 		public void transform(NetworkEntity entity, ArrayMap<NetworkEntityMetadataObject<?>> original, NetworkEntityMetadataList remapped) {
-			NetworkEntityMetadataObjectVillagerData villagerData = NetworkEntityMetadataObjectIndex.ZombieVillager.VDATA.getObject(original);
+			NetworkEntityMetadataObjectVillagerData villagerData = fromIndex.getObject(original);
 			if (villagerData != null) {
 				remapped.add(toIndex, new NetworkEntityMetadataObjectVarInt(LegacyVillagerProfession.toLegacyId(villagerData.getValue().getProfession()) + 1));
 			} else if (entity.getDataCache().isFirstMeta()) {

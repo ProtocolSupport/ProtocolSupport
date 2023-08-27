@@ -10,6 +10,13 @@ public enum EntityPose {
 	SPIN_ATTACK,
 	SNEAKING,
 	LONG_JUMPING,
-	DYING;
+	DYING,
+	CROAKING,
+	USING_TONGUE,
+	SITTING,
+	ROARING,
+	SNIFFING,
+	EMERGIN,
+	DIGGINGG;
 	public static final EnumConstantLookup<EntityPose> CONSTANT_LOOKUP = new EnumConstantLookup<>(EntityPose.class);
 }

@@ -27,7 +27,7 @@ import protocolsupport.protocol.typeremapper.utils.MappingRegistry;
 import protocolsupport.protocol.typeremapper.utils.MappingTable;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
-import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndexRegistry;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectBoolean;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
@@ -160,7 +160,13 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		.add(NetworkEntityType.CHICKEN, ProtocolVersionsHelper.DOWN_1_11_1)
 		.register();
 
-		register(NetworkEntityType.ENDERMAN, version -> new NetworkEntityLegacyDataEntry(NetworkEntityType.ENDERMAN, new GenericEntityDirectBlockDataMetadataTransformer(BlockDataLegacyDataRegistry.INSTANCE.getTable(version), NetworkEntityMetadataObjectIndex.Enderman.CARRIED_BLOCK)));
+		register(
+			NetworkEntityType.ENDERMAN,
+			version -> new NetworkEntityLegacyDataEntry(
+				NetworkEntityType.ENDERMAN,
+				new GenericEntityDirectBlockDataMetadataTransformer(BlockDataLegacyDataRegistry.INSTANCE.getTable(version), NetworkEntityMetadataObjectIndexRegistry.EndermanIndexRegistry.INSTANCE.CARRIED_BLOCK)
+			)
+		);
 
 		registerNoop(NetworkEntityType.GIANT);
 
@@ -308,9 +314,9 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		new Mapping(NetworkEntityType.PANDA)
 		.add(NetworkEntityType.PANDA, ProtocolVersionsHelper.UP_1_14)
 		.add(NetworkEntityType.POLAR_BEAR, meta -> {
-			NetworkEntityMetadataObjectByte pandaFlags = NetworkEntityMetadataObjectIndex.Panda.PANDA_FLAGS.getObject(meta);
+			NetworkEntityMetadataObjectByte pandaFlags = NetworkEntityMetadataObjectIndexRegistry.PandaIndexRegistry.INSTANCE.PANDA_FLAGS.getObject(meta);
 			if (pandaFlags != null) {
-				NetworkEntityMetadataObjectIndex.PolarBear.STANDING_UP.setObject(meta, new NetworkEntityMetadataObjectBoolean(BitUtils.isIBitSet(pandaFlags.getValue(), 4)));
+				NetworkEntityMetadataObjectIndexRegistry.PolarBearIndexRegistry.INSTANCE.STANDING_UP.setObject(meta, new NetworkEntityMetadataObjectBoolean(BitUtils.isIBitSet(pandaFlags.getValue(), 4)));
 			}
 		}, ProtocolVersionsHelper.RANGE__1_10__1_13_2)
 		.add(NetworkEntityType.SPIDER, SpiderInitDefaultMetadataTransformer.INSTANCE, ProtocolVersionsHelper.DOWN_1_9_4)
@@ -365,9 +371,9 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		new Mapping(NetworkEntityType.STRIDER)
 		.add(NetworkEntityType.STRIDER, ProtocolVersionsHelper.UP_1_16)
 		.add(NetworkEntityType.PIG, meta -> {
-			NetworkEntityMetadataObjectBoolean hasSaddle = NetworkEntityMetadataObjectIndex.Strider.HAS_SADDLE.getObject(meta);
+			NetworkEntityMetadataObjectBoolean hasSaddle = NetworkEntityMetadataObjectIndexRegistry.StriderIndexRegistry.INSTANCE.HAS_SADDLE.getObject(meta);
 			if (hasSaddle != null) {
-				NetworkEntityMetadataObjectIndex.Pig.HAS_SADLLE.setObject(meta, hasSaddle);
+				NetworkEntityMetadataObjectIndexRegistry.PigIndexRegistry.INSTANCE.HAS_SADLLE.setObject(meta, hasSaddle);
 			}
 		}, ProtocolVersionsHelper.DOWN_1_15_2)
 		.register();
@@ -397,7 +403,10 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 
 		registerNoop(NetworkEntityType.ENDEREYE);
 
-		register(NetworkEntityType.POTION, version -> new NetworkEntityLegacyDataEntry(NetworkEntityType.POTION, new GenericEntityItemMetadataTransformer(version, NetworkEntityMetadataObjectIndex.Potion.ITEM)));
+		register(
+			NetworkEntityType.POTION,
+			version -> new NetworkEntityLegacyDataEntry(NetworkEntityType.POTION, new GenericEntityItemMetadataTransformer(version, NetworkEntityMetadataObjectIndexRegistry.PotionIndexRegistry.INSTANCE.ITEM))
+		);
 
 		registerNoop(NetworkEntityType.EXP_BOTTLE);
 
@@ -408,7 +417,10 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 
 		registerNoop(NetworkEntityType.FISHING_FLOAT);
 
-		register(NetworkEntityType.ITEM, version -> new NetworkEntityLegacyDataEntry(NetworkEntityType.ITEM, new GenericEntityItemMetadataTransformer(version, NetworkEntityMetadataObjectIndex.Item.ITEM)));
+		register(
+			NetworkEntityType.ITEM,
+			version -> new NetworkEntityLegacyDataEntry(NetworkEntityType.ITEM, new GenericEntityItemMetadataTransformer(version, NetworkEntityMetadataObjectIndexRegistry.ItemIndexRegistry.INSTANCE.ITEM))
+		);
 
 		registerNoop(NetworkEntityType.ARROW);
 
@@ -427,19 +439,42 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		.add(NetworkEntityType.ARROW, ProtocolVersionsHelper.DOWN_1_12_2)
 		.register();
 
-		register(NetworkEntityType.FIREWORK, version -> new NetworkEntityLegacyDataEntry(NetworkEntityType.FIREWORK, new GenericEntityItemMetadataTransformer(version, NetworkEntityMetadataObjectIndex.Firework.ITEM)));
+		register(
+			NetworkEntityType.FIREWORK,
+			version -> new NetworkEntityLegacyDataEntry(NetworkEntityType.FIREWORK, new GenericEntityItemMetadataTransformer(version, NetworkEntityMetadataObjectIndexRegistry.FireworkIndexRegistry.INSTANCE.ITEM))
+		);
 
-		register(NetworkEntityType.ITEM_FRAME, version -> new NetworkEntityLegacyDataEntry(NetworkEntityType.ITEM_FRAME, new GenericEntityItemMetadataTransformer(version, NetworkEntityMetadataObjectIndex.ItemFrame.ITEM)));
+		register(
+			NetworkEntityType.ITEM_FRAME,
+			version -> new NetworkEntityLegacyDataEntry(NetworkEntityType.ITEM_FRAME, new GenericEntityItemMetadataTransformer(version, NetworkEntityMetadataObjectIndexRegistry.ItemFrameIndexRegistry.INSTANCE.ITEM))
+		);
 
 		new Mapping(NetworkEntityType.GLOW_ITEM_FRAME)
-		.add(NetworkEntityType.GLOW_ITEM_FRAME, (Function<ProtocolVersion, Consumer<ArrayMap<NetworkEntityMetadataObject<?>>>>) version -> new GenericEntityItemMetadataTransformer(version, NetworkEntityMetadataObjectIndex.ItemFrame.ITEM), ProtocolVersionsHelper.UP_1_17)
-		.add(NetworkEntityType.ITEM_FRAME, (Function<ProtocolVersion, Consumer<ArrayMap<NetworkEntityMetadataObject<?>>>>) version -> new GenericEntityItemMetadataTransformer(version, NetworkEntityMetadataObjectIndex.ItemFrame.ITEM), ProtocolVersionsHelper.DOWN_1_16_4)
+		.add(
+			NetworkEntityType.GLOW_ITEM_FRAME,
+			(Function<ProtocolVersion, Consumer<ArrayMap<NetworkEntityMetadataObject<?>>>>) version -> new GenericEntityItemMetadataTransformer(
+				version, NetworkEntityMetadataObjectIndexRegistry.ItemFrameIndexRegistry.INSTANCE.ITEM
+			),
+			ProtocolVersionsHelper.UP_1_17
+		)
+		.add(NetworkEntityType.ITEM_FRAME,
+			(Function<ProtocolVersion, Consumer<ArrayMap<NetworkEntityMetadataObject<?>>>>) version -> new GenericEntityItemMetadataTransformer(
+				version, NetworkEntityMetadataObjectIndexRegistry.ItemFrameIndexRegistry.INSTANCE.ITEM
+			),
+			ProtocolVersionsHelper.DOWN_1_16_4
+		)
 		.register();
 
 		registerNoop(NetworkEntityType.ENDER_CRYSTAL);
 
 		new Mapping(NetworkEntityType.AREA_EFFECT_CLOUD)
-		.add(NetworkEntityType.AREA_EFFECT_CLOUD, (Function<ProtocolVersion, Consumer<ArrayMap<NetworkEntityMetadataObject<?>>>>) version -> new GenericEntityParticleMetadataTransformer(NetworkParticleLegacyData.REGISTRY.getTable(version), NetworkEntityMetadataObjectIndex.AreaEffectCloud.PARTICLE), ProtocolVersionsHelper.UP_1_9)
+		.add(
+			NetworkEntityType.AREA_EFFECT_CLOUD,
+			(Function<ProtocolVersion, Consumer<ArrayMap<NetworkEntityMetadataObject<?>>>>) version -> new GenericEntityParticleMetadataTransformer(
+				NetworkParticleLegacyData.REGISTRY.getTable(version), NetworkEntityMetadataObjectIndexRegistry.AreaEffectCloudIndexRegistry.INSTANCE.PARTICLE
+			),
+			ProtocolVersionsHelper.UP_1_9
+		)
 		.add(NetworkEntityLegacyDataEntry.NONE, ProtocolVersionsHelper.DOWN_1_8)
 		.register();
 
@@ -463,7 +498,13 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		.add(NetworkEntityType.FIRECHARGE, ProtocolVersionsHelper.DOWN_1_10)
 		.register();
 
-		register(NetworkEntityType.MINECART, version -> new NetworkEntityLegacyDataEntry(NetworkEntityType.MINECART, new GenericEntityVarIntBlockDataMetadataTransformer(BlockDataLegacyDataRegistry.INSTANCE.getTable(version), NetworkEntityMetadataObjectIndex.Minecart.BLOCK)));
+		register(
+			NetworkEntityType.MINECART,
+			version -> new NetworkEntityLegacyDataEntry(
+				NetworkEntityType.MINECART,
+				new GenericEntityVarIntBlockDataMetadataTransformer(BlockDataLegacyDataRegistry.INSTANCE.getTable(version), NetworkEntityMetadataObjectIndexRegistry.MinecartIndexRegistry.INSTANCE.BLOCK)
+			)
+		);
 
 		registerNoop(NetworkEntityType.MINECART_CHEST);
 
@@ -480,12 +521,26 @@ public class NetworkEntityLegacyDataRegistry extends MappingRegistry<NetworkEnti
 		registerNoop(NetworkEntityType.THUNDERBOLT);
 
 		new Mapping(NetworkEntityType.DISPLAY_BLOCK)
-		.add(NetworkEntityType.DISPLAY_BLOCK, ProtocolVersionsHelper.UP_1_20)
+		.add(
+			NetworkEntityType.DISPLAY_BLOCK,
+			(Function<ProtocolVersion, Consumer<ArrayMap<NetworkEntityMetadataObject<?>>>>) version -> new GenericEntityDirectBlockDataMetadataTransformer(
+				BlockDataLegacyDataRegistry.INSTANCE.getTable(version),
+				NetworkEntityMetadataObjectIndexRegistry.DisplayBlockIndexRegistry.INSTANCE.BLOCK
+			),
+			ProtocolVersionsHelper.UP_1_20
+		)
 		.add(NetworkEntityLegacyDataEntry.NONE, ProtocolVersionsHelper.DOWN_1_19_4) //TODO: think of a replacement (falling block (armorstand with block on head)?)
 		.register();
 
 		new Mapping(NetworkEntityType.DISPLAY_ITEM)
-		.add(NetworkEntityType.DISPLAY_ITEM, ProtocolVersionsHelper.UP_1_20)
+		.add(
+			NetworkEntityType.DISPLAY_ITEM,
+			(Function<ProtocolVersion, Consumer<ArrayMap<NetworkEntityMetadataObject<?>>>>) version -> new GenericEntityItemMetadataTransformer(
+				version,
+				NetworkEntityMetadataObjectIndexRegistry.DisplayItemIndexRegistry.INSTANCE.ITEM
+			),
+			ProtocolVersionsHelper.UP_1_20
+		)
 		.add(NetworkEntityLegacyDataEntry.NONE, ProtocolVersionsHelper.DOWN_1_19_4) //TODO: think of a replacement (item (armorstand with block on head)?)
 		.register();
 

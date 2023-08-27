@@ -9,7 +9,7 @@ import protocolsupport.protocol.types.Position;
 import protocolsupport.protocol.types.networkentity.NetworkEntityDataCache;
 import protocolsupport.protocol.types.networkentity.NetworkEntityType;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
-import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndexRegistry;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVarInt;
 import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
@@ -26,7 +26,7 @@ public abstract class AbstractLegacyPaintingEntityMetadata extends AbstractRemap
 			PaintingNetworkEntityData paintingdata = edata.getData(PaintingNetworkEntityData.DATA_KEY);
 			if (paintingdata != null) {
 				paintingdata.updateMetadata(metadata);
-				NetworkEntityMetadataObjectVarInt variant = NetworkEntityMetadataObjectIndex.Painting.VARIANT.getObject(metadata);
+				NetworkEntityMetadataObjectVarInt variant = NetworkEntityMetadataObjectIndexRegistry.PaintingIndexRegistry.INSTANCE.VARIANT.getObject(metadata);
 				if (variant != null) {
 					fMetadata.clear();
 					writePaintingRespawn(paintingdata.getPosition(), paintingdata.getDirection(), variant.getValue());
@@ -72,14 +72,15 @@ public abstract class AbstractLegacyPaintingEntityMetadata extends AbstractRemap
 		}
 
 		public void updateMetadata(ArrayMap<NetworkEntityMetadataObject<?>> metadata) {
-			NetworkEntityMetadataObjectIndex.Entity.BASE_FLAGS.copy(metadata, this.metadata);
-			NetworkEntityMetadataObjectIndex.Entity.AIR.copy(metadata, this.metadata);
-			NetworkEntityMetadataObjectIndex.Entity.NAMETAG.copy(metadata, this.metadata);
-			NetworkEntityMetadataObjectIndex.Entity.NAMETAG_VISIBLE.copy(metadata, this.metadata);
-			NetworkEntityMetadataObjectIndex.Entity.SILENT.copy(metadata, this.metadata);
-			NetworkEntityMetadataObjectIndex.Entity.NO_GRAVITY.copy(metadata, this.metadata);
-			NetworkEntityMetadataObjectIndex.Entity.POSE.copy(metadata, this.metadata);
-			NetworkEntityMetadataObjectIndex.Potion.ITEM.copy(metadata, this.metadata);
+			NetworkEntityMetadataObjectIndexRegistry.PaintingIndexRegistry registry = NetworkEntityMetadataObjectIndexRegistry.PaintingIndexRegistry.INSTANCE;
+			registry.BASE_FLAGS.copy(metadata, this.metadata);
+			registry.AIR.copy(metadata, this.metadata);
+			registry.NAMETAG.copy(metadata, this.metadata);
+			registry.NAMETAG_VISIBLE.copy(metadata, this.metadata);
+			registry.SILENT.copy(metadata, this.metadata);
+			registry.NO_GRAVITY.copy(metadata, this.metadata);
+			registry.POSE.copy(metadata, this.metadata);
+			registry.VARIANT.copy(metadata, this.metadata);
 		}
 
 

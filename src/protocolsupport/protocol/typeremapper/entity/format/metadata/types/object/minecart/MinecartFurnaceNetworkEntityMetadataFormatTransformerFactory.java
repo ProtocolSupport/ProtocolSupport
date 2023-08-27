@@ -2,19 +2,21 @@ package protocolsupport.protocol.typeremapper.entity.format.metadata.types.objec
 
 import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataObjectIndexValueBooleanToByteTransformer;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
-import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndexRegistry;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
-public class MinecartFurnaceNetworkEntityMetadataFormatTransformerFactory extends MinecartNetworkEntityMetadataFormatTransformerFactory {
+public class MinecartFurnaceNetworkEntityMetadataFormatTransformerFactory<R extends NetworkEntityMetadataObjectIndexRegistry.MinecartFurnaceIndexRegistry> extends MinecartNetworkEntityMetadataFormatTransformerFactory<R> {
 
-	public static final MinecartFurnaceNetworkEntityMetadataFormatTransformerFactory INSTANCE = new MinecartFurnaceNetworkEntityMetadataFormatTransformerFactory();
+	public static final MinecartFurnaceNetworkEntityMetadataFormatTransformerFactory<NetworkEntityMetadataObjectIndexRegistry.MinecartFurnaceIndexRegistry> INSTANCE = new MinecartFurnaceNetworkEntityMetadataFormatTransformerFactory<>(NetworkEntityMetadataObjectIndexRegistry.MinecartFurnaceIndexRegistry.INSTANCE);
 
-	protected MinecartFurnaceNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartFurnace.POWERED, 14), ProtocolVersionsHelper.UP_1_17);
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartFurnace.POWERED, 13), ProtocolVersionsHelper.RANGE__1_14__1_16_4);
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartFurnace.POWERED, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.MinecartFurnace.POWERED, 11), ProtocolVersionsHelper.ALL_1_9);
-		add(new NetworkEntityMetadataObjectIndexValueBooleanToByteTransformer(NetworkEntityMetadataObjectIndex.MinecartFurnace.POWERED, 16), ProtocolVersionsHelper.DOWN_1_8);
+	protected MinecartFurnaceNetworkEntityMetadataFormatTransformerFactory(R registry) {
+		super(registry);
+
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(registry.POWERED, 14), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(registry.POWERED, 13), ProtocolVersionsHelper.RANGE__1_14__1_16_4);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(registry.POWERED, 12), ProtocolVersionsHelper.RANGE__1_10__1_13_2);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(registry.POWERED, 11), ProtocolVersionsHelper.ALL_1_9);
+		add(new NetworkEntityMetadataObjectIndexValueBooleanToByteTransformer(registry.POWERED, 16), ProtocolVersionsHelper.DOWN_1_8);
 	}
 
 }

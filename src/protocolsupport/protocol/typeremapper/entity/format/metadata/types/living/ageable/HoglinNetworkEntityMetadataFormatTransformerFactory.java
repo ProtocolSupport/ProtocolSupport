@@ -2,16 +2,18 @@ package protocolsupport.protocol.typeremapper.entity.format.metadata.types.livin
 
 import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.base.AgeableNetworkEntityMetadataFormatTransformerFactory;
-import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndexRegistry;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
-public class HoglinNetworkEntityMetadataFormatTransformerFactory extends AgeableNetworkEntityMetadataFormatTransformerFactory {
+public class HoglinNetworkEntityMetadataFormatTransformerFactory<R extends NetworkEntityMetadataObjectIndexRegistry.HoglinIndexRegistry> extends AgeableNetworkEntityMetadataFormatTransformerFactory<R> {
 
-	public static final HoglinNetworkEntityMetadataFormatTransformerFactory INSTANCE = new HoglinNetworkEntityMetadataFormatTransformerFactory();
+	public static final HoglinNetworkEntityMetadataFormatTransformerFactory<NetworkEntityMetadataObjectIndexRegistry.HoglinIndexRegistry> INSTANCE = new HoglinNetworkEntityMetadataFormatTransformerFactory<>(NetworkEntityMetadataObjectIndexRegistry.HoglinIndexRegistry.INSTANCE);
 
-	protected HoglinNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Hoglin.ZOMBIFICATION_IMMUNITY, 17), ProtocolVersionsHelper.UP_1_17);
-		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(NetworkEntityMetadataObjectIndex.Hoglin.ZOMBIFICATION_IMMUNITY, 16), ProtocolVersionsHelper.ALL_1_16);
+	protected HoglinNetworkEntityMetadataFormatTransformerFactory(R registry) {
+		super(registry);
+
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(registry.ZOMBIFICATION_IMMUNITY, 17), ProtocolVersionsHelper.UP_1_17);
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(registry.ZOMBIFICATION_IMMUNITY, 16), ProtocolVersionsHelper.ALL_1_16);
 	}
 
 }

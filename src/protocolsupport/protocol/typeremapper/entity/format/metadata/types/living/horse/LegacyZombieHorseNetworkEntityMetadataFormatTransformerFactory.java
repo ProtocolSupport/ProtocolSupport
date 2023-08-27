@@ -2,15 +2,18 @@ package protocolsupport.protocol.typeremapper.entity.format.metadata.types.livin
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.object.misc.NetworkEntityMetadataObjectAddOnFirstUpdateTransformer;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndexRegistry;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVarInt;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
-public class LegacyZombieHorseNetworkEntityMetadataFormatTransformerFactory extends BattleHorseNetworkEntityMetadataFormatTransformerFactory {
+public class LegacyZombieHorseNetworkEntityMetadataFormatTransformerFactory<R extends NetworkEntityMetadataObjectIndexRegistry.BattleHorseIndexRegistry> extends BattleHorseNetworkEntityMetadataFormatTransformerFactory<R> {
 
-	public static final LegacyZombieHorseNetworkEntityMetadataFormatTransformerFactory INSTANCE = new LegacyZombieHorseNetworkEntityMetadataFormatTransformerFactory();
+	public static final LegacyZombieHorseNetworkEntityMetadataFormatTransformerFactory<NetworkEntityMetadataObjectIndexRegistry.BattleHorseIndexRegistry> INSTANCE = new LegacyZombieHorseNetworkEntityMetadataFormatTransformerFactory<>(NetworkEntityMetadataObjectIndexRegistry.BattleHorseIndexRegistry.INSTANCE);
 
-	protected LegacyZombieHorseNetworkEntityMetadataFormatTransformerFactory() {
+	protected LegacyZombieHorseNetworkEntityMetadataFormatTransformerFactory(R registry) {
+		super(registry);
+
 		//legacy horse type
 		add(new NetworkEntityMetadataObjectAddOnFirstUpdateTransformer(14, new NetworkEntityMetadataObjectVarInt(3)), ProtocolVersion.MINECRAFT_1_10);
 		add(new NetworkEntityMetadataObjectAddOnFirstUpdateTransformer(13, new NetworkEntityMetadataObjectVarInt(3)), ProtocolVersionsHelper.ALL_1_9);

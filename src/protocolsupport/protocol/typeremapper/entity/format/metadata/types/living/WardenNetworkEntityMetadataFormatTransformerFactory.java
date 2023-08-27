@@ -1,13 +1,18 @@
 package protocolsupport.protocol.typeremapper.entity.format.metadata.types.living;
 
+import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.base.InsentientNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndexRegistry;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
-public class WardenNetworkEntityMetadataFormatTransformerFactory extends InsentientNetworkEntityMetadataFormatTransformerFactory {
+public class WardenNetworkEntityMetadataFormatTransformerFactory<R extends NetworkEntityMetadataObjectIndexRegistry.WardenIndexRegistry> extends InsentientNetworkEntityMetadataFormatTransformerFactory<R> {
 
-	public static final WardenNetworkEntityMetadataFormatTransformerFactory INSTANCE = new WardenNetworkEntityMetadataFormatTransformerFactory();
+	public static final WardenNetworkEntityMetadataFormatTransformerFactory<NetworkEntityMetadataObjectIndexRegistry.WardenIndexRegistry> INSTANCE = new WardenNetworkEntityMetadataFormatTransformerFactory<>(NetworkEntityMetadataObjectIndexRegistry.WardenIndexRegistry.INSTANCE);
 
-	protected WardenNetworkEntityMetadataFormatTransformerFactory() {
-		//TODO: implement
+	protected WardenNetworkEntityMetadataFormatTransformerFactory(R registry) {
+		super(registry);
+
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(registry.ANGER_LEVEL, 16), ProtocolVersionsHelper.UP_1_19);
 	}
 
 }

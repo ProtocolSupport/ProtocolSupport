@@ -1,0 +1,18 @@
+package protocolsupport.protocol.typeremapper.entity.format.metadata.types.special;
+
+import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataObjectIndexValueNoOpTransformer;
+import protocolsupport.protocol.typeremapper.entity.format.metadata.types.base.BaseNetworkEntityMetadataFormatTransformerFactory;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndexRegistry;
+import protocolsupport.protocol.utils.ProtocolVersionsHelper;
+
+public class PaintingNetworkEntityMetadataFormatTransformerFactory<R extends NetworkEntityMetadataObjectIndexRegistry.PaintingIndexRegistry> extends BaseNetworkEntityMetadataFormatTransformerFactory<R> {
+
+	public static final PaintingNetworkEntityMetadataFormatTransformerFactory<NetworkEntityMetadataObjectIndexRegistry.PaintingIndexRegistry> INSTANCE = new PaintingNetworkEntityMetadataFormatTransformerFactory<>(NetworkEntityMetadataObjectIndexRegistry.PaintingIndexRegistry.INSTANCE);
+
+	protected PaintingNetworkEntityMetadataFormatTransformerFactory(R registry) {
+		super(registry);
+
+		add(new NetworkEntityMetadataObjectIndexValueNoOpTransformer(registry.VARIANT, 8), ProtocolVersionsHelper.UP_1_19);
+	}
+
+}

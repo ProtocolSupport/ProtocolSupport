@@ -113,6 +113,8 @@ public class ProtocolVersionsHelper {
 
 	public static final ProtocolVersion[] RANGE__1_19__1_19_3 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_19, ProtocolVersion.MINECRAFT_1_19_3);
 
+	public static final ProtocolVersion[] RANGE__1_17__1_18_2 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_17, ProtocolVersion.MINECRAFT_1_18_2);
+
 	public static final ProtocolVersion[] RANGE__1_16_2__1_16_4 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_16_2, ProtocolVersion.MINECRAFT_1_16_4);
 
 	public static final ProtocolVersion[] RANGE__1_16__1_18_2 = ProtocolVersion.getAllBetween(ProtocolVersion.MINECRAFT_1_18_2, ProtocolVersion.MINECRAFT_1_16);

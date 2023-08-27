@@ -23,6 +23,7 @@ public class NetworkEntityMetadataObjectIndexValueOptionalChatToLegacyTextTransf
 		this(fromIndex, toIndex, NO_LIMIT);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public NetworkEntityMetadataObject<?> transformValue(NetworkEntityMetadataObjectOptionalChat object) {
 		if (object.getValue() != null) {

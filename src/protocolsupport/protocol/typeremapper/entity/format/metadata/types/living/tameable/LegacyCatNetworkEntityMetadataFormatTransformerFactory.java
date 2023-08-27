@@ -3,31 +3,34 @@ package protocolsupport.protocol.typeremapper.entity.format.metadata.types.livin
 import protocolsupport.protocol.typeremapper.entity.format.metadata.object.value.NetworkEntityMetadataObjectIndexValueTransformer;
 import protocolsupport.protocol.typeremapper.entity.format.metadata.types.base.TameableNetworkEntityMetadataFormatTransformerFactory;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
-import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
+import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndexRegistry;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectByte;
+import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectCatVariant;
 import protocolsupport.protocol.types.networkentity.metadata.objects.NetworkEntityMetadataObjectVarInt;
 import protocolsupport.protocol.utils.ProtocolVersionsHelper;
 
-public class LegacyCatNetworkEntityMetadataFormatTransformerFactory extends TameableNetworkEntityMetadataFormatTransformerFactory {
+public class LegacyCatNetworkEntityMetadataFormatTransformerFactory<R extends NetworkEntityMetadataObjectIndexRegistry.CatIndexRegistry> extends TameableNetworkEntityMetadataFormatTransformerFactory<R> {
 
-	public static final LegacyCatNetworkEntityMetadataFormatTransformerFactory INSTANCE = new LegacyCatNetworkEntityMetadataFormatTransformerFactory();
+	public static final LegacyCatNetworkEntityMetadataFormatTransformerFactory<NetworkEntityMetadataObjectIndexRegistry.CatIndexRegistry> INSTANCE = new LegacyCatNetworkEntityMetadataFormatTransformerFactory<>(NetworkEntityMetadataObjectIndexRegistry.CatIndexRegistry.INSTANCE);
 
-	protected LegacyCatNetworkEntityMetadataFormatTransformerFactory() {
-		add(new NetworkEntityMetadataObjectIndexValueTransformer<>(NetworkEntityMetadataObjectIndex.Cat.VARIANT, 15) {
+	protected LegacyCatNetworkEntityMetadataFormatTransformerFactory(R registry) {
+		super(registry);
+
+		add(new NetworkEntityMetadataObjectIndexValueTransformer<>(registry.VARIANT, 15) {
 			@Override
-			public NetworkEntityMetadataObject<?> transformValue(NetworkEntityMetadataObjectVarInt object) {
+			public NetworkEntityMetadataObject<?> transformValue(NetworkEntityMetadataObjectCatVariant object) {
 				return new NetworkEntityMetadataObjectVarInt(getLegacyCatVariant(object.getValue()));
 			}
 		}, ProtocolVersionsHelper.RANGE__1_10__1_13_2);
-		add(new NetworkEntityMetadataObjectIndexValueTransformer<>(NetworkEntityMetadataObjectIndex.Cat.VARIANT, 14) {
+		add(new NetworkEntityMetadataObjectIndexValueTransformer<>(registry.VARIANT, 14) {
 			@Override
-			public NetworkEntityMetadataObject<?> transformValue(NetworkEntityMetadataObjectVarInt object) {
+			public NetworkEntityMetadataObject<?> transformValue(NetworkEntityMetadataObjectCatVariant object) {
 				return new NetworkEntityMetadataObjectVarInt(getLegacyCatVariant(object.getValue()));
 			}
 		}, ProtocolVersionsHelper.ALL_1_9);
-		add(new NetworkEntityMetadataObjectIndexValueTransformer<>(NetworkEntityMetadataObjectIndex.Cat.VARIANT, 18) {
+		add(new NetworkEntityMetadataObjectIndexValueTransformer<>(registry.VARIANT, 18) {
 			@Override
-			public NetworkEntityMetadataObject<?> transformValue(NetworkEntityMetadataObjectVarInt object) {
+			public NetworkEntityMetadataObject<?> transformValue(NetworkEntityMetadataObjectCatVariant object) {
 				return new NetworkEntityMetadataObjectByte((byte) getLegacyCatVariant(object.getValue()));
 			}
 		}, ProtocolVersionsHelper.DOWN_1_8);
