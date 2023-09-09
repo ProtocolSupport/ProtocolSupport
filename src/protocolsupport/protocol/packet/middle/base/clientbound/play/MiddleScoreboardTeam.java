@@ -5,10 +5,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.bukkit.ChatColor;
-
 import io.netty.buffer.ByteBuf;
 import protocolsupport.api.chat.ChatAPI;
+import protocolsupport.api.chat.ChatFormat;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.protocol.codec.ArrayCodec;
 import protocolsupport.protocol.codec.MiscDataCodec;
@@ -33,7 +32,7 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 	protected int friendlyFire;
 	protected String nameTagVisibility;
 	protected String collisionRule;
-	protected ChatColor format;
+	protected ChatFormat format;
 	protected String[] players;
 
 	@Override
@@ -45,7 +44,7 @@ public abstract class MiddleScoreboardTeam extends ClientBoundMiddlePacket {
 			friendlyFire = serverdata.readUnsignedByte();
 			nameTagVisibility = StringCodec.readVarIntUTF8String(serverdata);
 			collisionRule = StringCodec.readVarIntUTF8String(serverdata);
-			format = MiscDataCodec.readVarIntEnum(serverdata, EnumConstantLookup.CHAT_COLOR);
+			format = MiscDataCodec.readVarIntEnum(serverdata, EnumConstantLookup.CHAT_FORMAT);
 			prefix = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(serverdata), true);
 			suffix = ChatAPI.fromJSON(StringCodec.readVarIntUTF8String(serverdata), true);
 		}

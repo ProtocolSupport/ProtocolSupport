@@ -2,8 +2,7 @@ package protocolsupport.protocol.packet.middle.impl.clientbound.status.v_l;
 
 import java.util.StringJoiner;
 
-import org.bukkit.ChatColor;
-
+import protocolsupport.api.chat.ChatFormat;
 import protocolsupport.protocol.codec.StringCodec;
 import protocolsupport.protocol.packet.ClientBoundPacketData;
 import protocolsupport.protocol.packet.ClientBoundPacketType;
@@ -19,7 +18,7 @@ public class ServerInfo extends MiddleServerInfo {
 	protected void write() {
 		ClientBoundPacketData serverinfo = ClientBoundPacketData.create(ClientBoundPacketType.STATUS_SERVER_INFO);
 		String response = new StringJoiner("§")
-		.add(ChatColor.stripColor(ping.getMotd().toLegacyText(cache.getClientCache().getLocale())).replace("§", ""))
+		.add(ChatFormat.stripFormat(ping.getMotd().toLegacyText(cache.getClientCache().getLocale())).replace("§", ""))
 		.add(String.valueOf(ping.getPlayers().getOnline()))
 		.add(String.valueOf(ping.getPlayers().getMax()))
 		.toString();

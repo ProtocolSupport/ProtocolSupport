@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import protocolsupport.api.chat.ChatColor;
+import protocolsupport.api.chat.ChatFormat;
 import protocolsupport.api.chat.components.BaseComponent;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.chat.modifiers.Modifier;
@@ -16,23 +17,6 @@ public class LegacyChat {
 	private LegacyChat() {
 	}
 
-	public static final char STYLE_CHAR = '§';
-
-	public static final char STYLE_RANDOM_CHAR = 'k';
-	public static final char STYLE_BOLD_CHAR = 'l';
-	public static final char STYLE_STRIKETHROUGH_CHAR = 'm';
-	public static final char STYLE_UNDERLINED_CHAR = 'n';
-	public static final char STYLE_ITALIC_CHAR = 'o';
-	public static final char STYLE_RESET_CHAR = 'r';
-
-	public static final String STYLE_RANDOM = String.valueOf(new char[] {STYLE_CHAR, STYLE_RANDOM_CHAR});
-	public static final String STYLE_BOLD = String.valueOf(new char[] {STYLE_CHAR, STYLE_BOLD_CHAR});
-	public static final String STYLE_STRIKETHROUGH = String.valueOf(new char[] {STYLE_CHAR, STYLE_STRIKETHROUGH_CHAR});
-	public static final String STYLE_UNDERLINED = String.valueOf(new char[] {STYLE_CHAR, STYLE_UNDERLINED_CHAR});
-	public static final String STYLE_ITALIC = String.valueOf(new char[] {STYLE_CHAR, STYLE_ITALIC_CHAR});
-	public static final String STYLE_RESET = String.valueOf(new char[] {STYLE_CHAR, STYLE_RESET_CHAR});
-
-
 	public static boolean isEmpty(@Nonnull String string) {
 		if (string.isEmpty()) {
 			return true;
@@ -40,7 +24,7 @@ public class LegacyChat {
 		int length = string.length();
 		int index = 0;
 		do {
-			if (string.charAt(index) != STYLE_CHAR) {
+			if (string.charAt(index) != ChatFormat.StyleCode.CONTROL_CHAR) {
 				return false;
 			} else {
 				index += 2;
@@ -112,29 +96,29 @@ public class LegacyChat {
 		 * }
 		 */
 		public void writeModifier(Modifier newModifier) {
-			org.bukkit.ChatColor lastAppendedColor = lastAppendedModifier.hasColor() ? lastAppendedModifier.getRGBColor().asBukkit() : null;
-			org.bukkit.ChatColor newColor = newModifier.hasColor() ? newModifier.getRGBColor().asBukkit() : null;
+			ChatFormat lastAppendedColor = lastAppendedModifier.hasColor() ? ChatFormat.ofColor(lastAppendedModifier.getRGBColor()) : null;
+			ChatFormat newColor = newModifier.hasColor() ? ChatFormat.ofColor(newModifier.getRGBColor()) : null;
 			if (newColor != lastAppendedColor) {
 				if (newColor != null) {
-					out.append(newColor);
+					out.append(newColor.toStyle());
 				} else {
-					out.append(STYLE_RESET);
+					out.append(ChatFormat.RESET.toStyle());
 				}
 				writeAllFormatCodes(newModifier);
 			} else {
 				int prevLength = out.length();
 				try {
-					writeAdditionalFormatCode(lastAppendedModifier.isRandom(), newModifier.isRandom(), STYLE_RANDOM);
-					writeAdditionalFormatCode(lastAppendedModifier.isBold(), newModifier.isBold(), STYLE_BOLD);
-					writeAdditionalFormatCode(lastAppendedModifier.isStrikethrough(), newModifier.isStrikethrough(), STYLE_STRIKETHROUGH);
-					writeAdditionalFormatCode(lastAppendedModifier.isUnderlined(), newModifier.isUnderlined(), STYLE_UNDERLINED);
-					writeAdditionalFormatCode(lastAppendedModifier.isItalic(), newModifier.isItalic(), STYLE_ITALIC);
+					writeAdditionalFormatCode(lastAppendedModifier.isRandom(), newModifier.isRandom(), ChatFormat.RANDOM);
+					writeAdditionalFormatCode(lastAppendedModifier.isBold(), newModifier.isBold(), ChatFormat.BOLD);
+					writeAdditionalFormatCode(lastAppendedModifier.isStrikethrough(), newModifier.isStrikethrough(), ChatFormat.STRIKETHROUGH);
+					writeAdditionalFormatCode(lastAppendedModifier.isUnderlined(), newModifier.isUnderlined(), ChatFormat.UNDERLINED);
+					writeAdditionalFormatCode(lastAppendedModifier.isItalic(), newModifier.isItalic(), ChatFormat.ITALIC);
 				} catch (NeedsFormatResetSignal e) {
 					out.setLength(prevLength);
 					if (lastAppendedColor != null) {
 						out.append(lastAppendedColor);
 					} else {
-						out.append(STYLE_RESET);
+						out.append(ChatFormat.RESET.toStyle());
 					}
 					writeAllFormatCodes(newModifier);
 				}
@@ -159,31 +143,30 @@ public class LegacyChat {
 		 * We need to reset format codes if we encounter combinations 4, 6
 		 * We need to write additional format code is we encounter combinations 2, 8
 		 */
-		protected boolean writeAdditionalFormatCode(Boolean oldModifierValue, Boolean newModifierValue, String newFormatCode) throws NeedsFormatResetSignal {
+		protected void writeAdditionalFormatCode(Boolean oldModifierValue, Boolean newModifierValue, ChatFormat style) throws NeedsFormatResetSignal {
 			if (Boolean.TRUE.equals(oldModifierValue) && !Boolean.TRUE.equals(newModifierValue)) {
 				throw NeedsFormatResetSignal.INSTANCE;
 			}
 			if (!Boolean.TRUE.equals(oldModifierValue) && Boolean.TRUE.equals(newModifierValue)) {
-				out.append(newFormatCode);
+				out.append(style.toStyle());
 			}
-			return true;
 		}
 
 		protected void writeAllFormatCodes(Modifier modifier) {
 			if (Boolean.TRUE.equals(modifier.isRandom())) {
-				out.append(STYLE_RANDOM);
+				out.append(ChatFormat.RANDOM.toStyle());
 			}
 			if (Boolean.TRUE.equals(modifier.isBold())) {
-				out.append(STYLE_BOLD);
+				out.append(ChatFormat.BOLD.toStyle());
 			}
 			if (Boolean.TRUE.equals(modifier.isStrikethrough())) {
-				out.append(STYLE_STRIKETHROUGH);
+				out.append(ChatFormat.STRIKETHROUGH.toStyle());
 			}
 			if (Boolean.TRUE.equals(modifier.isUnderlined())) {
-				out.append(STYLE_UNDERLINED);
+				out.append(ChatFormat.UNDERLINED.toStyle());
 			}
 			if (Boolean.TRUE.equals(modifier.isItalic())) {
-				out.append(STYLE_ITALIC);
+				out.append(ChatFormat.ITALIC.toStyle());
 			}
 		}
 
@@ -236,7 +219,7 @@ public class LegacyChat {
 
 		charIter: for (int cIndex = 0; cIndex < length; ++cIndex) {
 			char c = message.charAt(cIndex);
-			if (c == STYLE_CHAR) {
+			if (c == ChatFormat.StyleCode.CONTROL_CHAR) {
 				if (++cIndex >= length) {
 					break;
 				}
@@ -270,87 +253,87 @@ public class LegacyChat {
 						));
 						break;
 					}
-					case '0': {
+					case ChatFormat.StyleCode.BLACK: {
 						currentModifier.setRGBColor(ChatColor.BLACK);
 						break;
 					}
-					case '1': {
+					case ChatFormat.StyleCode.DARK_BLUE: {
 						currentModifier.setRGBColor(ChatColor.DARK_BLUE);
 						break;
 					}
-					case '2': {
+					case ChatFormat.StyleCode.DARK_GREEN: {
 						currentModifier.setRGBColor(ChatColor.DARK_GREEN);
 						break;
 					}
-					case '3': {
+					case ChatFormat.StyleCode.DARK_AQUA: {
 						currentModifier.setRGBColor(ChatColor.DARK_AQUA);
 						break;
 					}
-					case '4': {
+					case ChatFormat.StyleCode.DARK_RED: {
 						currentModifier.setRGBColor(ChatColor.DARK_RED);
 						break;
 					}
-					case '5': {
+					case ChatFormat.StyleCode.DARK_PURPLE: {
 						currentModifier.setRGBColor(ChatColor.DARK_PURPLE);
 						break;
 					}
-					case '6': {
+					case ChatFormat.StyleCode.GOLD: {
 						currentModifier.setRGBColor(ChatColor.GOLD);
 						break;
 					}
-					case '7': {
+					case ChatFormat.StyleCode.GRAY: {
 						currentModifier.setRGBColor(ChatColor.GRAY);
 						break;
 					}
-					case '8': {
+					case ChatFormat.StyleCode.DARK_GRAY: {
 						currentModifier.setRGBColor(ChatColor.DARK_GRAY);
 						break;
 					}
-					case '9': {
+					case ChatFormat.StyleCode.BLUE: {
 						currentModifier.setRGBColor(ChatColor.BLUE);
 						break;
 					}
-					case 'a': {
+					case ChatFormat.StyleCode.GREEN: {
 						currentModifier.setRGBColor(ChatColor.GREEN);
 						break;
 					}
-					case 'b': {
+					case ChatFormat.StyleCode.AQUA: {
 						currentModifier.setRGBColor(ChatColor.AQUA);
 						break;
 					}
-					case 'c': {
+					case ChatFormat.StyleCode.RED: {
 						currentModifier.setRGBColor(ChatColor.RED);
 						break;
 					}
-					case 'd': {
+					case ChatFormat.StyleCode.LIGHT_PURPLE: {
 						currentModifier.setRGBColor(ChatColor.LIGHT_PURPLE);
 						break;
 					}
-					case 'e': {
+					case ChatFormat.StyleCode.YELLOW: {
 						currentModifier.setRGBColor(ChatColor.YELLOW);
 						break;
 					}
-					case 'f': {
+					case ChatFormat.StyleCode.WHITE: {
 						currentModifier.setRGBColor(ChatColor.WHITE);
 						break;
 					}
-					case STYLE_RANDOM_CHAR: {
+					case ChatFormat.StyleCode.RANDOM: {
 						currentModifier.setRandom(Boolean.TRUE);
 						break;
 					}
-					case STYLE_BOLD_CHAR: {
+					case ChatFormat.StyleCode.BOLD: {
 						currentModifier.setBold(Boolean.TRUE);
 						break;
 					}
-					case STYLE_STRIKETHROUGH_CHAR: {
+					case ChatFormat.StyleCode.STRIKETHROUGH: {
 						currentModifier.setStrikethrough(Boolean.TRUE);
 						break;
 					}
-					case STYLE_UNDERLINED_CHAR: {
+					case ChatFormat.StyleCode.UNDERLINED: {
 						currentModifier.setUnderlined(Boolean.TRUE);
 						break;
 					}
-					case STYLE_ITALIC_CHAR: {
+					case ChatFormat.StyleCode.ITALIC: {
 						currentModifier.setItalic(Boolean.TRUE);
 						break;
 					}
@@ -385,7 +368,7 @@ public class LegacyChat {
 			return text;
 		}
 		int lastNotColorCharIndex = limit - 1;
-		while (text.charAt(lastNotColorCharIndex) == STYLE_CHAR) {
+		while (text.charAt(lastNotColorCharIndex) == ChatFormat.StyleCode.CONTROL_CHAR) {
 			lastNotColorCharIndex--;
 		}
 		return text.substring(0, lastNotColorCharIndex + 1);

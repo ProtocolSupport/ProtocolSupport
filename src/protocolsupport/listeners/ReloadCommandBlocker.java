@@ -4,11 +4,12 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.ServerCommandEvent;
+
+import protocolsupport.api.chat.ChatFormat;
 
 public class ReloadCommandBlocker implements Listener {
 
@@ -30,7 +31,7 @@ public class ReloadCommandBlocker implements Listener {
 		String command = event.getMessage().toLowerCase(Locale.ENGLISH);
 		if (command.startsWith("/") && blacklist.contains(command.substring(1))) {
 			event.setCancelled(true);
-			event.getPlayer().sendMessage(ChatColor.DARK_RED + "The reload command has been disabled by ProtocolSupport");
+			event.getPlayer().sendMessage(ChatFormat.DARK_RED.toStyle() + "The reload command has been disabled by ProtocolSupport");
 		}
 	}
 
@@ -42,7 +43,7 @@ public class ReloadCommandBlocker implements Listener {
 		}
 		if (blacklist.contains(command)) {
 			event.setCancelled(true);
-			event.getSender().sendMessage(ChatColor.DARK_RED + "The reload command has been disabled by ProtocolSupport");
+			event.getSender().sendMessage(ChatFormat.DARK_RED.toStyle() + "The reload command has been disabled by ProtocolSupport");
 		}
 	}
 

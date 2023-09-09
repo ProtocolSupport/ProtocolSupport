@@ -5,15 +5,13 @@ import java.text.MessageFormat;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.MainHand;
 
-import protocolsupport.api.chat.ChatAPI.MessagePosition;
+import protocolsupport.api.chat.ChatFormat;
 
 public class EnumConstantLookup<T extends Enum<T>> {
 
-	public static final EnumConstantLookup<ChatColor> CHAT_COLOR = new EnumConstantLookup<>(ChatColor.class);
-	public static final EnumConstantLookup<MessagePosition> MESSAGE_POSITION = new EnumConstantLookup<>(MessagePosition.class);
+	public static final EnumConstantLookup<ChatFormat> CHAT_FORMAT = new EnumConstantLookup<>(ChatFormat.class);
 	public static final EnumConstantLookup<MainHand> MAIN_HAND = new EnumConstantLookup<>(MainHand.class);
 
 	protected final T[] enumConstans;

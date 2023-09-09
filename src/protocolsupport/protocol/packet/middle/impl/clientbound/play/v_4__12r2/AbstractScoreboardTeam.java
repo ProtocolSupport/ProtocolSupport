@@ -1,7 +1,6 @@
 package protocolsupport.protocol.packet.middle.impl.clientbound.play.v_4__12r2;
 
-import org.bukkit.ChatColor;
-
+import protocolsupport.api.chat.ChatFormat;
 import protocolsupport.api.chat.components.TextComponent;
 import protocolsupport.api.utils.Any;
 import protocolsupport.protocol.packet.middle.base.clientbound.play.MiddleScoreboardTeam;
@@ -48,18 +47,18 @@ public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 	protected String formatLegacyClampedPrefix() {
 		String prefix = this.prefix.toLegacyText(clientCache.getLocale());
 
-		if ((format != ChatColor.RESET) && !prefix.isEmpty() && !isStringFormatOverride(prefix, format)) {
+		if ((format != ChatFormat.RESET) && !prefix.isEmpty() && !isStringFormatOverride(prefix, format)) {
 			prefix = format + prefix;
 		}
 
-		String prefixLastFormatString = ChatColor.getLastColors(prefix);
+		String prefixLastFormatString = ChatFormat.getLastFomat(prefix);
 		String formatString = format.toString();
 		if (
-			(prefixLastFormatString.isEmpty() && (format != ChatColor.RESET)) ||
+			(prefixLastFormatString.isEmpty() && (format != ChatFormat.RESET)) ||
 			!formatString.equals(prefixLastFormatString)
 		) {
-			if (format.isFormat()) {
-				return LegacyChat.clampLegacyText(prefix, NFIX_LIMIT_2F) + ChatColor.RESET + formatString;
+			if (!format.hasColor()) {
+				return LegacyChat.clampLegacyText(prefix, NFIX_LIMIT_2F) + ChatFormat.RESET.toStyle() + formatString;
 			} else {
 				return LegacyChat.clampLegacyText(prefix, NFIX_LIMIT_1F) + formatString;
 			}
@@ -72,8 +71,8 @@ public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 
 		if (!isStringFormatOverride(suffix, format)) {
 			suffix = format + suffix;
-			if (format.isFormat()) {
-				suffix = ChatColor.RESET + suffix;
+			if (!format.hasColor()) {
+				suffix = ChatFormat.RESET.toStyle() + suffix;
 			}
 		}
 
@@ -83,7 +82,7 @@ public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 	protected Any<String, String> formatDisplayLinePrefixSuffix() {
 		String prefix = this.prefix.toLegacyText(clientCache.getLocale());
 
-		if ((format != ChatColor.RESET) && !isStringFormatOverride(prefix, format)) {
+		if ((format != ChatFormat.RESET) && !isStringFormatOverride(prefix, format)) {
 			prefix = format + prefix;
 		}
 
@@ -91,23 +90,23 @@ public abstract class AbstractScoreboardTeam extends MiddleScoreboardTeam {
 			return new Any<>(prefix, "");
 		}
 
-		int limit = prefix.charAt(NFIX_LIMIT_FCUT) == ChatColor.COLOR_CHAR ? NFIX_LIMIT_FCUT : NFIX_LIMIT;
+		int limit = prefix.charAt(NFIX_LIMIT_FCUT) == ChatFormat.StyleCode.CONTROL_CHAR ? NFIX_LIMIT_FCUT : NFIX_LIMIT;
 
 		String sPrefix = prefix.substring(0, limit);
 
-		String sSuffix = ChatColor.getLastColors(sPrefix) + prefix.substring(limit);
-		if (!isStringFormatOverride(sSuffix, ChatColor.RESET)) {
-			sSuffix = ChatColor.RESET + sSuffix;
+		String sSuffix = ChatFormat.getLastFomat(sPrefix) + prefix.substring(limit);
+		if (!isStringFormatOverride(sSuffix, ChatFormat.RESET)) {
+			sSuffix = ChatFormat.RESET.toStyle() + sSuffix;
 		}
 		sSuffix = LegacyChat.clampLegacyText(sSuffix, NFIX_LIMIT);
 
 		return new Any<>(sPrefix, sSuffix);
 	}
 
-	protected static boolean isStringFormatOverride(String string, ChatColor format) {
-		if ((string.length() >= 2) && (string.charAt(0) == ChatColor.COLOR_CHAR)) {
-			ChatColor formatStringColor = ChatColor.getByChar(string.charAt(1));
-			if ((formatStringColor != null) && (formatStringColor.isColor() || (formatStringColor == format))) {
+	protected static boolean isStringFormatOverride(String string, ChatFormat format) {
+		if ((string.length() >= 2) && (string.charAt(0) == ChatFormat.StyleCode.CONTROL_CHAR)) {
+			ChatFormat formatStringColor = ChatFormat.ofChar(string.charAt(1));
+			if ((formatStringColor != null) && (formatStringColor.hasColor() || (formatStringColor == format))) {
 				return true;
 			}
 		}

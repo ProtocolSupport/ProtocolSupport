@@ -29,7 +29,7 @@ public class ScoreboardTeam extends AbstractScoreboardTeam implements IClientbou
 			StringCodec.writeVarIntUTF8String(scoreboardteam, nfix.getObj2());
 			scoreboardteam.writeByte(friendlyFire);
 			StringCodec.writeVarIntUTF8String(scoreboardteam, nameTagVisibility);
-			scoreboardteam.writeByte(format.isColor() ? format.ordinal() : -1);
+			scoreboardteam.writeByte(format.hasColor() ? format.ordinal() : -1);
 		}
 		if ((mode == Mode.CREATE) || (mode == Mode.PLAYERS_ADD) || (mode == Mode.PLAYERS_REMOVE)) {
 			ArrayCodec.writeVarIntTArray(scoreboardteam, players, (to, element) -> StringCodec.writeVarIntUTF8String(to, MiscUtils.clampString(element, 16)));

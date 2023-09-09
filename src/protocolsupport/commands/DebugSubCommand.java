@@ -1,8 +1,8 @@
 package protocolsupport.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import protocolsupport.api.chat.ChatFormat;
 import protocolsupport.zplatform.ServerPlatform;
 
 public class DebugSubCommand implements SubCommand {
@@ -16,10 +16,10 @@ public class DebugSubCommand implements SubCommand {
 	public boolean handle(CommandSender sender, String[] args) {
 		if (ServerPlatform.get().getMiscUtils().isDebugging()) {
 			ServerPlatform.get().getMiscUtils().disableDebug();
-			sender.sendMessage(ChatColor.YELLOW + "Disabled debug");
+			sender.sendMessage(ChatFormat.YELLOW.toStyle() + "Disabled debug");
 		} else {
 			ServerPlatform.get().getMiscUtils().enableDebug();
-			sender.sendMessage(ChatColor.YELLOW + "Enabled debug");
+			sender.sendMessage(ChatFormat.YELLOW.toStyle() + "Enabled debug");
 		}
 		return true;
 	}

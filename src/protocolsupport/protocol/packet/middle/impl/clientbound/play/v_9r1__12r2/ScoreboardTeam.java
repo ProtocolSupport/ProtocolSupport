@@ -40,7 +40,7 @@ IClientboundMiddlePacketV12r2 {
 			scoreboardteam.writeByte(friendlyFire);
 			StringCodec.writeVarIntUTF8String(scoreboardteam, nameTagVisibility);
 			StringCodec.writeVarIntUTF8String(scoreboardteam, collisionRule);
-			scoreboardteam.writeByte(format.isColor() ? format.ordinal() : -1);
+			scoreboardteam.writeByte(format.hasColor() ? format.ordinal() : -1);
 		}
 		if ((mode == Mode.CREATE) || (mode == Mode.PLAYERS_ADD) || (mode == Mode.PLAYERS_REMOVE)) {
 			ArrayCodec.writeVarIntVarIntUTF8StringArray(scoreboardteam, players);

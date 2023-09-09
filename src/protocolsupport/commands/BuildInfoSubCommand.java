@@ -1,9 +1,9 @@
 package protocolsupport.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import protocolsupport.ProtocolSupport;
+import protocolsupport.api.chat.ChatFormat;
 
 public class BuildInfoSubCommand implements SubCommand {
 
@@ -14,7 +14,7 @@ public class BuildInfoSubCommand implements SubCommand {
 
 	@Override
 	public boolean handle(CommandSender sender, String[] args) {
-		sender.sendMessage(ChatColor.YELLOW.toString() + ProtocolSupport.getInstance().getBuildInfo());
+		sender.sendMessage(ChatFormat.YELLOW.toStyle() + ProtocolSupport.getInstance().getBuildInfo());
 		return true;
 	}
 

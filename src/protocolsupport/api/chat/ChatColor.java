@@ -14,6 +14,7 @@ import protocolsupportbuildprocessor.Preload;
 @Preload
 public class ChatColor {
 
+	@SuppressWarnings("deprecation")
 	private static final EnumMap<org.bukkit.ChatColor, ChatColor> BASIC_BY_BUKKIT = new EnumMap<>(org.bukkit.ChatColor.class);
 	private static final Int2ObjectMap<ChatColor> BASIC_BY_RGB = new Int2ObjectOpenHashMap<>();
 	private static final Map<String, ChatColor> BASIC_BY_NAME = new HashMap<>();
@@ -35,6 +36,7 @@ public class ChatColor {
 		return color != null ? color : new ChatColor(rgb);
 	}
 
+	@SuppressWarnings("deprecation")
 	public static ChatColor ofBukkit(org.bukkit.ChatColor color) {
 		return BASIC_BY_BUKKIT.get(color);
 	}
@@ -57,6 +59,7 @@ public class ChatColor {
 	public static final ChatColor WHITE = new ChatColor("white", 0xFFFFFF);
 
 
+	@SuppressWarnings("deprecation")
 	private final org.bukkit.ChatColor bukkitColor;
 	private final String identifier;
 	private final int rgb;
@@ -72,6 +75,7 @@ public class ChatColor {
 		this(identifier, rgb, true);
 	}
 
+	@SuppressWarnings("deprecation")
 	private ChatColor(String identifier, int rgb, boolean basic) {
 		this.identifier = identifier;
 		this.rgb = rgb;
@@ -129,6 +133,7 @@ public class ChatColor {
 		return similarColor;
 	}
 
+	@SuppressWarnings("deprecation")
 	public org.bukkit.ChatColor asBukkit() {
 		if (isBasic()) {
 			return bukkitColor;

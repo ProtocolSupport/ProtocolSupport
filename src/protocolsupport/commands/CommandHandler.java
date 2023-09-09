@@ -7,12 +7,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+
+import protocolsupport.api.chat.ChatFormat;
 
 public class CommandHandler implements CommandExecutor, TabCompleter {
 
@@ -34,7 +35,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 			public boolean handle(CommandSender sender, String[] args) {
 				String prepend = sender instanceof Player ? "/" : "";
 				for (Entry<String, SubCommand> entry : subcommands.entrySet()) {
-					sender.sendMessage(ChatColor.YELLOW + prepend + "ps " + entry.getKey() + " - " + entry.getValue().getHelp());
+					sender.sendMessage(ChatFormat.YELLOW.toStyle() + prepend + "ps " + entry.getKey() + " - " + entry.getValue().getHelp());
 				}
 				return true;
 			}
@@ -49,7 +50,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!sender.hasPermission("protocolsupport.admin")) {
-			sender.sendMessage(ChatColor.DARK_RED + "You have no power here!");
+			sender.sendMessage(ChatFormat.DARK_RED.toStyle() + "You have no power here!");
 			return true;
 		}
 		if (args.length == 0) {
@@ -61,7 +62,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 		}
 		String[] subcommandargs = Arrays.copyOfRange(args, 1, args.length);
 		if (subcommandargs.length < subcommand.getMinArgs()) {
-			sender.sendMessage(ChatColor.DARK_RED + "Not enough args");
+			sender.sendMessage(ChatFormat.DARK_RED.toStyle()	 + "Not enough args");
 			return true;
 		}
 		return subcommand.handle(sender, subcommandargs);

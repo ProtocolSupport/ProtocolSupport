@@ -1,7 +1,6 @@
 package protocolsupport.protocol.typeremapper.entity.format.metadata.object.value;
 
-import org.bukkit.ChatColor;
-
+import protocolsupport.api.chat.ChatFormat;
 import protocolsupport.protocol.typeremapper.legacy.LegacyChat;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObject;
 import protocolsupport.protocol.types.networkentity.metadata.NetworkEntityMetadataObjectIndex;
@@ -23,7 +22,6 @@ public class NetworkEntityMetadataObjectIndexValueOptionalChatToLegacyTextTransf
 		this(fromIndex, toIndex, NO_LIMIT);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public NetworkEntityMetadataObject<?> transformValue(NetworkEntityMetadataObjectOptionalChat object) {
 		if (object.getValue() != null) {
@@ -31,7 +29,7 @@ public class NetworkEntityMetadataObjectIndexValueOptionalChatToLegacyTextTransf
 			if (limit != NO_LIMIT) {
 				text = LegacyChat.clampLegacyText(object.getValue().toLegacyText(), limit);
 			}
-			return new NetworkEntityMetadataObjectString(!text.isEmpty() ? text : ChatColor.BLACK.toString());
+			return new NetworkEntityMetadataObjectString(!text.isEmpty() ? text : ChatFormat.BLACK.toStyle());
 		} else {
 			return new NetworkEntityMetadataObjectString("");
 		}

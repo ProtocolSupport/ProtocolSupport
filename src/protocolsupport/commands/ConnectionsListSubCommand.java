@@ -1,10 +1,10 @@
 package protocolsupport.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import protocolsupport.api.Connection;
 import protocolsupport.api.ProtocolSupportAPI;
+import protocolsupport.api.chat.ChatFormat;
 
 public class ConnectionsListSubCommand implements SubCommand {
 
@@ -16,7 +16,7 @@ public class ConnectionsListSubCommand implements SubCommand {
 	@Override
 	public boolean handle(CommandSender sender, String[] args) {
 		for (Connection connection : ProtocolSupportAPI.getConnections()) {
-			sender.sendMessage(ChatColor.YELLOW + connection.toString());
+			sender.sendMessage(ChatFormat.YELLOW.toString() + connection.toString());
 		}
 		return true;
 	}
